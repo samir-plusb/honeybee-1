@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/factories/1.0">
+
+    <ae:configuration>
+
+        <controller class="AgaviController" />
+
+        <database_manager class="AgaviDatabaseManager" />
+
+        <dispatch_filter class="AgaviDispatchFilter" />
+
+        <execution_container class="AgaviExecutionContainer" />
+
+        <execution_filter class="AgaviExecutionFilter" />
+
+        <filter_chain class="AgaviFilterChain" />
+
+        <logger_manager class="AgaviLoggerManager" />
+
+        <request class="AgaviWebRequest" />
+
+        <response class="AgaviWebResponse" />
+
+        <routing class="AgaviWebRouting" />
+
+        <security_filter class="AgaviSecurityFilter" />
+
+        <storage class="AgaviSessionStorage" />
+
+        <user class="AgaviSecurityUser" />
+
+        <translation_manager class="AgaviTranslationManager" />
+
+        <validation_manager class="AgaviValidationManager" />
+
+    </ae:configuration>
+
+    <ae:configuration context="web" environment="development.*">
+        <execution_filter class="PhpDebugToolbarAgaviExecutionFilter" />
+    </ae:configuration>
+
+    <ae:configuration context="console">
+
+        <request class="AgaviConsoleRequest" />
+
+        <response class="AgaviConsoleResponse" />
+
+        <routing class="AgaviConsoleRouting" />
+
+        <user class="AgaviSecurityUser" />
+
+    </ae:configuration>
+
+</ae:configurations>

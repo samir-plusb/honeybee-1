@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="ContentWorker" basedir="." default="cc">
+    
+    <property name="project.directory" value="${application.startdir}" />
+    <property name="project.directory.etc" value="${application.startdir}/etc" />
+    
+    <property userProperty="true" override="true" file="${project.directory.etc}/build/build.properties" />
+    
+    <adhoc-task name="run"><![CDATA[
+        class RunTask extends Task 
+        {
+            private $dir;
+            private $command;
+            private $revealPasswords = false;
+            private $supressEcho = false;
+
+            function setCommand($command) 
+            {
+                $this->command = $command;
+            }
+
+            function setDir($dir) 
+            {
+                $this->dir = $dir;
+            }
+
+            function setSupressEcho($supress) 
+            {
+                $this->supressEcho = $supress;
+            }
+
+            function setRevealPasswords($reveal_passwords) 
+            {
+                $this->revealPasswords = $reveal_passwords;
+            }
+
+            function main() 
+            {
+                $this->log("Changing to " . $this->dir);
+                
+                if (!chdir($this->dir))
+                {
+                    $this->log('FAILED to change into given directory "' . $this->dir . '. ABORTING...', Project::MSG_ERR);
+                }
+                else
+                {
+                    $echo_cmd = $this->command;
+
+                    if (true !== $this->revealPasswords)
+                    {
+                        $echo_cmd = preg_replace('~--password\s+\S+~is', '', $this->command);
+                    }
+                    
+                    if (!$this->supressEcho)
+                    {
+                        $this->log("Execution " . $echo_cmd);
+                    }
+
+                    system($this->command);
+                }
+            }
+        }
+    ]]></adhoc-task>
+    
+    <target name="cc" description="Clear the config cache.">
+        <echo message="Clearing the config cache." />
+        <run command="rm -rf app/cache/config/*" dir="${project.directory}"/>
+    </target>
+	
+</project>

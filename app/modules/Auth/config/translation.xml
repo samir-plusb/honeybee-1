@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/translation/1.0">
+    <ae:configuration>
+		
+        <translators default_domain="toplevel">
+            <translator domain="auth">
+				
+                <translator domain="messages">
+                    <message_translator class="AgaviSimpleTranslator">
+                        <ae:parameter name="de">
+                            <ae:parameter name="exmp_msg">Das ist eine Beispielnachricht.</ae:parameter>
+                        </ae:parameter>
+                        
+                        <ae:parameter name="en">
+                            <ae:parameter name="exmp_msg">This is an example message.</ae:parameter>
+                        </ae:parameter>
+                    </message_translator>
+                </translator>
+                
+                <translator domain="errors">
+                    <message_translator class="AgaviSimpleTranslator">
+                        <ae:parameter name="de">
+                            <ae:parameter name="exmp_msg">Das ist eine Beispielnachricht.</ae:parameter>
+                        </ae:parameter>
+                        
+                        <ae:parameter name="en">
+                            <ae:parameter name="exmp_msg">This is an example message.</ae:parameter>
+                        </ae:parameter>
+                    </message_translator>
+                </translator>
+
+            </translator>
+        </translators>
+		
+    </ae:configuration>
+    
+</ae:configurations>

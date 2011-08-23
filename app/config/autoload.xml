@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" parent="%core.system_config_dir%/autoload.xml">
+    <ae:configuration>
+        <autoloads>
+            <autoload name="ProjectBaseAction">%core.lib_dir%/base/ProjectBaseAction.class.php</autoload>
+            <autoload name="ProjectBaseModel">%core.lib_dir%/base/ProjectBaseModel.class.php</autoload>
+            <autoload name="ProjectBaseView">%core.lib_dir%/base/ProjectBaseView.class.php</autoload>
+
+            <autoload name="ProjectLanguageRoutingCallback">%core.lib_dir%/routing/ProjectLanguageRoutingCallback.class.php</autoload>
+        </autoloads>
+    </ae:configuration>
+
+    <xi:include href="%core.app_dir%/../libs/PhpDebugToolbar/lib/agavi/autoload.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
+    </xi:include>
+</ae:configurations>
