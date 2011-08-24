@@ -2,7 +2,7 @@
 
 /**
  *
- * @version     $Id: LoginLdapAction.class.php 4153 2011-05-30 07:13:33Z tom.anheyer $
+ * @version     $Id$
  * @copyright   BerlinOnline Stadtportal GmbH
  * @author      Tom.Anheyer@BerlinOnline.de
  *

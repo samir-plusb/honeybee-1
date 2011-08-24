@@ -2,7 +2,7 @@
 
 /**
  *
- * @version     $Id: LogoutAction.class.php 3276 2010-03-11 13:46:01Z tom.anheyer $
+ * @version     $Id$
  * @copyright   BerlinOnline Stadtportal GmbH
  * @author      Tom.Anheyer@BerlinOnline.de
  *
