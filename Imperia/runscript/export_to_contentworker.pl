@@ -1,6 +1,18 @@
 #!/usr/bin/perl
 #
+#
+# Trigger import of Imperia news pages in ContentWorker
+#
+# Script expects a list of Imperia URI in command line
+#
+# Paramters in system.conf
+# <ul>
+# <li>ContentWorker.ImportUrl - URL of ContentWorker import interface
+# <li>ContentWorker.XmlDumpUrl - URL to Imperia /cgi-bin/xml_dump.pl; node_id is appeneded
+# </ul>
+#
 # @version $Id$
+#
 
 utf8;
 
@@ -44,6 +56,7 @@ foreach my $uri (@ARGV)
 
     my $data = {
         'uri' => $uri,
+        'dump_url' => $xmlDumpUrl . uri_escape($metainfo->getValues('__imperia_node_id')),
         '__imperia_node_id' => scalar $metainfo->getValues('__imperia_node_id'),
         '__imperia_modified' => scalar $metainfo->getValues('__imperia_modified'),
         'publish_date' =>  scalar $metainfo->getValues('publish_date'),
@@ -55,8 +68,6 @@ foreach my $uri (@ARGV)
 
 my $json = JSON->new->allow_nonref;
 my $json_text = $json->encode( \@docs );
-print $json_text;
-
 
 my $ua = LWP::UserAgent->new;
 $ua->agent('$Id$');
