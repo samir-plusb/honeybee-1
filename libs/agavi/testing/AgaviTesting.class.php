@@ -167,6 +167,7 @@ class AgaviTesting
 			'log-pmd=',
 			'log-tap=',
 			'log-xml=',
+            'log-junit=',
 			'include-suite=',
 			'exclude-suite=',
 		);
