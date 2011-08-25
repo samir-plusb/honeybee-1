@@ -1,7 +1,8 @@
 #!/bin/bash
 
+BASEDIR="`dirname $0`/../"
 PROJECT_CONFIG_FILE=`dirname $0`"/../etc/local/local.config.sh"
-PROJECT_BASE_DIR=`readlink -f ./`
+PROJECT_BASE_DIR=`readlink -f "$BASEDIR"`
 
 if [ -f $PROJECT_CONFIG_FILE ] ; then
     # include the config file 
@@ -42,4 +43,5 @@ fi
 
 phing_exec_cmd="exec $PHP_COMMAND -d html_errors=off -qC \"$PHING_HOME/bin/phing.php\" -logger phing.listener.AnsiColorLogger $phing_exec_args"
 
+cd "$PROJECT_BASE_DIR"
 eval $phing_exec_cmd
