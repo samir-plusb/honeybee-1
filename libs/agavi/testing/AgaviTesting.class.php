@@ -15,9 +15,9 @@
 
 
 /**
- * Main framework class used for autoloading and initial bootstrapping of the 
+ * Main framework class used for autoloading and initial bootstrapping of the
  * Agavi testing environment
- * 
+ *
  * @package    agavi
  * @subpackage testing
  *
@@ -47,42 +47,42 @@ class AgaviTesting
 			// env given, but testing.environment is read-only? then we must use that instead and ignore the given setting
 			$environment = AgaviConfig::get('testing.environment');
 		}
-		
+
 		if($environment === null) {
 			// still no env? oh man...
 			throw new Exception('You must supply an environment name to AgaviTesting::bootstrap() or set the name of the default environment to be used for testing in the configuration directive "testing.environment".');
 		}
-		
+
 		// finally set the env to what we're really using now.
 		AgaviConfig::set('testing.environment', $environment, true, true);
-		
+
 		// bootstrap the framework for autoload, config handlers etc.
 		Agavi::bootstrap($environment);
-		
+
 		ini_set('include_path', get_include_path().PATH_SEPARATOR.dirname(__DIR__));
-		
+
 		$GLOBALS['AGAVI_CONFIG'] = AgaviConfig::toArray();
 	}
 
 	public static function dispatch($arguments = array())
-	{		
-		
+	{
+
 		$suites = include AgaviConfigCache::checkConfig(AgaviConfig::get('core.testing_dir').'/config/suites.xml');
 		$master_suite = new AgaviTestSuite('Master');
-		
+
 		if(!empty($arguments['include-suite'])) {
-			
+
 			$names = explode(',', $arguments['include-suite']);
 			unset($arguments['include-suite']);
-			
+
 			foreach($names as $name) {
 				if(empty($suites[$name])) {
 					throw new InvalidArgumentException(sprintf('Invalid suite name %1$s.', $name));
 				}
 
-				$master_suite->addTest(self::createSuite($name, $suites[$name]));		
+				$master_suite->addTest(self::createSuite($name, $suites[$name]));
 			}
-				
+
 		} else {
 			$excludes = array();
 			if(!empty($arguments['exclude-suite'])) {
@@ -91,15 +91,15 @@ class AgaviTesting
 			}
 			foreach($suites as $name => $suite) {
 				if(!in_array($name, $excludes)) {
-					$master_suite->addTest(self::createSuite($name, $suite));	
+					$master_suite->addTest(self::createSuite($name, $suite));
 				}
 			}
 		}
-		
+
 		$runner = new PHPUnit_TextUI_TestRunner();
 		$runner->doRun($master_suite, $arguments);
 	}
-	
+
 	/**
 	 * Initialize a suite from the given instructions and add registered tests.
 	 *
@@ -111,7 +111,7 @@ class AgaviTesting
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
-	protected static function createSuite($name, array $suite) 
+	protected static function createSuite($name, array $suite)
 	{
 		$base = (null == $suite['base']) ? 'tests' : $suite['base'];
 		if(!AgaviToolkit::isPathAbsolute($base)) {
@@ -122,13 +122,13 @@ class AgaviTesting
 			foreach(
 				new RecursiveIteratorIterator(
 					new AgaviRecursiveDirectoryFilterIterator(
-						new RecursiveDirectoryIterator($base), 
-						$suite['includes'], 
+						new RecursiveDirectoryIterator($base),
+						$suite['includes'],
 						$suite['excludes']
-					), 
+					),
 					RecursiveIteratorIterator::CHILD_FIRST
 				) as $finfo) {
-					
+
 				if($finfo->isFile()) {
 					$s->addTestFile($finfo->getPathName());
 				}
@@ -142,12 +142,12 @@ class AgaviTesting
 		}
 		return $s;
 	}
-	
+
 	/**
 	 * Handles the commandline arguments passed.
-	 * 
+	 *
 	 * @return     array the commandline arguments
-	 * 
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -170,55 +170,56 @@ class AgaviTesting
             'log-junit=',
 			'include-suite=',
 			'exclude-suite=',
+            'configuration=',
 		);
-		
+
 		try {
 			$options = PHPUnit_Util_Getopt::getopt(
 				$_SERVER['argv'],
-				'd:',
+				'd:c:',
 				$longOptions
 			);
 		} catch(RuntimeException $e) {
 			PHPUnit_TextUI_TestRunner::showError($e->getMessage());
 		}
-		
-		$arguments = array(); 
-		
+
+		$arguments = array();
+
 		foreach($options[0] as $option) {
 			switch($option[0]) {
 				case '--coverage-clover':
-				case '--coverage-xml': 
+				case '--coverage-xml':
 					if(self::checkCodeCoverageDeps()) {
 						$arguments['coverageClover'] = $option[1];
 					}
 					break;
-				
-				case '--coverage-source': 
+
+				case '--coverage-source':
 					if(self::checkCodeCoverageDeps()) {
 						$arguments['coverageSource'] = $option[1];
 					}
 					break;
-				
+
 				case '--coverage-html':
-				case '--report': 
+				case '--report':
 					if(self::checkCodeCoverageDeps()) {
 						$arguments['reportDirectory'] = $option[1];
 					}
 					break;
-				
+
 				case '--environment':
 					$arguments['environment'] = $option[1];
 					break;
-				
+
 				case '--help':
 					self::showHelp();
 					exit(PHPUnit_TextUI_TestRunner::SUCCESS_EXIT);
 					break;
-				
+
 				case '--log-json':
 					$arguments['jsonLogfile'] = $option[1];
 					break;
-				
+
 				case '--log-graphviz':
 					if(PHPUnit_Util_Filesystem::fileExistsInIncludePath('Image/GraphViz.php')) {
 						$arguments['graphvizLogfile'] = $option[1];
@@ -226,47 +227,51 @@ class AgaviTesting
 						throw new AgaviException('The Image_GraphViz package is not installed.');
 					}
 					break;
-				
+
 				case '--log-tap':
 					$arguments['tapLogfile'] = $option[1];
 					break;
-				
+
 				case '--log-xml':
 					$arguments['xmlLogfile'] = $option[1];
 				break;
-				
+
 				case '--log-pmd':
 					if(self::checkCodeCoverageDeps()) {
 						$arguments['pmdXML'] = $option[1];
 					}
 					break;
-				
+
 				case '--log-metrics':
 					if(self::checkCodeCoverageDeps()) {
 						$arguments['metricsXML'] = $option[1];
 					}
 					break;
-				
+
 				case '--include-suite':
 					$arguments['include-suite'] = $option[1];
 					break;
-				
+
 				case '--exclude-suite':
 					$arguments['exclude-suite'] = $option[1];
 					break;
+
+                case '--configuration':
+                    $arguments['configuration'] = $option[1];
+                    break;
 			}
 		}
-		
+
 		return $arguments;
 	}
-	
+
 	/**
 	 * Checks whether all dependencies for writing code coverage information
-	 * are met. 
-	 * 
+	 * are met.
+	 *
 	 * @return     true if all deps are met
 	 * @throws     AgaviExecption if a dependency is missing
-	 * 
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -281,13 +286,13 @@ class AgaviTesting
 				throw new AgaviException('The Xdebug extension is not loaded.');
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * shows the help for the commandline call
-	 * 
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -313,6 +318,7 @@ Usage: run-tests.php [switches]
 
   --include-suite <suites> run only suites named <suite>, accepts a list of suites, comma separated.
   --exclude-suite <suites> run all but suites named <suite>, accepts a list of suites, comma separated.
+  --configuration <file>   Defines a phpunit configuration file to use for running the tests.
 
   --help                   Prints this usage information.
 
