@@ -51,7 +51,7 @@
         <exec executable="phpmd">
             <arg path="${source}" />
             <arg value="xml" />
-            <arg value="${build_dir}/phpmd.xml" />
+            <arg value="codesize,design,naming,unusedcode" />
             <arg value="--reportfile" />
             <arg value="${build_dir}/logs/pmd.xml" />
         </exec>
