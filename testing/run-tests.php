@@ -12,7 +12,7 @@ set_include_path(implode(PATH_SEPARATOR, $includes).PATH_SEPARATOR.get_include_p
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to our environment config provider.           |
 // +---------------------------------------------------------------------------+
-require $root_dir . DIRECTORY_SEPARATOR . 'app/lib/config/ProjectEnvironmentConfig.class.php';
+//require $root_dir . DIRECTORY_SEPARATOR . 'app/lib/config/ProjectEnvironmentConfig.class.php';
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi/testing.php script.              |
@@ -24,15 +24,22 @@ require 'agavi/testing.php';
 // +---------------------------------------------------------------------------+
 require $base_dir . DIRECTORY_SEPARATOR . 'config.php';
 
-AgaviToolkit::clearCache();
+$arguments = AgaviTesting::processCommandlineOptions();
 
-$env =  'testing.'.ProjectEnvironmentConfig::getEnvironment();
+if(isset($arguments['environment'])) {
+	$env = $arguments['environment'];
+	unset($arguments['environment']);
+} else {
+	$env = 'testing';
+}
+
+
+AgaviToolkit::clearCache();
 AgaviTesting::bootstrap($env);
 
 PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(AgaviConfig::get('core.agavi_dir'));
 PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(AgaviConfig::get('core.cache_dir'));
 
-$arguments = AgaviTesting::processCommandlineOptions(); 
 AgaviTesting::dispatch($arguments);
 
 ?>
