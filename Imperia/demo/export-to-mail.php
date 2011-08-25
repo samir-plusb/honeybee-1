@@ -40,13 +40,13 @@ class DemoImperiaExportResponder
     private $template = '<html>
 	<head>
 		<meta http-equiv="Content-Type" value="text/html; charset=utf8">
-		<title>%$1s</title>
+		<title>%1$s</title>
 	</head>
 	<body>
-		<h3>%$2s</h3>
-		<h1>%$1s</h1>
-		<h2>%$3s</h2>
-		%$3s
+		<h3>%2$s</h3>
+		<h1>%1$s</h1>
+		<h2>%3$s</h2>
+		%4$s
 	</body>
 </html>';
 
@@ -57,6 +57,7 @@ class DemoImperiaExportResponder
      */
     protected function errorResponse ($messge)
     {
+        error_log(__FILE__.": $messge");
         header('Content-Type', 'application/json');
         $resp = array('Error', $messge);
         echo json_encode($resp);
@@ -70,13 +71,14 @@ class DemoImperiaExportResponder
     public function __construct()
     {
         $config = parse_ini_file(dirname(__FILE__).'/config.denied.ini');
-        foreach (array('mailto', 'user', 'password', 'export_url') as $key)
+        foreach (array('mailto', 'user', 'password', 'export_url', 'login_url') as $key)
         {
             if (empty($config[$key]))
             {
                 die("Config key not defined: $key\n");
             }
         }
+        $this->config = $config;
     }
 
 
@@ -115,19 +117,20 @@ class DemoImperiaExportResponder
         $resp = curl_exec($this->curlHandle);
         if (200 != curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE))
         {
-            $this->errorResponse('Can not load data from imperia for: '.$item['__imperia_node_id']);
+            $this->errorResponse('Can not load data: '.$url);
         }
 
         if (FALSE !== strpos($resp, '<title>Access Denied!</title>'))
         {
             $post = array
             (
-                'my_imperia_login' => $config['user'],
-                'my_imperia_pass' => $config['password'],
+                'my_imperia_login' => $this->config['user'],
+                'my_imperia_pass' => $this->config['password'],
                 'Target' => $url
             );
             curl_setopt($this->curlHandle, CURLOPT_POST, 1);
-            curl_setopt($this->curlHandle, CURLOPT_POSTFIELDS, $post);
+            curl_setopt($this->curlHandle, CURLOPT_POSTFIELDS, http_build_query($post));
+            curl_setopt($this->curlHandle, CURLOPT_URL, $this->config['login_url']);
             $resp = curl_exec($this->curlHandle);
             if (200 != curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE) || FALSE !== strpos($resp, '<title>Access Denied!</title>'))
             {
@@ -173,6 +176,10 @@ class DemoImperiaExportResponder
      */
     protected function simpleXpath($xpath, DOMNode $contextNode = NULL)
     {
+        if ($contextNode == NULL)
+        {
+            $contextNode = $this->dom;
+        }
         $nl = $this->xpath->query($xpath, $contextNode);
         if (! $nl instanceof DOMNodeList || $nl->length != 1)
         {
@@ -271,7 +278,7 @@ class DemoImperiaExportResponder
             {
                 errorResponse('each item must contain a key: __imperia_node_id');
             }
-            $url = sprintf($config['export_url'], urlencode($item['__imperia_node_id']));
+            $url = sprintf($this->config['export_url'], urlencode($item['__imperia_node_id']));
             $resp = $this->getDocument($url);
 
             $this->parseDocument($resp);
