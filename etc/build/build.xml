@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="ContentWorker" basedir="." default="cc">
-    
+
     <property name="project.directory" value="${application.startdir}" />
     <property name="project.directory.etc" value="${application.startdir}/etc" />
-    
+
     <property userProperty="true" override="true" file="${project.directory.etc}/build/build.properties" />
-    
+
     <adhoc-task name="run"><![CDATA[
-        class RunTask extends Task 
+        class RunTask extends Task
         {
             private $dir;
             private $command;
             private $revealPasswords = false;
             private $supressEcho = false;
 
-            function setCommand($command) 
+            function setCommand($command)
             {
                 $this->command = $command;
             }
 
-            function setDir($dir) 
+            function setDir($dir)
             {
                 $this->dir = $dir;
             }
 
-            function setSupressEcho($supress) 
+            function setSupressEcho($supress)
             {
                 $this->supressEcho = $supress;
             }
 
-            function setRevealPasswords($reveal_passwords) 
+            function setRevealPasswords($reveal_passwords)
             {
                 $this->revealPasswords = $reveal_passwords;
             }
 
-            function main() 
+            function main()
             {
                 $this->log("Changing to " . $this->dir);
-                
+
                 if (!chdir($this->dir))
                 {
                     $this->log('FAILED to change into given directory "' . $this->dir . '. ABORTING...', Project::MSG_ERR);
@@ -50,7 +50,7 @@
                     {
                         $echo_cmd = preg_replace('~--password\s+\S+~is', '', $this->command);
                     }
-                    
+
                     if (!$this->supressEcho)
                     {
                         $this->log("Execution " . $echo_cmd);
@@ -60,11 +60,17 @@
                 }
             }
         }
-    ]]></adhoc-task>
-    
+    ]]>
+    </adhoc-task>
+
     <target name="cc" description="Clear the config cache.">
         <echo message="Clearing the config cache." />
         <run command="rm -rf app/cache/config/*" dir="${project.directory}"/>
     </target>
-	
+
+    <target name="phpcs" description="Run the php codesniffer.">
+        <echo message="Running the php codesniffer (phpcs)." />
+        <run command="nice bin/phpcs --report=xml --report-file=etc/integration/phpcs.xml --standard=libs/BerlinOnline/CodingStandard/ --ignore='app/cache*,*Success.php,*Input.php,*Error.php,app/templates/*' ${project.directory}/app" dir="${project.directory}" />
+    </target>
+
 </project>
