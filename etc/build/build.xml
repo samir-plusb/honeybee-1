@@ -72,5 +72,10 @@
         <echo message="Running the php codesniffer (phpcs)." />
         <run command="nice bin/phpcs --report=xml --report-file=etc/integration/phpcs.xml --standard=libs/BerlinOnline/CodingStandard/ --ignore='app/cache*,*Success.php,*Input.php,*Error.php,app/templates/*' ${project.directory}/app" dir="${project.directory}" />
     </target>
+    
+    <target name="test" description="Run the project's testsuite.">
+        <echo message="Running the project's testsuite." />
+        <run command="nice bin/test --configuration testing/config/phpunit.xml" dir="${project.directory}" />
+    </target>
 
 </project>
