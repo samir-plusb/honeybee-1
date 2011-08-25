@@ -79,7 +79,7 @@
         <run command="nice bin/test --configuration testing/config/phpunit.xml" dir="${project.directory}" />
     </target>
     
-    <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
+    <target name="phpdoc" description="Generate API documentation using PHPDocumentor.">
         <echo message="Generating the API documentation using PHPDocumentor." />
         <run command="mkdir -p ${project.directory}/etc/integration/build/api/" dir="${project.directory}" />
         <run command="libs/PhpDocumentor/phpdoc --directory ${project.directory}/app/ --target ${project.directory}/etc/integration/build/api" dir="${project.directory}" />
