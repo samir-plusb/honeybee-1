@@ -37,8 +37,7 @@ class DemoImperiaExportResponder
     protected $xpath;
 
 
-    private $template = <<<EOT
-<html>
+    private $template = '<html>
 	<head>
 		<meta http-equiv="Content-Type" value="text/html; charset=utf8">
 		<title>%$1s</title>
@@ -49,8 +48,7 @@ class DemoImperiaExportResponder
 		<h2>%$3s</h2>
 		%$3s
 	</body>
-</html>
-EOT;
+</html>';
 
     /**
      *
