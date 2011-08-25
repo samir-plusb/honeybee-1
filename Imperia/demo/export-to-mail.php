@@ -220,7 +220,7 @@ EOT;
         return '=?utf-8?q?' .
             preg_replace_callback(
                 '/[\x80-\xff]/',
-                function($m) { return sprintf('=%02X', $m[0]); },
+                create_function('$m','return sprintf(\'=%02X\',$m[0]);'),
                 $str)
             . '?=';
     }
