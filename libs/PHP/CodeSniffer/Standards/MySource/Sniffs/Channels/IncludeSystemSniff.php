@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: IncludeSystemSniff.php 293522 2010-01-13 22:28:20Z squiz $
+ * @version   CVS: $Id: IncludeSystemSniff.php 304170 2010-10-06 23:16:19Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -26,7 +26,7 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractScopeSniff', true) === false
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class MySource_Sniffs_Channels_IncludeSystemSniff extends PHP_CodeSniffer_Standards_AbstractScopeSniff
@@ -52,6 +52,7 @@ class MySource_Sniffs_Channels_IncludeSystemSniff extends PHP_CodeSniffer_Standa
                         'abstractdatacleanunittest',
                         'exception',
                         'abstractwidgetwidgettype',
+                        'domdocument',
                        );
 
 
@@ -101,9 +102,19 @@ class MySource_Sniffs_Channels_IncludeSystemSniff extends PHP_CodeSniffer_Standa
         $matches  = array();
         if (preg_match('|/systems/(.*)/([^/]+)?actions.inc$|', $fileName, $matches) !== 0) {
             // This is an actions file, which means we don't
-            // have to include the system in which it exists
-            // We know the system from the path.
+            // have to include the system in which it exists.
             $includedClasses[] = $matches[2];
+
+            // Or a system it implements.
+            $class      = $phpcsFile->getCondition($stackPtr, T_CLASS);
+            $implements = $phpcsFile->findNext(T_IMPLEMENTS, $class, ($class + 10));
+            if ($implements !== false) {
+                $implementsClass     = $phpcsFile->findNext(T_STRING, $implements);
+                $implementsClassName = strtolower($tokens[$implementsClass]['content']);
+                if (substr($implementsClassName, -7) === 'actions') {
+                    $includedClasses[] = substr($implementsClassName, 0, -7);
+                }
+            }
         }
 
         // Go searching for includeSystem and includeAsset calls within this
@@ -185,8 +196,9 @@ class MySource_Sniffs_Channels_IncludeSystemSniff extends PHP_CodeSniffer_Standa
         }//end if
 
         if (in_array(strtolower($className), $includedClasses) === false) {
-            $error = "Static method called on non-included class or system \"$className\"; include system with Channels::includeSystem() or include class with require_once";
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Static method called on non-included class or system "%s"; include system with Channels::includeSystem() or include class with require_once';
+            $data  = array($className);
+            $phpcsFile->addError($error, $stackPtr, 'NotIncludedCall', $data);
         }
 
     }//end processTokenWithinScope()
@@ -264,12 +276,14 @@ class MySource_Sniffs_Channels_IncludeSystemSniff extends PHP_CodeSniffer_Standa
 
         if (in_array(strtolower($className), $includedClasses) === false) {
             if ($tokens[$stackPtr]['code'] === T_EXTENDS) {
-                $error = "Class extends non-included class or system \"$className\"; include system with Channels::includeSystem() or include class with require_once";
+                $error = 'Class extends non-included class or system "%s"; include system with Channels::includeSystem() or include class with require_once';
+                $data  = array($className);
+                $phpcsFile->addError($error, $stackPtr, 'NotIncludedExtends', $data);
             } else {
-                $error = "Static method called on non-included class or system \"$className\"; include system with Channels::includeSystem() or include class with require_once";
+                $error = 'Static method called on non-included class or system "%s"; include system with Channels::includeSystem() or include class with require_once';
+                $data  = array($className);
+                $phpcsFile->addError($error, $stackPtr, 'NotIncludedCall', $data);
             }
-
-            $phpcsFile->addError($error, $stackPtr);
         }
 
     }//end processTokenOutsideScope()

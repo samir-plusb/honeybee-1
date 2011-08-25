@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ObjectOperatorIndentSniff.php 288251 2009-09-10 23:50:52Z squiz $
+ * @version   CVS: $Id: ObjectOperatorIndentSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -24,7 +24,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PEAR_Sniffs_WhiteSpace_ObjectOperatorIndentSniff implements PHP_CodeSniffer_Sniff
@@ -133,8 +133,12 @@ class PEAR_Sniffs_WhiteSpace_ObjectOperatorIndentSniff implements PHP_CodeSniffe
                     }
 
                     if ($foundIndent !== $requiredIndent) {
-                        $error = "Object operator not indented correctly; expected $requiredIndent spaces but found $foundIndent";
-                        $phpcsFile->addError($error, $next);
+                        $error = 'Object operator not indented correctly; expected %s spaces but found %s';
+                        $data  = array(
+                                  $requiredIndent,
+                                  $foundIndent,
+                                 );
+                        $phpcsFile->addError($error, $next, 'Incorrect', $data);
                     }
                 }
 
@@ -142,7 +146,7 @@ class PEAR_Sniffs_WhiteSpace_ObjectOperatorIndentSniff implements PHP_CodeSniffe
                 $content = $phpcsFile->findNext(T_WHITESPACE, ($next + 1), null, true);
                 if ($tokens[$content]['line'] !== $tokens[$next]['line']) {
                     $error = 'Object operator must be at the start of the line, not the end';
-                    $phpcsFile->addError($error, $next);
+                    $phpcsFile->addError($error, $next, 'StartOfLine');
                 }
             }//end if
 

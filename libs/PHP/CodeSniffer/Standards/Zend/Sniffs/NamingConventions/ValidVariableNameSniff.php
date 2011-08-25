@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ValidVariableNameSniff.php 261899 2008-07-02 05:08:16Z squiz $
+ * @version   CVS: $Id: ValidVariableNameSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -29,7 +29,7 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractVariableSniff', true) === fa
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Zend_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniffer_Standards_AbstractVariableSniff
@@ -97,11 +97,13 @@ class Zend_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniff
                     }
 
                     if (PHP_CodeSniffer::isCamelCaps($objVarName, false, true, false) === false) {
-                        $error = "Variable \"$originalVarName\" is not in valid camel caps format";
-                        $phpcsFile->addError($error, $var);
+                        $error = 'Variable "%s" is not in valid camel caps format';
+                        $data  = array($originalVarName);
+                        $phpcsFile->addError($error, $var, 'NotCamelCaps', $data);
                     } else if (preg_match('|\d|', $objVarName)) {
-                        $warning = "Variable \"$originalVarName\" contains numbers but this is discouraged";
-                        $phpcsFile->addWarning($warning, $stackPtr);
+                        $warning = 'Variable "%s" contains numbers but this is discouraged';
+                        $data    = array($originalVarName);
+                        $phpcsFile->addWarning($warning, $stackPtr, 'ContainsNumbers', $data);
                     }
                 }//end if
             }//end if
@@ -127,11 +129,13 @@ class Zend_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniff
         }
 
         if (PHP_CodeSniffer::isCamelCaps($varName, false, true, false) === false) {
-            $error = "Variable \"$originalVarName\" is not in valid camel caps format";
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Variable "%s" is not in valid camel caps format';
+            $data  = array($originalVarName);
+            $phpcsFile->addError($error, $stackPtr, 'NotCamelCaps', $data);
         } else if (preg_match('|\d|', $varName)) {
-            $warning = "Variable \"$originalVarName\" contains numbers but this is discouraged";
-            $phpcsFile->addWarning($warning, $stackPtr);
+            $warning = 'Variable "%s" contains numbers but this is discouraged';
+            $data    = array($originalVarName);
+            $phpcsFile->addWarning($warning, $stackPtr, 'ContainsNumbers', $data);
         }
 
     }//end processVariable()
@@ -156,25 +160,32 @@ class Zend_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniff
 
         if ($public === true) {
             if (substr($varName, 0, 1) === '_') {
-                $error = "Public member variable \"$varName\" must not contain a leading underscore";
-                $phpcsFile->addError($error, $stackPtr);
+                $error = 'Public member variable "%s" must not contain a leading underscore';
+                $data  = array($varName);
+                $phpcsFile->addError($error, $stackPtr, 'PublicHasUnderscore', $data);
                 return;
             }
         } else {
             if (substr($varName, 0, 1) !== '_') {
                 $scope = ucfirst($memberProps['scope']);
-                $error = "$scope member variable \"$varName\" must contain a leading underscore";
-                $phpcsFile->addError($error, $stackPtr);
+                $error = '%s member variable "%s" must contain a leading underscore';
+                $data  = array(
+                          $scope,
+                          $varName,
+                         );
+                $phpcsFile->addError($error, $stackPtr, 'PrivateNoUnderscore', $data);
                 return;
             }
         }
 
         if (PHP_CodeSniffer::isCamelCaps($varName, false, $public, false) === false) {
-            $error = "Variable \"$varName\" is not in valid camel caps format";
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Variable "%s" is not in valid camel caps format';
+            $data  = array($varName);
+            $phpcsFile->addError($error, $stackPtr, 'MemberVarNotCamelCaps', $data);
         } else if (preg_match('|\d|', $varName)) {
-            $warning = "Variable \"$varName\" contains numbers but this is discouraged";
-            $phpcsFile->addWarning($warning, $stackPtr);
+            $warning = 'Variable "%s" contains numbers but this is discouraged';
+            $data    = array($varName);
+            $phpcsFile->addWarning($warning, $stackPtr, 'MemberVarContainsNumbers', $data);
         }
 
     }//end processMemberVar()
@@ -224,11 +235,13 @@ class Zend_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniff
 
                 if (PHP_CodeSniffer::isCamelCaps($varName, false, true, false) === false) {
                     $varName = $matches[0];
-                    $error   = "Variable \"$originalVarName\" is not in valid camel caps format";
-                    $phpcsFile->addError($error, $stackPtr);
+                    $error   = 'Variable "%s" is not in valid camel caps format';
+                    $data    = array($originalVarName);
+                    $phpcsFile->addError($error, $stackPtr, 'StringVarNotCamelCaps', $data);
                 } else if (preg_match('|\d|', $varName)) {
-                    $warning = "Variable \"$originalVarName\" contains numbers but this is discouraged";
-                    $phpcsFile->addWarning($warning, $stackPtr);
+                    $warning = 'Variable "%s" contains numbers but this is discouraged';
+                    $data    = array($originalVarName);
+                    $phpcsFile->addWarning($warning, $stackPtr, 'StringVarContainsNumbers', $data);
                 }
             }
         }//end if

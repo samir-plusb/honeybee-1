@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: GetRequestDataSniff.php 292098 2009-12-14 00:36:04Z squiz $
+ * @version   CVS: $Id: GetRequestDataSniff.php 302095 2010-08-11 04:42:36Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -21,7 +21,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class MySource_Sniffs_PHP_GetRequestDataSniff implements PHP_CodeSniffer_Sniff
@@ -75,7 +75,7 @@ class MySource_Sniffs_PHP_GetRequestDataSniff implements PHP_CodeSniffer_Sniff
                     // We don't have nested classes.
                     break;
                 }
-            } else if ($inClass == true && $tokens[$i]['code'] === T_FUNCTION) {
+            } else if ($inClass === true && $tokens[$i]['code'] === T_FUNCTION) {
                 $funcName = $phpcsFile->findNext(T_STRING, $i);
                 $funcName = $tokens[$funcName]['content'];
                 if (strtolower($funcName) === 'getrequestdata') {
@@ -90,8 +90,8 @@ class MySource_Sniffs_PHP_GetRequestDataSniff implements PHP_CodeSniffer_Sniff
 
         // If we get to here, the super global was used incorrectly.
         // First find out how it is being used.
-        $globalName   = strtolower(substr($varName, 2));
-        $usedVar      = '';
+        $globalName = strtolower(substr($varName, 2));
+        $usedVar    = '';
 
         $openBracket = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
         if ($tokens[$openBracket]['code'] === T_OPEN_SQUARE_BRACKET) {
@@ -99,13 +99,18 @@ class MySource_Sniffs_PHP_GetRequestDataSniff implements PHP_CodeSniffer_Sniff
             $usedVar      = $phpcsFile->getTokensAsString(($openBracket + 1), ($closeBracket - $openBracket - 1));
         }
 
-        $error = "The $varName super global must not be accessed directly; use Security::getRequestData(";
+        $type  = 'SuperglobalAccessed';
+        $error = 'The %s super global must not be accessed directly; use Security::getRequestData(';
+        $data  = array($varName);
         if ($usedVar !== '') {
-            $error .= "$usedVar, '$globalName'";
+            $type  .= 'WithVar';
+            $error .= '%s, \'%s\'';
+            $data[] = $usedVar;
+            $data[] = $globalName;
         }
 
         $error .= ') instead';
-        $phpcsFile->addError($error, $stackPtr);
+        $phpcsFile->addError($error, $stackPtr, $type, $data);
 
     }//end process()
 

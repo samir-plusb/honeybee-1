@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: OpeningFunctionBraceBsdAllmanSniff.php 259084 2008-05-05 03:59:12Z squiz $
+ * @version   CVS: $Id: OpeningFunctionBraceBsdAllmanSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -26,7 +26,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_Functions_OpeningFunctionBraceBsdAllmanSniff implements PHP_CodeSniffer_Sniff
@@ -74,18 +74,14 @@ class Generic_Sniffs_Functions_OpeningFunctionBraceBsdAllmanSniff implements PHP
 
         if ($lineDifference === 0) {
             $error = 'Opening brace should be on a new line';
-            $phpcsFile->addError($error, $openingBrace);
+            $phpcsFile->addError($error, $openingBrace, 'BraceOnSameLine');
             return;
         }
 
         if ($lineDifference > 1) {
-            $ender = 'line';
-            if (($lineDifference - 1) !== 1) {
-                $ender .= 's';
-            }
-
-            $error = 'Opening brace should be on the line after the declaration; found '.($lineDifference - 1).' blank '.$ender;
-            $phpcsFile->addError($error, $openingBrace);
+            $error = 'Opening brace should be on the line after the declaration; found %s blank line(s)';
+            $data  = array(($lineDifference - 1));
+            $phpcsFile->addError($error, $openingBrace, 'BraceSpacing', $data);
             return;
         }
 
@@ -110,8 +106,12 @@ class Generic_Sniffs_Functions_OpeningFunctionBraceBsdAllmanSniff implements PHP
         $braceIndent = $tokens[$openingBrace]['column'];
 
         if ($braceIndent !== $startColumn) {
-            $error = 'Opening brace indented incorrectly; expected '.($startColumn - 1).' spaces, found '.($braceIndent - 1);
-            $phpcsFile->addError($error, $openingBrace);
+            $error = 'Opening brace indented incorrectly; expected %s spaces, found %s';
+            $data  = array(
+                      ($startColumn - 1),
+                      ($braceIndent - 1),
+                     );
+            $phpcsFile->addError($error, $openingBrace, 'BraceIndent', $data);
         }
 
     }//end process()

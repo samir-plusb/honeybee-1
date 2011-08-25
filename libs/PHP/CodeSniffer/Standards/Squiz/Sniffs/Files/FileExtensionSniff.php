@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: FileExtensionSniff.php 240175 2007-07-23 01:47:54Z squiz $
+ * @version   CVS: $Id: FileExtensionSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_Files_FileExtensionSniff implements PHP_CodeSniffer_Sniff
@@ -72,13 +72,14 @@ class Squiz_Sniffs_Files_FileExtensionSniff implements PHP_CodeSniffer_Sniff
 
         if ($extension === '.php') {
             if ($nextClass !== false) {
-                $error = ucfirst($tokens[$nextClass]['content']).' found in ".php" file; use ".inc" extension instead';
-                $phpcsFile->addError($error, $stackPtr);
+                $error = '%s found in ".php" file; use ".inc" extension instead';
+                $data  = array(ucfirst($tokens[$nextClass]['content']));
+                $phpcsFile->addError($error, $stackPtr, 'ClassFound', $data);
             }
         } else if ($extension === '.inc') {
             if ($nextClass === false) {
                 $error = 'No interface or class found in ".inc" file; use ".php" extension instead';
-                $phpcsFile->addError($error, $stackPtr);
+                $phpcsFile->addError($error, $stackPtr, 'NoClass');
             }
         }
 

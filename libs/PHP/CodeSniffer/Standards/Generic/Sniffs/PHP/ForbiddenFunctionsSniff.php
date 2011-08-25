@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ForbiddenFunctionsSniff.php 290853 2009-11-17 03:17:17Z squiz $
+ * @version   CVS: $Id: ForbiddenFunctionsSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -26,7 +26,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_PHP_ForbiddenFunctionsSniff implements PHP_CodeSniffer_Sniff
@@ -50,7 +50,7 @@ class Generic_Sniffs_PHP_ForbiddenFunctionsSniff implements PHP_CodeSniffer_Snif
      *
      * @var bool
      */
-    protected $error = true;
+    public $error = true;
 
 
     /**
@@ -97,21 +97,26 @@ class Generic_Sniffs_PHP_ForbiddenFunctionsSniff implements PHP_CodeSniffer_Snif
             return;
         }
 
-        $error = "The use of function $function() is ";
+        $data  = array($function);
+        $error = 'The use of function %s() is ';
         if ($this->error === true) {
+            $type   = 'Found';
             $error .= 'forbidden';
         } else {
+            $type   = 'Discouraged';
             $error .= 'discouraged';
         }
 
         if ($this->forbiddenFunctions[$function] !== null) {
-            $error .= '; use '.$this->forbiddenFunctions[$function].'() instead';
+            $type  .= 'WithAlternative';
+            $data[] = $this->forbiddenFunctions[$function];
+            $error .= '; use %s() instead';
         }
 
         if ($this->error === true) {
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, $type, $data);
         } else {
-            $phpcsFile->addWarning($error, $stackPtr);
+            $phpcsFile->addWarning($error, $stackPtr, $type, $data);
         }
 
     }//end process()

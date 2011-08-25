@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ClassFileNameSniff.php 240175 2007-07-23 01:47:54Z squiz $
+ * @version   CVS: $Id: ClassFileNameSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -26,7 +26,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_Classes_ClassFileNameSniff implements PHP_CodeSniffer_Sniff
@@ -65,11 +65,13 @@ class Squiz_Sniffs_Classes_ClassFileNameSniff implements PHP_CodeSniffer_Sniff
         $fileName = substr($fullPath, 0, strrpos($fullPath, '.'));
 
         if ($tokens[$decName]['content'] !== $fileName) {
-            $error  = ucfirst($tokens[$stackPtr]['content']);
-            $error .= ' name doesn\'t match filename. Expected ';
-            $error .= '"'.$tokens[$stackPtr]['content'].' ';
-            $error .= $fileName.'".';
-            $phpcsFile->addError($error, $stackPtr);
+            $error = '%s name doesn\'t match filename; expected "%s %s"';
+            $data  = array(
+                      ucfirst($tokens[$stackPtr]['content']),
+                      $tokens[$stackPtr]['content'],
+                      $fileName,
+                     );
+            $phpcsFile->addError($error, $stackPtr, 'NoMatch', $data);
         }
 
     }//end process()

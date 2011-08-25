@@ -25,7 +25,7 @@
  * @copyright 2009 SQLI <www.sqli.com>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 interface PHP_CodeSniffer_Report
@@ -35,16 +35,14 @@ interface PHP_CodeSniffer_Report
     /**
      * Generate the actual report.
      * 
-     * @param array   $report       Prepared report.
-     * @param boolean $showWarnings Show warnings?
-     * @param boolean $showSources  Show sources?
-     * @param int     $width        Maximum allowed lne width.  
+     * @param array   $report      Prepared report.
+     * @param boolean $showSources Show sources?
+     * @param int     $width       Maximum allowed lne width.  
      * 
      * @return string 
      */
     public function generate(
         $report,
-        $showWarnings=true,
         $showSources=false,
         $width=80
     );

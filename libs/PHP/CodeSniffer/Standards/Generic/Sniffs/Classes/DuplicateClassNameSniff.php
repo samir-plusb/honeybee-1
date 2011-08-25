@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: DuplicateClassNameSniff.php 263478 2008-07-25 04:24:11Z squiz $
+ * @version   CVS: $Id: DuplicateClassNameSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -21,7 +21,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_Classes_DuplicateClassNameSniff implements PHP_CodeSniffer_MultiFileSniff
@@ -52,8 +52,14 @@ class Generic_Sniffs_Classes_DuplicateClassNameSniff implements PHP_CodeSniffer_
                     $type  = strtolower($tokens[$stackPtr]['content']);
                     $file  = $foundClasses[$compareName]['file'];
                     $line  = $foundClasses[$compareName]['line'];
-                    $error = "Duplicate $type name \"$name\" found; first defined in $file on line $line";
-                    $phpcsFile->addWarning($error, $stackPtr);
+                    $error = 'Duplicate %s name "%s" found; first defined in %s on line %s';
+                    $data  = array(
+                              $type,
+                              $name,
+                              $file,
+                              $line,
+                             );
+                    $phpcsFile->addWarning($error, $stackPtr, 'Found', $data);
                 } else {
                     $foundClasses[$compareName] = array(
                                                         'file' => $phpcsFile->getFilename(),

@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: CreateWidgetTypeCallbackSniff.php 292105 2009-12-14 03:37:53Z squiz $
+ * @version   CVS: $Id: CreateWidgetTypeCallbackSniff.php 302095 2010-08-11 04:42:36Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -21,7 +21,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class MySource_Sniffs_Objects_CreateWidgetTypeCallbackSniff implements PHP_CodeSniffer_Sniff
@@ -78,8 +78,8 @@ class MySource_Sniffs_Objects_CreateWidgetTypeCallbackSniff implements PHP_CodeS
             continue;
         }
 
-        $start  = ($tokens[$function]['scope_opener'] + 1);
-        $end    = ($tokens[$function]['scope_closer'] - 1);
+        $start = ($tokens[$function]['scope_opener'] + 1);
+        $end   = ($tokens[$function]['scope_closer'] - 1);
 
         // Check that the first argument is called "callback".
         $arg = $phpcsFile->findNext(T_WHITESPACE, ($tokens[$function]['parenthesis_opener'] + 1), null, true);

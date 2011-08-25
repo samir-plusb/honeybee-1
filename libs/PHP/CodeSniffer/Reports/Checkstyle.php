@@ -27,7 +27,7 @@
  * @copyright 2009 SQLI <www.sqli.com>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PHP_CodeSniffer_Reports_Checkstyle implements PHP_CodeSniffer_Report
@@ -39,21 +39,19 @@ class PHP_CodeSniffer_Reports_Checkstyle implements PHP_CodeSniffer_Report
      *
      * Violations are grouped by file.
      *
-     * @param array   $report       Prepared report.
-     * @param boolean $showWarnings Show warnings?
-     * @param boolean $showSources  Show sources?
-     * @param int     $width        Maximum allowed lne width.
+     * @param array   $report      Prepared report.
+     * @param boolean $showSources Show sources?
+     * @param int     $width       Maximum allowed lne width.
      * 
      * @return string 
      */
     public function generate(
         $report,
-        $showWarnings=true,
         $showSources=false,
         $width=80
     ) {
         echo '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        echo '<checkstyle version="1.2.2">'.PHP_EOL;
+        echo '<checkstyle version="1.3.0">'.PHP_EOL;
 
         $errorsShown = 0;
         foreach ($report['files'] as $filename => $file) {
@@ -62,12 +60,15 @@ class PHP_CodeSniffer_Reports_Checkstyle implements PHP_CodeSniffer_Report
             foreach ($file['messages'] as $line => $lineErrors) {
                 foreach ($lineErrors as $column => $colErrors) {
                     foreach ($colErrors as $error) {
-                        $error['type'] = strtolower($error['type']);
-                        echo '  <error';
-                        echo ' line="'.$line.'" column="'.$column.'"';
+                        $error['type']    = strtolower($error['type']);
+                        $error['message'] = htmlspecialchars($error['message']);
+                        if (PHP_CODESNIFFER_ENCODING !== 'utf-8') {
+                            $error['message'] = iconv(PHP_CODESNIFFER_ENCODING, 'utf-8', $error['message']);
+                        }
+
+                        echo '  <error line="'.$line.'" column="'.$column.'"';
                         echo ' severity="'.$error['type'].'"';
-                        $message = utf8_encode(htmlspecialchars($error['message']));
-                        echo ' message="'.$message.'"';
+                        echo ' message="'.$error['message'].'"';
                         echo ' source="'.$error['source'].'"';
                         echo '/>'.PHP_EOL;
                         $errorsShown++;

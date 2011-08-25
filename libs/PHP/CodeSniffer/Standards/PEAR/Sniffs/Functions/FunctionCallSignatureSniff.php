@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: FunctionCallSignatureSniff.php 284575 2009-07-22 02:58:19Z squiz $
+ * @version   CVS: $Id: FunctionCallSignatureSniff.php 307869 2011-01-31 03:56:50Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -23,7 +23,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PEAR_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffer_Sniff
@@ -77,24 +77,19 @@ class PEAR_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffe
             return;
         }
 
-        if ($tokens[$previous]['code'] === T_NEW) {
-            // We are creating an object, not calling a function.
-            return;
-        }
-
         $closeBracket = $tokens[$openBracket]['parenthesis_closer'];
 
         if (($stackPtr + 1) !== $openBracket) {
             // Checking this: $value = my_function[*](...).
             $error = 'Space before opening parenthesis of function call prohibited';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'SpaceBeforeOpenBracket');
         }
 
         $next = $phpcsFile->findNext(T_WHITESPACE, ($closeBracket + 1), null, true);
         if ($tokens[$next]['code'] === T_SEMICOLON) {
             if (in_array($tokens[($closeBracket + 1)]['code'], PHP_CodeSniffer_Tokens::$emptyTokens) === true) {
                 $error = 'Space after closing parenthesis of function call prohibited';
-                $phpcsFile->addError($error, $closeBracket);
+                $phpcsFile->addError($error, $closeBracket, 'SpaceAfterCloseBracket');
             }
         }
 
@@ -126,7 +121,7 @@ class PEAR_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffe
         if ($tokens[($openBracket + 1)]['code'] === T_WHITESPACE) {
             // Checking this: $value = my_function([*]...).
             $error = 'Space after opening parenthesis of function call prohibited';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'SpaceAfterOpenBracket');
         }
 
         $closer = $tokens[$openBracket]['parenthesis_closer'];
@@ -142,7 +137,7 @@ class PEAR_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffe
             // $value = my_function( ).
             if ($between !== $closer) {
                 $error = 'Space before closing parenthesis of function call prohibited';
-                $phpcsFile->addError($error, $closer);
+                $phpcsFile->addError($error, $closer, 'SpaceBeforeCloseBracket');
             }
         }
 
@@ -221,21 +216,32 @@ class PEAR_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffe
                 }
 
                 if ($expectedIndent !== $foundIndent) {
-                    $error = "Multi-line function call not indented correctly; expected $expectedIndent spaces but found $foundIndent";
-                    $phpcsFile->addError($error, $i);
+                    $error = 'Multi-line function call not indented correctly; expected %s spaces but found %s';
+                    $data  = array(
+                              $expectedIndent,
+                              $foundIndent,
+                             );
+                    $phpcsFile->addError($error, $i, 'Indent', $data);
                 }
             }//end if
+
+            // Skip the rest of a closure.
+            if ($tokens[$i]['code'] === T_CLOSURE) {
+                $i        = $tokens[$i]['scope_closer'];
+                $lastLine = $tokens[$i]['line'];
+                continue;
+            }
         }//end for
 
         if ($tokens[($openBracket + 1)]['content'] !== $phpcsFile->eolChar) {
             $error = 'Opening parenthesis of a multi-line function call must be the last content on the line';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'ContentAfterOpenBracket');
         }
 
         $prev = $phpcsFile->findPrevious(T_WHITESPACE, ($closeBracket - 1), null, true);
         if ($tokens[$prev]['line'] === $tokens[$closeBracket]['line']) {
             $error = 'Closing parenthesis of a multi-line function call must be on a line by itself';
-            $phpcsFile->addError($error, $closeBracket);
+            $phpcsFile->addError($error, $closeBracket, 'CloseBracketLine');
         }
 
     }//end processMultiLineCall()

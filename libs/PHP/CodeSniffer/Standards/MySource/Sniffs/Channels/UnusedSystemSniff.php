@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: UnusedSystemSniff.php 293522 2010-01-13 22:28:20Z squiz $
+ * @version   CVS: $Id: UnusedSystemSniff.php 302095 2010-08-11 04:42:36Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -21,11 +21,12 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class MySource_Sniffs_Channels_UnusedSystemSniff implements PHP_CodeSniffer_Sniff
 {
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -98,9 +99,14 @@ class MySource_Sniffs_Channels_UnusedSystemSniff implements PHP_CodeSniffer_Snif
                 }
 
                 break;
-            }
+            }//end if
 
-            $validTokens = array(T_DOUBLE_COLON, T_EXTENDS, T_IMPLEMENTS);
+            $validTokens = array(
+                            T_DOUBLE_COLON,
+                            T_EXTENDS,
+                            T_IMPLEMENTS,
+                           );
+
             if (in_array($tokens[$i]['code'], $validTokens) === false) {
                 continue;
             }
@@ -140,8 +146,9 @@ class MySource_Sniffs_Channels_UnusedSystemSniff implements PHP_CodeSniffer_Snif
         }//end for
 
         // If we get to here, the system was not use.
-        $error = "Included system \"$systemName\" is never used";
-        $phpcsFile->addError($error, $stackPtr);
+        $error = 'Included system "%s" is never used';
+        $data  = array($systemName);
+        $phpcsFile->addError($error, $stackPtr, 'Found', $data);
 
     }//end process()
 

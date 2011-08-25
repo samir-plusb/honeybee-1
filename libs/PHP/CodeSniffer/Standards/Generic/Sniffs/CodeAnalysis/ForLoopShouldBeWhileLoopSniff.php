@@ -10,7 +10,7 @@
  * @author    Manuel Pichler <mapi@manuel-pichler.de>
  * @copyright 2007-2008 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   CVS: $Id: ForLoopShouldBeWhileLoopSniff.php 252356 2008-02-06 02:38:37Z squiz $
+ * @version   CVS: $Id: ForLoopShouldBeWhileLoopSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -35,7 +35,7 @@
  * @author    Manuel Pichler <mapi@manuel-pichler.de>
  * @copyright 2007-2008 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_CodeAnalysis_ForLoopShouldBeWhileLoopSniff implements PHP_CodeSniffer_Sniff
@@ -90,7 +90,7 @@ class Generic_Sniffs_CodeAnalysis_ForLoopShouldBeWhileLoopSniff implements PHP_C
 
         if ($parts[0] === 0 && $parts[2] === 0 && $parts[1] > 0) {
             $error = 'This FOR loop can be simplified to a WHILE loop';
-            $phpcsFile->addWarning($error, $stackPtr);
+            $phpcsFile->addWarning($error, $stackPtr, 'CanSimplify');
         }
 
     }//end process()

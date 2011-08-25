@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ConcatenationSpacingSniff.php 240175 2007-07-23 01:47:54Z squiz $
+ * @version   CVS: $Id: ConcatenationSpacingSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -26,7 +26,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_Strings_ConcatenationSpacingSniff implements PHP_CodeSniffer_Sniff
@@ -57,39 +57,11 @@ class Squiz_Sniffs_Strings_ConcatenationSpacingSniff implements PHP_CodeSniffer_
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-
-        $found    = '';
-        $expected = '';
-        $error    = false;
-
-        if ($tokens[($stackPtr - 1)]['code'] === T_WHITESPACE) {
-            $expected .= '...'.substr($tokens[($stackPtr - 2)]['content'], -5).$tokens[$stackPtr]['content'];
-            $found    .= '...'.substr($tokens[($stackPtr - 2)]['content'], -5).$tokens[($stackPtr - 1)]['content'].$tokens[$stackPtr]['content'];
-            $error     = true;
-        } else {
-            $found    .= '...'.substr($tokens[($stackPtr - 1)]['content'], -5).$tokens[$stackPtr]['content'];
-            $expected .= '...'.substr($tokens[($stackPtr - 1)]['content'], -5).$tokens[$stackPtr]['content'];
-        }
-
-        if ($tokens[($stackPtr + 1)]['code'] === T_WHITESPACE) {
-            $expected .= substr($tokens[($stackPtr + 2)]['content'], 0, 5).'...';
-            $found    .= $tokens[($stackPtr + 1)]['content'].substr($tokens[($stackPtr + 2)]['content'], 0, 5).'...';
-            $error     = true;
-        } else {
-            $found    .= $tokens[($stackPtr + 1)]['content'];
-            $expected .= $tokens[($stackPtr + 1)]['content'];
-        }
-
-        if ($error === true) {
-            $found    = str_replace("\r\n", '\n', $found);
-            $found    = str_replace("\n", '\n', $found);
-            $found    = str_replace("\r", '\n', $found);
-            $expected = str_replace("\r\n", '\n', $expected);
-            $expected = str_replace("\n", '\n', $expected);
-            $expected = str_replace("\r", '\n', $expected);
-
-            $message = "Concat operator must not be surrounded by spaces. Found \"$found\"; expected \"$expected\"";
-            $phpcsFile->addError($message, $stackPtr);
+        if ($tokens[($stackPtr - 1)]['code'] === T_WHITESPACE
+            || $tokens[($stackPtr + 1)]['code'] === T_WHITESPACE
+        ) {
+            $message = 'Concat operator must not be surrounded by spaces';
+            $phpcsFile->addError($message, $stackPtr, 'Missing');
         }
 
     }//end process()

@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: InlineControlStructureSniff.php 258843 2008-05-01 00:49:32Z squiz $
+ * @version   CVS: $Id: InlineControlStructureSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_ControlStructures_InlineControlStructureSniff implements PHP_CodeSniffer_Sniff
@@ -46,7 +46,8 @@ class Generic_Sniffs_ControlStructures_InlineControlStructureSniff implements PH
      *
      * @var bool
      */
-    protected $error = true;
+    public $error = true;
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -104,9 +105,9 @@ class Generic_Sniffs_ControlStructures_InlineControlStructureSniff implements PH
             // This is a control structure without an opening brace,
             // so it is an inline statement.
             if ($this->error === true) {
-                $phpcsFile->addError('Inline control structures are not allowed', $stackPtr);
+                $phpcsFile->addError('Inline control structures are not allowed', $stackPtr, 'NotAllowed');
             } else {
-                $phpcsFile->addWarning('Inline control structures are discouraged', $stackPtr);
+                $phpcsFile->addWarning('Inline control structures are discouraged', $stackPtr, 'Discouraged');
             }
 
             return;

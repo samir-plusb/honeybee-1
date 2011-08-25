@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: MultiLineAssignmentSniff.php 270196 2008-12-01 05:02:13Z squiz $
+ * @version   CVS: $Id: MultiLineAssignmentSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -23,7 +23,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PEAR_Sniffs_Formatting_MultiLineAssignmentSniff implements PHP_CodeSniffer_Sniff
@@ -64,7 +64,7 @@ class PEAR_Sniffs_Formatting_MultiLineAssignmentSniff implements PHP_CodeSniffer
 
         if ($tokens[$next]['line'] !== $tokens[$stackPtr]['line']) {
             $error = 'Multi-line assignments must have the equal sign on the second line';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'EqualSignLine');
             return;
         }
 
@@ -99,8 +99,12 @@ class PEAR_Sniffs_Formatting_MultiLineAssignmentSniff implements PHP_CodeSniffer
         $expectedIndent = ($assignmentIndent + 4);
         $foundIndent    = strlen($tokens[$prev]['content']);
         if ($foundIndent !== $expectedIndent) {
-            $error = "Multi-line assignment not indented correctly; expected $expectedIndent spaces but found $foundIndent";
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Multi-line assignment not indented correctly; expected %s spaces but found %s';
+            $data  = array(
+                      $expectedIndent,
+                      $foundIndent,
+                     );
+            $phpcsFile->addError($error, $stackPtr, 'Indent', $data);
         }
 
     }//end process()

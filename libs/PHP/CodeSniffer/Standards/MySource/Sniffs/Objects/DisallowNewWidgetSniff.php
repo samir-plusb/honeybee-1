@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: DisallowNewWidgetSniff.php 253718 2008-02-25 03:48:52Z squiz $
+ * @version   CVS: $Id: DisallowNewWidgetSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -21,7 +21,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class MySource_Sniffs_Objects_DisallowNewWidgetSniff implements PHP_CodeSniffer_Sniff
@@ -60,8 +60,9 @@ class MySource_Sniffs_Objects_DisallowNewWidgetSniff implements PHP_CodeSniffer_
 
         if (substr(strtolower($tokens[$className]['content']), -10) === 'widgettype') {
             $widgetType = substr($tokens[$className]['content'], 0, -10);
-            $error      = "Manual creation of widget objects is banned; use Widget::getWidget('$widgetType'); instead";
-            $phpcsFile->addError($error, $stackPtr);
+            $error      = 'Manual creation of widget objects is banned; use Widget::getWidget(\'%s\'); instead';
+            $data       = array($widgetType);
+            $phpcsFile->addError($error, $stackPtr, 'Found', $data);
         }
 
     }//end process()

@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: DebugCodeSniff.php 265159 2008-08-20 05:37:21Z squiz $
+ * @version   CVS: $Id: DebugCodeSniff.php 302095 2010-08-11 04:42:36Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -21,11 +21,12 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class MySource_Sniffs_Debug_DebugCodeSniff implements PHP_CodeSniffer_Sniff
 {
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -54,10 +55,10 @@ class MySource_Sniffs_Debug_DebugCodeSniff implements PHP_CodeSniffer_Sniff
 
         $className = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
         if (strtolower($tokens[$className]['content']) === 'debug') {
-            $method     = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
-            $methodName = $tokens[$method]['content'];
-            $error      = "Call to debug function Debug::$methodName() must be removed";
-            $phpcsFile->addError($error, $stackPtr);
+            $method = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
+            $error  = 'Call to debug function Debug::%s() must be removed';
+            $data   = array($tokens[$method]['content']);
+            $phpcsFile->addError($error, $stackPtr, 'Found', $data);
         }
 
     }//end process()

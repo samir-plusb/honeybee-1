@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ValidVariableNameSniff.php 261129 2008-06-13 04:10:43Z squiz $
+ * @version   CVS: $Id: ValidVariableNameSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -28,7 +28,7 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractVariableSniff', true) === fa
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PEAR_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniffer_Standards_AbstractVariableSniff
@@ -60,15 +60,20 @@ class PEAR_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniff
 
         // If it's a private member, it must have an underscore on the front.
         if ($isPublic === false && $memberName{0} !== '_') {
-            $error = "Private member variable \"$memberName\" must be prefixed with an underscore";
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Private member variable "%s" must be prefixed with an underscore';
+            $data  = array($memberName);
+            $phpcsFile->addError($error, $stackPtr, 'PrivateNoUnderscore', $data);
             return;
         }
 
         // If it's not a private member, it must not have an underscore on the front.
         if ($isPublic === true && $scopeSpecified === true && $memberName{0} === '_') {
-            $error = ucfirst($scope)." member variable \"$memberName\" must not be prefixed with an underscore";
-            $phpcsFile->addError($error, $stackPtr);
+            $error = '%s member variable "%s" must not be prefixed with an underscore';
+            $data  = array(
+                      ucfirst($scope),
+                      $memberName,
+                     );
+            $phpcsFile->addError($error, $stackPtr, 'PublicUnderscore', $data);
             return;
         }
 

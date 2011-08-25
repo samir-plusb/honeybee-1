@@ -10,7 +10,7 @@
  * @author    Manuel Pichler <mapi@manuel-pichler.de>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version   CVS: $Id: UnusedFunctionParameterSniff.php 293532 2010-01-14 04:46:35Z squiz $
+ * @version   CVS: $Id: UnusedFunctionParameterSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -28,7 +28,7 @@
  * @author    Manuel Pichler <mapi@manuel-pichler.de>
  * @copyright 2007-2008 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_CodeAnalysis_UnusedFunctionParameterSniff implements PHP_CodeSniffer_Sniff
@@ -112,7 +112,16 @@ class Generic_Sniffs_CodeAnalysis_UnusedFunctionParameterSniff implements PHP_Co
                 unset($params[$token['content']]);
             } else if ($code === T_DOUBLE_QUOTED_STRING || $code === T_HEREDOC) {
                 // Tokenize strings that can contain variables.
-                $strTokens = token_get_all(sprintf('<?php %s;?>', $token['content']));
+                // Make sure the string is re-joined if it occurs over multiple lines.
+                $string = $token['content'];
+                for ($i = ($next + 1); $i <= $end; $i++) {
+                    if ($tokens[$i]['code'] === $code) {
+                        $string .= $tokens[$i]['content'];
+                        $next++;
+                    }
+                }
+
+                $strTokens = token_get_all(sprintf('<?php %s;?>', $string));
 
                 foreach ($strTokens as $tok) {
                     if (is_array($tok) === false || $tok[0] !== T_VARIABLE ) {
@@ -128,8 +137,9 @@ class Generic_Sniffs_CodeAnalysis_UnusedFunctionParameterSniff implements PHP_Co
 
         if ($emptyBody === false && count($params) > 0) {
             foreach ($params as $paramName => $position) {
-                $error = 'The method parameter '.$paramName.' is never used';
-                $phpcsFile->addWarning($error, $position);
+                $error = 'The method parameter %s is never used';
+                $data  = array($paramName);
+                $phpcsFile->addWarning($error, $position, 'Found', $data);
             }
         }
 

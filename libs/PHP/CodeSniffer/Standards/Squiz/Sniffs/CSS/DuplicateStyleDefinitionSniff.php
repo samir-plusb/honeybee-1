@@ -23,7 +23,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_CSS_DuplicateStyleDefinitionSniff implements PHP_CodeSniffer_Sniff
@@ -76,9 +76,9 @@ class Squiz_Sniffs_CSS_DuplicateStyleDefinitionSniff implements PHP_CodeSniffer_
             $name = $tokens[$next]['content'];
             if (isset($styleNames[$name]) === true) {
                 $first = $styleNames[$name];
-                $line  = $tokens[$first]['line'];
-                $error = "Duplicate style definition found; first defined on line $line";
-                $phpcsFile->addError($error, $next);
+                $error = 'Duplicate style definition found; first defined on line %s';
+                $data  = array($tokens[$first]['line']);
+                $phpcsFile->addError($error, $next, 'Found', $data);
             } else {
                 $styleNames[$name] = $next;
             }

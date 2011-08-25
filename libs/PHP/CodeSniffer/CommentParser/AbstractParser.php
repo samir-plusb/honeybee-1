@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: AbstractParser.php 293524 2010-01-13 22:38:47Z squiz $
+ * @version   CVS: $Id: AbstractParser.php 302086 2010-08-11 01:50:50Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -64,7 +64,7 @@ if (class_exists('PHP_CodeSniffer_CommentParser_ParserException', true) === fals
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 abstract class PHP_CodeSniffer_CommentParser_AbstractParser
@@ -100,6 +100,13 @@ abstract class PHP_CodeSniffer_CommentParser_AbstractParser
      * @var array(string)
      */
     protected $words = array();
+
+    /**
+     * An array of all tags found in the comment.
+     *
+     * @var array(string)
+     */
+    protected $foundTags = array();
 
     /**
      * The previous doc element that was processed.
@@ -261,7 +268,6 @@ abstract class PHP_CodeSniffer_CommentParser_AbstractParser
     {
         $allowedTags     = (self::$_tags + $this->getAllowedTags());
         $allowedTagNames = array_keys($allowedTags);
-        $foundTags       = array();
         $prevTagPos      = false;
         $wordWasEmpty    = true;
 
@@ -287,7 +293,11 @@ abstract class PHP_CodeSniffer_CommentParser_AbstractParser
                     continue;
                 }
 
-                $foundTags[] = $tag;
+                $this->foundTags[] = array(
+                                      'tag'  => $tag,
+                                      'line' => $this->getLine($wordPos),
+                                      'pos'  => $wordPos,
+                                     );
 
                 if ($prevTagPos !== false) {
                     // There was a tag before this so let's process it.
@@ -326,6 +336,7 @@ abstract class PHP_CodeSniffer_CommentParser_AbstractParser
                         $this->unknown[] = array(
                                             'tag'  => $tag,
                                             'line' => $this->getLine($wordPos),
+                                            'pos'  => $wordPos,
                                            );
                     }
                 }//end if
@@ -517,6 +528,30 @@ abstract class PHP_CodeSniffer_CommentParser_AbstractParser
         return $this->comment;
 
     }//end getComment()
+
+
+    /**
+     * Returns the word list.
+     *
+     * @return array
+     */
+    public function getWords()
+    {
+        return $this->words;
+
+    }//end getWords()
+
+
+    /**
+     * Returns the list of found tags.
+     *
+     * @return array
+     */
+    public function getTags()
+    {
+        return $this->foundTags;
+
+    }//end getTags()
 
 
     /**

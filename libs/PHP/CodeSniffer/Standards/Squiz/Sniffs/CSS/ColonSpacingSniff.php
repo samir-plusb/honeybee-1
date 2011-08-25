@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ColonSpacingSniff.php 287631 2009-08-24 06:50:56Z squiz $
+ * @version   CVS: $Id: ColonSpacingSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -23,7 +23,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_CSS_ColonSpacingSniff implements PHP_CodeSniffer_Sniff
@@ -70,23 +70,24 @@ class Squiz_Sniffs_CSS_ColonSpacingSniff implements PHP_CodeSniffer_Sniff
 
         if ($tokens[($stackPtr - 1)]['code'] === T_WHITESPACE) {
             $error = 'There must be no space before a colon in a style definition';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'Before');
         }
 
         if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
             $error = 'Expected 1 space after colon in style definition; 0 found';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'NoneAfter');
         } else {
             $content = $tokens[($stackPtr + 1)]['content'];
             if (strpos($content, $phpcsFile->eolChar) === false) {
                 $length  = strlen($content);
                 if ($length !== 1) {
-                    $error = "Expected 1 space after colon in style definition; $length found";
-                    $phpcsFile->addError($error, $stackPtr);
+                    $error = 'Expected 1 space after colon in style definition; %s found';
+                    $data  = array($length);
+                    $phpcsFile->addError($error, $stackPtr, 'After', $data);
                 }
             } else {
                 $error = 'Expected 1 space after colon in style definition; newline found';
-                $phpcsFile->addError($error, $stackPtr);
+                $phpcsFile->addError($error, $stackPtr, 'AfterNewline');
             }
         }//end if
 

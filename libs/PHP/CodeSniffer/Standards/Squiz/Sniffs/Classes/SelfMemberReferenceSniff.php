@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: SelfMemberReferenceSniff.php 247629 2007-12-05 03:31:16Z squiz $
+ * @version   CVS: $Id: SelfMemberReferenceSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -35,7 +35,7 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractScopeSniff', true) === false
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_Classes_SelfMemberReferenceSniff extends PHP_CodeSniffer_Standards_AbstractScopeSniff
@@ -68,8 +68,9 @@ class Squiz_Sniffs_Classes_SelfMemberReferenceSniff extends PHP_CodeSniffer_Stan
         $className = ($stackPtr - 1);
         if ($tokens[$className]['code'] === T_SELF) {
             if (strtolower($tokens[$className]['content']) !== $tokens[$className]['content']) {
-                $error = 'Must use "self::" for local static member reference; found "'.$tokens[$className]['content'].'::"';
-                $phpcsFile->addError($error, $className);
+                $error = 'Must use "self::" for local static member reference; found "%s::"';
+                $data  = array($tokens[$className]['content']);
+                $phpcsFile->addError($error, $className, 'IncorrectCase', $data);
                 return;
             }
         } else if ($tokens[$className]['code'] === T_STRING) {
@@ -78,21 +79,23 @@ class Squiz_Sniffs_Classes_SelfMemberReferenceSniff extends PHP_CodeSniffer_Stan
             if ($declarationName === $tokens[$className]['content']) {
                 // Class name is the same as the current class.
                 $error = 'Must use "self::" for local static member reference';
-                $phpcsFile->addError($error, $className);
+                $phpcsFile->addError($error, $className, 'NotUsed');
                 return;
             }
         }
 
         if ($tokens[($stackPtr - 1)]['code'] === T_WHITESPACE) {
             $found = strlen($tokens[($stackPtr - 1)]['content']);
-            $error = "Expected 0 spaces before double colon; $found found";
-            $phpcsFile->addError($error, $className);
+            $error = 'Expected 0 spaces before double colon; %s found';
+            $data  = array($found);
+            $phpcsFile->addError($error, $className, 'SpaceBefore', $data);
         }
 
         if ($tokens[($stackPtr + 1)]['code'] === T_WHITESPACE) {
             $found = strlen($tokens[($stackPtr + 1)]['content']);
-            $error = "Expected 0 spaces after double colon; $found found";
-            $phpcsFile->addError($error, $className);
+            $error = 'Expected 0 spaces after double colon; %s found';
+            $data  = array($found);
+            $phpcsFile->addError($error, $className, 'SpaceAfter', $data);
         }
 
     }//end processTokenWithinScope()

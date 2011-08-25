@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: CSS.php 287661 2009-08-25 01:32:53Z squiz $
+ * @version   CVS: $Id: CSS.php 298354 2010-04-23 00:16:02Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@ if (class_exists('PHP_CodeSniffer_Tokenizers_PHP', true) === false) {
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PHP_CodeSniffer_Tokenizers_CSS extends PHP_CodeSniffer_Tokenizers_PHP
@@ -224,7 +224,7 @@ class PHP_CodeSniffer_Tokenizers_CSS extends PHP_CodeSniffer_Tokenizers_PHP
                         }
                     }
 
-                    // Needs to be in the format url( for it to be a URL.
+                    // Needs to be in the format "url(" for it to be a URL.
                     if ($finalTokens[$x]['code'] !== T_OPEN_PARENTHESIS) {
                         continue;
                     }
@@ -251,9 +251,14 @@ class PHP_CodeSniffer_Tokenizers_CSS extends PHP_CodeSniffer_Tokenizers_PHP
                         unset($finalTokens[$i]);
                     }
 
+                    // If the content inside the "url()" is in double quotes
+                    // there will only be one token and so we don't have to do
+                    // anything except change its type. If it is not empty,
+                    // we need to do some token merging.
+                    $finalTokens[($x + 1)]['type'] = 'T_URL';
+                    $finalTokens[($x + 1)]['code'] = T_URL;
+
                     if ($newContent !== '') {
-                        $finalTokens[($x + 1)]['type']     = 'T_URL';
-                        $finalTokens[($x + 1)]['code']     = T_URL;
                         $finalTokens[($x + 1)]['content'] .= $newContent;
 
                         $finalTokens = array_values($finalTokens);

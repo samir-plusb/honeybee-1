@@ -10,7 +10,7 @@
  * @author    Leif Wickland <lwickland@rightnow.com>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ConstructorNameSniff.php 287726 2009-08-26 05:13:12Z squiz $
+ * @version   CVS: $Id: ConstructorNameSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -29,7 +29,7 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractScopeSniff', true) === false
  * @package  PHP_CodeSniffer
  * @author   Leif Wickland <lwickland@rightnow.com>
  * @license  http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version  Release: 1.2.2
+ * @version  Release: 1.3.0
  * @link     http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_NamingConventions_ConstructorNameSniff extends PHP_CodeSniffer_Standards_AbstractScopeSniff
@@ -68,7 +68,7 @@ class Generic_Sniffs_NamingConventions_ConstructorNameSniff extends PHP_CodeSnif
 
         if (strcasecmp($methodName, $className) === 0) {
             $error = 'PHP4 style constructors are not allowed; use "__construct()" instead';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'OldStyle');
         } else if (strcasecmp($methodName, '__construct') !== 0) {
             // Not a constructor.
             return;
@@ -88,7 +88,7 @@ class Generic_Sniffs_NamingConventions_ConstructorNameSniff extends PHP_CodeSnif
                 && $tokens[($doubleColonIndex + 1)]['content'] === $parentClassName
             ) {
                 $error = 'PHP4 style calls to parent constructors are not allowed; use "parent::__construct()" instead';
-                $phpcsFile->addError($error, ($doubleColonIndex + 1));
+                $phpcsFile->addError($error, ($doubleColonIndex + 1), 'OldStyleCall');
             }
 
             $startIndex = ($doubleColonIndex + 1);

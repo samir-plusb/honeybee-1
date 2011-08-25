@@ -11,7 +11,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: File.php 293533 2010-01-14 05:55:31Z squiz $
+ * @version   CVS: $Id: File.php 306530 2010-12-21 04:08:20Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -112,7 +112,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PHP_CodeSniffer_File
@@ -131,6 +131,13 @@ class PHP_CodeSniffer_File
      * @var string
      */
     public $eolChar = '';
+
+    /**
+     * The PHP_CodeSniffer object controlling this run.
+     *
+     * @var PHP_CodeSniffer
+     */
+    public $phpcs = null;
 
     /**
      * The tokenizer being used for this file.
@@ -211,7 +218,7 @@ class PHP_CodeSniffer_File
      */
     private $_listeners = array();
 
-     /**
+    /**
      * The class name of the sniff currently processing the file.
      *
      * @var string
@@ -219,18 +226,11 @@ class PHP_CodeSniffer_File
     private $_activeListener = '';
 
     /**
-     * A constant to represent an error in PHP_CodeSniffer.
+     * An array of sniffs being processed and how long they took.
      *
-     * @var int
+     * @var array()
      */
-    const ERROR = 0;
-
-    /**
-     * A constant to represent a warning in PHP_CodeSniffer.
-     *
-     * @var int
-     */
-    const WARNING = 1;
+    private $_listenerTimes = array();
 
     /**
      * An array of extensions mapping to the tokenizer to use.
@@ -241,25 +241,46 @@ class PHP_CodeSniffer_File
      */
     protected $tokenizers = array();
 
+    /**
+     * An array of rules from the ruleset.xml file.
+     *
+     * This value gets set by PHP_CodeSniffer when the object is created.
+     * It may be empty, indicating that the ruleset does not override
+     * any of the default sniff settings.
+     *
+     * @var array
+     */
+    protected $ruleset = array();
+
 
     /**
      * Constructs a PHP_CodeSniffer_File.
      *
-     * @param string        $file       The absolute path to the file
-     *                                  to process.
-     * @param array(string) $listeners  The initial listeners listening
-     *                                  to processing of this file.
-     * @param array         $tokenizers An array of extensions mapping
-     *                                  to the tokenizer to use.
+     * @param string          $file       The absolute path to the file to process.
+     * @param array(string)   $listeners  The initial listeners listening
+     *                                    to processing of this file.
+     * @param array           $tokenizers An array of extensions mapping
+     *                                    to the tokenizer to use.
+     * @param array           $ruleset    An array of rules from the
+     *                                    ruleset.xml file.
+     * @param PHP_CodeSniffer $phpcs      The PHP_CodeSniffer object controlling
+     *                                    this run.
      *
      * @throws PHP_CodeSniffer_Exception If the register() method does
      *                                   not return an array.
      */
-    public function __construct($file, array $listeners, array $tokenizers)
-    {
+    public function __construct(
+        $file,
+        array $listeners,
+        array $tokenizers,
+        array $ruleset,
+        PHP_CodeSniffer $phpcs
+    ) {
         $this->_file      = trim($file);
         $this->_listeners = $listeners;
         $this->tokenizers = $tokenizers;
+        $this->ruleset    = $ruleset;
+        $this->phpcs      = $phpcs;
 
     }//end __construct()
 
@@ -368,7 +389,7 @@ class PHP_CodeSniffer_File
         $foundCode = false;
         $ignoring  = false;
 
-        // Foreach of the listeners that have registed to listen for this
+        // Foreach of the listeners that have registered to listen for this
         // token, get them to process it.
         foreach ($this->_tokens as $stackPtr => $token) {
             // Check for ignored lines.
@@ -409,7 +430,8 @@ class PHP_CodeSniffer_File
                 foreach ($this->_listeners[$tokenType] as $listener) {
                     // Make sure this sniff supports the tokenizer
                     // we are currently using.
-                    $vars = get_class_vars(get_class($listener));
+                    $class = get_class($listener);
+                    $vars  = get_class_vars($class);
                     if (isset($vars['supportedTokenizers']) === true) {
                         if (in_array($this->tokenizerType, $vars['supportedTokenizers']) === false) {
                             continue;
@@ -421,7 +443,25 @@ class PHP_CodeSniffer_File
                         }
                     }
 
-                    $this->setActiveListener(get_class($listener));
+                    // If the file path matches one of our ignore patterns, skip it.
+                    $parts = explode('_', $class);
+                    if (isset($parts[3]) === true) {
+                        $source   = $parts[0].'.'.$parts[2].'.'.substr($parts[3], 0, -5);
+                        $patterns = $this->phpcs->getIgnorePatterns($source);
+                        foreach ($patterns as $pattern) {
+                            $replacements = array(
+                                             '\\,' => ',',
+                                             '*'   => '.*',
+                                            );
+
+                            $pattern = strtr($pattern, $replacements);
+                            if (preg_match("|{$pattern}|i", $this->_file) === 1) {
+                                continue(2);
+                            }
+                        }
+                    }
+
+                    $this->setActiveListener($class);
 
                     if (PHP_CODESNIFFER_VERBOSITY > 2) {
                         $startTime = microtime(true);
@@ -429,12 +469,20 @@ class PHP_CodeSniffer_File
                     }
 
                     $listener->process($this, $stackPtr);
-                    $this->_activeListener = '';
 
                     if (PHP_CODESNIFFER_VERBOSITY > 2) {
-                        $timeTaken = round((microtime(true) - $startTime), 4);
+                        $timeTaken = (microtime(true) - $startTime);
+                        if (isset($this->_listenerTimes[$this->_activeListener]) === false) {
+                            $this->_listenerTimes[$this->_activeListener] = 0;
+                        }
+
+                        $this->_listenerTimes[$this->_activeListener] += $timeTaken;
+
+                        $timeTaken = round(($timeTaken), 4);
                         echo "DONE in $timeTaken seconds".PHP_EOL;
                     }
+
+                    $this->_activeListener = '';
                 }//end foreach
             }//end if
         }//end foreach
@@ -465,12 +513,24 @@ class PHP_CodeSniffer_File
             $shortTags = (bool) ini_get('short_open_tag');
             if ($shortTags === false) {
                 $error = 'No PHP code was found in this file and short open tags are not allowed by this install of PHP. This file may be using short open tags but PHP does not allow them.';
-                $this->addWarning($error, null);
+                $this->addWarning($error, null, 'Internal.NoCodeFound');
             }
         }
 
         if (PHP_CODESNIFFER_VERBOSITY > 2) {
             echo "\t*** END TOKEN PROCESSING ***".PHP_EOL;
+        }
+
+        if (PHP_CODESNIFFER_VERBOSITY > 2) {
+            echo "\t*** START SNIFF PROCESSING REPORT ***".PHP_EOL;
+
+            asort($this->_listenerTimes, SORT_NUMERIC);
+            $this->_listenerTimes = array_reverse($this->_listenerTimes, true);
+            foreach ($this->_listenerTimes as $listener => $timeTaken) {
+                echo "\t$listener: ".round(($timeTaken), 4).' secs'.PHP_EOL;
+            }
+
+            echo "\t*** END SNIFF PROCESSING REPORT ***".PHP_EOL;
         }
 
     }//end start()
@@ -499,7 +559,12 @@ class PHP_CodeSniffer_File
      */
     private function _parse($contents=null)
     {
-        $this->eolChar = self::detectLineEndings($this->_file, $contents);
+        try {
+            $this->eolChar = self::detectLineEndings($this->_file, $contents);
+        } catch (PHP_CodeSniffer_Exception $e) {
+            $this->addWarning($e->getMessage(), null, 'Internal.DetectLineEndings');
+            return;
+        }
 
         // Determine the tokenizer from the file extension.
         $fileParts = explode('.', $this->_file);
@@ -519,7 +584,7 @@ class PHP_CodeSniffer_File
             $contents = file_get_contents($this->_file);
         }
 
-        $this->_tokens = self::tokenizeString($contents, $tokenizer, $this->eolChar);
+        $this->_tokens   = self::tokenizeString($contents, $tokenizer, $this->eolChar);
         $this->numTokens = count($this->_tokens);
 
         if (PHP_CODESNIFFER_VERBOSITY > 0) {
@@ -553,10 +618,15 @@ class PHP_CodeSniffer_File
         if ($contents === null) {
             // Determine the newline character being used in this file.
             // Will be either \r, \r\n or \n.
-            $handle = fopen($file, 'r');
-            if ($handle === false) {
-                $error = 'Error opening file; could not auto-detect line endings';
+            if (is_readable($file) === false) {
+                $error = 'Error opening file; file no longer exists or you do not have access to read the file';
                 throw new PHP_CodeSniffer_Exception($error);
+            } else {
+                $handle = fopen($file, 'r');
+                if ($handle === false) {
+                    $error = 'Error opening file; could not auto-detect line endings';
+                    throw new PHP_CodeSniffer_Exception($error);
+                }
             }
 
             $firstLine = fgets($handle);
@@ -594,24 +664,74 @@ class PHP_CodeSniffer_File
      * @param string $error    The error message.
      * @param int    $stackPtr The stack position where the error occured.
      * @param string $code     A violation code unique to the sniff message.
+     * @param array  $data     Replacements for the error message.
+     * @param int    $severity The severity level for this error. A value of
+     *                         will be converted into the default severity level.
      *
      * @return void
      */
-    public function addError($error, $stackPtr, $code='')
+    public function addError($error, $stackPtr, $code='', $data=array(), $severity=0)
     {
-        // Work out which sniff generated the error.
-        $parts = explode('_', $this->_activeListener);
-        if (isset($parts[3]) === true) {
-            $sniff = $parts[0].'.'.$parts[2].'.'.$parts[3];
-
-            // Remove "Sniff" from the end.
-            $sniff = substr($sniff, 0, -5);
-        } else {
-            $sniff = 'unknownSniff';
+        // Don't bother doing any processing if errors are just going to
+        // be hidden in the reports anyway.
+        if ($this->phpcs->cli->errorSeverity === 0) {
+            return;
         }
 
-        if ($code !== '') {
-            $sniff .= '.'.$code;
+        // Work out which sniff generated the error.
+        if (substr($code, 0, 9) === 'Internal.') {
+            // Any internal message.
+            $sniff = $code;
+        } else {
+            $parts = explode('_', $this->_activeListener);
+            if (isset($parts[3]) === true) {
+                $sniff = $parts[0].'.'.$parts[2].'.'.$parts[3];
+
+                // Remove "Sniff" from the end.
+                $sniff = substr($sniff, 0, -5);
+            } else {
+                $sniff = 'unknownSniff';
+            }
+
+            if ($code !== '') {
+                $sniff .= '.'.$code;
+            }
+        }
+
+        // Make sure we are interested in this severity level.
+        if (isset($this->ruleset[$sniff]['severity']) === true) {
+            $severity = $this->ruleset[$sniff]['severity'];
+        } else if ($severity === 0) {
+            $severity = PHPCS_DEFAULT_ERROR_SEV;
+        }
+
+        if ($this->phpcs->cli->errorSeverity > $severity) {
+            return;
+        }
+
+        // Make sure we are not ignoring this file.
+        $patterns = $this->phpcs->getIgnorePatterns($sniff);
+        foreach ($patterns as $pattern) {
+            $replacements = array(
+                             '\\,' => ',',
+                             '*'   => '.*',
+                            );
+
+            $pattern = strtr($pattern, $replacements);
+            if (preg_match("|{$pattern}|i", $this->_file) === 1) {
+                return;
+            }
+        }
+
+        // Work out the warning message.
+        if (isset($this->ruleset[$sniff]['message']) === true) {
+            $error = $this->ruleset[$sniff]['message'];
+        }
+
+        if (empty($data) === true) {
+            $message = $error;
+        } else {
+            $message = vsprintf($error, $data);
         }
 
         if ($stackPtr === null) {
@@ -631,8 +751,9 @@ class PHP_CodeSniffer_File
         }
 
         $this->_errors[$lineNum][$column][] = array(
-                                               'message' => $error,
-                                               'source'  => $sniff,
+                                               'message'  => $message,
+                                               'source'   => $sniff,
+                                               'severity' => $severity,
                                               );
         $this->_errorCount++;
 
@@ -645,24 +766,74 @@ class PHP_CodeSniffer_File
      * @param string $warning  The error message.
      * @param int    $stackPtr The stack position where the error occured.
      * @param string $code     A violation code unique to the sniff message.
+     * @param array  $data     Replacements for the warning message.
+     * @param int    $severity The severity level for this warning. A value of
+     *                         will be converted into the default severity level.
      *
      * @return void
      */
-    public function addWarning($warning, $stackPtr, $code='')
+    public function addWarning($warning, $stackPtr, $code='', $data=array(), $severity=0)
     {
-        // Work out which sniff generated the warning.
-        $parts = explode('_', $this->_activeListener);
-        if (isset($parts[3]) === true) {
-            $sniff = $parts[0].'.'.$parts[2].'.'.$parts[3];
-
-            // Remove "Sniff" from the end.
-            $sniff = substr($sniff, 0, -5);
-        } else {
-            $sniff = 'unknownSniff';
+        // Don't bother doing any processing if warnings are just going to
+        // be hidden in the reports anyway.
+        if ($this->phpcs->cli->warningSeverity === 0) {
+            return;
         }
 
-        if ($code !== '') {
-            $sniff .= '.'.$code;
+        // Work out which sniff generated the warning.
+        if (substr($code, 0, 9) === 'Internal.') {
+            // Any internal message.
+            $sniff = $code;
+        } else {
+            $parts = explode('_', $this->_activeListener);
+            if (isset($parts[3]) === true) {
+                $sniff = $parts[0].'.'.$parts[2].'.'.$parts[3];
+
+                // Remove "Sniff" from the end.
+                $sniff = substr($sniff, 0, -5);
+            } else {
+                $sniff = 'unknownSniff';
+            }
+
+            if ($code !== '') {
+                $sniff .= '.'.$code;
+            }
+        }
+
+        // Make sure we are interested in this severity level.
+        if (isset($this->ruleset[$sniff]['severity']) === true) {
+            $severity = $this->ruleset[$sniff]['severity'];
+        } else if ($severity === 0) {
+            $severity = PHPCS_DEFAULT_WARN_SEV;
+        }
+
+        if ($this->phpcs->cli->warningSeverity > $severity) {
+            return;
+        }
+
+        // Make sure we are not ignoring this file.
+        $patterns = $this->phpcs->getIgnorePatterns($sniff);
+        foreach ($patterns as $pattern) {
+            $replacements = array(
+                             '\\,' => ',',
+                             '*'   => '.*',
+                            );
+
+            $pattern = strtr($pattern, $replacements);
+            if (preg_match("|{$pattern}|i", $this->_file) === 1) {
+                return;
+            }
+        }
+
+        // Work out the warning message.
+        if (isset($this->ruleset[$sniff]['message']) === true) {
+            $warning = $this->ruleset[$sniff]['message'];
+        }
+
+        if (empty($data) === true) {
+            $message = $warning;
+        } else {
+            $message = vsprintf($warning, $data);
         }
 
         if ($stackPtr === null) {
@@ -682,9 +853,10 @@ class PHP_CodeSniffer_File
         }
 
         $this->_warnings[$lineNum][$column][] = array(
-                                               'message' => $warning,
-                                               'source'  => $sniff,
-                                              );
+                                                 'message'  => $message,
+                                                 'source'   => $sniff,
+                                                 'severity' => $severity,
+                                                );
         $this->_warningCount++;
 
     }//end addWarning()
@@ -1132,7 +1304,7 @@ class PHP_CodeSniffer_File
                 if (empty($map) === false) {
                     $tokens[$i]['nested_parenthesis'] = $map;
                 }
-            }
+            }//end if
         }//end for
 
     }//end _createParenthesisNestingMap()
@@ -1295,7 +1467,7 @@ class PHP_CodeSniffer_File
 
                     if (in_array(T_CLOSE_CURLY_BRACKET, $tokenizer->scopeOpeners[$tokenType]['end']) === true) {
                         $oldIgnore = $ignore;
-                        $ignore = 0;
+                        $ignore    = 0;
                     }
 
                     $i = self::_recurseScopeMap(
@@ -1312,9 +1484,9 @@ class PHP_CodeSniffer_File
                         $ignore = $oldIgnore;
                     }
                 }//end if
-            }//end if start scope
+            }//end if
 
-            if (in_array($tokenType, $tokenizer->scopeOpeners[$currType]['start']) == true
+            if (in_array($tokenType, $tokenizer->scopeOpeners[$currType]['start']) === true
                 && $opener === null
             ) {
                 if ($tokenType === T_OPEN_CURLY_BRACKET) {
@@ -1409,7 +1581,7 @@ class PHP_CodeSniffer_File
                             echo '* skipping parenthesis *'.PHP_EOL;
                         }
                     }
-                }
+                }//end if
             } else if ($tokenType === T_OPEN_CURLY_BRACKET && $opener !== null) {
                 // We opened something that we don't have a scope opener for.
                 // Examples of this are curly brackets for string offsets etc.
@@ -1426,8 +1598,12 @@ class PHP_CodeSniffer_File
             ) {
                 // If we still haven't found the opener after 3 lines,
                 // we're not going to find it, unless we know it requires
-                // an opener, in which case we better keep looking.
-                if ($tokens[$i]['line'] >= ($startLine + 3)) {
+                // an opener (in which case we better keep looking) or the last
+                // token was empty (in which case we'll just confirm there is
+                // more code in this file and not just a big comment).
+                if ($tokens[$i]['line'] >= ($startLine + 3)
+                    && in_array($tokens[($i - 1)]['code'], PHP_CodeSniffer_Tokens::$emptyTokens) === false
+                ) {
                     if ($tokenizer->scopeOpeners[$currType]['strict'] === true) {
                         if (PHP_CODESNIFFER_VERBOSITY > 1) {
                             $type  = $tokens[$stackPtr]['type'];
@@ -1847,7 +2023,7 @@ class PHP_CodeSniffer_File
             // we cause problems in our parsing below, so lets just skip to the
             // end of it.
             if (isset($this->_tokens[$i]['parenthesis_opener']) === true) {
-                // Don't do this if its the close parenthesis for the method.
+                // Don't do this if it's the close parenthesis for the method.
                 if ($i !== $this->_tokens[$i]['parenthesis_closer']) {
                     $i = ($this->_tokens[$i]['parenthesis_closer'] + 1);
                 }
@@ -1874,7 +2050,17 @@ class PHP_CodeSniffer_File
                     }
                 }
 
-                $typeHint = $this->_tokens[$i]['content'];
+                if ($defaultStart === null) {
+                    $typeHint .= $this->_tokens[$i]['content'];
+                }
+
+                break;
+            case T_NS_SEPARATOR:
+                // Part of a type hint or default value.
+                if ($defaultStart === null) {
+                    $typeHint .= $this->_tokens[$i]['content'];
+                }
+
                 break;
             case T_CLOSE_PARENTHESIS:
             case T_COMMA:
@@ -2032,17 +2218,25 @@ class PHP_CodeSniffer_File
             throw new PHP_CodeSniffer_Exception('$stackPtr must be of type T_VARIABLE');
         }
 
-        end($this->_tokens[$stackPtr]['conditions']);
-        $ptr = key($this->_tokens[$stackPtr]['conditions']);
+        $conditions = array_keys($this->_tokens[$stackPtr]['conditions']);
+        $ptr        = array_pop($conditions);
         if (isset($this->_tokens[$ptr]) === false
             || $this->_tokens[$ptr]['code'] !== T_CLASS
         ) {
             if (isset($this->_tokens[$ptr]) === true
                 && $this->_tokens[$ptr]['code'] === T_INTERFACE
             ) {
-                $error = 'Possible parse error: interfaces may not include member vars';
-                $this->addWarning($error, $stackPtr);
-                return array();
+                // T_VARIABLEs in interfaces can actually be method arguments
+                // but they wont be seen as being inside the method because there
+                // are no scope openers and closers for abstract methods. If it is in
+                // parentheses, we can be pretty sure it is a method argument.
+                if (isset($this->_tokens[$stackPtr]['nested_parenthesis']) === false
+                    || empty($this->_tokens[$stackPtr]['nested_parenthesis']) === true
+                ) {
+                    $error = 'Possible parse error: interfaces may not include member vars';
+                    $this->addWarning($error, $stackPtr, 'Internal.ParseError.InterfaceHasMemberVar');
+                    return array();
+                }
             } else {
                 throw new PHP_CodeSniffer_Exception('$stackPtr is not a class member var');
             }
@@ -2096,6 +2290,65 @@ class PHP_CodeSniffer_File
 
 
     /**
+     * Returns the visibility and implementation properies of a class.
+     *
+     * The format of the array is:
+     * <code>
+     *   array(
+     *    'is_abstract' => false, // true if the abstract keyword was found.
+     *    'is_final'    => false, // true if the final keyword was found.
+     *   );
+     * </code>
+     *
+     * @param int $stackPtr The position in the stack of the T_CLASS token to
+     *                      acquire the properties for.
+     *
+     * @return array
+     * @throws PHP_CodeSniffer_Exception If the specified position is not a
+     *                                   T_CLASS token.
+     */
+    public function getClassProperties($stackPtr)
+    {
+        if ($this->_tokens[$stackPtr]['code'] !== T_CLASS) {
+            throw new PHP_CodeSniffer_Exception('$stackPtr must be of type T_CLASS');
+        }
+
+        $valid = array(
+                  T_FINAL,
+                  T_ABSTRACT,
+                  T_WHITESPACE,
+                  T_COMMENT,
+                  T_DOC_COMMENT,
+                 );
+
+        $isAbstract = false;
+        $isFinal    = false;
+
+        for ($i = ($stackPtr - 1); $i > 0; $i--) {
+            if (in_array($this->_tokens[$i]['code'], $valid) === false) {
+                break;
+            }
+
+            switch ($this->_tokens[$i]['code']) {
+            case T_ABSTRACT:
+                $isAbstract = true;
+                break;
+
+            case T_FINAL:
+                $isFinal = true;
+                break;
+            }
+        }//end for
+
+        return array(
+                'is_abstract' => $isAbstract,
+                'is_final'    => $isFinal,
+               );
+
+    }//end getClassProperties()
+
+
+    /**
      * Determine if the passed token is a reference operator.
      *
      * Returns true if the specified token position represents a reference.
@@ -2144,8 +2397,8 @@ class PHP_CodeSniffer_File
             $lastBracket = array_pop($brackets);
             if (isset($this->_tokens[$lastBracket]['parenthesis_owner']) === true) {
                 $owner = $this->_tokens[$this->_tokens[$lastBracket]['parenthesis_owner']];
-                if ($owner['code'] === T_FUNCTION) {
-                    // Inside a function declaration, this is a reference.
+                if ($owner['code'] === T_FUNCTION || $owner['code'] === T_ARRAY) {
+                    // Inside a function or array declaration, this is a reference.
                     return true;
                 }
             }
@@ -2404,6 +2657,40 @@ class PHP_CodeSniffer_File
         return false;
 
     }//end hasCondition()
+
+
+    /**
+     * Return the position of the condition for the passed token.
+     *
+     * Returns FALSE if the token does not have the condition.
+     *
+     * @param int $stackPtr The position of the token we are checking.
+     * @param int $type     The type of token to search for.
+     *
+     * @return int
+     */
+    public function getCondition($stackPtr, $type)
+    {
+        // Check for the existence of the token.
+        if (isset($this->_tokens[$stackPtr]) === false) {
+            return false;
+        }
+
+        // Make sure the token has conditions.
+        if (isset($this->_tokens[$stackPtr]['conditions']) === false) {
+            return false;
+        }
+
+        $conditions = $this->_tokens[$stackPtr]['conditions'];
+        foreach ($conditions as $token => $condition) {
+            if ($condition === $type) {
+                return $token;
+            }
+        }
+
+        return false;
+
+    }//end getCondition()
 
 
     /**

@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: DisallowMultipleStyleDefinitionsSniff.php 268253 2008-11-04 05:05:49Z squiz $
+ * @version   CVS: $Id: DisallowMultipleStyleDefinitionsSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -23,7 +23,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_CSS_DisallowMultipleStyleDefinitionsSniff implements PHP_CodeSniffer_Sniff
@@ -68,7 +68,7 @@ class Squiz_Sniffs_CSS_DisallowMultipleStyleDefinitionsSniff implements PHP_Code
 
         if ($tokens[$next]['line'] === $tokens[$stackPtr]['line']) {
             $error = 'Each style definition must be on a line by itself';
-            $phpcsFile->addError($error, $next);
+            $phpcsFile->addError($error, $next, 'Found');
         }
 
     }//end process()

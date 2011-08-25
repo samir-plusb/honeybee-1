@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ScopeKeywordSpacingSniff.php 293361 2010-01-10 22:08:39Z squiz $
+ * @version   CVS: $Id: ScopeKeywordSpacingSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_WhiteSpace_ScopeKeywordSpacingSniff implements PHP_CodeSniffer_Sniff
@@ -59,21 +59,25 @@ class Squiz_Sniffs_WhiteSpace_ScopeKeywordSpacingSniff implements PHP_CodeSniffe
     {
         $tokens = $phpcsFile->getTokens();
 
-        $nextToken = $tokens[($stackPtr + 1)];
+        $prevToken = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
+        $nextToken = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
 
         if ($tokens[$stackPtr]['code'] === T_STATIC
-            && $nextToken['code'] === T_DOUBLE_COLON
+            && ($tokens[$nextToken]['code'] === T_DOUBLE_COLON
+            || $tokens[$prevToken]['code'] === T_NEW)
         ) {
-            // Late static binding, e.g., static:: usage.
+            // Late static binding, e.g., static:: OR new static() usage.
             return;
         }
 
+        $nextToken = $tokens[($stackPtr + 1)];
         if ($nextToken['code'] !== T_WHITESPACE
             || strlen($nextToken['content']) !== 1
             || $nextToken['content'] === $phpcsFile->eolChar
         ) {
-            $error = 'Scope keyword "'.$tokens[$stackPtr]['content'].'" must be followed by a single space';
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Scope keyword "%s" must be followed by a single space';
+            $data  = array($tokens[$stackPtr]['content']);
+            $phpcsFile->addError($error, $stackPtr, 'Incorrect', $data);
         }
 
     }//end process()

@@ -10,7 +10,7 @@
  * @author    Manuel Pichler <mapi@manuel-pichler.de>
  * @copyright 2007-2008 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version   CVS: $Id: UselessOverridingMethodSniff.php 266867 2008-10-01 06:08:50Z squiz $
+ * @version   CVS: $Id: UselessOverridingMethodSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -34,7 +34,7 @@
  * @author    Manuel Pichler <mapi@manuel-pichler.de>
  * @copyright 2007-2008 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_CodeAnalysis_UselessOverridingMethodSniff implements PHP_CodeSniffer_Sniff
@@ -170,7 +170,7 @@ class Generic_Sniffs_CodeAnalysis_UselessOverridingMethodSniff implements PHP_Co
         $parameters = array_filter($parameters);
 
         if (count($parameters) === count($signature) && $parameters === $signature) {
-            $phpcsFile->addWarning('Useless method overriding detected', $stackPtr);
+            $phpcsFile->addWarning('Useless method overriding detected', $stackPtr, 'Found');
         }
 
     }//end process()

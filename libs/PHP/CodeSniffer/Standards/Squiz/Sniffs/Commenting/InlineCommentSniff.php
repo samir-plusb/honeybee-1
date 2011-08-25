@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: InlineCommentSniff.php 291580 2009-12-02 03:40:18Z squiz $
+ * @version   CVS: $Id: InlineCommentSniff.php 308450 2011-02-18 05:23:38Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_Commenting_InlineCommentSniff implements PHP_CodeSniffer_Sniff
@@ -87,6 +87,7 @@ class Squiz_Sniffs_Commenting_InlineCommentSniff implements PHP_CodeSniffer_Snif
                        T_PUBLIC,
                        T_PRIVATE,
                        T_PROTECTED,
+                       T_FINAL,
                        T_STATIC,
                        T_ABSTRACT,
                        T_CONST,
@@ -124,14 +125,14 @@ class Squiz_Sniffs_Commenting_InlineCommentSniff implements PHP_CodeSniffer_Snif
                 // Only error once per comment.
                 if (substr($tokens[$stackPtr]['content'], 0, 3) === '/**') {
                     $error  = 'Inline doc block comments are not allowed; use "/* Comment */" or "// Comment" instead';
-                    $phpcsFile->addError($error, $stackPtr);
+                    $phpcsFile->addError($error, $stackPtr, 'DocBlock');
                 }
             }//end if
         }//end if
 
         if ($tokens[$stackPtr]['content']{0} === '#') {
             $error  = 'Perl-style comments are not allowed; use "// Comment" instead';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'WrongStyle');
         }
 
         // We don't want end of block comments. If the last comment is a closing
@@ -170,13 +171,22 @@ class Squiz_Sniffs_Commenting_InlineCommentSniff implements PHP_CodeSniffer_Snif
         }
 
         if ($spaceCount === 0) {
-            $error = 'No space before comment text; expected "// '.substr($comment, 2).'" but found "'.$comment.'"';
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'No space before comment text; expected "// %s" but found "%s"';
+            $data  = array(
+                      substr($comment, 2),
+                      $comment,
+                     );
+            $phpcsFile->addError($error, $stackPtr, 'NoSpaceBefore', $data);
         }
 
         if ($spaceCount > 1) {
-            $error = $spaceCount.' spaces found before inline comment; expected "// '.substr($comment, (2 + $spaceCount)).'" but found "'.$comment.'"';
-            $phpcsFile->addError($error, $stackPtr);
+            $error = '%s spaces found before inline comment; expected "// %s" but found "%s"';
+            $data  = array(
+                      $spaceCount,
+                      substr($comment, (2 + $spaceCount)),
+                      $comment,
+                     );
+            $phpcsFile->addError($error, $stackPtr, 'SpacingBefore', $data);
         }
 
 
@@ -210,13 +220,13 @@ class Squiz_Sniffs_Commenting_InlineCommentSniff implements PHP_CodeSniffer_Snif
 
         if ($commentText === '') {
             $error = 'Blank comments are not allowed';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'Empty');
             return;
         }
 
         if (preg_match('|[A-Z]|', $commentText[0]) === 0) {
             $error = 'Inline comments must start with a capital letter';
-            $phpcsFile->addError($error, $topComment);
+            $phpcsFile->addError($error, $topComment, 'NotCapital');
         }
 
         $commentCloser   = $commentText[(strlen($commentText) - 1)];
@@ -227,13 +237,15 @@ class Squiz_Sniffs_Commenting_InlineCommentSniff implements PHP_CodeSniffer_Snif
                            );
 
         if (in_array($commentCloser, $acceptedClosers) === false) {
-            $error = 'Inline comments must end in';
+            $error = 'Inline comments must end in %s';
+            $ender = '';
             foreach ($acceptedClosers as $closerName => $symbol) {
-                $error .= ' '.$closerName.',';
+                $ender .= ' '.$closerName.',';
             }
 
-            $error = rtrim($error, ',');
-            $phpcsFile->addError($error, $stackPtr);
+            $ender = rtrim($ender, ',');
+            $data  = array($ender);
+            $phpcsFile->addError($error, $stackPtr, 'InvalidEndChar', $data);
         }
 
         // Finally, the line below the last comment cannot be empty.
@@ -249,7 +261,7 @@ class Squiz_Sniffs_Commenting_InlineCommentSniff implements PHP_CodeSniffer_Snif
         }
 
         $error = 'There must be no blank line following an inline comment';
-        $phpcsFile->addError($error, $stackPtr);
+        $phpcsFile->addError($error, $stackPtr, 'SpacingAfter');
 
     }//end process()
 

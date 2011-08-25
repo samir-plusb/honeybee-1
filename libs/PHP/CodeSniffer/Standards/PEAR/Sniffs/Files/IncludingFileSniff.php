@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: IncludingFileSniff.php 244643 2007-10-22 23:11:56Z squiz $
+ * @version   CVS: $Id: IncludingFileSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -27,7 +27,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PEAR_Sniffs_Files_IncludingFileSniff implements PHP_CodeSniffer_Sniff
@@ -78,17 +78,16 @@ class PEAR_Sniffs_Files_IncludingFileSniff implements PHP_CodeSniffer_Sniff
 
         $nextToken = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
         if ($tokens[$nextToken]['code'] === T_OPEN_PARENTHESIS) {
-            $error  = '"'.$tokens[$stackPtr]['content'].'"';
-            $error .= ' is a statement, not a function; ';
-            $error .= 'no parentheses are required';
-            $phpcsFile->addError($error, $stackPtr);
+            $error = '"%s" is a statement not a function; no parentheses are required';
+            $data  = array($tokens[$stackPtr]['content']);
+            $phpcsFile->addError($error, $stackPtr, 'BracketsNotRequired', $data);
         }
 
         $inCondition = (count($tokens[$stackPtr]['conditions']) !== 0) ? true : false;
 
-        // Check to see if this including statement is within the parenthesis of a condition.
-        // If that's the case then we need to process it as being within a condition, as they
-        // are checking the return value.
+        // Check to see if this including statement is within the parenthesis
+        // of a condition. If that's the case then we need to process it as being
+        // within a condition, as they are checking the return value.
         if (isset($tokens[$stackPtr]['nested_parenthesis']) === true) {
             foreach ($tokens[$stackPtr]['nested_parenthesis'] as $left => $right) {
                 if (isset($tokens[$left]['parenthesis_owner']) === true) {
@@ -97,8 +96,9 @@ class PEAR_Sniffs_Files_IncludingFileSniff implements PHP_CodeSniffer_Sniff
             }
         }
 
-        // Check to see if they are assigning the return value of this including call.
-        // If they are then they are probably checking it, so its conditional.
+        // Check to see if they are assigning the return value of this
+        // including call. If they are then they are probably checking it, so
+        // it's conditional.
         $previous = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         if (in_array($tokens[$previous]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens) === true) {
             // The have assigned the return value to it, so its conditional.
@@ -111,22 +111,22 @@ class PEAR_Sniffs_Files_IncludingFileSniff implements PHP_CodeSniffer_Sniff
             if ($tokenCode === T_REQUIRE_ONCE) {
                 $error  = 'File is being conditionally included; ';
                 $error .= 'use "include_once" instead';
-                $phpcsFile->addError($error, $stackPtr);
+                $phpcsFile->addError($error, $stackPtr, 'UseIncludeOnce');
             } else if ($tokenCode === T_REQUIRE) {
                 $error  = 'File is being conditionally included; ';
                 $error .= 'use "include" instead';
-                $phpcsFile->addError($error, $stackPtr);
+                $phpcsFile->addError($error, $stackPtr, 'UseInclude');
             }
         } else {
             // We are unconditionally including, we need a require_once.
             if ($tokenCode === T_INCLUDE_ONCE) {
                 $error  = 'File is being unconditionally included; ';
                 $error .= 'use "require_once" instead';
-                $phpcsFile->addError($error, $stackPtr);
+                $phpcsFile->addError($error, $stackPtr, 'UseRequireOnce');
             } else if ($tokenCode === T_INCLUDE) {
                 $error  = 'File is being unconditionally included; ';
                 $error .= 'use "require" instead';
-                $phpcsFile->addError($error, $stackPtr);
+                $phpcsFile->addError($error, $stackPtr, 'UseRequire');
             }
         }//end if
 

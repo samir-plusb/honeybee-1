@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: EvalObjectFactorySniff.php 240175 2007-07-23 01:47:54Z squiz $
+ * @version   CVS: $Id: EvalObjectFactorySniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -21,7 +21,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class MySource_Sniffs_PHP_EvalObjectFactorySniff implements PHP_CodeSniffer_Sniff
@@ -115,7 +115,7 @@ class MySource_Sniffs_PHP_EvalObjectFactorySniff implements PHP_CodeSniffer_Snif
             // of "new" is for object instantiation.
             if (strstr($string, ' new ') !== false) {
                 $error = 'Do not use eval() to create objects dynamically; use reflection instead';
-                $phpcsFile->addWarning($error, $stackPtr);
+                $phpcsFile->addWarning($error, $stackPtr, 'Found');
             }
         }
 

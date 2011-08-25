@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: LanguageConstructSpacingSniff.php 245680 2007-11-06 01:09:34Z squiz $
+ * @version   CVS: $Id: LanguageConstructSpacingSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -26,7 +26,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_WhiteSpace_LanguageConstructSpacingSniff implements PHP_CodeSniffer_Sniff
@@ -76,14 +76,17 @@ class Squiz_Sniffs_WhiteSpace_LanguageConstructSpacingSniff implements PHP_CodeS
             $content       = $tokens[($stackPtr + 1)]['content'];
             $contentLength = strlen($content);
             if ($contentLength !== 1) {
-                $error = "Language constructs must be followed by a single space; expected 1 space but found $contentLength";
-                $phpcsFile->addError($error, $stackPtr);
+                $error = 'Language constructs must be followed by a single space; expected 1 space but found %s';
+                $data  = array($contentLength);
+                $phpcsFile->addError($error, $stackPtr, 'IncorrectSingle', $data);
             }
         } else {
-            $expected = $tokens[$stackPtr]['content'].' '.$tokens[($stackPtr + 1)]['content'];
-            $found    = $tokens[$stackPtr]['content'].$tokens[($stackPtr + 1)]['content'];
-            $error    = "Language constructs must be followed by a single space; expected \"$expected\" but found \"$found\"";
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Language constructs must be followed by a single space; expected "%s" but found "%s"';
+            $data  = array(
+                      $tokens[$stackPtr]['content'].' '.$tokens[($stackPtr + 1)]['content'],
+                      $tokens[$stackPtr]['content'].$tokens[($stackPtr + 1)]['content'],
+                     );
+            $phpcsFile->addError($error, $stackPtr, 'Incorrect', $data);
         }
 
     }//end process()

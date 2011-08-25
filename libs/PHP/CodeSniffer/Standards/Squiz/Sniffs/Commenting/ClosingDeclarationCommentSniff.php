@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ClosingDeclarationCommentSniff.php 291629 2009-12-03 03:32:46Z squiz $
+ * @version   CVS: $Id: ClosingDeclarationCommentSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_Commenting_ClosingDeclarationCommentSniff implements PHP_CodeSniffer_Sniff
@@ -83,7 +83,7 @@ class Squiz_Sniffs_Commenting_ClosingDeclarationCommentSniff implements PHP_Code
 
             if (isset($tokens[$stackPtr]['scope_closer']) === false) {
                 $error = 'Possible parse error: non-abstract method defined as abstract';
-                $phpcsFile->addWarning($error, $stackPtr);
+                $phpcsFile->addWarning($error, $stackPtr, 'Abstract');
                 return;
             }
 
@@ -96,10 +96,9 @@ class Squiz_Sniffs_Commenting_ClosingDeclarationCommentSniff implements PHP_Code
         }//end if
 
         if (isset($tokens[$stackPtr]['scope_closer']) === false) {
-            $error  = 'Possible parse error: ';
-            $error .= $tokens[$stackPtr]['content'];
-            $error .= ' missing opening or closing brace';
-            $phpcsFile->addWarning($error, $stackPtr);
+            $error = 'Possible parse error: %s missing opening or closing brace';
+            $data  = array($tokens[$stackPtr]['content']);
+            $phpcsFile->addWarning($error, $stackPtr, 'MissingBrace', $data);
             return;
         }
 
@@ -112,12 +111,12 @@ class Squiz_Sniffs_Commenting_ClosingDeclarationCommentSniff implements PHP_Code
 
         $error = 'Expected '.$comment;
         if (isset($tokens[($closingBracket + 1)]) === false || $tokens[($closingBracket + 1)]['code'] !== T_COMMENT) {
-            $phpcsFile->addError($error, $closingBracket);
+            $phpcsFile->addError($error, $closingBracket, 'Missing');
             return;
         }
 
         if (rtrim($tokens[($closingBracket + 1)]['content']) !== $comment) {
-            $phpcsFile->addError($error, $closingBracket);
+            $phpcsFile->addError($error, $closingBracket, 'Incorrect');
             return;
         }
 

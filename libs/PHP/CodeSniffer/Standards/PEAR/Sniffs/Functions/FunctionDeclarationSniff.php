@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: FunctionDeclarationSniff.php 293522 2010-01-13 22:28:20Z squiz $
+ * @version   CVS: $Id: FunctionDeclarationSniff.php 308840 2011-03-02 05:32:18Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -23,7 +23,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PEAR_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_Sniff
@@ -142,11 +142,22 @@ class PEAR_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_
                 }
 
                 if ($expectedIndent !== $foundIndent) {
-                    $error = "Multi-line function declaration not indented correctly; expected $expectedIndent spaces but found $foundIndent";
-                    $phpcsFile->addError($error, $i);
+                    $error = 'Multi-line function declaration not indented correctly; expected %s spaces but found %s';
+                    $data  = array(
+                              $expectedIndent,
+                              $foundIndent,
+                             );
+                    $phpcsFile->addError($error, $i, 'Indent', $data);
                 }
 
                 $lastLine = $tokens[$i]['line'];
+            }//end if
+
+            if ($tokens[$i]['code'] === T_ARRAY) {
+                // Skip arrays as they have their own indentation rules.
+                $i        = $tokens[$i]['parenthesis_closer'];
+                $lastLine = $tokens[$i]['line'];
+                continue;
             }
         }//end for
 
@@ -163,14 +174,18 @@ class PEAR_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_
             }
 
             if ($length !== 1) {
+                $data = array($length);
+                $code = 'SpaceBeforeOpenBrace';
+
                 $error = 'There must be a single space between the closing parenthesis and the opening brace of a multi-line function declaration; found ';
                 if ($length === -1) {
                     $error .= 'newline';
+                    $code   = 'NewlineBeforeOpenBrace';
                 } else {
-                    $error .= "$length spaces";
+                    $error .= '%s spaces';
                 }
 
-                $phpcsFile->addError($error, ($closeBracket + 1));
+                $phpcsFile->addError($error, ($closeBracket + 1), $code, $data);
                 return;
             }
 
@@ -184,7 +199,7 @@ class PEAR_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_
 
             if ($next !== false && $tokens[$next]['code'] !== T_OPEN_CURLY_BRACKET) {
                 $error = 'There must be a single space between the closing parenthesis and the opening brace of a multi-line function declaration';
-                $phpcsFile->addError($error, $next);
+                $phpcsFile->addError($error, $next, 'NoSpaceBeforeOpenBrace');
             }
         }//end if
 
@@ -199,7 +214,7 @@ class PEAR_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_
 
         if ($tokens[$prev]['line'] === $tokens[$closeBracket]['line']) {
             $error = 'The closing parenthesis of a multi-line function declaration must be on a new line';
-            $phpcsFile->addError($error, $closeBracket);
+            $phpcsFile->addError($error, $closeBracket, 'CloseBracketLine');
         }
 
     }//end processMultiLineDeclaration()

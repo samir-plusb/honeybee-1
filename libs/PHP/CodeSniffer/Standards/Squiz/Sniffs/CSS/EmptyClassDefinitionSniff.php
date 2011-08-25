@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: EmptyClassDefinitionSniff.php 267996 2008-10-30 05:21:34Z squiz $
+ * @version   CVS: $Id: EmptyClassDefinitionSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -23,7 +23,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_CSS_EmptyClassDefinitionSniff implements PHP_CodeSniffer_Sniff
@@ -65,7 +65,7 @@ class Squiz_Sniffs_CSS_EmptyClassDefinitionSniff implements PHP_CodeSniffer_Snif
 
         if ($next === false || $tokens[$next]['code'] === T_CLOSE_CURLY_BRACKET) {
             $error = 'Class definition is empty';
-            $phpcsFile->addError($error, $stackPtr);
+            $phpcsFile->addError($error, $stackPtr, 'Found');
         }
 
     }//end process()

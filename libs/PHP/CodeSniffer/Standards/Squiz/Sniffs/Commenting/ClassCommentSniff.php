@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ClassCommentSniff.php 292513 2009-12-23 00:41:20Z squiz $
+ * @version   CVS: $Id: ClassCommentSniff.php 302088 2010-08-11 01:52:10Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -38,7 +38,7 @@ if (class_exists('PHP_CodeSniffer_CommentParser_ClassCommentParser', true) === f
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_Commenting_ClassCommentSniff implements PHP_CodeSniffer_Sniff
@@ -81,10 +81,10 @@ class Squiz_Sniffs_Commenting_ClassCommentSniff implements PHP_CodeSniffer_Sniff
         $commentEnd = $phpcsFile->findPrevious($find, ($stackPtr - 1), null, true);
 
         if ($commentEnd !== false && $tokens[$commentEnd]['code'] === T_COMMENT) {
-            $phpcsFile->addError('You must use "/**" style comments for a class comment', $stackPtr);
+            $phpcsFile->addError('You must use "/**" style comments for a class comment', $stackPtr, 'WrongStyle');
             return;
         } else if ($commentEnd === false || $tokens[$commentEnd]['code'] !== T_DOC_COMMENT) {
-            $phpcsFile->addError('Missing class doc comment', $stackPtr);
+            $phpcsFile->addError('Missing class doc comment', $stackPtr, 'Missing');
             return;
         }
 
@@ -106,7 +106,7 @@ class Squiz_Sniffs_Commenting_ClassCommentSniff implements PHP_CodeSniffer_Sniff
                         if ($newlineToken !== false) {
                             // Blank line between the class and the doc block.
                             // The doc block is most likely a file comment.
-                            $phpcsFile->addError('Missing class doc comment', ($stackPtr + 1));
+                            $phpcsFile->addError('Missing class doc comment', ($stackPtr + 1), 'Missing');
                             return;
                         }
                     }//end if
@@ -124,7 +124,7 @@ class Squiz_Sniffs_Commenting_ClassCommentSniff implements PHP_CodeSniffer_Sniff
 
                     if ($blankLineBefore !== 2) {
                         $error = 'There must be exactly one blank line before the class comment';
-                        $phpcsFile->addError($error, ($commentStart - 1));
+                        $phpcsFile->addError($error, ($commentStart - 1), 'SpacingBefore');
                     }
                 }
 
@@ -139,14 +139,14 @@ class Squiz_Sniffs_Commenting_ClassCommentSniff implements PHP_CodeSniffer_Sniff
             $this->commentParser->parse();
         } catch (PHP_CodeSniffer_CommentParser_ParserException $e) {
             $line = ($e->getLineWithinComment() + $commentStart);
-            $phpcsFile->addError($e->getMessage(), $line);
+            $phpcsFile->addError($e->getMessage(), $line, 'FailedParse');
             return;
         }
 
         $comment = $this->commentParser->getComment();
         if (is_null($comment) === true) {
             $error = 'Class doc comment is empty';
-            $phpcsFile->addError($error, $commentStart);
+            $phpcsFile->addError($error, $commentStart, 'Empty');
             return;
         }
 
@@ -155,14 +155,14 @@ class Squiz_Sniffs_Commenting_ClassCommentSniff implements PHP_CodeSniffer_Sniff
         $firstLine = substr($commentString, 0, $eolPos);
         if ($firstLine !== '/**') {
             $error = 'The open comment tag must be the only content on the line';
-            $phpcsFile->addError($error, $commentStart);
+            $phpcsFile->addError($error, $commentStart, 'SpacingAfterOpen');
         }
 
         // Check for a comment description.
         $short = rtrim($comment->getShortComment(), $phpcsFile->eolChar);
         if (trim($short) === '') {
             $error = 'Missing short description in class doc comment';
-            $phpcsFile->addError($error, $commentStart);
+            $phpcsFile->addError($error, $commentStart, 'MissingShort');
             return;
         }
 
@@ -170,9 +170,8 @@ class Squiz_Sniffs_Commenting_ClassCommentSniff implements PHP_CodeSniffer_Sniff
         $newlineCount = 0;
         $newlineSpan  = strspn($short, $phpcsFile->eolChar);
         if ($short !== '' && $newlineSpan > 0) {
-            $line  = ($newlineSpan > 1) ? 'newlines' : 'newline';
-            $error = "Extra $line found before class comment short description";
-            $phpcsFile->addError($error, ($commentStart + 1));
+            $error = 'Extra newline(s) found before class comment short description';
+            $phpcsFile->addError($error, ($commentStart + 1), 'SpacingBeforeShort');
         }
 
         $newlineCount = (substr_count($short, $phpcsFile->eolChar) + 1);
@@ -184,7 +183,7 @@ class Squiz_Sniffs_Commenting_ClassCommentSniff implements PHP_CodeSniffer_Sniff
             $newlineBetween = substr_count($between, $phpcsFile->eolChar);
             if ($newlineBetween !== 2) {
                 $error = 'There must be exactly one blank line between descriptions in class comment';
-                $phpcsFile->addError($error, ($commentStart + $newlineCount + 1));
+                $phpcsFile->addError($error, ($commentStart + $newlineCount + 1), 'SpacingBetween');
             }
 
             $newlineCount += $newlineBetween;
@@ -192,7 +191,7 @@ class Squiz_Sniffs_Commenting_ClassCommentSniff implements PHP_CodeSniffer_Sniff
             $testLong = trim($long);
             if (preg_match('|[A-Z]|', $testLong[0]) === 0) {
                 $error = 'Class comment long description must start with a capital letter';
-                $phpcsFile->addError($error, ($commentStart + $newlineCount));
+                $phpcsFile->addError($error, ($commentStart + $newlineCount), 'LongNotCaptial');
             }
         }
 
@@ -206,7 +205,7 @@ class Squiz_Sniffs_Commenting_ClassCommentSniff implements PHP_CodeSniffer_Sniff
                     $newlineCount += (substr_count($long, $phpcsFile->eolChar) - $newlineSpan + 1);
                 }
 
-                $phpcsFile->addError($error, ($commentStart + $newlineCount));
+                $phpcsFile->addError($error, ($commentStart + $newlineCount), 'SpacingBeforeTags');
                 $short = rtrim($short, $phpcsFile->eolChar.' ');
             }
         }
@@ -216,119 +215,41 @@ class Squiz_Sniffs_Commenting_ClassCommentSniff implements PHP_CodeSniffer_Sniff
         $lastChar  = $testShort[(strlen($testShort) - 1)];
         if (substr_count($testShort, $phpcsFile->eolChar) !== 0) {
             $error = 'Class comment short description must be on a single line';
-            $phpcsFile->addError($error, ($commentStart + 1));
+            $phpcsFile->addError($error, ($commentStart + 1), 'ShortSingleLine');
         }
 
         if (preg_match('|[A-Z]|', $testShort[0]) === 0) {
             $error = 'Class comment short description must start with a capital letter';
-            $phpcsFile->addError($error, ($commentStart + 1));
+            $phpcsFile->addError($error, ($commentStart + 1), 'ShortNotCapital');
         }
 
         if ($lastChar !== '.') {
             $error = 'Class comment short description must end with a full stop';
-            $phpcsFile->addError($error, ($commentStart + 1));
+            $phpcsFile->addError($error, ($commentStart + 1), 'ShortFullStop');
         }
 
-        // Check for unknown/deprecated tags.
-        $unknownTags = $this->commentParser->getUnknown();
-        foreach ($unknownTags as $errorTag) {
-            $error = "@$errorTag[tag] tag is not allowed in class comment";
-            $phpcsFile->addWarning($error, ($commentStart + $errorTag['line']));
-            return;
+        // No tags are allowed in the class comment.
+        $tags = $this->commentParser->getTags();
+        foreach ($tags as $errorTag) {
+            $error = '@%s tag is not allowed in class comment';
+            $data  = array($errorTag['tag']);
+            $phpcsFile->addWarning($error, ($commentStart + $errorTag['line']), 'TagNotAllowed', $data);
         }
 
-        // Check each tag.
-        $this->processTags($commentStart, $commentEnd);
+        // The last content should be a newline and the content before
+        // that should not be blank. If there is more blank space
+        // then they have additional blank lines at the end of the comment.
+        $words   = $this->commentParser->getWords();
+        $lastPos = (count($words) - 1);
+        if (trim($words[($lastPos - 1)]) !== ''
+            || strpos($words[($lastPos - 1)], $this->currentFile->eolChar) === false
+            || trim($words[($lastPos - 2)]) === ''
+        ) {
+            $error = 'Additional blank lines found at end of class comment';
+            $this->currentFile->addError($error, $commentEnd, 'SpacingAfter');
+        }
 
     }//end process()
-
-
-    /**
-     * Processes each required or optional tag.
-     *
-     * @param int $commentStart The position in the stack where the comment started.
-     * @param int $commentEnd   The position in the stack where the comment ended.
-     *
-     * @return void
-     */
-    protected function processTags($commentStart, $commentEnd)
-    {
-        $foundTags = $this->commentParser->getTagOrders();
-
-        // Other tags found.
-        foreach ($foundTags as $tagName) {
-            if ($tagName !== 'comment' && $tagName !== 'since') {
-                $error = 'Only @since tag is allowed in class comment';
-                $this->currentFile->addWarning($error, $commentEnd);
-                break;
-            }
-        }
-
-        // Since tag missing.
-        if (in_array('since', $foundTags) === false) {
-            $error = 'Missing @since tag in class comment';
-            $this->currentFile->addError($error, $commentEnd);
-            return;
-        }
-
-        // Get the line number for current tag.
-        $since = $this->commentParser->getSince();
-        if (is_null($since) === true || empty($since) === true) {
-            return;
-        }
-
-        $errorPos = ($commentStart + $since->getLine());
-
-        // Make sure there is no duplicate tag.
-        $foundIndexes = array_keys($foundTags, 'since');
-        if (count($foundIndexes) > 1) {
-            $error = 'Only 1 @since tag is allowed in class comment';
-            $this->currentFile->addError($error, $errorPos);
-        }
-
-        // Check spacing.
-        if ($since->getContent() !== '') {
-            $spacing = substr_count($since->getWhitespaceBeforeContent(), ' ');
-            if ($spacing !== 1) {
-                $error = "Expected 1 space but found $spacing before version number in @since tag";
-                $this->currentFile->addError($error, $errorPos);
-            }
-        }
-
-        // Check content.
-        $this->processSince($errorPos);
-
-    }//end processTags()
-
-
-    /**
-     * Processes the since tag.
-     *
-     * The since tag must have the exact keyword 'release_version'
-     * or is in the form x.x.x
-     *
-     * @param int $errorPos The line number where the error occurs.
-     *
-     * @return void
-     */
-    protected function processSince($errorPos)
-    {
-        $since = $this->commentParser->getSince();
-        if ($since !== null) {
-            $content = $since->getContent();
-            if (empty($content) === true) {
-                $error = 'Content missing for @since tag in class comment';
-                $this->currentFile->addError($error, $errorPos);
-
-            } else if ($content !== '%release_version%') {
-                if (preg_match('/^([0-9]+)\.([0-9]+)\.([0-9]+)/', $content) === 0) {
-                    $error = 'Expected version number to be in the form x.x.x in @since tag';
-                    $this->currentFile->addError($error, $errorPos);
-                }
-            }
-        }
-
-    }//end processSince()
 
 
 }//end class

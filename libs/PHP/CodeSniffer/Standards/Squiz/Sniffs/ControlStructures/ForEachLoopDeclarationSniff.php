@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ForEachLoopDeclarationSniff.php 289611 2009-10-13 07:52:23Z sebastian $
+ * @version   CVS: $Id: ForEachLoopDeclarationSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_ControlStructures_ForEachLoopDeclarationSniff implements PHP_CodeSniffer_Sniff
@@ -56,45 +56,57 @@ class Squiz_Sniffs_ControlStructures_ForEachLoopDeclarationSniff implements PHP_
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $errors = array();
 
         $openingBracket = $phpcsFile->findNext(T_OPEN_PARENTHESIS, $stackPtr);
         $closingBracket = $tokens[$openingBracket]['parenthesis_closer'];
 
         if ($tokens[($openingBracket + 1)]['code'] === T_WHITESPACE) {
-            $errors[] = 'Space found after opening bracket of FOREACH loop';
+            $error = 'Space found after opening bracket of FOREACH loop';
+            $phpcsFile->addError($error, $stackPtr, 'SpaceAfterOpen');
         }
 
         if ($tokens[($closingBracket - 1)]['code'] === T_WHITESPACE) {
-            $errors[] = 'Space found before closing bracket of FOREACH loop';
+            $error = 'Space found before closing bracket of FOREACH loop';
+            $phpcsFile->addError($error, $stackPtr, 'SpaceBeforeClose');
         }
 
         $asToken = $phpcsFile->findNext(T_AS, $openingBracket);
         $content = $tokens[$asToken]['content'];
         if ($content !== strtolower($content)) {
             $expected = strtolower($content);
-            $errors[] = "AS keyword must be lowercase; expected \"$expected\" but found \"$content\"";
+            $error    = 'AS keyword must be lowercase; expected "%s" but found "%s"';
+            $data     = array(
+                         $expected,
+                         $content,
+                        );
+            $phpcsFile->addError($error, $stackPtr, 'AsNotLower', $data);
         }
 
         $doubleArrow = $phpcsFile->findNext(T_DOUBLE_ARROW, $openingBracket, $closingBracket);
 
         if ($doubleArrow !== false) {
             if ($tokens[($doubleArrow - 1)]['code'] !== T_WHITESPACE) {
-                $errors[] = 'Expected 1 space before "=>"; 0 found';
+                $error = 'Expected 1 space before "=>"; 0 found';
+                $phpcsFile->addError($error, $stackPtr, 'NoSpaceBeforeArrow');
             } else {
                 if (strlen($tokens[($doubleArrow - 1)]['content']) !== 1) {
-                    $spaces   = strlen($tokens[($doubleArrow - 1)]['content']);
-                    $errors[] = "Expected 1 space before \"=>\"; $spaces found";
+                    $spaces = strlen($tokens[($doubleArrow - 1)]['content']);
+                    $error  = 'Expected 1 space before "=>"; %s found';
+                    $data   = array($spaces);
+                    $phpcsFile->addError($error, $stackPtr, 'SpacingBeforeArrow', $data);
                 }
 
             }
 
             if ($tokens[($doubleArrow + 1)]['code'] !== T_WHITESPACE) {
-                $errors[] = 'Expected 1 space after "=>"; 0 found';
+                $error = 'Expected 1 space after "=>"; 0 found';
+                $phpcsFile->addError($error, $stackPtr, 'NoSpaceAfterArrow');
             } else {
                 if (strlen($tokens[($doubleArrow + 1)]['content']) !== 1) {
-                    $spaces   = strlen($tokens[($doubleArrow + 1)]['content']);
-                    $errors[] = "Expected 1 space after \"=>\"; $spaces found";
+                    $spaces = strlen($tokens[($doubleArrow + 1)]['content']);
+                    $error  = 'Expected 1 space after "=>"; %s found';
+                    $data   = array($spaces);
+                    $phpcsFile->addError($error, $stackPtr, 'SpacingAfterArrow', $data);
                 }
 
             }
@@ -102,26 +114,27 @@ class Squiz_Sniffs_ControlStructures_ForEachLoopDeclarationSniff implements PHP_
         }//end if
 
         if ($tokens[($asToken - 1)]['code'] !== T_WHITESPACE) {
-            $errors[] = 'Expected 1 space before "as"; 0 found';
+            $error = 'Expected 1 space before "as"; 0 found';
+            $phpcsFile->addError($error, $stackPtr, 'NoSpaceBeforeAs');
         } else {
             if (strlen($tokens[($asToken - 1)]['content']) !== 1) {
-                $spaces   = strlen($tokens[($asToken - 1)]['content']);
-                $errors[] = "Expected 1 space before \"as\"; $spaces found";
+                $spaces = strlen($tokens[($asToken - 1)]['content']);
+                $error  = 'Expected 1 space before "as"; %s found';
+                $data   = array($spaces);
+                $phpcsFile->addError($error, $stackPtr, 'SpacingBeforeAs', $data);
             }
         }
 
         if ($tokens[($asToken + 1)]['code'] !== T_WHITESPACE) {
-            $errors[] = 'Expected 1 space after "as"; 0 found';
+            $error = 'Expected 1 space after "as"; 0 found';
+            $phpcsFile->addError($error, $stackPtr, 'NoSpaceAfterAs');
         } else {
             if (strlen($tokens[($asToken + 1)]['content']) !== 1) {
-                $spaces   = strlen($tokens[($asToken + 1)]['content']);
-                $errors[] = "Expected 1 space after \"as\"; $spaces found";
+                $spaces = strlen($tokens[($asToken + 1)]['content']);
+                $error  = 'Expected 1 space after "as"; %s found';
+                $data   = array($spaces);
+                $phpcsFile->addError($error, $stackPtr, 'SpacingAfterAs', $data);
             }
-
-        }
-
-        foreach ($errors as $error) {
-            $phpcsFile->addError($error, $stackPtr);
         }
 
     }//end process()

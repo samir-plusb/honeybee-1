@@ -10,7 +10,7 @@
  * @author    Manuel Pichler <mapi@manuel-pichler.de>
  * @copyright 2007-2008 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   CVS: $Id: EmptyStatementSniff.php 286785 2009-08-04 05:19:21Z squiz $
+ * @version   CVS: $Id: EmptyStatementSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -39,7 +39,7 @@
  * @author    Manuel Pichler <mapi@manuel-pichler.de>
  * @copyright 2007-2008 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_CodeAnalysis_EmptyStatementSniff implements PHP_CodeSniffer_Sniff
@@ -112,11 +112,12 @@ class Generic_Sniffs_CodeAnalysis_EmptyStatementSniff implements PHP_CodeSniffer
         if ($emptyBody === true) {
             // Get token identifier.
             $name  = $phpcsFile->getTokensAsString($stackPtr, 1);
-            $error = sprintf('Empty %s statement detected', strtoupper($name));
+            $error = 'Empty %s statement detected';
+            $data  = array(strtoupper($name));
             if ($this->checkedTokens[$token['code']] === true) {
-                $phpcsFile->addError($error, $stackPtr);
+                $phpcsFile->addError($error, $stackPtr, 'NotAllowed', $data);
             } else {
-                $phpcsFile->addWarning($error, $stackPtr);
+                $phpcsFile->addWarning($error, $stackPtr, 'NotAllowedWarning', $data);
             }
         }
 

@@ -8,7 +8,7 @@
  * @package  PHP_CodeSniffer
  * @author   Andy Brockhurst <abrock@yahoo-inc.com>
  * @license  http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version  CVS: $Id: NoSilencedErrorsSniff.php 270342 2008-12-03 04:42:07Z squiz $
+ * @version  CVS: $Id: NoSilencedErrorsSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link     http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -28,7 +28,7 @@
  * @package  PHP_CodeSniffer
  * @author   Andy Brockhurst <abrock@yahoo-inc.com>
  * @license  http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version  Release: 1.2.2
+ * @version  Release: 1.3.0
  * @link     http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_PHP_NoSilencedErrorsSniff implements PHP_CodeSniffer_Sniff
@@ -39,7 +39,7 @@ class Generic_Sniffs_PHP_NoSilencedErrorsSniff implements PHP_CodeSniffer_Sniff
      *
      * @var bool
      */
-    protected $error = false;
+    public $error = false;
 
 
     /**
@@ -65,13 +65,13 @@ class Generic_Sniffs_PHP_NoSilencedErrorsSniff implements PHP_CodeSniffer_Sniff
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        $error = 'Silencing errors is ';
+        $error = 'Silencing errors is forbidden';
         if ($this->error === true) {
-            $error .= 'forbidden';
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Silencing errors is forbidden';
+            $phpcsFile->addError($error, $stackPtr, 'Forbidden');
         } else {
-            $error .= 'discouraged';
-            $phpcsFile->addWarning($error, $stackPtr);
+            $error = 'Silencing errors is discouraged';
+            $phpcsFile->addWarning($error, $stackPtr, 'Discouraged');
         }
 
     }//end process()

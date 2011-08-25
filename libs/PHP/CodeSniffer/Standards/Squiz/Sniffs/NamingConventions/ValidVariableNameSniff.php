@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: ValidVariableNameSniff.php 253706 2008-02-25 00:25:02Z squiz $
+ * @version   CVS: $Id: ValidVariableNameSniff.php 308521 2011-02-21 00:56:09Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -29,7 +29,7 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractVariableSniff', true) === fa
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniffer_Standards_AbstractVariableSniff
@@ -95,8 +95,9 @@ class Squiz_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSnif
                     }
 
                     if (PHP_CodeSniffer::isCamelCaps($objVarName, false, true, false) === false) {
-                        $error = "Variable \"$originalVarName\" is not in valid camel caps format";
-                        $phpcsFile->addError($error, $var);
+                        $error = 'Variable "%s" is not in valid camel caps format';
+                        $data  = array($originalVarName);
+                        $phpcsFile->addError($error, $var, 'NotCamelCaps', $data);
                     }
                 }//end if
             }//end if
@@ -122,8 +123,9 @@ class Squiz_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSnif
         }
 
         if (PHP_CodeSniffer::isCamelCaps($varName, false, true, false) === false) {
-            $error = "Variable \"$originalVarName\" is not in valid camel caps format";
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Variable "%s" is not in valid camel caps format';
+            $data  = array($originalVarName);
+            $phpcsFile->addError($error, $stackPtr, 'NotCamelCaps', $data);
         }
 
     }//end processVariable()
@@ -144,26 +146,38 @@ class Squiz_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSnif
 
         $varName     = ltrim($tokens[$stackPtr]['content'], '$');
         $memberProps = $phpcsFile->getMemberProperties($stackPtr);
-        $public      = ($memberProps['scope'] !== 'private');
+        if (empty($memberProps) === true) {
+            // Couldn't get any info about this variable, which
+            // generally means it is invalid or possibly has a parse
+            // error. Any errors will be reported by the core, so
+            // we can ignore it.
+            return;
+        }
+
+        $public    = ($memberProps['scope'] !== 'private');
+        $errorData = array($varName);
 
         if ($public === true) {
             if (substr($varName, 0, 1) === '_') {
-                $scope = ucfirst($memberProps['scope']);
-                $error = "$scope member variable \"$varName\" must not contain a leading underscore";
-                $phpcsFile->addError($error, $stackPtr);
+                $error = '%s member variable "%s" must not contain a leading underscore';
+                $data  = array(
+                          ucfirst($memberProps['scope']),
+                          $errorData[0],
+                         );
+                $phpcsFile->addError($error, $stackPtr, 'PublicHasUnderscore', $data);
                 return;
             }
         } else {
             if (substr($varName, 0, 1) !== '_') {
-                $error = "Private member variable \"$varName\" must contain a leading underscore";
-                $phpcsFile->addError($error, $stackPtr);
+                $error = 'Private member variable "%s" must contain a leading underscore';
+                $phpcsFile->addError($error, $stackPtr, 'PrivateNoUnderscore', $errorData);
                 return;
             }
         }
 
         if (PHP_CodeSniffer::isCamelCaps($varName, false, $public, false) === false) {
-            $error = "Variable \"$varName\" is not in valid camel caps format";
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Variable "%s" is not in valid camel caps format';
+            $phpcsFile->addError($error, $stackPtr, 'MemberNotCamelCaps', $errorData);
         }
 
     }//end processMemberVar()
@@ -194,7 +208,7 @@ class Squiz_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSnif
                             'GLOBALS',
                            );
 
-        if (preg_match_all('|[^\\\]\$([a-zA-Z0-9_]+)|', $tokens[$stackPtr]['content'], $matches) !== 0) {
+        if (preg_match_all('|[^\\\]\${?([a-zA-Z0-9_]+)|', $tokens[$stackPtr]['content'], $matches) !== 0) {
             foreach ($matches[1] as $varName) {
                 // If it's a php reserved var, then its ok.
                 if (in_array($varName, $phpReservedVars) === true) {
@@ -213,8 +227,10 @@ class Squiz_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSnif
 
                 if (PHP_CodeSniffer::isCamelCaps($varName, false, true, false) === false) {
                     $varName = $matches[0];
-                    $error   = "Variable \"$originalVarName\" is not in valid camel caps format";
-                    $phpcsFile->addError($error, $stackPtr);
+                    $error = 'Variable "%s" is not in valid camel caps format';
+                    $data  = array($originalVarName);
+                    $phpcsFile->addError($error, $stackPtr, 'StringNotCamelCaps', $data);
+                    
                 }
             }
         }//end if

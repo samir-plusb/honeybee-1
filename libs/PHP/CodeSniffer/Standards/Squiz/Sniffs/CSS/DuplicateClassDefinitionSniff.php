@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: DuplicateClassDefinitionSniff.php 288184 2009-09-09 05:00:01Z squiz $
+ * @version   CVS: $Id: DuplicateClassDefinitionSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -23,7 +23,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_CSS_DuplicateClassDefinitionSniff implements PHP_CodeSniffer_Sniff
@@ -97,9 +97,9 @@ class Squiz_Sniffs_CSS_DuplicateClassDefinitionSniff implements PHP_CodeSniffer_
 
             if (isset($classNames[$name]) === true) {
                 $first = $classNames[$name];
-                $line  = $tokens[$first]['line'];
-                $error = "Duplicate class definition found; first defined on line $line";
-                $phpcsFile->addError($error, $next);
+                $error = 'Duplicate class definition found; first defined on line %s';
+                $data  = array($tokens[$first]['line']);
+                $phpcsFile->addError($error, $next, 'Found', $data);
             } else {
                 $classNames[$name] = $next;
             }

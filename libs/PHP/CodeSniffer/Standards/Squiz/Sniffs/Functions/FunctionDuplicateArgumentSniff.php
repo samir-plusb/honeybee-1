@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: FunctionDuplicateArgumentSniff.php 244439 2007-10-19 07:06:57Z squiz $
+ * @version   CVS: $Id: FunctionDuplicateArgumentSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_Functions_FunctionDuplicateArgumentSniff implements PHP_CodeSniffer_Sniff
@@ -65,8 +65,9 @@ class Squiz_Sniffs_Functions_FunctionDuplicateArgumentSniff implements PHP_CodeS
             if ($tokens[$i]['code'] === T_VARIABLE) {
                 $variable = $tokens[$i]['content'];
                 if (in_array($variable, $foundVariables) === true) {
-                    $error = "Variable \"$variable\" appears more than once in function declaration";
-                    $phpcsFile->addError($error, $i);
+                    $error = 'Variable "%s" appears more than once in function declaration';
+                    $data  = array($variable);
+                    $phpcsFile->addError($error, $i, 'Found', $data);
                 } else {
                     $foundVariables[] = $variable;
                 }

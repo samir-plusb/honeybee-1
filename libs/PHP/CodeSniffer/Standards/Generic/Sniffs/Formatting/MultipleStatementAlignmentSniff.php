@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: MultipleStatementAlignmentSniff.php 288187 2009-09-09 06:12:33Z squiz $
+ * @version   CVS: $Id: MultipleStatementAlignmentSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -27,7 +27,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_Formatting_MultipleStatementAlignmentSniff implements PHP_CodeSniffer_Sniff
@@ -48,7 +48,7 @@ class Generic_Sniffs_Formatting_MultipleStatementAlignmentSniff implements PHP_C
      *
      * @var bool
      */
-    protected $error = false;
+    public $error = false;
 
     /**
      * The maximum amount of padding before the alignment is ignored.
@@ -59,14 +59,14 @@ class Generic_Sniffs_Formatting_MultipleStatementAlignmentSniff implements PHP_C
      *
      * @var int
      */
-    protected $maxPadding = 1000;
+    public $maxPadding = 1000;
 
     /**
      * If true, multi-line assignments are not checked.
      *
      * @var int
      */
-    protected $ignoreMultiLine = false;
+    public $ignoreMultiLine = false;
 
 
     /**
@@ -146,6 +146,12 @@ class Generic_Sniffs_Formatting_MultipleStatementAlignmentSniff implements PHP_C
         $lastLine       = $tokens[$stackPtr]['line'];
 
         while (($prevAssignment = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$assignmentTokens, ($prevAssignment - 1))) !== false) {
+
+            // We are not interested in double arrows as they assign values inside
+            // arrays and loops and do not use the same indentation rules.
+            if ($tokens[$prevAssignment]['code'] === T_DOUBLE_ARROW) {
+                continue;
+            }
 
             // The assignment's end token must be on the line directly
             // above the current one to be in the same assignment block.
@@ -271,15 +277,22 @@ class Generic_Sniffs_Formatting_MultipleStatementAlignmentSniff implements PHP_C
                 }
 
                 if (count($assignments) === 1) {
-                    $error = "Equals sign not aligned correctly; expected $expected but found $found";
+                    $type  = 'Incorrect';
+                    $error = 'Equals sign not aligned correctly; expected %s but found %s';
                 } else {
-                    $error = "Equals sign not aligned with surrounding assignments; expected $expected but found $found";
+                    $type  = 'NotSame';
+                    $error = 'Equals sign not aligned with surrounding assignments; expected %s but found %s';
                 }
 
+                $errorData = array(
+                              $expected,
+                              $found,
+                             );
+
                 if ($this->error === true) {
-                    $phpcsFile->addError($error, $assignment);
+                    $phpcsFile->addError($error, $assignment, $type, $errorData);
                 } else {
-                    $phpcsFile->addWarning($error, $assignment);
+                    $phpcsFile->addWarning($error, $assignment, $type.'Warning', $errorData);
                 }
             }//end if
         }//end foreach

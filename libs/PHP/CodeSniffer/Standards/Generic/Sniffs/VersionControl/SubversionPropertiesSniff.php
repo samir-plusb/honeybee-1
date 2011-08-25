@@ -9,7 +9,7 @@
  * @author    Jack Bates <ms419@freezone.co.uk>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: SubversionPropertiesSniff.php 284038 2009-07-14 00:17:39Z squiz $
+ * @version   CVS: $Id: SubversionPropertiesSniff.php 302527 2010-08-20 05:37:22Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -23,7 +23,7 @@
  * @author    Jack Bates <ms419@freezone.co.uk>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_VersionControl_SubversionPropertiesSniff implements PHP_CodeSniffer_Sniff
@@ -31,6 +31,10 @@ class Generic_Sniffs_VersionControl_SubversionPropertiesSniff implements PHP_Cod
 
     /**
      * The Subversion properties that should be set.
+     *
+     * Key of array is the SVN property and the value is the
+     * exact value the property should have or NULL if the
+     * property should just be set but the value is not fixed.
      *
      * @var array
      */
@@ -73,28 +77,48 @@ class Generic_Sniffs_VersionControl_SubversionPropertiesSniff implements PHP_Cod
         }
 
         $path       = $phpcsFile->getFileName();
-        $properties = $this->properties($path);
+        $properties = $this->getProperties($path);
+        if ($properties === null) {
+            // Not under version control.
+            return;
+        }
 
-        foreach (($properties + $this->properties) as $key => $value) {
+        $properties += $this->properties;
+        foreach ($properties as $key => $value) {
             if (isset($properties[$key]) === true
                 && isset($this->properties[$key]) === false
             ) {
-                $error = 'Unexpected Subversion property "'.$key.'" = "'.$properties[$key].'"';
-                $phpcsFile->addError($error, $stackPtr);
+                $error = 'Unexpected Subversion property "%s" = "%s"';
+                $data  = array(
+                          $key,
+                          $properties[$key],
+                         );
+                $phpcsFile->addError($error, $stackPtr, 'Unexpected', $data);
                 continue;
             }
 
             if (isset($properties[$key]) === false
                 && isset($this->properties[$key]) === true
             ) {
-                $error = 'Missing Subversion property "'.$key.'" = "'.$this->properties[$key].'"';
-                $phpcsFile->addError($error, $stackPtr);
+                $error = 'Missing Subversion property "%s" = "%s"';
+                $data  = array(
+                          $key,
+                          $this->properties[$key],
+                         );
+                $phpcsFile->addError($error, $stackPtr, 'Missing', $data);
                 continue;
             }
 
-            if ($properties[$key] !== $this->properties[$key]) {
-                $error = 'Subversion property "'.$key.'" = "'.$properties[$key].'" does not match "'.$this->properties[$key].'"';
-                $phpcsFile->addError($error, $stackPtr);
+            if ($properties[$key] !== null
+                && $properties[$key] !== $this->properties[$key]
+            ) {
+                $error = 'Subversion property "%s" = "%s" does not match "%s"';
+                $data  = array(
+                          $key,
+                          $properties[$key],
+                          $this->properties[$key],
+                         );
+                $phpcsFile->addError($error, $stackPtr, 'NoMatch', $data);
             }
         }//end foreach
 
@@ -104,13 +128,15 @@ class Generic_Sniffs_VersionControl_SubversionPropertiesSniff implements PHP_Cod
     /**
      * Returns the Subversion properties which are actually set on a path.
      *
+     * Returns NULL if the file is not under version control.
+     *
      * @param string $path The path to return Subversion properties on.
      *
      * @return array
      * @throws PHP_CodeSniffer_Exception If Subversion properties file could
      *                                   not be opened.
      */
-    protected function properties($path)
+    protected function getProperties($path)
     {
         $properties = array();
 
@@ -118,14 +144,18 @@ class Generic_Sniffs_VersionControl_SubversionPropertiesSniff implements PHP_Cod
         $paths[] = dirname($path).'/.svn/props/'.basename($path).'.svn-work';
         $paths[] = dirname($path).'/.svn/prop-base/'.basename($path).'.svn-base';
 
+        $foundPath = false;
         foreach ($paths as $path) {
-            if (true === file_exists($path)) {
-                if (false === $handle = fopen($path, 'r')) {
+            if (file_exists($path) === true) {
+                $foundPath = true;
+
+                $handle = fopen($path, 'r');
+                if ($handle === false) {
                     $error = 'Error opening file; could not get Subversion properties';
                     throw new PHP_CodeSniffer_Exception($error);
                 }
 
-                while (!feof($handle)) {
+                while (feof($handle) === false) {
                     // Read a key length line. Might be END, though.
                     $buffer = trim(fgets($handle));
 
@@ -163,9 +193,13 @@ class Generic_Sniffs_VersionControl_SubversionPropertiesSniff implements PHP_Cod
             }//end if
         }//end foreach
 
+        if ($foundPath === false) {
+            return null;
+        }
+
         return $properties;
 
-    }//end properties()
+    }//end getProperties()
 
 
 }//end class

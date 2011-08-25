@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: TodoSniff.php 270281 2008-12-02 02:38:34Z squiz $
+ * @version   CVS: $Id: TodoSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -23,7 +23,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_Commenting_TodoSniff implements PHP_CodeSniffer_Sniff
@@ -70,14 +70,17 @@ class Generic_Sniffs_Commenting_TodoSniff implements PHP_CodeSniffer_Sniff
         if (preg_match('|[^a-z]+todo[^a-z]+(.*)|i', $content, $matches) !== 0) {
             // Clear whitespace and some common characters not required at
             // the end of a to-do message to make the warning more informative.
+            $type        = 'CommentFound';
             $todoMessage = trim($matches[1]);
             $todoMessage = trim($todoMessage, '[]().');
             $error       = 'Comment refers to a TODO task';
+            $data        = array($todoMessage);
             if ($todoMessage !== '') {
-                $error .= " \"$todoMessage\"";
+                $type   = 'TaskFound';
+                $error .= ' "%s"';
             }
 
-            $phpcsFile->addWarning($error, $stackPtr);
+            $phpcsFile->addWarning($error, $stackPtr, $type, $data);
         }
 
     }//end process()

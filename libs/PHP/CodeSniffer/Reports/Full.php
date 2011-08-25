@@ -27,7 +27,7 @@
  * @copyright 2009 SQLI <www.sqli.com>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PHP_CodeSniffer_Reports_Full implements PHP_CodeSniffer_Report
@@ -39,16 +39,14 @@ class PHP_CodeSniffer_Reports_Full implements PHP_CodeSniffer_Report
      *
      * Errors and warnings are displayed together, grouped by file.
      *
-     * @param array   $report       Prepared report.
-     * @param boolean $showWarnings Show warnings?
-     * @param boolean $showSources  Show sources?
-     * @param int     $width        Maximum allowed lne width.
+     * @param array   $report      Prepared report.
+     * @param boolean $showSources Show sources?
+     * @param int     $width       Maximum allowed lne width.
      * 
      * @return string 
      */
     public function generate(
         $report,
-        $showWarnings=true,
         $showSources=false,
         $width=80
     ) {
@@ -71,8 +69,7 @@ class PHP_CodeSniffer_Reports_Full implements PHP_CodeSniffer_Report
             echo str_repeat('-', $width).PHP_EOL;
 
             echo 'FOUND '.$file['errors'].' ERROR(S) ';
-
-            if ($showWarnings === true) {
+            if ($file['warnings'] > 0) {
                 echo 'AND '.$file['warnings'].' WARNING(S) ';
             }
 
@@ -90,7 +87,7 @@ class PHP_CodeSniffer_Reports_Full implements PHP_CodeSniffer_Report
             $maxLineLength = strlen($maxLine);
 
             // The length of the word ERROR or WARNING; used for padding.
-            if ($showWarnings === true && $file['warnings'] > 0) {
+            if ($file['warnings'] > 0) {
                 $typeLength = 7;
             } else {
                 $typeLength = 5;
@@ -124,7 +121,7 @@ class PHP_CodeSniffer_Reports_Full implements PHP_CodeSniffer_Report
 
                         echo ' '.str_repeat(' ', $padding).$line.' | '.$error['type'];
                         if ($error['type'] === 'ERROR') {
-                            if ($showWarnings === true && $file['warnings'] > 0) {
+                            if ($file['warnings'] > 0) {
                                 echo '  ';
                             }
                         }
@@ -137,6 +134,12 @@ class PHP_CodeSniffer_Reports_Full implements PHP_CodeSniffer_Report
 
             echo str_repeat('-', $width).PHP_EOL.PHP_EOL;
         }//end foreach
+
+        if (PHP_CODESNIFFER_INTERACTIVE === false
+            && class_exists('PHP_Timer', false) === true
+        ) {
+            echo PHP_Timer::resourceUsage().PHP_EOL.PHP_EOL;
+        }
 
         return $errorsShown;
 

@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: PHP.php 293533 2010-01-14 05:55:31Z squiz $
+ * @version   CVS: $Id: PHP.php 307870 2011-01-31 04:01:45Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -21,7 +21,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PHP_CodeSniffer_Tokenizers_PHP
@@ -417,7 +417,9 @@ class PHP_CodeSniffer_Tokenizers_PHP
      * Performs additional processing after main tokenizing.
      *
      * This additional processing checks for CASE statements
-     * that are using curly braces for scope openers and closers.
+     * that are using curly braces for scope openers and closers. It
+     * also turn some T_FUNCTION tokens into T_CLOSURE when they
+     * are not standard function definitions.
      *
      * @param array  &$tokens The array of tokens to process.
      * @param string $eolChar The EOL character to use for splitting strings.
@@ -432,10 +434,31 @@ class PHP_CodeSniffer_Tokenizers_PHP
 
         $numTokens = count($tokens);
         for ($i = ($numTokens - 1); $i >= 0; $i--) {
-            if ($tokens[$i]['code'] !== T_CASE
+            // Looking for functions that are actually closures.
+            if ($tokens[$i]['code'] === T_FUNCTION) {
+                for ($x = ($i + 1); $x < $numTokens; $x++) {
+                    if (in_array($tokens[$x]['code'], PHP_CodeSniffer_Tokens::$emptyTokens) === false) {
+                        break;
+                    }
+                }
+
+                if ($tokens[$x]['code'] === T_OPEN_PARENTHESIS) {
+                    $tokens[$i]['code'] = T_CLOSURE;
+                    if (PHP_CODESNIFFER_VERBOSITY > 1) {
+                        $line = $tokens[$i]['line'];
+                        echo "\t* token $i on line $line changed from T_FUNCTION to T_CLOSURE".PHP_EOL;
+                    }
+                }
+
+                continue;
+            }//end if
+
+            if (($tokens[$i]['code'] !== T_CASE
+                && $tokens[$i]['code'] !== T_DEFAULT)
                 || isset($tokens[$i]['scope_opener']) === false
             ) {
-                // Only interested in CASE statements.
+                // Only interested in CASE and DEFAULT statements
+                // from here on in.
                 continue;
             }
 
@@ -444,7 +467,7 @@ class PHP_CodeSniffer_Tokenizers_PHP
 
             // If the first char after the opener is a curly brace
             // and that brace has been ignored, it is actually
-            // opening this case statement and the closer is
+            // opening this case statement and the opener and closer are
             // probably set incorrectly.
             for ($x = ($scopeOpener + 1); $x < $numTokens; $x++) {
                 if (in_array($tokens[$x]['code'], PHP_CodeSniffer_Tokens::$emptyTokens) === false) {
@@ -478,20 +501,31 @@ class PHP_CodeSniffer_Tokenizers_PHP
                 continue;
             }
 
+            // The closer for this CASE/DEFAULT should be the closing
+            // curly brace and not whatever it already is. The opener needs
+            // to be the opening curly brace so everything matches up.
             $newCloser = $tokens[$x]['bracket_closer'];
+            $tokens[$i]['scope_closer'] = $newCloser;
+            $tokens[$x]['scope_closer'] = $newCloser;
+            $tokens[$i]['scope_opener'] = $x;
+            $tokens[$x]['scope_condition'] = $i;
+            $tokens[$newCloser]['scope_condition'] = $i;
+            $tokens[$newCloser]['scope_opener']    = $x;
             if (PHP_CODESNIFFER_VERBOSITY > 1) {
+                $line      = $tokens[$i]['line'];
+                $tokenType = $tokens[$i]['type'];
+
+                $oldType = $tokens[$scopeOpener]['type'];
+                $newType = $tokens[$x]['type'];
+                echo "\t* token $i ($tokenType) on line $line opener changed from $scopeOpener ($oldType) to $x ($newType)".PHP_EOL;
+
                 $oldType = $tokens[$scopeCloser]['type'];
                 $newType = $tokens[$newCloser]['type'];
-                $line    = $tokens[$i]['line'];
-                echo "\t* token $i (T_CASE) on line $line closer changed from $scopeCloser ($oldType) to $newCloser ($newType)".PHP_EOL;
+                echo "\t* token $i ($tokenType) on line $line closer changed from $scopeCloser ($oldType) to $newCloser ($newType)".PHP_EOL;
             }
 
-            // The closer for this CASE should be the closing
-            // curly brace and not whatever it already is.
-            $tokens[$i]['scope_closer'] = $newCloser;
-
             // Now fix up all the tokens that think they are
-            // inside the CASE statement when they are really outside.
+            // inside the CASE/DEFAULT statement when they are really outside.
             for ($x = $newCloser; $x < $scopeCloser; $x++) {
                 foreach ($tokens[$x]['conditions'] as $num => $oldCond) {
                     if ($oldCond === $tokens[$i]['code']) {

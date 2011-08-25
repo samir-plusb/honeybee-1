@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: DisallowObEndFlushSniff.php 247282 2007-11-29 04:02:47Z squiz $
+ * @version   CVS: $Id: DisallowObEndFlushSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_PHP_DisallowObEndFlushSniff implements PHP_CodeSniffer_Sniff
@@ -58,7 +58,7 @@ class Squiz_Sniffs_PHP_DisallowObEndFlushSniff implements PHP_CodeSniffer_Sniff
         $tokens = $phpcsFile->getTokens();
 
         if ($tokens[$stackPtr]['content'] === 'ob_end_flush') {
-            $phpcsFile->addError('Use of ob_end_flush() is not allowed; use ob_get_contents() and ob_end_clean() instead', $stackPtr);
+            $phpcsFile->addError('Use of ob_end_flush() is not allowed; use ob_get_contents() and ob_end_clean() instead', $stackPtr, 'Found');
         }
 
     }//end process()

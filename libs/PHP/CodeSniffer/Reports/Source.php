@@ -27,7 +27,7 @@
  * @copyright 2009 SQLI <www.sqli.com>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class PHP_CodeSniffer_Reports_Source implements PHP_CodeSniffer_Report
@@ -37,16 +37,14 @@ class PHP_CodeSniffer_Reports_Source implements PHP_CodeSniffer_Report
     /**
      * Prints the source of all errors and warnings.
      *
-     * @param array   $report       Prepared report.
-     * @param boolean $showWarnings Show warnings?
-     * @param boolean $showSources  Show sources?
-     * @param int     $width        Maximum allowed lne width.
+     * @param array   $report      Prepared report.
+     * @param boolean $showSources Show sources?
+     * @param int     $width       Maximum allowed lne width.
      * 
      * @return string 
      */
     public function generate(
         $report,
-        $showWarnings=true,
         $showSources=false,
         $width=80
     ) {
@@ -111,7 +109,9 @@ class PHP_CodeSniffer_Reports_Source implements PHP_CodeSniffer_Report
 
                 $sniff = $this->makeFriendlyName($parts[2]);
                 if (isset($parts[3]) === true) {
-                    $sniff .= ' '.ucfirst($this->makeFriendlyName($parts[3]));
+                    $name    = $this->makeFriendlyName($parts[3]);
+                    $name[0] = strtolower($name[0]);
+                    $sniff .= ' '.$name;
                 }
 
                 if (strlen($sniff) > ($width - 37)) {
@@ -128,6 +128,12 @@ class PHP_CodeSniffer_Reports_Source implements PHP_CodeSniffer_Report
         echo 'A TOTAL OF '.$errorsShown.' SNIFF VIOLATION(S) ';
         echo 'WERE FOUND IN '.count($sources).' SOURCE(S)'.PHP_EOL;
         echo str_repeat('-', $width).PHP_EOL.PHP_EOL;
+
+        if (PHP_CODESNIFFER_INTERACTIVE === false
+            && class_exists('PHP_Timer', false) === true
+        ) {
+            echo PHP_Timer::resourceUsage().PHP_EOL.PHP_EOL;
+        }
 
         return $errorsShown;
 

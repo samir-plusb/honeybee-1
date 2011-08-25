@@ -9,7 +9,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: DisallowSelfActionsSniff.php 292108 2009-12-14 04:00:29Z squiz $
+ * @version   CVS: $Id: DisallowSelfActionsSniff.php 302095 2010-08-11 04:42:36Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -21,7 +21,7 @@
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class MySource_Sniffs_Channels_DisallowSelfActionsSniff implements PHP_CodeSniffer_Sniff
@@ -77,8 +77,10 @@ class MySource_Sniffs_Channels_DisallowSelfActionsSniff implements PHP_CodeSniff
                     // Cache the function information.
                     $funcName  = $phpcsFile->findNext(T_STRING, ($i + 1));
                     $funcScope = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$scopeModifiers, ($i - 1));
+
                     $foundFunctions[$tokens[$funcName]['content']] = strtolower($tokens[$funcScope]['content']);
                 }
+
                 continue;
             }
 
@@ -113,12 +115,16 @@ class MySource_Sniffs_Channels_DisallowSelfActionsSniff implements PHP_CodeSniff
                 // Either way, we can't really check this.
                 continue;
             } else if ($foundFunctions[$funcName] === 'public') {
-                $error = "Static calls to public methods in Action classes must not use the self keyword; use $errorClassName::$funcName() instead";
-                $phpcsFile->addError($error, $token);
+                $error = 'Static calls to public methods in Action classes must not use the self keyword; use %s::%s() instead';
+                $data  = array(
+                          $errorClassName,
+                          $funcName,
+                         );
+                $phpcsFile->addError($error, $token, 'Found', $data);
             }
         }
 
-    }//end processTokenWithinScope()
+    }//end process()
 
 
 }//end class

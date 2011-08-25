@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: DisallowShortOpenTagSniff.php 270343 2008-12-03 04:42:41Z squiz $
+ * @version   CVS: $Id: DisallowShortOpenTagSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Generic_Sniffs_PHP_DisallowShortOpenTagSniff implements PHP_CodeSniffer_Sniff
@@ -72,15 +72,20 @@ class Generic_Sniffs_PHP_DisallowShortOpenTagSniff implements PHP_CodeSniffer_Sn
         $openTag = $tokens[$stackPtr];
 
         if ($openTag['content'] === '<?') {
-            $error = 'Short PHP opening tag used. Found "'.$openTag['content'].'" Expected "<?php".';
-            $phpcsFile->addError($error, $stackPtr);
+            $error = 'Short PHP opening tag used; expected "<?php" but found "%s"';
+            $data  = array($openTag['content']);
+            $phpcsFile->addError($error, $stackPtr, 'Found', $data);
         }
 
         if ($openTag['code'] === T_OPEN_TAG_WITH_ECHO) {
             $nextVar = $tokens[$phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true)];
-            $error   = 'Short PHP opening tag used with echo. Found "';
-            $error  .= $openTag['content'].' '.$nextVar['content'].' ..." but expected "<?php echo '.$nextVar['content'].' ...".';
-            $phpcsFile->addError($error, $stackPtr);
+            $error   = 'Short PHP opening tag used with echo; expected "<?php echo %s ..." but found "%s %s ..."';
+            $data = array(
+                     $nextVar['content'],
+                     $openTag['content'],
+                     $nextVar['content'],
+                    );
+            $phpcsFile->addError($error, $stackPtr, 'EchoFound', $data);
         }
 
     }//end process()

@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: DoubleQuoteUsageSniff.php 289078 2009-10-02 02:01:28Z sebastian $
+ * @version   CVS: $Id: DoubleQuoteUsageSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_Strings_DoubleQuoteUsageSniff implements PHP_CodeSniffer_Sniff
@@ -60,31 +60,42 @@ class Squiz_Sniffs_Strings_DoubleQuoteUsageSniff implements PHP_CodeSniffer_Snif
     {
         $tokens = $phpcsFile->getTokens();
 
-        // The use of variables in double quoted strings is not allowed.
-        if ($tokens[$stackPtr]['code'] === T_DOUBLE_QUOTED_STRING) {
-            $stringTokens = token_get_all('<?php '.$tokens[$stackPtr]['content']);
-            foreach ($stringTokens as $token) {
-                if (is_array($token) === true && $token[0] === T_VARIABLE) {
-                    $error = 'Variable "'.$token[1].'" not allowed in double quoted string; use concatenation instead';
-                    $phpcsFile->addError($error, $stackPtr);
-                }
-            }
-
+        // We are only interested in the first token in a multi-line string.
+        if ($tokens[$stackPtr]['code'] === $tokens[($stackPtr - 1)]['code']) {
             return;
-        }//end if
+        }
 
         $workingString = $tokens[$stackPtr]['content'];
+        $i = ($stackPtr + 1);
+        while ($tokens[$i]['code'] === $tokens[$stackPtr]['code']) {
+            $workingString .= $tokens[$i]['content'];
+            $i++;
+        }
 
         // Check if it's a double quoted string.
         if (strpos($workingString, '"') === false) {
             return;
         }
 
-        // Make sure it's not a part of a string started above.
+        // Make sure it's not a part of a string started in a previous line.
         // If it is, then we have already checked it.
         if ($workingString[0] !== '"') {
             return;
         }
+
+        // The use of variables in double quoted strings is not allowed.
+        if ($tokens[$stackPtr]['code'] === T_DOUBLE_QUOTED_STRING) {
+            $stringTokens = token_get_all('<?php '.$workingString);
+            foreach ($stringTokens as $token) {
+                if (is_array($token) === true && $token[0] === T_VARIABLE) {
+                    $error = 'Variable "%s" not allowed in double quoted string; use concatenation instead';
+                    $data  = array($token[1]);
+                    $phpcsFile->addError($error, $stackPtr, 'ContainsVar', $data);
+                }
+            }
+
+            return;
+        }//end if
 
         // Work through the following tokens, in case this string is stretched
         // over multiple Lines.
@@ -113,8 +124,9 @@ class Squiz_Sniffs_Strings_DoubleQuoteUsageSniff implements PHP_CodeSniffer_Snif
             }
         }
 
-        $error = "String $workingString does not require double quotes; use single quotes instead";
-        $phpcsFile->addError($error, $stackPtr);
+        $error = 'String %s does not require double quotes; use single quotes instead';
+        $data  = array($workingString);
+        $phpcsFile->addError($error, $stackPtr, 'NotRequired', $data);
 
     }//end process()
 

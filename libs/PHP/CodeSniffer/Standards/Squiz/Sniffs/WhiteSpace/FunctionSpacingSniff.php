@@ -10,7 +10,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   CVS: $Id: FunctionSpacingSniff.php 253905 2008-02-28 06:06:00Z squiz $
+ * @version   CVS: $Id: FunctionSpacingSniff.php 301632 2010-07-28 01:57:56Z squiz $
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -25,7 +25,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: 1.2.2
+ * @version   Release: 1.3.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Squiz_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_Sniff
@@ -95,7 +95,9 @@ class Squiz_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_Sn
         }
 
         if ($foundLines !== 2) {
-            $phpcsFile->addError("Expected 2 blank lines after function; $foundLines found", $closer);
+            $error = 'Expected 2 blank lines after function; %s found';
+            $data  = array($foundLines);
+            $phpcsFile->addError($error, $closer, 'After', $data);
         }
 
         /*
@@ -156,7 +158,9 @@ class Squiz_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_Sn
         }//end if
 
         if ($foundLines !== 2) {
-            $phpcsFile->addError("Expected 2 blank lines before function; $foundLines found", $stackPtr);
+            $error = 'Expected 2 blank lines before function; %s found';
+            $data  = array($foundLines);
+            $phpcsFile->addError($error, $stackPtr, 'Before', $data);
         }
 
     }//end process()
