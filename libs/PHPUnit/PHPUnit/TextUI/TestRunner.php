@@ -463,8 +463,6 @@ class PHPUnit_TextUI_TestRunner extends PHPUnit_Runner_BaseTestRunner
      */
     protected function handleConfiguration(array &$arguments)
     {
-        file_put_contents('/home/shrink/dev/php/ContentWorker/testing/moep.log', print_r());
-        
         if (isset($arguments['configuration']) &&
             !$arguments['configuration'] instanceof PHPUnit_Util_Configuration) {
             $arguments['configuration'] = PHPUnit_Util_Configuration::getInstance(
