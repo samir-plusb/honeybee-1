@@ -4,7 +4,7 @@
         <suites>
             <suite name="Default">
                 <testfiles>
-                    <!-- <testfile>unit/FooTest.php</testfile> -->
+                    <testfile>unit/XunitLogTest.php</testfile>
                 </testfiles>
             </suite>
         </suites>
