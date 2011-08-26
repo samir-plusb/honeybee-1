@@ -100,5 +100,5 @@
         </exec>
     </target>
 
-    <target name="build" depends="clean,parallelTasks,phpunit,phpcb"/>
+    <target name="build" depends="clean,parallelTasks,phpunit,phpunit_to_xunit,phpcb"/>
 </project>
