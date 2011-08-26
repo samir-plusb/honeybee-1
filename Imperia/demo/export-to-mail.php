@@ -225,7 +225,7 @@ class DemoImperiaExportResponder
         return '=?utf-8?q?' .
             preg_replace_callback(
                 '/[\x80-\xff]/',
-                create_function('$m','return sprintf(\'=%02X\',$m[0]);'),
+                create_function('$m','return sprintf(\'=%02X\',ord($m[0]));'),
                 $str)
             . '?=';
     }
@@ -247,6 +247,7 @@ class DemoImperiaExportResponder
         $headers = array
         (
             'From: bo@service.berlinonline.de',
+	    'CC: tom.anheyer@berlinonline.de',
             'Content-Type: Text/Plain; charset="utf-8"',
             'Content-Transfer-Encoding: base64'
         );
@@ -255,7 +256,7 @@ class DemoImperiaExportResponder
             $this->config['mailto'],
             $this->quoteMailHeader($info['title']),
             base64_encode(strip_tags($body)),
-            join("\r\n", $headers));
+            join("\n", $headers));
     }
 
 
