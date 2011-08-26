@@ -24,6 +24,10 @@
             <arg value="test" />
         </exec>
     </target>
+    
+    <target name="phpunit_to_xunit">
+        <xslt in="${build_dir}/logs/phpunit.xml" out="${build_dir}/logs/junit.xml" style="phpunit.xsl"/>
+    </target>
 
     <target name="parallelTasks" description="Run the pdepend, phpmd, phpcpd, phpcs, phpdoc and phploc tasks in parallel using a maximum of 2 threads.">
         <parallel threadCount="2">

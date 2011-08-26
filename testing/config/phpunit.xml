@@ -18,6 +18,6 @@
     <logging>
         <log type="coverage-html" target="../../etc/integration/build/coverage" title="ContentWorker" charset="UTF-8" yui="true" highlight="true" lowUpperBound="35" highLowerBound="70"/>
         <log type="coverage-clover" target="../../etc/integration/build/logs/clover.xml"/>
-        <log type="junit" target="../../etc/integration/build/logs/junit.xml" logIncompleteSkipped="false"/>
+        <log type="junit" target="../../etc/integration/build/logs/phpunit.xml" logIncompleteSkipped="false"/>
     </logging>
 </phpunit>
