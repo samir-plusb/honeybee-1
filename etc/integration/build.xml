@@ -26,7 +26,7 @@
     </target>
     
     <target name="phpunit_to_xunit">
-        <xslt in="${build_dir}/logs/phpunit.xml" out="${build_dir}/logs/junit.xml" style="phpunit.xsl"/>
+        <xslt in="${build_dir}/logs/phpunit.xml" out="${build_dir}/logs/junit.xml" style="${basedir}/etc/integration/phpunit.xsl"/>
     </target>
 
     <target name="parallelTasks" description="Run the pdepend, phpmd, phpcpd, phpcs, phpdoc and phploc tasks in parallel using a maximum of 2 threads.">
