@@ -37,16 +37,20 @@ class DemoImperiaExportResponder
      * @var string template for a very simple html output
      */
     private $template = '<html>
-	<head>
-		<meta http-equiv="Content-Type" value="text/html; charset=utf8">
-		<title>%1$s</title>
-	</head>
-	<body>
-		<h3>%2$s</h3>
-		<h1>%1$s</h1>
-		<h2>%3$s</h2>
-		%4$s
-	</body>
+    <head>
+        <meta http-equiv="Content-Type" value="text/html; charset=utf8">
+        <title>%1$s</title>
+    </head>
+    <body>
+        <h5>%5$s</h5>
+        <h3>%2$s</h3>
+        <h1>%1$s</h1>
+        <h2>%3$s</h2>
+        %4$s
+        <p>
+            Link: <a href="%6$s">%6$s</a>
+        <p>
+    </body>
 </html>';
 
     /**
@@ -199,13 +203,16 @@ class DemoImperiaExportResponder
      * extract core info from previous parsed document
      *
      * @see parseDocument()
-     * @return array assoziative keys: title,subtitle, kicker, text
+     * @return array assoziative keys: title,subtitle, kicker, text, category, link
      */
     protected function evaluateDocument()
     {
         $title = $this->simpleXpath('//article/title');
         $kicker = $this->simpleXpath('//article/kicker');
         $subtitle = $this->simpleXpath('//article/subtitle');
+        $filename = $this->simpleXpath('//head/filename');
+        $directory = $this->simpleXpath('//head/directory');
+
 
         $nl = $this->xpath->query('//article//paragraph/text');
         for ($i = 0; $i < $nl->length; $i ++)
@@ -213,12 +220,21 @@ class DemoImperiaExportResponder
             $paragraphs[] = $nl->item($i)->nodeValue;
         }
 
+        $breadcrumb = array();
+        $nl =  $this->xpath->query('//categories/category');
+        for ($i = $nl->length - 1; $i >= 0; $i --)
+        {
+            $breadcrumb[] = $nl->item($i)->nodeValue;
+        }
+
         $doc = array
         (
             'title' => $title,
             'subtitle' => $subtitle,
             'kicker' => $kicker,
-            'text' => $paragraphs
+            'text' => $paragraphs,
+            'category' => '// '. join(' // ', $breadcrumb),
+            'link' => "http://www.berlin.de${directory}/${filename}"
         );
         return $doc;
     }
@@ -250,14 +266,15 @@ class DemoImperiaExportResponder
         $text = "<p>\n" . join("\n</p>\n<p>\n", $info['text']) . "\n</p>\n";
         $body = sprintf($this->template,
             $info['title'],
-            @$info['kicker'],
-            @$info['subtitle'],
-            $text);
+            $info['kicker'],
+            $info['subtitle'],
+            $text,
+            $info['category'],
+            $info['link']);
 
         $headers = array
         (
             'From: bo@service.berlinonline.de',
-            'CC: tom.anheyer@berlinonline.de',
             'Content-Type: Text/Plain; charset="utf-8"',
             'Content-Transfer-Encoding: base64'
         );
