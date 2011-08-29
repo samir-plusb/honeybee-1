@@ -8,8 +8,10 @@
 
 # Set this to the path to the Agavi installation's source directory. This is
 # the directory that contains the `agavi.php' file.
-AGAVI_SOURCE_DIRECTORY="`dirname $0`/../libs/agavi"
-LOCAL_CONFIG_SH=`dirname $0`/../etc/local/local.config.sh
+
+BASEDIR=`readlink -f "$( dirname $0 )/.."`
+AGAVI_SOURCE_DIRECTORY="${BASEDIR}/libs/agavi"
+LOCAL_CONFIG_SH="${BASEDIR}/etc/local/local.config.sh"
 
 if [ -f $LOCAL_CONFIG_SH ] ; then
   . $LOCAL_CONFIG_SH
@@ -104,5 +106,5 @@ until agavi_directory_exists; do
 done
 
 # Call build script.
-`which rlwrap` ${PHP_COMMAND} -d memory_limit=4294967295 -f "${AGAVI_SOURCE_DIRECTORY}/build/agavi/script/agavi.php" -- --agavi-source-directory "${AGAVI_SOURCE_DIRECTORY}" "$@"
+`which rlwrap` ${PHP_COMMAND} -d include_path=${BASEDIR}/libs -d memory_limit=4294967295 -f "${AGAVI_SOURCE_DIRECTORY}/build/agavi/script/agavi.php" -- --agavi-source-directory "${AGAVI_SOURCE_DIRECTORY}" "$@"
 
