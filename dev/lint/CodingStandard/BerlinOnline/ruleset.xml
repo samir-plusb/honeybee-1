@@ -59,7 +59,7 @@
     <rule ref="Generic.WhiteSpace.ScopeIndent">
         <properties>
             <property name="indent" value="4"/>
-            <property name="exact" value="true"/>
+            <property name="exact" value="false"/>
         </properties>
     </rule>
 </ruleset>
