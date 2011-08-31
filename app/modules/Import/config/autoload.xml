@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" parent="%core.system_config_dir%/autoload.xml">
+
+    <ae:configuration>
+        
+        <autoloads>
+            <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/base/ImportBaseAction.class.php</autoload>
+            <autoload name="ImportBaseModel">%core.module_dir%/Import/lib/base/ImportBaseModel.class.php</autoload>
+            <autoload name="ImportBaseView">%core.module_dir%/Import/lib/base/ImportBaseView.class.php</autoload>
+            
+            <autoload name="IImportConfig">%core.module_dir%/Import/models/Base/Config/IImportConfig.iface.php</autoload>
+            <autoload name="ImportBaseConfig">%core.module_dir%/Import/models/Base/Config/ImportBaseConfig.class.php</autoload>
+            <autoload name="ImportConfigException">%core.module_dir%/Import/models/Base/Config/ImportConfigException.class.php</autoload>
+            <autoload name="XmlFileBasedConfig">%core.module_dir%/Import/models/Base/Config/XmlFileBasedConfig.class.php</autoload>
+            
+            <autoload name="ImperiaImportFactoryConfig">%core.module_dir%/Import/models/Imperia/Config/ImperiaImportFactoryConfig.class.php</autoload>
+        </autoloads>
+        
+    </ae:configuration>
+</ae:configurations>
