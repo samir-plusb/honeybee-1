@@ -5,6 +5,7 @@
             <suite name="Default">
                 <testfiles>
                     <testfile>unit/modules/Import/models/Config/ImperiaImportFactoryConfigTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Config/ImperiaDataSourceConfigTest.php</testfile>
                 </testfiles>
             </suite>
         </suites>
