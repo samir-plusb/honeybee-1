@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+
+    <ae:configuration>
+        <import class="ImperiaDataImport">
+            <name>Polizeimeldungen</name>
+            <description>Imports the imperia "Polizeimeldungen" data into our couch database.</description>
+    
+            <settings>
+                <setting name="couch_host">localhost</setting>
+                <setting name="couch_port">5984</setting>
+            </settings>
+    
+            <datasource class="ImperiaXmlDataSource">
+                <name>Polizeimeldungen</name>
+                <description>Provides access to the imperia "Polizeimeldungen" data via http.</description>
+        
+                <settings>
+                    <setting name="url">http://imperia.berlinonline.de</setting>
+                    <setting name="account_user">hans</setting>
+                    <setting name="account_pass">wurst</setting>
+                </settings>
+            </datasource>
+        </import>
+
+    </ae:configuration>
+</ae:configurations>

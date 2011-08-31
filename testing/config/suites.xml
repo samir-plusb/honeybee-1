@@ -4,7 +4,7 @@
         <suites>
             <suite name="Default">
                 <testfiles>
-                    <testfile>unit/XunitLogTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Config/ImperiaImportFactoryConfigTest.php</testfile>
                 </testfiles>
             </suite>
         </suites>
