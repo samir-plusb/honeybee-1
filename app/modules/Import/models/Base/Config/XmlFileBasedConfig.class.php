@@ -1,8 +1,8 @@
 <?php
 
-abstract class XmlFileBasedConfig extends ImportBaseConfig
+abstract class XmlFileBasedConfig extends ResourceBasedConfig
 {
-    protected function loadConfig()
+    protected function loadResource()
     {
         $uriParts = $this->getUriParts();
         $config = include AgaviConfigCache::checkConfig($uriParts['path']);

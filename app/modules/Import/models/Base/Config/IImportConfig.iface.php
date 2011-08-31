@@ -3,11 +3,6 @@
 interface IImportConfig
 {
     /**
-     * @param string $configUri
-     */
-    public function __construct($configUri);
-    
-    /**
      * @param string $setting
      * @param mixed $default
      * 
@@ -19,16 +14,6 @@ interface IImportConfig
      * @return array<string>
      */
     public function getSupportSettings();
-    
-    /**
-     * @return array
-     */
-    public function getUriParts();
-    
-    /**
-     * @return string
-     */
-    public function getUri();
 }
 
 ?>

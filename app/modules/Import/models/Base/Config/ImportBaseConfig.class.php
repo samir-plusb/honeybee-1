@@ -2,23 +2,15 @@
 
 abstract class ImportBaseConfig implements IImportConfig
 {
-    private $configUri;
-    
-    private $configUriParts;
-    
     private $settings;
 
-    abstract protected function loadConfig();
+    abstract protected function load($configSrc);
     
     abstract protected function getRequiredSettings();
     
-    public function __construct($configUri)
+    public function __construct($configSrc)
     {
-        
-        $this->configUriParts = $this->parseUri($configUri);
-        $this->configUri = $configUri;
-        
-        $this->init();
+        $this->init($configSrc);
     }
     
     public function getSetting($setting, $default = null)
@@ -38,35 +30,13 @@ abstract class ImportBaseConfig implements IImportConfig
         return array_keys($this->settings);
     }
     
-    public function getUriParts()
+    protected function init($configSrc)
     {
-        return $this->configUriParts;
-    }
-    
-    public function getUri()
-    {
-        return $this->configUri;
-    }
-    
-    protected function init()
-    {
-        $settings = $this->loadConfig();
+        $settings = $this->load($configSrc);
         
         $this->validateConfig($settings);
         
         $this->settings = $settings;
-    }
-    
-    protected function parseUri($configUri)
-    {
-        $uriParts = parse_url($configUri);
-        
-        if (!$uriParts)
-        {
-            throw new ImportConfigException("Unable to parse the given uri: " . $configUri);
-        }
-        
-        return $uriParts;
     }
     
     protected function validateConfig(array $settings)
