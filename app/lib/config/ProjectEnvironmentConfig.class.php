@@ -14,46 +14,63 @@ class ProjectEnvironmentConfig
 
     const CFG_DB_PORT = 'port';
 
-    const CONFIG_FILE_NAME = 'local.environment.php';
-
+    const CONFIG_FILE_NAME = 'environment.php';
+    
+    const CONFIG_FILE_PREFIX = 'local.';
+    
     private static $instance;
 
     private $config;
 
     private $current_host;
+    
+    private $testing_enabled;
 
-    private function __construct($host = null)
+    private function __construct($host = null, $testing_enabled = false)
     {
-        $base_dir = dirname(dirname(dirname(dirname(__FILE__))));
-        $config_filepath = $base_dir . DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'local' . DIRECTORY_SEPARATOR . self::CONFIG_FILE_NAME;
-
-        $this->config = include($config_filepath);
+        $this->testing_enabled = $testing_enabled;
         
+        $base_dir = dirname(dirname(dirname(dirname(__FILE__))));
+        $local_config_dir = $base_dir . DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'local' . DIRECTORY_SEPARATOR;
+        $filename = $this->testing_enabled ? 'testing.' . self::CONFIG_FILE_NAME : self::CONFIG_FILE_NAME;
+        $config_filepath = $local_config_dir . self::CONFIG_FILE_PREFIX . $filename;
+        
+        $this->config = include($config_filepath);
+         
         if (isset($_SERVER['HTTP_HOST']))
         {
             $this->current_host = empty($host) ? $_SERVER['HTTP_HOST'] : $host;
         }
     }
+    
+    public static function load($testing_enabled = false)
+    {
+        if (null === self::$instance)
+        {
+           self::$instance = new ProjectEnvironmentConfig($testing_enabled);
+        }
+
+        return self::$instance;
+    }
+    
+    public static function toEnvString()
+    {
+        return self::getEnvironment();
+    }
 
     public static function getEnvironment()
     {
-        $cfg = self::getInstance();
-
-        return $cfg->config[self::CFG_ENVIRONMENT];
+        return self::$instance->config[self::CFG_ENVIRONMENT];
     }
 
     public static function getPhpPath()
     {
-        $cfg = self::getInstance();
-
-        return $cfg->config[self::CFG_PHP];
+        return self::$instance->config[self::CFG_PHP];
     }
 
     public static function getDatabaseSettings()
     {
-        $cfg = self::getInstance();
-
-        return $cfg->config[self::CFG_DB];
+        return self::$instance->config[self::CFG_DB];
     }
 
     public static function getDatabasePort()
@@ -69,19 +86,9 @@ class ProjectEnvironmentConfig
 
         return $db_settings[self::CFG_DB_HOST];
     }
-
-    public static function toEnvString()
+    
+    public static function isTestingEnabled()
     {
-        return self::getEnvironment();
-    }
-
-    protected static function getInstance()
-    {
-        if (null === self::$instance)
-        {
-           self::$instance = new ProjectEnvironmentConfig();
-        }
-
-        return self::$instance;
+        return self::$instance->testing_enabled;
     }
 }

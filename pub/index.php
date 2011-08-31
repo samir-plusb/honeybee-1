@@ -12,6 +12,7 @@ set_include_path(implode(PATH_SEPARATOR, $includes).PATH_SEPARATOR.get_include_p
 // | An absolute filesystem path to our environment config provider.           |
 // +---------------------------------------------------------------------------+
 require $root_dir . DIRECTORY_SEPARATOR . 'app/lib/config/ProjectEnvironmentConfig.class.php';
+ProjectEnvironmentConfig::load();
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi/agavi.php script.                |
@@ -24,7 +25,7 @@ require 'agavi/agavi.php';
 require $root_dir . DIRECTORY_SEPARATOR . 'app/config.php';
 
 // +---------------------------------------------------------------------------+
-// | PhpDebugToolbar iintegration                                              |
+// | PhpDebugToolbar integration                                              |
 // +---------------------------------------------------------------------------+
 if (!strstr(ProjectEnvironmentConfig::getEnvironment(), 'live')) // @todo Think about this, is the right include condition?
 {
