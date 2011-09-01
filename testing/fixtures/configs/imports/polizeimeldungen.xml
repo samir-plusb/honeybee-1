@@ -1,50 +1,27 @@
-<?xml version="1.0" ?>
-<imperia>
-<head>
-	<title>Verkehrsunfall mit Polizeifahrzeug - Berlin.de</title>
-	<meta name="DC.Title" content="Verkehrsunfall mit Polizeifahrzeug"/>
-	<meta name="DC.Date" content="2011-09-01"/>
-	<meta name="description" content="Während einer Einsatzfahrt mit Blaulicht und Martinshorn stieß gestern Nachmittag ein Polizeifahrzeug mit einem Pkw in Tempelhof zusammen. " />
-	<meta name="keywords" content="Pressemeldung Polizei Berlin vom 1.9.2011 - Verkehrsunfall mit Polizeifahrzeug" />
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<meta http-equiv="Content-Language" content="de" />
-	<meta name="X-Imperia-Live-Info" content="c9014314-4573-55c5-b087-5ddc8f775df7/2/10330/10343/10890/1385807" />
-	<filename>index.html</filename>
-	<directory>/polizei/presse-fahndung/archiv/357025</directory>
-	<node_id>/2/10330/10343/10890/1385807</node_id>
-	<created>2011-09-01</created>
-	<template>land_polizei_presse_fahndung</template>
-    <categories>
-        <category directory="/polizei/presse-fahndung/archiv" description="" >neue Meldung</category>
-		<category directory="/polizei/presse-fahndung" description="" >Presse Fahndung</category>
-		<category directory="/polizei" description="" >Polizei</category>
-		<category directory="/land" description="" >Land</category>
-    </categories>
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
 
+    <ae:configuration>
+        <import class="ImperiaDataImport">
+            <name>Polizeimeldungen</name>
+            <description>Imports the imperia "Polizeimeldungen" data into our couch database.</description>
 
+            <settings>
+                <setting name="couch_host">localhost</setting>
+                <setting name="couch_port">5984</setting>
+            </settings>
 
-</head>
-<body>
-<last_modified timezone="CEST">2011-09-01T11:06:36</last_modified>
-<article>
-	<type>pressemeldung</type>
-	<kicker>Pressemeldung</kicker>
-	<date type="ticker" label="Eingabe">01.09.2011 - 09:25 Uhr</date>
-	<title>Verkehrsunfall mit Polizeifahrzeug</title>
-	<subtitle>Tempelhof-Schöneberg</subtitle>
+            <datasource class="ImperiaXmlDataSource">
+                <name>Polizeimeldungen</name>
+                <description>Provides access to the imperia "Polizeimeldungen" data via http.</description>
 
-	<flexmodules>
-		<paragraph name="land_text">
-			<text format="textbr" align="justify"><![CDATA[# 3243<br /><br />Während einer Einsatzfahrt mit Blaulicht und Martinshorn stieß gestern Nachmittag ein Polizeifahrzeug mit einem Pkw in Tempelhof zusammen. Der „VW Touran“ der Polizei wendete gegen 15 Uhr 30 in der Attila- in Höhe der Kaiser-Wilhelm-Straße. Dabei stieß das Einsatzfahrzeug mit dem „Passat“ eines 21-Jährigen zusammen. Verletzt wurde niemand.]]></text>
-		</paragraph>
+                <settings>
+                    <setting name="url">https://imperia.berlinonline.de/</setting>
+                    <setting name="account_user">hans</setting>
+                    <setting name="account_pass">wurst</setting>
+                </settings>
+            </datasource>
+        </import>
 
-	</flexmodules>
-
-	<containerbereich>
-		<standardcontact used="used" />
-
-	</containerbereich>
-</article>
-</body>
-</imperia>
-
+    </ae:configuration>
+</ae:configurations>
