@@ -5,7 +5,7 @@ interface IDataImport
     /**
      * @param IGenericConfig $config
      */
-    public function __construct(IConfig $config);
+    public function __construct(IImportConfig $config);
 
     /**
      * @param IDataSource $dataSource

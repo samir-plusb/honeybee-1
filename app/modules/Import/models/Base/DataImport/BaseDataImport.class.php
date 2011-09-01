@@ -8,7 +8,7 @@ abstract class BaseDataImport implements IDataImport
     
     protected abstract function importRecord(IDataRecord $record);
 
-    public function __construct(IConfig $config)
+    public function __construct(IImportConfig $config)
     {
         $this->config = $config;
     }
