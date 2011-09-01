@@ -298,7 +298,7 @@ class DemoImperiaExportResponder
      */
     public function storeNotification(array $item)
     {
-        file_put_contents($this->notifcationStoreFile, $data['__imperia_node_id']."\n", FILE_APPEND);
+        file_put_contents($this->notifcationStoreFile, $item['__imperia_node_id']."\n", FILE_APPEND);
     }
 
 
