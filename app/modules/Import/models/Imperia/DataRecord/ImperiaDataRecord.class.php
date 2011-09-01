@@ -21,70 +21,10 @@ class ImperiaDataRecord extends XmlBasedDataRecord
         'directory' => '/imperia/head/directory',
         'filename'  => '/imperia/head/filename'
     );
-
-    protected function parse($dataSrc)
+    
+    protected function getFieldMap()
     {
-        $domDoc = null;
-
-        if ($dataSrc instanceof DOMDocument)
-        {
-            $domDoc = $dataSrc;
-        }
-        else
-        {
-            $domDoc = $this->createDom($dataSrc);
-        }
-
-        return $this->evaluateDocument($domDoc);
-    }
-
-    protected function createDom($xmlString)
-    {
-        libxml_clear_errors();
-        $domDoc = new DOMDocument();
-
-        if (!$domDoc->loadXML($xmlString))
-        {
-            $errors = libxml_get_errors();
-            $msg = array();
-
-            foreach ($errors as $error)
-            {
-                $msg[] = sprintf('%d (%d,%d) %s', $error->code, $error->line, $error->column, $error->message);
-            }
-
-            throw new DataRecordException('Xml parse errors: '.join(', ', $msg));
-        }
-
-        return $domDoc;
-    }
-
-    protected function evaluateDocument(DOMDocument $domDoc)
-    {
-        $rawData = $this->collectData($domDoc);
-
-        return $this->normalizeData($rawData);
-    }
-
-    protected function collectData(DOMDocument $domDoc)
-    {
-        $xPath = new DOMXPath($domDoc);
-        $data = array();
-
-        foreach (self::$fieldMap as $dataKey => $dataExpr)
-        {
-            $nodeList = $xPath->query($dataExpr);
-            $value = FALSE;
-
-            if (0 < $nodeList->length)
-            {
-                $value = (1 === $nodeList->length) ? trim($nodeList->item(0)->nodeValue) : $nodeList;
-            }
-
-            $data[$dataKey]= $value;
-        }
-
-        return $data;
+        return self::$fieldMap;
     }
 
     protected function normalizeData(array $mappedData)
