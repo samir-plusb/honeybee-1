@@ -21,10 +21,29 @@
             <autoload name="XmlFileBasedConfig">%core.module_dir%/Import/models/Base/Config/XmlFileBasedConfig.class.php</autoload>
             <!-- /Config Base Models -->
             
+            <!-- DataSource Base Models -->
+            <autoload name="IDataSource">%core.module_dir%/Import/models/Base/DataSource/IDataSource.iface.php</autoload>
+            
+            <autoload name="DataSourceException">%core.module_dir%/Import/models/Base/DataSource/DataSourceException.class.php</autoload>
+            <autoload name="ImportBaseDataSource">%core.module_dir%/Import/models/Base/DataSource/ImportBaseDataSource.class.php</autoload>
+            <!-- /DataSource Base Models -->
+            
+            <!-- DataRecord Base Models -->
+            <autoload name="IDataRecord">%core.module_dir%/Import/models/Base/DataRecord/IDataRecord.iface.php</autoload>
+            
+            <autoload name="DataRecordException">%core.module_dir%/Import/models/Base/DataRecord/DataRecordException.class.php</autoload>
+            <autoload name="ImportBaseDataRecord">%core.module_dir%/Import/models/Base/DataRecord/ImportBaseDataRecord.class.php</autoload>
+            <!-- /DataRecord Base Models -->
+            
             <!-- Imperia Import -->
             <autoload name="ImperiaImportFactoryConfig">%core.module_dir%/Import/models/Imperia/Config/ImperiaImportFactoryConfig.class.php</autoload>
             <autoload name="ImperiaDataSourceConfig">%core.module_dir%/Import/models/Imperia/Config/ImperiaDataSourceConfig.class.php</autoload>
+            
+            <autoload name="ImperiaDataSource">%core.module_dir%/Import/models/Imperia/DataSource/ImperiaDataSource.class.php</autoload>
+            <autoload name="ImperiaDataRecord">%core.module_dir%/Import/models/Imperia/DataRecord/ImperiaDataRecord.class.php</autoload>
             <!-- /Imperia Import -->
+            
+            
         </autoloads>
         
     </ae:configuration>

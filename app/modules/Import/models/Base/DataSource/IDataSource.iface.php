@@ -3,9 +3,9 @@
 interface IDataSource
 {
     /**
-     * @param IGenericConfig $config
+     * @param IImportConfig $config
      */
-    public function __construct(IGenericConfig $config);
+    public function __construct(IImportConfig $config);
 
     /**
      * @return IDataRecord

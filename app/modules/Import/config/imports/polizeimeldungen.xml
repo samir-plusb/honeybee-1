@@ -16,7 +16,7 @@
                 <description>Provides access to the imperia "Polizeimeldungen" data via http.</description>
         
                 <settings>
-                    <setting name="url">http://imperia.berlinonline.de</setting>
+                    <setting name="url">https://imperia.berlinonline.de/</setting>
                     <setting name="account_user">hans</setting>
                     <setting name="account_pass">wurst</setting>
                 </settings>

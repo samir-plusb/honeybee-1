@@ -2,18 +2,21 @@
 
 class ImperiaDataSourceConfig extends SimpleConfig
 {
-    const URL = 'url';
+    const CFG_URL = 'url';
     
-    const ACCOUNT_USER = 'account_user';
+    const CFG_ACCOUNT_USER = 'account_user';
     
-    const ACCOUNT_PASS = 'account_pass';
+    const CFG_ACCOUNT_PASS = 'account_pass';
+    
+    const CFG_DOCUMENT_IDS = 'doc_ids';
     
     protected function getRequiredSettings()
     {
         return array(
-            self::URL,
-            self::ACCOUNT_USER,
-            self::ACCOUNT_PASS
+            self::CFG_URL,
+            self::CFG_ACCOUNT_USER,
+            self::CFG_ACCOUNT_PASS,
+            self::CFG_DOCUMENT_IDS
         );
     }
 }
