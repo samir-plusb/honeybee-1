@@ -49,8 +49,32 @@ class ImperiaDataSource extends ImportBaseDataSource
     {
         $docId = $this->documentIds[$this->cursorPos];
         $documentXml = $this->loadDocumentById($docId);
-
-        return new ImperiaDataRecord($documentXml);
+        
+        $recordClass = $this->config->getSetting(ImperiaDataSourceConfig::CFG_RECORD_TYPE);
+        
+        if (!class_exists($recordClass, true))
+        {
+            throw new DataSourceException(
+                sprintf(
+                    "Unable to find provided datarecord class: %s",
+                    $recordClass
+                )
+            );
+        }
+        
+        $record = new $recordClass($documentXml);
+        
+        if (!($record instanceof IDataRecord))
+        {
+            throw new DataSourceException(
+                sprintf(
+                    "An invalid IDataRecord implementor was provided. '%s' does not implement the interface IDataRecord.",
+                    $recordClass
+                )
+            );
+        }
+        
+        return $record;
     }
 
     protected function initCurlHandle()
@@ -88,7 +112,8 @@ class ImperiaDataSource extends ImportBaseDataSource
 
         if ($err || $errNo || 200 != $respCode)
         {
-            throw new DataSourceException("An error occured while loading: " . $docExportUrl . " Error: " . $err . ", Resp-code: " . $respCode, $errNo);
+            $msg = sprintf("An error occured while loading: %s Error: %s, Resp-code: %s", $docExportUrl, $err, $respCode);
+            throw new DataSourceException($msg, $errNo);
         }
 
         if (FALSE !== strpos($responseDoc, '<title>Access Denied!</title>'))
@@ -121,7 +146,8 @@ class ImperiaDataSource extends ImportBaseDataSource
 
         if ($err || $errNo || 200 != $respCode || FALSE !== strpos($resp, '<title>Access Denied!</title>'))
         {
-            throw new DataSourceException("Can not login to imperia. Error: " . $err . ", Resp-code: " . $respCode, $errNo);
+            $msg = sprintf("Can not login to imperia. Error: %s, Resp-code: %d", $err, $respCode);
+            throw new DataSourceException($msg, $errNo);
         }
     }
 

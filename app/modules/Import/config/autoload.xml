@@ -42,6 +42,8 @@
 
             <autoload name="ImperiaDataSource">%core.module_dir%/Import/models/Imperia/DataSource/ImperiaDataSource.class.php</autoload>
             <autoload name="ImperiaDataRecord">%core.module_dir%/Import/models/Imperia/DataRecord/ImperiaDataRecord.class.php</autoload>
+            
+            <autoload name="PoliceReportDataRecord">%core.module_dir%/Import/models/Imperia/DataRecord/PoliceReportDataRecord.class.php</autoload>
             <!-- /Imperia Import -->
         </autoloads>
 

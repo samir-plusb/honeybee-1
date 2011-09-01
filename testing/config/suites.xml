@@ -6,7 +6,7 @@
                 <testfiles>
                     <testfile>unit/modules/Import/models/Config/ImperiaImportFactoryConfigTest.php</testfile>
                     <testfile>unit/modules/Import/models/Config/ImperiaDataSourceConfigTest.php</testfile>
-                    <testfile>unit/modules/Import/models/DataRecord/ImperiaDataRecordTest.php</testfile>
+                    <testfile>unit/modules/Import/models/DataRecord/PoliceReportDataRecordTest.php</testfile>
                     <testfile>unit/modules/Import/models/DataSource/ImperiaDataSourceTest.php</testfile>
                 </testfiles>
             </suite>

@@ -1,18 +1,18 @@
 <?php
 
-class ImperiaDataRecordTest extends AgaviUnitTestCase
+class PoliceReportDataRecordTest extends AgaviUnitTestCase
 {
     const CFG_XML_FIXTURE = 'data/polizeimeldung.article.xml';
 
     const CFG_DATA_FIXTURE = 'data/polizeimeldung.article.php';
 
-    protected $imperiaDataRecord;
+    protected $policeReportDataRecord;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->imperiaDataRecord = new ImperiaDataRecord(
+        $this->policeReportDataRecord = new PoliceReportDataRecord(
             $this->loadXmlArticleFixture()
         );
     }
@@ -25,7 +25,7 @@ class ImperiaDataRecordTest extends AgaviUnitTestCase
      */
     public function testGetValue($expected, $fieldname)
     {
-        $value = $this->imperiaDataRecord->getValue($fieldname);
+        $value = $this->policeReportDataRecord->getValue($fieldname);
 
         $this->assertEquals($expected, $value);
     }

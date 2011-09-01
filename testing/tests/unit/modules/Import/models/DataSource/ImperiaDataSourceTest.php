@@ -16,7 +16,7 @@ class ImperiaDataSourceTest extends AgaviUnitTestCase
 
         $this->imperiaDataSource = new ImperiaDataSource(
             new ImperiaDataSourceConfig(
-                $this->loadConfigFixture()
+                $this->loadDataSourceConfigFixture()
             )
         );
     }
@@ -25,8 +25,8 @@ class ImperiaDataSourceTest extends AgaviUnitTestCase
     {
         $record = $this->imperiaDataSource->nextRecord();
 
-        $expectedRecord = new ImperiaDataRecord(
-            $this->loadXmlArticleFixture()
+        $expectedRecord = new PoliceReportDataRecord(
+            $this->loadPoliceReportXmlFixture()
         );
 
         $this->assertEquals(self::RECORDS_ARE_EQUAL, $record->compareTo($expectedRecord));
@@ -46,7 +46,7 @@ class ImperiaDataSourceTest extends AgaviUnitTestCase
         $this->assertEquals($expectedCount, $currentCount);
     }
 
-    protected function loadConfigFixture()
+    protected function loadDataSourceConfigFixture()
     {
         $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
 
@@ -55,7 +55,7 @@ class ImperiaDataSourceTest extends AgaviUnitTestCase
         return include $fixtureFile;
     }
 
-    protected function loadXmlArticleFixture()
+    protected function loadPoliceReportXmlFixture()
     {
         $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
 

@@ -11,6 +11,7 @@ return array(
         ),
         'datasource' => array(
             'class' => 'ImperiaXmlDataSource',
+            'record' => 'PoliceReportDataRecord',
             'name' => 'Polizeimeldungen',
             'description' => 'Provides access to the imperia "Polizeimeldungen" data via http.',
             'settings' => array(

@@ -11,7 +11,7 @@
                 <setting name="couch_port">5984</setting>
             </settings>
     
-            <datasource class="ImperiaXmlDataSource">
+            <datasource class="ImperiaXmlDataSource" record="PoliceReportDataRecord">
                 <name>Polizeimeldungen</name>
                 <description>Provides access to the imperia "Polizeimeldungen" data via http.</description>
         
