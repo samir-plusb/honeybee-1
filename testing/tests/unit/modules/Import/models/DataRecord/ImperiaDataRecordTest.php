@@ -2,33 +2,62 @@
 
 class ImperiaDataRecordTest extends AgaviUnitTestCase
 {
-    const CFG_FIXTURE = 'configs/imports/fixture.polizeimeldungen.datarec.xml';
-    
+    const CFG_XML_FIXTURE = 'data/polizeimeldung.article.xml';
+
+    const CFG_DATA_FIXTURE = 'data/polizeimeldung.article.php';
+
     protected $imperiaDataRecord;
-    
+
     protected function setUp()
     {
         parent::setUp();
-        
+
         $this->imperiaDataRecord = new ImperiaDataRecord(
-            $this->loadConfigFixture()
+            $this->loadXmlArticleFixture()
         );
     }
-    
-    public function testGetValue()
+
+    /**
+     * @param type $expected
+     * @param type $fieldname
+     *
+     * @dataProvider provideExpectedRecordValues
+     */
+    public function testGetValue($expected, $fieldname)
     {
-        $value = $this->imperiaDataRecord->getValue('foobar');
-        
-        
+        $value = $this->imperiaDataRecord->getValue($fieldname);
+
+        $this->assertEquals($expected, $value);
     }
-    
-    protected function loadConfigFixture()
+
+    public function provideExpectedRecordValues()
+    {
+        $ret = array();
+
+        foreach ($this->loadProcessedArticleDataFixture() as $key => $value)
+        {
+            $ret[] = array('expected' => $value, 'fieldname' => $key);
+        }
+
+        return $ret;
+    }
+
+    protected function loadXmlArticleFixture()
     {
         $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-        
-        $fixtureFile = $baseDir . self::CFG_FIXTURE;
-        
+
+        $fixtureFile = $baseDir . self::CFG_XML_FIXTURE;
+
         return file_get_contents($fixtureFile);
+    }
+
+    protected function loadProcessedArticleDataFixture()
+    {
+        $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
+
+        $fixtureFile = $baseDir . self::CFG_DATA_FIXTURE;
+
+        return include $fixtureFile;
     }
 }
 
