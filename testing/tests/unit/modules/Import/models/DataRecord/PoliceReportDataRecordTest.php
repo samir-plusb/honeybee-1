@@ -29,6 +29,17 @@ class PoliceReportDataRecordTest extends AgaviUnitTestCase
 
         $this->assertEquals($expected, $value);
     }
+    
+    public function testToArray()
+    {
+        $values = $this->policeReportDataRecord->toArray();
+        
+        foreach ($this->loadProcessedArticleDataFixture() as $key => $value)
+        {
+            $this->assertArrayHasKey($key, $values);
+            $this->assertEquals($value, $values[$key]);
+        }
+    }
 
     public function provideExpectedRecordValues()
     {

@@ -27,7 +27,12 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
 
         return $value;
     }
-
+    
+    public function toArray()
+    {
+        return $this->data;
+    }
+    
     public function compareTo($other)
     {
         if (!($other instanceof IDataRecord))

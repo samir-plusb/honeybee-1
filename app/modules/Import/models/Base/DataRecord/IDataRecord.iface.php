@@ -12,6 +12,11 @@ interface IDataRecord
      * return array<string>
      */
     public function getSupportedFields();
+    
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray();
 }
 
 ?>
