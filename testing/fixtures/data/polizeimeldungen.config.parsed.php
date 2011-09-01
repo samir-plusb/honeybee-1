@@ -17,8 +17,8 @@ return array(
                 'url' => 'https://imperia.berlinonline.de/',
                 'account_user' => 'hans',
                 'account_pass' => 'wurst',
-            ),
-        ),
-    ),
+            )
+        )
     )
+)
 ?>
