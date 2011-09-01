@@ -6,12 +6,16 @@ class ImperiaDataSource extends ImportBaseDataSource
 
     const URl_PATH_EXPORT = "/cgi-bin/xml_dump.pl?node_id=%s";
 
+    const INPUT_USERNAME = 'my_imperia_login';
+
+    const INPUT_PASSWORD = 'my_imperia_pass';
+
     private $documentIds;
-    
+
     private $curlHandle;
-    
+
     private $cookiePath;
-    
+
     private $cursorPos;
 
     public function __construct(IImportConfig $config)
@@ -20,32 +24,32 @@ class ImperiaDataSource extends ImportBaseDataSource
 
         $this->documentIds = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOCUMENT_IDS);
     }
-    
+
     protected function init()
     {
         $this->initCurlHandle();
         $this->login();
-        
+
         $this->cursorPos = -1;
     }
-    
+
     protected function forwardCursor()
     {
         if ($this->cursorPos < count($this->documentIds) - 1)
         {
             $this->cursorPos++;
-            
+
             return TRUE;
         }
-        
+
         return FALSE;
     }
-    
+
     protected function createRecord()
     {
         $docId = $this->documentIds[$this->cursorPos];
         $documentXml = $this->loadDocumentById($docId);
-        
+
         return new ImperiaDataRecord($documentXml);
     }
 
@@ -67,21 +71,21 @@ class ImperiaDataSource extends ImportBaseDataSource
 
             $this->curlHandle = $ch;
         }
-        
+
     }
 
     protected function loadDocumentById($documentId)
     {
         $docExportUrl = $this->buildDocExportUrlById($documentId);
-        
+
         curl_setopt($this->curlHandle, CURLOPT_URL, $docExportUrl);
         curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
-        
+
         $responseDoc = curl_exec($this->curlHandle);
         $err = curl_error($this->curlHandle);
         $errNo = curl_errno($this->curlHandle);
         $respCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
-        
+
         if ($err || $errNo || 200 != $respCode)
         {
             throw new DataSourceException("An error occured while loading: " . $docExportUrl . " Error: " . $err . ", Resp-code: " . $respCode, $errNo);
@@ -91,44 +95,47 @@ class ImperiaDataSource extends ImportBaseDataSource
         {
             throw new DataSourceException("Currently not logged in to imperia and therefor can not continue.");
         }
-        
+
         return $responseDoc;
     }
-    
+
     protected function login()
     {
-        $post = array
-        (
-            'my_imperia_login' => $this->config->getSetting(ImperiaDataSourceConfig::CFG_ACCOUNT_USER),
-            'my_imperia_pass'  => $this->config->getSetting(ImperiaDataSourceConfig::CFG_ACCOUNT_PASS)
+        $post = array(
+            self::INPUT_USERNAME => $this->config->getSetting(
+                ImperiaDataSourceConfig::CFG_ACCOUNT_USER
+            ),
+            self::INPUT_PASSWORD => $this->config->getSetting(
+                ImperiaDataSourceConfig::CFG_ACCOUNT_PASS
+            )
         );
 
         curl_setopt($this->curlHandle, CURLOPT_POST, 1);
         curl_setopt($this->curlHandle, CURLOPT_POSTFIELDS, http_build_query($post));
         curl_setopt($this->curlHandle, CURLOPT_URL, $this->buildLoginUrl());
-        
+
         $resp = curl_exec($this->curlHandle);
         $err = curl_error($this->curlHandle);
         $errNo = curl_errno($this->curlHandle);
         $respCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
-        
+
         if ($err || $errNo || 200 != $respCode || FALSE !== strpos($resp, '<title>Access Denied!</title>'))
         {
             throw new DataSourceException("Can not login to imperia. Error: " . $err . ", Resp-code: " . $respCode, $errNo);
         }
     }
-    
+
     protected function buildDocExportUrlById($documentId)
     {
         $baseUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_URL);
-        
+
         return $baseUrl . sprintf(self::URl_PATH_EXPORT, $documentId);
     }
-    
+
     protected function buildLoginUrl()
     {
         $baseUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_URL);
-        
+
         return $baseUrl . self::URl_PATH_LOGIN;
     }
 }
