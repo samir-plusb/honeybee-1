@@ -1,12 +1,12 @@
 <?php
 
-class ImperiaDataSourceConfigTest extends ImportConfigBaseTestCase
+class ImperiaDataImportConfigTest extends ImportConfigBaseTestCase
 {
-    const CFG_FIXTURE = 'data/polizeimeldungen.config.datasource.php';
+    const CFG_FIXTURE = 'data/polizeimeldungen.config.import.php';
 
     protected function getConfigImplementor()
     {
-        return 'ImperiaDataSourceConfig';
+        return 'ImperiaDataImportConfig';
     }
 
     protected function getConfigFixturePath()

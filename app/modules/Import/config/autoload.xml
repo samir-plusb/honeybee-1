@@ -8,6 +8,8 @@
             <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/base/ImportBaseAction.class.php</autoload>
             <autoload name="ImportBaseModel">%core.module_dir%/Import/lib/base/ImportBaseModel.class.php</autoload>
             <autoload name="ImportBaseView">%core.module_dir%/Import/lib/base/ImportBaseView.class.php</autoload>
+            
+            <autoload name="ImportConfigBaseTestCase">%core.module_dir%/Import/lib/base/ImportConfigBaseTestCase.class.php</autoload>
             <!-- /Module Base Libs -->
 
             <!-- Config Base Models -->
@@ -20,6 +22,13 @@
             <autoload name="ImportConfigException">%core.module_dir%/Import/models/Base/Config/ImportConfigException.class.php</autoload>
             <autoload name="XmlFileBasedConfig">%core.module_dir%/Import/models/Base/Config/XmlFileBasedConfig.class.php</autoload>
             <!-- /Config Base Models -->
+
+            <!-- Import Base Models -->
+            <autoload name="IDataImport">%core.module_dir%/Import/models/Base/DataImport/IDataImport.iface.php</autoload>
+            
+            <autoload name="DataImportException">%core.module_dir%/Import/models/Base/DataImport/DataImportException.class.php</autoload>
+            <autoload name="BaseDataImport">%core.module_dir%/Import/models/Base/DataImport/BaseDataImport.class.php</autoload>
+            <!-- /Import Base Models -->
 
             <!-- DataSource Base Models -->
             <autoload name="IDataSource">%core.module_dir%/Import/models/Base/DataSource/IDataSource.iface.php</autoload>
@@ -37,9 +46,12 @@
             <!-- /DataRecord Base Models -->
 
             <!-- Imperia Import -->
+            <autoload name="ImperiaDataImportConfig">%core.module_dir%/Import/models/Imperia/Config/ImperiaDataImportConfig.class.php</autoload>
             <autoload name="ImperiaImportFactoryConfig">%core.module_dir%/Import/models/Imperia/Config/ImperiaImportFactoryConfig.class.php</autoload>
             <autoload name="ImperiaDataSourceConfig">%core.module_dir%/Import/models/Imperia/Config/ImperiaDataSourceConfig.class.php</autoload>
-
+            
+            <autoload name="ImperiaDataImport">%core.module_dir%/Import/models/Imperia/DataImport/ImperiaDataImport.class.php</autoload>
+            
             <autoload name="ImperiaDataSource">%core.module_dir%/Import/models/Imperia/DataSource/ImperiaDataSource.class.php</autoload>
             <autoload name="ImperiaDataRecord">%core.module_dir%/Import/models/Imperia/DataRecord/ImperiaDataRecord.class.php</autoload>
             

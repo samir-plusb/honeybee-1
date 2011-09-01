@@ -2,7 +2,7 @@
 
 class ImperiaDataSourceTest extends AgaviUnitTestCase
 {
-    const CFG_CONFIG_FIXTURE = 'data/polizeimeldungen.datasource.php';
+    const CFG_CONFIG_FIXTURE = 'data/polizeimeldungen.config.datasource.php';
 
     const CFG_XML_FIXTURE = 'data/polizeimeldung.article.xml';
 

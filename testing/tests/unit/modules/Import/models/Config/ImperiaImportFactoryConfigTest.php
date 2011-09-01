@@ -4,7 +4,7 @@ class ImperiaImportFactoryConfigTest extends AgaviUnitTestCase
 {
     const CFG_FILE_PATH = 'configs/imports/polizeimeldungen.xml';
 
-    const CFG_FIXTURE = 'data/polizeimeldungen.config.parsed.php';
+    const CFG_FIXTURE = 'data/polizeimeldungen.config.php';
 
     protected $imperiaFactoryConfig;
 

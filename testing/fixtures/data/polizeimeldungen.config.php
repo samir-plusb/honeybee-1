@@ -6,8 +6,10 @@ return array(
         'name' => 'Polizeimeldungen',
         'description' => 'Imports the imperia "Polizeimeldungen" data into our couch database.',
         'settings' => array(
-            'couch_host' => 'localhost',
-            'couch_port' => '5984',
+            'couchdb_host' => 'localhost',
+            'couchdb_port' => '5984',
+            'couchdb_database' => 'imperia',
+            'doc_ids_url' => 'https://imperia.berlinonline.de/imperia/ContentWorker/export-to-mail.php?getNotifications=1'
         ),
         'datasource' => array(
             'class' => 'ImperiaXmlDataSource',
@@ -17,7 +19,7 @@ return array(
             'settings' => array(
                 'url' => 'https://imperia.berlinonline.de/',
                 'account_user' => 'hans',
-                'account_pass' => 'wurst',
+                'account_pass' => 'wurst'
             )
         )
     )
