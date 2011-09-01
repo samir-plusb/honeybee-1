@@ -11,16 +11,7 @@ abstract class XmlBasedDataRecord extends ImportBaseDataRecord
     
     protected function parse($dataSrc)
     {
-        $domDoc = null;
-
-        if ($dataSrc instanceof DOMDocument)
-        {
-            $domDoc = $dataSrc;
-        }
-        else
-        {
-            $domDoc = $this->createDom($dataSrc);
-        }
+        $domDoc = $this->createDom($dataSrc);
 
         return $this->evaluateDocument($domDoc);
     }
