@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<imperia>
+<head>
+<title>Löwenzahn</title>
+<directory>/orte/shop/loewenzahn</directory>
+<filename>index.php</filename>
+<template>seo_content</template>
+<publish_date>2001-01-01 01:01</publish_date>
+<expiry_date/>
+<keywords/>
+<description>Schnittblumen und kleine Topfpflanzen für den Balkon.</description>
+</head>
+<body>
+  <view_doc_as>location</view_doc_as>
+  <anzeige/>
+  <layoutforce/>
+  <trackback/>
+  <source/>
+  <doc_title>Löwenzahn</doc_title>
+  <doc_subtitle/>
+  <subtitle/>
+  <startdatum_plain>02.08.2007 10:26</startdatum_plain>
+  <article_start>1186043204</article_start>
+  <rotate_source/>
+  <ticketkey/>
+  <rotate_intervall/>
+  <sponsored_by_image/>
+  <imgSponsored_By_Art/>
+  <imgSponsored_By/>
+  <sponsored_by_url/>
+  <globalcopyright>pixelio.de</globalcopyright>
+  <photo_center/>
+  <override_link/>
+  <pager_title/>
+  <pager/>
+  <pager_fullnames/>
+  <poink>
+  <global_nearby_cats>425,108</global_nearby_cats>
+  <global_nearby_dist>2000</global_nearby_dist>
+  <global_nearby_limit>10</global_nearby_limit>
+  <global_nearby_hotels/>
+  <loc_name>Löwenzahn</loc_name>
+  <loc_hide/>
+  <loc_altname/>
+  <loc_str>Konrad-Wolf-Straße</loc_str>
+  <loc_hnr>99</loc_hnr>
+  <loc_altadr/>
+  <loc_altadr/>
+  <loc_plz>13055</loc_plz>
+  <loc_ort>Berlin</loc_ort>
+  <loc_bezirk>Lichtenberg</loc_bezirk>
+  <loc_state>Berlin</loc_state>
+  <loc_email/>
+  <loc_telefon>030 44 05 09 33</loc_telefon>
+  <loc_internet/>
+  <loc_gk5x/>
+  <loc_gk5y/>
+  <loc_wgs84long/>
+  <loc_wgs84lat/>
+  <csv_cat/>
+  <loc_cat>425</loc_cat>
+
+  <csv_subcat>Blumen</csv_subcat>
+  <loc_subcat>Blumen</loc_subcat>
+
+  <csv_tags/>
+  <loc_tags/>
+
+  <notranslate_hinweis/>
+  <iblocks index="9">
+
+  </iblocks>
+  <pnv_limit>10</pnv_limit>
+  <pnv_dist>500</pnv_dist>
+  <local_nearby/>
+  <opt_nearby_cats>210</opt_nearby_cats>
+  <nearby_cats>210</nearby_cats>
+  <nearby_limit>10</nearby_limit>
+  <nearby_dist>2000</nearby_dist>
+  <nearby_hotels/>
+  <loc_cat>425</loc_cat>
+  <loc_image/>
+  <loc_img_src/>
+  <loc_image_src/>
+</poink>
+
+  <teaser_kind_of>none</teaser_kind_of>
+  <teaser_deep_of>2</teaser_deep_of>
+  <teaser_image/>
+  <topteaser_image/>
+  <teaser_alt/>
+  <teaser_copyright/>
+  <teaser_desc/>
+  <locale>de</locale>
+  <!-- Flextools-Position: seo_mainbar/REPARSE/".Meta::Info::Buffered=HASH(0x1e12300)->getValues('template')." -->
+<flex validcode="seo_artikel">
+
+</flex>
+
+  <!-- Flextools-Position: seo_mainbar/REPARSE/".Meta::Info::Buffered=HASH(0x1e12300)->getValues('template')." -->
+<flex validcode="seo_artikel">
+  <seo_artikel_fotostreckenbild>
+    <fs_header/>
+    <fs_image>Blumenneu_1_420_237.jpg</fs_image>
+    <imgArt>Blumenneu_1_170_96.jpg</imgArt>
+    <imgFS>Blumenneu_1_420_237.jpg</imgFS>
+    <fs_bildunterschrift/>
+    <fs_alt>Löwenzahn</fs_alt>
+    <fs_copyright>pixelio.de</fs_copyright>
+    <fs_text/>
+    <fs_artikeltext>on</fs_artikeltext>
+    <fs_link/>
+    <showtitle/>
+    <img_pos>center</img_pos>
+    <img_width>355</img_width>
+    
+    <iblocks index="00">
+
+    </iblocks>
+  </seo_artikel_fotostreckenbild>  <seo_artikel_text>
+    <doc_subhead/>
+    <absatz>Die kreativen Floristen vom Löwenzahn versorgen ihre Kunden mit originellen und dekorativen Sträußen. Im Laden werden aber vor allem der Jahreszeit entsprechende Schnittblumen und kleine Topfpflanzen für den Balkon verkauft.</absatz>
+    <absatz2/>
+    <noquote/>
+  </seo_artikel_text>
+
+</flex>
+
+  <quelle>berlin.de</quelle>
+  <fotoquelle/>
+  <addtitle/>
+  <bottomlink_fotostrecke/>
+  <iblocks index="1">
+
+  </iblocks>
+  <sidebar_kind_of>normal</sidebar_kind_of>
+  <!-- Flextools-Position: seo_sidebar/REPARSE/".Meta::Info::Buffered=HASH(0x1e12300)->getValues('template')." -->
+<flex validcode="seo_service">
+
+</flex>
+
+
+  <preview_as>bde_seo</preview_as>
+</body>
+</imperia>
