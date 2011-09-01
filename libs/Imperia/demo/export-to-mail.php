@@ -33,6 +33,7 @@ class DemoImperiaExportResponder
      * @var DOMXPath XPATH handle of current imperia document
      */
     protected $xpath;
+    protected $notifcationStoreFile;
     /**
      * @var string template for a very simple html output
      */
@@ -82,7 +83,10 @@ class DemoImperiaExportResponder
             }
         }
         $this->config = $config;
+        $this->notifcationStoreFile = '/var/tmp/notifiactions.'.md5(__FILE__).'.txt';
     }
+
+
 
 
     /**
@@ -288,6 +292,30 @@ class DemoImperiaExportResponder
 
 
     /**
+     * store node ids line by line notification file
+     *
+     * @param array $item
+     */
+    public function storeNotification(array $item)
+    {
+        file_put_contents($this->notifcationStoreFile, $data['__imperia_node_id']."\n", FILE_APPEND);
+    }
+
+
+    /**
+     * build response to get all stored notifications and start new notification store
+     *
+     */
+    public function getNotifications()
+    {
+        touch($this->notifcationStoreFile);
+        rename($this->notifcationStoreFile, $this->notifcationStoreFile.'.get');
+        header('Content-Type', 'text/plain');
+        readfile($this->notifcationStoreFile.'.get');
+        exit;
+    }
+
+    /**
      *
      * dispatch HTTP Request
      */
@@ -306,6 +334,7 @@ class DemoImperiaExportResponder
             {
                 errorResponse('each item must contain a key: __imperia_node_id');
             }
+            $this->storeNotification($item);
             $url = sprintf($this->config['export_url'], urlencode($item['__imperia_node_id']));
             $resp = $this->getDocument($url);
 
@@ -320,4 +349,11 @@ class DemoImperiaExportResponder
 }
 
 $responder = new DemoImperiaExportResponder();
-$responder->dispatchRequest();
+if (isset($_GET['getNotifications']))
+{
+    $responder->getNotifications();
+}
+else
+{
+    $responder->dispatchRequest();
+}
