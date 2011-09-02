@@ -17,12 +17,7 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
         '/2/10330/10343/10890/1385806',
         '/2/10330/10343/10890/1385805'
     );
-
-    protected function tearDown()
-    {
-        unlink($this->buildImportOutputPath());
-    }
-
+    
     /**
 	 * @dataProvider provideConfigFilePath
 	 */
