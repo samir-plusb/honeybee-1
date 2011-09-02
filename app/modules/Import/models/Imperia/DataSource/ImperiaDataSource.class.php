@@ -2,9 +2,9 @@
 
 class ImperiaDataSource extends ImportBaseDataSource
 {
-    const URl_PATH_LOGIN = "/cgi-bin/site_login.pl";
+    const URl_PATH_LOGIN = "cgi-bin/site_login.pl";
 
-    const URl_PATH_EXPORT = "/cgi-bin/xml_dump.pl?node_id=%s";
+    const URl_PATH_EXPORT = "cgi-bin/xml_dump.pl?node_id=%s";
 
     const INPUT_USERNAME = 'my_imperia_login';
 
@@ -22,7 +22,9 @@ class ImperiaDataSource extends ImportBaseDataSource
     {
         parent::__construct($config);
 
-        $this->documentIds = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOCUMENT_IDS);
+        $this->documentIds = $this->config->getSetting(
+            ImperiaDataSourceConfig::CFG_DOCUMENT_IDS
+        );
     }
 
     protected function init()
@@ -49,9 +51,9 @@ class ImperiaDataSource extends ImportBaseDataSource
     {
         $docId = $this->documentIds[$this->cursorPos];
         $documentXml = $this->loadDocumentById($docId);
-        
+
         $recordClass = $this->config->getSetting(ImperiaDataSourceConfig::CFG_RECORD_TYPE);
-        
+
         if (!class_exists($recordClass, true))
         {
             throw new DataSourceException(
@@ -61,9 +63,9 @@ class ImperiaDataSource extends ImportBaseDataSource
                 )
             );
         }
-        
+
         $record = new $recordClass($documentXml);
-        
+
         if (!($record instanceof IDataRecord))
         {
             throw new DataSourceException(
@@ -73,7 +75,7 @@ class ImperiaDataSource extends ImportBaseDataSource
                 )
             );
         }
-        
+
         return $record;
     }
 
@@ -81,7 +83,7 @@ class ImperiaDataSource extends ImportBaseDataSource
     {
         if (!isset($this->curlHandle))
         {
-            $this->cookiePath = tempnam(sys_get_temp_dir(), 'imperia.datasrc.');
+            $this->cookiePath = tempnam(sys_get_temp_dir(), uniqid('imperia.'));
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_POST, 0);
@@ -145,7 +147,7 @@ class ImperiaDataSource extends ImportBaseDataSource
 
         if ($err || $errNo || 200 != $respCode || FALSE !== strpos($resp, '<title>Access Denied!</title>'))
         {
-            $msg = sprintf("Can not login to imperia. Error: %s, Resp-code: %d", $err, $respCode);
+            $msg = sprintf("Can not login to imperia. Error: %s, Resp-code: %d" , $err, $respCode);
             throw new DataSourceException($msg, $errNo);
         }
     }
