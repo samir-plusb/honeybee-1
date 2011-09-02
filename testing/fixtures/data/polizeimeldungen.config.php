@@ -12,7 +12,7 @@ return array(
             'doc_ids_url' => 'https://imperia.berlinonline.de/imperia/ContentWorker/export-to-mail.php?getNotifications=1'
         ),
         'datasource' => array(
-            'class' => 'ImperiaXmlDataSource',
+            'class' => 'ImperiaDataSource',
             'record' => 'PoliceReportDataRecord',
             'name' => 'Polizeimeldungen',
             'description' => 'Provides access to the imperia "Polizeimeldungen" data via http.',

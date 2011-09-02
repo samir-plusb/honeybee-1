@@ -8,14 +8,15 @@
                     <testfile>unit/modules/Import/models/Config/ImperiaImportFactoryConfigTest.php</testfile>
                     <testfile>unit/modules/Import/models/Config/ImperiaDataImportConfigTest.php</testfile>
                     <testfile>unit/modules/Import/models/Config/ImperiaDataSourceConfigTest.php</testfile>
-                    
+
                     <!-- IDataRecord Tests -->
                     <testfile>unit/modules/Import/models/DataRecord/PoliceReportDataRecordTest.php</testfile>
-                    
+
                     <!-- IDataSource Tests -->
                     <testfile>unit/modules/Import/models/DataSource/ImperiaDataSourceTest.php</testfile>
-                    
+
                     <!-- IDataImport Tests -->
+                    <testfile>unit/modules/Import/models/DataImport/DataImportFactoryTest.php</testfile>
                     <testfile>unit/modules/Import/models/DataImport/ImperiaDataImportTest.php</testfile>
                 </testfiles>
             </suite>
