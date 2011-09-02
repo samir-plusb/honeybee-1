@@ -3,19 +3,19 @@
 class ImperiaDataImport extends BaseDataImport
 {
     protected $couchClient;
-    
+
     protected function importRecord(IDataRecord $record)
     {
         $record->toArray();
     }
-    
+
     /**
      * Setup our couch client and preselect the configured database,
      * so we can start sending data right away.
      */
     protected function init()
     {
-        $this->couchClient = new CouchDbClient(
+        $this->couchClient = new ExtendedCouchDbClient(
             $this->buildCouchDbUri()
         );
     }

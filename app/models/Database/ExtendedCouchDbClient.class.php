@@ -1,6 +1,6 @@
 <?php
 
-class CouchDbClient
+class ExtendedCouchDbClient
 {
     protected $compositeClient;
 
@@ -38,67 +38,67 @@ class CouchDbClient
         $this->compositeClient->selectDb($database);
 
         $uri = $this->baseUri . $database . '/_design/' . $designDocId . '/_view/' . $viewname;
-        
+
         $ch = self::createCurlHandle();
         curl_setopt($ch, CURLOPT_URL, $uri);
 
         $resp = curl_exec($ch);
         $error = curl_error($ch);
         $errorNum = curl_errno($ch);
-        
+
         if ($errorNum || $error)
         {
             throw new Exception("An unexpected error occured: $error", $errorNum);
         }
-        
+
         $data = json_decode($resp, true);
-        
+
         curl_close($ch);
-        
+
         return $data;
     }
-    
+
     public function createDesignDocument($database, $docId, $doc)
     {
         $doc['_id'] = $docId;
-        
+
         $removeWhitespace = function($funcString)
         {
             return preg_replace('~[\n\r\t]+~', '', $funcString);
         };
-        
+
         foreach ($doc['views'] as & $view)
         {
             $view['map'] = $removeWhitespace($view['map']);
-            
+
             if (isset($view['reduce']))
             {
                 $view['reduce'] = $removeWhitespace($view['map']);
             }
         }
-        
+
         $ch = self::createCurlHandle();
-        
+
         $uri = $this->baseUri . $database . '/_design/' . $docId;
-        $file = tmpfile(); 
+        $file = tmpfile();
         $jsonDoc = json_encode($doc);
-        fwrite($file, $jsonDoc); 
+        fwrite($file, $jsonDoc);
         fseek($file, 0);
 
         curl_setopt($ch, CURLOPT_URL, $uri);
         curl_setopt($ch, CURLOPT_PUT, true);
-        curl_setopt($ch, CURLOPT_INFILE, $file); 
+        curl_setopt($ch, CURLOPT_INFILE, $file);
         curl_setopt($ch, CURLOPT_INFILESIZE, strlen($jsonDoc));
 
         $resp = curl_exec($ch);
         $error = curl_error($ch);
         $errorNum = curl_errno($ch);
-        
+
         if ($errorNum || $error)
         {
             throw new Exception("An unexpected error occured: $error", $errorNum);
         }
-        
+
         fclose($file);
         curl_close($ch);
     }

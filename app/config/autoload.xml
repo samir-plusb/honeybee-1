@@ -10,7 +10,7 @@
             <autoload name="ProjectLanguageRoutingCallback">%core.lib_dir%/routing/ProjectLanguageRoutingCallback.class.php</autoload>
 
             <autoload name="IComparable">%core.app_dir%/models/Core/IComparable.iface.php</autoload>
-            <autoload name="CouchDbClient">%core.app_dir%/models/Database/CouchDbClient.class.php</autoload>
+            <autoload name="ExtendedCouchDbClient">%core.app_dir%/models/Database/ExtendedCouchDbClient.class.php</autoload>
         </autoloads>
     </ae:configuration>
 
