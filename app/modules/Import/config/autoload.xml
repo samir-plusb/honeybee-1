@@ -21,6 +21,7 @@
             <autoload name="ResourceBasedConfig">%core.module_dir%/Import/models/Base/Config/ResourceBasedConfig.class.php</autoload>
             <autoload name="ImportConfigException">%core.module_dir%/Import/models/Base/Config/ImportConfigException.class.php</autoload>
             <autoload name="XmlFileBasedConfig">%core.module_dir%/Import/models/Base/Config/XmlFileBasedConfig.class.php</autoload>
+            <autoload name="DataImportFactoryConfig">%core.module_dir%/Import/models/Base/Config/DataImportFactoryConfig.class.php</autoload>
             <!-- /Config Base Models -->
 
             <!-- Import Base Models -->
@@ -28,6 +29,7 @@
             <autoload name="DataImportException">%core.module_dir%/Import/models/Base/DataImport/DataImportException.class.php</autoload>
             <autoload name="BaseDataImport">%core.module_dir%/Import/models/Base/DataImport/BaseDataImport.class.php</autoload>
             <autoload name="BaseCouchDbImport">%core.module_dir%/Import/models/Base/DataImport/BaseCouchDbImport.class.php</autoload>
+            <autoload name="DataImportFactory">%core.module_dir%/Import/models/Base/DataImport/DataImportFactory.class.php</autoload>
             <!-- /Import Base Models -->
 
             <!-- DataSource Base Models -->
@@ -57,7 +59,7 @@
             <autoload name="ImperiaDataImportMockUp">%core.module_dir%/Import/models/Imperia/DataImport/ImperiaDataImportMockUp.class.php</autoload>
 
             <autoload name="ImperiaDataSource">%core.module_dir%/Import/models/Imperia/DataSource/ImperiaDataSource.class.php</autoload>
-            
+
             <autoload name="ImperiaDataRecord">%core.module_dir%/Import/models/Imperia/DataRecord/ImperiaDataRecord.class.php</autoload>
             <autoload name="PoliceReportDataRecord">%core.module_dir%/Import/models/Imperia/DataRecord/PoliceReportDataRecord.class.php</autoload>
             <!-- /Imperia Import -->
