@@ -5,18 +5,18 @@
         <import class="ImperiaDataImport">
             <name>Polizeimeldungen</name>
             <description>Imports the imperia "Polizeimeldungen" data into our couch database.</description>
-    
+
             <settings>
                 <setting name="couchdb_host">localhost</setting>
                 <setting name="couchdb_port">5984</setting>
                 <setting name="couchdb_database">imperia</setting>
                 <setting name="doc_ids_url">https://imperia.berlinonline.de/imperia/ContentWorker/export-to-mail.php?getNotifications=1</setting>
             </settings>
-    
+
             <datasource class="ImperiaXmlDataSource" record="PoliceReportDataRecord">
                 <name>Polizeimeldungen</name>
                 <description>Provides access to the imperia "Polizeimeldungen" data via http.</description>
-        
+
                 <settings>
                     <setting name="url">https://imperia.berlinonline.de/</setting>
                     <setting name="account_user">bo-xml-export</setting>
