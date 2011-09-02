@@ -29,8 +29,8 @@ class ImperiaDataImport extends BaseDataImport
     {
         return sprintf(
             "http://%s:%d/",
-            $this->config->getSetting(self::CONFIG_COUCHDB_HOST),
-            $this->config->getSetting(self::CONFIG_COUCHDB_PORT)
+            $this->config->getSetting(ImperiaDataImportConfig::CFG_COUCHDB_HOST),
+            $this->config->getSetting(ImperiaDataImportConfig::CFG_COUCHDB_PORT)
         );
     }
 }

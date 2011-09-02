@@ -95,7 +95,6 @@ class ImperiaDataSource extends ImportBaseDataSource
 
             $this->curlHandle = $ch;
         }
-
     }
 
     protected function loadDocumentById($documentId)
@@ -118,7 +117,7 @@ class ImperiaDataSource extends ImportBaseDataSource
 
         if (FALSE !== strpos($responseDoc, '<title>Access Denied!</title>'))
         {
-            throw new DataSourceException("Currently not logged in to imperia and therefor can not continue.");
+            throw new DataSourceException("Currently not logged in to imperia and therefore can not continue.");
         }
 
         return $responseDoc;

@@ -18,8 +18,8 @@ return array(
             'description' => 'Provides access to the imperia "Polizeimeldungen" data via http.',
             'settings' => array(
                 'url' => 'https://imperia.berlinonline.de/',
-                'account_user' => 'hans',
-                'account_pass' => 'wurst'
+                'account_user' => 'bo-xml-export',
+                'account_pass' => 'P8TaamVVwOb4JGbPWtqwo'
             )
         )
     )

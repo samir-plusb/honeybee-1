@@ -19,8 +19,8 @@
 
                 <settings>
                     <setting name="url">https://imperia.berlinonline.de/</setting>
-                    <setting name="account_user">hans</setting>
-                    <setting name="account_pass">wurst</setting>
+                    <setting name="account_user">bo-xml-export</setting>
+                    <setting name="account_pass">P8TaamVVwOb4JGbPWtqwo</setting>
                 </settings>
             </datasource>
         </import>
