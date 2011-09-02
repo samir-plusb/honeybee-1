@@ -6,7 +6,9 @@ abstract class BaseDataImport implements IDataImport
 
     protected $config;
 
-    protected abstract function importRecord(IDataRecord $record);
+    protected abstract function processRecord(IDataRecord $record);
+
+    protected abstract function importData(array $data);
 
     public function __construct(IImportConfig $config)
     {
@@ -21,7 +23,9 @@ abstract class BaseDataImport implements IDataImport
 
         while ($record = $dataSource->nextRecord())
         {
-            $this->importRecord($record);
+            $this->importData(
+                $this->processRecord($record)
+            );
         }
 
         $this->cleanup();
