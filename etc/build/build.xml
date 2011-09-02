@@ -15,18 +15,18 @@
     <target name="phpcs" description="Run the php codesniffer.">
         <echo message="Running the php codesniffer (phpcs)." />
         <run command="mkdir -p ${project.directory}/etc/integration/build/logs/" dir="${project.directory}" />
-        <run command="nice bin/phpcs --report=checkstyle --report-file=${project.directory}/etc/integration/build/logs/checkstyle.xml --standard=dev/lint/CodingStandard/BerlinOnline/ --ignore='app/cache*,*Success.php,*Input.php,*Error.php,app/templates/*' ${project.directory}/app" dir="${project.directory}" />
+        <run command="nice bin/phpcs --report=checkstyle --report-file=${project.directory}/etc/integration/build/logs/checkstyle.xml --standard=dev/lint/CodingStandard/BerlinOnline/ruleset.xml --ignore='app/cache*,*Success.php,*Input.php,*Error.php,app/templates/*' ${project.directory}/app" dir="${project.directory}" />
     </target>
-    
+
     <target name="test" description="Run the project's testsuite.">
         <echo message="Running the project's testsuite." />
         <run command="nice bin/test --configuration testing/config/phpunit.xml" dir="${project.directory}" />
     </target>
-    
+
     <target name="phpdoc" description="Generate API documentation using PHPDocumentor.">
         <echo message="Generating the API documentation using PHPDocumentor." />
         <run command="mkdir -p ${project.directory}/etc/integration/build/api/" dir="${project.directory}" />
         <run command="libs/PhpDocumentor/phpdoc --directory ${project.directory}/app/ --target ${project.directory}/etc/integration/build/api" dir="${project.directory}" />
     </target>
-    
+
 </project>
