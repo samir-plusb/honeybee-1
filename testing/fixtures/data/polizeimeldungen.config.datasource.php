@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'url' => 'https://imperia.berlinonline.de',
+    'url' => 'https://imperia.berlinonline.de/',
     'account_user' => 'bo-xml-export',
     'account_pass' => 'P8TaamVVwOb4JGbPWtqwo',
     'record'       => 'PoliceReportDataRecord',
