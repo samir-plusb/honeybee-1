@@ -1,6 +1,6 @@
 <?php
 
-class DataImportFactory
+class DataImportFactory implements IDataImportFactory
 {
     protected $factoryConfig;
 
@@ -9,32 +9,32 @@ class DataImportFactory
         $this->factoryConfig = $factoryConfig;
     }
 
-    public function createDataImport($configClass)
+    public function createDataImport($configClass, array $parameters = array())
     {
         $importSettings = array_merge(
             $this->factoryConfig->getSetting(DataImportFactoryConfig::CFG_SETTINGS)
         );
 
         $importConfig = new $configClass($importSettings);
-        $importClass = $config->getSetting(DataImportFactoryConfig::CFG_CLASS);
+        $importClass = $this->factoryConfig->getSetting(DataImportFactoryConfig::CFG_CLASS);
 
         return new $importClass($importConfig);
     }
 
-    public function createDataSource($configClass)
+    public function createDataSource($configClass, array $parameters = array())
     {
-        $dataSourceSettings = $this->factoryConfig->getSetting(DataImportFactoryConfig::CFG_DATASRC);
+        $rawSourceSettings = $this->factoryConfig->getSetting(DataImportFactoryConfig::CFG_DATASRC);
 
         $dataSourceSettings = array_merge(
-            $dataSourceSettings[ImperiaDataSourceConfig::CFG_SETTINGS],
+            $rawSourceSettings[DataImportFactoryConfig::CFG_SETTINGS],
             array(
-                ImperiaDataSourceConfig::CFG_RECORD_TYPE     => $dataSourceSettings['record'],
-                ImperiaDataSourceConfig::CFG_DOCUMENT_IDS    => self::$docIds
-            )
+                ImperiaDataSourceConfig::CFG_RECORD_TYPE     => $rawSourceSettings['record']
+            ),
+            $parameters
         );
 
+        $dataSourceClass = $rawSourceSettings[DataImportFactoryConfig::CFG_CLASS];
         $dataSrcConfig = new $configClass($dataSourceSettings);
-        $dataSourceClass = $dataSourceSettings[DataImportFactoryConfig::CFG_CLASS];
 
         return new $dataSourceClass($dataSrcConfig);
     }

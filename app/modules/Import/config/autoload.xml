@@ -25,6 +25,7 @@
             <!-- /Config Base Models -->
 
             <!-- Import Base Models -->
+            <autoload name="IDataImportFactory">%core.module_dir%/Import/models/Base/DataImport/IDataImportFactory.iface.php</autoload>
             <autoload name="IDataImport">%core.module_dir%/Import/models/Base/DataImport/IDataImport.iface.php</autoload>
             <autoload name="DataImportException">%core.module_dir%/Import/models/Base/DataImport/DataImportException.class.php</autoload>
             <autoload name="BaseDataImport">%core.module_dir%/Import/models/Base/DataImport/BaseDataImport.class.php</autoload>
