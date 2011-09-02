@@ -11,6 +11,7 @@ set_include_path(implode(PATH_SEPARATOR, $includes).PATH_SEPARATOR.get_include_p
 // | An absolute filesystem path to our environment config provider.           |
 // +---------------------------------------------------------------------------+
 require $root_dir . DIRECTORY_SEPARATOR . 'app/lib/config/ProjectEnvironmentConfig.class.php';
+ProjectEnvironmentConfig::load();
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the agavi/agavi.php script.                |
