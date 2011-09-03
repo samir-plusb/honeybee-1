@@ -17,6 +17,6 @@ if (test -z "$PHP_COMMAND") ; then
   exit 0
 fi
 
-cmd=`which rlwrap` $PHP_COMMAND -d html_errors=off -f "$PROJECT/testing/run-tests.php" -- "$@"
+cmd="$PHP_COMMAND -d html_errors=off -f $PROJECT/testing/run-tests.php -- $@"
 echo [Executing] $cmd
-PHP_COMMAND=$PHP_COMMAND $cmd
+PHP_COMMAND=$PHP_COMMAND $(which rlwrap) $cmd
