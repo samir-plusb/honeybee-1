@@ -21,9 +21,7 @@ class DataImportFactoryTest extends AgaviPhpUnitTestCase
         parent::setUp();
 
         $this->factory = new DataImportFactory(
-            new ImperiaImportFactoryConfig(
-                $this->buildConfigFilePath()
-            )
+            $this->buildConfigFilePath()
         );
     }
 

@@ -4,9 +4,20 @@ class DataImportFactory implements IDataImportFactory
 {
     protected $factoryConfig;
 
-    public function __construct(DataImportFactoryConfig $factoryConfig)
+    public function __construct($factoryConfig)
     {
-        $this->factoryConfig = $factoryConfig;
+        if ($factoryConfig instanceof DataImportFactoryConfig) 
+        {
+            $this->factoryConfig = $factoryConfig;
+        }
+        elseif (is_string($factoryConfig))
+        {
+            $this->factoryConfig = new DataImportFactoryConfig($factoryConfig);
+        }
+        else
+        {
+            throw new DataImportFactoryException("Invalid factory config given.");
+        }
     }
 
     public function createDataImport($configClass, array $parameters = array())

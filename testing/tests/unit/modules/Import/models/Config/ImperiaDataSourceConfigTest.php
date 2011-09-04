@@ -14,9 +14,9 @@ class ImperiaDataSourceConfigTest extends ImportConfigBaseTestCase
     {
         $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
         $factoryConfigFile = $baseDir . 'configs/imports/polizeimeldungen.xml';
-        $config = new ImperiaImportFactoryConfig($factoryConfigFile);
+        $config = new DataImportFactoryConfig($factoryConfigFile);
 
-        $dataSrcSettings = $config->getSetting(ImperiaImportFactoryConfig::CFG_DATASRC);
+        $dataSrcSettings = $config->getSetting(DataImportFactoryConfig::CFG_DATASRC);
 
         $dataSrcSettings = array_merge(
             $dataSrcSettings['settings'],

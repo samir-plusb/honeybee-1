@@ -1,6 +1,6 @@
 <?php
 
-abstract class DataImportFactoryConfig extends XmlFileBasedConfig
+class DataImportFactoryConfig extends XmlFileBasedConfig
 {
     const CFG_CLASS = 'class';
 
@@ -15,7 +15,7 @@ abstract class DataImportFactoryConfig extends XmlFileBasedConfig
     /**
      * @return array<string>
      */
-    protected function getRequiredSettings()
+    public function getRequiredSettings()
     {
         return array(
             self::CFG_CLASS,

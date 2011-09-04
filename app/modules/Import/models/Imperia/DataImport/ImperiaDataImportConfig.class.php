@@ -1,6 +1,6 @@
 <?php
 
-class ImperiaDataImportConfig extends SimpleConfig
+class ImperiaDataImportConfig extends DataImportConfig
 {
     const CFG_COUCHDB_HOST = 'couchdb_host';
     
@@ -10,7 +10,7 @@ class ImperiaDataImportConfig extends SimpleConfig
     
     const CFG_DOC_IDS_URL = 'doc_ids_url';
     
-    protected function getRequiredSettings()
+    public function getRequiredSettings()
     {
         return array(
             self::CFG_COUCHDB_HOST,

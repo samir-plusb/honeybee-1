@@ -12,10 +12,9 @@ class Import_ImperiaAction extends ImportBaseAction
 
 	public function executeWrite(AgaviRequestDataHolder $rd)
 	{
-        $configFile = $rd->getParameter(self::PARAM_CONFIG_FILE);
-        $config = new ImperiaImportFactoryConfig($configFile);
-
-        $importFactory = new DataImportFactory($config);
+        $importFactory = new DataImportFactory(
+            $rd->getParameter(self::PARAM_CONFIG_FILE)
+        );
 
         $import = $importFactory->createImport('ImperiaDataImportConfig');
         $dataSource = $importFactory->createDataSource('ImperiaDataSourceConfig');

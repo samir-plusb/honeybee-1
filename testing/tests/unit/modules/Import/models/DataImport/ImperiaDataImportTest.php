@@ -23,9 +23,9 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
 	 */
     public function testCreateDataImport($factoryConfigFile)
     {
-        $config = new ImperiaImportFactoryConfig($factoryConfigFile);
+        $config = new DataImportFactoryConfig($factoryConfigFile);
 
-        $importSettings = $config->getSetting(ImperiaImportFactoryConfig::CFG_SETTINGS);
+        $importSettings = $config->getSetting(DataImportFactoryConfig::CFG_SETTINGS);
         $importConfig = new ImperiaDataImportConfig($importSettings);
         $import = new ImperiaDataImportMockUp($importConfig);
 
@@ -37,14 +37,14 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
 	 */
     public function testRunDataImport($factoryConfigFile)
     {
-        $config = new ImperiaImportFactoryConfig($factoryConfigFile);
+        $config = new DataImportFactoryConfig($factoryConfigFile);
 
         // Create our datasource.
-        $dataSrcSettings = $config->getSetting(ImperiaImportFactoryConfig::CFG_DATASRC);
+        $dataSrcSettings = $config->getSetting(DataImportFactoryConfig::CFG_DATASRC);
         $dataSrcSettings = array_merge(
             $dataSrcSettings['settings'],
             array(
-                ImperiaDataSourceConfig::CFG_RECORD_TYPE     => $dataSrcSettings['record'],
+                DataSourceConfig::CFG_RECORD_TYPE            => $dataSrcSettings['record'],
                 ImperiaDataSourceConfig::CFG_DOCUMENT_IDS    => self::$docIds
             )
         );
@@ -53,7 +53,7 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
 
         // Create our importer.
         $importSettings = array_merge(
-            $config->getSetting(ImperiaImportFactoryConfig::CFG_SETTINGS),
+            $config->getSetting(DataImportFactoryConfig::CFG_SETTINGS),
             array(
                 ImperiaDataImportMockUp::SETTING_OUTPUT_FILE => $this->buildImportOutputPath()
             )
