@@ -12,10 +12,13 @@ class CouchDbDataImportConfig extends DataImportConfig
     
     public function getRequiredSettings()
     {
-        return array(
-            self::CFG_COUCHDB_HOST,
-            self::CFG_COUCHDB_PORT,
-            self::CFG_COUCHDB_DATABASE
+        return array_merge(
+            parent::getRequiredSettings(),
+            array(
+                self::CFG_COUCHDB_HOST,
+                self::CFG_COUCHDB_PORT,
+                self::CFG_COUCHDB_DATABASE
+            )
         );
     }
 }
