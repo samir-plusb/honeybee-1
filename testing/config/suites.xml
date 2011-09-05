@@ -5,19 +5,19 @@
             <suite name="Default">
                 <testfiles>
                     <!-- IImportFactory Tests -->
-                    <testfile>unit/modules/Import/models/Factory/DataImportFactoryConfigTest.php</testfile>
-                    <testfile>unit/modules/Import/models/Factory/DataImportFactoryTest.php</testfile>
-                    
+                    <testfile>unit/modules/Import/models/Base/Factory/DataImportFactoryConfigTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Base/Factory/DataImportFactoryTest.php</testfile>
+
                     <!-- IDataRecord Tests -->
-                    <testfile>unit/modules/Import/models/DataRecord/PoliceReportDataRecordTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Imperia/DataRecord/PoliceReportDataRecordTest.php</testfile>
 
                     <!-- IDataSource Tests -->
-                    <testfile>unit/modules/Import/models/DataSource/ImperiaDataSourceConfigTest.php</testfile>
-                    <testfile>unit/modules/Import/models/DataSource/ImperiaDataSourceTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Imperia/DataSource/ImperiaDataSourceConfigTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Imperia/DataSource/ImperiaDataSourceTest.php</testfile>
 
                     <!-- IDataImport Tests -->
-                    <testfile>unit/modules/Import/models/DataImport/ImperiaDataImportConfigTest.php</testfile>
-                    <testfile>unit/modules/Import/models/DataImport/ImperiaDataImportTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Imperia/DataImport/ImperiaDataImportConfigTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Imperia/DataImport/ImperiaDataImportTest.php</testfile>
                 </testfiles>
             </suite>
         </suites>
