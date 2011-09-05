@@ -8,20 +8,20 @@
  */
 class Import_ImperiaAction extends ImportBaseAction
 {
-    const PARAM_CONFIG_FILE = 'import_config';
+    const PARAM_CONFIG_FILE = 'polizeimeldungen.xml';
 
 	public function executeWrite(AgaviRequestDataHolder $rd)
 	{
         $importFactory = new DataImportFactory(
-            $rd->getParameter(self::PARAM_CONFIG_FILE)
+            $rd->getParameter(self::PARAM_CONFIG_FILE, $this->getImportConfigDirectory())
         );
 
-        $import = $importFactory->createImport('ImperiaDataImportConfig');
+        $import = $importFactory->createDataImport('ImperiaDataImportConfig');
         $dataSource = $importFactory->createDataSource('ImperiaDataSourceConfig');
 
         if (!$import->run($dataSource))
         {
-            
+            return 'Error';
         }
 
 		return 'Success';
@@ -29,9 +29,12 @@ class Import_ImperiaAction extends ImportBaseAction
 
     private function getImportConfigDirectory()
     {
-        $baseDir = AgaviConfig::get('core.config_dir') . DIRECTORY_SEPARATOR . 'imports' . DIRECTORY_SEPARATOR;
-
-        return $baseDir . self::PARAM_CONFIG_FILE;
+        return AgaviConfig::get('core.app_dir') . DIRECTORY_SEPARATOR . 
+            'modules' . DIRECTORY_SEPARATOR . 
+            'Import' . DIRECTORY_SEPARATOR .
+            'config' . DIRECTORY_SEPARATOR .
+            'imports' . DIRECTORY_SEPARATOR . 
+            self::PARAM_CONFIG_FILE;
 
     }
 }

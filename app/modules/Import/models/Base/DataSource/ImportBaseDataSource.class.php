@@ -10,7 +10,7 @@ abstract class ImportBaseDataSource implements IDataSource
     
     abstract protected function forwardCursor();
     
-    abstract protected function createRecord();
+    abstract protected function fetchData();
     
     public function __construct(IImportConfig $config)
     {
@@ -30,7 +30,38 @@ abstract class ImportBaseDataSource implements IDataSource
             return NULL;
         }
         
-        return $this->createRecord();
+        return $this->createRecord(
+            $this->fetchData()
+        );
+    }
+    
+    protected function createRecord($data)
+    {
+        $recordClass = $this->config->getSetting(DataSourceConfig::CFG_RECORD_TYPE);
+
+        if (!class_exists($recordClass, true))
+        {
+            throw new DataSourceException(
+                sprintf(
+                    "Unable to find provided datarecord class: %s",
+                    $recordClass
+                )
+            );
+        }
+
+        $record = new $recordClass($data);
+
+        if (!($record instanceof IDataRecord))
+        {
+            throw new DataSourceException(
+                sprintf(
+                    "An invalid IDataRecord implementor was provided. '%s' does not implement the interface IDataRecord.",
+                    $recordClass
+                )
+            );
+        }
+
+        return $record;
     }
 }
 

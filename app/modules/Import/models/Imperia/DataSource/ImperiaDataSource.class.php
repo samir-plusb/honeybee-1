@@ -23,12 +23,17 @@ class ImperiaDataSource extends ImportBaseDataSource
         parent::__construct($config);
 
         $this->documentIds = $this->config->getSetting(
-            ImperiaDataSourceConfig::CFG_DOCUMENT_IDS
+            ImperiaDataSourceConfig::PARAM_DOCIDS
         );
     }
 
     protected function init()
     {
+        if (empty($this->documentIds))
+        {
+            $url = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOC_IDLIST_URL);
+        }
+        
         $this->initCurlHandle();
         $this->login();
 
@@ -47,36 +52,12 @@ class ImperiaDataSource extends ImportBaseDataSource
         return FALSE;
     }
 
-    protected function createRecord()
+    protected function fetchData()
     {
         $docId = $this->documentIds[$this->cursorPos];
         $documentXml = $this->loadDocumentById($docId);
 
-        $recordClass = $this->config->getSetting(ImperiaDataSourceConfig::CFG_RECORD_TYPE);
-
-        if (!class_exists($recordClass, true))
-        {
-            throw new DataSourceException(
-                sprintf(
-                    "Unable to find provided datarecord class: %s",
-                    $recordClass
-                )
-            );
-        }
-
-        $record = new $recordClass($documentXml);
-
-        if (!($record instanceof IDataRecord))
-        {
-            throw new DataSourceException(
-                sprintf(
-                    "An invalid IDataRecord implementor was provided. '%s' does not implement the interface IDataRecord.",
-                    $recordClass
-                )
-            );
-        }
-
-        return $record;
+        return $documentXml;
     }
 
     protected function initCurlHandle()

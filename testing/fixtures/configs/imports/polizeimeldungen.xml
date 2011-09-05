@@ -10,7 +10,6 @@
                 <setting name="couchdb_host">localhost</setting>
                 <setting name="couchdb_port">5984</setting>
                 <setting name="couchdb_database">imperia</setting>
-                <setting name="doc_ids_url">https://imperia.berlinonline.de/imperia/ContentWorker/export-to-mail.php?getNotifications=1</setting>
             </settings>
 
             <datasource class="ImperiaDataSource" record="PoliceReportDataRecord">
@@ -18,6 +17,8 @@
                 <description>Provides access to the imperia "Polizeimeldungen" data via http.</description>
 
                 <settings>
+                    <!-- <setting name="doc_idlist_url">https://imperia.berlinonline.de/imperia/ContentWorker/export-to-mail.php?getNotifications=1</setting> -->
+                    <setting name="doc_idlist_url">http://localhost/importer.php</setting>
                     <setting name="url">https://imperia.berlinonline.de/</setting>
                     <setting name="account_user">bo-xml-export</setting>
                     <setting name="account_pass">P8TaamVVwOb4JGbPWtqwo</setting>

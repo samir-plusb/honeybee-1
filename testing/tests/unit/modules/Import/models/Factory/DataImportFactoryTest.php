@@ -35,7 +35,7 @@ class DataImportFactoryTest extends AgaviPhpUnitTestCase
     public function testCreateDataSource()
     {
         $parameters = array(
-            ImperiaDataSourceConfig::CFG_DOCUMENT_IDS => self::$docIds
+            ImperiaDataSourceConfig::PARAM_DOCIDS => self::$docIds
         );
 
         $dataSource = $this->factory->createDataSource('ImperiaDataSourceConfig', $parameters);

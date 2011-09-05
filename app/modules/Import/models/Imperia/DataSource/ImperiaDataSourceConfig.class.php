@@ -2,13 +2,15 @@
 
 class ImperiaDataSourceConfig extends DataSourceConfig
 {
+    const PARAM_DOCIDS = 'doc_ids';
+    
     const CFG_URL = 'url';
     
     const CFG_ACCOUNT_USER = 'account_user';
     
     const CFG_ACCOUNT_PASS = 'account_pass';
     
-    const CFG_DOCUMENT_IDS = 'doc_ids';
+    const CFG_DOC_IDLIST_URL = 'doc_idlist_url';
     
     public function getRequiredSettings()
     {
@@ -18,7 +20,7 @@ class ImperiaDataSourceConfig extends DataSourceConfig
                 self::CFG_URL,
                 self::CFG_ACCOUNT_USER,
                 self::CFG_ACCOUNT_PASS,
-                self::CFG_DOCUMENT_IDS
+                self::CFG_DOC_IDLIST_URL
             )
         );
     }

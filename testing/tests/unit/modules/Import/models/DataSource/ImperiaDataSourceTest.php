@@ -93,7 +93,7 @@ class ImperiaDataSourceTest extends AgaviUnitTestCase
             $dataSrcSettings['settings'],
             array(
                 ImperiaDataSourceConfig::CFG_RECORD_TYPE => $dataSrcSettings['record'],
-                ImperiaDataSourceConfig::CFG_DOCUMENT_IDS => self::$docIds
+                ImperiaDataSourceConfig::PARAM_DOCIDS => self::$docIds
             )
         );
 
