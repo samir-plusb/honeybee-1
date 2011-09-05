@@ -85,6 +85,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
     
     protected function resolveConflicts(array $resultItems)
     {
+        $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
         $updateData = array();
         
         foreach ($resultItems as $resultItem)
