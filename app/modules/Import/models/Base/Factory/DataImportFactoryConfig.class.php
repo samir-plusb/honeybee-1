@@ -17,15 +17,12 @@ class DataImportFactoryConfig extends XmlFileBasedConfig
      */
     public function getRequiredSettings()
     {
-        return array_merge(
-            parent::getRequiredSettings(),
-            array(
-                self::CFG_CLASS,
-                self::CFG_NAME,
-                self::CFG_DESCRIPTION,
-                self::CFG_SETTINGS,
-                self::CFG_DATASRC
-            )
+        return array(
+            self::CFG_CLASS,
+            self::CFG_NAME,
+            self::CFG_DESCRIPTION,
+            self::CFG_SETTINGS,
+            self::CFG_DATASRC
         );
     }
 }
