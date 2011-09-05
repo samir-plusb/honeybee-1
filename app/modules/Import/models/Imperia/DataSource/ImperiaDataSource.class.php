@@ -29,12 +29,13 @@ class ImperiaDataSource extends ImportBaseDataSource
 
     protected function init()
     {
+        $this->initCurlHandle();
+
         if (empty($this->documentIds))
         {
-            $url = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOC_IDLIST_URL);
+            $this->loadDocumentIds();
         }
-        
-        $this->initCurlHandle();
+
         $this->login();
 
         $this->cursorPos = -1;
@@ -80,11 +81,32 @@ class ImperiaDataSource extends ImportBaseDataSource
         }
     }
 
+    protected function loadDocumentIds()
+    {
+        $idListUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOC_IDLIST_URL);
+
+        curl_setopt($this->curlHandle, CURLOPT_URL, $idListUrl);
+        curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
+
+        $response = curl_exec($this->curlHandle);
+        $err = curl_error($this->curlHandle);
+        $errNo = curl_errno($this->curlHandle);
+        $respCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
+
+        if ($err || $errNo || 200 != $respCode)
+        {
+            $msg = sprintf("An error occured while trying to load doc-idlist from: %s Error: %s, Resp-code: %s", $idListUrl, $err, $respCode);
+            throw new DataSourceException($msg, $errNo);
+        }
+
+        $this->documentIds = explode(' ', $response);
+    }
+
     protected function loadDocumentById($documentId)
     {
-        $docExportUrl = $this->buildDocExportUrlById($documentId);
+        $idListUrl = $this->buildDocExportUrlById($documentId);
 
-        curl_setopt($this->curlHandle, CURLOPT_URL, $docExportUrl);
+        curl_setopt($this->curlHandle, CURLOPT_URL, $idListUrl);
         curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
 
         $responseDoc = curl_exec($this->curlHandle);
@@ -94,7 +116,7 @@ class ImperiaDataSource extends ImportBaseDataSource
 
         if ($err || $errNo || 200 != $respCode)
         {
-            $msg = sprintf("An error occured while loading: %s Error: %s, Resp-code: %s", $docExportUrl, $err, $respCode);
+            $msg = sprintf("An error occured while loading: %s Error: %s, Resp-code: %s", $idListUrl, $err, $respCode);
             throw new DataSourceException($msg, $errNo);
         }
 

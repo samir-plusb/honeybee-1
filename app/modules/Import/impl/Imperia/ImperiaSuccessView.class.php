@@ -38,8 +38,6 @@ class Import_Imperia_ImperiaSuccessView extends ImportBaseView
      */
     public function executeText(AgaviRequestDataHolder $rd)
     {
-        $this->setupConsole($rd);
-
         $this->setAttribute('_title', 'Imperia');
     }
 }
