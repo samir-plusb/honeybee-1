@@ -2,6 +2,12 @@
 
 abstract class BaseCouchDbImport extends BaseDataImport
 {
+    const COUDB_ID_FIELD = '_id';
+    
+    const COUDB_REV_FIELD = '_rev';
+    
+    const COUCHDB_ERR_CONFLICT = 'conflict';
+    
     const DEFAULT_BUFFER_SIZE = 50;
     
     protected $couchClient;
@@ -48,9 +54,18 @@ abstract class BaseCouchDbImport extends BaseDataImport
         parent::cleanup();
     }
     
+    protected function convertRecord()
+    {
+        $data = parent::convertRecord();
+        
+        $data[self::COUDB_ID_FIELD] = $this->getCurrentRecord()->getIdentifier();
+        
+        return $data;
+    }
+    
     protected function importData(array $data)
     {
-        $this->importBuffer[] = $data;
+        $this->importBuffer[$data[self::COUDB_ID_FIELD]] = $data;
         
         if ($this->importBufferSize === count($this->importBuffer))
         {
@@ -61,11 +76,41 @@ abstract class BaseCouchDbImport extends BaseDataImport
     protected function flushImportBuffer()
     {
         $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
-        $last_result = $this->couchClient->storeDocs($database, $this->importBuffer);
+        $couchData = array_values($this->importBuffer);
         
-        $this->importBuffer = array();
+        $result = $this->couchClient->storeDocs($database, $couchData);
+        
+        $this->resolveConflicts($result);
     }
-
+    
+    protected function resolveConflicts(array $resultItems)
+    {
+        $updateData = array();
+        
+        foreach ($resultItems as $resultItem)
+        {
+            if (isset($resultItem['error']) && self::COUCHDB_ERR_CONFLICT === $resultItem['error'])
+            {
+                $rev = $this->couchClient->statDoc($database, $resultItem['id']);
+                
+                if (0 !== $rev)
+                {
+                    $newData = $this->importBuffer[$resultItem['id']];
+                    $newData[self::COUDB_REV_FIELD] = $rev;
+                    $updateData[] = $newData;
+                }
+            }
+        }
+        
+        if (!empty($updateData))
+        {
+            /**
+             * @todo Handle unresolveable conflicts.
+             */
+            $this->couchClient->storeDocs($database, $updateData);
+        }
+    }
+    
     /**
      * Build the uri to use in order to connect to couchdb.
      *

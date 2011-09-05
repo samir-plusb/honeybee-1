@@ -2,13 +2,29 @@
 
 abstract class ImportBaseDataRecord implements IDataRecord, IComparable
 {
+    protected $identifier;
+    
     protected $data;
 
     abstract protected function parse($dataSrc);
+    
+    abstract protected function getIdentifierFieldName();
 
     public function __construct($dataSrc)
     {
         $this->data = $this->parse($dataSrc);
+        $identifierFieldname = $this->getIdentifierFieldName();
+        
+        if (!isset($this->data[$identifierFieldname]))
+        {
+            throw new DataRecordException(
+                "No record identifier given for identifier-field: " . $identifierFieldname
+            );
+        }
+        /**
+         * @todo we might want to put this somewhere else so can ovderride the behaviour for generating the identifier.
+         */
+        $this->identifier = md5($this->data[$identifierFieldname]);
     }
 
     public function getSupportedFields()
@@ -31,6 +47,11 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     public function toArray()
     {
         return $this->data;
+    }
+    
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
     
     public function compareTo($other)

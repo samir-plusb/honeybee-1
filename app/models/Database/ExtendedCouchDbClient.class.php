@@ -16,7 +16,8 @@ class ExtendedCouchDbClient
     public function storeDocs($database, $documentData)
     {
         $this->compositeClient->selectDb($database);
-        $this->compositeClient->storeDocs($documentData);
+        
+        return $this->compositeClient->storeDocs($documentData);
     }
 
     public function getDoc($database, $documentId)
@@ -31,6 +32,45 @@ class ExtendedCouchDbClient
         {
             return null;
         }
+    }
+    
+    /**
+     *
+     * @param type $database
+     * @param type $docId
+     * 
+     * @return int Returns the document's revision or 0 if it doesn't exist.
+     */
+    public function statDoc($database, $docId)
+    {
+        $ch = self::createCurlHandle();
+
+        $uri = $this->baseUri . $database . '/' . $docId;
+        $file = tmpfile();
+
+        curl_setopt($ch, CURLOPT_URL, $uri);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_NOBODY, 1);
+        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $resp = curl_exec($ch);
+        $error = curl_error($ch);
+        $errorNum = curl_errno($ch);
+
+        if ($errorNum || $error)
+        {
+            throw new Exception("An unexpected error occured: $error", $errorNum);
+        }
+
+        fclose($file);
+        curl_close($ch);
+        
+        if (!preg_match_all('~Etag:\s*"(\d+-\w+)"~is', $resp, $matches, PREG_SET_ORDER))
+        {
+            return 0;
+        }
+        
+        return $matches[0][1];
     }
 
     public function getView($database, $designDocId, $viewname)

@@ -10,7 +10,7 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
 
     const IMPORT_OUTPUTFILE = 'polizeimeldungen.import';
 
-    const EXPECTED_IMPORT_RESULT_HASH = '93dbd0e40764a373e10a1715d137cf8a';
+    const EXPECTED_IMPORT_RESULT_HASH = 'b4522809eeca2678ac604e6d43a918b8';
 
     static private $docIds = array( // normally these are provided by the imperia-trigger script.
         '/2/10330/10343/10890/1385807',

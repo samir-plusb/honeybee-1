@@ -22,6 +22,11 @@ class PoliceReportDataRecord extends ImperiaDataRecord
         'filename'  => '/imperia/head/filename'
     );
     
+    protected function getIdentifierFieldName()
+    {
+        return 'title';
+    }
+    
     protected function getFieldMap()
     {
         return self::$fieldMap;

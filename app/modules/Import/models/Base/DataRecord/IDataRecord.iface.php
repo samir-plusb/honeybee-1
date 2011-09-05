@@ -17,6 +17,11 @@ interface IDataRecord
      * @return array<string, mixed>
      */
     public function toArray();
+    
+    /**
+     * @return string
+     */
+    public function getIdentifier();
 }
 
 ?>
