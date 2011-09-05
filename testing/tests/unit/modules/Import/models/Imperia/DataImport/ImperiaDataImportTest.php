@@ -4,9 +4,9 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
 {
     const CFG_FILE_PATH = 'configs/imports/polizeimeldungen.xml';
 
-    const CFG_FIXTURE = 'data/polizeimeldungen.config.php';
+    const CFG_FIXTURE = 'data/import/imperia/polizeimeldungen.config.php';
 
-    const CFG_DATASRC_FIXTURE = 'data/polizeimeldungen.config.datasource.php';
+    const CFG_DATASRC_FIXTURE = 'data/import/imperia/polizeimeldungen.config.datasource.php';
 
     const IMPORT_OUTPUTFILE = 'polizeimeldungen.import';
 

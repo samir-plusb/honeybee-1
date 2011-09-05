@@ -2,7 +2,7 @@
 
 class ImperiaDataImportConfigTest extends ImportConfigBaseTestCase
 {
-    const CFG_FIXTURE = 'data/polizeimeldungen.config.import.php';
+    const CFG_FIXTURE = 'data/import/imperia/polizeimeldungen.config.import.php';
 
     protected function getConfigImplementor()
     {

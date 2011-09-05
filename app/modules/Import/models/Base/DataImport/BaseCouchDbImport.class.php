@@ -63,8 +63,6 @@ abstract class BaseCouchDbImport extends BaseDataImport
         $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
         $last_result = $this->couchClient->storeDocs($database, $this->importBuffer);
         
-        file_put_contents('couch.resp', var_export($last_result, true), FILE_APPEND);
-        
         $this->importBuffer = array();
     }
 

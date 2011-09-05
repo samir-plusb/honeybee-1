@@ -10,7 +10,9 @@
             <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/base/ImportBaseAction.class.php</autoload>
             <autoload name="ImportBaseModel">%core.module_dir%/Import/lib/base/ImportBaseModel.class.php</autoload>
             <autoload name="ImportBaseView">%core.module_dir%/Import/lib/base/ImportBaseView.class.php</autoload>
+            
             <autoload name="ImportConfigBaseTestCase">%core.module_dir%/Import/lib/base/ImportConfigBaseTestCase.class.php</autoload>
+            <autoload name="DataRecordBaseTestCase">%core.module_dir%/Import/lib/base/DataRecordBaseTestCase.class.php</autoload>
             <!-- /Module Base Libs -->
 
             <!-- Config Base Models -->
@@ -78,6 +80,12 @@
             <autoload name="ImperiaDataRecord">%core.module_dir%/Import/models/Imperia/DataRecord/ImperiaDataRecord.class.php</autoload>
             <autoload name="PoliceReportDataRecord">%core.module_dir%/Import/models/Imperia/DataRecord/PoliceReportDataRecord.class.php</autoload>
             <!-- /Imperia Import -->
+            
+             <!-- Newswire Import -->
+            <autoload name="DpaNitfDataRecord">%core.module_dir%/Import/models/Newswire/DataRecord/DpaNitfDataRecord.class.php</autoload>
+            <autoload name="NewswireDataRecord">%core.module_dir%/Import/models/Newswire/DataRecord/NewswireDataRecord.class.php</autoload>
+            <autoload name="NitfDataRecord">%core.module_dir%/Import/models/Newswire/DataRecord/NitfDataRecord.class.php</autoload>
+            <!-- /Newswire Import -->
 
             <!-- /CONCRETE IMPLEMENTATIONS -->
         </autoloads>

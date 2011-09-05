@@ -1,74 +1,24 @@
 <?php
 
-class PoliceReportDataRecordTest extends AgaviUnitTestCase
+class PoliceReportDataRecordTest extends DataRecordBaseTestCase
 {
-    const CFG_XML_FIXTURE = 'data/polizeimeldung.article.xml';
+    const CFG_XML_FIXTURE = 'data/import/imperia/polizeimeldung.article.xml';
 
-    const CFG_DATA_FIXTURE = 'data/polizeimeldung.article.php';
-
-    protected $policeReportDataRecord;
-
-    protected function setUp()
+    const CFG_DATA_FIXTURE = 'data/import/imperia/polizeimeldung.article.php';
+    
+    protected function getRecordXmlFixturePath()
     {
-        parent::setUp();
-
-        $this->policeReportDataRecord = new PoliceReportDataRecord(
-            $this->loadXmlArticleFixture()
-        );
-    }
-
-    /**
-     * @param type $expected
-     * @param type $fieldname
-     *
-     * @dataProvider provideExpectedRecordValues
-     */
-    public function testGetValue($expected, $fieldname)
-    {
-        $value = $this->policeReportDataRecord->getValue($fieldname);
-
-        $this->assertEquals($expected, $value);
+        return self::CFG_XML_FIXTURE;
     }
     
-    public function testToArray()
+    protected function getRecordResultFixturePath()
     {
-        $values = $this->policeReportDataRecord->toArray();
-        
-        foreach ($this->loadProcessedArticleDataFixture() as $key => $value)
-        {
-            $this->assertArrayHasKey($key, $values);
-            $this->assertEquals($value, $values[$key]);
-        }
+        return self::CFG_DATA_FIXTURE;
     }
-
-    public function provideExpectedRecordValues()
+    
+    protected function getDataRecordClass()
     {
-        $ret = array();
-
-        foreach ($this->loadProcessedArticleDataFixture() as $key => $value)
-        {
-            $ret[] = array('expected' => $value, 'fieldname' => $key);
-        }
-
-        return $ret;
-    }
-
-    protected function loadXmlArticleFixture()
-    {
-        $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-
-        $fixtureFile = $baseDir . self::CFG_XML_FIXTURE;
-
-        return file_get_contents($fixtureFile);
-    }
-
-    protected function loadProcessedArticleDataFixture()
-    {
-        $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-
-        $fixtureFile = $baseDir . self::CFG_DATA_FIXTURE;
-
-        return include $fixtureFile;
+        return 'PoliceReportDataRecord';
     }
 }
 

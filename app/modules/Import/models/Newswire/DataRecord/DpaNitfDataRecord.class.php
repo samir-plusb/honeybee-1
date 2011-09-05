@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DPA specific NITF processing
  *
@@ -30,3 +31,5 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
         return array_merge(parent::getFieldMap(), $dmap);
     }
 }
+
+?>

@@ -2,7 +2,7 @@
 
 class ImperiaDataSourceConfigTest extends ImportConfigBaseTestCase
 {
-    const CFG_FIXTURE = 'data/polizeimeldungen.config.datasource.php';
+    const CFG_FIXTURE = 'data/import/imperia/polizeimeldungen.config.datasource.php';
 
     static private $docIds = array( // normally these are provided by the imperia-trigger script.
         '/2/10330/10343/10890/1385807',
