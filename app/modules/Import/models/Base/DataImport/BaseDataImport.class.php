@@ -3,10 +3,10 @@
 abstract class BaseDataImport implements IDataImport
 {
     private $dataSource;
+    
+    private $currentRecord;
 
     protected $config;
-
-    protected abstract function processRecord(IDataRecord $record);
 
     protected abstract function importData(array $data);
 
@@ -17,37 +17,68 @@ abstract class BaseDataImport implements IDataImport
 
     public function run(IDataSource $dataSource)
     {
-        $this->dataSource = $dataSource;
+        $this->init($dataSource);
 
-        $this->init();
-
-        while ($record = $dataSource->nextRecord())
+        while ($this->currentRecord = $dataSource->nextRecord())
         {
-            $this->importData(
-                $this->processRecord($record)
-            );
+            if (!$this->processRecord())
+            {
+                // @todo Need to think of a smart error handling,
+                // as the overall import process is not allowed to be affected by single record related errors.
+            }
         }
 
         $this->cleanup();
-
-        $this->dataSource = null;
-
+        
         return true;
+    }
+    
+    protected function processRecord()
+    {
+        $data = $this->convertRecord();
+        
+        return $this->importData($data);
+    }
+    
+    protected function convertRecord()
+    {
+        return $this->getCurrentRecord()->toArray();
     }
 
     protected function getDataSource()
     {
         if (null === $this->dataSource)
         {
-            throw new DataImportException("The datasource member is only available inside the run method's execution scope.");
+            throw new DataImportException(
+                "The dataSource member is only available inside the run method's execution scope."
+            );
         }
 
         return $this->dataSource;
     }
+    
+    protected function getCurrentRecord()
+    {
+        if (null === $this->currentRecord)
+        {
+            throw new DataImportException(
+                "The currentRecord member is only available inside the run method's execution scope."
+            );
+        }
 
-    protected function init() {}
+        return $this->currentRecord;
+    }
 
-    protected function cleanup() {}
+    protected function init(IDataSource $dataSource) 
+    {
+        $this->dataSource = $dataSource;
+    }
+
+    protected function cleanup() 
+    {
+        $this->dataSource = null;
+        $this->currentRecord = null;
+    }
 }
 
 ?>
