@@ -1,0 +1,40 @@
+<?php
+
+class ImportConfigFileValidator extends AgaviStringValidator
+{
+    const CONFIG_FILE_POSTFIX = '.xml';
+    
+    protected function validate()
+    {
+        if (!parent::validate())
+        {
+            return false;
+        }
+        
+        $originalValue =& $this->getData($this->getArgument());
+        
+        $filePath = $this->buildImportConfigFilePath($originalValue);
+        
+        if (!is_readable($filePath))
+        {
+            $this->throwError('non_existant');
+            
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private function buildImportConfigFilePath($configName)
+    {
+        return AgaviConfig::get('core.app_dir') . DIRECTORY_SEPARATOR . 
+            'modules' . DIRECTORY_SEPARATOR . 
+            'Import' . DIRECTORY_SEPARATOR .
+            'config' . DIRECTORY_SEPARATOR .
+            'imports' . DIRECTORY_SEPARATOR . 
+            $configName . self::CONFIG_FILE_POSTFIX;
+
+    }
+}
+
+?>

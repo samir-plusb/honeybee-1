@@ -8,12 +8,14 @@
  */
 class Import_ImperiaAction extends ImportBaseAction
 {
-    const PARAM_CONFIG_FILE = 'polizeimeldungen.xml';
+    const DEFAULT_CONFIG_FILE = 'polizeimeldungen.xml';
+    
+    const PARAM_CONFIG_NAME = 'config';
 
 	public function executeWrite(AgaviRequestDataHolder $rd)
 	{
         $importFactory = new DataImportFactory(
-            $rd->getParameter(self::PARAM_CONFIG_FILE, $this->getImportConfigDirectory())
+            $rd->getParameter(self::PARAM_CONFIG_NAME, $this->getImportConfigDirectory())
         );
 
         $import = $importFactory->createDataImport('ImperiaDataImportConfig');
@@ -34,7 +36,7 @@ class Import_ImperiaAction extends ImportBaseAction
             'Import' . DIRECTORY_SEPARATOR .
             'config' . DIRECTORY_SEPARATOR .
             'imports' . DIRECTORY_SEPARATOR . 
-            self::PARAM_CONFIG_FILE;
+            self::DEFAULT_CONFIG_FILE;
 
     }
 }

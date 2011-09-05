@@ -83,6 +83,8 @@ class ImperiaDataSource extends ImportBaseDataSource
 
     protected function loadDocumentIds()
     {
+        $this->documentIds = array();
+        
         $idListUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOC_IDLIST_URL);
 
         curl_setopt($this->curlHandle, CURLOPT_URL, $idListUrl);
@@ -98,8 +100,11 @@ class ImperiaDataSource extends ImportBaseDataSource
             $msg = sprintf("An error occured while trying to load doc-idlist from: %s Error: %s, Resp-code: %s", $idListUrl, $err, $respCode);
             throw new DataSourceException($msg, $errNo);
         }
-
-        $this->documentIds = explode(' ', $response);
+        
+        if (!empty($response))
+        {
+            $this->documentIds = explode(' ', $response);
+        }
     }
 
     protected function loadDocumentById($documentId)

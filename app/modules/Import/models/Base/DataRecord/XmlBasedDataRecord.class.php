@@ -21,7 +21,7 @@ abstract class XmlBasedDataRecord extends ImportBaseDataRecord
         libxml_clear_errors();
         $domDoc = new DOMDocument();
 
-        if (!$domDoc->loadXML($xmlString))
+        if (!@$domDoc->loadXML($xmlString))
         {
             $errors = libxml_get_errors();
             $msg = array();
@@ -30,7 +30,7 @@ abstract class XmlBasedDataRecord extends ImportBaseDataRecord
             {
                 $msg[] = sprintf('%d (%d,%d) %s', $error->code, $error->line, $error->column, $error->message);
             }
-
+            
             throw new DataRecordException('Xml parse errors: '.join(', ', $msg));
         }
 

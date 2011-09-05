@@ -13,6 +13,8 @@
             
             <autoload name="ImportConfigBaseTestCase">%core.module_dir%/Import/lib/base/ImportConfigBaseTestCase.class.php</autoload>
             <autoload name="DataRecordBaseTestCase">%core.module_dir%/Import/lib/base/DataRecordBaseTestCase.class.php</autoload>
+            
+            <autoload name="ImportConfigFileValidator">%core.module_dir%/Import/lib/validator/ImportConfigFileValidator.class.php</autoload>
             <!-- /Module Base Libs -->
 
             <!-- Config Base Models -->
