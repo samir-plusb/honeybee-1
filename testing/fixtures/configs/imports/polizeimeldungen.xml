@@ -7,9 +7,9 @@
             <description>Imports the imperia "Polizeimeldungen" data into our couch database.</description>
 
             <settings>
-                <setting name="couchdb_host">localhost</setting>
-                <setting name="couchdb_port">5984</setting>
-                <setting name="couchdb_database">imperia</setting>
+                <setting name="couchdb_host">%couchdb.import.host%</setting>
+                <setting name="couchdb_port">%couchdb.import.port%</setting>
+                <setting name="couchdb_database">%couchdb.import.database%</setting>
             </settings>
 
             <datasource class="ImperiaDataSource" record="PoliceReportDataRecord">
@@ -25,6 +25,5 @@
                 </settings>
             </datasource>
         </import>
-
     </ae:configuration>
 </ae:configurations>

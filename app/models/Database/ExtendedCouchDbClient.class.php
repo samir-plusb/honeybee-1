@@ -147,6 +147,11 @@ class ExtendedCouchDbClient
     {
         $this->compositeClient->createDatabase($database);
     }
+    
+    public function deleteDatabase($database)
+    {
+        $this->compositeClient->deleteDatabase($database);
+    }
 
     public static function createCurlHandle()
     {

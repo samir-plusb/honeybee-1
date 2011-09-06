@@ -37,7 +37,7 @@
         </system_actions>
 		
         <settings>
-            <setting name="app_name">ContentWorker</setting>
+            <setting name="app_name">Midas - Content Refining Middleware</setting>
 			
             <setting name="available">true</setting>
             <setting name="debug">false</setting>
@@ -46,6 +46,12 @@
             <setting name="use_logging">true</setting>
             <setting name="use_security">false</setting>
             <setting name="use_translation">true</setting>
+        </settings>
+        
+        <settings prefix="couchdb.import.">
+            <setting name="host">localhost</setting>
+            <setting name="port">5984</setting>
+            <setting name="database">midas_import</setting>
         </settings>
         
         <exception_templates>
@@ -58,13 +64,18 @@
     <ae:configuration environment="development.*">
         <settings>
             <setting name="debug">true</setting>
-            <setting name="use_logging">true</setting>
         </settings>
     </ae:configuration>
 	
     <ae:configuration environment="testing.*">
         <settings>
             <setting name="default_context">web</setting>
+        </settings>
+        
+        <settings prefix="couchdb.import.">
+            <setting name="host">localhost</setting>
+            <setting name="port">5984</setting>
+            <setting name="database">midas_import_testing</setting>
         </settings>
     </ae:configuration>
 	

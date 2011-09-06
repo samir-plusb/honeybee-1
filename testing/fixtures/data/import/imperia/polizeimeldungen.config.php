@@ -8,7 +8,7 @@ return array(
         'settings' => array(
             'couchdb_host' => 'localhost',
             'couchdb_port' => '5984',
-            'couchdb_database' => 'imperia'
+            'couchdb_database' => 'midas_import_testing'
         ),
         'datasource' => array(
             'class' => 'ImperiaDataSource',

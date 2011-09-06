@@ -26,7 +26,7 @@ class ProjectEnvironmentConfig
     
     private $testing_enabled;
 
-    private function __construct($host = null, $testing_enabled = false)
+    private function __construct($testing_enabled = false)
     {
         $this->testing_enabled = $testing_enabled;
         
@@ -39,7 +39,7 @@ class ProjectEnvironmentConfig
          
         if (isset($_SERVER['HTTP_HOST']))
         {
-            $this->current_host = empty($host) ? $_SERVER['HTTP_HOST'] : $host;
+            $this->current_host = $_SERVER['HTTP_HOST'];
         }
     }
     
