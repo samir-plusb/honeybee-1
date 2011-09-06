@@ -149,7 +149,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
     // ---------------------------------- </BaseDataImport OVERRIDES> ----------------------------
 
 
-    // ---------------------------------- <BaseDataImport IMPLEMENTATION> ------------------------
+    // ---------------------------------- <BaseDataImport IMPL> ----------------------------------
 
     /**
      * Implementation of the BaseDataImport's importData strategy hook.
@@ -169,7 +169,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
         }
     }
 
-    // ---------------------------------- </BaseDataImport IMPLEMENTATION> -----------------------
+    // ---------------------------------- </BaseDataImport IMPL> ---------------------------------
 
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------

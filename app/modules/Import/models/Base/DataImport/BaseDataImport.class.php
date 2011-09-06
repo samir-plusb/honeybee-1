@@ -74,6 +74,8 @@ abstract class BaseDataImport implements IDataImport
      * 
      * @return      boolean
      * 
+     * @see         IDataImport::run($dataSource)
+     * 
      * @uses        BaseDataImport::init($dataSource)
      * @uses        IDataSource::nextRecord()
      * @uses        BaseDataImport::processRecord()

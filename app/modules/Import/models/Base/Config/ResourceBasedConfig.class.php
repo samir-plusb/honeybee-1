@@ -115,8 +115,6 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
      * @return      array<string, mixed>
      *
      * @throws      ImportConfigException
-     *
-     * @uses        parse_url($configUri);
      */
     protected function parseUri($configUri)
     {
