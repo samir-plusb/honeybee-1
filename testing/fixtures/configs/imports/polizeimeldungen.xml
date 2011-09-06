@@ -2,7 +2,7 @@
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
 
     <ae:configuration>
-        <import class="ImperiaDataImport">
+        <import class="ImperiaDataImportMockUp">
             <name>Polizeimeldungen</name>
             <description>Imports the imperia "Polizeimeldungen" data into our couch database.</description>
 

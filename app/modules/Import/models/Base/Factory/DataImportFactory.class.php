@@ -23,7 +23,8 @@ class DataImportFactory implements IDataImportFactory
     public function createDataImport($configClass, array $parameters = array())
     {
         $importSettings = array_merge(
-            $this->factoryConfig->getSetting(DataImportFactoryConfig::CFG_SETTINGS)
+            $this->factoryConfig->getSetting(DataImportFactoryConfig::CFG_SETTINGS),
+            $parameters
         );
 
         $importConfig = new $configClass($importSettings);

@@ -9,6 +9,7 @@ class ImperiaDataImportMockUp extends ImperiaDataImport
         parent::init($dataSource);
         
         $importTargetFile = $this->config->getSetting(self::SETTING_OUTPUT_FILE);
+        
         file_put_contents($importTargetFile, '');
     }
 

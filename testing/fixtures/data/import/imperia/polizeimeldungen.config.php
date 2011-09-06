@@ -2,7 +2,7 @@
 
 return array(
     'import' => array(
-        'class' => 'ImperiaDataImport',
+        'class' => 'ImperiaDataImportMockUp',
         'name' => 'Polizeimeldungen',
         'description' => 'Imports the imperia "Polizeimeldungen" data into our couch database.',
         'settings' => array(
