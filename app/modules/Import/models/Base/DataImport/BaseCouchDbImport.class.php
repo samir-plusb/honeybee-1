@@ -195,6 +195,8 @@ abstract class BaseCouchDbImport extends BaseDataImport
      * So it fetches the rev with an head request
      *
      * @param       array $resultItems
+     * 
+     * @uses        BaseCoucDbImport::createUpdateData()
      */
     protected function resolveConflicts(array $resultItems)
     {
@@ -203,14 +205,10 @@ abstract class BaseCouchDbImport extends BaseDataImport
 
         foreach ($resultItems as $resultItem)
         {
-            if (isset($resultItem['error']) && self::COUCHDB_ERR_CONFLICT === $resultItem['error'])
+            if ($this->isCouchDbCreateConflict($resultItem))
             {
-                $rev = $this->couchClient->statDoc($database, $resultItem['id']);
-
-                if (0 !== $rev)
+                if (($newData = $this->createUpdateData($resultItem['id'])))
                 {
-                    $newData = $this->importBuffer[$resultItem['id']];
-                    $newData[self::COUDB_REV_FIELD] = $rev;
                     $updateData[] = $newData;
                 }
             }
@@ -221,6 +219,46 @@ abstract class BaseCouchDbImport extends BaseDataImport
             // @todo Handle unresolveable conflicts (exception?).
             $this->couchClient->storeDocs($database, $updateData);
         }
+    }
+    
+    /**
+     * Helper method for querying a couchdb result for a potential create conflict.
+     * 
+     * @param       array $response
+     * 
+     * @return      boolean
+     */
+    protected function isCouchDbCreateConflict(array $response)
+    {
+        return (
+            isset($response['error']) 
+            && 
+            self::COUCHDB_ERR_CONFLICT === $response['error']
+        );
+    }
+    
+    /**
+     * Return an array that can be posted to couch as is 
+     * and that contains a valid revision 
+     * in order to update it's corresponding document.
+     * 
+     * @param       string $docId
+     * 
+     * @return      array
+     */
+    protected function createUpdateData($docId)
+    {
+        $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
+        $rev = $this->couchClient->statDoc($database, $docId);
+        $data = null;
+        
+        if (0 !== $rev)
+        {
+            $data = $this->importBuffer[$docId];
+            $data[self::COUDB_REV_FIELD] = $rev;
+        }
+        
+        return $data;
     }
 
     /**
