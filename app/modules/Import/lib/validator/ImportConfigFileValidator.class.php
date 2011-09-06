@@ -21,9 +21,14 @@ class ImportConfigFileValidator extends AgaviStringValidator
         }
         catch (AgaviConfigurationException $e)
         {
-            $this->throwError('parse_error');
+            if (!$this->getParameter('pop_parse_errors'))
+            {
+                $this->throwError('parse_error');
             
-            return false;
+                return false;
+            }
+            
+            throw $e;
         }
         
         if (!is_readable($filePath))

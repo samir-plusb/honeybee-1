@@ -12,6 +12,29 @@
                     <error for="non_existant">The given config does not exist.</error>
                     <error for="parse_error">The given config is not parseable.</error>
                 </errors>
+                <ae:parameters>
+                    <ae:parameter name="pop_parse_errors">false</ae:parameter>
+                </ae:parameters>
+            </validator>
+            
+        </validators>
+    </ae:configuration>
+    
+    <ae:configuration environment="development*">
+        <validators>
+            
+            <validator class="ImportConfigFileValidator" name="invalid_config" required="true">
+                <arguments>
+                    <argument>c</argument>
+                </arguments>
+                <errors>
+                    <error>Please provide a config name.</error>
+                    <error for="non_existant">The given config does not exist.</error>
+                    <error for="parse_error">The given config is not parseable.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="pop_parse_errors">true</ae:parameter>
+                </ae:parameters>
             </validator>
             
         </validators>
