@@ -45,7 +45,7 @@ class CouchDbDataImportConfig extends DataImportConfig
      * Return an array of settings names,
      * that must be provided by our config srource.
      * 
-     * @return      array<string> 
+     * @return      array
      * 
      * @see         DataImportConfig::getRequiredSettings()
      */

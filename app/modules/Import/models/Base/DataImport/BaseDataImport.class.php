@@ -46,7 +46,7 @@ abstract class BaseDataImport implements IDataImport
     /**
      * Import the given data.
      * 
-     * @param       array<mixed> $data
+     * @param       array
      */
     protected abstract function importData(array $data);
 
@@ -136,7 +136,7 @@ abstract class BaseDataImport implements IDataImport
      * handle the default structure or override this method and define an own strategy,
      * because the returned array is passed to our abstract method BaseDataImport::importData.
      * 
-     * @return      array<mixed>
+     * @return      array
      */
     protected function convertRecord()
     {

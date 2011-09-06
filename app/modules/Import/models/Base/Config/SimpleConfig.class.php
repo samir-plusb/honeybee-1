@@ -20,7 +20,7 @@ abstract class SimpleConfig extends ImportBaseConfig
     /**
      * Load the given $configSource and return an array representation.
      *
-     * @return      array<string, mixed>
+     * @return      array
      *
      * @throws      ImportConfigException
      */

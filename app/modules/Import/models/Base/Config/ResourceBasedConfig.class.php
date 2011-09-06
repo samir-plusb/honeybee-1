@@ -28,7 +28,7 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
     /**
      * Holds our parsed uri parts,
      *
-     * @var         array<string, string>
+     * @var         array
      */
     private $configUriParts;
 
@@ -43,7 +43,7 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
      * Usually you would want to use our {@see ResourceBasedConfig::getUriParts()} and then pull out
      * the path or whatever you need to load the thing.
      *
-     * @return      array<string, mixed>
+     * @return      array
      */
     abstract protected function loadResource();
 
@@ -55,7 +55,7 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
     /**
      * Return the uri parts, that reflect our config source (uri).
      *
-     * @return      array<string, mixed>
+     * @return      array
      *
      * @see         IUriContainer::getUriParts()
      */
@@ -86,7 +86,7 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
      *
      * @param       string $configSrc
      *
-     * @return      array<string, mixed>
+     * @return      array
      *
      * @throws      ImportConfigException
      *
@@ -112,7 +112,7 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
      *
      * @param       string $configUri
      *
-     * @return      array<string, mixed>
+     * @return      array
      *
      * @throws      ImportConfigException
      */

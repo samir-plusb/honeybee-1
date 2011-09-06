@@ -35,7 +35,7 @@ interface IImportConfig
      * Return an array containing the settings that are currently
      * avaiable by this instance.
      *
-     * @return      array<string>
+     * @return      array
      */
     public function getSupportSettings();
 }

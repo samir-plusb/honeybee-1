@@ -19,7 +19,7 @@ abstract class XmlFileBasedConfig extends ResourceBasedConfig
     /**
      * Load and return the settings data from our config source uri.
      *
-     * @return      array<string, mixed>
+     * @return      array
      *
      * @see         ResourceBasedConfig::loadResource()
      */

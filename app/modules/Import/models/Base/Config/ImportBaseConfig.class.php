@@ -18,7 +18,7 @@ abstract class ImportBaseConfig implements IImportConfig
     /**
      * An assoc array that holds our settings.
      *
-     * @var         array<string, mixed>
+     * @var         array
      */
     private $settings;
 
@@ -30,7 +30,7 @@ abstract class ImportBaseConfig implements IImportConfig
     /**
      * Load the given $configSource and return an array representation.
      *
-     * @return      array<string, mixed>
+     * @return      array
      */
     abstract protected function load($configSource);
 
@@ -39,7 +39,7 @@ abstract class ImportBaseConfig implements IImportConfig
      * An exception will occur upon initialization,
      * if a required setting is not available after loading.
      *
-     * @return      array<string>
+     * @return      array
      */
     abstract protected function getRequiredSettings();
 
@@ -88,7 +88,7 @@ abstract class ImportBaseConfig implements IImportConfig
    /**
     * Return an array containing our supported setting names.
     *
-    * @return       array<string>
+    * @return       array
     *
     * @see          IImportConfig::getSupportSettings()
     */

@@ -17,7 +17,7 @@ abstract class DataImportConfig extends SimpleConfig
     /**
      * Return an array with setting names, that we consider required.
      * 
-     * @return      array<string>
+     * @return      array
      */
     public function getRequiredSettings()
     {

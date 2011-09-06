@@ -52,7 +52,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
      * Holds the import (record)data currently being buffered, before it is batch-pushed to couch.
      * The buffer is an assoc array whereas a data's record-identifier serves as the key.
      *
-     * @var         array<string, mixed> $importBuffer
+     * @var         array $importBuffer
      */
     protected $importBuffer;
 
@@ -133,7 +133,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
      * Converts the given record into an array,
      * thereby setting the couchdb id field.
      *
-     * @return      array<string ,mixed>
+     * @return      array
      *
      * @see         BaseDataImport::convertRecord()
      */
