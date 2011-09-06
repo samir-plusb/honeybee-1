@@ -71,7 +71,7 @@ abstract class ImportBaseConfig implements IImportConfig
      *
      * @return      mixed
      *
-     * @see         IImportConfig::getSetting($setting, $default = null)
+     * @see         IImportConfig::getSetting()
      */
     public function getSetting($setting, $default = null)
     {
@@ -108,8 +108,8 @@ abstract class ImportBaseConfig implements IImportConfig
      *
      * @param       mixed $configSource
      *
-     * @uses        ImportBaseConfig::load($configSource)
-     * @uses        ImportBaseConfig::validateConfig($settings)
+     * @uses        ImportBaseConfig::load()
+     * @uses        ImportBaseConfig::validateConfig()
      */
     protected function init($configSource)
     {

@@ -32,7 +32,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
     const COUCHDB_ERR_CONFLICT = 'conflict';
 
     /**
-     * @const       DEFAULT_BUFFER_SIZE The default value to use for our { @see BaseCouchDbImport::importBufferSize }.
+     * @const       DEFAULT_BUFFER_SIZE The default value to use for our {@see BaseCouchDbImport::importBufferSize}.
      */
     const DEFAULT_BUFFER_SIZE = 50;
 
@@ -75,7 +75,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
      *
      * @throws      DataImportException If the given $config is no CouchDbDataImportConfig.
      *
-     * @see         BaseDataImport::__construct($config)
+     * @see         BaseDataImport::__construct()
      */
     public function __construct(IImportConfig $config)
     {
@@ -95,7 +95,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
      *
      * @param       IDataSource $dataSource
      *
-     * @see         BaseDataImport::init($dataSource)
+     * @see         BaseDataImport::init()
      *
      * @uses        BaseCouchDbImport::buildCouchDbUri()
      */
@@ -177,7 +177,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
     /**
      * Sends our buffered import data to the couch.
      *
-     * @uses        BaseCouchDbImport::resolveConflicts($result)
+     * @uses        BaseCouchDbImport::resolveConflicts()
      */
     protected function flushImportBuffer()
     {

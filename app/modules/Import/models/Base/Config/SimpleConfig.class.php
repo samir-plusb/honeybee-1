@@ -4,7 +4,7 @@
  * The SimpleConfig class is an abstract implementation of the ImportBaseConfig base.
  * It's job is to provide a strategy for handling simple, data-based configuration.
  * In short, this guy wraps assoc arrays into config objects.
- * Just extend this class, provide your required settings via {@see ImportBaseConfig::getRequiredSettings}
+ * Just extend this class, provide your required settings via {@see ImportBaseConfig::getRequiredSettings()}
  * and pass in your settings-data to the constructor.
  *
  * @version         $Id:$

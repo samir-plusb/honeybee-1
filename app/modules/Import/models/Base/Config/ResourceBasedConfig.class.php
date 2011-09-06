@@ -90,7 +90,7 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
      *
      * @throws      ImportConfigException
      *
-     * @uses        ResourceBasedConfig::parseUri($configSrc)
+     * @uses        ResourceBasedConfig::parseUri()
      * @uses        ResourceBasedConfig::loadResource()
      */
     protected function load($configSrc)

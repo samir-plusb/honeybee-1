@@ -60,7 +60,7 @@ abstract class BaseDataImport implements IDataImport
      * 
      * @param IImportConfig $config 
      * 
-     * @see         IDataImport::__construct($config)
+     * @see         IDataImport::__construct()
      */
     public function __construct(IImportConfig $config)
     {
@@ -74,9 +74,9 @@ abstract class BaseDataImport implements IDataImport
      * 
      * @return      boolean
      * 
-     * @see         IDataImport::run($dataSource)
+     * @see         IDataImport::run()
      * 
-     * @uses        BaseDataImport::init($dataSource)
+     * @uses        BaseDataImport::init()
      * @uses        IDataSource::nextRecord()
      * @uses        BaseDataImport::processRecord()
      * @uses        BaseDataImport::cleanup()

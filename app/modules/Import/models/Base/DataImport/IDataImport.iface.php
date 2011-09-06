@@ -14,11 +14,15 @@
 interface IDataImport
 {
     /**
+     * Create a new IDataImport instance.
+     * 
      * @param       IImportConfig $config
      */
     public function __construct(IImportConfig $config);
 
     /**
+     * Imort all IDataRecords provided by the given IDataSource.
+     * 
      * @param       IDataSource $dataSource
      */
     public function run(IDataSource $dataSource);
