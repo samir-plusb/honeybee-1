@@ -1,18 +1,75 @@
 <?php
 
+/**
+ * The ImportBaseConfig class is an abstract implementation of the IImportConfig interface.
+ * It fully exposes the required interface methods and defines the strategy for loading
+ * a given config source.
+ * 
+ * @copyright   BerlinOnline Stadtportal GmbH & Co. KG
+ * @author      Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package     Import/Base
+ * @subpackage  Config
+ */
 abstract class ImportBaseConfig implements IImportConfig
 {
-    private $settings;
-
-    abstract protected function load($configSrc);
+    // ---------------------------------- <MEMBERS> ----------------------------------------------
     
+    /**
+     * An assoc array that holds our settings.
+     * 
+     * @var array<string, mixed>
+     */
+    private $settings;
+    
+    // ---------------------------------- </MEMBERS> ---------------------------------------------
+    
+    
+    // ---------------------------------- <ABSTRACT METHODS> -------------------------------------
+    
+    /**
+     * Load the given $configSource and return an array representation.
+     * 
+     * @return array<string, mixed>
+     */
+    abstract protected function load($configSource);
+    
+    /**
+     * Return an array of settings that are to be considered as mandatory for this instance.
+     * An exception will occur upon initialization, 
+     * if a required setting is not available after loading.
+     * 
+     * @return array<string>
+     */
     abstract protected function getRequiredSettings();
     
-    public function __construct($configSrc)
+    // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
+    
+    
+    // ---------------------------------- <IImportConfig METHODS> --------------------------------
+    
+    /**
+     * Create a new ImportBaseConfig instance for the given $configSource.
+     * 
+     * @param type $configSource 
+     * 
+     * @see IImportConfig::__construct
+     */
+    public function __construct($configSource)
     {
-        $this->init($configSrc);
+        $this->init($configSource);
     }
     
+    /**
+     * Fetch the value for the given setting.
+     * If the setting does not exist the provided default is returned.
+     * 
+     * @param string $setting
+     * @param mixed $default
+     * 
+     * @return mixed
+     * 
+     * @see IImportConfig::getSetting
+     */
     public function getSetting($setting, $default = null)
     {
         $value = $default;
@@ -25,20 +82,47 @@ abstract class ImportBaseConfig implements IImportConfig
         return $value;
     }
     
+   /**
+    * Return an array containing our supported setting names.
+    * 
+    * @return array<string>
+    * 
+    * @see IImportConfig::getSupportSettings
+    */
     public function getSupportSettings()
     {
         return array_keys($this->settings);
     }
     
-    protected function init($configSrc)
+    // ---------------------------------- </IImportConfig METHODS> -------------------------------
+    
+    
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
+    
+    /**
+     * Initialize this ImportBaseConfig instance with the given $configSource.
+     * After this method has completed we are ready to provide settings.
+     * 
+     * @param type $configSource 
+     */
+    protected function init($configSource)
     {
-        $settings = $this->load($configSrc);
+        $settings = $this->load($configSource);
         
         $this->validateConfig($settings);
         
         $this->settings = $settings;
     }
     
+    /**
+     * Validate the given settings against any required rules.
+     * This basic implementation just makes sure, 
+     * that all required settings are in place.
+     * 
+     * @param array $settings 
+     * 
+     * @throws ImportConfigException
+     */
     protected function validateConfig(array $settings)
     {
         foreach ($this->getRequiredSettings() as $required_setting)
@@ -49,6 +133,8 @@ abstract class ImportBaseConfig implements IImportConfig
             }
         }
     }
+    
+    // ---------------------------------- </WORKING METHODS> --------------------------------------
 }
 
 ?>
