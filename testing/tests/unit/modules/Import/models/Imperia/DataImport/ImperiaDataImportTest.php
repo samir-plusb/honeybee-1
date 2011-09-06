@@ -37,29 +37,17 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
 	 */
     public function testRunDataImport($factoryConfigFile)
     {
-        $config = new DataImportFactoryConfig($factoryConfigFile);
-
-        // Create our datasource.
-        $dataSrcSettings = $config->getSetting(DataImportFactoryConfig::CFG_DATASRC);
-        $dataSrcSettings = array_merge(
-            $dataSrcSettings['settings'],
-            array(
-                DataSourceConfig::CFG_RECORD_TYPE            => $dataSrcSettings['record'],
-                ImperiaDataSourceConfig::PARAM_DOCIDS    => self::$docIds
-            )
+        $importFactory = new DataImportFactory($factoryConfigFile);
+        
+        $importParams = array(
+            ImperiaDataImportMockUp::SETTING_OUTPUT_FILE => $this->buildImportOutputPath()
         );
-        $dataSrcConfig = new ImperiaDataSourceConfig($dataSrcSettings);
-        $dataSource = new ImperiaDataSource($dataSrcConfig);
-
-        // Create our importer.
-        $importSettings = array_merge(
-            $config->getSetting(DataImportFactoryConfig::CFG_SETTINGS),
-            array(
-                ImperiaDataImportMockUp::SETTING_OUTPUT_FILE => $this->buildImportOutputPath()
-            )
+        $import = $importFactory->createDataImport('ImperiaDataImportConfig', $importParams);
+        
+        $dataSourceParams = array(
+            ImperiaDataSourceConfig::PARAM_DOCIDS => self::$docIds
         );
-        $importConfig = new ImperiaDataImportConfig($importSettings);
-        $import = new ImperiaDataImportMockUp($importConfig);
+        $dataSource = $importFactory->createDataSource('ImperiaDataSourceConfig', $dataSourceParams);
 
         // And let them rock!
         $success = $import->run($dataSource);
