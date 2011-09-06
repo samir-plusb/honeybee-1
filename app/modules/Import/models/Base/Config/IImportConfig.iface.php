@@ -7,7 +7,7 @@
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @package         Import
- * @subpackage      Base
+ * @subpackage      Base/Config
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  */
 interface IImportConfig

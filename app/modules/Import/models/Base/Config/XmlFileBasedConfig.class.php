@@ -10,7 +10,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Base
+ * @subpackage      Base/Config
  */
 abstract class XmlFileBasedConfig extends ResourceBasedConfig
 {
