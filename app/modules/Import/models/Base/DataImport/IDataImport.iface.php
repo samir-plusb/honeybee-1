@@ -3,7 +3,7 @@
 interface IDataImport
 {
     /**
-     * @param IGenericConfig $config
+     * @param IImportConfig $config
      */
     public function __construct(IImportConfig $config);
 

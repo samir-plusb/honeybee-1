@@ -46,7 +46,7 @@ abstract class ImportBaseConfig implements IImportConfig
     // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
 
 
-    // ---------------------------------- <IImportConfig METHODS> --------------------------------
+    // ---------------------------------- <IImportConfig IMPL> -----------------------------------
 
     /**
      * Create a new ImportBaseConfig instance for the given $configSource.
@@ -97,7 +97,7 @@ abstract class ImportBaseConfig implements IImportConfig
         return array_keys($this->settings);
     }
 
-    // ---------------------------------- </IImportConfig METHODS> -------------------------------
+    // ---------------------------------- </IImportConfig IMPL> ----------------------------------
 
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
