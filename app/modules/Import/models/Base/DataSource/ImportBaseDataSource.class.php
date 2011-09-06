@@ -39,7 +39,7 @@ abstract class ImportBaseDataSource implements IDataSource
     {
         $recordClass = $this->config->getSetting(DataSourceConfig::CFG_RECORD_TYPE);
 
-        if (!class_exists($recordClass, true))
+        if (!class_exists($recordClass, TRUE))
         {
             throw new DataSourceException(
                 sprintf(

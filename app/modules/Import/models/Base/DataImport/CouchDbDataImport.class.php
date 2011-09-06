@@ -250,7 +250,7 @@ abstract class CouchDbDataImport extends BaseDataImport
     {
         $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
         $rev = $this->couchClient->statDoc($database, $docId);
-        $data = null;
+        $data = NULL;
         
         if (0 !== $rev)
         {

@@ -96,7 +96,7 @@ abstract class BaseDataImport implements IDataImport
 
         $this->cleanup();
         
-        return true;
+        return TRUE;
     }
     
     // ---------------------------------- <IDataImport IMPL> -------------------------------------
@@ -152,7 +152,7 @@ abstract class BaseDataImport implements IDataImport
      */
     protected function getCurrentRecord()
     {
-        if (null === $this->currentRecord)
+        if (NULL === $this->currentRecord)
         {
             throw new DataImportException(
                 "The currentRecord member is only available inside the run method's execution scope."
@@ -171,7 +171,7 @@ abstract class BaseDataImport implements IDataImport
      */
     protected function getDataSource()
     {
-        if (null === $this->dataSource)
+        if (NULL === $this->dataSource)
         {
             throw new DataImportException(
                 "The dataSource member is only available inside the run method's execution scope."
@@ -186,8 +186,8 @@ abstract class BaseDataImport implements IDataImport
      */
     protected function cleanup() 
     {
-        $this->dataSource = null;
-        $this->currentRecord = null;
+        $this->dataSource = NULL;
+        $this->currentRecord = NULL;
     }
     
     // ---------------------------------- </WORKING METHODS> -------------------------------------

@@ -28,7 +28,9 @@ abstract class SimpleConfig extends ImportBaseConfig
     {
         if (!is_array($configSrc))
         {
-            throw new ImportConfigException("The given config source is expected to be by the type of 'array' but is not.");
+            throw new ImportConfigException(
+                "The given config source is expected to be by the type of 'array' but is not."
+            );
         }
 
         return $configSrc;

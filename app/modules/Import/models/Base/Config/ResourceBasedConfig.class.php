@@ -33,8 +33,6 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
     private $configUriParts;
 
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-
-
     // ---------------------------------- <ABSTRACT METHODS> -------------------------------------
 
     /**
@@ -48,8 +46,6 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
     abstract protected function loadResource();
 
     // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
-
-
     // ---------------------------------- <IUriContainer METHODS> --------------------------------
 
     /**
@@ -77,7 +73,6 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
     }
 
     // ---------------------------------- </IUriContainer METHODS> -------------------------------
-
     // ---------------------------------- <WORKING METHODS> --------------------------------------
 
     /**
@@ -97,7 +92,9 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
     {
         if (!is_string($configSrc))
         {
-            throw new ImportConfigException(("The given config-uri is expected to be by the type of 'string' but is not."));
+            throw new ImportConfigException(
+                "The given config-uri is expected to be by the type of 'string' but is not."
+            );
         }
 
         $this->configUriParts = $this->parseUri($configSrc);
@@ -122,7 +119,9 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
 
         if (!$uriParts)
         {
-            throw new ImportConfigException("Unable to parse the given uri: " . $configUri);
+            throw new ImportConfigException(
+                "Unable to parse the given uri: " . $configUri
+            );
         }
 
         return $uriParts;

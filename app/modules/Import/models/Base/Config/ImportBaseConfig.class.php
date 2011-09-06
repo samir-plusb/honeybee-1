@@ -73,7 +73,7 @@ abstract class ImportBaseConfig implements IImportConfig
      *
      * @see         IImportConfig::getSetting()
      */
-    public function getSetting($setting, $default = null)
+    public function getSetting($setting, $default = NULL)
     {
         $value = $default;
 
@@ -137,7 +137,9 @@ abstract class ImportBaseConfig implements IImportConfig
         {
             if (!isset($settings[$required_setting]))
             {
-                throw new ImportConfigException("Missing setting '" . $required_setting . "' for config.");
+                throw new ImportConfigException(
+                    "Missing setting '" . $required_setting . "' for config."
+                );
             }
         }
     }

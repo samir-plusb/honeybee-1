@@ -1,5 +1,11 @@
 <?php
 
+/**
+ *
+ * @copyright BerlinOnline
+ * @version $Id$
+ * @package Import
+ */
 class Import_Imperia_ImperiaErrorView extends ImportBaseView
 {
     /**
@@ -12,9 +18,9 @@ class Import_Imperia_ImperiaErrorView extends ImportBaseView
      *                     <li>Any other type will be set as the response content.</li>
      *                   </ul>
      */
-    public function executeJson(AgaviRequestDataHolder $rd)
+    public function executeJson(AgaviRequestDataHolder $parameters)
     {
-        $this->setupJson($rd);
+        $this->setupJson($parameters);
         $errors = array();
         
         foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $error)
@@ -39,7 +45,7 @@ class Import_Imperia_ImperiaErrorView extends ImportBaseView
      *                     <li>Any other type will be set as the response content.</li>
      *                   </ul>
      */
-    public function executeText(AgaviRequestDataHolder $rd)
+    public function executeText(AgaviRequestDataHolder $parameters)
     {
         $errors = array();
         
@@ -53,3 +59,5 @@ class Import_Imperia_ImperiaErrorView extends ImportBaseView
         $this->getResponse()->setContent($content);
     }
 }
+
+?>

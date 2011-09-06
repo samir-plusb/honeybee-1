@@ -53,7 +53,7 @@ class ImperiaDataSourceTest extends AgaviUnitTestCase
     {
         $expectedCount = 3;
         $currentCount = 0;
-        $record = null;
+        $record = NULL;
 
         while (($record = $this->imperiaDataSource->nextRecord()))
         {

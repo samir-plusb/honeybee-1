@@ -8,7 +8,6 @@
  */
 class Import_Imperia_ImperiaSuccessView extends ImportBaseView
 {
-
     /**
      * Handles the Json output type.
      *
@@ -19,11 +18,11 @@ class Import_Imperia_ImperiaSuccessView extends ImportBaseView
      *                     <li>Any other type will be set as the response content.</li>
      *                   </ul>
      */
-    public function executeJson(AgaviRequestDataHolder $rd)
+    public function executeJson(AgaviRequestDataHolder $parameters)
     {
-        $this->setupJson($rd);
-
-        $this->setAttribute('_title', 'Imperia');
+        $this->setupJson($parameters);
+        $data = array('state' => 'success');
+        $this->getResponse()->setContent(json_encode($data));
     }
 
     /**
@@ -36,8 +35,10 @@ class Import_Imperia_ImperiaSuccessView extends ImportBaseView
      *                     <li>Any other type will be set as the response content.</li>
      *                   </ul>
      */
-    public function executeText(AgaviRequestDataHolder $rd)
+    public function executeText(AgaviRequestDataHolder $parameters)
     {
-        $this->setAttribute('_title', 'Imperia');
+        $this->getResponse()->setContent("Import succeeded.");
     }
 }
+
+?>

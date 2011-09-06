@@ -32,7 +32,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
         return array_keys($this->data);
     }
 
-    public function getValue($fieldname, $default = null)
+    public function getValue($fieldname, $default = NULL)
     {
         $value = $default;
 

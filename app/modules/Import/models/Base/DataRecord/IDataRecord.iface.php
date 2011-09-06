@@ -6,7 +6,7 @@ interface IDataRecord
      * @param string $fieldname
      * @param mixed $default
      */
-    public function getValue($fieldname, $default = null);
+    public function getValue($fieldname, $default = NULL);
 
     /**
      * return array<string>
