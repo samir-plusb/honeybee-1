@@ -39,7 +39,7 @@ abstract class ImportBaseConfig implements IImportConfig
      * An exception will occur upon initialization,
      * if a required setting is not available after loading.
      *
-     * @return array<string>
+     * @return      array<string>
      */
     abstract protected function getRequiredSettings();
 

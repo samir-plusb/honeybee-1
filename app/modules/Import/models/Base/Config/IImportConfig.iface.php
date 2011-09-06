@@ -1,14 +1,13 @@
 <?php
 
 /**
- *
  * IImportConfig implementations provide access to configration data,
  * that comes from arbitary config sources.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
- * @package         Import/Base
- * @subpackage      Config
+ * @package         Import
+ * @subpackage      Base
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  */
 interface IImportConfig
