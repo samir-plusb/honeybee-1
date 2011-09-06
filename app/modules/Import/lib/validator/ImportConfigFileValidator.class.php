@@ -15,6 +15,17 @@ class ImportConfigFileValidator extends AgaviStringValidator
         
         $filePath = $this->buildImportConfigFilePath($originalValue);
         
+        try
+        {
+            AgaviConfigCache::checkConfig($filePath);
+        }
+        catch (AgaviConfigurationException $e)
+        {
+            $this->throwError('parse_error');
+            
+            return false;
+        }
+        
         if (!is_readable($filePath))
         {
             $this->throwError('non_existant');

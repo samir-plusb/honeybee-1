@@ -10,6 +10,7 @@
                 <errors>
                     <error>Please provide a config name.</error>
                     <error for="non_existant">The given config does not exist.</error>
+                    <error for="parse_error">The given config is not parseable.</error>
                 </errors>
             </validator>
             

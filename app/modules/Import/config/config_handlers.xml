@@ -3,22 +3,12 @@
     <ae:configuration>
         <handlers>
 
-            <handler pattern="*/imports/*.xml" class="AgaviReturnArrayConfigHandler" />
-
-            <!-- Default -->
-            <!--
-
-            So validiert man testdatei.xml
-
-            <handler pattern="subdir/testdatei.xml" class="AgaviReturnArrayConfigHandler" />
-
-                Validierung mit xsd file
-
-            <handler pattern="subdir/testdatei.xml" class="AgaviReturnArrayConfigHandler" />
-                <validation>%core.config_dir%/xsd/foo_definition.xsd</validation/>
+            <handler pattern="*/imports/*.xml" class="AgaviReturnArrayConfigHandler">
+                <validation>%core.app_dir%/modules/Import/config/xsd/import.xsd</validation>
+                <ae:parameters>
+                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/midas/config/import/definition/1.0</ae:parameter>
+                </ae:parameters>
             </handler>
-
-            -->
 
         </handlers>
     </ae:configuration>
