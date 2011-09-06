@@ -25,7 +25,6 @@ class NitfNewswireDataRecord extends NewswireDataRecord
             'subtitle' => '//hedline/hl2',
             'abstract' => '//abstract',
             'copyright' => '//doc.copyright/@holder',
-            'source' => '//meta[@name="origin"]/@content',
             'date.issue' => '//date.issue/@norm',
             'date.release' => '//date.release/@norm',
             'date.expire' => '//date.expire/@norm',
@@ -35,34 +34,13 @@ class NitfNewswireDataRecord extends NewswireDataRecord
         );
     }
 
-
-
     /**
-     * acts like join() for the nodeValues of the node-list
-     *
-     * @param DOMNodeList $nl
-     * @param string $separator
-     * @return string
+     * (non-PHPdoc)
+     * @see ImportBaseDataRecord::getIdentifierFieldName()
      */
-    protected function joinNodeList(DOMNodeList $nl, $separator)
+    public function getIdentifierFieldName()
     {
-        $content = $this->nodeListToArray($nl);
-        return join($separator, $content);
-    }
-
-
-    /**
-     * translate a node list to a simple string array
-     *
-     * @param DOMNodeList $nl
-     */
-    protected function nodeListToArray(DOMNodeList $nl)
-    {
-        $content = array();
-        for ($i = 0; $i < $nl->length; $i++) {
-            $content[] = self::nodeToString($nl->item($i));
-        }
-        return $content;
+        return 'id';
     }
 
     /**
@@ -84,22 +62,27 @@ class NitfNewswireDataRecord extends NewswireDataRecord
             ? $this->nodeListToArray($data['keywords'])
             : array($data['keywords']);
 
-        foreach ($data as $key => $value)
+        foreach ($data as $key => &$value)
         {
             if ($value instanceof DOMNodeList)
             {
-                if (0 == $value->length)
+                $map = $this->getFieldMap();
+                throw new DataImportException('Value for xpath "'.$map[$key].'" results to a list. Expected is a scalar');
+            }
+            else if (is_scalar($value))
+            {
+                if (preg_match('/^\d{8}T\d{6}[+-]\d{4}$/', $value))
                 {
-                    $data['key'] = '';
+                    $value = new DateTime($value);
                 }
-                else
+                else if (preg_match('/^(\d{8}T\d{6})Z$/', $value, $m))
                 {
-                    $map = $this->getFieldMap();
-                    throw new DataImportException('Value for xpath "'.$map[$key].'" results to a list. Expected is a scalar');
+                    $value = new DateTime($m[1].'+0000');
                 }
             }
         }
         $data = array_filter($data);
+        return $data;
     }
 
     /**
@@ -113,6 +96,26 @@ class NitfNewswireDataRecord extends NewswireDataRecord
     {
         $data = parent::collectData($domDoc);
         $data['media'] = $this->importMedia($domDoc);
+        $data['table'] = $this->importTable($domDoc);
+
+        return $data;
+    }
+
+
+    /**
+     * import nitf tables
+     *
+     * @param DOMDocument $domDoc
+     * @return array of xml tagged strings
+     */
+    protected function importTable(DOMDocument $domDoc)
+    {
+        $data = array();
+        $xpath = new DOMXPath($domDoc);
+        foreach ($xpath->query('//table') as $table)
+        {
+            $data[] = $this->nodeToString($table);
+        }
         return $data;
     }
 
@@ -131,11 +134,13 @@ class NitfNewswireDataRecord extends NewswireDataRecord
         {
             $pixels = -1;
             $img = array();
-            foreach ($xpath->query('//media-reference', $mNode) as $mr) {
+            foreach ($xpath->query('//media-reference', $mNode) as $mr)
+            {
                 $attr = $mr->attributes;
                 $width = intval($attr->getNamedItem("width")->nodeValue);
                 $height = intval($attr->getNamedItem("height")->nodeValue);
-                if ($pixels < ($width * $height)) {
+                if ($pixels < ($width * $height))
+                {
                     $img['source'] = htmlspecialchars($attr->getNamedItem("source")->nodeValue);
                     $img['name'] = htmlspecialchars($attr->getNamedItem("name")->nodeValue);
                     $img['alternate'] = htmlspecialchars($attr->getNamedItem("alternate-text")->nodeValue);
@@ -144,12 +149,12 @@ class NitfNewswireDataRecord extends NewswireDataRecord
             }
             if (! empty ($img))
             {
-                $cnl = $xpath->query('/media-caption', $mNode);
+                $cnl = $xpath->query('media-caption', $mNode);
                 $img['caption'] = $this->joinNodeList($cnl, "\n");
                 $media[] = $img;
             }
         }
-        return $ref_values;
+        return $media;
     }
 
 
