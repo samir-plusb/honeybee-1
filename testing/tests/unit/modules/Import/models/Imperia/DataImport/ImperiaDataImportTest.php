@@ -49,7 +49,7 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
     /**
 	 * @dataProvider provideConfigFilePath
 	 */
-    public function testRunDataImport($factoryConfigFile)
+    public function testRunDataImportCreate($factoryConfigFile)
     {
         $importFactory = new DataImportFactory($factoryConfigFile);
         
@@ -69,10 +69,11 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
         $this->assertEquals(TRUE, $success);
         $this->assertEquals(self::EXPECTED_IMPORT_RESULT_HASH, $this->calculateImportResultHash());
     }
-
+    
     public function provideConfigFilePath()
     {
         return array(
+            array('factoryConfigFile' => $this->buildConfigFilePath()),
             array('factoryConfigFile' => $this->buildConfigFilePath())
         );
     }
