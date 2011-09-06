@@ -12,13 +12,6 @@
 interface IUriContainer
 {
     /**
-     * Create a new IUriContainer based on the given uri.
-     * 
-     * @param string $uri
-     */
-    public function __construct($uri);
-    
-    /**
      * Return an array reflecting our parsed uri.
      * 
      * @return array
