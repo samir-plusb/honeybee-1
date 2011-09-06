@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The BaseCouchDbImport class is an abstract implementation of the BaseDataImport base class.
+ * The CouchDbDataImport class is an abstract implementation of the BaseDataImport base class.
  * It's task is to stuff records that are obtained from a given IDataSource into the configured couchdb.
  * In order to be able to tweak the couchdb load, this class supports buffering calls to importData
  * and sends batch-creates to the couch everytime the buffer limit is reached.
@@ -12,7 +12,7 @@
  * @package         Import
  * @subpackage      Base/DataImport
  */
-abstract class BaseCouchDbImport extends BaseDataImport
+abstract class CouchDbDataImport extends BaseDataImport
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------
 
@@ -32,7 +32,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
     const COUCHDB_ERR_CONFLICT = 'conflict';
 
     /**
-     * @const       DEFAULT_BUFFER_SIZE The default value to use for our {@see BaseCouchDbImport::importBufferSize}.
+     * @const       DEFAULT_BUFFER_SIZE The default value to use for our {@see CouchDbDataImport::importBufferSize}.
      */
     const DEFAULT_BUFFER_SIZE = 50;
 
@@ -69,7 +69,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
     // ---------------------------------- <BaseDataImport OVERRIDES> -----------------------------
 
     /**
-     * Creates a new BaseCouchDbImport instance.
+     * Creates a new CouchDbDataImport instance.
      *
      * @param       CouchDbDataImportConfig $config
      *
@@ -97,7 +97,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
      *
      * @see         BaseDataImport::init()
      *
-     * @uses        BaseCouchDbImport::buildCouchDbUri()
+     * @uses        CouchDbDataImport::buildCouchDbUri()
      */
     protected function init(IDataSource $dataSource)
     {
@@ -120,7 +120,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
      *
      * @see         BaseDataImport::cleanup()
      *
-     * @uses        BaseCouchDbImport::flushImportBuffer()
+     * @uses        CouchDbDataImport::flushImportBuffer()
      */
     protected function cleanup()
     {
@@ -157,7 +157,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
      *
      * @param       array $data
      *
-     * @uses        BaseCouchDbImport::flushImportBuffer()
+     * @uses        CouchDbDataImport::flushImportBuffer()
      */
     protected function importData(array $data)
     {
@@ -177,7 +177,7 @@ abstract class BaseCouchDbImport extends BaseDataImport
     /**
      * Sends our buffered import data to the couch.
      *
-     * @uses        BaseCouchDbImport::resolveConflicts()
+     * @uses        CouchDbDataImport::resolveConflicts()
      */
     protected function flushImportBuffer()
     {

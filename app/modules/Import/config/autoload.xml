@@ -44,7 +44,7 @@
             <autoload name="IDataImport">%core.module_dir%/Import/models/Base/DataImport/IDataImport.iface.php</autoload>
 
             <autoload name="BaseDataImport">%core.module_dir%/Import/models/Base/DataImport/BaseDataImport.class.php</autoload>
-            <autoload name="BaseCouchDbImport">%core.module_dir%/Import/models/Base/DataImport/BaseCouchDbImport.class.php</autoload>
+            <autoload name="CouchDbDataImport">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImport.class.php</autoload>
             <autoload name="DataImportException">%core.module_dir%/Import/models/Base/DataImport/DataImportException.class.php</autoload>
             <!-- /Import Base Models -->
 

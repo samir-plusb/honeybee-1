@@ -1,6 +1,6 @@
 <?php
 
-class ImperiaDataImport extends BaseCouchDbImport
+class ImperiaDataImport extends CouchDbDataImport
 {
     
 }
