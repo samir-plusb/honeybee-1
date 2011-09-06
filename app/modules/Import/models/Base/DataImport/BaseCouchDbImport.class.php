@@ -184,26 +184,30 @@ abstract class BaseCouchDbImport extends BaseDataImport
         $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
         $couchData = array_values($this->importBuffer);
 
-        $result = $this->couchClient->storeDocs($database, $couchData);
+        $updateData = $this->handleCouchDbResponse(
+            $this->couchClient->storeDocs($database, $couchData)
+        );
 
-        $this->resolveConflicts($result);
+        if (!empty($updateData))
+        {
+            // @todo Handle unresolveable conflicts (exception?).
+            $this->couchClient->storeDocs($database, $updateData);
+        }
     }
-
+    
     /**
-     * Checks our store batch result for conflict errors
-     * and assumes they occured due to update without rev info.
-     * So it fetches the rev with an head request
-     *
-     * @param       array $resultItems
+     * Checks the given reponse to our batch create request,
+     * checks for conflicts and returns an array that can used to resolve them.
      * 
-     * @uses        BaseCoucDbImport::createUpdateData()
+     * @param       array $response
+     * 
+     * @return      array
      */
-    protected function resolveConflicts(array $resultItems)
+    protected function handleCouchDbResponse(array $response)
     {
-        $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
         $updateData = array();
-
-        foreach ($resultItems as $resultItem)
+        
+        foreach ($response as $resultItem)
         {
             if ($this->isCouchDbCreateConflict($resultItem))
             {
@@ -213,12 +217,8 @@ abstract class BaseCouchDbImport extends BaseDataImport
                 }
             }
         }
-
-        if (!empty($updateData))
-        {
-            // @todo Handle unresolveable conflicts (exception?).
-            $this->couchClient->storeDocs($database, $updateData);
-        }
+        
+        return $updateData;
     }
     
     /**
