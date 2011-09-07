@@ -8,7 +8,7 @@ class ImportConfigFileValidator extends AgaviStringValidator
     {
         if (!parent::validate())
         {
-            return false;
+            return FALSE;
         }
         
         $originalValue =& $this->getData($this->getArgument());
@@ -25,7 +25,7 @@ class ImportConfigFileValidator extends AgaviStringValidator
             {
                 $this->throwError('parse_error');
             
-                return false;
+                return FALSE;
             }
             
             throw $e;
@@ -35,10 +35,10 @@ class ImportConfigFileValidator extends AgaviStringValidator
         {
             $this->throwError('non_existant');
             
-            return false;
+            return FALSE;
         }
         
-        return true;
+        return TRUE;
     }
     
     private function buildImportConfigFilePath($configName)

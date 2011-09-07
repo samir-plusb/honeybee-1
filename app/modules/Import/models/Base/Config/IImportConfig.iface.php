@@ -29,7 +29,7 @@ interface IImportConfig
      *
      * @return      mixed
      */
-    public function getSetting($setting, $default = null);
+    public function getSetting($setting, $default = NULL);
 
     /**
      * Return an array containing the settings that are currently

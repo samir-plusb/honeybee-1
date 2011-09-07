@@ -2,9 +2,9 @@
 
 class ImperiaDataSource extends ImportBaseDataSource
 {
-    const URl_PATH_LOGIN = "cgi-bin/site_login.pl";
+    const URL_PATH_LOGIN = "cgi-bin/site_login.pl";
 
-    const URl_PATH_EXPORT = "cgi-bin/xml_dump.pl?node_id=%s";
+    const URL_PATH_EXPORT = "cgi-bin/xml_dump.pl?node_id=%s";
 
     const INPUT_USERNAME = 'my_imperia_login';
 
@@ -67,17 +67,15 @@ class ImperiaDataSource extends ImportBaseDataSource
         {
             $this->cookiePath = tempnam(sys_get_temp_dir(), uniqid('imperia.'));
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_POST, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-            curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookiePath);
-            curl_setopt($ch, CURLOPT_COOKIEJAR, $this->cookiePath);
-            curl_setopt($ch, CURLOPT_FORBID_REUSE, 0);
-            curl_setopt($ch, CURLOPT_FRESH_CONNECT, 0);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
-
-            $this->curlHandle = $ch;
+            $this->curlHandle = curl_init();
+            curl_setopt($this->curlHandle, CURLOPT_POST, 0);
+            curl_setopt($this->curlHandle, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($this->curlHandle, CURLOPT_TIMEOUT, 10);
+            curl_setopt($this->curlHandle, CURLOPT_COOKIEFILE, $this->cookiePath);
+            curl_setopt($this->curlHandle, CURLOPT_COOKIEJAR, $this->cookiePath);
+            curl_setopt($this->curlHandle, CURLOPT_FORBID_REUSE, 0);
+            curl_setopt($this->curlHandle, CURLOPT_FRESH_CONNECT, 0);
+            curl_setopt($this->curlHandle, CURLOPT_FOLLOWLOCATION, 0);
         }
     }
 
@@ -97,7 +95,13 @@ class ImperiaDataSource extends ImportBaseDataSource
 
         if ($err || $errNo || 200 != $respCode)
         {
-            $msg = sprintf("An error occured while trying to load doc-idlist from: %s Error: %s, Resp-code: %s", $idListUrl, $err, $respCode);
+            $msg = sprintf(
+                "An error occured while trying to load doc-idlist from: %s Error: %s, Resp-code: %s",
+                $idListUrl,
+                $err,
+                $respCode
+            );
+            
             throw new DataSourceException($msg, $errNo);
         }
         
@@ -164,14 +168,14 @@ class ImperiaDataSource extends ImportBaseDataSource
     {
         $baseUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_URL);
 
-        return $baseUrl . sprintf(self::URl_PATH_EXPORT, $documentId);
+        return $baseUrl . sprintf(self::URL_PATH_EXPORT, $documentId);
     }
 
     protected function buildLoginUrl()
     {
         $baseUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_URL);
 
-        return $baseUrl . self::URl_PATH_LOGIN;
+        return $baseUrl . self::URL_PATH_LOGIN;
     }
 }
 
