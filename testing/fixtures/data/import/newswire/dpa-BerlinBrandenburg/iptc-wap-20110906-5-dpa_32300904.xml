@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DOCTYPE nitf PUBLIC "-//IPTC-NAA//DTD NITF-XML 3.0//EN" "nitf.dtd" -->
+<nitf>
+<head>
+<title>Brandenburger wählen in 37 Orten Bürgermeister</title>
+<meta name="origin" content="dpa - Deutsche Presse-Agentur GmbH"/>
+<meta name="copyright" content="dpa-info.com GmbH"/>
+<meta name="generator" content="CoreMedia"/>
+<meta name="variant" content="21407779-1315260341789-1"/>
+<tobject>
+<tobject.subject tobject.subject.refnum="00000000" tobject.subject.code="NIL" />
+</tobject>
+<docdata>
+<evloc iso-cc="DEU"/>
+<doc-id regsrc="dpa-infocom" id-string="32300904:1315282390000"/>
+<urgency ed-urg="4"/>
+<fixture fix-id="/regioline/berlinbrandenburg/"/>
+<date.issue norm="20110906T061310+0200"/>
+<doc-scope scope="pl"/>
+<key-list>
+<keyword key="Brandenburg/Kommunen/Wahlen/"/>
+</key-list>
+</docdata>
+</head>
+<body>
+<body.head>
+<hedline><hl1>Brandenburger wählen in 37 Orten Bürgermeister</hl1></hedline>
+<byline></byline>
+</body.head>
+<body.content><p>Potsdam (dpa/bb) - Die Brandenburger wählen  am kommenden Sonntag rund ein Viertel ihrer hauptamtlichen Bürgermeister oder Oberbürgermeister nach acht Jahren Amtszeit neu. Um die 37 Posten bewerben sich 110 Kandidaten, die oft keiner Partei angehören. Allein 30 von ihnen sind laut Landeswahlleiter Einzelbewerber, 17 kommen von Wählergruppen, 6 von Listenvereinigungen. Da es sich vor allem um Persönlichkeitswahlen handelt, taugt der Urnengang kaum zu einem Stimmungstest für die Landespolitik. Von den vier kreisfreien Städten ist nur Brandenburg/Havel dabei, wo Oberbürgermeisterin Dietlind Tiemann (CDU) ihr Amt verteidigen will.</p>
+<block style="EXTERNAL-LINKS" >
+<p><a href="http://dpaq.de/aGCfq">Wahlinformationen</a></p>
+</block>
+<media media-type="image">
+<media-metadata name="image-fovea-region" value="96,62,705,523"/>
+<media-reference alternate-text="Bürgermeisterwahlen in Brandenburg 2011" source="../dpa-BerlinBrandenburg-images/jpeg-147E4C005709D6D7-20110906-img_32302410.thumbnail.jpg" mime-type="image/jpeg" name="thumbnail_4_3" width="80" height="60" />
+<media-reference alternate-text="Bürgermeisterwahlen in Brandenburg 2011" source="../dpa-BerlinBrandenburg-images/jpeg-147E4C005709D6D7-20110906-img_32302410.onlineBild.jpg" mime-type="image/jpeg" name="medium_4_3" width="400" height="300" />
+<media-reference alternate-text="Bürgermeisterwahlen in Brandenburg 2011" source="../dpa-BerlinBrandenburg-images/small/jpeg-147E4C005709D6D7-20110906-img_32302410.original.small-16-9-200-320-113-1953-1036.jpg" mime-type="image/jpeg" name="small_16_9" width="200" height="112" />
+<media-reference alternate-text="Bürgermeisterwahlen in Brandenburg 2011" source="../dpa-BerlinBrandenburg-images/small/jpeg-147E4C005709D6D7-20110906-img_32302410.original.small-3-2-200-446-114-1827-1034.jpg" mime-type="image/jpeg" name="small_3_2" width="200" height="133" />
+<media-reference alternate-text="Bürgermeisterwahlen in Brandenburg 2011" source="../dpa-BerlinBrandenburg-images/small/jpeg-147E4C005709D6D7-20110906-img_32302410.original.small-1-1-200-678-0-1844-1168.jpg" mime-type="image/jpeg" name="small_1_1" width="200" height="200" />
+<media-reference alternate-text="Bürgermeisterwahlen in Brandenburg 2011" source="../dpa-BerlinBrandenburg-images/small/jpeg-147E4C005709D6D7-20110906-img_32302410.original.small-4-3-200-568-112-1790-1029.jpg" mime-type="image/jpeg" name="small_4_3" width="200" height="150" />
+<media-reference alternate-text="Bürgermeisterwahlen in Brandenburg 2011" source="../dpa-BerlinBrandenburg-images/small/jpeg-147E4C005709D6D7-20110906-img_32302410.original.small-3-4-200-810-0-1683-1166.jpg" mime-type="image/jpeg" name="small_3_4" width="150" height="200" />
+<media-reference alternate-text="Bürgermeisterwahlen in Brandenburg 2011" source="../dpa-BerlinBrandenburg-images/large/jpeg-147E4C005709D6D7-20110906-img_32302410.original.large-4-3-800-359-0-1914-1168.jpg" mime-type="image/jpeg" name="large_4_3" width="800" height="600" />
+<media-caption><p>Bei den Bürgermeisterwahlen zählen Persönlichkeiten mehr als Parteien.</p></media-caption>
+</media>
+</body.content>
+<body.end/>
+</body>
+</nitf>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations 
+	xmlns="http://berlinonline.de/schemas/midas/config/import/definition/1.0" 
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+	<ae:configuration>
+		<import class="NewswireDataImport">
+			<name>Newswire agency messages</name>
+			<description>Imports newswire agency messages.</description>
+			<settings>
+				<setting name="couchdb_host">localhost</setting>
+				<setting name="couchdb_port">5984</setting>
+				<setting name="couchdb_database">imperia</setting>
+			</settings>
+			<datasource class="NewswireDataSource" record="DpaNitfNewswireDataRecord">
+				<name>DPA messages</name>
+				<description>Provides access to the DPA messages.</description>
+				<settings>
+					<setting name="glob">/var/tmp/dpa/regio-berlinbrandenburg/dpa-BerlinBrandenburg/*.xml</setting>
+					<setting name="timestamp_file">/var/tmp/dpa.time.stamp</setting>
+				</settings>
+			</datasource>
+		</import>
+	</ae:configuration>
+</ae:configurations>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DOCTYPE nitf PUBLIC "-//IPTC-NAA//DTD NITF-XML 3.0//EN" "nitf.dtd" -->
+<nitf>
+<head>
+<title>Wahlforscher: Piraten als Protestventil ernst nehmen</title>
+<meta name="origin" content="dpa - Deutsche Presse-Agentur GmbH"/>
+<meta name="copyright" content="dpa-info.com GmbH"/>
+<meta name="generator" content="CoreMedia"/>
+<meta name="variant" content="14672070-1315274439017-1"/>
+<tobject>
+<tobject.subject tobject.subject.refnum="11000000" tobject.subject.code="POL" />
+</tobject>
+<docdata>
+<evloc iso-cc="DEU"/>
+<doc-id regsrc="dpa-infocom" id-string="32301736:1315283147000"/>
+<urgency ed-urg="4"/>
+<fixture fix-id="/regioline/berlinbrandenburg/"/>
+<date.issue norm="20110906T062547+0200"/>
+<doc-scope scope="pl"/>
+<key-list>
+<keyword key="Wahlen/Piratenpartei/Berlin/"/>
+</key-list>
+</docdata>
+</head>
+<body>
+<body.head>
+<hedline><hl1>Wahlforscher: Piraten als Protestventil ernst nehmen</hl1></hedline>
+<byline></byline>
+</body.head>
+<body.content><p>Berlin (dpa/bb) - Die Piratenpartei ist nach Ansicht des Politologen Oskar Niedermayer eine ernstzunehmende Protestpartei und kann in Berlin vor allem von den Grünen Wähler abziehen. «Die Piraten bilden so eine Art Protestventil. Und sie gelten als noch unverbrauchte Leute», sagte der Parteienforscher von der Freien Universität Berlin in einem Gespräch mit der Nachrichtenagentur dpa. «Ich vermute auch, in Berlin holen die Piraten stärker als sonst von den Grünen Stimmen.» Ein Teil dieser Wähler könne die Umweltpartei, die einen sehr personalisierten Wahlkampf führe, als «zu brav» empfinden.</p><p>Die 2006 neu gegründete Piratenpartei erreichte in den Umfragen zur Wahl des Berliner Abgeordnetenhauses 4 bis 4,5 Prozent der Stimmen. Damit kratzt sie an der entscheidenden Fünf-Prozent-Hürde für den Einzug ins Parlament.</p>
+<block style="EXTERNAL-LINKS" >
+<p><a href="http://dpaq.de/asFUq">Kurzform Wahlprogramm Piratenpartei Berlin</a></p><p><a href="http://dpaq.de/sW0O0">LiquidFeedback</a></p>
+</block>
+<media media-type="image">
+<media-metadata name="image-fovea-region" value="183,71,799,527"/>
+<media-reference alternate-text="Parteifahne der Piraten in Berlin" source="../dpa-BerlinBrandenburg-images/Piraten_32302432.thumbnail.jpg" mime-type="image/jpeg" name="thumbnail_4_3" width="80" height="59" />
+<media-reference alternate-text="Parteifahne der Piraten in Berlin" source="../dpa-BerlinBrandenburg-images/Piraten_32302432.onlineBild.jpg" mime-type="image/jpeg" name="medium_4_3" width="400" height="299" />
+<media-reference alternate-text="Parteifahne der Piraten in Berlin" source="../dpa-BerlinBrandenburg-images/small/Piraten_32302432.original.small-16-9-200-0-636-1844-1675.jpg" mime-type="image/jpeg" name="small_16_9" width="200" height="112" />
+<media-reference alternate-text="Parteifahne der Piraten in Berlin" source="../dpa-BerlinBrandenburg-images/small/Piraten_32302432.original.small-3-2-200-241-641-1844-1710.jpg" mime-type="image/jpeg" name="small_3_2" width="200" height="133" />
+<media-reference alternate-text="Parteifahne der Piraten in Berlin" source="../dpa-BerlinBrandenburg-images/small/Piraten_32302432.original.small-1-1-200-404-451-1844-1891.jpg" mime-type="image/jpeg" name="small_1_1" width="200" height="200" />
+<media-reference alternate-text="Parteifahne der Piraten in Berlin" source="../dpa-BerlinBrandenburg-images/small/Piraten_32302432.original.small-4-3-200-404-631-1844-1711.jpg" mime-type="image/jpeg" name="small_4_3" width="200" height="150" />
+<media-reference alternate-text="Parteifahne der Piraten in Berlin" source="../dpa-BerlinBrandenburg-images/small/Piraten_32302432.original.small-3-4-200-387-193-1836-2122.jpg" mime-type="image/jpeg" name="small_3_4" width="150" height="200" />
+<media-reference alternate-text="Parteifahne der Piraten in Berlin" source="../dpa-BerlinBrandenburg-images/large/Piraten_32302432.original.large-4-3-800-0-481-1844-1861.jpg" mime-type="image/jpeg" name="large_4_3" width="800" height="600" />
+<media-caption><p>Politologe Niedermayer: Piraten holen stärker Stimmen von Grünen als sonst. (Archiv)</p></media-caption>
+</media>
+</body.content>
+<body.end/>
+</body>
+</nitf>

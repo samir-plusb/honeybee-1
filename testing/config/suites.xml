@@ -19,6 +19,7 @@
                     <!-- IDataSource Tests -->
                     <testfile>unit/modules/Import/models/Imperia/DataSource/ImperiaDataSourceConfigTest.php</testfile>
                     <testfile>unit/modules/Import/models/Imperia/DataSource/ImperiaDataSourceTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Newswire/DataSource/NewswireDataSourceTest.php</testfile>
 
                     <!-- IDataImport Tests -->
                     <testfile>unit/modules/Import/models/Imperia/DataImport/ImperiaDataImportConfigTest.php</testfile>
