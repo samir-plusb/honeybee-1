@@ -16,7 +16,7 @@ class ExtendedCouchDbClient
     public function storeDocs($database, $documentData)
     {
         $this->compositeClient->selectDb($database);
-        
+
         return $this->compositeClient->storeDocs($documentData);
     }
 
@@ -33,12 +33,12 @@ class ExtendedCouchDbClient
             return null;
         }
     }
-    
+
     /**
      *
      * @param type $database
      * @param type $docId
-     * 
+     *
      * @return int Returns the document's revision or 0 if it doesn't exist.
      */
     public function statDoc($database, $docId)
@@ -54,22 +54,16 @@ class ExtendedCouchDbClient
         curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
 
         $resp = curl_exec($ch);
-        $error = curl_error($ch);
-        $errorNum = curl_errno($ch);
-
-        if ($errorNum || $error)
-        {
-            throw new Exception("An unexpected error occured: $error", $errorNum);
-        }
+        $this->processCurlErrors($ch);
 
         fclose($file);
         curl_close($ch);
-        
+
         if (!preg_match_all('~Etag:\s*"(\d+-\w+)"~is', $resp, $matches, PREG_SET_ORDER))
         {
             return 0;
         }
-        
+
         return $matches[0][1];
     }
 
@@ -83,14 +77,7 @@ class ExtendedCouchDbClient
         curl_setopt($ch, CURLOPT_URL, $uri);
 
         $resp = curl_exec($ch);
-        $error = curl_error($ch);
-        $errorNum = curl_errno($ch);
-
-        if ($errorNum || $error)
-        {
-            throw new Exception("An unexpected error occured: $error", $errorNum);
-        }
-
+        $this->processCurlErrors($ch);
         $data = json_decode($resp, true);
 
         curl_close($ch);
@@ -131,13 +118,7 @@ class ExtendedCouchDbClient
         curl_setopt($ch, CURLOPT_INFILESIZE, strlen($jsonDoc));
 
         $resp = curl_exec($ch);
-        $error = curl_error($ch);
-        $errorNum = curl_errno($ch);
-
-        if ($errorNum || $error)
-        {
-            throw new Exception("An unexpected error occured: $error", $errorNum);
-        }
+        $this->processCurlErrors($ch);
 
         fclose($file);
         curl_close($ch);
@@ -147,7 +128,14 @@ class ExtendedCouchDbClient
     {
         $this->compositeClient->createDatabase($database);
     }
-    
+
+    /**
+     *
+     *
+     * @param string $database
+     * @return void
+     * @throws CouchdbClientException e.g. database does not exists
+     */
     public function deleteDatabase($database)
     {
         $this->compositeClient->deleteDatabase($database);
@@ -166,9 +154,29 @@ class ExtendedCouchDbClient
         curl_setopt($curlHandle, CURLOPT_FAILONERROR, 1);
         curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curlHandle, CURLOPT_FORBID_REUSE, 0);
+        curl_setopt($curlHandle, CURLOPT_FRESH_CONNECT, 0);
+        curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, 0);
         curl_setopt($curlHandle, CURLOPT_HEADER, 'Content-Type: application/json; charset=utf-8');
         curl_setopt($curlHandle, CURLOPT_ENCODING, 'gzip,deflate');
 
         return $curlHandle;
+    }
+
+    /**
+     * check curl response status and throw exception on error
+     *
+     * @param resource $curlHandle CURL handle
+     * @return void
+     * @throws CouchdbClientException
+     */
+    protected function processCurlErrors($curlHandle)
+    {
+        $error = curl_error($curlHandle);
+        $errorNum = curl_errno($curlHandle);
+        if (200 != curl_getinfo($curlHandle, CURLINFO_HTTP_CODE) || $errorNum || $error)
+        {
+            throw new CouchdbClientException("CURL error: $error", $errorNum);
+        }
     }
 }
