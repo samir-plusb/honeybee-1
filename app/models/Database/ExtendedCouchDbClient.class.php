@@ -47,7 +47,7 @@ class ExtendedCouchDbClient
      */
     public function statDoc($database, $docId)
     {
-        $ch = $this->createCurlHandle();
+        $ch = $this->getCurlHandle();
 
         $uri = $this->baseUri . $database . '/' . $docId;
         $file = tmpfile();
@@ -76,7 +76,7 @@ class ExtendedCouchDbClient
 
         $uri = $this->baseUri . $database . '/_design/' . $designDocId . '/_view/' . $viewname;
 
-        $ch = $this->createCurlHandle();
+        $ch = $this->getCurlHandle();
         curl_setopt($ch, CURLOPT_URL, $uri);
 
         $resp = curl_exec($ch);
@@ -105,7 +105,7 @@ class ExtendedCouchDbClient
             }
         }
 
-        $ch = $this->createCurlHandle();
+        $ch = $this->getCurlHandle();
 
         $uri = $this->baseUri . $database . '/_design/' . $docId;
         $file = tmpfile();
@@ -146,7 +146,7 @@ class ExtendedCouchDbClient
      *
      * @return resource curl handle
      */
-    protected function createCurlHandle()
+    protected function getCurlHandle()
     {
         if (! $this->curlHandle)
         {
