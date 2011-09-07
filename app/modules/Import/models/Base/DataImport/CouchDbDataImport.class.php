@@ -156,6 +156,8 @@ abstract class CouchDbDataImport extends BaseDataImport
      * In this case we add the data to our buffer and then flush if necessary.
      *
      * @param       array $data
+     * 
+     * @return      boolean
      *
      * @uses        CouchDbDataImport::flushImportBuffer()
      */
@@ -167,6 +169,8 @@ abstract class CouchDbDataImport extends BaseDataImport
         {
             $this->flushImportBuffer();
         }
+        
+        return true;
     }
 
     // ---------------------------------- </BaseDataImport IMPL> ---------------------------------

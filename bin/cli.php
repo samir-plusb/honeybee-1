@@ -22,6 +22,7 @@ require 'agavi/agavi.php';
 // | An absolute filesystem path to our app/config.php script.                 |
 // +---------------------------------------------------------------------------+
 require $root_dir . DIRECTORY_SEPARATOR . 'app/config.php';
+AgaviConfig::set('core.default_context', 'console');
 
 // +---------------------------------------------------------------------------+
 // | Initialize the framework. You may pass an environment name to this method.|

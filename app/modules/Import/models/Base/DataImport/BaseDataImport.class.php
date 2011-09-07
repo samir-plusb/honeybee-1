@@ -13,6 +13,25 @@
  */
 abstract class BaseDataImport implements IDataImport
 {
+    // ---------------------------------- <CONSTANTS> --------------------------------------------
+    
+    /**
+     * Holds the name of the event that reflects successful records imports.
+     * 
+     * @example     Register to this event the following way:
+     * 
+     *              ProjectEventProxy::getInstance()->subscribe(
+     *                  BaseDataImport::EVENT_RECORD_SUCCESS,
+     *                  $yourCallback
+     *              );
+     * 
+     * @const       EVENT_RECORD_SUCCESS
+     */
+    const EVENT_RECORD_SUCCESS = 'midas.events.import.record_success';
+    
+    // ---------------------------------- </CONSTANTS> -------------------------------------------
+    
+    
     // ---------------------------------- <MEMBERS> ----------------------------------------------
     
     /**
@@ -21,6 +40,13 @@ abstract class BaseDataImport implements IDataImport
      * @var         IImportConfig $config
      */
     protected $config;
+    
+    /**
+     * Holds a reference to the event proxy, that we use to publish our event to other components.
+     * 
+     * @var         IEventProxy
+     */
+    protected $eventProxy;
     
     /**
      * During execution time of our run method,
@@ -65,6 +91,8 @@ abstract class BaseDataImport implements IDataImport
     public function __construct(IImportConfig $config)
     {
         $this->config = $config;
+        
+        $this->eventProxy = ProjectEventProxy::getInstance();
     }
     
     /**
@@ -87,7 +115,11 @@ abstract class BaseDataImport implements IDataImport
 
         while ($this->currentRecord = $dataSource->nextRecord())
         {
-            if (!$this->processRecord())
+            if ($this->processRecord())
+            {
+                $this->fireRecordImportedEvent($this->getCurrentRecord());
+            }
+            else
             {
                 // @todo Need to think of a smart error handling,
                 // as the overall import process is not allowed to be affected by single record related errors.
@@ -188,6 +220,18 @@ abstract class BaseDataImport implements IDataImport
     {
         $this->dataSource = NULL;
         $this->currentRecord = NULL;
+    }
+    
+    /**
+     * Fire an event that indicates, that we have successfully imported the given record.
+     * 
+     * @param       IDataRecord $dataRecord 
+     */
+    protected function fireRecordImportedEvent(IDataRecord $dataRecord)
+    {
+        $this->eventProxy->publish(
+            new ProjectEvent(self::EVENT_RECORD_SUCCESS, array('record' => $dataRecord))
+        );
     }
     
     // ---------------------------------- </WORKING METHODS> -------------------------------------
