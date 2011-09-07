@@ -4,6 +4,9 @@
         <suites>
             <suite name="Default">
                 <testfiles>
+                    <!-- IEventProxy Tests -->
+                    <testfile>unit/models/Event/ProjectEventProxyTest.php</testfile>
+                    
                     <!-- IImportFactory Tests -->
                     <testfile>unit/modules/Import/models/Base/Factory/DataImportFactoryConfigTest.php</testfile>
                     <testfile>unit/modules/Import/models/Base/Factory/DataImportFactoryTest.php</testfile>
