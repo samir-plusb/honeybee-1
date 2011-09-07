@@ -11,27 +11,35 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
     const IMPORT_OUTPUTFILE = 'polizeimeldungen.import';
 
     const EXPECTED_IMPORT_RESULT_HASH = 'b4522809eeca2678ac604e6d43a918b8';
-    
+
     static private $docIds = array( // normally these are provided by the imperia-trigger script.
         '/2/10330/10343/10890/1385807',
         '/2/10330/10343/10890/1385806',
         '/2/10330/10343/10890/1385805'
     );
-    
+
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        
+
         $couchDbHost = AgaviConfig::get('couchdb.import.host');
         $couchDbPort = AgaviConfig::get('couchdb.import.port');
         $couchDbDatabase = AgaviConfig::get('couchdb.import.database');
         $couchUri = sprintf('http://%s:%d/', $couchDbHost, $couchDbPort);
-        
+
         $coucDbClient = new ExtendedCouchDbClient($couchUri);
-        $coucDbClient->deleteDatabase($couchDbDatabase);
-        $coucDbClient->createDatabase($couchDbDatabase);
+
+        try
+        {
+            $coucDbClient->createDatabase($couchDbDatabase);
+        }
+        catch(CouchdbClientException $e)
+        {
+            $coucDbClient->deleteDatabase($couchDbDatabase);
+            $coucDbClient->createDatabase($couchDbDatabase);
+        }
     }
-    
+
     /**
 	 * @dataProvider provideConfigFilePath
 	 */
@@ -52,12 +60,12 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
     public function testRunDataImportCreate($factoryConfigFile)
     {
         $importFactory = new DataImportFactory($factoryConfigFile);
-        
+
         $importParams = array(
             ImperiaDataImportMockUp::SETTING_OUTPUT_FILE => $this->buildImportOutputPath()
         );
         $import = $importFactory->createDataImport('ImperiaDataImportConfig', $importParams);
-        
+
         $dataSourceParams = array(
             ImperiaDataSourceConfig::PARAM_DOCIDS => self::$docIds
         );
@@ -69,7 +77,7 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
         $this->assertEquals(TRUE, $success);
         $this->assertEquals(self::EXPECTED_IMPORT_RESULT_HASH, $this->calculateImportResultHash());
     }
-    
+
     public function provideConfigFilePath()
     {
         return array(
