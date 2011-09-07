@@ -1,7 +1,8 @@
 <?php
 
 /**
- * ProjectEventProxy provides loosely coupled x-component communication via a classical pub/sub event proxy implementation.
+ * ProjectEventProxy is a concrete implementation of the IEventProxy interface
+ *  and provides typical event routing functionality, bases on event names and callbacks.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -13,8 +14,18 @@ class ProjectEventProxy implements IEventProxy
 {
     // ---------------------------------- <MEMBERS> ----------------------------------------------
     
+    /**
+     * An array containing our current event subscriptions.
+     * 
+     * @var         array
+     */
     private $subscriptions = array();
     
+    /**
+     * Holds a static instance of this class.
+     * 
+     * @var         ProjectEventProxy
+     */
     private static $instance;
     
     // ---------------------------------- </MEMBERS> ---------------------------------------------

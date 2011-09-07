@@ -170,7 +170,7 @@ abstract class CouchDbDataImport extends BaseDataImport
             $this->flushImportBuffer();
         }
         
-        return true;
+        return TRUE;
     }
 
     // ---------------------------------- </BaseDataImport IMPL> ---------------------------------

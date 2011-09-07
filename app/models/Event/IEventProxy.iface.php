@@ -1,7 +1,8 @@
 <?php
 
 /**
- * The IEventProxy interface exposes a pub/sub base event messageing api.
+ * The IEventProxy interface exposes a publish/subscribe based event messageing api,
+ * that provides x-component communication without coupleling.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
