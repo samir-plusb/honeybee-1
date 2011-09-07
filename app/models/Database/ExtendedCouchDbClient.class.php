@@ -5,6 +5,10 @@ class ExtendedCouchDbClient
     protected $compositeClient;
 
     protected $baseUri;
+    /**
+     * @var Resource internal used curl handle
+     */
+    private $curlHandle = NULL;
 
     public function __construct($uri)
     {
@@ -43,7 +47,7 @@ class ExtendedCouchDbClient
      */
     public function statDoc($database, $docId)
     {
-        $ch = self::createCurlHandle();
+        $ch = $this->createCurlHandle();
 
         $uri = $this->baseUri . $database . '/' . $docId;
         $file = tmpfile();
@@ -57,7 +61,6 @@ class ExtendedCouchDbClient
         $this->processCurlErrors($ch);
 
         fclose($file);
-        curl_close($ch);
 
         if (!preg_match_all('~Etag:\s*"(\d+-\w+)"~is', $resp, $matches, PREG_SET_ORDER))
         {
@@ -73,14 +76,12 @@ class ExtendedCouchDbClient
 
         $uri = $this->baseUri . $database . '/_design/' . $designDocId . '/_view/' . $viewname;
 
-        $ch = self::createCurlHandle();
+        $ch = $this->createCurlHandle();
         curl_setopt($ch, CURLOPT_URL, $uri);
 
         $resp = curl_exec($ch);
         $this->processCurlErrors($ch);
         $data = json_decode($resp, true);
-
-        curl_close($ch);
 
         return $data;
     }
@@ -104,7 +105,7 @@ class ExtendedCouchDbClient
             }
         }
 
-        $ch = self::createCurlHandle();
+        $ch = $this->createCurlHandle();
 
         $uri = $this->baseUri . $database . '/_design/' . $docId;
         $file = tmpfile();
@@ -121,7 +122,6 @@ class ExtendedCouchDbClient
         $this->processCurlErrors($ch);
 
         fclose($file);
-        curl_close($ch);
     }
 
     public function createDatabase($database)
@@ -141,26 +141,33 @@ class ExtendedCouchDbClient
         $this->compositeClient->deleteDatabase($database);
     }
 
-    public static function createCurlHandle()
+    /**
+     * create curl handle to handle all http communication to couchdb
+     *
+     * @return resource curl handle
+     */
+    protected function createCurlHandle()
     {
-        $curlHandle = curl_init();
+        if (! $this->curlHandle)
+        {
+            $this->curlHandle = $curlHandle = curl_init();
 
-        // @todo introduce an options member for couchdb proxy and verbose and timeout settings.
-        curl_setopt($curlHandle, CURLOPT_PROXY, '');
-        curl_setopt($curlHandle, CURLOPT_VERBOSE, 0);
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 10);
-        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-        curl_setopt($curlHandle, CURLOPT_FAILONERROR, 1);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curlHandle, CURLOPT_FORBID_REUSE, 0);
-        curl_setopt($curlHandle, CURLOPT_FRESH_CONNECT, 0);
-        curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, 0);
-        curl_setopt($curlHandle, CURLOPT_HEADER, 'Content-Type: application/json; charset=utf-8');
-        curl_setopt($curlHandle, CURLOPT_ENCODING, 'gzip,deflate');
-
-        return $curlHandle;
+            // @todo introduce an options member for couchdb proxy and verbose and timeout settings.
+            curl_setopt($curlHandle, CURLOPT_PROXY, '');
+            curl_setopt($curlHandle, CURLOPT_VERBOSE, 0);
+            curl_setopt($curlHandle, CURLOPT_TIMEOUT, 10);
+            curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+            curl_setopt($curlHandle, CURLOPT_FAILONERROR, 1);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($curlHandle, CURLOPT_FORBID_REUSE, 0);
+            curl_setopt($curlHandle, CURLOPT_FRESH_CONNECT, 0);
+            curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, 0);
+            curl_setopt($curlHandle, CURLOPT_HEADER, 'Content-Type: application/json; charset=utf-8');
+            curl_setopt($curlHandle, CURLOPT_ENCODING, 'gzip,deflate');
+        }
+        return $this->curlHandle;
     }
 
     /**
