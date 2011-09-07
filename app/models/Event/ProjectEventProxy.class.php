@@ -125,7 +125,7 @@ class ProjectEventProxy implements IEventProxy
      */
     public static function getInstance()
     {
-        if (null === self::$instance)
+        if (NULL === self::$instance)
         {
             self::$instance = new ProjectEventProxy();
         }
