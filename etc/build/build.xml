@@ -23,7 +23,7 @@
         <run command="nice bin/test --configuration testing/config/phpunit.xml" dir="${project.directory}" />
     </target>
 
-    <target name="phpdoc" description="Generate API documentation using PHPDocumentor." depends="project-cache-remove">
+    <target name="phpdoc" description="Generate API documentation using PHPDocumentor." depends="cc">
         <echo message="Generating the API documentation using PHPDocumentor."/>
         <run command="/bin/rm -rf etc/integration/build/api" dir="${project.directory}"/>
         <run command="/bin/mkdir -p etc/integration/build/api" dir="${project.directory}"/>
