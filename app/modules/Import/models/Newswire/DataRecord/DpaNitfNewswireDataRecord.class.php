@@ -73,6 +73,8 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
     {
         $data = parent::normalizeData($data);
 
+        list($data['id'], $data['revision']) = explode(':', $data['id']);
+
         if (! empty($data['keywords']))
         {
             $list = array();

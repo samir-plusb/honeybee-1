@@ -6,7 +6,8 @@
  * @author Tom Anheyer
  */
 return array(
-    'id' => '30598030:1307517225000',
+    'id' => '30598030',
+    'revision' => '1307517225000',
     'title' => 'Ssangyong Korando: Der Comeback-Koreaner',
     'copyright' => 'dpa-info.com GmbH',
     'source' => 'dpa - Deutsche Presse-Agentur GmbH',
