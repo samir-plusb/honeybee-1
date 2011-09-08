@@ -10,29 +10,29 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Base/DataImport
+ * @subpackage      Base
  */
 abstract class CouchDbDataImport extends BaseDataImport
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------
 
     /**
-     * @const       COUDB_ID_FIELD The CouchDb standard doc-id fieldname.
+     * The CouchDb standard doc-id fieldname.
      */
     const COUDB_ID_FIELD = '_id';
 
     /**
-     * @const       COUDB_REV_FIELD The CouchDb standard doc-revision fieldname.
+     * The CouchDb standard doc-revision fieldname.
      */
     const COUDB_REV_FIELD = '_rev';
 
     /**
-     * @const       COUCHDB_ERR_CONFLICT Name of the error returned by couchdb, when conflicts occur.
+     * Name of the error returned by couchdb, when conflicts occur.
      */
     const COUCHDB_ERR_CONFLICT = 'conflict';
 
     /**
-     * @const       DEFAULT_BUFFER_SIZE The default value to use for our {@see CouchDbDataImport::importBufferSize}.
+     * The default value to use for our @see CouchDbDataImport::importBufferSize.
      */
     const DEFAULT_BUFFER_SIZE = 50;
 

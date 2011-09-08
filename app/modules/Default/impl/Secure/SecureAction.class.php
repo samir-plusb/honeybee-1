@@ -13,6 +13,17 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * The Default_SecureAction class handles the %system_actions.secure% action logic,
+ * which is executed by the AgaviSecurityFilter as soon as an action,
+ * that is marked as secure is encountered without the having an authenticated user session.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Default
+ * @subpackage      Secure
+ */
 class Default_SecureAction extends DefaultBaseAction 
 {
     /**

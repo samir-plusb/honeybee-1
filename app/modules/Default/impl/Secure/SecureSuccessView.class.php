@@ -13,18 +13,61 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * The Default_SecureSuccess_SecureSuccessView class handles the presentation logic
+ * required for the %system_actions.secure% action.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Default
+ * @subpackage      Secure
+ */
 class Default_SecureSuccess_SecureSuccessView extends DefaultBaseView 
 {
-    public function executeHtml(AgaviRequestDataHolder $rd) 
+    /**
+     * Execute any html related presentation logic and sets up our template attributes.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
+     */
+    public function executeHtml(AgaviRequestDataHolder $parameters) 
     {
-        $this->setupHtml($rd);
+        $this->setupHtml($parameters);
 
         // set the title
-        $this->setAttribute('_title', $this->tm->_('Permission Denied'));
+        $this->setAttribute('_title', $this->translationManager->_('Permission Denied'));
 
         $this->getResponse()->setHttpStatusCode('403');
     }
+    
+    /**
+     * Prepares and sets our json data on our webresponse.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
+     */
+    public function executeJson(AgaviRequestDataHolder $parameters)
+    {
+        $this->getContainer()->getResponse()->setContent(
+            json_encode(
+                array(
+                    'result' => 'error',
+                    'message' => 'Permission Denied.'
+                )
+            )
+        );
+    }
 
+    /**
+     * Prepares and sets our json data on our console response.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
+     */
+    public function executeText(AgaviRequestDataHolder $parameters)
+    {
+        $msg = 'Permission Denied.' . PHP_EOL;
+
+        $this->getResponse()->setContent($msg);
+    }
 }
 
 ?>

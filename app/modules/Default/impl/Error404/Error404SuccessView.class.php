@@ -13,20 +13,59 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
-class Default_Error404_Error404SuccessView extends DefaultBaseView 
+/**
+ * The Default_Error404_Error404SuccessView class provides presentation logic for standard 404 handling.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Default
+ * @subpackage      Error404
+ */
+class Default_Error404_Error404SuccessView extends DefaultBaseView
 {
-    public function executeHtml(AgaviRequestDataHolder $rd) 
+    /**
+     * Execute any html related presentation logic and sets up our template attributes.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
+     */
+    public function executeHtml(AgaviRequestDataHolder $parameters)
     {
-        $this->setupHtml($rd);
-        $this->setAttribute('_title', $this->tm->_('404 Not Found'));
+        $this->setupHtml($parameters);
+        $this->setAttribute('_title', $this->translationManager->_('404 Not Found'));
         $this->container->getResponse()->setHttpStatusCode('404');
     }
 
-    public function executeText(AgaviRequestDataHolder $rd) 
+    /**
+     * Prepares and sets our json data on our webresponse.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
+     */
+    public function executeJson(AgaviRequestDataHolder $parameters)
     {
-        return 'Usage: console.php <command> [OPTION]...' . PHP_EOL .
-            PHP_EOL . 'Available Commands:' . PHP_EOL;
+        $this->getContainer()->getResponse()->setContent(
+            json_encode(
+                array(
+                    'result' => 'error',
+                    'message' => '404 - Not found'
+                )
+            )
+        );
     }
+
+    /**
+     * Prepares and sets our json data on our console response.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
+     */
+    public function executeText(AgaviRequestDataHolder $parameters)
+    {
+        $msg = 'Usage: console.php <command> [OPTION]...' . PHP_EOL .
+            PHP_EOL . 'Available Commands:' . PHP_EOL;
+
+        $this->getResponse()->setContent($msg);
+    }
+
 }
 
 ?>

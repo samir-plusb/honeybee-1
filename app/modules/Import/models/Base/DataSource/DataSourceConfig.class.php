@@ -8,7 +8,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Base/DataSource
+ * @subpackage      Base
  */
 abstract class DataSourceConfig extends SimpleConfig
 {
@@ -16,8 +16,6 @@ abstract class DataSourceConfig extends SimpleConfig
     
     /**
      * Setting that holds the IDataRecord implementation to use for creating new concrete records.
-     * 
-     * @const       CFG_RECORD_TYPE
      */
     const CFG_RECORD_TYPE = 'record';
     

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The IComparable interface provides a contract that objects cann fullfill to compare each other.
+ *
+ * @version         $Id:$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         ApplicationsBase
+ * @subpackage      Core
+ */
 interface IComparable
 {
     /**

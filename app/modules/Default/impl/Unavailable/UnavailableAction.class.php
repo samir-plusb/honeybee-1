@@ -13,6 +13,16 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * The Default_UnavailableAction class handles the %system_actions.unavailable% logic,
+ * which is used when the app is down for maintenance.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Default
+ * @subpackage      Unavailable
+ */
 class Default_UnavailableAction extends DefaultBaseAction 
 {
     /**

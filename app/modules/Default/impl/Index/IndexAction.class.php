@@ -13,6 +13,15 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * The Default_IndexAction class handles the %system_actions.default% action logic.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Default
+ * @subpackage      Index
+ */
 class Default_IndexAction extends DefaultBaseAction 
 {
     /**

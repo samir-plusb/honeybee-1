@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The DefaultBaseModel serves as the base model to all models implemented inside of the Default module.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Default
+ * @subpackage      Base
+ */
 class DefaultBaseModel extends ProjectBaseModel 
 {
     /*

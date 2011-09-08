@@ -6,9 +6,9 @@
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
- * @package         Core
- * @subpackage      Event
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         ApplicationsBase
+ * @subpackage      Event
  */
 interface IEventProxy
 {

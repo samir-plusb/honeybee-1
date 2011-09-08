@@ -1,6 +1,16 @@
 <?php
 
-class ProjectBaseView extends AgaviView {
+/**
+ * The ProjectBaseView serves as the base view to all views implemented inside of this project.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         ApplicationBase
+ * @subpackage      Base
+ */
+class ProjectBaseView extends AgaviView
+{
     /*
       This is the base view all your application's views should extend.
       This way, you can easily inject new functionality into all of your views.
@@ -22,83 +32,148 @@ class ProjectBaseView extends AgaviView {
       build.properties settings. Also, keep in mind that you can define templates
       for specific modules in case you require this.
      */
-
+    
+    /**
+     * Name of the default layout to use for slots.
+     */
     const DEFAULT_SLOT_LAYOUT_NAME = 'slot';
 
     /**
-     * @var        AgaviRouting
+     * Holds a reference to the current routing object.
+     * 
+     * @var         AgaviRouting
      */
-    protected $ro;
+    protected $routing;
 
     /**
-     * @var        AgaviRequest
+     * Holds a reference to the current request object.
+     * 
+     * @var         AgaviRequest
      */
-    protected $rq;
+    protected $request;
 
     /**
-     * @var        AgaviTranslationManager
+     * Holds a reference to the translation manager.
+     * 
+     * @var         AgaviTranslationManager
      */
-    protected $tm;
+    protected $translationManager;
 
     /**
-     * @var        AgaviUser
+     * Holds a reference to the user for the current session.
+     * 
+     * @var         AgaviUser
      */
-    protected $us;
+    protected $user;
 
-    public function initialize(AgaviExecutionContainer $container) {
+    /**
+     * Initialize the view thereby setting up our members.
+     * 
+     * @param       AgaviExecutionContainer $container 
+     */
+    public function initialize(AgaviExecutionContainer $container)
+    {
         parent::initialize($container);
 
-        $this->ro = $this->getContext()->getRouting();
-        $this->rq = $this->getContext()->getRequest();
-        $this->tm = $this->getContext()->getTranslationManager();
-        $this->us = $this->getContext()->getUser();
+        $this->routing = $this->getContext()->getRouting();
+        $this->request = $this->getContext()->getRequest();
+        $this->translationManager = $this->getContext()->getTranslationManager();
+        $this->user = $this->getContext()->getUser();
     }
-
-    public final function execute(AgaviRequestDataHolder $rd) {
-        throw new AgaviViewException(sprintf(
-                        'The View "%1$s" does not implement an "execute%3$s()" method to serve ' .
-                        'the Output Type "%2$s", and the base View "%4$s" does not implement an ' .
-                        '"execute%3$s()" method to handle this situation.', get_class($this), $this->container->getOutputType()->getName(), ucfirst(strtolower($this->container->getOutputType()->getName())), get_class()
-        ));
+    
+    /**
+     * If no output type specfic execute* method could be found on our current
+     * concrete implemenation, then we will throw an exception letting the dev know.
+     * 
+     * @param       AgaviRequestDataHolder $rd 
+     */
+    public final function execute(AgaviRequestDataHolder $rd)
+    {
+        $this->throwOutputPutTypeNotImplementedException();
     }
-
-    public function executeHtml(AgaviRequestDataHolder $rd) {
-        throw new AgaviViewException(sprintf(
-                        'The View "%1$s" does not implement an "execute%3$s()" method to serve ' .
-                        'the Output Type "%2$s". It is recommended that you change the code of ' .
-                        'the method "execute%3$s()" in the base View "%4$s" that is throwing ' .
-                        'this exception to deal with this situation in a more appropriate ' .
-                        'way, for example by forwarding to the default 404 error action, or by ' .
-                        'showing some other meaningful error message to the user which explains ' .
-                        'that the operation was unsuccessful beacuse the desired Output Type is ' .
-                        'not implemented.', get_class($this), $this->container->getOutputType()->getName(), ucfirst(strtolower($this->container->getOutputType()->getName())), get_class()
-        ));
+    
+    /**
+     * If this method is called someone has missed to provide html view support
+     * for the current action.
+     * Let them know ^^
+     * 
+     * @param       AgaviRequestDataHolder $rd 
+     */
+    public function executeHtml(AgaviRequestDataHolder $rd)
+    {
+        $this->throwOutputPutTypeNotImplementedException();
     }
-
-    public function executeJson(AgaviRequestDataHolder $rd) {
-        throw new AgaviViewException(sprintf(
-                        'The View "%1$s" does not implement an "execute%3$s()" method to serve ' .
-                        'the Output Type "%2$s". It is recommended that you change the code of ' .
-                        'the method "execute%3$s()" in the base View "%4$s" that is throwing ' .
-                        'this exception to deal with this situation in a more appropriate ' .
-                        'way, for example by forwarding to the default 404 error action, or by ' .
-                        'showing some other meaningful error message to the user which explains ' .
-                        'that the operation was unsuccessful beacuse the desired Output Type is ' .
-                        'not implemented.', get_class($this), $this->container->getOutputType()->getName(), ucfirst(strtolower($this->container->getOutputType()->getName())), get_class()
-        ));
+    
+    /**
+     * If this method is called someone has missed to provide json view support
+     * for the current action.
+     * 
+     * @param       AgaviRequestDataHolder $rd 
+     */
+    public function executeJson(AgaviRequestDataHolder $parameters)
+    {
+        $this->throwOutputPutTypeNotImplementedException();
     }
-
-    public function setupHtml(AgaviRequestDataHolder $rd, $layoutName = null) {
-        if ($layoutName === null && $this->getContainer()->getParameter('is_slot', false)) {
+    
+    /**
+     * If this method is called someone has missed to provide text(console) view support
+     * for the current action.
+     * 
+     * @param       AgaviRequestDataHolder $rd 
+     */
+    public function executeText(AgaviRequestDataHolder $parameters)
+    {
+        $this->throwOutputPutTypeNotImplementedException();
+    }
+    
+    /**
+     * Convenience method for setting up the correct html layout.
+     * 
+     * @param       AgaviRequestDataHolder $rd
+     * @param       string $layoutName 
+     */
+    public function setupHtml(AgaviRequestDataHolder $rd, $layoutName = null)
+    {
+        if ($layoutName === null && $this->getContainer()->getParameter('is_slot', false))
+        {
             $layoutName = self::DEFAULT_SLOT_LAYOUT_NAME;
-        } else {
+        }
+        else
+        {
             // set a default title just to avoid warnings
             $this->setAttribute('_title', '');
         }
 
         $this->loadLayout($layoutName);
     }
-
+    
+    /**
+     * Convenience method for throwing an exception saying,
+     * that the current output type is not implemented for this view instance.
+     * 
+     * @throws      AgaviViewException
+     */
+    protected function throwOutputPutTypeNotImplementedException()
+    {
+        throw new AgaviViewException(
+            sprintf(
+                'The View "%1$s" does not implement an "execute%3$s()" method to serve ' .
+                'the Output Type "%2$s". It is recommended that you change the code of ' .
+                'the method "execute%3$s()" in the base View "%4$s" that is throwing ' .
+                'this exception to deal with this situation in a more appropriate ' .
+                'way, for example by forwarding to the default 404 error action, or by ' .
+                'showing some other meaningful error message to the user which explains ' .
+                'that the operation was unsuccessful beacuse the desired Output Type is ' .
+                'not implemented.', 
+                get_class($this),
+                $this->container->getOutputType()->getName(), 
+                ucfirst(
+                    strtolower($this->container->getOutputType()->getName())
+                ), 
+                get_class()
+            )
+        );
+    }
 }
 
 ?>

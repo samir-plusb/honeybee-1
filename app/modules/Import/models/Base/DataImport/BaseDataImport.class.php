@@ -9,7 +9,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Base/DataImport
+ * @subpackage      Base
  */
 abstract class BaseDataImport implements IDataImport
 {
@@ -24,8 +24,6 @@ abstract class BaseDataImport implements IDataImport
      *                  BaseDataImport::EVENT_RECORD_SUCCESS,
      *                  $yourCallback
      *              );
-     * 
-     * @const       EVENT_RECORD_SUCCESS
      */
     const EVENT_RECORD_SUCCESS = 'midas.events.import.record_success';
     

@@ -13,6 +13,15 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * The Default_Error404Action class provides default 404 error handling.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Default
+ * @subpackage      Error404
+ */
 class Default_Error404Action extends DefaultBaseAction 
 {
     /**

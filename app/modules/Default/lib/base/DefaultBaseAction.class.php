@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The DefaultBaseAction serves as the base action to all actions implemented inside of the Default module.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Default
+ * @subpackage      Base
+ */
 class DefaultBaseAction extends ProjectBaseAction 
 {
     /*

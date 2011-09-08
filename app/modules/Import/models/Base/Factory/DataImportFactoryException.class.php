@@ -8,7 +8,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Base/Factory
+ * @subpackage      Base
  */
 class DataImportFactoryException extends Exception
 {

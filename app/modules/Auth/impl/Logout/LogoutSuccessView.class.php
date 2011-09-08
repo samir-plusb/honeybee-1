@@ -7,8 +7,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         ApplicationBase
- * @subpackage      Auth/Logout
+ * @package         Auth
+ * @subpackage      Logout
  */
 class Auth_Logout_LogoutSuccessView extends AuthBaseView
 {
@@ -38,7 +38,7 @@ class Auth_Logout_LogoutSuccessView extends AuthBaseView
      * 
      * @param       AgaviRequestDataHolder $parameters 
      */
-    public function executeJson(AgaviRequestDataHolder $rd)
+    public function executeJson(AgaviRequestDataHolder $parameters)
     {
         $this->getContainer()->getResponse()->setContent(
             json_encode(
@@ -55,7 +55,7 @@ class Auth_Logout_LogoutSuccessView extends AuthBaseView
      * 
      * @param       AgaviRequestDataHolder $parameters 
      */
-    public function executeText(AgaviRequestDataHolder $rd)
+    public function executeText(AgaviRequestDataHolder $parameters)
     {
         $this->getContainer()->getResponse()->setContent(
             "You have been successfully logged out.\n"

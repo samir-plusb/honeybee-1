@@ -7,8 +7,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         ApplicationBase
- * @subpackage      Auth/Login
+ * @package         Auth
+ * @subpackage      Login
  */
 class Auth_Login_LoginSuccessView extends AuthBaseView
 {
@@ -17,9 +17,9 @@ class Auth_Login_LoginSuccessView extends AuthBaseView
      * 
      * @param       AgaviRequestDataHolder $parameters 
      */
-    public function executeHtml(AgaviRequestDataHolder $rd)
+    public function executeHtml(AgaviRequestDataHolder $parameters)
     {
-        if (null != ($container = $this->attemptForward($rd)))
+        if (null != ($container = $this->attemptForward($parameters)))
         {
             return $container;
         }
@@ -43,9 +43,9 @@ class Auth_Login_LoginSuccessView extends AuthBaseView
      * 
      * @param       AgaviRequestDataHolder $parameters 
      */
-    public function executeJson(AgaviRequestDataHolder $rd)
+    public function executeJson(AgaviRequestDataHolder $parameters)
     {
-        if (null != ($container = $this->attemptForward($rd)))
+        if (null != ($container = $this->attemptForward($parameters)))
         {
             return $container;
         }
@@ -65,9 +65,9 @@ class Auth_Login_LoginSuccessView extends AuthBaseView
      * 
      * @param       AgaviRequestDataHolder $parameters 
      */
-    public function executeText(AgaviRequestDataHolder $rd)
+    public function executeText(AgaviRequestDataHolder $parameters)
     {
-        if (null != ($container = $this->attemptForward($rd)))
+        if (null != ($container = $this->attemptForward($parameters)))
         {
             return $container;
         }

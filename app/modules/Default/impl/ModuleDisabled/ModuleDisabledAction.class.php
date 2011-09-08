@@ -13,6 +13,15 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * The Default_ModuleDisabledAction class handles the %system_actions.module_disabled% logic.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Default
+ * @subpackage      ModuleDisabled
+ */
 class Default_ModuleDisabledAction extends DefaultBaseAction 
 {
     /**

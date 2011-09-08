@@ -1,10 +1,13 @@
 <?php
 
 /**
+ * The Import_Imperia_ImperiaErrorView class handles imperia import error presentation.
  *
- * @copyright BerlinOnline
- * @version $Id$
- * @package Import
+ * @version         $Id: $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Import
+ * @subpackage      Imperia
  */
 class Import_Imperia_ImperiaErrorView extends ImportBaseView
 {

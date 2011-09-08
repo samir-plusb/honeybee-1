@@ -2,13 +2,13 @@
 
 /**
  * ProjectEventProxy is a concrete implementation of the IEventProxy interface
- *  and provides typical event routing functionality, bases on event names and callbacks.
+ * and provides typical event routing functionality, based on event names and callbacks.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
- * @package         Core
- * @subpackage      Event
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         ApplicationsBase
+ * @subpackage      Event
  */
 class ProjectEventProxy implements IEventProxy
 {

@@ -13,18 +13,61 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+/**
+ * The Default_ModuleDisabled_ModuleDisabledSuccessView class handles the presentation logic
+ * required for the %system_actions.module_disabled% action.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Default
+ * @subpackage      ModuleDisabled
+ */
 class Default_ModuleDisabled_ModuleDisabledSuccessView extends DefaultBaseView 
 {
-    public function executeHtml(AgaviRequestDataHolder $rd) 
+    /**
+     * Execute any html related presentation logic and sets up our template attributes.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
+     */
+    public function executeHtml(AgaviRequestDataHolder $parameters) 
     {
-        $this->setupHtml($rd);
+        $this->setupHtml($parameters);
 
         // set the title
-        $this->setAttribute('_title', $this->tm->_('This Module is Disabled'));
+        $this->setAttribute('_title', $this->translationManager->_('This Module is Disabled'));
 
         $this->getResponse()->setHttpStatusCode('503');
     }
+    
+    /**
+     * Prepares and sets our json data on our webresponse.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
+     */
+    public function executeJson(AgaviRequestDataHolder $parameters)
+    {
+        $this->getContainer()->getResponse()->setContent(
+            json_encode(
+                array(
+                    'result' => 'error',
+                    'message' => 'This Module is Disabled.'
+                )
+            )
+        );
+    }
 
+    /**
+     * Prepares and sets our json data on our console response.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
+     */
+    public function executeText(AgaviRequestDataHolder $parameters)
+    {
+        $msg = 'This Module is Disabled.' . PHP_EOL;
+
+        $this->getResponse()->setContent($msg);
+    }
 }
 
 ?>

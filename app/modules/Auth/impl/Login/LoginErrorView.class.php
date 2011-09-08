@@ -7,8 +7,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         ApplicationBase
- * @subpackage      Auth/Login
+ * @package         Auth
+ * @subpackage      Login
  */
 class Auth_LoginLogin_ErrorView extends Auth_Login_LoginInputView
 {

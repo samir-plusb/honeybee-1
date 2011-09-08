@@ -7,8 +7,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         ApplicationBase
- * @subpackage      Auth/Logout
+ * @package         Auth
+ * @subpackage      Logout
  */
 class Auth_Logout_LogoutErrorView extends AuthBaseView
 {

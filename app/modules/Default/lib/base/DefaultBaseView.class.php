@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The DefaultBaseView serves as the base view to all views implemented inside of the Default module.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Default
+ * @subpackage      Base
+ */
 class DefaultBaseView extends ProjectBaseView
 {
     /*
