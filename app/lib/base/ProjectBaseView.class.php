@@ -85,9 +85,9 @@ class ProjectBaseView extends AgaviView
      * If no output type specfic execute* method could be found on our current
      * concrete implemenation, then we will throw an exception letting the dev know.
      * 
-     * @param       AgaviRequestDataHolder $rd 
+     * @param       AgaviRequestDataHolder $parameters 
      */
-    public final function execute(AgaviRequestDataHolder $rd)
+    public final function execute(AgaviRequestDataHolder $parameters)
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
@@ -97,9 +97,9 @@ class ProjectBaseView extends AgaviView
      * for the current action.
      * Let them know ^^
      * 
-     * @param       AgaviRequestDataHolder $rd 
+     * @param       AgaviRequestDataHolder $parameters 
      */
-    public function executeHtml(AgaviRequestDataHolder $rd)
+    public function executeHtml(AgaviRequestDataHolder $parameters)
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
@@ -108,7 +108,7 @@ class ProjectBaseView extends AgaviView
      * If this method is called someone has missed to provide json view support
      * for the current action.
      * 
-     * @param       AgaviRequestDataHolder $rd 
+     * @param       AgaviRequestDataHolder $parameters 
      */
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
@@ -119,7 +119,7 @@ class ProjectBaseView extends AgaviView
      * If this method is called someone has missed to provide text(console) view support
      * for the current action.
      * 
-     * @param       AgaviRequestDataHolder $rd 
+     * @param       AgaviRequestDataHolder $parameters 
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {
@@ -129,12 +129,12 @@ class ProjectBaseView extends AgaviView
     /**
      * Convenience method for setting up the correct html layout.
      * 
-     * @param       AgaviRequestDataHolder $rd
+     * @param       AgaviRequestDataHolder $parameters
      * @param       string $layoutName 
      */
-    public function setupHtml(AgaviRequestDataHolder $rd, $layoutName = null)
+    public function setupHtml(AgaviRequestDataHolder $parameters, $layoutName = NULL)
     {
-        if ($layoutName === null && $this->getContainer()->getParameter('is_slot', false))
+        if ($layoutName === NULL && $this->getContainer()->getParameter('is_slot', FALSE))
         {
             $layoutName = self::DEFAULT_SLOT_LAYOUT_NAME;
         }

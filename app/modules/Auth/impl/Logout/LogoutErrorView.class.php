@@ -12,28 +12,26 @@
  */
 class Auth_Logout_LogoutErrorView extends AuthBaseView
 {
-	/**
+    /**
      * Execute any html related presentation logic and sets up our template attributes.
      * 
      * @param       AgaviRequestDataHolder $parameters 
      */
 	public function executeHtml(AgaviRequestDataHolder $parameters)
 	{
-	    parent::setupHtml();
-		
+        parent::setupHtml();
  		// set our template
- 		$this->appendLayer($this->createLayer('AgaviFileTemplateLayer', 'content'));
-
+        $this->appendLayer($this->createLayer('AgaviFileTemplateLayer', 'content'));
 		// set the title
-		$this->setAttribute('_title', 'Logout Action');
+        $this->setAttribute('_title', 'Logout Action');
 	}
-    
+
     /**
      * Prepares and sets our json data on our webresponse.
      * 
      * @param       AgaviRequestDataHolder $parameters 
      */
-    public function executeJson(AgaviRequestDataHolder $rd)
+    public function executeJson(AgaviRequestDataHolder $parameters)
     {
         $this->getContainer()->getResponse()->setContent(
             json_encode(
@@ -50,7 +48,7 @@ class Auth_Logout_LogoutErrorView extends AuthBaseView
      * 
      * @param       AgaviRequestDataHolder $parameters 
      */
-    public function executeText(AgaviRequestDataHolder $rd)
+    public function executeText(AgaviRequestDataHolder $parameters)
     {
         $this->getContainer()->getResponse()->setContent(
             "An unexpected error occured during logout.\n"

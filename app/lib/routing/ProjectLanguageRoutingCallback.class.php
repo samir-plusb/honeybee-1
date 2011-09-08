@@ -51,9 +51,10 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
         // let's check if the locale is allowed
         try
         {
-            $set = $this->context->getTranslationManager()->getLocaleIdentifier($parameters['locale']);
+            $this->context->getTranslationManager()->getLocaleIdentifier($parameters['locale']);
             // yup, worked. now lets set that as a cookie
             $this->context->getController()->getGlobalResponse()->setCookie('locale', $parameters['locale'], '+1 month');
+            
             return TRUE;
         }
         catch (AgaviException $e)
@@ -76,15 +77,16 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
     {
         // the pattern didn't match, or onMatched() returned FALSE.
         // that's sad. let's see if there's a locale set in a cookie from an earlier visit.
-        $rd = $this->context->getRequest()->getRequestData();
+        $requestData = $this->context->getRequest()->getRequestData();
 
-        $cookie = $rd->getCookie('locale');
+        $cookie = $requestData->getCookie('locale');
         
         if ($cookie !== NULL)
         {
             try
             {
                 $this->translationManager->setLocale($cookie);
+                
                 return;
             }
             catch (AgaviException $e)
@@ -94,11 +96,11 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
             }
         }
 
-        if ($rd->hasHeader('Accept-Language'))
+        if ($requestData->hasHeader('Accept-Language'))
         {
             $hasIntl = function_exists('locale_accept_from_http');
             // try to find the best match for the locale
-            $locales = self::parseAcceptLanguage($rd->getHeader('Accept-Language'));
+            $locales = self::parseAcceptLanguage($requestData->getHeader('Accept-Language'));
             
             foreach ($locales as $locale)
             {
@@ -106,17 +108,19 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
                 {
                     if ($hasIntl)
                     {
-                        // we don't use this directly on Accept-Language because we might not have the preferred locale, but another one
-                        // in any case, it might help clean up the value a bit further
+                        // we don't use this directly on Accept-Language,
+                        // because we might not have the preferred locale, 
+                        // but another one in any case, it might help clean up the value a bit further
                         $locale = locale_accept_from_http($locale);
                     }
                     
                     $this->translationManager->setLocale($locale);
+                    
                     return;
                 }
                 catch (AgaviException $e)
                 {
-                    
+                    return;
                 }
             }
         }

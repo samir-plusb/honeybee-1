@@ -19,7 +19,7 @@ class Auth_Login_LoginSuccessView extends AuthBaseView
      */
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
-        if (null != ($container = $this->attemptForward($parameters)))
+        if (NULL != ($container = $this->attemptForward($parameters)))
         {
             return $container;
         }
@@ -45,7 +45,7 @@ class Auth_Login_LoginSuccessView extends AuthBaseView
      */
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
-        if (null != ($container = $this->attemptForward($parameters)))
+        if (NULL != ($container = $this->attemptForward($parameters)))
         {
             return $container;
         }
@@ -67,7 +67,7 @@ class Auth_Login_LoginSuccessView extends AuthBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {
-        if (null != ($container = $this->attemptForward($parameters)))
+        if (NULL != ($container = $this->attemptForward($parameters)))
         {
             return $container;
         }
@@ -93,7 +93,7 @@ class Auth_Login_LoginSuccessView extends AuthBaseView
         $requestedModule = $request->getAttribute('requested_module', 'org.agavi.controller.forwards.login');
         $requestedAction = $request->getAttribute('requested_action', 'org.agavi.controller.forwards.login');
 
-        $container = null;
+        $container = NULL;
         
         if (!empty($requestedModule) && !empty($requestedAction))
         {

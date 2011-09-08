@@ -87,7 +87,7 @@ class ExtendedCouchDbClient
 
         try
         {
-            return (array) $this->compositeClient->getDoc($documentId);
+            return (array)$this->compositeClient->getDoc($documentId);
         }
         catch(CouchdbClientException $ex)
         {
@@ -107,18 +107,18 @@ class ExtendedCouchDbClient
      */
     public function statDoc($database, $docId)
     {
-        $ch = $this->getCurlHandle();
+        $curlHandle = $this->getCurlHandle();
 
         $uri = $this->baseUri . $database . '/' . $docId;
         $file = tmpfile();
 
-        curl_setopt($ch, CURLOPT_URL, $uri);
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_NOBODY, 1);
-        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlHandle, CURLOPT_URL, $uri);
+        curl_setopt($curlHandle, CURLOPT_HEADER, 1);
+        curl_setopt($curlHandle, CURLOPT_NOBODY, 1);
+        curl_setopt ($curlHandle, CURLOPT_RETURNTRANSFER, 1);
 
-        $resp = curl_exec($ch);
-        $this->processCurlErrors($ch);
+        $resp = curl_exec($curlHandle);
+        $this->processCurlErrors($curlHandle);
 
         fclose($file);
 
@@ -145,11 +145,11 @@ class ExtendedCouchDbClient
 
         $uri = $this->baseUri . $database . '/_design/' . $designDocId . '/_view/' . $viewname;
 
-        $ch = $this->getCurlHandle();
-        curl_setopt($ch, CURLOPT_URL, $uri);
+        $curlHandle = $this->getCurlHandle();
+        curl_setopt($curlHandle, CURLOPT_URL, $uri);
 
-        $resp = curl_exec($ch);
-        $this->processCurlErrors($ch);
+        $resp = curl_exec($curlHandle);
+        $this->processCurlErrors($curlHandle);
         $data = json_decode($resp, TRUE);
 
         return $data;
@@ -183,7 +183,7 @@ class ExtendedCouchDbClient
             }
         }
 
-        $ch = $this->getCurlHandle();
+        $curlHandle = $this->getCurlHandle();
 
         $uri = $this->baseUri . $database . '/_design/' . $docId;
         $file = tmpfile();
@@ -191,13 +191,13 @@ class ExtendedCouchDbClient
         fwrite($file, $jsonDoc);
         fseek($file, 0);
 
-        curl_setopt($ch, CURLOPT_URL, $uri);
-        curl_setopt($ch, CURLOPT_PUT, TRUE);
-        curl_setopt($ch, CURLOPT_INFILE, $file);
-        curl_setopt($ch, CURLOPT_INFILESIZE, strlen($jsonDoc));
+        curl_setopt($curlHandle, CURLOPT_URL, $uri);
+        curl_setopt($curlHandle, CURLOPT_PUT, TRUE);
+        curl_setopt($curlHandle, CURLOPT_INFILE, $file);
+        curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($jsonDoc));
 
-        $resp = curl_exec($ch);
-        $this->processCurlErrors($ch);
+        curl_exec($curlHandle);
+        $this->processCurlErrors($curlHandle);
 
         fclose($file);
     }

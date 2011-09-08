@@ -107,7 +107,12 @@ class ProjectEnvironmentConfig
         $this->testingEnabled = $testing_enabled;
         
         $base_dir = dirname(dirname(dirname(dirname(__FILE__))));
-        $local_config_dir = $base_dir . DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'local' . DIRECTORY_SEPARATOR;
+        
+        $local_config_dir = 
+            $base_dir . DIRECTORY_SEPARATOR . 
+            'etc' . DIRECTORY_SEPARATOR . 
+            'local' . DIRECTORY_SEPARATOR;
+        
         $filename = $this->testingEnabled ? 'testing.' . self::CONFIG_FILE_NAME : self::CONFIG_FILE_NAME;
         $config_filepath = $local_config_dir . self::CONFIG_FILE_PREFIX . $filename;
         
@@ -133,9 +138,9 @@ class ProjectEnvironmentConfig
      */
     public static function load($testing_enabled = FALSE)
     {
-        if (null === self::$instance)
+        if (NULL === self::$instance)
         {
-           self::$instance = new ProjectEnvironmentConfig($testing_enabled);
+            self::$instance = new ProjectEnvironmentConfig($testing_enabled);
         }
 
         return self::$instance;

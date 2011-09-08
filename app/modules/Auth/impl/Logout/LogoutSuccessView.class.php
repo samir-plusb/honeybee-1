@@ -23,14 +23,14 @@ class Auth_Logout_LogoutSuccessView extends AuthBaseView
         $context = $this->getContext();
         /* @var $user AgaviSecurityUser */
         $user = $context->getUser();
-        /* @var $ro AgaviWebRouting */
-        $ro = $context->getRouting();
-        /* @var $tm AgaviTranslationManager */
-        $tm = $context->getTranslationManager();
+        /* @var $routing AgaviWebRouting */
+        $routing = $context->getRouting();
+        /* @var $translationManager AgaviTranslationManager */
+        $translationManager = $context->getTranslationManager();
         
-        $user->addIncident($tm->_("You have been logged out"), AgaviLogger::INFO);
+        $user->addIncident($translationManager->_("You have been logged out"), AgaviLogger::INFO);
         
-        $this->getResponse()->setRedirect($ro->gen('login'));
+        $this->getResponse()->setRedirect($routing->gen('login'));
     }
     
     /**
