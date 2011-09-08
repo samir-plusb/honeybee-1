@@ -1,24 +1,44 @@
 <?php
 
+/**
+ * IDataRecord implementations are responseable for normalizing and then transporting
+ * data that represents a single data record
+ *
+ * @version         $Id:$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Import
+ * @subpackage      Base/Config
+ */
 interface IDataRecord
 {
     /**
-     * @param string $fieldname
-     * @param mixed $default
+     * Return the value for the given field.
+     * 
+     * @param       string $fieldname
+     * @param       mixed $default
+     * 
+     * @return      mixed The field's value or $default if the field is not set.
      */
     public function getValue($fieldname, $default = NULL);
 
     /**
-     * return array<string>
+     * Return an array holding the names of all field's that we provide values for.
+     * 
+     * @return       array
      */
     public function getSupportedFields();
     
     /**
-     * @return array<string, mixed>
+     * Return an array representation of this record.
+     * 
+     * @return array
      */
     public function toArray();
     
     /**
+     * Return an unique string that identifies this record.
+     * 
      * @return string
      */
     public function getIdentifier();
