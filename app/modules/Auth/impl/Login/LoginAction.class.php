@@ -6,8 +6,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer <Tom.Anheyer@BerlinOnline.de>
- * @package         Auth
- * @subpackage      Login
+ * @package         ApplicationBase
+ * @subpackage      Auth
  */
 class Auth_LoginAction extends AuthBaseAction 
 {

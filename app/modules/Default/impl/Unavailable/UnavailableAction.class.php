@@ -20,8 +20,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Default
- * @subpackage      Unavailable
+ * @package         ApplicationBase
+ * @subpackage      Default
  */
 class Default_UnavailableAction extends DefaultBaseAction 
 {

@@ -20,8 +20,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Default
- * @subpackage      ModuleDisabled
+ * @package         ApplicationBase
+ * @subpackage      Default
  */
 class Default_ModuleDisabled_ModuleDisabledSuccessView extends DefaultBaseView 
 {

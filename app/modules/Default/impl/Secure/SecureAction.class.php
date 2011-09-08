@@ -21,8 +21,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Default
- * @subpackage      Secure
+ * @package         ApplicationBase
+ * @subpackage      Default
  */
 class Default_SecureAction extends DefaultBaseAction 
 {

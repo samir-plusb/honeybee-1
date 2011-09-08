@@ -19,8 +19,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Default
- * @subpackage      Index
+ * @package         ApplicationBase
+ * @subpackage      Default
  */
 class Default_Index_IndexSuccessView extends DefaultBaseView 
 {
