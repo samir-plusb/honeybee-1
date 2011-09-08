@@ -6,8 +6,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Default
- * @subpackage      Base
+ * @package         ApplicationBase
+ * @subpackage      Default
  */
 class DefaultBaseModel extends ProjectBaseModel 
 {

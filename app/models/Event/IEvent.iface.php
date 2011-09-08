@@ -7,7 +7,7 @@
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         ApplicationsBase
+ * @package         ApplicationBase
  * @subpackage      Event
  */
 interface IEvent
