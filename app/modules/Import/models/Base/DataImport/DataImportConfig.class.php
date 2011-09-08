@@ -12,11 +12,6 @@
  */
 abstract class DataImportConfig extends SimpleConfig
 {
-    public function __construct($configSource)
-    {
-        parent::__construct($configSource);
-    }
-    
     // ---------------------------------- <IImportConfig IMPL> -----------------------------------
     
     /**

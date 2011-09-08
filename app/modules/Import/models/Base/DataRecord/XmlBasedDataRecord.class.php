@@ -9,7 +9,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Base/DataImport
+ * @subpackage      Base/DataRecord
  */
 abstract class XmlBasedDataRecord extends ImportBaseDataRecord
 {
