@@ -27,6 +27,9 @@
                     <!-- IDataImport Tests -->
                     <testfile>unit/modules/Import/models/Imperia/DataImport/ImperiaDataImportConfigTest.php</testfile>
                     <testfile>unit/modules/Import/models/Imperia/DataImport/ImperiaDataImportTest.php</testfile>
+                    
+                    <!-- Flow Tests -->
+                    <testfile>fragment/Import/Newswire/NewswireFragmentTest.class.php</testfile>
                 </testfiles>
             </suite>
         </suites>

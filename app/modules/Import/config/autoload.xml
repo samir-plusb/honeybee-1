@@ -84,6 +84,8 @@
             <!-- /Imperia Import -->
 
              <!-- Newswire Import -->
+            <autoload name="NewswireDataImport">%core.module_dir%/Import/models/Newswire/DataImport/NewswireDataImport.class.php</autoload>
+            <autoload name="NewswireDataImportConfig">%core.module_dir%/Import/models/Newswire/DataImport/NewswireDataImportConfig.class.php</autoload>
             <autoload name="NewswireDataSource">%core.module_dir%/Import/models/Newswire/DataSource/NewswireDataSource.class.php</autoload>
             <autoload name="NewswireDataSourceConfig">%core.module_dir%/Import/models/Newswire/DataSource/NewswireDataSourceConfig.class.php</autoload>
             <autoload name="NewswireDataRecord">%core.module_dir%/Import/models/Newswire/DataRecord/NewswireDataRecord.class.php</autoload>

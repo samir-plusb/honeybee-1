@@ -28,6 +28,7 @@ class NewswireDataSource extends ImportBaseDataSource
     {
         parent::__construct($config);
         $this->timestampFile = $this->config->getSetting(NewswireDataSourceConfig::CFG_TIMESTAMP_FILE);
+        ProjectEventProxy::getInstance()->subscribe(BaseDataImport::EVENT_RECORD_SUCCESS, array($this, 'importSucceeded'));
     }
 
     /**
@@ -86,11 +87,17 @@ class NewswireDataSource extends ImportBaseDataSource
     }
 
     /**
+     * store the timestamp of last imported record
      *
+     * @param int $time unix timestamp
      * @throws DataSourceException if timestamp file can not be written
      */
     protected function updateTimestamp($time)
     {
+        if (false === $time && $this->iterator instanceof DirectoryIterator)
+        {
+            $time = $this->iterator->getMTime();
+        }
         if (! file_put_contents($this->timestampFile, $time))
         {
             throw new DataSourceException('Can not write timestamp file: '.$this->timestampFile);
@@ -98,10 +105,19 @@ class NewswireDataSource extends ImportBaseDataSource
         touch($this->timestampFile, $time);
     }
 
+    /**
+     * run the method after a successfull import of current record
+     * @uses updateTimestamp()
+     */
+    public function importSucceeded()
+    {
+        $this->updateTimestamp($this->iterator->getMTime());
+    }
 
     /**
      *
      * reset the timestamp
+     * @uses updateTimestamp()
      */
     public function resetTimestamp()
     {

@@ -4,6 +4,7 @@
         <routes>
             <route pattern="import." module="Import">
                 <route pattern="imperia" action="Imperia" method="write" />
+                <route pattern="newswire" action="Newswire" method="write"/>
             </route>
         </routes>
     </ae:configuration>

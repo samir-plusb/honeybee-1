@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations 
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.1" 
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" 
+	parent="%core.module_dir%/Import/config/validators.xml">
+	<ae:configuration>
+		<validators>
+			<validator class="regex" required="true">
+				<arguments>
+					<argument>config</argument>
+				</arguments>
+				<errors>
+					<error>Please provide a xml config file path.</error>
+				</errors>
+				<ae:parameters>
+					<ae:parameter name="pattern">/\.xml$/</ae:parameter>
+					<ae:parameter name="match">1</ae:parameter>
+				</ae:parameters>
+			</validator>
+		</validators>
+	</ae:configuration>
+</ae:configurations>
