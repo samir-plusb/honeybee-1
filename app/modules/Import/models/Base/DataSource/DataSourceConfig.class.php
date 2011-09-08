@@ -12,12 +12,17 @@
  */
 abstract class DataSourceConfig extends SimpleConfig
 {
+    // ---------------------------------- <CONSTANTS> --------------------------------------------
+    
     /**
      * Setting that holds the IDataRecord implementation to use for creating new concrete records.
      * 
      * @const       CFG_RECORD_TYPE
      */
     const CFG_RECORD_TYPE = 'record';
+    
+    // ---------------------------------- </CONSTANTS> -------------------------------------------
+    
     
     // ---------------------------------- <IImportConfig IMPL> -----------------------------------
     

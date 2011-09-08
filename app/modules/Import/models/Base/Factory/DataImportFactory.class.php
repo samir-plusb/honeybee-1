@@ -1,9 +1,38 @@
 <?php
 
+/**
+ * The ImportBaseDataSource class is a concrete implementation of the IDataImportFactory interface.
+ * It provides factory methods for creating IDataImport and IDataSource instances based on a given DataImportFactoryConfig.
+ * 
+ * @version         $Id:$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Import
+ * @subpackage      Base/DataSource
+ */
 class DataImportFactory implements IDataImportFactory
 {
+    // ---------------------------------- <MEMBERS> ----------------------------------------------
+    
+    /**
+     * Holds our config object.
+     * 
+     * @var         DataImportFactoryConfig 
+     */
     protected $factoryConfig;
-
+    
+    // ---------------------------------- </MEMBERS> ---------------------------------------------
+    
+    
+    // ---------------------------------- <CONSTRCUTOR> ------------------------------------------
+    
+    /**
+     * Creates a new DataImportFactory instance.
+     * 
+     * @param       DataImportFactoryConfig $factoryConfig 
+     * 
+     * @throws      DataImportFactoryException If an invalid configuration is given.
+     */
     public function __construct($factoryConfig)
     {
         if ($factoryConfig instanceof DataImportFactoryConfig) 
@@ -19,7 +48,18 @@ class DataImportFactory implements IDataImportFactory
             throw new DataImportFactoryException("Invalid factory config given.");
         }
     }
-
+    
+    // ---------------------------------- </CONSTRCUTOR> -----------------------------------------
+    
+    /**
+     * Create a new concrete IDataImport instance based on our config
+     * and optionally provided parameters.
+     * 
+     * @param       string $configClass
+     * @param       array $parameters
+     * 
+     * @return      IDataImport
+     */
     public function createDataImport($configClass, array $parameters = array())
     {
         $importSettings = array_merge(
@@ -32,7 +72,16 @@ class DataImportFactory implements IDataImportFactory
 
         return new $importClass($importConfig);
     }
-
+    
+    /**
+     * Create a new concrete IDataSource instance based on our config
+     * and optionally provided parameters.
+     * 
+     * @param       string $configClass
+     * @param       array $parameters
+     * 
+     * @return      IDataSource
+     */
     public function createDataSource($configClass, array $parameters = array())
     {
         $rawSourceSettings = $this->factoryConfig->getSetting(DataImportFactoryConfig::CFG_DATASRC);
