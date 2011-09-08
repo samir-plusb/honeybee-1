@@ -17,22 +17,30 @@ class CouchDbDataImportConfig extends DataImportConfig
     // ---------------------------------- <CONSTANTS> --------------------------------------------
     
     /**
-     * @const       PARAM_BUFFER_SIZE Name of the config parameter that holds our buffer size.
+     * Name of the config parameter that holds our buffer size.
+     * 
+     * @const       PARAM_BUFFER_SIZE
      */
     const PARAM_BUFFER_SIZE = 50;
     
     /**
-     * @const       CFG_COUCHDB_HOST Name of the config setting that holds our couchdb host.
+     * Name of the config setting that holds our couchdb host.
+     * 
+     * @const       CFG_COUCHDB_HOST
      */
     const CFG_COUCHDB_HOST = 'couchdb_host';
     
     /**
-     * @const       CFG_COUCHDB_PORT Name of the config setting that holds our couchdb port.
+     * Name of the config setting that holds our couchdb port.
+     * 
+     * @const       CFG_COUCHDB_PORT
      */
     const CFG_COUCHDB_PORT = 'couchdb_port';
     
     /**
-     * @const       CFG_COUCHDB_DATABASE Name of the config setting that holds our couchdb database name.
+     * Name of the config setting that holds our couchdb database name.
+     * 
+     * @const       CFG_COUCHDB_DATABASE
      */
     const CFG_COUCHDB_DATABASE = 'couchdb_database';
     

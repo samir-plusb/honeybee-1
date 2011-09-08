@@ -18,7 +18,7 @@ abstract class BaseDataImport implements IDataImport
     /**
      * Holds the name of the event that reflects successful records imports.
      * 
-     * @example     Register to this event the following way:
+     * Example:     Register to this event the following way:
      * 
      *              ProjectEventProxy::getInstance()->subscribe(
      *                  BaseDataImport::EVENT_RECORD_SUCCESS,
