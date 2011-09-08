@@ -17,4 +17,4 @@ if (test -z "$PHP_COMMAND") ; then
 fi
 
 echo "[Executing] `which rlwrap` $PHP_COMMAND -d html_errors=off -f "`dirname $0`/phpdoc.php" -- $@"
-PHP_COMMAND=$PHP_COMMAND `which rlwrap` $PHP_COMMAND -d html_errors=off -f "`dirname $0`/phpdoc.php" -- "$@"
+PHP_COMMAND=$PHP_COMMAND `which rlwrap` $PHP_COMMAND -d error_reporting=1 -d html_errors=off -f "`dirname $0`/phpdoc.php" -- "$@"

@@ -23,11 +23,11 @@
         <run command="nice bin/test --configuration testing/config/phpunit.xml" dir="${project.directory}" />
     </target>
 
-    <target name="phpdoc" description="Generate API documentation using PHPDocumentor.">
-        <echo message="Generating the API documentation using PHPDocumentor." />
-        <run command="/bin/mkdir -p ${project.directory}/etc/integration/build/api/" />
-        <run command="/bin/rm -rf ${project.directory}/etc/integration/build/api/*" />
-        <run command="libs/PhpDocumentor/phpdoc --directory ${project.directory}/app/ --target ${project.directory}/etc/integration/build/api -ti 'Midas API' -dn 'Midas' -o HTML:frames:DOM/earthli" dir="${project.directory}" />
+    <target name="phpdoc" description="Generate API documentation using PHPDocumentor." depends="project-cache-remove">
+        <echo message="Generating the API documentation using PHPDocumentor."/>
+        <run command="/bin/rm -rf etc/integration/build/api" dir="${project.directory}"/>
+        <run command="/bin/mkdir -p etc/integration/build/api" dir="${project.directory}"/>
+        <run command="libs/PhpDocumentor/phpdoc --directory app/ --target ${project.directory}/etc/integration/build/api -i /.svn/,/cache/ -ti 'Midas API' -dn 'Midas' -o HTML:frames:DOM/earthli" dir="${project.directory}" />
     </target>
 
 </project>
