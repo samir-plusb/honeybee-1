@@ -1,21 +1,22 @@
 <?php
+
 /**
  * NITF processing
  *
- * @package Import
- * @subpackage Newswire
- * @version $ID:$
- * @author Tom Anheyer
- *
+ * @version         $ID:$
+ * @author          Tom Anheyer
+ * @package         Import
+ * @subpackage      Newswire
  */
 class NitfNewswireDataRecord extends NewswireDataRecord
 {
     /**
      * return a list of field keys to corresponding xpath expressions
      *
-     * @see collectData()
-     * @see XmlBasedDataRecord::getFieldMap()
-     * @return array
+     * @return      array
+     * 
+     * @see         collectData()
+     * @see         XmlBasedDataRecord::getFieldMap()
      */
     protected function getFieldMap()
     {
@@ -36,7 +37,7 @@ class NitfNewswireDataRecord extends NewswireDataRecord
 
     /**
      * (non-PHPdoc)
-     * @see ImportBaseDataRecord::getIdentifierFieldName()
+     * @see         ImportBaseDataRecord::getIdentifierFieldName()
      */
     public function getIdentifierFieldName()
     {
@@ -48,8 +49,9 @@ class NitfNewswireDataRecord extends NewswireDataRecord
      *
      * Maps existing xml node lists to strings or array of strings.
      *
-     * @see XmlBasedDataRecord::normalizeData()
-     * @return array
+     * @see         XmlBasedDataRecord::normalizeData()
+     * 
+     * @return      array
      */
     protected function normalizeData(array $data)
     {
@@ -81,16 +83,19 @@ class NitfNewswireDataRecord extends NewswireDataRecord
                 }
             }
         }
+        
         $data = array_filter($data);
+        
         return $data;
     }
 
     /**
      * collect data from xml document
      *
+     * @see XmlBasedDataRecord::collectData()
+     * 
      * @uses getFieldMap()
      * @uses importMedia()
-     * @see XmlBasedDataRecord::collectData()
      */
     protected function collectData(DOMDocument $domDoc)
     {
@@ -101,61 +106,69 @@ class NitfNewswireDataRecord extends NewswireDataRecord
         return $data;
     }
 
-
     /**
      * import nitf tables
      *
-     * @param DOMDocument $domDoc
-     * @return array of xml tagged strings
+     * @param       DOMDocument $domDoc
+     * 
+     * @return      array of xml tagged strings
      */
     protected function importTable(DOMDocument $domDoc)
     {
         $data = array();
         $xpath = new DOMXPath($domDoc);
+        
         foreach ($xpath->query('//table') as $table)
         {
             $data[] = $this->nodeToString($table);
         }
+        
         return $data;
     }
 
     /**
      * import image media objects
      *
-     * @param DOMNode $item current nitf document
-     * @param array $feed_values feed entry values
-     * @return array with reference information
+     * @param       DOMNode $item current nitf document
+     * @param       array $feed_values feed entry values
+     * 
+     * @return      array with reference information
      */
     protected function importMedia(DOMDocument $domDoc)
     {
         $media = array();
         $xpath = new DOMXPath($domDoc);
-        foreach ($xpath->query("//media[@media-type='image']") as $mNode)
+        
+        foreach ($xpath->query("//media[@media-type='image']") as $mediaNode)
         {
             $pixels = -1;
-            $img = array();
-            foreach ($xpath->query('//media-reference', $mNode) as $mr)
+            $image = array();
+            
+            foreach ($xpath->query('//media-reference', $mediaNode) as $mediaReference)
             {
-                $attr = $mr->attributes;
-                $width = intval($attr->getNamedItem("width")->nodeValue);
-                $height = intval($attr->getNamedItem("height")->nodeValue);
+                $attribute = $mediaReference->attributes;
+                $width = intval($attribute->getNamedItem("width")->nodeValue);
+                $height = intval($attribute->getNamedItem("height")->nodeValue);
+                
                 if ($pixels < ($width * $height))
                 {
-                    $img['source'] = htmlspecialchars($attr->getNamedItem("source")->nodeValue);
-                    $img['name'] = htmlspecialchars($attr->getNamedItem("name")->nodeValue);
-                    $img['alternate'] = htmlspecialchars($attr->getNamedItem("alternate-text")->nodeValue);
+                    $image['source'] = htmlspecialchars($attribute->getNamedItem("source")->nodeValue);
+                    $image['name'] = htmlspecialchars($attribute->getNamedItem("name")->nodeValue);
+                    $image['alternate'] = htmlspecialchars($attribute->getNamedItem("alternate-text")->nodeValue);
                     $pixels = $width * $height;
                 }
             }
-            if (! empty ($img))
+            
+            if (! empty ($image))
             {
-                $cnl = $xpath->query('media-caption', $mNode);
-                $img['caption'] = $this->joinNodeList($cnl, "\n");
-                $media[] = $img;
+                $captionNodeList = $xpath->query('media-caption', $mediaNode);
+                $image['caption'] = $this->joinNodeList($captionNodeList, "\n");
+                $media[] = $image;
             }
         }
+        
         return $media;
     }
-
-
 }
+
+?>

@@ -1,12 +1,12 @@
 <?php
+
 /**
  * DataImport for newswire
  *
- * @package Import
- * @subpackage Newswire
- * @author tay
- * @version $Id$
- *
+ * @version         $Id$
+ * @author          tay
+ * @package         Import
+ * @subpackage      Newswire
  */
 class NewswireDataImportConfig extends CouchDbDataImportConfig
 {

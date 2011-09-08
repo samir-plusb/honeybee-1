@@ -33,7 +33,7 @@ class Auth_LoginLogin_ErrorView extends AuthBaseView
      * @param       AgaviRequestDataHolder $parameters 
      */
 	public function executeJson(AgaviRequestDataHolder $parameters)
-	{
+    {
         $this->getContainer()->getResponse()->setContent(
             json_encode(
                 array(

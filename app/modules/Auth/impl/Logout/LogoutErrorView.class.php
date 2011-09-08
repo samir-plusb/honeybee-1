@@ -18,13 +18,13 @@ class Auth_Logout_LogoutErrorView extends AuthBaseView
      * @param       AgaviRequestDataHolder $parameters 
      */
 	public function executeHtml(AgaviRequestDataHolder $parameters)
-	{
+    {
         parent::setupHtml();
- 		// set our template
+        // set our template
         $this->appendLayer($this->createLayer('AgaviFileTemplateLayer', 'content'));
-		// set the title
+        // set the title
         $this->setAttribute('_title', 'Logout Action');
-	}
+    }
 
     /**
      * Prepares and sets our json data on our webresponse.

@@ -3,38 +3,39 @@
 /**
  * DPA specific NITF processing
  *
- * @package Import
- * @subpackage Newswire
- * @version $ID:$
- * @author Tom Anheyer
- *
+ * @version         $ID:$
+ * @author          Tom Anheyer
+ * @package         Import
+ * @subpackage      Newswire
  */
 class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
 {
-
     /**
      * return a list of field keys to corresponding xpath expressions
      *
-     * @see collectData()
-     * @see XmlBasedDataRecord::getFieldMap()
-     * @return array
+     * @see         collectData()
+     * @see         XmlBasedDataRecord::getFieldMap()
+     * 
+     * @return      array
      */
     protected function getFieldMap()
     {
-        $dmap = array(
+        $fieldMap = array(
             'subtitle' => '//byline',
             'copyright' => '//meta[@name="copyright"]/@content',
             'source' => '//meta[@name="origin"]/@content',
         );
-        return array_merge(parent::getFieldMap(), $dmap);
+        
+        return array_merge(parent::getFieldMap(), $fieldMap);
     }
 
     /**
      * collect data from xml document
      *
-     * @uses getFieldMap()
-     * @uses importMedia()
-     * @see XmlBasedDataRecord::collectData()
+     * @uses        getFieldMap()
+     * @uses        importMedia()
+     * 
+     * @see         XmlBasedDataRecord::collectData()
      */
     protected function collectData(DOMDocument $domDoc)
     {
@@ -47,17 +48,20 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
     /**
      * import nitf tables
      *
-     * @param DOMDocument $domDoc
-     * @return array of xml tagged strings
+     * @param       DOMDocument $domDoc
+     * 
+     * @return      array of xml tagged strings
      */
     protected function importLinks(DOMDocument $domDoc)
     {
         $data = array();
         $xpath = new DOMXPath($domDoc);
+        
         foreach ($xpath->query('//body.content/block[@style="EXTERNAL-LINKS"]/p/a') as $nd)
         {
             $data[] = $this->nodeToString($nd);
         }
+        
         return $data;
     }
 
@@ -66,8 +70,9 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
      *
      * Maps existing xml node lists to strings or array of strings.
      *
-     * @see XmlBasedDataRecord::normalizeData()
-     * @return array
+     * @see         XmlBasedDataRecord::normalizeData()
+     * 
+     * @return      array
      */
     protected function normalizeData(array $data)
     {
@@ -78,10 +83,12 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
         if (! empty($data['keywords']))
         {
             $list = array();
+            
             foreach ($data['keywords'] as $kw)
             {
                 $list = array_merge($list,explode('/', $kw));
             }
+            
             $data['keywords'] = array_filter($list);
         }
 

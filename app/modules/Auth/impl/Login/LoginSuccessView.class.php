@@ -80,14 +80,12 @@ class Auth_Login_LoginSuccessView extends AuthBaseView
     /**
      * Create a forward container for the that was intentionally called before the login was executed.
      * 
-     * @param       AgaviRequestDataHolder $parameters
-     * 
      * @return      AgaviExecutionContainer A new execution container instance,
 	 *                                      fully initialized.
 	 *
 	 * @see         AgaviExecutionContainer::createExecutionContainer()
      */
-    protected function attemptForward(AgaviRequestDataHolder $parameters)
+    protected function attemptForward()
     {
         $request = $this->getContext()->getRequest();
         $requestedModule = $request->getAttribute('requested_module', 'org.agavi.controller.forwards.login');

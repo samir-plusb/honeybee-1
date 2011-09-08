@@ -21,7 +21,7 @@ class Auth_Login_LoginInputView extends AuthBaseView
     {
         parent::setupHtml($parameters);
 
-        $tm = $this->getContext()->getTranslationManager();
+        $translationManager = $this->getContext()->getTranslationManager();
 
         if ($this->getContext()->getRequest()->hasAttributeNamespace('org.agavi.controller.forwards.login'))
         {
@@ -44,7 +44,7 @@ class Auth_Login_LoginInputView extends AuthBaseView
         }
 
         // set the title
-        $this->setAttribute('_title', $tm->_('Login', 'auth.messages'));
+        $this->setAttribute('_title', $translationManager->_('Login', 'auth.messages'));
     }
     
     /**
@@ -54,7 +54,7 @@ class Auth_Login_LoginInputView extends AuthBaseView
      */
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
-        if (null != ($container = $this->attemptForward($parameters)))
+        if (NULL != ($container = $this->attemptForward($parameters)))
         {
             return $container;
         }
@@ -63,7 +63,8 @@ class Auth_Login_LoginInputView extends AuthBaseView
             json_encode(
                 array(
                     'result'  => 'success',
-                    'message' => 'You may post a username and a password to this uri in order to login to the application.'
+                    'message' => 'You may post a username and a password' . 
+                                 'to this uri in order to login to the application.'
                 )
             )
         );
@@ -76,9 +77,12 @@ class Auth_Login_LoginInputView extends AuthBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {
+        $translationManager = $this->getContext()->getTranslationManager();
+        
         $this->getContainer()->getResponse()->setContent(
-            $tm->_(
-                'Please provide username and password as commandline arguments when calling secure actions. Use --username {user} --password {pass}.',
+            $translationManager->_(
+                'Please provide username and password as commandline arguments when calling secure actions.' .
+                'Use --username {user} --password {pass}.',
                 'auth.messages'
             )
         );

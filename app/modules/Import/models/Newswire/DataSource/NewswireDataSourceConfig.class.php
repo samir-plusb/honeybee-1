@@ -1,16 +1,17 @@
 <?php
+
 /**
  * Settings for newswire datasource
  *
- * @package Import
- * @subpackage Newswire
- * @author Tom Anheyer
- * @version $Id$
- *
+ * @version         $Id$
+ * @author          Tom Anheyer
+ * @package         Import
+ * @subpackage      Newswire
  */
 class NewswireDataSourceConfig extends DataSourceConfig
 {
     const CFG_GLOB = 'glob';
+    
     const CFG_TIMESTAMP_FILE = 'timestamp_file';
 
     public function getRequiredSettings()

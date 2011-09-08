@@ -70,20 +70,27 @@ class Auth_LoginAction extends AuthBaseAction
         
         ldap_set_option($this->ldap, LDAP_OPT_PROTOCOL_VERSION, AgaviConfig::get("ldap.protocol", 3));
 
-        $bind_rdn = sprintf(
+        $bindRdn = sprintf(
             "%s=%s,%s",
             AgaviConfig::get("ldap.user_search", "uid"),
             $this->getLdapEscapedString($username),
             AgaviConfig::get("ldap.base_user")
         );
         
-        if (!@ldap_bind($this->ldap, $bind_rdn, $parameters->getParameter("password"))) 
+        if (!@ldap_bind($this->ldap, $bindRdn, $parameters->getParameter("password"))) 
         {
             if (0x31 == ldap_errno($this->ldap)) 
             {
                 // LDAP_INVALID_CREDENTIALS
-                $this->getContext()->getUser()->setAuthenticated(false);
-                $this->getContainer()->getValidationManager()->setError('username_password_mismatch', $this->getContext()->getTranslationManager()->_('This combination of username and password is invalid.', 'cms.auth'));
+                $this->getContext()->getUser()->setAuthenticated(FALSE);
+                
+                $this->getContainer()->getValidationManager()->setError(
+                    'username_password_mismatch', 
+                    $this->getContext()->getTranslationManager()->_(
+                        'This combination of username and password is invalid.', 
+                        'cms.auth'
+                    )
+                );
                 
                 $logger->log(
                     new AgaviLoggerMessage(
@@ -99,7 +106,9 @@ class Auth_LoginAction extends AuthBaseAction
                 return 'Error';
             }
             
-            $logger->log(new AgaviLoggerMessage(AgaviConfig::get("ldap.host") . ': LDAP error: ' . ldap_error($this->ldap)));
+            $logger->log(new AgaviLoggerMessage(
+                AgaviConfig::get("ldap.host") . ': LDAP error: ' . ldap_error($this->ldap))
+            );
             
             //todo introduce a fallback action from config to allow other logins for dev environments.
             return 'Error';
@@ -109,7 +118,7 @@ class Auth_LoginAction extends AuthBaseAction
         
         if (AgaviConfig::has("ldap.group_required")) 
         {
-            $dn = sprintf(
+            $ldapDn = sprintf(
                 "%s=%s,%s",
                 AgaviConfig::get("ldap.group_search"),
                 AgaviConfig::get("ldap.group_required"),
@@ -121,11 +130,11 @@ class Auth_LoginAction extends AuthBaseAction
                 AgaviConfig::get("ldap.group_object_class", "posixGroup"),
                 AgaviConfig::get("ldap.group_member_attr", "memberUid"),
                 $this->getLdapEscapedString(
-                    AgaviConfig::get("ldap.group_member_attr_is_dn", false) ? $bind_rdn : $uid
+                    AgaviConfig::get("ldap.group_member_attr_is_dn", FALSE) ? $bindRdn : $uid
                 )
             );
             
-            $entry = ldap_read($this->ldap, $dn, $filter);
+            $entry = ldap_read($this->ldap, $ldapDn, $filter);
             
             if (!$entry) 
             {
@@ -136,7 +145,7 @@ class Auth_LoginAction extends AuthBaseAction
             
             if (!$info || 0 == $info["count"]) 
             {
-                $this->getContext()->getUser()->setAuthenticated(false);
+                $this->getContext()->getUser()->setAuthenticated(FALSE);
                 $this->getContainer()->getValidationManager()->setError(
                     'username_password_mismatch', 
                     $this->getContext()->getTranslationManager()->_(
@@ -160,7 +169,7 @@ class Auth_LoginAction extends AuthBaseAction
             }
         }
 
-        $this->getContext()->getUser()->setAuthenticated(true);
+        $this->getContext()->getUser()->setAuthenticated(TRUE);
 
         $logger->log(
             new AgaviLoggerMessage(
@@ -175,11 +184,11 @@ class Auth_LoginAction extends AuthBaseAction
     /**
      * This method handles validation errors that occur upon our received input data.
      * 
-     * @param       AgaviRequestDataHolder $rd
+     * @param       AgaviRequestDataHolder $parameters
      * 
      * @return      string The name of the view to execute.
      */
-    public function handleError(AgaviRequestDataHolder $rd) 
+    public function handleError(AgaviRequestDataHolder $parameters) 
     {
         $logger = $this->getContext()->getLoggerManager()->getLogger('login');
         
@@ -187,7 +196,7 @@ class Auth_LoginAction extends AuthBaseAction
             new AgaviLoggerMessage(
                 sprintf(
                     'Failed authentication attempt for username %1$s, validation failed',
-                    $rd->getParameter('username')
+                    $parameters->getParameter('username')
                 ),
                 AgaviILogger::INFO
             )
@@ -242,13 +251,15 @@ class Auth_LoginAction extends AuthBaseAction
         
         if (!empty($missing)) 
         {
-            throw new AgaviConfigurationException("Missing LDAP settings: " . join(", ", $missing));
+            throw new AgaviConfigurationException(
+                "Missing LDAP settings: " . join(", ", $missing)
+            );
         }
     }
 
     /**
      * Return the the ldap attribute value for the given 
-     * user and attribute name or false if can't be resolved.
+     * user and attribute name or FALSE if can't be resolved.
      * 
      * @param       string $username
      * @param       string $attribute
@@ -259,7 +270,7 @@ class Auth_LoginAction extends AuthBaseAction
      */
     private function getLdapAttribute($username, $attribute) 
     {
-        $dn = sprintf(
+        $ldapDn = sprintf(
             "%s=%s,%s",
             AgaviConfig::get("ldap.user_search", "uid"),
             $this->getLdapEscapedString($username), 
@@ -267,7 +278,7 @@ class Auth_LoginAction extends AuthBaseAction
         );
         
         $filter = "(objectClass=*)";
-        $entry = @ldap_read($this->ldap, $dn, "(objectClass=*)", array($attribute));
+        $entry = @ldap_read($this->ldap, $ldapDn, $filter, array($attribute));
         
         if ($entry) 
         {
