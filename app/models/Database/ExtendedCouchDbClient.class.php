@@ -80,19 +80,14 @@ class ExtendedCouchDbClient
      * @param       string $documentId
      * 
      * @return      array
+     * 
+     * @throws      CouchdbClientException
      */
     public function getDoc($database, $documentId)
     {
         $this->compositeClient->selectDb($database);
 
-        try
-        {
-            return (array)$this->compositeClient->getDoc($documentId);
-        }
-        catch(CouchdbClientException $ex)
-        {
-            return NULL;
-        }
+        return (array)$this->compositeClient->getDoc($documentId);
     }
 
     /**
