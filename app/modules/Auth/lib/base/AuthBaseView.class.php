@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The AuthBaseAction serves as the base view to all views implemented inside of the Auth module.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Tom Anheyer <Tom.Anheyer@BerlinOnline.de>
+ * @package         ApplicationBase
+ * @subpackage      Auth/Base
+ */
 class AuthBaseView extends ProjectBaseView
 {
     /*

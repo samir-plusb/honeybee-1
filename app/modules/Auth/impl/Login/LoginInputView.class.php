@@ -1,9 +1,21 @@
 <?php
 
+/**
+ * The Auth_Login_LoginInputView class handles input form presentation
+ * for our various supported output types.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         ApplicationBase
+ * @subpackage      Auth/Login
+ */
 class Auth_Login_LoginInputView extends AuthBaseView
 {
     /**
-     * Execute any presentation logic and set template attributes.
+     * Execute any html related presentation logic and sets up our template attributes.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
      */
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
@@ -35,6 +47,11 @@ class Auth_Login_LoginInputView extends AuthBaseView
         $this->setAttribute('_title', $tm->_('Login', 'auth.messages'));
     }
     
+    /**
+     * Prepares and sets our json data on our webresponse.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
+     */
     public function executeJson(AgaviRequestDataHolder $rd)
     {
         if (null != ($container = $this->attemptForward($rd)))
@@ -51,7 +68,12 @@ class Auth_Login_LoginInputView extends AuthBaseView
             )
         );
     }
-
+    
+    /**
+     * Prepares and sets our json data on our console response.
+     * 
+     * @param       AgaviRequestDataHolder $parameters 
+     */
     public function executeText(AgaviRequestDataHolder $rd)
     {
         $this->getContainer()->getResponse()->setContent(

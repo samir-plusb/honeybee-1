@@ -1,13 +1,13 @@
 <?php
 
 /**
+ * The Auth_LogoutAction class provides standard logout functionality and ends any current session.
  *
- * @version     $Id$
- * @copyright   BerlinOnline Stadtportal GmbH
- * @author      Tom.Anheyer@BerlinOnline.de
- *
- * @package     BerlinOnline
- * @subpackage  Auth
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Tom Anheyer <Tom.Anheyer@BerlinOnline.de>
+ * @package         ApplicationBase
+ * @subpackage      Auth/Logout
  */
 class Auth_LogoutAction extends AuthBaseAction 
 {
@@ -48,23 +48,44 @@ class Auth_LogoutAction extends AuthBaseAction
 //	{
 //		return 'Success';
 //	}
-
+    
+    /**
+     * Delegates to our executeWrite method.
+     * @internal    Do we want this? Logging out per get request?
+     *
+     * @param       AgaviParameterHolder $parameters
+     * 
+     * @return      string The name of the view to execute.
+     */
     public function executeRead(AgaviParameterHolder $parameters) 
     {
         return $this->executeWrite($parameters);
     }
-
+    
+    /**
+     * Logout the current user and end his session.
+     *
+     * @param       AgaviParameterHolder $parameters
+     * 
+     * @return      string The name of the view to execute.
+     */
     public function executeWrite(AgaviParameterHolder $parameters) 
     {
         $this->getContext()->getUser()->clearAttributes();
-        $this->getContext()->getUser()->setAuthenticated(false);
+        $this->getContext()->getUser()->setAuthenticated(FALSE);
         
         return 'Success';
     }
-
+    
+    /**
+     * Return whether this action requires authentication
+     * before execution.
+     * 
+     * @return      boolean
+     */
     public function isSecure() 
     {
-        return false;
+        return FALSE;
     }
 }
 

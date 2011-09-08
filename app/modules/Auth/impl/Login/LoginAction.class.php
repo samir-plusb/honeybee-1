@@ -1,19 +1,20 @@
 <?php
 
 /**
+ * The Auth_LoginAction class provides login support to the companies ldap.
  *
- * @version     $Id$
- * @copyright   BerlinOnline Stadtportal GmbH
- * @author      Tom.Anheyer@BerlinOnline.de
- *
- * @package     BerlinOnline
- * @subpackage  Auth
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Tom Anheyer <Tom.Anheyer@BerlinOnline.de>
+ * @package         ApplicationBase
+ * @subpackage      Auth/Login
  */
 class Auth_LoginAction extends AuthBaseAction 
 {
     /**
-     * LDAP link_identifier
-     * @var resource
+     * Holds our LDAP link_identifier resource.
+     * 
+     * @var         resource
      */
     private $ldap;
 
@@ -36,11 +37,17 @@ class Auth_LoginAction extends AuthBaseAction
     }
 
     /**
-     * perform login check
+     * Try to login based on the account information, that is provided with our given $parameters.
      *
-     * fallback to standard login action if ldap server is not available
+     * @todo        Fallback to standard login action if ldap server is not available
      *
-     * @param AgaviParameterHolder $parameters
+     * @param       AgaviParameterHolder $parameters
+     * 
+     * @return      string The name of the view to execute.
+     * 
+     * @uses        Auth_LoginAction::checkLdapConfig()
+     * @uses        Auth_LoginAction::getLdapEscapedString()
+     * @uses        Auth_LoginAction::getLdapAttribute()
      */
     public function executeWrite(AgaviParameterHolder $parameters) 
     {
@@ -164,7 +171,14 @@ class Auth_LoginAction extends AuthBaseAction
 
         return 'Success';
     }
-
+    
+    /**
+     * This method handles validation errors that occur upon our received input data.
+     * 
+     * @param       AgaviRequestDataHolder $rd
+     * 
+     * @return      string The name of the view to execute.
+     */
     public function handleError(AgaviRequestDataHolder $rd) 
     {
         $logger = $this->getContext()->getLoggerManager()->getLogger('login');
@@ -181,12 +195,25 @@ class Auth_LoginAction extends AuthBaseAction
 
         return 'Error';
     }
-
+    
+    /**
+     * Return whether this action requires authentication
+     * before execution.
+     * 
+     * @return      boolean
+     */
     public function isSecure() 
     {
-        return false;
+        return FALSE;
     }
     
+    /**
+     * Checks if all required ldap settings are correctly configured.
+     * 
+     * @staticvar   array $ldap_settings 
+     * 
+     * @throws      AgaviConfigurationException If the any required ldap setting can't ne resolved.
+     */
     private function checkLdapConfig() 
     {
         $missing = array();
@@ -220,24 +247,16 @@ class Auth_LoginAction extends AuthBaseAction
     }
 
     /**
-     * Returns a string which has the chars *, (, ), \ & NUL escaped to LDAP compliant
-     * syntax as per RFC 2254
-     * Thanks and credit to Iain Colledge for the research and function.
-     *
-     * @param string $string
-     * @return string
-     * @access private
+     * Return the the ldap attribute value for the given 
+     * user and attribute name or false if can't be resolved.
+     * 
+     * @param       string $username
+     * @param       string $attribute
+     * 
+     * @return      mixed 
+     * 
+     * @uses        Auth_LoginAction::getLdapEscapedString()
      */
-    private function getLdapEscapedString($string) 
-    {
-        // Make the string LDAP compliant by escaping *, (, ) , \ & NUL
-        return str_replace(
-            array("*", "(", ")", "\\", "\x00"), //replace this
-            array("\\2a", "\\28", "\\29", "\\5c", "\\00"), //with this
-            $string //in this
-        );
-    }
-
     private function getLdapAttribute($username, $attribute) 
     {
         $dn = sprintf(
@@ -254,10 +273,29 @@ class Auth_LoginAction extends AuthBaseAction
         {
             $info = @ldap_get_entries($this->ldap, $entry);
             
-            return empty($info[0][$attribute][0]) ? false : $info[0][$attribute][0];
+            return empty($info[0][$attribute][0]) ? FALSE : $info[0][$attribute][0];
         }
         
-        return false;
+        return FALSE;
+    }
+    
+    /**
+     * Returns a string which has the chars *, (, ), \ & NUL escaped to LDAP compliant
+     * syntax as per RFC 2254.
+     * Thanks and credit to Iain Colledge for the research and function.
+     *
+     * @param       string $string
+     * 
+     * @return      string
+     */
+    private function getLdapEscapedString($string) 
+    {
+        // Make the string LDAP compliant by escaping *, (, ) , \ & NUL
+        return str_replace(
+            array("*", "(", ")", "\\", "\x00"), //replace this
+            array("\\2a", "\\28", "\\29", "\\5c", "\\00"), //with this
+            $string //in this
+        );
     }
 }
 

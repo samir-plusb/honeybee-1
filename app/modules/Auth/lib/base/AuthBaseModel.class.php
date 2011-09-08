@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The AuthBaseAction serves as the base model to all models implemented inside of the Auth module.
+ *
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Tom Anheyer <Tom.Anheyer@BerlinOnline.de>
+ * @package         ApplicationBase
+ * @subpackage      Auth/Base
+ */
 class AuthBaseModel extends ProjectBaseModel 
 {
     /*
