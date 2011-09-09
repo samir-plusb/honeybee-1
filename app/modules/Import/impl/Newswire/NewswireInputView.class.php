@@ -17,8 +17,6 @@ class Import_Newswire_NewswireInputView extends ImportBaseView
      *                     <li>An AgaviExecutionContainer to forward the execution to or</li>
      *                     <li>Any other type will be set as the response content.</li>
      *                   </ul>
-     * 
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
@@ -38,8 +36,9 @@ class Import_Newswire_NewswireInputView extends ImportBaseView
      *                   </ul>
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getResponse()->setContent("Import succeeded.");
     }

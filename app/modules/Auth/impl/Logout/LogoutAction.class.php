@@ -70,8 +70,9 @@ class Auth_LogoutAction extends AuthBaseAction
      * @return      string The name of the view to execute.
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeWrite(AgaviParameterHolder $parameters) 
+    public function executeWrite(AgaviParameterHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getContext()->getUser()->clearAttributes();
         $this->getContext()->getUser()->setAuthenticated(FALSE);

@@ -19,8 +19,9 @@ class Import_Newswire_NewswireErrorView extends ImportBaseView
      *                   </ul>
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeJson(AgaviRequestDataHolder $parameters)
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupJson($parameters);
         $errors = array();
@@ -48,8 +49,9 @@ class Import_Newswire_NewswireErrorView extends ImportBaseView
      *                   </ul>
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $errors = array();
 

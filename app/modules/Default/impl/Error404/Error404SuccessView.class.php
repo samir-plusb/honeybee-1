@@ -30,8 +30,9 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeHtml(AgaviRequestDataHolder $parameters)
+    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
         $this->setAttribute('_title', $this->translationManager->_('404 Not Found'));
@@ -44,8 +45,9 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeJson(AgaviRequestDataHolder $parameters)
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getContainer()->getResponse()->setContent(
             json_encode(
@@ -63,8 +65,9 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $msg = 'Usage: console.php <command> [OPTION]...' . PHP_EOL .
             PHP_EOL . 'Available Commands:' . PHP_EOL;

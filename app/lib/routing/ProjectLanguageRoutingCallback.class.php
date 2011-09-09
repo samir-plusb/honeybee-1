@@ -47,8 +47,9 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      * @return      boolean 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function onMatched(array &$parameters, AgaviExecutionContainer $container)
+    public function onMatched(array &$parameters, AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
     {
         // let's check if the locale is allowed
         try
@@ -76,8 +77,9 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      * @return      boolean 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function onNotMatched(AgaviExecutionContainer $container)
+    public function onNotMatched(AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
     {
         // the pattern didn't match, or onMatched() returned FALSE.
         // that's sad. let's see if there's a locale set in a cookie from an earlier visit.
@@ -139,8 +141,9 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      * @return      boolean 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function onGenerate(array $defaultParameters, array &$userParameters, array &$options)
+    public function onGenerate(array $defaultParameters, array &$userParameters, array &$options) // @codingStandardsIgnoreEnd
     {
         if (isset($userParameters['locale']))
         {

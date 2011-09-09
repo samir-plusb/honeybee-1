@@ -137,7 +137,8 @@ abstract class ImportBaseDataSource implements IDataSource
         {
             throw new DataSourceException(
                 sprintf(
-                    "An invalid IDataRecord implementor was provided. '%s' does not implement the interface IDataRecord.",
+                    "An invalid IDataRecord implementor was provided. " .
+                    "'%s' does not implement the interface IDataRecord.",
                     $recordClass
                 )
             );

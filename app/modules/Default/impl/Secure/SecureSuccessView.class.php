@@ -31,8 +31,9 @@ class Default_SecureSuccess_SecureSuccessView extends DefaultBaseView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeHtml(AgaviRequestDataHolder $parameters) 
+    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
 
@@ -48,8 +49,9 @@ class Default_SecureSuccess_SecureSuccessView extends DefaultBaseView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeJson(AgaviRequestDataHolder $parameters)
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getContainer()->getResponse()->setContent(
             json_encode(
@@ -67,8 +69,9 @@ class Default_SecureSuccess_SecureSuccessView extends DefaultBaseView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $msg = 'Permission Denied.' . PHP_EOL;
 

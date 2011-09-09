@@ -53,7 +53,9 @@ class ImperiaDataImportMockUp extends ImperiaDataImport
 
         if (empty($importTargetFile) || !is_string($importTargetFile))
         {
-            throw new DataImportException("Missing or invalid output_file setting encountered for mockimport class. Path: " . $importTargetFile);
+            throw new DataImportException(
+                "Missing or invalid output_file setting encountered for mockimport class. Path: " . $importTargetFile
+            );
         }
 
         file_put_contents($importTargetFile, var_export($data, TRUE), FILE_APPEND);

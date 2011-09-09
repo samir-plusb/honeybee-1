@@ -22,8 +22,9 @@ class Import_Imperia_ImperiaSuccessView extends ImportBaseView
      *                   </ul>
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getResponse()->setContent("Import succeeded.");
     }

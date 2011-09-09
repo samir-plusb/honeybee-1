@@ -18,8 +18,9 @@ class Auth_Logout_LogoutErrorView extends AuthBaseView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeHtml(AgaviRequestDataHolder $parameters)
+    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         parent::setupHtml();
         // set our template
@@ -34,8 +35,9 @@ class Auth_Logout_LogoutErrorView extends AuthBaseView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeJson(AgaviRequestDataHolder $parameters)
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getContainer()->getResponse()->setContent(
             json_encode(
@@ -53,8 +55,9 @@ class Auth_Logout_LogoutErrorView extends AuthBaseView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getContainer()->getResponse()->setContent(
             "An unexpected error occured during logout.\n"

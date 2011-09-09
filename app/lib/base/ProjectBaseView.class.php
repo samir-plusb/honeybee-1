@@ -88,8 +88,9 @@ class ProjectBaseView extends AgaviView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public final function execute(AgaviRequestDataHolder $parameters)
+    public final function execute(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
@@ -102,8 +103,10 @@ class ProjectBaseView extends AgaviView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * 
+     * @codingStandardsIgnoreStart
      */
-    public function executeHtml(AgaviRequestDataHolder $parameters)
+    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
@@ -115,8 +118,9 @@ class ProjectBaseView extends AgaviView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeJson(AgaviRequestDataHolder $parameters)
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
@@ -128,8 +132,9 @@ class ProjectBaseView extends AgaviView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
@@ -141,8 +146,9 @@ class ProjectBaseView extends AgaviView
      * @param       string $layoutName 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function setupHtml(AgaviRequestDataHolder $parameters, $layoutName = NULL)
+    public function setupHtml(AgaviRequestDataHolder $parameters, $layoutName = NULL) // @codingStandardsIgnoreEnd
     {
         if ($layoutName === NULL && $this->getContainer()->getParameter('is_slot', FALSE))
         {
