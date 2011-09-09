@@ -1,6 +1,6 @@
 <?php
 
-class NewswireDataRecordTest extends DataRecordBaseTestCase
+abstract class NewswireDataRecordTest extends DataRecordBaseTestCase
 {
     protected function getDataRecordClass()
     {

@@ -1,6 +1,6 @@
 <?php
 
-class NitfDataRecordTest extends DataRecordBaseTestCase
+abstract class NitfDataRecordTest extends DataRecordBaseTestCase
 {
     protected function getDataRecordClass()
     {

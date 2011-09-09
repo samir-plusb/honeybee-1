@@ -20,4 +20,16 @@
         <log type="coverage-clover" target="../../etc/integration/build/logs/clover.xml"/>
         <log type="junit" target="../../etc/integration/build/logs/phpunit.xml" logIncompleteSkipped="false"/>
     </logging>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../../app/models</directory>
+            <directory suffix=".php">../../app/modules/Import/</directory>
+            <directory suffix=".php">../../testing/</directory>
+            <exclude>
+                <directory suffix="Success.php">../../app/</directory>
+                <directory suffix="Input.php">../../app/</directory>
+                <directory suffix="Error.php">../../app/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
