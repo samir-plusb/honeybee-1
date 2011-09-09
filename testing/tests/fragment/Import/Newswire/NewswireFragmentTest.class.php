@@ -50,6 +50,9 @@ class NewswireActionTest extends AgaviActionTestCase
 </ae:configurations>
 EOT;
 
+    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
+    
     /**
      *
      * Enter description here ...
@@ -74,7 +77,8 @@ EOT;
             $this->configTemplate);
         file_put_contents($this->configFile, $config);
     }
-
+    
+    // @codeCoverageIgnoreEnd
 
     /**
      * @agaviRequestMethod write

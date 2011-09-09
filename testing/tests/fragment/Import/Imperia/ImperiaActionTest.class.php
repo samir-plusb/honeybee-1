@@ -5,6 +5,9 @@
  */
 class ImperiaActionTest extends AgaviActionTestCase
 {
+    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
+    
     public function __construct($name = NULL, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
@@ -13,7 +16,9 @@ class ImperiaActionTest extends AgaviActionTestCase
         $this->moduleName = 'Import';
         $this->actionName = 'Imperia';
     }
-
+    
+    // @codeCoverageIgnoreEnd
+    
     public function testPositiveImport()
     {
         $this->runActionWithParameters('write', array('c' => 'polizeimeldungen'));

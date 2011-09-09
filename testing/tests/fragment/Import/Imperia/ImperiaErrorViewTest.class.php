@@ -5,6 +5,9 @@
  */
 class ImperiaErrorViewTest extends AgaviViewTestCase
 {
+    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
+    
     public function __construct($name = NULL, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
@@ -14,6 +17,8 @@ class ImperiaErrorViewTest extends AgaviViewTestCase
         $this->actionName = 'Imperia';
         $this->viewName = 'Error';
     }
+    
+    // @codeCoverageIgnoreEnd
 
     public function testHandlesTextOutputType()
 	{
