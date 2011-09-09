@@ -57,7 +57,10 @@ class DataImportFactoryConfigTest extends AgaviUnitTestCase
 
         $this->assertEquals($expected, $setting_val, $msg);
     }
-
+    
+    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
+    
     public function provideConfigFilePath()
     {
         return array(
@@ -81,6 +84,8 @@ class DataImportFactoryConfigTest extends AgaviUnitTestCase
 
         return $ret;
     }
+    
+    // @codeCoverageIgnoreEnd
 
     private function buildConfigFilePath()
     {

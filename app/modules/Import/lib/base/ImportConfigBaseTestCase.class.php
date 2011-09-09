@@ -98,6 +98,9 @@ abstract class ImportConfigBaseTestCase extends AgaviPhpUnitTestCase
     
     // ---------------------------------- <WORKING METHODS> --------------------------------------
     
+    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
+    
     /**
      * This method serves as the data provider for the testGetSetting test.
      * It returns an array of expected setting name/value pairs.
@@ -116,6 +119,8 @@ abstract class ImportConfigBaseTestCase extends AgaviPhpUnitTestCase
 
         return $ret;
     }
+    
+    // @codeCoverageIgnoreEnd
     
     /**
      * Returns a fixture array that is used to validate the state 

@@ -102,6 +102,9 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
     
     // ---------------------------------- <WORKING METHODS> --------------------------------------
     
+    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
+    
     /**
      * This method serves as the data provider for the testGetValue test.
      * It returns an array of expected setting name/value pairs.
@@ -119,6 +122,8 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
 
         return $ret;
     }
+    
+    // @codeCoverageIgnoreEnd
     
     /**
      * Returns a xml fixture that is passed to the record,

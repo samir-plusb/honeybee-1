@@ -77,6 +77,9 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
         $this->assertEquals(TRUE, $success);
         $this->assertEquals(self::EXPECTED_IMPORT_RESULT_HASH, $this->calculateImportResultHash());
     }
+    
+    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
 
     public function provideConfigFilePath()
     {
@@ -85,6 +88,8 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
             array('factoryConfigFile' => $this->buildConfigFilePath())
         );
     }
+    
+    // @codeCoverageIgnoreEnd
 
     private function buildConfigFilePath()
     {
