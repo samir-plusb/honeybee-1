@@ -68,6 +68,8 @@ class Auth_LogoutAction extends AuthBaseAction
      * @param       AgaviParameterHolder $parameters
      * 
      * @return      string The name of the view to execute.
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeWrite(AgaviParameterHolder $parameters) 
     {

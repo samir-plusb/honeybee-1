@@ -50,6 +50,8 @@ class Auth_LoginLogin_ErrorView extends AuthBaseView
      * Prepares and sets our json data on our console response.
      * 
      * @param       AgaviRequestDataHolder $parameters 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {

@@ -86,6 +86,8 @@ class ProjectBaseView extends AgaviView
      * concrete implemenation, then we will throw an exception letting the dev know.
      * 
      * @param       AgaviRequestDataHolder $parameters 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public final function execute(AgaviRequestDataHolder $parameters)
     {
@@ -98,6 +100,8 @@ class ProjectBaseView extends AgaviView
      * Let them know ^^
      * 
      * @param       AgaviRequestDataHolder $parameters 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
@@ -109,6 +113,8 @@ class ProjectBaseView extends AgaviView
      * for the current action.
      * 
      * @param       AgaviRequestDataHolder $parameters 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
@@ -120,6 +126,8 @@ class ProjectBaseView extends AgaviView
      * for the current action.
      * 
      * @param       AgaviRequestDataHolder $parameters 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {
@@ -131,6 +139,8 @@ class ProjectBaseView extends AgaviView
      * 
      * @param       AgaviRequestDataHolder $parameters
      * @param       string $layoutName 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setupHtml(AgaviRequestDataHolder $parameters, $layoutName = NULL)
     {

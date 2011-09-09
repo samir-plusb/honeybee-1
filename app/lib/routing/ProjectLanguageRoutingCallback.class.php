@@ -45,6 +45,8 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      * @param       AgaviExecutionContainer $container
      * 
      * @return      boolean 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function onMatched(array &$parameters, AgaviExecutionContainer $container)
     {
@@ -72,6 +74,8 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      * @param       AgaviExecutionContainer $container
      * 
      * @return      boolean 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function onNotMatched(AgaviExecutionContainer $container)
     {
@@ -133,6 +137,8 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      * @param       AgaviExecutionContainer $container
      * 
      * @return      boolean 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function onGenerate(array $defaultParameters, array &$userParameters, array &$options)
     {
