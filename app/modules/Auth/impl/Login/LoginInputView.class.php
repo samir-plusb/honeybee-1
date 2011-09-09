@@ -76,8 +76,9 @@ class Auth_Login_LoginInputView extends AuthBaseView
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $translationManager = $this->getContext()->getTranslationManager();
         

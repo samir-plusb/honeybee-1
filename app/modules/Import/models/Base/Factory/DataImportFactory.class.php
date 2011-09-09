@@ -2,7 +2,8 @@
 
 /**
  * The ImportBaseDataSource class is a concrete implementation of the IDataImportFactory interface.
- * It provides factory methods for creating IDataImport and IDataSource instances based on a given DataImportFactoryConfig.
+ * It provides factory methods for creating IDataImport and IDataSource instances
+ * based on a given DataImportFactoryConfig.
  * 
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
