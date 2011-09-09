@@ -37,8 +37,8 @@
  * @todo      CS cleanup - change package to PhpDocumentor
  */
 
-$libs_dir = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs';
-$includes = array($libs_dir, $libs_dir . DIRECTORY_SEPARATOR . 'PhpDocumentor/');
+$libsDir = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs';
+$includes = array($libsDir, $libsDir . DIRECTORY_SEPARATOR . 'PhpDocumentor/');
 set_include_path(implode(PATH_SEPARATOR, $includes).PATH_SEPARATOR.get_include_path());
 
 /**

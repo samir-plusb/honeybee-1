@@ -30,6 +30,10 @@ class Import_ImperiaAction extends ImportBaseAction
      */
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
+        $feed = ezcFeed::parse('http://www.spiegel.de/schlagzeilen/index.rss');
+        
+        var_dump($feed);exit;
+        
         $importFactory = new DataImportFactory(
             $parameters->getParameter(self::PARAM_CONFIG_NAME, $this->getImportConfigDirectory())
         );
