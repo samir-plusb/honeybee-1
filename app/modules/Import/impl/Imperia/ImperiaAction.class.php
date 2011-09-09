@@ -12,11 +12,6 @@
 class Import_ImperiaAction extends ImportBaseAction
 {
     /**
-     * Holds the name of the our default import config file.
-     */
-    const DEFAULT_CONFIG_FILE = 'polizeimeldungen.xml';
-    
-    /**
      * Holds the name of our config parameter.
      */
     const PARAM_CONFIG_NAME = 'config';
@@ -31,11 +26,11 @@ class Import_ImperiaAction extends ImportBaseAction
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
         $importFactory = new DataImportFactory(
-            $parameters->getParameter(self::PARAM_CONFIG_NAME, $this->getImportConfigDirectory())
+            $parameters->getParameter(self::PARAM_CONFIG_NAME)
         );
 
-        $import = $importFactory->createDataImport('CouchDbDataImportConfig');
-        $dataSource = $importFactory->createDataSource('ImperiaDataSourceConfig');
+        $import = $importFactory->createDataImport();
+        $dataSource = $importFactory->createDataSource();
 
         if (!$import->run($dataSource))
         {
@@ -43,21 +38,6 @@ class Import_ImperiaAction extends ImportBaseAction
         }
 
         return 'Success';
-    }
-    
-    /**
-     * Return a path pointing to our config directory.
-     * 
-     * @return      string 
-     */
-    private function getImportConfigDirectory()
-    {
-        return AgaviConfig::get('core.app_dir') . DIRECTORY_SEPARATOR .
-            'modules' . DIRECTORY_SEPARATOR .
-            'Import' . DIRECTORY_SEPARATOR .
-            'config' . DIRECTORY_SEPARATOR .
-            'imports' . DIRECTORY_SEPARATOR .
-            self::DEFAULT_CONFIG_FILE;
     }
 }
 

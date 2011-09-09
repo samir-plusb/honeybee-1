@@ -12,16 +12,6 @@
  */
 class CouchDbDataImportMockUp extends CouchDbDataImport
 {
-    // ---------------------------------- <CONSTANTS> --------------------------------------------
-    
-    /**
-     * Holds the name of the config parameter that specifies the outputfile to write to.
-     */
-    const SETTING_OUTPUT_FILE = 'output_file';
-    
-    // ---------------------------------- </CONSTANTS> -------------------------------------------
-    
-    
     // ---------------------------------- <CouchDbDataImport OVERRIDES> --------------------------
     
     /**
@@ -35,7 +25,9 @@ class CouchDbDataImportMockUp extends CouchDbDataImport
     {
         parent::init($dataSource);
         
-        $importTargetFile = $this->config->getSetting(self::SETTING_OUTPUT_FILE);
+        $importTargetFile = $this->config->getSetting(
+            CouchDbDataImportMockUpConfig::CFG_OUTPUT_FILE
+        );
         
         file_put_contents($importTargetFile, '');
     }
@@ -49,7 +41,9 @@ class CouchDbDataImportMockUp extends CouchDbDataImport
     {
         parent::importData($data);
         
-        $importTargetFile = $this->config->getSetting(self::SETTING_OUTPUT_FILE);
+        $importTargetFile = $this->config->getSetting(
+            CouchDbDataImportMockUpConfig::CFG_OUTPUT_FILE
+        );
 
         if (empty($importTargetFile) || !is_string($importTargetFile))
         {

@@ -13,6 +13,8 @@
  */
 class DataImportFactory implements IDataImportFactory
 {
+    const CONFIG_CLASS_SUFFIX = 'Config';
+    
     // ---------------------------------- <MEMBERS> ----------------------------------------------
     
     /**
@@ -56,20 +58,44 @@ class DataImportFactory implements IDataImportFactory
      * Create a new concrete IDataImport instance based on our config
      * and optionally provided parameters.
      * 
-     * @param       string $configClass
      * @param       array $parameters
      * 
      * @return      IDataImport
      */
-    public function createDataImport($configClass, array $parameters = array())
+    public function createDataImport(array $parameters = array())
     {
         $importSettings = array_merge(
             $this->factoryConfig->getSetting(DataImportFactoryConfig::CFG_SETTINGS),
             $parameters
         );
 
-        $importConfig = new $configClass($importSettings);
         $importClass = $this->factoryConfig->getSetting(DataImportFactoryConfig::CFG_CLASS);
+        
+        if (!class_exists($importClass))
+        {
+            throw new DataImportFactoryException(
+                "Unable to find provided import class: " . $importClass
+            );
+        }
+        
+        // This is a simple convention that prevents cross package dependencies 
+        // concerning the usage of config objects.
+        // We always want an ImperiaDataImport to use a ImperiaDataImportConfig and 
+        // not a config object from a base or other domain level package.
+        // So it is ok to enforce the creation of concrete config objects when implementing
+        // concrete instances of other packages such as DataImport or DataSource.
+        $configClass = $importClass . self::CONFIG_CLASS_SUFFIX;
+        
+        if (!class_exists($configClass))
+        {
+            throw new DataImportFactoryException(
+                "Unable to find corresponding config class for import class: " . $importClass . 
+                ". Please make sure that you have create a " . $configClass . " implementation along with your" . 
+                $importClass
+            );
+        }
+        
+        $importConfig = new $configClass($importSettings);
 
         return new $importClass($importConfig);
     }
@@ -78,12 +104,11 @@ class DataImportFactory implements IDataImportFactory
      * Create a new concrete IDataSource instance based on our config
      * and optionally provided parameters.
      * 
-     * @param       string $configClass
      * @param       array $parameters
      * 
      * @return      IDataSource
      */
-    public function createDataSource($configClass, array $parameters = array())
+    public function createDataSource(array $parameters = array())
     {
         $rawSourceSettings = $this->factoryConfig->getSetting(DataImportFactoryConfig::CFG_DATASRC);
 
@@ -94,11 +119,30 @@ class DataImportFactory implements IDataImportFactory
             ),
             $parameters
         );
-
+        
         $dataSourceClass = $rawSourceSettings[DataImportFactoryConfig::CFG_CLASS];
-        $dataSrcConfig = new $configClass($dataSourceSettings);
+        
+        if (!class_exists($dataSourceClass))
+        {
+            throw new DataImportFactoryException(
+                "Unable to find provided data source class: " . $dataSourceClass
+            );
+        }
+        
+        $configClass = $dataSourceClass . self::CONFIG_CLASS_SUFFIX;
+        
+        if (!class_exists($configClass))
+        {
+            throw new DataImportFactoryException(
+                "Unable to find corresponding config class for datasource class: " . $dataSourceClass . 
+                ". Please make sure that you have create a " . $configClass . " implementation along with your" . 
+                $dataSourceClass
+            );
+        }
+        
+        $dataSourceConfig = new $configClass($dataSourceSettings);
 
-        return new $dataSourceClass($dataSrcConfig);
+        return new $dataSourceClass($dataSourceConfig);
     }
 }
 

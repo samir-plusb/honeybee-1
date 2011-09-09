@@ -40,7 +40,8 @@
             <!-- Import Base Models -->
             <autoload name="DataImportConfig">%core.module_dir%/Import/models/Base/DataImport/DataImportConfig.class.php</autoload>
             <autoload name="CouchDbDataImportConfig">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImportConfig.class.php</autoload>
-
+            <autoload name="CouchDbDataImportMockUpConfig">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImportMockUpConfig.class.php</autoload>
+            
             <autoload name="IDataImport">%core.module_dir%/Import/models/Base/DataImport/IDataImport.iface.php</autoload>
 
             <autoload name="BaseDataImport">%core.module_dir%/Import/models/Base/DataImport/BaseDataImport.class.php</autoload>

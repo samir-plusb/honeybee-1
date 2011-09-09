@@ -14,6 +14,7 @@
                 </errors>
                 <ae:parameters>
                     <ae:parameter name="pop_parse_errors">false</ae:parameter>
+                    <ae:parameter name="export">config</ae:parameter>
                 </ae:parameters>
             </validator>
             
@@ -34,6 +35,7 @@
                 </errors>
                 <ae:parameters>
                     <ae:parameter name="pop_parse_errors">true</ae:parameter>
+                    <ae:parameter name="export">config</ae:parameter>
                 </ae:parameters>
             </validator>
             

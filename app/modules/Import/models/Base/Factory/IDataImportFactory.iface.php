@@ -23,7 +23,7 @@ interface IDataImportFactory
      * 
      * @return      IDataImport
      */
-    public function createDataImport($configClass, array $parameters = array());
+    public function createDataImport(array $parameters = array());
 
     /**
      * Create a new concrete IDataSource instance using the given config class
@@ -36,7 +36,7 @@ interface IDataImportFactory
      * 
      * @return      IDataSource
      */
-    public function createDataSource($configClass, array $parameters = array());
+    public function createDataSource(array $parameters = array());
 }
 
 ?>

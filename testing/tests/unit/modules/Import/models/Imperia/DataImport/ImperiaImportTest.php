@@ -65,14 +65,14 @@ class ImperiaImportTest extends AgaviPhpUnitTestCase
         $importFactory = new DataImportFactory($factoryConfigFile);
 
         $importParams = array(
-            CouchDbDataImportMockUp::SETTING_OUTPUT_FILE => $this->buildImportOutputPath()
+            CouchDbDataImportMockUpConfig::CFG_OUTPUT_FILE => $this->buildImportOutputPath()
         );
-        $import = $importFactory->createDataImport('CouchDbDataImportConfig', $importParams);
+        $import = $importFactory->createDataImport($importParams);
 
         $dataSourceParams = array(
             ImperiaDataSourceConfig::PARAM_DOCIDS => self::$docIds
         );
-        $dataSource = $importFactory->createDataSource('ImperiaDataSourceConfig', $dataSourceParams);
+        $dataSource = $importFactory->createDataSource($dataSourceParams);
 
         // And let them rock!
         $success = $import->run($dataSource);

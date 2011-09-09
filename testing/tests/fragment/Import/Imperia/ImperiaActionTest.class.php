@@ -22,7 +22,7 @@ class ImperiaActionTest extends AgaviActionTestCase
     public function testPositiveImport()
     {
         $this->runActionWithParameters('write', array('c' => 'polizeimeldungen'));
-        $this->assertValidatedArgument('c');
+        $this->assertValidatedArgument('config');
         $this->assertViewNameEquals('Success');
     }
 

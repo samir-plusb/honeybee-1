@@ -38,15 +38,15 @@ class ImportConfigFileValidator extends AgaviStringValidator
             return FALSE;
         }
         
+        $config = NULL;
         $originalValue =& $this->getData($this->getArgument());
-        
         $filePath = $this->buildImportConfigFilePath($originalValue);
         
         try
         {
-            AgaviConfigCache::checkConfig($filePath);
+            $config = new DataImportFactoryConfig($filePath);
         }
-        catch (AgaviConfigurationException $e)
+        catch (Exception $e)
         {
             if (!$this->getParameter('pop_parse_errors'))
             {
@@ -64,6 +64,8 @@ class ImportConfigFileValidator extends AgaviStringValidator
             
             return FALSE;
         }
+        
+        $this->export($config, $this->getParameter('export', $this->getArgument()));
         
         return TRUE;
     }

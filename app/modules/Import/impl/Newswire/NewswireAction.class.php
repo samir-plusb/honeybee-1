@@ -24,8 +24,8 @@ class Import_NewswireAction extends ImportBaseAction
         error_log(__CLASS__.":".__FUNCTION__.":".__LINE__,3,'/tmp/log');
         error_log($this->getImportConfigFile($parameters->getParameter(self::PARAM_CONFIG_NAME, 'newswire-dpa.xml')),3,'/tmp/log');
 
-        $import = $importFactory->createDataImport('NewswireDataImportConfig');
-        $dataSource = $importFactory->createDataSource('NewswireDataSourceConfig');
+        $import = $importFactory->createDataImport();
+        $dataSource = $importFactory->createDataSource();
 
         if (!$import->run($dataSource))
         {
