@@ -17,6 +17,9 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
         '/2/10330/10343/10890/1385806',
         '/2/10330/10343/10890/1385805'
     );
+    
+    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
 
     public static function setUpBeforeClass()
     {
@@ -39,7 +42,9 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
             $coucDbClient->createDatabase($couchDbDatabase);
         }
     }
-
+    
+    // @codeCoverageIgnoreEnd
+    
     /**
 	 * @dataProvider provideConfigFilePath
 	 */
@@ -89,14 +94,14 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
         );
     }
     
-    // @codeCoverageIgnoreEnd
-
     private function buildConfigFilePath()
     {
         $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
 
         return $baseDir . self::CFG_FILE_PATH;
     }
+    
+    // @codeCoverageIgnoreEnd
 
     private function buildImportOutputPath()
     {
