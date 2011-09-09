@@ -74,6 +74,8 @@ class Auth_Login_LoginInputView extends AuthBaseView
      * Prepares and sets our json data on our console response.
      * 
      * @param       AgaviRequestDataHolder $parameters 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {
