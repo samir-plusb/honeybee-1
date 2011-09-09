@@ -56,7 +56,11 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
         {
             $this->context->getTranslationManager()->getLocaleIdentifier($parameters['locale']);
             // yup, worked. now lets set that as a cookie
-            $this->context->getController()->getGlobalResponse()->setCookie('locale', $parameters['locale'], '+1 month');
+            $this->context->getController()->getGlobalResponse()->setCookie(
+                'locale',
+                $parameters['locale'], 
+                '+1 month'
+            );
             
             return TRUE;
         }
@@ -143,7 +147,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function onGenerate(array $defaultParameters, array &$userParameters, array &$options) // @codingStandardsIgnoreEnd
+    public function onGenerate(array $defaultParameters, array &$userParameters, array &$options) //@codingStandardsIgnoreEnd
     {
         if (isset($userParameters['locale']))
         {
