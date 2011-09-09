@@ -30,6 +30,9 @@
                     
                     <!-- Flow Tests -->
                     <testfile>fragment/Import/Newswire/NewswireFragmentTest.class.php</testfile>
+                    <testfile>fragment/Import/Imperia/ImperiaActionTest.class.php</testfile>
+                    <testfile>fragment/Import/Imperia/ImperiaSuccessViewTest.class.php</testfile>
+                    <testfile>fragment/Import/Imperia/ImperiaErrorViewTest.class.php</testfile>
                 </testfiles>
             </suite>
         </suites>

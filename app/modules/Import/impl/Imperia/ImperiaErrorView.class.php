@@ -59,6 +59,8 @@ class Import_Imperia_ImperiaErrorView extends ImportBaseView
         
         $content = implode("\n", $errors);
         
+        $content = 'An error occoured: ' . $content;
+        
         $this->getResponse()->setContent($content);
     }
 }
