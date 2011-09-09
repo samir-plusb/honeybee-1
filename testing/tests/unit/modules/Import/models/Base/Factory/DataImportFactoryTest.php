@@ -4,7 +4,7 @@ class DataImportFactoryTest extends AgaviPhpUnitTestCase
 {
     const CFG_FILE_PATH = 'configs/imports/polizeimeldungen.xml';
 
-    const EXPECTED_IMPORT_INSTANCE = 'ImperiaDataImport';
+    const EXPECTED_IMPORT_INSTANCE = 'CouchDbDataImport';
 
     const EXPECTED_DATASOURCE_INSTANCE = 'ImperiaDataSource';
 
@@ -27,7 +27,7 @@ class DataImportFactoryTest extends AgaviPhpUnitTestCase
 
     public function testCreateDataImport()
     {
-        $importer = $this->factory->createDataImport('ImperiaDataImportConfig');
+        $importer = $this->factory->createDataImport('CouchDbDataImportConfig');
 
         $this->assertInstanceOf(self::EXPECTED_IMPORT_INSTANCE, $importer);
     }

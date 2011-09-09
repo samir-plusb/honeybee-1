@@ -45,6 +45,7 @@
 
             <autoload name="BaseDataImport">%core.module_dir%/Import/models/Base/DataImport/BaseDataImport.class.php</autoload>
             <autoload name="CouchDbDataImport">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImport.class.php</autoload>
+            <autoload name="CouchDbDataImportMockUp">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImportMockUp.class.php</autoload>
             <autoload name="DataImportException">%core.module_dir%/Import/models/Base/DataImport/DataImportException.class.php</autoload>
             <!-- /Import Base Models -->
 
@@ -71,11 +72,6 @@
             <!-- CONCRETE IMPLEMENTATIONS -->
 
             <!-- Imperia Import -->
-            <autoload name="ImperiaDataImportConfig">%core.module_dir%/Import/models/Imperia/DataImport/ImperiaDataImportConfig.class.php</autoload>
-            <autoload name="ImperiaDataImport">%core.module_dir%/Import/models/Imperia/DataImport/ImperiaDataImport.class.php</autoload>
-            <autoload name="ImperiaDataImportMockUp">%core.module_dir%/Import/models/Imperia/DataImport/ImperiaDataImportMockUp.class.php</autoload>
-
-
             <autoload name="ImperiaDataSourceConfig">%core.module_dir%/Import/models/Imperia/DataSource/ImperiaDataSourceConfig.class.php</autoload>
             <autoload name="ImperiaDataSource">%core.module_dir%/Import/models/Imperia/DataSource/ImperiaDataSource.class.php</autoload>
 

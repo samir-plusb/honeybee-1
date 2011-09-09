@@ -35,7 +35,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     // ---------------------------------- <ABSTRACT METHODS> -------------------------------------
     
     /**
-     * Normaliize the incoming data.
+     * Normalize the incoming data.
      * This probally the most important method for subclasses to implement,
      * as this where you take your arbitary data(array, file, xml, whatever ...)
      * and bring it into an usable array structure with keys that map to our provided fieldnames.

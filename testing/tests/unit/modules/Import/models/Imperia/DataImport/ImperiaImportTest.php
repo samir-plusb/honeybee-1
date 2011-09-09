@@ -1,12 +1,10 @@
 <?php
 
-class ImperiaDataImportTest extends AgaviPhpUnitTestCase
+class ImperiaImportTest extends AgaviPhpUnitTestCase
 {
     const CFG_FILE_PATH = 'configs/imports/polizeimeldungen.xml';
 
     const CFG_FIXTURE = 'data/import/imperia/polizeimeldungen.config.php';
-
-    const CFG_DATASRC_FIXTURE = 'data/import/imperia/polizeimeldungen.config.datasource.php';
 
     const IMPORT_OUTPUTFILE = 'polizeimeldungen.import';
 
@@ -53,10 +51,10 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
         $config = new DataImportFactoryConfig($factoryConfigFile);
 
         $importSettings = $config->getSetting(DataImportFactoryConfig::CFG_SETTINGS);
-        $importConfig = new ImperiaDataImportConfig($importSettings);
-        $import = new ImperiaDataImportMockUp($importConfig);
+        $importConfig = new CouchDbDataImportConfig($importSettings);
+        $import = new CouchDbDataImportMockUp($importConfig);
 
-        $this->assertInstanceOf('ImperiaDataImport', $import);
+        $this->assertInstanceOf('CouchDbDataImport', $import);
     }
 
     /**
@@ -67,9 +65,9 @@ class ImperiaDataImportTest extends AgaviPhpUnitTestCase
         $importFactory = new DataImportFactory($factoryConfigFile);
 
         $importParams = array(
-            ImperiaDataImportMockUp::SETTING_OUTPUT_FILE => $this->buildImportOutputPath()
+            CouchDbDataImportMockUp::SETTING_OUTPUT_FILE => $this->buildImportOutputPath()
         );
-        $import = $importFactory->createDataImport('ImperiaDataImportConfig', $importParams);
+        $import = $importFactory->createDataImport('CouchDbDataImportConfig', $importParams);
 
         $dataSourceParams = array(
             ImperiaDataSourceConfig::PARAM_DOCIDS => self::$docIds

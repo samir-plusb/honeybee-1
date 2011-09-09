@@ -34,7 +34,7 @@ class Import_ImperiaAction extends ImportBaseAction
             $parameters->getParameter(self::PARAM_CONFIG_NAME, $this->getImportConfigDirectory())
         );
 
-        $import = $importFactory->createDataImport('ImperiaDataImportConfig');
+        $import = $importFactory->createDataImport('CouchDbDataImportConfig');
         $dataSource = $importFactory->createDataSource('ImperiaDataSourceConfig');
 
         if (!$import->run($dataSource))

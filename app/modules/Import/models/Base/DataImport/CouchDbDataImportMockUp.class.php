@@ -1,16 +1,16 @@
 <?php
 
 /**
- * The ImperiaDataImportMockUp class extends ImperiaDataImport for testing purposes
+ * The CouchDbDataImportMockUp class extends ImperiaDataImport for testing purposes
  * and extends it's import behaviour to writing the processed data to a file for test assertion.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Imperia
+ * @subpackage      Base
  */
-class ImperiaDataImportMockUp extends ImperiaDataImport
+class CouchDbDataImportMockUp extends CouchDbDataImport
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------
     

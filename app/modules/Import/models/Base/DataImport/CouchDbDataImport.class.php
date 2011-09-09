@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The CouchDbDataImport class is an abstract implementation of the BaseDataImport base class.
+ * The CouchDbDataImport class is an concrete implementation of the BaseDataImport base class.
  * It's task is to stuff records that are obtained from a given IDataSource into the configured couchdb.
  * In order to be able to tweak the couchdb load, this class supports buffering calls to importData
  * and sends batch-creates to the couch everytime the buffer limit is reached.
@@ -12,7 +12,7 @@
  * @package         Import
  * @subpackage      Base
  */
-abstract class CouchDbDataImport extends BaseDataImport
+class CouchDbDataImport extends BaseDataImport
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------
 
