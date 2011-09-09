@@ -89,6 +89,13 @@
             <autoload name="DpaNitfNewswireDataRecord">%core.module_dir%/Import/models/Newswire/DataRecord/DpaNitfNewswireDataRecord.class.php</autoload>
             <autoload name="NitfNewswireDataRecord">%core.module_dir%/Import/models/Newswire/DataRecord/NitfNewswireDataRecord.class.php</autoload>
             <!-- /Newswire Import -->
+            
+             <!-- Rss Import -->
+            <autoload name="RssDataSourceConfig">%core.module_dir%/Import/models/Rss/DataSource/RssDataSourceConfig.class.php</autoload>
+            <autoload name="RssDataSource">%core.module_dir%/Import/models/Rss/DataSource/RssDataSource.class.php</autoload>
+
+            <autoload name="RssDataRecord">%core.module_dir%/Import/models/Rss/DataRecord/RssDataRecord.class.php</autoload>
+            <!-- /Rss Import -->
 
             <!-- /CONCRETE IMPLEMENTATIONS -->
         </autoloads>
