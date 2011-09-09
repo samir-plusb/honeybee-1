@@ -20,6 +20,8 @@ class Import_Imperia_ImperiaErrorView extends ImportBaseView
      *                     <li>An AgaviExecutionContainer to forward the execution to or</li>
      *                     <li>Any other type will be set as the response content.</li>
      *                   </ul>
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {

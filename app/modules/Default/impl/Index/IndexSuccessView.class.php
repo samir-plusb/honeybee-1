@@ -28,6 +28,8 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
      * Execute any html related presentation logic and sets up our template attributes.
      * 
      * @param       AgaviRequestDataHolder $parameters 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeHtml(AgaviRequestDataHolder $parameters) 
     {
@@ -41,6 +43,8 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
      * Prepares and sets our json data on our webresponse.
      * 
      * @param       AgaviRequestDataHolder $parameters 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
@@ -58,6 +62,8 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
      * Prepares and sets our json data on our console response.
      * 
      * @param       AgaviRequestDataHolder $parameters 
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {

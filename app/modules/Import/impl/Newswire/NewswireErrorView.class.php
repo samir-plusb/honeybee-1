@@ -17,6 +17,8 @@ class Import_Newswire_NewswireErrorView extends ImportBaseView
      *                     <li>An AgaviExecutionContainer to forward the execution to or</li>
      *                     <li>Any other type will be set as the response content.</li>
      *                   </ul>
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
@@ -44,6 +46,8 @@ class Import_Newswire_NewswireErrorView extends ImportBaseView
      *                     <li>An AgaviExecutionContainer to forward the execution to or</li>
      *                     <li>Any other type will be set as the response content.</li>
      *                   </ul>
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {
