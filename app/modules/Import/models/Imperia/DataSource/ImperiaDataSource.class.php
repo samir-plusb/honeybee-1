@@ -188,7 +188,7 @@ class ImperiaDataSource extends ImportBaseDataSource
     
     /**
      * Fetch a list of document ids to import 
-     * from imperia the update-stream service-api.
+     * from the imperia update-stream service-api.
      * 
      * @return      array
      * 
@@ -199,7 +199,7 @@ class ImperiaDataSource extends ImportBaseDataSource
         $this->documentIds = array();
         
         $idListUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOC_IDLIST_URL);
-
+        
         curl_setopt($this->curlHandle, CURLOPT_URL, $idListUrl);
         curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
 
@@ -222,7 +222,7 @@ class ImperiaDataSource extends ImportBaseDataSource
         
         if (!empty($response))
         {
-            $this->documentIds = explode(' ', $response);
+            $this->documentIds = explode(' ', trim($response));
         }
     }
     

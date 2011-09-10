@@ -54,6 +54,17 @@
             <setting name="database">midas_import</setting>
         </settings>
         
+        <settings prefix="imperia.">
+            <setting name="base_url">https://imperia.berlinonline.de/</setting>
+            <setting name="docid_api_url">
+                https://imperia.berlinonline.de/imperia/ContentWorker/export-to-mail.php?getNotifications=1
+            </setting>
+        </settings>
+        
+        <settings prefix="import.">
+            <setting name="config_dir">%core.modules_dir%/Import/config/</setting>
+        </settings>
+        
         <exception_templates>
             <exception_template>%core.agavi_dir%/exception/templates/shiny.php</exception_template>
             <exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
@@ -61,21 +72,30 @@
 
     </ae:configuration>
 	
-    <ae:configuration environment="development.*">
+    <ae:configuration environment="development*">
         <settings>
             <setting name="debug">true</setting>
+        </settings>
+    </ae:configuration>
+    
+    <ae:configuration environment="development-shrink">
+        <settings prefix="imperia.">
+            <setting name="docid_api_url">http://localhost/importer.php</setting>
         </settings>
     </ae:configuration>
 	
     <ae:configuration environment="testing.*">
         <settings>
             <setting name="default_context">web</setting>
+            <setting name="fixtures_dir">%core.testing_dir%/fixtures/</setting>
         </settings>
         
         <settings prefix="couchdb.import.">
-            <setting name="host">localhost</setting>
-            <setting name="port">5984</setting>
             <setting name="database">midas_import_testing</setting>
+        </settings>
+        
+        <settings prefix="import.">
+            <setting name="config_dir">%core.testing_dir%/fixtures/configs/import/</setting>
         </settings>
     </ae:configuration>
 	

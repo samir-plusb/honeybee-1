@@ -8,8 +8,8 @@
                     <testfile>unit/models/Event/ProjectEventProxyTest.php</testfile>
                     
                     <!-- IImportFactory Tests -->
-                    <testfile>unit/modules/Import/models/Base/Factory/DataImportFactoryConfigTest.php</testfile>
-                    <testfile>unit/modules/Import/models/Base/Factory/DataImportFactoryTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Base/Factory/ImportFactoryConfigTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Base/Factory/ImportFactoryTest.php</testfile>
 
                     <!-- IDataRecord Tests -->
                     <testfile>unit/modules/Import/models/Imperia/DataRecord/PoliceReportDataRecordTest.php</testfile>
@@ -29,10 +29,9 @@
                     <testfile>unit/modules/Import/models/Imperia/DataImport/ImperiaImportTest.php</testfile>
                     
                     <!-- Flow Tests -->
-                    <testfile>fragment/Import/Newswire/NewswireFragmentTest.class.php</testfile>
-                    <testfile>fragment/Import/Imperia/ImperiaActionTest.class.php</testfile>
-                    <testfile>fragment/Import/Imperia/ImperiaSuccessViewTest.class.php</testfile>
-                    <testfile>fragment/Import/Imperia/ImperiaErrorViewTest.class.php</testfile>
+                    <testfile>fragment/Import/Run/RunActionTest.class.php</testfile>
+                    <testfile>fragment/Import/Run/RunSuccessViewTest.class.php</testfile>
+                    <testfile>fragment/Import/Run/RunErrorViewTest.class.php</testfile>
                 </testfiles>
             </suite>
         </suites>

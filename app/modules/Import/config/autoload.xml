@@ -1,86 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" parent="%core.system_config_dir%/autoload.xml">
-
     <ae:configuration>
-
         <autoloads>
-            <!-- ABSTRACT CONCEPT -->
-
-            <!-- Module Base Libs -->
+        <!-- ABSTRACT GENERIC LAYER -->
+        
+            <!-- Base/Lib -->
             <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/base/ImportBaseAction.class.php</autoload>
             <autoload name="ImportBaseModel">%core.module_dir%/Import/lib/base/ImportBaseModel.class.php</autoload>
             <autoload name="ImportBaseView">%core.module_dir%/Import/lib/base/ImportBaseView.class.php</autoload>
-
+            <autoload name="ImportValidator">%core.module_dir%/Import/lib/validator/ImportValidator.class.php</autoload>
+            
             <autoload name="ImportConfigBaseTestCase">%core.module_dir%/Import/lib/base/ImportConfigBaseTestCase.class.php</autoload>
+            <autoload name="DataSourceBaseTestCase">%core.module_dir%/Import/lib/base/DataSourceBaseTestCase.class.php</autoload>
             <autoload name="DataRecordBaseTestCase">%core.module_dir%/Import/lib/base/DataRecordBaseTestCase.class.php</autoload>
+            <autoload name="CouchDbDataImportBaseTestCase">%core.module_dir%/Import/lib/base/CouchDbDataImportBaseTestCase.class.php</autoload>
+            <!-- /Base/Lib -->
 
-            <autoload name="ImportConfigFileValidator">%core.module_dir%/Import/lib/validator/ImportConfigFileValidator.class.php</autoload>
-            <!-- /Module Base Libs -->
-
-            <!-- Config Base Models -->
+            <!-- Base/Config -->
             <autoload name="IUriContainer">%core.module_dir%/Import/models/Base/Config/IUriContainer.iface.php</autoload>
             <autoload name="IImportConfig">%core.module_dir%/Import/models/Base/Config/IImportConfig.iface.php</autoload>
-
             <autoload name="ImportBaseConfig">%core.module_dir%/Import/models/Base/Config/ImportBaseConfig.class.php</autoload>
             <autoload name="SimpleConfig">%core.module_dir%/Import/models/Base/Config/SimpleConfig.class.php</autoload>
             <autoload name="ResourceBasedConfig">%core.module_dir%/Import/models/Base/Config/ResourceBasedConfig.class.php</autoload>
             <autoload name="XmlFileBasedConfig">%core.module_dir%/Import/models/Base/Config/XmlFileBasedConfig.class.php</autoload>
             <autoload name="ImportConfigException">%core.module_dir%/Import/models/Base/Config/ImportConfigException.class.php</autoload>
-            <!-- /Config Base Models -->
+            <!-- /Base/Config -->
 
-            <!-- ImportFactory -->
-            <autoload name="DataImportFactoryConfig">%core.module_dir%/Import/models/Base/Factory/DataImportFactoryConfig.class.php</autoload>
-
-            <autoload name="IDataImportFactory">%core.module_dir%/Import/models/Base/Factory/IDataImportFactory.iface.php</autoload>
-
-            <autoload name="DataImportFactory">%core.module_dir%/Import/models/Base/Factory/DataImportFactory.class.php</autoload>
-            <autoload name="DataImportFactoryException">%core.module_dir%/Import/models/Base/Factory/DataImportFactoryException.class.php</autoload>
-            <!-- /ImportFactory -->
-
-            <!-- Import Base Models -->
-            <autoload name="DataImportConfig">%core.module_dir%/Import/models/Base/DataImport/DataImportConfig.class.php</autoload>
-            <autoload name="CouchDbDataImportConfig">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImportConfig.class.php</autoload>
-            <autoload name="CouchDbDataImportMockUpConfig">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImportMockUpConfig.class.php</autoload>
-            
-            <autoload name="IDataImport">%core.module_dir%/Import/models/Base/DataImport/IDataImport.iface.php</autoload>
-
-            <autoload name="BaseDataImport">%core.module_dir%/Import/models/Base/DataImport/BaseDataImport.class.php</autoload>
-            <autoload name="CouchDbDataImport">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImport.class.php</autoload>
-            <autoload name="CouchDbDataImportMockUp">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImportMockUp.class.php</autoload>
-            <autoload name="DataImportException">%core.module_dir%/Import/models/Base/DataImport/DataImportException.class.php</autoload>
-            <!-- /Import Base Models -->
-
-            <!-- DataSource Base Models -->
+            <!-- Base/DataSource -->
             <autoload name="DataSourceConfig">%core.module_dir%/Import/models/Base/DataSource/DataSourceConfig.class.php</autoload>
-
             <autoload name="IDataSource">%core.module_dir%/Import/models/Base/DataSource/IDataSource.iface.php</autoload>
-
             <autoload name="ImportBaseDataSource">%core.module_dir%/Import/models/Base/DataSource/ImportBaseDataSource.class.php</autoload>
             <autoload name="DataSourceException">%core.module_dir%/Import/models/Base/DataSource/DataSourceException.class.php</autoload>
-            <!-- /DataSource Base Models -->
+            <!-- /Base/DataSource -->
 
-            <!-- DataRecord Base Models -->
+            <!-- Base/DataRecord -->
             <autoload name="IDataRecord">%core.module_dir%/Import/models/Base/DataRecord/IDataRecord.iface.php</autoload>
-
             <autoload name="ImportBaseDataRecord">%core.module_dir%/Import/models/Base/DataRecord/ImportBaseDataRecord.class.php</autoload>
             <autoload name="XmlBasedDataRecord">%core.module_dir%/Import/models/Base/DataRecord/XmlBasedDataRecord.class.php</autoload>
             <autoload name="DataRecordException">%core.module_dir%/Import/models/Base/DataRecord/DataRecordException.class.php</autoload>
-            <!-- /DataRecord Base Models -->
+            <!-- /Base/DataRecord -->
+            
+            <!-- Base/Import -->
+            <autoload name="DataImportConfig">%core.module_dir%/Import/models/Base/DataImport/DataImportConfig.class.php</autoload>
+            <autoload name="CouchDbDataImportConfig">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImportConfig.class.php</autoload>
+            <autoload name="IDataImport">%core.module_dir%/Import/models/Base/DataImport/IDataImport.iface.php</autoload>
+            <autoload name="BaseDataImport">%core.module_dir%/Import/models/Base/DataImport/BaseDataImport.class.php</autoload>
+            <autoload name="CouchDbDataImport">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImport.class.php</autoload>
+            <autoload name="DataImportException">%core.module_dir%/Import/models/Base/DataImport/DataImportException.class.php</autoload>
+            <!-- /Base/Import -->
+            
+            <!-- Base/ImportFactory-->
+            <autoload name="IImportFactory">%core.module_dir%/Import/models/Base/Factory/IImportFactory.iface.php</autoload>
+            <autoload name="IImportFactoryConfig">%core.module_dir%/Import/models/Base/Factory/IImportFactoryConfig.iface.php</autoload>
+            <autoload name="ImportFactoryConfig">%core.module_dir%/Import/models/Base/Factory/ImportFactoryConfig.class.php</autoload>
+            <autoload name="DataSourcesFactoryConfig">%core.module_dir%/Import/models/Base/Factory/DataSourcesFactoryConfig.class.php</autoload>
+            <autoload name="DataImportsFactoryConfig">%core.module_dir%/Import/models/Base/Factory/DataImportsFactoryConfig.class.php</autoload>
+            <autoload name="ImportFactory">%core.module_dir%/Import/models/Base/Factory/ImportFactory.class.php</autoload>
+            <autoload name="ImportFactoryException">%core.module_dir%/Import/models/Base/Factory/ImportFactoryException.class.php</autoload>
+            <!-- /Base/ImportFactory -->
+            
+        <!-- /ABSTRACT GENERIC LAYER> -->
 
-            <!-- /ABSTRACT CONCEPT -->
 
-
-            <!-- CONCRETE IMPLEMENTATIONS -->
-
-            <!-- Imperia Import -->
+        <!-- CONCRETE DOMAIN LAYER -->
+        
+            <!-- Imperia -->
             <autoload name="ImperiaDataSourceConfig">%core.module_dir%/Import/models/Imperia/DataSource/ImperiaDataSourceConfig.class.php</autoload>
             <autoload name="ImperiaDataSource">%core.module_dir%/Import/models/Imperia/DataSource/ImperiaDataSource.class.php</autoload>
-
             <autoload name="ImperiaDataRecord">%core.module_dir%/Import/models/Imperia/DataRecord/ImperiaDataRecord.class.php</autoload>
             <autoload name="PoliceReportDataRecord">%core.module_dir%/Import/models/Imperia/DataRecord/PoliceReportDataRecord.class.php</autoload>
-            <!-- /Imperia Import -->
+            <!-- /Imperia -->
 
-             <!-- Newswire Import -->
+             <!-- Newswire -->
             <autoload name="NewswireDataImport">%core.module_dir%/Import/models/Newswire/DataImport/NewswireDataImport.class.php</autoload>
             <autoload name="NewswireDataImportConfig">%core.module_dir%/Import/models/Newswire/DataImport/NewswireDataImportConfig.class.php</autoload>
             <autoload name="NewswireDataSource">%core.module_dir%/Import/models/Newswire/DataSource/NewswireDataSource.class.php</autoload>
@@ -88,17 +79,15 @@
             <autoload name="NewswireDataRecord">%core.module_dir%/Import/models/Newswire/DataRecord/NewswireDataRecord.class.php</autoload>
             <autoload name="DpaNitfNewswireDataRecord">%core.module_dir%/Import/models/Newswire/DataRecord/DpaNitfNewswireDataRecord.class.php</autoload>
             <autoload name="NitfNewswireDataRecord">%core.module_dir%/Import/models/Newswire/DataRecord/NitfNewswireDataRecord.class.php</autoload>
-            <!-- /Newswire Import -->
+            <!-- /Newswire -->
             
-             <!-- Rss Import -->
+             <!-- Rss -->
             <autoload name="RssDataSourceConfig">%core.module_dir%/Import/models/Rss/DataSource/RssDataSourceConfig.class.php</autoload>
             <autoload name="RssDataSource">%core.module_dir%/Import/models/Rss/DataSource/RssDataSource.class.php</autoload>
-
             <autoload name="RssDataRecord">%core.module_dir%/Import/models/Rss/DataRecord/RssDataRecord.class.php</autoload>
-            <!-- /Rss Import -->
-
-            <!-- /CONCRETE IMPLEMENTATIONS -->
+            <!-- /Rss -->
+            
+        <!-- /CONCRETE DOMAIN LAYER -->
         </autoloads>
-
     </ae:configuration>
 </ae:configurations>

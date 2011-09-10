@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" parent="%core.module_dir%/Import/config/validators.xml">
+    
+    <ae:configuration>
+        <validators>
+            
+            <validator class="import" name="invalid_import" required="true">
+                <arguments>
+                    <argument name="import">i</argument>
+                    <argument name="datasources">d</argument>
+                </arguments>
+                <errors>
+                    <error>Make sure to provide a valid import(-i) argument.</error>
+                    <error for="invalid_config">A given dataimport or datasource is not valid.</error>
+                    <error for="invalid_import">The given import(-i) argument does not exist.</error>
+                    <error for="invalid_datasources">The given datasources(-d) argument does not match any existing datasource.</error>
+                </errors>
+            </validator>
+            
+        </validators>
+    </ae:configuration>
+    
+</ae:configurations>

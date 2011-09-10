@@ -27,13 +27,13 @@ abstract class XmlFileBasedConfig extends ResourceBasedConfig
     {
         $uriParts = $this->getUriParts();
         $config = include AgaviConfigCache::checkConfig($uriParts['path']);
-
-        if (empty($config['import']))
+        
+        if (empty($config))
         {
             return array();
         }
-
-        return $config['import'];
+        
+        return $config;
     }
 
     // ---------------------------------- </ResourceBasedConfig METHODS> -------------------------

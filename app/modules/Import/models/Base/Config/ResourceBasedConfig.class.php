@@ -33,6 +33,8 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
     private $configUriParts;
 
     // ---------------------------------- </MEMBERS> ---------------------------------------------
+     
+    
     // ---------------------------------- <ABSTRACT METHODS> -------------------------------------
 
     /**
@@ -46,6 +48,8 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
     abstract protected function loadResource();
 
     // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
+     
+    
     // ---------------------------------- <IUriContainer METHODS> --------------------------------
 
     /**
@@ -73,6 +77,8 @@ abstract class ResourceBasedConfig extends ImportBaseConfig implements IUriConta
     }
 
     // ---------------------------------- </IUriContainer METHODS> -------------------------------
+     
+    
     // ---------------------------------- <WORKING METHODS> --------------------------------------
 
     /**

@@ -8,81 +8,53 @@
  * @version $Id$
  *
  */
-class NewswireDataSourceTest extends AgaviUnitTestCase
+class NewswireDataSourceTest extends DataSourceBaseTestCase
 {
-    const CFG_CONFIG = 'configs/imports/newswire-dpa.xml';
-
-    const CFG_XML_FIXTURE = 'data/import/imperia/polizeimeldung.article.xml';
-
-    /**
-     * @var NewswireDataSource
-     */
-    protected $dataSource;
-
-    /**
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
     protected function setUp()
     {
         parent::setUp();
-
-        $this->dataSource = new NewswireDataSource($this->createDataSourceConfig());
+        
         $this->dataSource->resetTimestamp();
     }
-
-
-    /**
-     *
-     * Enter description here ...
-     */
-    public function testNextRecordCount()
+    
+    protected function getDataSourceClass()
     {
-        $count = 0;
-        while ($this->dataSource->nextRecord())
-        {
-            $count ++;
-        }
-        $this->assertEquals(5, $count);
+        return 'NewswireDataSource';
+    }
+    
+    protected function getDataSourceName()
+    {
+        return 'dpa';
+    }
+    
+    protected function getExpectedRecordType()
+    {
+        return 'DpaNitfNewswireDataRecord';
+    }
+    
+    protected function getExpectedLoopCount()
+    {
+        return 5;
+    }
+    
+    protected function getDataSourceParameters()
+    {
+        return array(
+            NewswireDataSourceConfig::CFG_GLOB => $this->getGlobSetting()
+        );
     }
 
-    /**
-     *
-     * Enter description here ...
-     */
-    public function testNextRecord()
+    protected function getGlobSetting()
     {
-        for ($i = 0; $i < 5; $i++)
-        {
-            $record = $this->dataSource->nextRecord();
-            $this->assertInstanceOf('DpaNitfNewswireDataRecord', $record);
-        }
-    }
-
-    /**
-     *
-     * Enter description here ...
-     * @return
-     */
-    protected function createDataSourceConfig()
-    {
-        $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-        $factoryConfigFile = $baseDir . self::CFG_CONFIG;
-        $config = new DataImportFactoryConfig($factoryConfigFile);
-
-        $dataSrcSettings = $config->getSetting(DataImportFactoryConfig::CFG_DATASRC);
-
-        $dataSrcSettings = array_merge(
-            $dataSrcSettings['settings'],
-            array(
-                NewswireDataSourceConfig::CFG_RECORD_TYPE =>  $dataSrcSettings['record'],
-                NewswireDataSourceConfig::CFG_GLOB => $baseDir . $dataSrcSettings['settings'][NewswireDataSourceConfig::CFG_GLOB],
-            )
+        $config = new ImportFactoryConfig(
+            AgaviConfig::get('import.config_dir')
         );
 
-        return new NewswireDataSourceConfig($dataSrcSettings);
+        $dataSourceConfig = $config->getDataSourceConfig('dpa');
+        $settings = $dataSourceConfig[DataSourcesFactoryConfig::CFG_SETTINGS];
+        
+        return AgaviConfig::get('core.fixtures_dir') . $settings[NewswireDataSourceConfig::CFG_GLOB];
     }
-
 }
 
 ?>

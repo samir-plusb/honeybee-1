@@ -133,9 +133,7 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
      */
     protected function loadXmlFixture()
     {
-        $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-
-        $fixtureFile = $baseDir . $this->getRecordXmlFixturePath();
+        $fixtureFile = AgaviConfig::get('core.fixtures_dir') . $this->getRecordXmlFixturePath();
 
         return file_get_contents($fixtureFile);
     }
@@ -148,9 +146,7 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
      */
     protected function loadDataRecordResultFixture()
     {
-        $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-
-        $fixtureFile = $baseDir . $this->getRecordResultFixturePath();
+        $fixtureFile = AgaviConfig::get('core.fixtures_dir') . $this->getRecordResultFixturePath();
 
         return include $fixtureFile;
     }

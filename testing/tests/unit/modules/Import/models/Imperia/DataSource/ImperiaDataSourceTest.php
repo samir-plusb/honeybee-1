@@ -1,8 +1,8 @@
 <?php
 
-class ImperiaDataSourceTest extends AgaviUnitTestCase
+class ImperiaDataSourceTest extends DataSourceBaseTestCase
 {
-    const CFG_CONFIG_FIXTURE = 'data/import/imperia/polizeimeldungen.config.datasource.php';
+    const CFG_CONFIG_FIXTURE = 'data/import/imperia/config.datasource.php';
 
     const CFG_XML_FIXTURE = 'data/import/imperia/polizeimeldung.article.xml';
 
@@ -13,91 +13,60 @@ class ImperiaDataSourceTest extends AgaviUnitTestCase
         '/2/10330/10343/10890/1385806',
         '/2/10330/10343/10890/1385805'
     );
-
-    protected $imperiaDataSource;
-
-    protected function setUp()
+    
+    protected function getDataSourceClass()
     {
-        parent::setUp();
-
-        $this->imperiaDataSource = new ImperiaDataSource(
-            new ImperiaDataSourceConfig(
-                $this->loadDataSourceConfigFixture()
-            )
+        return 'ImperiaDataSource';
+    }
+    
+    protected function getDataSourceName()
+    {
+        return 'imperia';
+    }
+    
+    protected function getExpectedLoopCount()
+    {
+        return 3;
+    }
+    
+    protected function getExpectedRecordType()
+    {
+        return 'PoliceReportDataRecord';
+    }
+    
+    protected function getDataSourceParameters()
+    {
+        return array(
+            ImperiaDataSourceConfig::PARAM_DOCIDS => self::$docIds
         );
     }
-
-    public function testCreateDataSource()
+    
+    public function testValidRecordData()
     {
-        $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-        $factoryConfigFile = $baseDir . 'configs/imports/polizeimeldungen.xml';
-        $config = new DataImportFactoryConfig($factoryConfigFile);
-
-        $dataSource = new ImperiaDataSource(
-            $this->createDataSourceConfig()
-        );
-    }
-
-    public function testNextRecordIsValid()
-    {
-        $record = $this->imperiaDataSource->nextRecord();
-
-        $expectedRecord = new PoliceReportDataRecord(
-            $this->loadPoliceReportXmlFixture()
+        $config = new ImportFactoryConfig(
+            AgaviConfig::get('import.config_dir')
         );
 
+        $dataSourceConfig = $config->getDataSourceConfig(
+            $this->getDataSourceName()
+        );
+        
+        $recordType = $dataSourceConfig[DataSourcesFactoryConfig::CFG_RECORD_TYPE];
+        
+        $expectedRecord = new $recordType(
+            $this->loadRecordFixtureData()
+        );
+        
+        $record = $this->dataSource->nextRecord();
+        
         $this->assertEquals(self::RECORDS_ARE_EQUAL, $record->compareTo($expectedRecord));
     }
-
-    public function testNextRecordLoop()
+    
+    protected function loadRecordFixtureData()
     {
-        $expectedCount = 3;
-        $currentCount = 0;
-        $record = NULL;
-
-        while (($record = $this->imperiaDataSource->nextRecord()))
-        {
-            $currentCount++;
-        }
-
-        $this->assertEquals($expectedCount, $currentCount);
-    }
-
-    protected function loadDataSourceConfigFixture()
-    {
-        $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-
-        $fixtureFile = $baseDir . self::CFG_CONFIG_FIXTURE;
-
-        return include $fixtureFile;
-    }
-
-    protected function loadPoliceReportXmlFixture()
-    {
-        $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-
-        $fixtureFile = $baseDir . self::CFG_XML_FIXTURE;
+        $fixtureFile = AgaviConfig::get('core.fixtures_dir') . self::CFG_XML_FIXTURE;
 
         return file_get_contents($fixtureFile);
-    }
-
-    protected function createDataSourceConfig()
-    {
-        $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-        $factoryConfigFile = $baseDir . 'configs/imports/polizeimeldungen.xml';
-        $config = new DataImportFactoryConfig($factoryConfigFile);
-
-        $dataSrcSettings = $config->getSetting(DataImportFactoryConfig::CFG_DATASRC);
-
-        $dataSrcSettings = array_merge(
-            $dataSrcSettings['settings'],
-            array(
-                ImperiaDataSourceConfig::CFG_RECORD_TYPE => $dataSrcSettings['record'],
-                ImperiaDataSourceConfig::PARAM_DOCIDS => self::$docIds
-            )
-        );
-
-        return new ImperiaDataSourceConfig($dataSrcSettings);
     }
 }
 

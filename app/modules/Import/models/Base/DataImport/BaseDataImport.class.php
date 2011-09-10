@@ -110,7 +110,7 @@ abstract class BaseDataImport implements IDataImport
     public function run(IDataSource $dataSource)
     {
         $this->init($dataSource);
-
+        
         while ($this->currentRecord = $dataSource->nextRecord())
         {
             if ($this->processRecord())

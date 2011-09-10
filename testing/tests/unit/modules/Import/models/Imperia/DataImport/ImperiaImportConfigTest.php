@@ -2,7 +2,7 @@
 
 class ImperiaImportConfigTest extends ImportConfigBaseTestCase
 {
-    const CFG_FIXTURE = 'data/import/imperia/polizeimeldungen.config.import.php';
+    const CFG_FIXTURE = 'data/import/imperia/config.import.php';
 
     protected function getConfigImplementor()
     {
@@ -11,9 +11,7 @@ class ImperiaImportConfigTest extends ImportConfigBaseTestCase
 
     protected function getConfigFixturePath()
     {
-        $baseDir = AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-
-        return $baseDir . self::CFG_FIXTURE;
+        return AgaviConfig::get('core.fixtures_dir') . self::CFG_FIXTURE;
     }
 }
 

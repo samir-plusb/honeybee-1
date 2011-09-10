@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations 
+    xmlns="http://berlinonline.de/schemas/midas/config/datasource/definition/1.0"
+    xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <datasources>
+            
+            <datasource name="imperia" class="ImperiaDataSource">
+                <description>Provides access to imperia-cms content via imperia's export-xml api.</description>
+                <recordType>PoliceReportDataRecord</recordType>
+                <settings>
+                    <setting name="doc_idlist_url">%imperia.docid_api_url%</setting>
+                    <setting name="account_pass">P8TaamVVwOb4JGbPWtqwo</setting>
+                    <setting name="account_user">bo-xml-export</setting>
+                    <setting name="url">%imperia.base_url%</setting>
+                </settings>
+            </datasource>
+            
+            <datasource name="dpa" class="NewswireDataSource">
+                <description>Provides access to the DPA messages.</description>
+                <recordType>DpaNitfNewswireDataRecord</recordType>
+                <settings>
+                    <setting name="glob">/var/tmp/dpa/regio-berlinbrandenburg/dpa-BerlinBrandenburg/*.xml</setting>
+                    <setting name="timestamp_file">/var/tmp/dpa.time.stamp</setting>
+                </settings>
+            </datasource>
+            
+        </datasources>        
+    </ae:configuration>
+</ae:configurations>

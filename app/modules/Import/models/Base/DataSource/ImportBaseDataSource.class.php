@@ -115,7 +115,7 @@ abstract class ImportBaseDataSource implements IDataSource
      * 
      * @return      IDataRecord 
      * 
-     * @throws      DataSourceException If the configured record class is invalid.
+     * @throws      DataSourceException If the configured record creation fails unexpectedly.
      */
     protected function createRecord($rawData)
     {
@@ -130,8 +130,22 @@ abstract class ImportBaseDataSource implements IDataSource
                 )
             );
         }
-
-        $record = new $recordClass($rawData);
+        
+        try 
+        {
+            $record = new $recordClass($rawData);
+        }
+        catch(DataRecordException $e)
+        {
+            throw new DataSourceException(
+                sprintf(
+                    "An error occured while trying to create new '%s' instance from data:\n%s\nOriginal Error:\n%s",
+                    $recordClass,
+                    $rawData,
+                    $e->getMessage()
+                )
+            );
+        }
 
         if (!($record instanceof IDataRecord))
         {

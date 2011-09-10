@@ -30,6 +30,7 @@
 // | Agavi can't determine this automatically, so you always have to supply it.|
 // +---------------------------------------------------------------------------+
 AgaviConfig::set('core.app_dir', dirname(__FILE__));
+AgaviConfig::set('core.modules_dir', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'modules');
 AgaviConfig::set('project.libs', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR);
 
 // +---------------------------------------------------------------------------+
