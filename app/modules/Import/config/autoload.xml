@@ -2,20 +2,27 @@
 <ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" parent="%core.system_config_dir%/autoload.xml">
     <ae:configuration>
         <autoloads>
-        <!-- ABSTRACT GENERIC LAYER -->
-        
-            <!-- Base/Lib -->
-            <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/base/ImportBaseAction.class.php</autoload>
-            <autoload name="ImportBaseModel">%core.module_dir%/Import/lib/base/ImportBaseModel.class.php</autoload>
-            <autoload name="ImportBaseView">%core.module_dir%/Import/lib/base/ImportBaseView.class.php</autoload>
-            <autoload name="ImportValidator">%core.module_dir%/Import/lib/validator/ImportValidator.class.php</autoload>
+        <!-- LIBS -->
+            <!-- Lib/Mvc -->
+            <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/mvc/ImportBaseAction.class.php</autoload>
+            <autoload name="ImportBaseModel">%core.module_dir%/Import/lib/mvc/ImportBaseModel.class.php</autoload>
+            <autoload name="ImportBaseView">%core.module_dir%/Import/lib/mvc/ImportBaseView.class.php</autoload>
+            <!-- /Lib/Mvc -->
             
-            <autoload name="ImportConfigBaseTestCase">%core.module_dir%/Import/lib/base/ImportConfigBaseTestCase.class.php</autoload>
-            <autoload name="DataSourceBaseTestCase">%core.module_dir%/Import/lib/base/DataSourceBaseTestCase.class.php</autoload>
-            <autoload name="DataRecordBaseTestCase">%core.module_dir%/Import/lib/base/DataRecordBaseTestCase.class.php</autoload>
-            <autoload name="CouchDbDataImportBaseTestCase">%core.module_dir%/Import/lib/base/CouchDbDataImportBaseTestCase.class.php</autoload>
-            <!-- /Base/Lib -->
-
+            <!-- Lib/Validator -->
+            <autoload name="ImportValidator">%core.module_dir%/Import/lib/validator/ImportValidator.class.php</autoload>
+            <!-- /Lib/Validator -->
+            
+            <!-- Lib/Testing -->
+            <autoload name="ImportConfigBaseTestCase">%core.module_dir%/Import/lib/testing/ImportConfigBaseTestCase.class.php</autoload>
+            <autoload name="DataSourceBaseTestCase">%core.module_dir%/Import/lib/testing/DataSourceBaseTestCase.class.php</autoload>
+            <autoload name="DataRecordBaseTestCase">%core.module_dir%/Import/lib/testing/DataRecordBaseTestCase.class.php</autoload>
+            <autoload name="CouchDbDataImportBaseTestCase">%core.module_dir%/Import/lib/testing/CouchDbDataImportBaseTestCase.class.php</autoload>
+            <!-- /Lib/Testing -->
+        <!-- /LIBS -->
+        
+        
+        <!-- ABSTRACT CONCEPT (BaseModels) -->
             <!-- Base/Config -->
             <autoload name="IUriContainer">%core.module_dir%/Import/models/Base/Config/IUriContainer.iface.php</autoload>
             <autoload name="IImportConfig">%core.module_dir%/Import/models/Base/Config/IImportConfig.iface.php</autoload>
@@ -58,12 +65,10 @@
             <autoload name="ImportFactory">%core.module_dir%/Import/models/Base/Factory/ImportFactory.class.php</autoload>
             <autoload name="ImportFactoryException">%core.module_dir%/Import/models/Base/Factory/ImportFactoryException.class.php</autoload>
             <!-- /Base/ImportFactory -->
-            
-        <!-- /ABSTRACT GENERIC LAYER> -->
+        <!-- /ABSTRACT CONCEPT (BaseModels) -->
 
 
-        <!-- CONCRETE DOMAIN LAYER -->
-        
+        <!-- CONCRETE IMPLEMENTATION (DomainModels) -->
             <!-- Imperia -->
             <autoload name="ImperiaDataSourceConfig">%core.module_dir%/Import/models/Imperia/DataSource/ImperiaDataSourceConfig.class.php</autoload>
             <autoload name="ImperiaDataSource">%core.module_dir%/Import/models/Imperia/DataSource/ImperiaDataSource.class.php</autoload>
@@ -84,8 +89,7 @@
             <autoload name="RssDataSource">%core.module_dir%/Import/models/Rss/DataSource/RssDataSource.class.php</autoload>
             <autoload name="RssDataRecord">%core.module_dir%/Import/models/Rss/DataRecord/RssDataRecord.class.php</autoload>
             <!-- /Rss -->
-            
-        <!-- /CONCRETE DOMAIN LAYER -->
+        <!-- /CONCRETE IMPLEMENTATION (DomainModels) -->
         </autoloads>
     </ae:configuration>
 </ae:configurations>

@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" parent="%core.system_config_dir%/autoload.xml">
     <ae:configuration>
         <autoloads>
-            <autoload name="AuthBaseAction">%core.module_dir%/Auth/lib/base/AuthBaseAction.class.php</autoload>
-            <autoload name="AuthBaseView">%core.module_dir%/Auth/lib/base/AuthBaseView.class.php</autoload>
-            <autoload name="AuthBaseModel">%core.module_dir%/Auth/lib/base/AuthBaseModel.class.php</autoload>
-            
-            <autoload name="Auth_Login_LoginInputView">%core.module_dir%/Auth/impl/Login/LoginInputView.class.php</autoload>
+        <!-- LIBS -->
+            <!-- Lib/Mvc -->
+            <autoload name="AuthBaseAction">%core.module_dir%/Auth/lib/mvc/AuthBaseAction.class.php</autoload>
+            <autoload name="AuthBaseView">%core.module_dir%/Auth/lib/mvc/AuthBaseView.class.php</autoload>
+            <autoload name="AuthBaseModel">%core.module_dir%/Auth/lib/mvc/AuthBaseModel.class.php</autoload>
+            <!-- /Lib/Mvc -->
+        <!-- /LIBS -->
         </autoloads>
     </ae:configuration>
 </ae:configurations>
