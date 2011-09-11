@@ -19,8 +19,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         ApplicationBase
- * @subpackage      Default
+ * @package         Default
+ * @subpackage      Mvc
  */
 class Default_Error404_Error404SuccessView extends DefaultBaseView
 {
@@ -60,7 +60,7 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
     }
 
     /**
-     * Prepares and sets our json data on our console response.
+     * Handle presentation logic for commandline interfaces.
      * 
      * @param       AgaviRequestDataHolder $parameters 
      * 

@@ -7,7 +7,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Imperia
+ * @subpackage      Mvc
  */
 class Import_Run_RunSuccessView extends ImportBaseView
 {
