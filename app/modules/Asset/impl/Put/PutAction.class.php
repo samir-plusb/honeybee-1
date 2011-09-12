@@ -25,6 +25,12 @@ class Asset_PutAction extends AssetBaseAction
      */
     public function executeWrite(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
+        $baseDir = dirname(AgaviConfig::get('core.app_dir')) . DIRECTORY_SEPARATOR;
+        $assetUri = sprintf('file://%sfoo.jpg', $baseDir);
+        
+        $service = new ProjectAssetService();
+        $assetInfo = $service->put($assetUri);
+        
         return 'Success';
     }
 }

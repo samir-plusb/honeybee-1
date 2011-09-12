@@ -174,15 +174,10 @@ class ImperiaDataSource extends ImportBaseDataSource
         {
             $this->cookiePath = tempnam(sys_get_temp_dir(), uniqid('imperia.'));
 
-            $this->curlHandle = curl_init();
+            $this->curlHandle = ProjectCurl::create();
             curl_setopt($this->curlHandle, CURLOPT_POST, 0);
-            curl_setopt($this->curlHandle, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($this->curlHandle, CURLOPT_TIMEOUT, 10);
             curl_setopt($this->curlHandle, CURLOPT_COOKIEFILE, $this->cookiePath);
             curl_setopt($this->curlHandle, CURLOPT_COOKIEJAR, $this->cookiePath);
-            curl_setopt($this->curlHandle, CURLOPT_FORBID_REUSE, 0);
-            curl_setopt($this->curlHandle, CURLOPT_FRESH_CONNECT, 0);
-            curl_setopt($this->curlHandle, CURLOPT_FOLLOWLOCATION, 0);
         }
     }
     

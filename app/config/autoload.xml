@@ -16,6 +16,8 @@
             <autoload name="IEventProxy">%core.app_dir%/models/Event/IEventProxy.iface.php</autoload>
             <autoload name="ProjectEventProxy">%core.app_dir%/models/Event/ProjectEventProxy.class.php</autoload>
             <autoload name="ProjectEvent">%core.app_dir%/models/Event/ProjectEvent.class.php</autoload>
+            
+            <autoload name="ProjectCurl">%core.app_dir%/models/Curl/ProjectCurl.class.php</autoload>
         </autoloads>
     </ae:configuration>
 

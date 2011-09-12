@@ -237,22 +237,8 @@ class ExtendedCouchDbClient
     {
         if (! $this->curlHandle)
         {
-            $this->curlHandle = $curlHandle = curl_init();
-
-            // @todo introduce an options member for couchdb proxy and verbose and timeout settings.
-            curl_setopt($curlHandle, CURLOPT_PROXY, '');
-            curl_setopt($curlHandle, CURLOPT_VERBOSE, 0);
-            curl_setopt($curlHandle, CURLOPT_TIMEOUT, 10);
-            curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-            curl_setopt($curlHandle, CURLOPT_FAILONERROR, 1);
-            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, FALSE);
-            curl_setopt($curlHandle, CURLOPT_FORBID_REUSE, 0);
-            curl_setopt($curlHandle, CURLOPT_FRESH_CONNECT, 0);
-            curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, 0);
-            curl_setopt($curlHandle, CURLOPT_HEADER, 'Content-Type: application/json; charset=utf-8');
-            curl_setopt($curlHandle, CURLOPT_ENCODING, 'gzip,deflate');
+            $this->curlHandle = ProjectCurl::create();
+            curl_setopt($this->curlHandle, CURLOPT_HEADER, 'Content-Type: application/json; charset=utf-8');
         }
         
         return $this->curlHandle;

@@ -11,7 +11,7 @@
             
             <!-- Models/Service -->
             <autoload name="IAssetService">%core.module_dir%/Asset/models/Service/IAssetService.iface.php</autoload>
-            <autoload name="AssetService">%core.module_dir%/Asset/models/Service/AssetService.class.php</autoload>
+            <autoload name="ProjectAssetService">%core.module_dir%/Asset/models/Service/ProjectAssetService.class.php</autoload>
             <autoload name="IAssetInfo">%core.module_dir%/Asset/models/AssetInfo/IAssetInfo.iface.php</autoload>
             <!-- /Models/Service -->
         <!-- /LIBS -->
