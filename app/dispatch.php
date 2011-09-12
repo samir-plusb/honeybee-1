@@ -5,8 +5,9 @@
 $rootDir = dirname(dirname(__FILE__));
 $libsDir = $rootDir . DIRECTORY_SEPARATOR . 'libs';
 $ezComponentsDir = $libsDir . DIRECTORY_SEPARATOR . 'ezc';
+$phpUnitDir = $libsDir . DIRECTORY_SEPARATOR . 'PHPUnit';
 
-$includes = array($libsDir, $ezComponentsDir);
+$includes = array($libsDir, $ezComponentsDir, $phpUnitDir);
 set_include_path(implode(PATH_SEPARATOR, $includes).PATH_SEPARATOR.get_include_path());
 
 // +---------------------------------------------------------------------------+
