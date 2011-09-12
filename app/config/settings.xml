@@ -63,6 +63,7 @@
         
         <settings prefix="import.">
             <setting name="config_dir">%core.modules_dir%/Import/config/</setting>
+            <setting name="newswire_dir">/var/tmp/dpa/regio-berlinbrandenburg/</setting>
         </settings>
         
         <exception_templates>
@@ -96,6 +97,7 @@
         
         <settings prefix="import.">
             <setting name="config_dir">%core.testing_dir%/fixtures/configs/import/</setting>
+            <setting name="newswire_dir">%core.testing_dir%/fixtures/data/import/newswire/</setting>
         </settings>
     </ae:configuration>
 	

@@ -53,7 +53,7 @@ class NewswireDataSourceTest extends DataSourceBaseTestCase
         $dataSourceConfig = $config->getDataSourceConfig('dpa');
         $settings = $dataSourceConfig[DataSourcesFactoryConfig::CFG_SETTINGS];
         
-        return AgaviConfig::get('core.fixtures_dir') . $settings[NewswireDataSourceConfig::CFG_GLOB];
+        return AgaviConfig::get('core.newswire_dir') . $settings[NewswireDataSourceConfig::CFG_GLOB];
     }
 }
 
