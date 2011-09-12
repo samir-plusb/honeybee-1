@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" parent="%core.system_config_dir%/autoload.xml">
+    <ae:configuration>
+        <autoloads>
+        <!-- LIBS -->
+            <!-- Lib/Mvc -->
+            <autoload name="AssetBaseAction">%core.module_dir%/Asset/lib/mvc/AssetBaseAction.class.php</autoload>
+            <autoload name="AssetBaseView">%core.module_dir%/Asset/lib/mvc/AssetBaseView.class.php</autoload>
+            <autoload name="AssetBaseModel">%core.module_dir%/Asset/lib/mvc/AssetBaseModel.class.php</autoload>
+            <!-- /Lib/Mvc -->
+            
+            <!-- Models/Service -->
+            <autoload name="IAssetService">%core.module_dir%/Asset/models/Service/IAssetService.iface.php</autoload>
+            <autoload name="AssetService">%core.module_dir%/Asset/models/Service/AssetService.class.php</autoload>
+            <autoload name="IAssetInfo">%core.module_dir%/Asset/models/AssetInfo/IAssetInfo.iface.php</autoload>
+            <!-- /Models/Service -->
+        <!-- /LIBS -->
+        </autoloads>
+    </ae:configuration>
+</ae:configurations>
