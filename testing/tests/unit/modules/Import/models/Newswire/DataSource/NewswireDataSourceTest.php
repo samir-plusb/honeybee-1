@@ -36,25 +36,6 @@ class NewswireDataSourceTest extends DataSourceBaseTestCase
     {
         return 5;
     }
-    
-    protected function getDataSourceParameters()
-    {
-        return array(
-            NewswireDataSourceConfig::CFG_GLOB => $this->getGlobSetting()
-        );
-    }
-
-    protected function getGlobSetting()
-    {
-        $config = new ImportFactoryConfig(
-            AgaviConfig::get('import.config_dir')
-        );
-
-        $dataSourceConfig = $config->getDataSourceConfig('dpa');
-        $settings = $dataSourceConfig[DataSourcesFactoryConfig::CFG_SETTINGS];
-        
-        return AgaviConfig::get('core.newswire_dir') . $settings[NewswireDataSourceConfig::CFG_GLOB];
-    }
 }
 
 ?>
