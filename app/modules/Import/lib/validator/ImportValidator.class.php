@@ -73,9 +73,10 @@ class ImportValidator extends AgaviStringValidator
     const ARG_IMPORT = 'import';
     
     /**
-     * Holds the name of the argument that specifies where to look for our datasource names.
+     * Holds the name of the parameter,
+     * that holds the name of our argument that specifies where to look for our datasource names.
      */
-    const ARG_SOURCES = 'datasources';
+    const PARAM_ARG_DATASOURCES = 'arg_datasources';
     
     // ---------------------------------- </CONSTANTS> -------------------------------------------
     
@@ -100,7 +101,7 @@ class ImportValidator extends AgaviStringValidator
         $dataSources = NULL;
         
         $importName =& $this->getData($this->getArgument(self::ARG_IMPORT));
-        $onlyTheseSources =& $this->getData($this->getArgument(self::ARG_SOURCES));
+        $onlyTheseSources =& $this->getData($this->getParameter(self::PARAM_ARG_DATASOURCES, 'datasources'));
         
         try
         {
@@ -109,7 +110,9 @@ class ImportValidator extends AgaviStringValidator
             $importFactory = new ImportFactory($importFactoryConfig);
             
             $dataImport = $importFactory->createDataImport($importName);
-            $dataSources = $importFactory->createDataSourcesForImport($importName, explode(',', $onlyTheseSources));
+            $onlyThese = is_string($onlyTheseSources) ? explode(',', $onlyTheseSources) : array();
+            
+            $dataSources = $importFactory->createDataSourcesForImport($importName, $onlyThese);
         }
         catch (ImportFactoryException $e)
         {
@@ -128,6 +131,13 @@ class ImportValidator extends AgaviStringValidator
         }
         
         if (empty ($dataSources))
+        {
+            $this->throwError(self::ERR_INVALID_DATASOURCES);
+            
+            return FALSE;
+        }
+        
+        if (!empty($onlyThese) && count($onlyThese) != count($dataSources))
         {
             $this->throwError(self::ERR_INVALID_DATASOURCES);
             

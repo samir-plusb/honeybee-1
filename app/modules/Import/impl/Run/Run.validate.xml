@@ -7,14 +7,25 @@
             <validator class="import" name="invalid_import" required="true">
                 <arguments>
                     <argument name="import">i</argument>
-                    <argument name="datasources">d</argument>
                 </arguments>
                 <errors>
-                    <error>Make sure to provide a valid import(-i) argument.</error>
-                    <error for="invalid_config">A given dataimport or datasource is not valid.</error>
-                    <error for="invalid_import">The given import(-i) argument does not exist.</error>
-                    <error for="invalid_datasources">The given datasources(-d) argument does not match any existing datasource.</error>
+                    <error>
+Please provide a valid data importname (-i) and optional datasources (-d).
+Enter -h to view the help text.    
+                    </error>
+                    <error for="invalid_config">
+One of either the dataimports- or datasources.xml contains an invalid configuration.
+                    </error>
+                    <error for="invalid_import">
+The given dataimport name(-i) does not exist.
+                    </error>
+                    <error for="invalid_datasources">
+At least one of the provided datasources(-d) does not exist.
+                    </error>
                 </errors>
+                <ae:parameters>
+                    <ae:parameter name="arg_datasources">d</ae:parameter>
+                </ae:parameters>
             </validator>
             
         </validators>
