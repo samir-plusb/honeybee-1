@@ -28,6 +28,13 @@
             <route pattern="application/json" source="_SERVER[HTTP_ACCEPT]" output_type="json" stop="false" />
 
             <route name="disabled" pattern="^/disabled$" module="Disabled" action="Index" />
+            
+            <!-- <xi:include href="%core.app_dir%/modules/Asset/config/routing.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/ae:configuration[@context='web'])/routes/*">
+            </xi:include> -->
+            <route pattern="^/asset" module="Asset">
+                <route pattern="^/put/$" action="Put" />
+                <route pattern="^/get/({aid:\d+})/$" action="Get" />
+            </route>
 
             <!-- The last route in case the input URL is just "/". -->
             <route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />

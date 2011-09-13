@@ -89,6 +89,41 @@ class ExtendedCouchDbClient
 
         return (array)$this->compositeClient->getDoc($documentId);
     }
+    
+    /**
+     * Stores the given document in the given database.
+     * 
+     * @param       string $database
+     * @param       string $documentId
+     * 
+     * @return      array
+     * 
+     * @throws      CouchdbClientException
+     */
+    public function storeDoc($database, $document)
+    {
+        $this->compositeClient->selectDb($database);
+        
+        return $this->compositeClient->storeDoc($document);
+    }
+    
+    public function deleteDoc($database, $docId, $rev)
+    {
+        $curlHandle = $this->getCurlHandle();
+
+        $uri = $this->baseUri . $database . '/' . $docId . '?' . 'rev=' . $rev;
+        
+        curl_setopt($curlHandle, CURLOPT_URL, $uri);
+        curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        
+        $response = curl_exec($curlHandle);
+        
+        $this->processCurlErrors($curlHandle);
+        
+        $data = json_decode($response, true);
+        
+        return (isset($data['ok']) && true === $data['ok']);
+    }
 
     /**
      * Query the given database for revision (e-tag header in response to head request)
@@ -142,9 +177,11 @@ class ExtendedCouchDbClient
 
         $curlHandle = $this->getCurlHandle();
         curl_setopt($curlHandle, CURLOPT_URL, $uri);
-
+        
         $resp = curl_exec($curlHandle);
+        
         $this->processCurlErrors($curlHandle);
+        
         $data = json_decode($resp, TRUE);
 
         return $data;
@@ -191,7 +228,8 @@ class ExtendedCouchDbClient
         curl_setopt($curlHandle, CURLOPT_INFILE, $file);
         curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($jsonDoc));
 
-        curl_exec($curlHandle);
+        $resp = curl_exec($curlHandle);
+        
         $this->processCurlErrors($curlHandle);
 
         fclose($file);
@@ -257,7 +295,9 @@ class ExtendedCouchDbClient
     {
         $error = curl_error($curlHandle);
         $errorNum = curl_errno($curlHandle);
-        if (200 != curl_getinfo($curlHandle, CURLINFO_HTTP_CODE) || $errorNum || $error)
+        $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
+        
+        if (200 > $respCode || 300 <= $respCode || $errorNum || $error)
         {
             throw new CouchdbClientException("CURL error: $error", $errorNum);
         }

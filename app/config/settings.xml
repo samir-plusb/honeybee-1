@@ -66,6 +66,10 @@
             <setting name="newswire_dir">/var/tmp/dpa/regio-berlinbrandenburg/</setting>
         </settings>
         
+        <settings prefix="assets.">
+            <setting name="base_dir">%core.app_dir%/../data/assets</setting>
+        </settings>
+        
         <exception_templates>
             <exception_template>%core.agavi_dir%/exception/templates/shiny.php</exception_template>
             <exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>

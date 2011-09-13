@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations
-	xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
-	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
-	parent="%core.module_dir%/Asset/config/validators.xml"
->
-	
-	<ae:configuration>
-		
-		<validators>
-		</validators>
-		
-	</ae:configuration>
-	
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" parent="%core.module_dir%/Asset/config/validators.xml">
+    <ae:configuration>
+        <validators>
+            
+            <validator class="or" method="write" required="true">
+                <validators>
+                    <validator class="asset_binary" name="invalid_asset_binary" required="false">
+                        <arguments>
+                            <argument>asset</argument>
+                        </arguments>
+                        <errors>
+                            <error>No valid asset binary given.</error>
+                        </errors>
+                    </validator>
+
+                    <validator class="asset_uri" name="invalid_asset_uri" required="false">
+                        <arguments>
+                            <argument>asset</argument>
+                        </arguments>
+                        <errors>
+                            <error>No valid asset uri given.</error>
+                            <error for="non_existant">The given asset uri points to a non-existing resource.</error>
+                        </errors>
+                    </validator>
+                </validators>
+                <errors>
+                    <error>Invalid asset parameter provided.</error>
+                </errors>
+                <ae:parameters>
+                    
+                </ae:parameters>
+            </validator>
+            
+        </validators>
+    </ae:configuration>
 </ae:configurations>

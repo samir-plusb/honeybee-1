@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Asset_Put_PutSuccessView class handle the presentation logic for our Asset/Put actions's success data.
+ * The Asset_Delete_DeleteErrorView class handle the presentation logic for our Asset/Delete actions's error data.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -9,7 +9,7 @@
  * @package         Asset
  * @subpackage      Mvc
  */
-class Asset_Put_PutSuccessView extends AssetBaseView
+class Asset_Delete_DeleteErrorView extends AssetBaseView
 {
     /**
      * Handle presentation logic for the web  (html).
@@ -23,8 +23,8 @@ class Asset_Put_PutSuccessView extends AssetBaseView
 	{
         $this->setupHtml($parameters);
         
-        $this->setAttribute('info', $this->getAttribute('asset_info')->toArray());
-        $this->setAttribute('_title', 'Asset PUT - Html Form Interface / SUCCESS');
+        $this->setAttribute('errors', $this->getValidationErrorMessages());
+        $this->setAttribute('_title', 'Asset DELETE - Html Interface / ERROR');
 	}
     
 	/**
@@ -37,9 +37,8 @@ class Asset_Put_PutSuccessView extends AssetBaseView
      */
 	public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
 	{
-        $msg = "Successfully stored your asset." . PHP_EOL;
-        $msg .= "Asset Information: " . PHP_EOL;
-        $msg .= var_export($this->getAttribute('asset_info')->toArray(), true);
+        $msg = "An arror occured while trying to delete your asset:" . PHP_EOL;
+        $msg .= '- ' . implode(PHP_EOL . '- ', $this->getValidationErrorMessages());
         
         $this->getResponse()->setContent($msg);
 	}

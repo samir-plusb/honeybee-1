@@ -14,6 +14,20 @@
  */
 class Asset_PutAction extends AssetBaseAction
 {
+    /**
+     * Execute the read logic for this action, hence prompt for an asset.
+     * 
+     * @param       AgaviRequestDataHolder $parameters
+     * 
+     * @return      string The name of the view to execute.
+     * 
+     * @codingStandardsIgnoreStart
+     */
+    public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreStart
+    {
+        return 'Input';
+    }
+    
 	/**
      * Execute the write logic for this action, hence process the given asset.
      * 
@@ -25,11 +39,11 @@ class Asset_PutAction extends AssetBaseAction
      */
     public function executeWrite(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $baseDir = dirname(AgaviConfig::get('core.app_dir')) . DIRECTORY_SEPARATOR;
-        $assetUri = sprintf('file://%sfoo.jpg', $baseDir);
+        $assetUri = $parameters->getParameter(AssetResourceValidator::DEFAULT_EXPORT);
         
-        $service = new ProjectAssetService();
-        $assetInfo = $service->put($assetUri);
+        $assetInfo = ProjectAssetService::getInstance()->put($assetUri);
+        
+        $this->setAttribute('asset_info', $assetInfo);
         
         return 'Success';
     }

@@ -2,10 +2,6 @@
 
 class ProjectAssetService implements IAssetService
 {
-    const ASSET_PATH_DEPTH = 4;
-    
-    const ASSET_FOLDER2ID_OFFSET = 3;
-    
     const URI_PART_SCHEME = 'scheme';
     
     const URI_PART_PATH = 'path';
@@ -14,6 +10,33 @@ class ProjectAssetService implements IAssetService
     
     const URI_SCHEME_HTTP = 'http';
     
+    const COUCHDB_DATABASE = 'assets';
+    
+    protected $couchDbClient;
+    
+    protected $idSequence;
+    
+    protected static $instance;
+    
+    public function __construct()
+    {
+        $this->couchDbClient = new ExtendedCouchDbClient(
+            $this->buildCouchDbUri()
+        );
+        
+        $this->idSequence = new AssetIdSequence();
+    }
+    
+    public static function getInstance()
+    {
+        if (null === self::$instance)
+        {
+            self::$instance = new ProjectAssetService();
+        }
+        
+        return self::$instance;
+    }
+
     /**
      * Store the given file on the filesystem 
      * and returns a IAssetInfo instance that reflects our new asset.
@@ -23,11 +46,16 @@ class ProjectAssetService implements IAssetService
      * 
      * @return      IAssetInfo
      */
-    public function put($assetUri, array $metaData = array())
+    public function put($assetUri, array $metaData = array(), $moveOrigin = TRUE)
     {
-        $localPath = $this->convertUriToLocalPath($assetUri);
+        $asset = $this->createAsset($assetUri, $metaData);
         
+        if ($asset->moveFile($moveOrigin))
+        {
+            $this->storeAssetInfo($asset);
+        }
         
+        return $asset;
     }
     
     /**
@@ -40,7 +68,28 @@ class ProjectAssetService implements IAssetService
      */
     public function update($assetId, array $metaData = array())
     {
+        $assetData = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
+        $curMetaData = (array)$assetData[ProjectAssetInfo::XPROP_META_DATA];
+        $isEqual = TRUE;
         
+        foreach ($metaData as $name => $value)
+        {
+            if (!isset($curMetaData[$name]) || $curMetaData[$name] !== $metaData[$name])
+            {
+                $isEqual = FALSE;
+                break;
+            }
+        }
+        
+        if (!$isEqual)
+        {
+            $assetData[ProjectAssetInfo::XPROP_META_DATA] = $metaData;
+            $asset = new ProjectAssetInfo($assetId, $assetData);
+            
+            return $this->storeAssetInfo($asset, $assetData['_rev']);
+        }
+        
+        return FALSE;
     }
     
     /**
@@ -50,7 +99,9 @@ class ProjectAssetService implements IAssetService
      */
     public function get($assetId)
     {
+        $asset = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
         
+        return new ProjectAssetInfo($asset['id'], $asset);
     }
     
     /**
@@ -60,44 +111,55 @@ class ProjectAssetService implements IAssetService
      */
     public function delete($assetId)
     {
+        $assetData = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
+        $asset = new ProjectAssetInfo($assetData['id'], $assetData);
         
-    }
-    
-    protected function convertUriToLocalPath($assetUri)
-    {
-        $uriParts = parse_url($assetUri);
-        
-        if (!isset($uriParts[self::URI_PART_SCHEME]) || empty($uriParts[self::URI_PART_SCHEME]))
+        if ($this->couchDbClient->deleteDoc(self::COUCHDB_DATABASE, $asset->getId(), $assetData['_rev']))
         {
-            $uriParts[self::URI_PART_SCHEME] = self::URI_SCHEME_FILE;
+            return $asset->deleteFile();
         }
         
-        $filePath = null;
-        
-        if (self::URI_SCHEME_FILE !== $uriParts[self::URI_PART_SCHEME])
-        {
-            $filePath = $this->downloadAsset($assetUri);
-        }
-        else
-        {
-            $filePath = $uriParts[self::URI_PART_PATH];
-        }
-        
-        return $filePath;
+        return FALSE;
     }
     
-    protected function downloadAsset($assetUri)
+    protected function buildCouchDbUri()
     {
-        $downloasFilePath = '';
-        
-        // @todo download the asset.
-        
-        return $downloasFilePath;
+        return sprintf(
+            "http://%s:%d/",
+            AgaviConfig::get('couchdb.import.host'),
+            AgaviConfig::get('couchdb.import.port')
+        );
     }
     
-    protected function generateTargetPath($assetId)
+    protected function createAsset($assetUri, array $metaData)
     {
+        return new ProjectAssetInfo(
+            $this->idSequence->nextId(),
+            array(
+                ProjectAssetInfo::XPROP_ORIGIN    => $assetUri,
+                ProjectAssetInfo::XPROP_META_DATA => $metaData
+            )
+        );
+    }
+    
+    protected function storeAssetInfo(IAssetInfo $asset, $revision = NULL)
+    {
+        $document = $asset->toArray();
+        $document['_id'] = $document['id'];
         
+        if ($revision)
+        {
+            $document['_rev'] = $revision;
+        }
+        
+        $response = (array)$this->couchDbClient->storeDoc(self::COUCHDB_DATABASE, $document);
+        
+        if (isset($response['ok']) && true === $response['ok'])
+        {
+            return true;
+        }
+        
+        return false;
     }
 }
 
