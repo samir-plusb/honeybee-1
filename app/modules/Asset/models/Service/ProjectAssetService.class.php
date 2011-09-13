@@ -137,7 +137,7 @@ class ProjectAssetService implements IAssetService
     {
         $asset = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
         
-        return new ProjectAssetInfo($asset['id'], $asset);
+        return new ProjectAssetInfo($asset['_id'], $asset);
     }
     
     /**
@@ -156,7 +156,7 @@ class ProjectAssetService implements IAssetService
         
         foreach ($metaData as $name => $value)
         {
-            if (!isset($curMetaData[$name]) || $curMetaData[$name] !== $metaData[$name])
+            if (!isset($curMetaData[$name]) || $curMetaData[$name] !== $value)
             {
                 $isEqual = FALSE;
                 break;
@@ -182,7 +182,7 @@ class ProjectAssetService implements IAssetService
     public function delete($assetId)
     {
         $assetData = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
-        $asset = new ProjectAssetInfo($assetData['id'], $assetData);
+        $asset = new ProjectAssetInfo($assetData['_id'], $assetData);
         
         if ($this->couchDbClient->deleteDoc(self::COUCHDB_DATABASE, $asset->getId(), $assetData['_rev']))
         {
@@ -243,7 +243,7 @@ class ProjectAssetService implements IAssetService
     protected function store(IAssetInfo $asset, $revision = NULL)
     {
         $document = $asset->toArray();
-        $document['_id'] = $document['id'];
+        $document['_id'] = $document[ProjectAssetInfo::PROP_ASSET_ID];
         
         if ($revision)
         {

@@ -23,7 +23,7 @@ class ProjectAssetInfo implements IAssetInfo
     /**
      * Holds the name of our id property.
      */
-    const PROP_ID = 'id';
+    const PROP_ASSET_ID = 'id';
     
     /**
      * Holds the name of our fullname property.
@@ -80,7 +80,7 @@ class ProjectAssetInfo implements IAssetInfo
      * 
      * @var         int 
      */
-    protected $id;
+    protected $assetId;
     
     /**
      * The asset's origin.
@@ -152,14 +152,14 @@ class ProjectAssetInfo implements IAssetInfo
      */
     public function __construct($assetId, array $assetData = array())
     {
-        $this->id = $assetId;
+        $this->assetId = $assetId;
         
         if (!empty($assetData))
         {
             $this->hydrate($assetData);
         }
         
-        $this->fullPath = $this->generateAbsTargetPath($this->id);
+        $this->fullPath = $this->generateAbsTargetPath($this->assetId);
     }
     
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
@@ -174,7 +174,7 @@ class ProjectAssetInfo implements IAssetInfo
      */
     public function getId()
     {
-        return $this->id;
+        return $this->assetId;
     }
     
     /**
@@ -444,7 +444,7 @@ class ProjectAssetInfo implements IAssetInfo
     protected function getExposedPropNames()
     {
         return array(
-            self::PROP_ID,
+            self::PROP_ASSET_ID,
             self::XPROP_ORIGIN,
             self::XPROP_FULLNAME,
             self::XPROP_NAME,

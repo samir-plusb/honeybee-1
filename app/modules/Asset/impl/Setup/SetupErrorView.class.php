@@ -19,7 +19,7 @@ class Asset_Setup_SetupErrorView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $rd) // @codingStandardsIgnoreStart
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $errors = implode(PHP_EOL, $this->getAttribute('errors', array()));
         $this->getResponse()->setContent(

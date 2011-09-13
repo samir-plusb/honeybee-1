@@ -1025,16 +1025,16 @@ class parserTocInlineTag extends parserInlineTag
                 $newtoc[$i]['tagname'] = $toc['tag']->name;
                 $l                     = new tutorialLink;
                 if (!isset($toc['title'])) {
-                    $title = 'section '.$toc['id']->id;
+                    $title = 'section '.$toc['id']->assetId;
                 } else {
                     $title = $toc['title']->Convert($c);
                 }
-                $l->addLink($toc['id']->id, $this->_path, basename($this->_path), 
+                $l->addLink($toc['id']->assetId, $this->_path, basename($this->_path), 
                     $toc['id']->package, $toc['id']->subpackage, strip_tags($title));
                 $newtoc[$i]['link']  = $c->returnSee($l);
                 $newtoc[$i]['id']    = $c->getTutorialId($toc['id']->package, 
                     $toc['id']->subpackage, basename($this->_path), 
-                    $toc['id']->id, $toc['id']->category);
+                    $toc['id']->assetId, $toc['id']->category);
                 $newtoc[$i]['title'] = $title;
             }
         }

@@ -168,14 +168,14 @@ class ImportValidator extends AgaviStringValidator
             self::DEFAULT_EXPORT_IMPORT
         );
         
-        $exportDataSourcesName = $this->getParameter(
+        $exportDataSources = $this->getParameter(
             self::PARAM_EXPORT_DATASRC,
             self::DEFAULT_EXPORT_SOURCE
         );
         
         $affectedArgs = array(
             $exportImportName => $dataImport,
-            $exportDataSourcesName => $dataSources
+            $exportDataSources => $dataSources
         );
         
         foreach ($affectedArgs as $argName => $argValue)

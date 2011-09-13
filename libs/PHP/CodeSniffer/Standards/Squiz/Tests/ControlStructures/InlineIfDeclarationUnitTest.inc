@@ -14,7 +14,7 @@ echo 'var is '.(($var < 0)
                     : 'positive');
 
 $args = array(
-         '"'.$this->id.'"',
+         '"'.$this->assetId.'"',
          '"'.$this->stepInfo['title'].'"',
          '"'.((isset($this->stepInfo['description']) === TRUE) ? $this->stepInfo['description'] : '').'"',
          '"'.(isset($this->stepInfo['description']) === TRUE ? $this->stepInfo['description'] : '').'"',

@@ -19,7 +19,7 @@ class Asset_Setup_SetupSuccessView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $rd) // @codingStandardsIgnoreStart
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getResponse()->setContent("Successfully setup your asset module.");
     }

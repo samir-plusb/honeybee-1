@@ -274,7 +274,7 @@ class ezcFeedRss1 extends ezcFeedProcessor implements ezcFeedParser
 
         foreach ( $items as $item )
         {
-            $about = $item->id;
+            $about = $item->assetId;
             $liTag = $this->xml->createElement( 'rdf:li' );
             $resourceAttr = $this->xml->createAttribute( 'resource' );
             $resourceVal = $this->xml->createTextNode( $about );
@@ -332,7 +332,7 @@ class ezcFeedRss1 extends ezcFeedProcessor implements ezcFeedParser
             $itemTag = $this->xml->createElement( 'item' );
             $this->root->appendChild( $itemTag );
 
-            $data = $element->id;
+            $data = $element->assetId;
             if ( is_null( $data ) )
             {
                 throw new ezcFeedRequiredMetaDataMissingException( "/{$this->root->nodeName}/item/@about" );

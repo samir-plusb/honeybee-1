@@ -282,7 +282,7 @@ class XMLPackagePageParser extends Parser
             if ($word == '>') {
                 if (is_object($this->p_vars['quote_data'])) {
                     $this->p_vars['quote_data'] = 
-                        '{@id '.$this->p_vars['quote_data']->id.'}';
+                        '{@id '.$this->p_vars['quote_data']->assetId.'}';
                 }
                 addErrorDie(PDERROR_UNTERMINATED_ATTRIB, $this->curtag->name, 
                     $this->p_vars['attrname'], $this->p_vars['quote_data']);
@@ -472,17 +472,17 @@ class XMLPackagePageParser extends Parser
                         $a .= ($this->refsect2id ? $this->refsect2id . '.' : '');
                         $a .= ($this->refsect3id ? $this->refsect3id . '.' : '');
                         if ($this->curtag->name == 'refsect1') {
-                            $this->refsect1id = $value->id;
+                            $this->refsect1id = $value->assetId;
                         }
                         if ($this->curtag->name == 'refsect2') {
-                            $this->refsect2id = $value->id;
+                            $this->refsect2id = $value->assetId;
                         }
                         if ($this->curtag->name == 'refsect3') {
-                            $this->refsect3id = $value->id;
+                            $this->refsect3id = $value->assetId;
                         }
                         //DEBUG debug($value->id . ' is now ' . $a . $value->id);
-                        $value->id = $a . $value->id;
-                        if ($value->id != '') {
+                        $value->assetId = $a . $value->assetId;
+                        if ($value->assetId != '') {
                             if (isset($this->_toc[$this->_cursection])) {
                                 $this->_cursection++;
                             }

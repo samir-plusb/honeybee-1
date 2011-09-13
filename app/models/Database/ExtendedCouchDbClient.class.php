@@ -228,7 +228,7 @@ class ExtendedCouchDbClient
         curl_setopt($curlHandle, CURLOPT_INFILE, $file);
         curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($jsonDoc));
 
-        $resp = curl_exec($curlHandle);
+        curl_exec($curlHandle);
         
         $this->processCurlErrors($curlHandle);
 

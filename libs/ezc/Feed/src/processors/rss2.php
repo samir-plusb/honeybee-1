@@ -649,7 +649,7 @@ class ezcFeedRss2 extends ezcFeedProcessor implements ezcFeedParser
                                 $attributes = array( 'isPermaLink' => $permaLink );
                             }
 
-                            $this->generateMetaDataWithAttributes( $itemTag, 'guid', $metaData->id, $attributes );
+                            $this->generateMetaDataWithAttributes( $itemTag, 'guid', $metaData->assetId, $attributes );
                             break;
 
                         case 'category':
@@ -784,7 +784,7 @@ class ezcFeedRss2 extends ezcFeedProcessor implements ezcFeedParser
 
                     case 'guid':
                         $subElement = $element->add( 'id' );
-                        $subElement->id = $itemChild->textContent;
+                        $subElement->assetId = $itemChild->textContent;
                         if ( $itemChild->hasAttribute( 'isPermaLink' ) )
                         {
                             $value = $itemChild->getAttribute( 'isPermaLink' );

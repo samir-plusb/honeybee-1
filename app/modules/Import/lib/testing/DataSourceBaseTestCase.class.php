@@ -37,7 +37,7 @@ abstract class DataSourceBaseTestCase extends AgaviUnitTestCase
     {
         $currentCount = 0;
 
-        while (($record = $this->dataSource->nextRecord()))
+        while ($this->dataSource->nextRecord())
         {
             $currentCount++;
         }

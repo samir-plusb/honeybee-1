@@ -410,7 +410,7 @@ class parserXMLDocBookTag extends parserStringWithInlineTags
         if (phpDocumentor_get_class($search) != 'parseridinlinetag') {
             return false;
         }
-        $search->id = $subsection;
+        $search->assetId = $subsection;
         foreach ($this->value as $el) {
             if (phpDocumentor_get_class($el) == 'parserxmldocbooktag') {
                 if ($el->getId($c) == $search->Convert($c)) {

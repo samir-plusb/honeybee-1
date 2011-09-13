@@ -160,7 +160,7 @@ class tests_IntermediateParserAddPrivatePageTests extends PHPUnit_Framework_Test
 
         // verify parent attributes are set correctly
         $this->assertEquals($this->ip->privatepages[$this->path]->parent->type, "page");
-        $this->assertEquals($this->ip->privatepages[$this->path]->parent->id, "");
+        $this->assertEquals($this->ip->privatepages[$this->path]->parent->assetId, "");
         $this->assertEquals($this->ip->privatepages[$this->path]->parent->file, "");
         $this->assertEquals($this->ip->privatepages[$this->path]->parent->sourceLocation, "");
         $this->assertEquals($this->ip->privatepages[$this->path]->parent->name, "");
@@ -202,7 +202,7 @@ class tests_IntermediateParserAddPrivatePageTests extends PHPUnit_Framework_Test
 
         // verify parent attributes are set correctly
         $this->assertEquals($this->ip->privatepages[$this->path]->parent->type, "page");
-        $this->assertEquals($this->ip->privatepages[$this->path]->parent->id, "");
+        $this->assertEquals($this->ip->privatepages[$this->path]->parent->assetId, "");
         $this->assertEquals($this->ip->privatepages[$this->path]->parent->file, "");
         $this->assertEquals($this->ip->privatepages[$this->path]->parent->sourceLocation, "");
         $this->assertEquals($this->ip->privatepages[$this->path]->parent->name, "");

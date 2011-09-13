@@ -128,7 +128,7 @@ $expected = array(
 
 // Space in second arg.
 $args = array(
-         '"'.$this->id.'"',
+         '"'.$this->assetId.'"',
          (int) $hasSessions,
         );
 
