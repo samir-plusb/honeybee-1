@@ -21,6 +21,7 @@ class Asset_PutAction extends AssetBaseAction
      * 
      * @return      string The name of the view to execute.
      * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
