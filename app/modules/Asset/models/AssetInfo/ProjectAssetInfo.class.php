@@ -302,7 +302,7 @@ class ProjectAssetInfo implements IAssetInfo
     public function moveFile($moveOrigin = TRUE)
     {
         $originParts = parse_url($this->getOrigin());
-        $src = null;
+        $src = NULL;
         
         if ('file' === $originParts['scheme'])
         {

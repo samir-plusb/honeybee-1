@@ -94,7 +94,7 @@ class ProjectAssetService implements IAssetService
      */
     public static function getInstance()
     {
-        if (null === self::$instance)
+        if (NULL === self::$instance)
         {
             self::$instance = new ProjectAssetService();
         }
@@ -252,12 +252,12 @@ class ProjectAssetService implements IAssetService
         
         $response = (array)$this->couchDbClient->storeDoc(self::COUCHDB_DATABASE, $document);
         
-        if (isset($response['ok']) && true === $response['ok'])
+        if (isset($response['ok']) && TRUE === $response['ok'])
         {
-            return true;
+            return TRUE;
         }
         
-        return false;
+        return FALSE;
     }
     
     // ---------------------------------- </WORKING METHODS> -------------------------------------

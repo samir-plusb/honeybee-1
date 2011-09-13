@@ -11,7 +11,7 @@
  */
 class Asset_SetupAction extends AssetBaseAction
 {
-	/**
+    /**
      * Execute the write logic for this action, hence process the given asset.
      * 
      * @param       AgaviRequestDataHolder $parameters
@@ -20,24 +20,25 @@ class Asset_SetupAction extends AssetBaseAction
      * 
      * @codingStandardsIgnoreStart
      */
-	public function executeWrite(AgaviRequestDataHolder $rd) // @codingStandardsIgnoreStart
-	{
+    public function executeWrite(AgaviRequestDataHolder $rd) // @codingStandardsIgnoreStart
+    {
         $moduleSetup = new AssetModuleSetup();
-        
+
         try
         {
             $moduleSetup->setup(TRUE);
         }
-        catch(Exception $e)
+        catch (Exception $e)
         {
             throw $e;
             $this->setAttribute('errors', array($e->getMessage()));
-            
+
             return 'Error';
         }
-        
-		return 'Success';
-	}
+
+        return 'Success';
+    }
+
 }
 
 ?>

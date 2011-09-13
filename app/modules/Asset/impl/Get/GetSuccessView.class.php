@@ -39,7 +39,7 @@ class Asset_Get_GetSuccessView extends AssetBaseView
     {
         $msg = "Found your asset." . PHP_EOL;
         $msg .= "Asset Information: " . PHP_EOL;
-        $msg .= var_export($this->getAttribute('asset_info')->toArray(), true);
+        $msg .= var_export($this->getAttribute('asset_info')->toArray(), TRUE);
 
         $this->getResponse()->setContent($msg);
     }

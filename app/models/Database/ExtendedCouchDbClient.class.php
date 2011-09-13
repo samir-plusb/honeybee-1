@@ -120,9 +120,9 @@ class ExtendedCouchDbClient
         
         $this->processCurlErrors($curlHandle);
         
-        $data = json_decode($response, true);
+        $data = json_decode($response, TRUE);
         
-        return (isset($data['ok']) && true === $data['ok']);
+        return (isset($data['ok']) && TRUE === $data['ok']);
     }
 
     /**
