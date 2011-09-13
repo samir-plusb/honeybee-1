@@ -23,7 +23,7 @@ class Asset_PutAction extends AssetBaseAction
      * 
      * @codingStandardsIgnoreStart
      */
-    public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreStart
+    public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         return 'Input';
     }
