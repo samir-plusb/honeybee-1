@@ -11,7 +11,7 @@
  */
 class Asset_Setup_SetupSuccessView extends AssetBaseView
 {
-	/**
+    /**
      * Handle presentation logic for commandline interfaces.
      * 
      * @param       AgaviRequestDataHolder $parameters 
@@ -19,10 +19,11 @@ class Asset_Setup_SetupSuccessView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-	public function executeText(AgaviRequestDataHolder $rd) // @codingStandardsIgnoreStart
-	{
-		$this->getResponse()->setContent("Successfully setup your asset module.");
-	}
+    public function executeText(AgaviRequestDataHolder $rd) // @codingStandardsIgnoreStart
+    {
+        $this->getResponse()->setContent("Successfully setup your asset module.");
+    }
+
 }
 
 ?>

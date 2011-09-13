@@ -90,7 +90,7 @@ class AssetModuleSetup
         }
         catch (CouchDbClientException $e)
         {
-            $error = json_decode($e->getMessage(), true);
+            $error = json_decode($e->getMessage(), TRUE);
             
             if (!isset($error['error']) || 'not_found' != $error['error'])
             {

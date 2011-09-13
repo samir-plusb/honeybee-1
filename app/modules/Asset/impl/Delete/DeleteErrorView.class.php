@@ -19,15 +19,15 @@ class Asset_Delete_DeleteErrorView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-	public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-	{
+    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
         $this->setupHtml($parameters);
-        
+
         $this->setAttribute('errors', $this->getValidationErrorMessages());
         $this->setAttribute('_title', 'Asset DELETE - Html Interface / ERROR');
-	}
-    
-	/**
+    }
+
+    /**
      * Handle presentation logic for commandline interfaces.
      * 
      * @param       AgaviRequestDataHolder $parameters 
@@ -35,13 +35,14 @@ class Asset_Delete_DeleteErrorView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-	public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-	{
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
         $msg = "An arror occured while trying to delete your asset:" . PHP_EOL;
         $msg .= '- ' . implode(PHP_EOL . '- ', $this->getValidationErrorMessages());
-        
+
         $this->getResponse()->setContent($msg);
-	}
+    }
+
 }
 
 ?>

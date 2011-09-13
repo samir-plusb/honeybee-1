@@ -11,7 +11,7 @@
  */
 class Asset_Setup_SetupErrorView extends AssetBaseView
 {
-	/**
+    /**
      * Handle presentation logic for commandline interfaces.
      * 
      * @param       AgaviRequestDataHolder $parameters 
@@ -19,13 +19,14 @@ class Asset_Setup_SetupErrorView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-	public function executeText(AgaviRequestDataHolder $rd) // @codingStandardsIgnoreStart
-	{
+    public function executeText(AgaviRequestDataHolder $rd) // @codingStandardsIgnoreStart
+    {
         $errors = implode(PHP_EOL, $this->getAttribute('errors', array()));
-		$this->getResponse()->setContent(
+        $this->getResponse()->setContent(
             "An error occured while trying to setup your asset module: " . PHP_EOL . $errors
         );
-	}
+    }
+
 }
 
 ?>

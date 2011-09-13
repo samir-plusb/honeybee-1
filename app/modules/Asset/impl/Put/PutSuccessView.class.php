@@ -19,15 +19,15 @@ class Asset_Put_PutSuccessView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-	public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-	{
+    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
         $this->setupHtml($parameters);
-        
+
         $this->setAttribute('info', $this->getAttribute('asset_info')->toArray());
         $this->setAttribute('_title', 'Asset PUT - Html Form Interface / SUCCESS');
-	}
-    
-	/**
+    }
+
+    /**
      * Handle presentation logic for commandline interfaces.
      * 
      * @param       AgaviRequestDataHolder $parameters 
@@ -35,14 +35,15 @@ class Asset_Put_PutSuccessView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-	public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-	{
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
         $msg = "Successfully stored your asset." . PHP_EOL;
         $msg .= "Asset Information: " . PHP_EOL;
         $msg .= var_export($this->getAttribute('asset_info')->toArray(), true);
-        
+
         $this->getResponse()->setContent($msg);
-	}
+    }
+
 }
 
 ?>

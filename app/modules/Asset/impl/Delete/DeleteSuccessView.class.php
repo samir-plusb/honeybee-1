@@ -19,15 +19,15 @@ class Asset_Delete_DeleteSuccessView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-	public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-	{
+    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
         $this->setupHtml($parameters);
-        
+
         $this->setAttribute('info', $this->getAttribute('asset_info')->toArray());
         $this->setAttribute('_title', 'Asset DELETE - Html Interface / SUCCESS');
-	}
-    
-	/**
+    }
+
+    /**
      * Handle presentation logic for commandline interfaces.
      * 
      * @param       AgaviRequestDataHolder $parameters 
@@ -35,13 +35,14 @@ class Asset_Delete_DeleteSuccessView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-	public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-	{
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
         $msg = "Successfully deleted your asset from path:" . PHP_EOL;
         $msg .= $this->getAttribute('asset_info')->getFullPath();
-        
+
         $this->getResponse()->setContent($msg);
-	}
+    }
+
 }
 
 ?>

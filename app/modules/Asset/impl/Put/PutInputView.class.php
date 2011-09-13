@@ -11,7 +11,7 @@
  */
 class Asset_Put_PutInputView extends AssetBaseView
 {
-	/**
+    /**
      * Handle presentation logic for the web  (html).
      * 
      * @param       AgaviRequestDataHolder $parameters 
@@ -19,12 +19,13 @@ class Asset_Put_PutInputView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-	public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-	{
+    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
         $this->setupHtml($parameters);
-        
+
         $this->setAttribute('_title', 'Asset PUT - Html Form Interface');
-	}
+    }
+
 }
 
 ?>

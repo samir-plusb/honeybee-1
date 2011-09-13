@@ -95,9 +95,9 @@ class AssetResourceValidator extends AgaviFileValidator
      * @param       string $name
      * @param       string $paramType
      */
-    protected function export($value, $name = null, $paramType = null)
+    protected function export($value, $name = NULL, $paramType = NULL)
     {
-        if ($name === null)
+        if ($name === NULL)
         {
             $name = $this->getParameter('export');
         }
@@ -107,7 +107,7 @@ class AssetResourceValidator extends AgaviFileValidator
             return;
         }
 
-        if ($paramType === null)
+        if ($paramType === NULL)
         {
             $paramType = $this->getParameter('source');
         }
@@ -115,7 +115,7 @@ class AssetResourceValidator extends AgaviFileValidator
         $array = & $this->validationParameters->getAll($paramType);
         $currentParts = $this->curBase->getParts();
 
-        if (count($currentParts) > 0 && strpos($name, '%') !== false)
+        if (count($currentParts) > 0 && strpos($name, '%') !== FALSE)
         {
             // this is a validator which actually has a base (<arguments base="xx">) set
             // and the export name contains sprintf syntax
@@ -123,13 +123,15 @@ class AssetResourceValidator extends AgaviFileValidator
         }
         // CAUTION
         // we had a feature here during development that would allow [] at the end to append values to an array
-        // that would, however, mean that we have to cast the value to an array, and, either way, a user would be able to manipulate the keys
-        // example: we export to foo[], and the user supplies ?foo[28] in the URL. that means our export will be in foo[29]. foo[28] will be removed by the validation, but the keys are still potentially harmful
-        // that's why we decided to remove this again
+        // that would, however, mean that we have to cast the value to an array, 
+        // and, either way, a user would be able to manipulate the keys
+        // example: we export to foo[], and the user supplies ?foo[28] in the URL. 
+        // That means our export will be in foo[29]. foo[28] will be removed by the validation, 
+        // but the keys are still potentially harmful, that's why we decided to remove this again.
         $arrayPath = new AgaviVirtualArrayPath($name);
         $arrayPath->setValue($array, $value);
 
-        if ($this->parentContainer !== null)
+        if ($this->parentContainer !== NULL)
         {
             // make sure the parameter doesn't get removed by the validation manager
             if (is_array($value))
@@ -262,7 +264,7 @@ class AssetResourceValidator extends AgaviFileValidator
         {
             if (!mkdir($tmpDir))
             {
-                return false;
+                return FALSE;
             }
         }
 
