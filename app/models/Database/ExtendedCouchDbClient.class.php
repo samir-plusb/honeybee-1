@@ -7,7 +7,7 @@
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         ApplicationBase
+ * @package         Project
  * @subpackage      Database
  */
 class ExtendedCouchDbClient
@@ -107,11 +107,20 @@ class ExtendedCouchDbClient
         return $this->compositeClient->storeDoc($document);
     }
     
-    public function deleteDoc($database, $docId, $rev)
+    /**
+     * Delete a document from the given couchdb database by id and revision.
+     * 
+     * @param       string $database
+     * @param       string $docId
+     * @param       string $revision
+     * 
+     * @return      boolean 
+     */
+    public function deleteDoc($database, $docId, $revision)
     {
         $curlHandle = $this->getCurlHandle();
 
-        $uri = $this->baseUri . $database . '/' . $docId . '?' . 'rev=' . $rev;
+        $uri = $this->baseUri . $database . '/' . $docId . '?' . 'rev=' . $revision;
         
         curl_setopt($curlHandle, CURLOPT_URL, $uri);
         curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, 'DELETE');
