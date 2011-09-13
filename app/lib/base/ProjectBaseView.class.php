@@ -6,8 +6,8 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         ApplicationBase
- * @subpackage      Base
+ * @package         Project
+ * @subpackage      Mvc
  */
 class ProjectBaseView extends AgaviView
 {

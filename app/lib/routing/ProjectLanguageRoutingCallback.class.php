@@ -8,7 +8,7 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         ApplicationBase
+ * @package         Project
  * @subpackage      Routing
  */
 class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
