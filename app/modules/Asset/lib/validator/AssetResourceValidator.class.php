@@ -7,7 +7,7 @@
  * @version         $Id: $
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Import
+ * @package         Asset
  * @subpackage      Validation
  */
 class AssetResourceValidator extends AgaviFileValidator
@@ -39,14 +39,14 @@ class AssetResourceValidator extends AgaviFileValidator
     // ---------------------------------- </CONSTANTS> -------------------------------------------
     
     
-    // ---------------------------------- <AgaviValidator OVERRIDES> -----------------------------
+    // ---------------------------------- <AgaviFileValidator OVERRIDES> -------------------------
     
     /**
-     * Validates that their is a valid import config file for a provided config name.
+     * Validates that given asset resource is either a valid uri or uploaded file.
      * 
      * @return      boolean
      * 
-     * @see         AgaviStringValidator::validate()
+     * @see         AgaviFileValidator::validate()
      */
     protected function validate()
     {
@@ -88,93 +88,15 @@ class AssetResourceValidator extends AgaviFileValidator
         return TRUE;
     }
     
-    // ---------------------------------- <AgaviValidator OVERRIDES> -----------------------------
-    
-    
-    // ---------------------------------- <WORKING METHODS> --------------------------------------
-    
-    protected function fixUri($assetUri)
-    {
-        $fixedUri = $assetUri;
-        
-        $pattern = '~^(\w+://).*$~is';
-        
-        if(!preg_match($pattern, $assetUri))
-        {
-            if ($assetUri{0} !== DIRECTORY_SEPARATOR)
-            {
-                $fixedUri = getcwd() . DIRECTORY_SEPARATOR . $assetUri;
-            }
-            
-            $fixedUri = 'file://' . $fixedUri;
-        }
-        
-        return $fixedUri;
-    }
-    
-    protected function assetExists($assetUri)
-    {
-        $uriParts = parse_url($assetUri);
-        
-        if ('http' === $uriParts['scheme'])
-        {
-            $curlHandle = ProjectCurl::create();
-            curl_setopt($curlHandle, CURLOPT_HEADER, 1);
-            curl_setopt($curlHandle, CURLOPT_NOBODY, 1);
-            curl_setopt ($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($curlHandle, CURLOPT_URL, $assetUri);
-            
-            curl_exec($curlHandle);
-            $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
-            
-            if (200 > $respCode || 300 <= $respCode)
-            {
-                return FALSE;
-            }
-            
-            return TRUE;
-        }
-        elseif ('file' === $uriParts['scheme'])
-        {
-            return file_exists($uriParts['path']);
-        }
-        
-        return FALSE;
-    }
-    
-    protected function moveUploadedFile()
-    {
-        $tmpDir = $this->getAssetTmpDir();
-        $uploadedFile = $this->getData($this->getArgument());
-        $tmpPath = $tmpDir . $uploadedFile->getName();
-
-        if (!$uploadedFile->move($tmpPath))
-        {
-            $this->throwError('move_tmpfile');
-
-            return FALSE;
-        }
-        
-        return $tmpPath;
-    }
-    
-    protected function getAssetTmpDir()
-    {
-        $baseDir = AgaviConfig::get('assets.base_dir');
-        
-        $tmpDir = realpath($baseDir) . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR;
-        
-        if (!is_dir($tmpDir))
-        {
-            if (!mkdir($tmpDir))
-            {
-                return false;
-            }
-        }
-        
-        return $tmpDir;
-    }
-    
+    /**
+     * Export a given value to our request data.
+     * The method was overriden to add support for defining the request data source,
+     * that the value is exported to.
+     * 
+     * @param       mixed $value
+     * @param       string $name
+     * @param       string $paramType
+     */
     protected function export($value, $name = null, $paramType = null)
 	{
 		if($name === null) 
@@ -238,6 +160,118 @@ class AssetResourceValidator extends AgaviFileValidator
             );
 		}
 	}
+    
+    // ---------------------------------- <AgaviFileValidator OVERRIDES> -------------------------
+    
+    
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
+    
+    /**
+     * Returns a valid uri, fixing a potentially
+     * missing scheme for file uris.
+     * 
+     * @param       string $assetUri
+     * 
+     * @return      string 
+     */
+    protected function fixUri($assetUri)
+    {
+        $fixedUri = $assetUri;
+        
+        $pattern = '~^(\w+://).*$~is';
+        
+        if(!preg_match($pattern, $assetUri))
+        {
+            if ($assetUri{0} !== DIRECTORY_SEPARATOR)
+            {
+                $fixedUri = getcwd() . DIRECTORY_SEPARATOR . $assetUri;
+            }
+            
+            $fixedUri = 'file://' . $fixedUri;
+        }
+        
+        return $fixedUri;
+    }
+    
+    /**
+     * Check if a given asset uri points to an available asset.
+     * 
+     * @param       string $assetUri
+     * 
+     * @return      boolean
+     */
+    protected function assetExists($assetUri)
+    {
+        $uriParts = parse_url($assetUri);
+        
+        if ('http' === $uriParts['scheme'])
+        {
+            $curlHandle = ProjectCurl::create();
+            curl_setopt($curlHandle, CURLOPT_HEADER, 1);
+            curl_setopt($curlHandle, CURLOPT_NOBODY, 1);
+            curl_setopt ($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curlHandle, CURLOPT_URL, $assetUri);
+            
+            curl_exec($curlHandle);
+            $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
+            
+            if (200 > $respCode || 300 <= $respCode)
+            {
+                return FALSE;
+            }
+            
+            return TRUE;
+        }
+        elseif ('file' === $uriParts['scheme'])
+        {
+            return file_exists($uriParts['path']);
+        }
+        
+        return FALSE;
+    }
+    
+    /**
+     * Move a given uploaded file to a temp path.
+     * 
+     * @return      string Return FALSE if something goes wrong.
+     */
+    protected function moveUploadedFile()
+    {
+        $tmpDir = $this->getAssetTmpDir();
+        $uploadedFile = $this->getData($this->getArgument());
+        $tmpPath = $tmpDir . $uploadedFile->getName();
+
+        if (!$uploadedFile->move($tmpPath))
+        {
+            $this->throwError('move_tmpfile');
+
+            return FALSE;
+        }
+        
+        return $tmpPath;
+    }
+    
+    /**
+     *  Return a path pointing to our asset tmp dir.
+     * 
+     * @return      string 
+     */
+    protected function getAssetTmpDir()
+    {
+        $baseDir = AgaviConfig::get('assets.base_dir');
+        
+        $tmpDir = realpath($baseDir) . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR;
+        
+        if (!is_dir($tmpDir))
+        {
+            if (!mkdir($tmpDir))
+            {
+                return false;
+            }
+        }
+        
+        return $tmpDir;
+    }
     
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }

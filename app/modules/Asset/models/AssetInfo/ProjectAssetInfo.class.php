@@ -1,49 +1,155 @@
 <?php
 
+/**
+ * The ProjectAssetInfo is a concrete implementation of the IAssetInfo interface.
+ * It reflects asset based imformation and provides an interface for moving and deleting
+ * asset files from the underlying filesystem.
+ * 
+ * @version         $Id:$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Asset
+ * @subpackage      AssetInfo
+ */
 class ProjectAssetInfo implements IAssetInfo
 {
-    const ASSET_MAX_ID = 100000000;
-                         
+    // ---------------------------------- <CONSTANTS> --------------------------------------------
+    
+    /**
+     * Holds the max number of files per directory.
+     */
     const ASSET_FOLDER_SIZE = 512;
     
+    /**
+     * Holds the name of our id property.
+     */
     const PROP_ID = 'id';
     
+    /**
+     * Holds the name of our fullname property.
+     */
     const XPROP_FULLNAME = 'fullname';
     
+    /**
+     * Holds the name of our name property.
+     */
     const XPROP_NAME = 'name';
     
+    /**
+     * Holds the name of our extension property.
+     */
     const XPROP_EXTENSION = 'extension';
     
+    /**
+     * Holds the name of our size property.
+     */
     const XPROP_SIZE = 'size';
     
+    /**
+     * Holds the name of our origin property.
+     */
     const XPROP_ORIGIN = 'origin';
     
+    /**
+     * Holds the name of our mimeType property.
+     */
     const XPROP_MIME_TYPE = 'mimeType';
     
+    /**
+     * Holds the name of our metaData property.
+     */
     const XPROP_META_DATA = 'metaData';
     
+    /**
+     * Holds the property prefix we use to build getter method names.
+     */
     const GETTER_METHOD_PREFIX = 'get';
     
+    /**
+     * Holds the property prefix we use to build setter method names.
+     */
     const SETTER_METHOD_PREFIX = 'set';
     
+    // ---------------------------------- </CONSTANTS> -------------------------------------------
+    
+    
+    // ---------------------------------- <MEMBERS> ----------------------------------------------
+    
+    /**
+     * The asset's id (also couchdb _id).
+     * 
+     * @var         int 
+     */
     protected $id;
     
+    /**
+     * The asset's origin.
+     * 
+     * @var         string
+     */
     protected $origin;
     
+    /**
+     * The asset's absolute fs path.
+     * 
+     * @var         string
+     */
     protected $fullPath;
     
+    /**
+     * The asset's full name (including extension)
+     * 
+     * @var         string
+     */
     protected $fullName;
     
+    /**
+     * The asset's bare name (excluding extension)
+     * 
+     * @var         string
+     */
     protected $name;
     
+    /**
+     * The asset's extension.
+     * 
+     * @var         string
+     */
     protected $extension;
     
+    /**
+     * The size of the asset's file.
+     * 
+     * @var         int
+     */
     protected $size = 0;
     
+    /**
+     * The asset's file's mime-type.
+     * 
+     * @var         string
+     */
     protected $mimeType = '';
     
+    /**
+     * Holds the asset's meta data.
+     * 
+     * @var         array 
+     */
     protected $metaData = array();
     
+    // ---------------------------------- <MEMBERS> ----------------------------------------------
+    
+    
+    // ---------------------------------- <CONSTRUCTOR> ------------------------------------------
+    
+    /**
+     * Create a new ProjectAssetInfo instance from the given id and data,
+     * that is hydrated if not empty.
+     * 
+     * @param       int $assetId
+     * @param       array $assetData
+     */
     public function __construct($assetId, array $assetData = array())
     {
         $this->id = $assetId;
@@ -56,84 +162,107 @@ class ProjectAssetInfo implements IAssetInfo
         $this->fullPath = $this->generateAbsTargetPath($this->id);
     }
     
+    // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
+    
+    
+    // ---------------------------------- <IAssetInfo IMPL> --------------------------------------
+    
+    /**
+     * Returns our unique identifier.
+     * 
+     * @return      int
+     */
     public function getId()
     {
         return $this->id;
     }
     
+    /**
+     * Return the uri that our asset orignates from.
+     * 
+     * @return      string
+     */
     public function getOrigin()
     {
         return $this->origin;
     }
     
-    protected function setOrigin($origin)
-    {
-        $this->origin = $origin;
-        
-        $originParts = parse_url($origin);
-        $explodedOrigin = explode('/', $originParts['path']);
-        $this->fullName = end($explodedOrigin);
-        
-        $explodedName = explode('.', $this->fullName);
-        $extension = array_pop($explodedName);
-        $this->name = implode('.', $explodedName);
-        
-        if ($extension)
-        {
-            $this->extension = strtolower($extension);
-        }
-    }
-    
-    public function getExtension()
-    {
-        return $this->extension;
-    }
-    
+    /**
+     * Return the asset's full filename,
+     * means name+extension
+     * 
+     * @return      string
+     */
     public function getFullName()
     {
         return $this->fullName;
     }
     
-    public function getMetaData()
-    {
-        return $this->metaData;
-    }
-    
-    protected function setMetaData($metaData)
-    {
-        $this->metaData = (array)$metaData;
-    }
-    
-    public function getMimeType()
-    {
-        return $this->mimeType;
-    }
-    
-    protected function setMimeType($mimeType)
-    {
-        $this->mimeType = $mimeType;
-    }
-    
+    /**
+     * Returns the asset's filename,
+     * without the extension.
+     * 
+     * @return      string
+     */
     public function getName()
     {
         return $this->name;
     }
     
+    /**
+     * Returns the asset's file extension.
+     * 
+     * @return      string
+     */
+    public function getExtension()
+    {
+        return $this->extension;
+    }
+    
+    /**
+     * Returns an absolute filesystem path,
+     * pointing to the asset's binary.
+     * 
+     * @return      string
+     */
     public function getFullPath()
     {
         return $this->fullPath;
     }
     
+    /**
+     * Returns the size of the asset's binary file on the filesystem.
+     * 
+     * @return      int
+     */
     public function getSize()
     {
         return $this->size;
     }
     
-    protected function setSize($size)
+    /**
+     * Return the mime-type of our assets file.
+     */
+    public function getMimeType()
     {
-        $this->size = $size;
+        return $this->mimeType;
     }
     
+    /**
+     * Return an array containing additional meta for our asset.
+     * 
+     * @return      array
+     */
+    public function getMetaData()
+    {
+        return $this->metaData;
+    }
+    
+    /**
+     * Return an array representation of this object.
+     * 
+     * @return      array
+     */
     public function toArray()
     {
         $data = array();
@@ -147,6 +276,11 @@ class ProjectAssetInfo implements IAssetInfo
         return $data;
     }
     
+    /**
+     * Hydrate the given the data.
+     * 
+     * @param       array $data
+     */
     public function hydrate(array $data)
     {
         foreach ($this->getExposedPropNames() as $property)
@@ -160,6 +294,11 @@ class ProjectAssetInfo implements IAssetInfo
         }
     }
     
+    /**
+     * Move our binary to our target path on the filesystem.
+     * 
+     * @return      boolean
+     */
     public function moveFile($moveOrigin = TRUE)
     {
         $originParts = parse_url($this->getOrigin());
@@ -197,6 +336,11 @@ class ProjectAssetInfo implements IAssetInfo
         return FALSE;
     }
     
+    /**
+     * Delete our binary from our target path on the filesystem.
+     * 
+     * @return      boolean
+     */
     public function deleteFile()
     {
         $firstDir = dirname($this->getFullPath());
@@ -217,11 +361,131 @@ class ProjectAssetInfo implements IAssetInfo
         return $return;
     }
     
+    /**
+     * Move our binary to our target path on the filesystem.
+     * 
+     * @return      boolean
+     */
     public function fileExists()
     {
         return file_exists($this->getFullPath());
     }
     
+    // ---------------------------------- </IAssetInfo IMPL> -------------------------------------
+    
+    
+    
+    // ---------------------------------- <HYDRATE SETTERS> --------------------------------------
+    
+    /**
+     * Set our mime-type.
+     * 
+     * @param       string $mimeType 
+     */
+    protected function setMimeType($mimeType)
+    {
+        $this->mimeType = $mimeType;
+    }
+    
+    /**
+     * Set our mime-type.
+     * 
+     * @param       string $mimeType 
+     */
+    protected function setSize($size)
+    {
+        $this->size = $size;
+    }
+    
+    /**
+     * Set our meta-data.
+     * 
+     * @param       array $metaData 
+     */
+    protected function setMetaData($metaData)
+    {
+        $this->metaData = (array)$metaData;
+    }
+    
+    /**
+     * Set our origin.
+     * 
+     * @param       string $origin 
+     */
+    protected function setOrigin($origin)
+    {
+        $this->origin = $origin;
+        
+        $originParts = parse_url($origin);
+        $explodedOrigin = explode('/', $originParts['path']);
+        $this->fullName = end($explodedOrigin);
+        
+        $explodedName = explode('.', $this->fullName);
+        $extension = array_pop($explodedName);
+        $this->name = implode('.', $explodedName);
+        
+        if ($extension)
+        {
+            $this->extension = strtolower($extension);
+        }
+    }
+    
+    // ---------------------------------- </HYDRATE SETTERS> -------------------------------------
+    
+    
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
+    
+    /**
+     * Return array with properties that we want expose
+     * in our toArray method and support for hydration.
+     * 
+     * @return      array 
+     */
+    protected function getExposedPropNames()
+    {
+        return array(
+            self::PROP_ID,
+            self::XPROP_ORIGIN,
+            self::XPROP_FULLNAME,
+            self::XPROP_NAME,
+            self::XPROP_EXTENSION,
+            self::XPROP_SIZE,
+            self::XPROP_MIME_TYPE,
+            self::XPROP_META_DATA
+        );
+    }
+    
+    /**
+     * Return a path relative to our asset base dir,
+     * that points the location for the given id.
+     * 
+     * @param       int $assetId
+     * 
+     * @return      string 
+     */
+    protected function generateRelTargetPath($assetId)
+    {
+        $first = $assetId % self::ASSET_FOLDER_SIZE;
+        $second =  intval($assetId / self::ASSET_FOLDER_SIZE) % self::ASSET_FOLDER_SIZE;
+        
+        return sprintf(
+            "%s%02x%s%02x%s", 
+            DIRECTORY_SEPARATOR, 
+            $first, 
+            DIRECTORY_SEPARATOR,
+            $second, 
+            DIRECTORY_SEPARATOR . $assetId
+        );
+    }
+    
+    /**
+     * Return true if the given directory is empty,
+     * false otherwise.
+     * 
+     * @param       string $directory
+     * 
+     * @return      boolean 
+     */
     protected function hasFiles($directory)
     {
         $dirHandle = opendir($directory);
@@ -248,35 +512,13 @@ class ProjectAssetInfo implements IAssetInfo
         return FALSE;
     }
     
-    protected function getExposedPropNames()
-    {
-        return array(
-            self::PROP_ID,
-            self::XPROP_ORIGIN,
-            self::XPROP_FULLNAME,
-            self::XPROP_NAME,
-            self::XPROP_EXTENSION,
-            self::XPROP_SIZE,
-            self::XPROP_MIME_TYPE,
-            self::XPROP_META_DATA
-        );
-    }
-    
-    protected function generateRelTargetPath($assetId)
-    {
-        $first = $assetId % self::ASSET_FOLDER_SIZE;
-        $second =  intval($assetId / self::ASSET_FOLDER_SIZE) % self::ASSET_FOLDER_SIZE;
-        
-        return sprintf(
-            "%s%02x%s%02x%s", 
-            DIRECTORY_SEPARATOR, 
-            $first, 
-            DIRECTORY_SEPARATOR,
-            $second, 
-            DIRECTORY_SEPARATOR . $assetId
-        );
-    }
-    
+    /**
+     * Return an absolute fs path pointing to our asset location.
+     * 
+     * @param       int $assetId
+     * 
+     * @return      string
+     */
     protected function generateAbsTargetPath($assetId)
     {
         $relPath = $this->generateRelTargetPath($assetId);
@@ -293,6 +535,12 @@ class ProjectAssetInfo implements IAssetInfo
         return $baseDir . $relPath;
     }
     
+    /**
+     * Download our asset from it's origin
+     * to a temp path and return the latter.
+     * 
+     * @return      string 
+     */
     protected function fetchAsset()
     {
         $curlHandle = ProjectCurl::create();
@@ -318,6 +566,12 @@ class ProjectAssetInfo implements IAssetInfo
         return $tempPath;
     }
     
+    /**
+     * Build a temp path that we can safely download asset files to,
+     * before importing them.
+     * 
+     * @return      string 
+     */
     protected function getDowloadTmpPath()
     {
         $baseDir = AgaviConfig::get('assets.base_dir');
@@ -336,6 +590,8 @@ class ProjectAssetInfo implements IAssetInfo
         
         return tempnam($tmpDir, 'dwn_');
     }
+    
+    // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 
 ?>

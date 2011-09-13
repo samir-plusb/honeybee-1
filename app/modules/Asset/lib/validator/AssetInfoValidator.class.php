@@ -1,13 +1,12 @@
 <?php
 
 /**
- * The AssetValidator class provides validation of asset resources given from various inputs
- * and always exports a valid asset uri that can be used with the ProjectAssetService.
+ * The AssetInfoValidator class provides validation of assets by id.
  *
  * @version         $Id: $
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Import
+ * @package         Asset
  * @subpackage      Validation
  */
 class AssetInfoValidator extends AgaviNumberValidator
@@ -42,11 +41,11 @@ class AssetInfoValidator extends AgaviNumberValidator
     // ---------------------------------- <AgaviValidator OVERRIDES> -----------------------------
     
     /**
-     * Validates that their is a valid import config file for a provided config name.
+     * Validates that their is a valid asset for th given id.
      * 
      * @return      boolean
      * 
-     * @see         AgaviStringValidator::validate()
+     * @see         AgaviNumberValidator::validate()
      */
     protected function validate()
     {

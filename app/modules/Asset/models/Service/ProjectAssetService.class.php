@@ -1,23 +1,78 @@
 <?php
 
+/**
+ * The ProjectAssetService is a concrete implementation of the IAssetService interface.
+ * It exposes a coarse grained crud api for managing assets.
+ * 
+ * @version         $Id:$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Asset
+ * @subpackage      Service
+ */
 class ProjectAssetService implements IAssetService
 {
+    // ---------------------------------- <CONSTANTS> --------------------------------------------
+    
+    /**
+     * Holds the index of the 'scheme' part of php's parse_url method's result.
+     */
     const URI_PART_SCHEME = 'scheme';
     
+    /**
+     * Holds the index of the 'path' part of php's parse_url method's result.
+     */
     const URI_PART_PATH = 'path';
     
+    /**
+     * Holds the string we use to identify file uri schemes.
+     */
     const URI_SCHEME_FILE = 'file';
     
+    /**
+     * Holds the string we use to identify http uri schemes.
+     */
     const URI_SCHEME_HTTP = 'http';
     
+    /**
+     * Holds the name of our couchdb database.
+     */
     const COUCHDB_DATABASE = 'assets';
     
+    // ---------------------------------- </CONSTANTS> -------------------------------------------
+    
+    
+    // ---------------------------------- <MEMBERS> ----------------------------------------------
+    
+    /**
+     * Holds the client we use to talk to couchdb.
+     * 
+     * @var         ExtendedCouchDbClient 
+     */
     protected $couchDbClient;
     
+    /**
+     * Holds the idsequence we use for new assets.
+     * 
+     * @var         AssetIdSequence 
+     */
     protected $idSequence;
     
+    /**
+     * Holds the idsequence object that delivers new ids for asset creation.
+     * 
+     * @var         ProjectAssetService 
+     */
     protected static $instance;
     
+    // ---------------------------------- </MEMBERS> ---------------------------------------------
+    
+    
+    // ---------------------------------- <CONSTRUCTOR> ------------------------------------------
+    
+    /**
+     * Create a new ProjectAssetService instance.
+     */
     public function __construct()
     {
         $this->couchDbClient = new ExtendedCouchDbClient(
@@ -27,6 +82,16 @@ class ProjectAssetService implements IAssetService
         $this->idSequence = new AssetIdSequence();
     }
     
+    // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
+    
+    
+    // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
+    
+    /**
+     * Returns a static instance of this class.
+     * 
+     * @return      ProjectAssetService 
+     */
     public static function getInstance()
     {
         if (null === self::$instance)
@@ -37,6 +102,11 @@ class ProjectAssetService implements IAssetService
         return self::$instance;
     }
 
+    // ---------------------------------- </PUBLIC METHODS> --------------------------------------
+    
+    
+    // ---------------------------------- <IAssetService IMPL> -----------------------------------
+    
     /**
      * Store the given file on the filesystem 
      * and returns a IAssetInfo instance that reflects our new asset.
@@ -48,14 +118,26 @@ class ProjectAssetService implements IAssetService
      */
     public function put($assetUri, array $metaData = array(), $moveOrigin = TRUE)
     {
-        $asset = $this->createAsset($assetUri, $metaData);
+        $asset = $this->create($assetUri, $metaData);
         
         if ($asset->moveFile($moveOrigin))
         {
-            $this->storeAssetInfo($asset);
+            $this->store($asset);
         }
         
         return $asset;
+    }
+    
+    /**
+     * Retrieves the corresponding IAssetInfo instance for a given $assetId.
+     * 
+     * @return      IAssetInfo
+     */
+    public function get($assetId)
+    {
+        $asset = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
+        
+        return new ProjectAssetInfo($asset['id'], $asset);
     }
     
     /**
@@ -86,22 +168,10 @@ class ProjectAssetService implements IAssetService
             $assetData[ProjectAssetInfo::XPROP_META_DATA] = $metaData;
             $asset = new ProjectAssetInfo($assetId, $assetData);
             
-            return $this->storeAssetInfo($asset, $assetData['_rev']);
+            return $this->store($asset, $assetData['_rev']);
         }
         
         return FALSE;
-    }
-    
-    /**
-     * Retrieves the corresponding IAssetInfo instance for a given $assetId.
-     * 
-     * @return      IAssetInfo
-     */
-    public function get($assetId)
-    {
-        $asset = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
-        
-        return new ProjectAssetInfo($asset['id'], $asset);
     }
     
     /**
@@ -122,6 +192,16 @@ class ProjectAssetService implements IAssetService
         return FALSE;
     }
     
+    // ---------------------------------- </IAssetService IMPL> ----------------------------------
+    
+    
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
+    
+    /**
+     * Return a string we can use to connect to couchdb.
+     * 
+     * @return      string 
+     */
     protected function buildCouchDbUri()
     {
         return sprintf(
@@ -131,7 +211,15 @@ class ProjectAssetService implements IAssetService
         );
     }
     
-    protected function createAsset($assetUri, array $metaData)
+    /**
+     * Create a new IAssetInfo from the given uri and meta-data.
+     * 
+     * @param       string
+     * @param       array $metaData
+     * 
+     * @return      IAssetInfo
+     */
+    protected function create($assetUri, array $metaData)
     {
         return new ProjectAssetInfo(
             $this->idSequence->nextId(),
@@ -142,7 +230,17 @@ class ProjectAssetService implements IAssetService
         );
     }
     
-    protected function storeAssetInfo(IAssetInfo $asset, $revision = NULL)
+    /**
+     * Store the given IAssetInfo to the database.
+     * If revision is supplied the store call will lead to  an update,
+     * otherwise a create will be submitted.
+     * 
+     * @param       IAssetInfo $asset
+     * @param       string $revision
+     * 
+     * @return      boolean 
+     */
+    protected function store(IAssetInfo $asset, $revision = NULL)
     {
         $document = $asset->toArray();
         $document['_id'] = $document['id'];
@@ -161,6 +259,8 @@ class ProjectAssetService implements IAssetService
         
         return false;
     }
+    
+    // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 
 ?>

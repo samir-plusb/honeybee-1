@@ -8,7 +8,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset
- * @subpackage      Service
+ * @subpackage      AssetInfo
  */
 interface IAssetInfo
 {
@@ -84,17 +84,23 @@ interface IAssetInfo
     public function toArray();
     
     /**
+     * Hydrate the given the data.
+     * 
      * @param       array $data
      */
     public function hydrate(array $data);
     
     /**
      * Move our binary to our target path on the filesystem.
+     * 
+     * @return      boolean
      */
     public function moveFile();
     
     /**
      * Delete our binary from our target path on the filesystem.
+     * 
+     * @return      boolean
      */
     public function deleteFile();
     
