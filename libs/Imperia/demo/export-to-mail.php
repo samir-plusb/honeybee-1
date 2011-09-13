@@ -306,13 +306,23 @@ class DemoImperiaExportResponder
      * build response to get all stored notifications and start new notification store
      *
      */
-    public function getNotifications()
+    public function getNotifications($action)
     {
-        touch($this->notifcationStoreFile);
-        rename($this->notifcationStoreFile, $this->notifcationStoreFile.'.get');
-        header('Content-Type', 'text/plain');
-        readfile($this->notifcationStoreFile.'.get');
-        exit;
+        switch ($action)
+        {
+            case 'check':
+                header('Content-Type', 'text/plain');
+                touch($this->notifcationStoreFile);
+                readfile($this->notifcationStoreFile);
+                break;
+            default:
+                touch($this->notifcationStoreFile);
+                rename($this->notifcationStoreFile, $this->notifcationStoreFile.'.get');
+                header('Content-Type', 'text/plain');
+                readfile($this->notifcationStoreFile.'.get');
+                break;
+        }
+         exit;
     }
 
     /**
@@ -351,7 +361,7 @@ class DemoImperiaExportResponder
 $responder = new DemoImperiaExportResponder();
 if (isset($_GET['getNotifications']))
 {
-    $responder->getNotifications();
+    $responder->getNotifications($_GET['getNotifications']);
 }
 else
 {
