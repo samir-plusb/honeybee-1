@@ -28,8 +28,8 @@ class Asset_PutAction extends AssetBaseAction
     {
         return 'Input';
     }
-    
-	/**
+
+    /**
      * Execute the write logic for this action, hence process the given asset.
      * 
      * @param       AgaviRequestDataHolder $parameters
@@ -41,11 +41,12 @@ class Asset_PutAction extends AssetBaseAction
     public function executeWrite(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $assetUri = $parameters->getParameter(AssetResourceValidator::DEFAULT_EXPORT);
-        
+
         $assetInfo = ProjectAssetService::getInstance()->put($assetUri);
-        
+
         $this->setAttribute('asset_info', $assetInfo);
-        
+
         return 'Success';
     }
+
 }
