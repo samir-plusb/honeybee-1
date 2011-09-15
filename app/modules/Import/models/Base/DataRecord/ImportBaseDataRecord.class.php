@@ -403,6 +403,18 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      *
      * @see         IDataRecord::getSource()
      */
+    private function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * Set our identifier.
+     *
+     * @param       string
+     *
+     * @see         IDataRecord::getSource()
+     */
     protected function setSource($source)
     {
         $this->source = $source;
