@@ -2,7 +2,9 @@
 
 /**
  * IDataRecord implementations are responseable for normalizing and then transporting
- * data that represents a single data record
+ * data that represents a single data record.
+ *
+ * !!! All dates formats handled and provided by data records shall be in the 'ISO 8601' date format. !!!
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
