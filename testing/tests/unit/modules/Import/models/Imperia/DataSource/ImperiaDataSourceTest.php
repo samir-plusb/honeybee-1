@@ -61,10 +61,11 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
         $expectedRecord = new $recordType(
             $this->loadRecordFixtureData(),
             'imperia/polizeimeldungen',
-            self::CFG_XML_FIXTURE
+            NULL
         );
 
         $record = $this->dataSource->nextRecord();
+
 
         $this->assertEquals(self::RECORDS_ARE_EQUAL, $record->compareTo($expectedRecord));
     }
