@@ -54,7 +54,11 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
     protected function setUp()
     {
         parent::setUp();
-
+        
+        // Reset our asset module so we can guess ids (start at 1).
+        $setup = new AssetModuleSetup();
+        $setup->setup(TRUE);
+        
         $recordImpl = $this->getDataRecordClass();
         
         $this->dataRecord = new $recordImpl(
@@ -72,15 +76,16 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
      * Test if the IDataRecord::getValue() method is implemented as expected.
      * 
      * @param       mixed $expected
-     * @param       string $setting 
+     * @param       string $setting
      * 
-     * @dataProvider provideExpectedRecordValues
+     * @dataProvider provideExpectedGetterParams
      */
-    public function testGetValue($expected, $fieldname)
+    public function testInterfaceGetter($expected, $getterName)
     {
-        $value = $this->dataRecord->getValue($fieldname);
-
-        $this->assertEquals($expected, $value);
+        $isCallable = is_callable(array($this->dataRecord, $getterName));
+        
+        $this->assertEquals(TRUE, $isCallable, "The given interface method: '$getterName' is not callable!");
+        $this->assertEquals($expected, $this->dataRecord->$getterName());
     }
     
     /**
@@ -111,13 +116,15 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
      * 
      * @return      array 
      */
-    public function provideExpectedRecordValues()
+    public function provideExpectedGetterParams()
     {
         $ret = array();
 
-        foreach ($this->loadDataRecordResultFixture() as $key => $value)
+        foreach ($this->loadDataRecordResultFixture() as $propName => $value)
         {
-            $ret[] = array('expected' => $value, 'fieldname' => $key);
+            $getterMethod = 'get' . ucfirst($propName);
+            
+            $ret[] = array('expected' => $value, 'getterName' => $getterMethod);
         }
 
         return $ret;

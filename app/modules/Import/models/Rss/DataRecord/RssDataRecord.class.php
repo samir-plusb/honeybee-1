@@ -58,7 +58,7 @@ class RssDataRecord extends ImportBaseDataRecord
      * @see         http://ezcomponents.org/docs/api/trunk/Feed/ezcFeedEntryElement.html
      * @see         ImportBaseDataRecord::parse()
      */
-    protected function parse($data)
+    protected function parseData($data)
     {
         /* @var $data ezcFeedEntryElement */
         $data;

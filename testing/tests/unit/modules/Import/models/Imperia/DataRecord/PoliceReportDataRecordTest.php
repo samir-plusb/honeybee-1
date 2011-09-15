@@ -2,9 +2,9 @@
 
 class PoliceReportDataRecordTest extends DataRecordBaseTestCase
 {
-    const CFG_XML_FIXTURE = 'data/import/imperia/polizeimeldung.article.xml';
+    const CFG_XML_FIXTURE = 'data/import/imperia/polizeimeldung.article2.xml';
 
-    const CFG_DATA_FIXTURE = 'data/import/imperia/polizeimeldung.article.php';
+    const CFG_DATA_FIXTURE = 'data/import/imperia/polizeimeldung.article2.php';
     
     protected function getRecordXmlFixturePath()
     {

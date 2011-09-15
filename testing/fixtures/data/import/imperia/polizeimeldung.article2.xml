@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+<imperia>
+    <head>
+        <title>Tötungsdelikt im Löwensteinring – 5000 Euro Belohnung für Hinweise - Berlin.de</title>
+        <meta name="DC.Title" content="Tötungsdelikt im Löwensteinring – 5000 Euro Belohnung für Hinweise"/>
+        <meta name="DC.Date" content="2011-07-21"/>
+        <meta name="description" content="Zum Fall des am 29.7.2011 ermordet aufegfundenen Alik K. in Berlin-Neukölln bittet die 7.Mordkommission des Landeskriminalamtes um Mithilfe."/>
+        <meta name="keywords" content="Pressemeldung Polizei Berlin, 07.07.2011, Tötungsdelikt im Löwensteinring –  5000 Euro Belohnung für Hinweise"/>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Content-Language" content="de"/>
+        <meta name="X-Imperia-Live-Info" content="c9014314-4573-55c5-b087-5ddc8f775df7/2/10330/10343/10890/1380596"/>
+        <filename>index.html</filename>
+        <directory>/polizei/presse-fahndung/archiv/350581</directory>
+        <node_id>/2/10330/10343/10890/1380596</node_id>
+        <created>2011-07-21</created>
+        <template>land_polizei_presse_fahndung</template>
+        <categories>
+            <category directory="/polizei/presse-fahndung/archiv" description="">neue Meldung</category>
+            <category directory="/polizei/presse-fahndung" description="">Presse Fahndung</category>
+            <category directory="/polizei" description="">Polizei</category>
+            <category directory="/land" description="">Land</category>
+        </categories>
+    </head>
+    <body>
+        <last_modified timezone="CEST">2011-09-14T19:56:38</last_modified>
+        <article>
+            <type>pressemeldung</type>
+            <kicker>Zeugen gesucht</kicker>
+            <title>Tötungsdelikt im Löwensteinring – 5000 Euro Belohnung für Hinweise</title>
+            <subtitle>Auffindezeit und -ort: 29. Juni 2011, Löwensteinring in Neukölln</subtitle>
+            <image type="small">
+                <src>/imperia/md/images/polizei/pressestelle/350581/350581.jpg</src>
+            </image>
+            <flexmodules>
+                <paragraph name="land_teaser_mit_bild">
+                    <link/>
+                    <image>
+                        <src>/imperia/md/images/polizei/pressestelle/350581/toter_alik_k___250_200x280.jpg</src>
+                        <alt>Opfer Alik K.</alt>
+                        <width>200</width>
+                        <caption>Opfer Alik K.</caption>
+                    </image>
+                    <text format="textbr" align="">
+                        <br />Zu einem Tötungsdelikt in Neukölln bittet die 7. Mordkommission des Landeskriminalamtes um Mithilfe und wendet sich mit  Fragen an die Bevölkerung.
+                        <br />
+                        <br />Die Berliner Feuerwehr hatte am 29.Juni 2011 den &lt;strong&gt; 55-jährigen Alik K.&lt;/strong&gt; tot in seiner Wohnung im Löwensteinring 5 in Neukölln gefunden und daraufhin die Polizei verständigt, die feststellte, dass der Mann Opfer eines Tötungsdeliktes geworden war. 
+                        <br />
+                        <br />Bisherige Ermittlungen ergaben, dass das Opfer bereits einige Tagen tot in seiner Wohnung gelegen hatte. Der Mann gehörte der „Trinkerszene“ an und hielt sich täglich im Bereich Lipschitzplatz und Bat-Yam-Platz auf. 
+                        <br />
+                        <br />Aufgrund von Ermittlungen im Umfeld des Opfers konnte schließlich ein 33-Jähriger ermittelt und festgenommen werden, der auch Haftbefehl erhielt. Der Mann ist derjenige, der als Letzter Kontakt  zum Opfer hatte. Da aber noch Fragen offen sind, hat die Staatsanwaltschaft Berlin eine &lt;strong&gt;Belohnung in Höhe von bis zu 5.000 € &lt;/strong&gt;für Hinweise ausgesetzt, die zur Klärung der Tat führen.
+                    </text>
+                </paragraph>
+                <paragraph name="land_text">
+                    <text format="textbr" align="left">&lt;strong&gt;Die Polizei fragt:&lt;/strong&gt;
+                        <br />&lt;wiki&gt;
+                        <br />* Wer hat das Opfer in der Nacht vom 20. zum 21. Juni 2011 gesehen?
+                        <br />* Wer hat in dem Zeitraum verdächtige Wahrnehmungen rund um den Bereich des Löwensteinring gemacht?
+                        <br />* Wer kennt Personen, die das Opfer in dessen Wohnung im Löwensteinring 5 besucht bzw. aufgesucht haben?&lt;/wiki&gt;
+                        <br />&lt;strong&gt;Hinweise nimmt die 7.Mordkommission des Landeskriminalamtes unter der Telefonnummer (030) 4664-911702 oder jede andere Polizeidienststelle entgegen. &lt;/strong&gt;
+                        <br />
+                        <br />
+                        <br />
+                    </text>
+                </paragraph>
+                <paragraph name="land_text_pdf">
+                    <pdf>
+                        <icon alt="Toter Alik K.jpg">/imperia/md/thumbnails/images/polizei/pressestelle/350581/toter_alik_k.__600.jpg</icon>
+                        <src>/imperia/md/images/polizei/pressestelle/350581/toter_alik_k.__600.jpg</src>
+                        <size>137441</size>
+                        <title>Toter Alik K.jpg</title>
+                        <text/>
+                    </pdf>
+                    <title/>
+                    <text format="html"></text>
+                </paragraph>
+            </flexmodules>
+            <containerbereich>
+                <standardcontact used="used"/>
+            </containerbereich>
+        </article>
+    </body>
+</imperia>

@@ -13,6 +13,57 @@
  */
 abstract class ImportBaseDataRecord implements IDataRecord, IComparable
 {
+    // ---------------------------------- <CONSTANTS> --------------------------------------------
+    
+    /**
+     * Holds the name of our identifier property.
+     */
+    const PROP_IDENT = 'identifier';
+    
+    /**
+     * Holds the name of our source property.
+     */
+    const PROP_SOURCE = 'source';
+    
+    /**
+     * Holds the name of our title property.
+     */
+    const PROP_TITLE = 'title';
+    
+    /**
+     * Holds the name of our category property.
+     */
+    const PROP_CONTENT = 'content';
+    
+    /**
+     * Holds the name of our category property.
+     */
+    const PROP_CATEGORY = 'category';
+    
+    /**
+     * Holds the name of our media property.
+     */
+    const PROP_MEDIA = 'media';
+    
+    /**
+     * Holds the name of our geoData property.
+     */
+    const PROP_GEO = 'geoData';
+    
+    /**
+     * Holds a prefix used to build the names of getter methods,
+     * by combinig the prefix with property names.
+     */
+    const METHOD_PREFIX_GETTER = 'get';
+    
+    /**
+     * Same as the self::METHOD_PREFIX_GETTER, just for setters.
+     */
+    const METHOD_PREFIX_SETTER = 'set';
+    
+    // ---------------------------------- </CONSTANTS> -------------------------------------------
+    
+    
     // ---------------------------------- <MEMBERS> ----------------------------------------------
     
     /**
@@ -23,11 +74,56 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     protected $identifier;
     
     /**
-     * Holds the data that is exposed by our IDataRecord::getValue() implementation.
+     * Holds this IDataRecord's source.
+     * Will usually be a name or term related to the datasource 
+     * that created this record instance.
      * 
-     * @var         array
+     * @var         string
      */
-    protected $data;
+    protected $source;
+    
+    /**
+     * Holds our title.
+     * 
+     * @var         string 
+     */
+    protected $title;
+    
+    /**
+     * Holds our content.
+     * 
+     * @var         string 
+     */
+    protected $content;
+    
+    /**
+     * Holds our category.
+     * 
+     * @var         string 
+     */
+    protected $category;
+    
+    /**
+     * Holds our media (image, video and file assets for example).
+     * The returned value is an array holding id's that can be used together with our ProjectAssetService 
+     * implementations.
+     * Example return value structure:
+     * -> array(23, 24, 512, 13);
+     * 
+     * @var         array 
+     */
+    protected $media;
+    
+    /**
+     * Returns our geo data in the following structure:
+     * -> array(
+     *        'long' => $longValue,
+     *        'lat'  => $latValue
+     *    );
+     * 
+     * @var         array 
+     */
+    protected $geoData;
     
     // ---------------------------------- </MEMBERS> ---------------------------------------------
     
@@ -44,14 +140,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      * 
      * @return      array
      */
-    abstract protected function parse($data);
-    
-    /**
-     * Returns the name of the field to use as the base for building our identifier.
-     * 
-     * @return      string
-     */
-    abstract protected function getIdentifierFieldName();
+    abstract protected function parseData($data);
     
     // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
     
@@ -64,78 +153,20 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      * 
      * @param       mixed $data 
      * 
-     * @throws      DataRecordException If the identifier field can't be resolved.
-     * 
      * @uses        ImportBaseDataRecord::parse()
-     * @uses        ImportBaseDataRecord::getIdentifierFieldName()
+     * @uses        ImportBaseDataRecord::hydrate()
      */
     public function __construct($data)
     {
-        $this->data = $this->parse($data);
-        $identifierFieldname = $this->getIdentifierFieldName();
-        
-        if (!isset($this->data[$identifierFieldname]))
-        {
-            throw new DataRecordException(
-                "No record identifier given for identifier-field: " . $identifierFieldname
-            );
-        }
-        /**
-         * @todo we might want to put this somewhere else so can ovderride the behaviour for generating the identifier.
-         */
-        $this->identifier = md5($this->data[$identifierFieldname]);
+        $this->hydrate(
+            $this->parseData($data)
+        );
     }
     
     // ---------------------------------- </CONSTRCUTOR> -----------------------------------------
     
     
     // ---------------------------------- <IDataRecord IMPL> -------------------------------------
-    
-    /**
-     * Return an array of fieldnames that are supported by this record.
-     * 
-     * @return      array
-     * 
-     * @see         IDataRecord::getSupportedFields()
-     */
-    public function getSupportedFields()
-    {
-        return array_keys($this->data);
-    }
-    
-    /**
-     * Return the value for the field represented by the given fieldname.
-     * 
-     * @param       string $fieldname
-     * @param       mixed $default
-     * 
-     * @return      mixed Returns the given field's value or $default if the field is not set.
-     * 
-     * @see         IDataRecord::getValue()
-     */
-    public function getValue($fieldname, $default = NULL)
-    {
-        $value = $default;
-
-        if (isset($this->data[$fieldname]))
-        {
-            $value = $this->data[$fieldname];
-        }
-
-        return $value;
-    }
-    
-    /**
-     * Return an array representation of the given record.
-     * 
-     * @return      array
-     * 
-     * @see         IDataRecord::toArray()
-     */
-    public function toArray()
-    {
-        return $this->data;
-    }
     
     /**
      * Return an unique identifier that represents this record.
@@ -149,6 +180,117 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
         return $this->identifier;
     }
     
+    /**
+     * Return our source.
+     * 
+     * @return      string
+     * 
+     * @see         IDataRecord::getSource()
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+    
+    /**
+     * Return our title.
+     * 
+     * @return      string
+     * 
+     * @see         IDataRecord::getTitle()
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    
+    /**
+     * Return our content.
+     * 
+     * @return      string
+     * 
+     * @see         IDataRecord::getContent()
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+    
+    /**
+     * Return our category.
+     * 
+     * @return      string
+     * 
+     * @see         IDataRecord::getCategory()
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+    
+    /**
+     * Return our media.
+     * 
+     * @return      string
+     * 
+     * @see         IDataRecord::getMedia()
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
+    
+    /**
+     * Return our geoData.
+     * 
+     * @return      string
+     * 
+     * @see         IDataRecord::getGeoData()
+     */
+    public function getGeoData()
+    {
+        return $this->geoData;
+    }
+    
+    /**
+     * Return an array representation of the given record.
+     * 
+     * @return      array
+     * 
+     * @see         IDataRecord::toArray()
+     */
+    public function toArray()
+    {
+        $data = array();
+        
+        foreach ($this->getExposedProperties() as $propName)
+        {
+            $getterMethod = self::METHOD_PREFIX_GETTER . ucfirst($propName);
+            
+            if (is_callable(array($this, $getterMethod)))
+            {
+                $data[$propName] = $this->$getterMethod();
+            }
+        }
+        
+        return $data;
+    }
+    
+    /**
+     * Validates that the given record is in a consistent state
+     * and is ready to be thrown into the domain.
+     * 
+     * @return      array
+     * 
+     * @see         IDataRecord::validate()
+     */
+    public function validate()
+    {
+        return array(
+            'ok' => TRUE
+        );
+    }
+    
     // ---------------------------------- </IDataRecord IMPL> ------------------------------------
     
     
@@ -159,12 +301,9 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      * 
      * @param       IDataRecord $other
      * 
-     * @return      int Returns -1 if $other is smaller, 0 if equal and 1 if $other is greater. 
+     * @return      int Returns 0 if equal and -1 not. 
      * 
      * @throws      DataRecordException If the given $other is no instance of IDataRecord.
-     * 
-     * @uses        ImportBaseDataRecord::getSupportedFields()
-     * @uses        ImportBaseDataRecord::getValue()
      */
     public function compareTo($other)
     {
@@ -173,9 +312,11 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
             throw new DataRecordException("Unable to compare non-datarecord type with data-record.");
         }
 
-        foreach ($this->getSupportedFields() as $supportedField)
+        $compareData = $other->toArray();
+        
+        foreach ($this->toArray() as $field => $value)
         {
-            if ($this->getValue($supportedField) !== $other->getValue($supportedField))
+            if ($compareData[$field] != $value)
             {
                 return -1;
             }
@@ -185,6 +326,120 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     }
     
     // ---------------------------------- </ICompareable IMPL> -----------------------------------
+    
+    
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
+    
+    /**
+     * Return an array holding property names of properties,
+     * which we want to expose through our IDataRecord::toArray() method.
+     * 
+     * @return      array 
+     */
+    protected function getExposedProperties()
+    {
+        return array(
+            self::PROP_IDENT,
+            self::PROP_SOURCE,
+            self::PROP_TITLE,
+            self::PROP_CONTENT,
+            self::PROP_CATEGORY,
+            self::PROP_MEDIA,
+            self::PROP_GEO
+        );
+    }
+    
+    /**
+     * Hydrate the given data into our object.
+     * 
+     * @param       array $data 
+     */
+    protected function hydrate(array $data)
+    {
+        foreach ($data as $propName => $value)
+        {
+            $setterMethod = self::METHOD_PREFIX_SETTER . ucfirst($propName);
+            
+            if (is_callable(array($this, $setterMethod)))
+            {
+                $this->$setterMethod($value);
+            }
+        }
+    }
+    
+    /**
+     * Return our source.
+     * 
+     * @param       string
+     * 
+     * @see         IDataRecord::getSource()
+     */
+    protected function setSource($source)
+    {
+        $this->source = $source;
+    }
+    
+    /**
+     * Return our title.
+     * 
+     * @param       string
+     * 
+     * @see         IDataRecord::setTitle()
+     */
+    protected function setTitle($title)
+    {
+        $this->title = $title;
+    }
+    
+    /**
+     * Return our content.
+     * 
+     * @param       string
+     * 
+     * @see         IDataRecord::setContent()
+     */
+    protected function setContent($content)
+    {
+        $this->content = $content;
+    }
+    
+    /**
+     * Return our category.
+     * 
+     * @param       string
+     * 
+     * @see         IDataRecord::setCategory()
+     */
+    protected function setCategory($category)
+    {
+        $this->category = $category;
+    }
+    
+    /**
+     * Return our media.
+     * 
+     * @param       array
+     * 
+     * @see         IDataRecord::setMedia()
+     */
+    protected function setMedia(array $media)
+    {
+        $this->media = $media;
+    }
+    
+    /**
+     * Return our geoData.
+     * 
+     * @param       array
+     * 
+     * @see         IDataRecord::setGeoData()
+     */
+    protected function setGeoData(array $geoData)
+    {
+        $this->geoData = $geoData;
+    }
+    
+    // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 
 ?>

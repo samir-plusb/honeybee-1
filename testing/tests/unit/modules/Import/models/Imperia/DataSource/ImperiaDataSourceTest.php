@@ -4,7 +4,7 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
 {
     const CFG_CONFIG_FIXTURE = 'data/import/imperia/config.datasource.php';
 
-    const CFG_XML_FIXTURE = 'data/import/imperia/polizeimeldung.article.xml';
+    const CFG_XML_FIXTURE = 'data/import/imperia/polizeimeldung.article1.xml';
 
     const RECORDS_ARE_EQUAL = 0;
 

@@ -97,9 +97,18 @@ abstract class ImportBaseDataSource implements IDataSource
             return NULL;
         }
         
-        return $this->createRecord(
+        $record = $this->createRecord(
             $this->fetchData()
         );
+        
+        $result = $record->validate();
+        
+        if ($result['ok'])
+        {
+            return $record;
+        }
+        
+        return NULL;
     }
     
     // ---------------------------------- </IDataSource IMPL> ------------------------------------

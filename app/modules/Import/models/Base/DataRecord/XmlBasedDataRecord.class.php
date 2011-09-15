@@ -50,7 +50,7 @@ abstract class XmlBasedDataRecord extends ImportBaseDataRecord
      * @uses        XmlBasedDataRecord::createDom()
      * @uses        XmlBasedDataRecord::evaluateDocument()
      */
-    protected function parse($dataSrc)
+    protected function parseData($dataSrc)
     {
         $domDoc = $this->createDom($dataSrc);
 
@@ -129,14 +129,7 @@ abstract class XmlBasedDataRecord extends ImportBaseDataRecord
         foreach ($this->getFieldMap() as $dataKey => $dataExpr)
         {
             $nodeList = $xPath->query($dataExpr);
-            $value = FALSE;
-
-            if (0 < $nodeList->length)
-            {
-                $value = (1 === $nodeList->length) ? trim($nodeList->item(0)->nodeValue) : $nodeList;
-            }
-
-            $data[$dataKey]= $value;
+            $data[$dataKey] = (0 < $nodeList->length) ? $nodeList : FALSE;
         }
 
         return $data;
