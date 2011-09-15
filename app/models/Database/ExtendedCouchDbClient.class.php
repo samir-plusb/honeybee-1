@@ -120,7 +120,7 @@ class ExtendedCouchDbClient
     {
         $curlHandle = $this->getCurlHandle();
 
-        $uri = $this->baseUri . $database . '/' . $docId . '?' . 'rev=' . $revision;
+        $uri = $this->baseUri . urlencode($database) . '/' . urlencode($docId) . '?' . 'rev=' . urlencode($revision);
 
         curl_setopt($curlHandle, CURLOPT_URL, $uri);
         curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, 'DELETE');
@@ -148,7 +148,7 @@ class ExtendedCouchDbClient
     {
         $curlHandle = $this->getCurlHandle();
 
-        $uri = $this->baseUri . $database . '/' . $docId;
+        $uri = $this->baseUri . urlencode($database) . '/' . urlencode($docId);
 
         curl_setopt($curlHandle, CURLOPT_URL, $uri);
         curl_setopt($curlHandle, CURLOPT_HEADER, 1);
@@ -184,7 +184,7 @@ class ExtendedCouchDbClient
     {
         $this->compositeClient->selectDb($database);
 
-        $uri = $this->baseUri . $database . '/_design/' . $designDocId . '/_view/' . $viewname;
+        $uri = $this->baseUri . urlencode($database) . '/_design/' . urlencode($designDocId) . '/_view/' . urlencode($viewname);
 
         $curlHandle = $this->getCurlHandle();
         curl_setopt($curlHandle, CURLOPT_URL, $uri);
@@ -228,7 +228,7 @@ class ExtendedCouchDbClient
 
         $curlHandle = $this->getCurlHandle();
 
-        $uri = $this->baseUri . $database . '/_design/' . $docId;
+        $uri = $this->baseUri . urlencode($database) . '/_design/' . urlencode($docId);
         $file = tmpfile();
         $jsonDoc = json_encode($doc);
         fwrite($file, $jsonDoc);
