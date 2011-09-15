@@ -149,7 +149,6 @@ class ExtendedCouchDbClient
         $curlHandle = $this->getCurlHandle();
 
         $uri = $this->baseUri . $database . '/' . $docId;
-        $file = tmpfile();
 
         curl_setopt($curlHandle, CURLOPT_URL, $uri);
         curl_setopt($curlHandle, CURLOPT_HEADER, 1);
@@ -157,11 +156,7 @@ class ExtendedCouchDbClient
         curl_setopt ($curlHandle, CURLOPT_RETURNTRANSFER, 1);
 
         $resp = curl_exec($curlHandle);
-        error_log($uri);
-        error_log($resp);
         $this->processCurlErrors($curlHandle);
-
-        fclose($file);
 
         if (!preg_match_all('~Etag:\s*"(\d+-\w+)"~is', $resp, $matches, PREG_SET_ORDER))
         {
