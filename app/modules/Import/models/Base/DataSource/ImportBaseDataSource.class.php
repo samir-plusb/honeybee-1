@@ -136,13 +136,13 @@ abstract class ImportBaseDataSource implements IDataSource
             $this->fetchData()
         );
 
-        $result = $record->validate();
+        $validationResult = $record->validate();
 
-        if ($result['ok'])
+        if (!$validationResult->hasError())
         {
             return $record;
         }
-
+        
         return NULL;
     }
 
@@ -177,7 +177,11 @@ abstract class ImportBaseDataSource implements IDataSource
 
         try
         {
-            $record = new $recordClass($rawData, $this->getName(), $this->getCurrentOrigin());
+            $record = new $recordClass(
+                $rawData,
+                $this->getName(),
+                $this->getCurrentOrigin()
+            );
         }
         catch(DataRecordException $e)
         {
@@ -204,10 +208,15 @@ abstract class ImportBaseDataSource implements IDataSource
 
         return $record;
     }
-
+    
+    /**
+     * Return the origin of our current data record.
+     * 
+     * @return      string
+     */
     protected function getCurrentOrigin()
     {
-        return NULL;
+        return '';
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------

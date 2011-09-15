@@ -89,9 +89,7 @@ abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
         $dataSource = $importFactory->createDataSource('imperia', $dataSourceParams);
 
         // And let them rock!
-        $success = $import->run($dataSource);
-
-        $this->assertEquals(TRUE, $success);
+        $import->run($dataSource);
     }
     
     // @codeCoverageIgnoreStart

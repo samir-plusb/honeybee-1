@@ -36,7 +36,11 @@ class Import_RunAction extends ImportBaseAction
         
         foreach ($dataSources as $dataSource)
         {
-            if (!$import->run($dataSource))
+            try
+            {
+                $import->run($dataSource);
+            }
+            catch(Exception $e)
             {
                 $view = 'Error';
             }

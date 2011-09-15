@@ -101,8 +101,6 @@ abstract class BaseDataImport implements IDataImport
      * 
      * @param       IDataSource $dataSource
      * 
-     * @return      boolean
-     * 
      * @see         IDataImport::run()
      * 
      * @uses        BaseDataImport::init()
@@ -114,18 +112,24 @@ abstract class BaseDataImport implements IDataImport
     {
         $this->init($dataSource);
         
-        while ($this->currentRecord = $dataSource->nextRecord())
+        do
         {
-            if (!$this->processRecord())
+            try
             {
-                // @todo Need to think of a smart error handling,
-                // as the overall import process is not allowed to be affected by single record related errors.
+                $this->currentRecord = $dataSource->nextRecord();
+                $this->processRecord();
             }
-        }
-
-        $this->cleanup();
+            catch(DataSourceException $e)
+            {
+                // @todo Handle error (log the stuff or something like that.
+            }
+            catch (DataImportException $e)
+            {
+                // @todo Handle error (log the stuff or something like that.
+            }
+        } while($this->currentRecord);
         
-        return TRUE;
+        $this->cleanup();
     }
     
     // ---------------------------------- <IDataImport IMPL> -------------------------------------

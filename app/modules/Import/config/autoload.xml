@@ -46,6 +46,8 @@
             <autoload name="ImportBaseDataRecord">%core.module_dir%/Import/models/Base/DataRecord/ImportBaseDataRecord.class.php</autoload>
             <autoload name="XmlBasedDataRecord">%core.module_dir%/Import/models/Base/DataRecord/XmlBasedDataRecord.class.php</autoload>
             <autoload name="DataRecordException">%core.module_dir%/Import/models/Base/DataRecord/DataRecordException.class.php</autoload>
+            <autoload name="RecordValidationResult">%core.module_dir%/Import/models/Base/DataRecord/RecordValidationResult.class.php</autoload>
+            <autoload name="IRecordValidationResult">%core.module_dir%/Import/models/Base/DataRecord/IRecordValidationResult.iface.php</autoload>
             <!-- /Base/DataRecord -->
             
             <!-- Base/Import -->

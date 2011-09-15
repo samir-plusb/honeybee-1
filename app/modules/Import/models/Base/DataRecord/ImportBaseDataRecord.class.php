@@ -65,6 +65,11 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      * Same as the self::METHOD_PREFIX_GETTER, just for setters.
      */
     const METHOD_PREFIX_SETTER = 'set';
+    
+    /**
+     * Same as the self::METHOD_PREFIX_GETTER, just for validation.
+     */
+    const METHOD_PREFIX_VALIDATE = 'validate';
 
     // ---------------------------------- </CONSTANTS> -------------------------------------------
 
@@ -307,16 +312,41 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     /**
      * Validates that the given record is in a consistent state
      * and is ready to be thrown into the domain.
-     *
-     * @return      array
+     * Subclasses may implement a validate{PROP_NAME} method,
+     * if they want to hook into the validaton process for certain properties.
+     * 
+     * @return      IRecordValidationResult
      *
      * @see         IDataRecord::validate()
      */
     public function validate()
     {
-        return array(
-            'ok' => TRUE
-        );
+        $data = $this->toArray();
+        $validationResult = new RecordValidationResult();
+        
+        foreach ($this->getRequiredProperties() as $propName)
+        {
+            $validationMethod = self::METHOD_PREFIX_VALIDATE . ucfirst($propName);
+            
+            if (!isset($data[$propName]))
+            {
+                $errName = 'missing_' . $propName;
+                $validationResult->addError(
+                    $errName,
+                    sprintf(
+                        "The property %s is mandatory but not set.",
+                        $propName
+                    )
+                );
+            }
+            
+            if (is_callable(array($this, $validationMethod)))
+            {
+                $this->$validationMethod($validationResult);
+            }
+        }
+        
+        return $validationResult;
     }
 
     // ---------------------------------- </IDataRecord IMPL> ------------------------------------
@@ -377,7 +407,27 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
             self::PROP_GEO
         );
     }
-
+    
+    /**
+     * Return an array holding the names of properties 
+     * that must be initialized before a record is considered as in a valid state.
+     * 
+     * @return      array
+     */
+    protected function getRequiredProperties()
+    {
+        return array(
+            self::PROP_IDENT,
+            self::PROP_ORIGIN,
+            self::PROP_SOURCE,
+            self::PROP_TITLE,
+            self::PROP_CONTENT,
+            self::PROP_CATEGORY,
+            self::PROP_MEDIA,
+            self::PROP_GEO
+        );
+    }
+    
     /**
      * Hydrate the given data into our object.
      *

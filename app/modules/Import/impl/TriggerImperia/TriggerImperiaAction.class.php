@@ -34,6 +34,7 @@ class Import_TriggerImperiaAction extends ImportBaseAction
         $factoryConfig = new ImportFactoryConfig(
             AgaviConfig::get('import.config_dir')
         );
+        
         $importFactory = new ImportFactory($factoryConfig);
         
         $docIds = $parameters->getParameter(ImperiaJsonValidator::DEFAULT_PARAM_EXPORT, array());
@@ -46,12 +47,16 @@ class Import_TriggerImperiaAction extends ImportBaseAction
             )
         );
         
-        if ($import->run($imperiaDataSource))
+        try
         {
-            return 'Success';
+            $import->run($dataSource);
+        }
+        catch(Exception $e)
+        {
+            return 'Error';
         }
         
-        return 'Error';
+        return 'Success';
     }
 }
 
