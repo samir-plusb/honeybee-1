@@ -88,6 +88,27 @@
             <setting name="docid_api_url">http://localhost/importer.php</setting>
         </settings>
     </ae:configuration>
+        
+    <ae:configuration environment=".*cw-tay.*">
+    	<settings prefix="curl.">
+    		<setting name="proxy">proxy:3128</setting>
+    	</settings>
+    	<settings prefix="php.">
+    		<setting name="default-stream">
+    			<ae:parameter name="http">
+    				<ae:parameter name="user_agent">Midas/0.1</ae:parameter>
+    				<ae:parameter name="proxy">tcp://proxy2:3128</ae:parameter>
+    				<ae:parameter name="request_fulluri">true</ae:parameter>
+    			</ae:parameter>
+    		</setting>
+    	</settings>
+    </ae:configuration>
+    
+    <ae:configuration environment=".*bo-devel.*">
+    	<settings prefix="curl.">
+    		<setting name="proxy">proxy:3128</setting>
+    	</settings>
+    </ae:configuration>
 	
     <ae:configuration environment="testing.*">
         <settings>
