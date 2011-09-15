@@ -13,37 +13,37 @@
 class ExtendedCouchDbClient
 {
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      * Holds a reference to our composed pecl CouchDbClient.
-     * 
-     * @var         CouchDbClient 
+     *
+     * @var         CouchDbClient
      */
     protected $compositeClient;
-    
+
     /**
      * Holds base uri used to talk to couch db.
-     * 
-     * @var         string 
+     *
+     * @var         string
      */
     protected $baseUri;
-    
+
     /**
      * Holds a curl handle that is internally used for submitting requests.
-     * 
+     *
      * @var         Resource
      */
     private $curlHandle = NULL;
-    
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-    
-    
+
+
     // ---------------------------------- <CONSTRUCTOR> ------------------------------------------
-    
+
     /**
      * Create a new ExtendedCouchDbClient instance passing in the couchdb base uri.
-     * 
-     * @param       string $uri 
+     *
+     * @param       string $uri
      */
     public function __construct($uri)
     {
@@ -51,19 +51,19 @@ class ExtendedCouchDbClient
 
         $this->compositeClient = new CouchDbClient($uri);
     }
-    
+
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
-    
-    
+
+
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
-    
+
     /**
      * Send a batch create/update request to the given couch database
      * and return the resulting response information.
-     * 
+     *
      * @param       string $database
      * @param       array $documentData
-     * 
+     *
      * @return      array
      */
     public function storeDocs($database, array $documentData)
@@ -72,15 +72,15 @@ class ExtendedCouchDbClient
 
         return $this->compositeClient->storeDocs($documentData);
     }
-    
+
     /**
      * Fetch the data for the given $documentId for the passed $database.
-     * 
+     *
      * @param       string $database
      * @param       string $documentId
-     * 
+     *
      * @return      array
-     * 
+     *
      * @throws      CouchdbClientException
      */
     public function getDoc($database, $documentId)
@@ -89,48 +89,48 @@ class ExtendedCouchDbClient
 
         return (array)$this->compositeClient->getDoc($documentId);
     }
-    
+
     /**
      * Stores the given document in the given database.
-     * 
+     *
      * @param       string $database
      * @param       string $documentId
-     * 
+     *
      * @return      array
-     * 
+     *
      * @throws      CouchdbClientException
      */
     public function storeDoc($database, $document)
     {
         $this->compositeClient->selectDb($database);
-        
+
         return $this->compositeClient->storeDoc($document);
     }
-    
+
     /**
      * Delete a document from the given couchdb database by id and revision.
-     * 
+     *
      * @param       string $database
      * @param       string $docId
      * @param       string $revision
-     * 
-     * @return      boolean 
+     *
+     * @return      boolean
      */
     public function deleteDoc($database, $docId, $revision)
     {
         $curlHandle = $this->getCurlHandle();
 
         $uri = $this->baseUri . $database . '/' . $docId . '?' . 'rev=' . $revision;
-        
+
         curl_setopt($curlHandle, CURLOPT_URL, $uri);
         curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, 'DELETE');
-        
+
         $response = curl_exec($curlHandle);
-        
+
         $this->processCurlErrors($curlHandle);
-        
+
         $data = json_decode($response, TRUE);
-        
+
         return (isset($data['ok']) && TRUE === $data['ok']);
     }
 
@@ -138,7 +138,7 @@ class ExtendedCouchDbClient
      * Query the given database for revision (e-tag header in response to head request)
      * information on the given $docId.
      * If the document does not exist 0 is returned.
-     * 
+     *
      * @param       string $database
      * @param       string $docId
      *
@@ -157,6 +157,8 @@ class ExtendedCouchDbClient
         curl_setopt ($curlHandle, CURLOPT_RETURNTRANSFER, 1);
 
         $resp = curl_exec($curlHandle);
+        error_log($uri);
+        error_log($resp);
         $this->processCurlErrors($curlHandle);
 
         fclose($file);
@@ -168,14 +170,14 @@ class ExtendedCouchDbClient
 
         return $matches[0][1];
     }
-    
+
     /**
      * Fetch the data for the given view.
-     * 
+     *
      * @param       string $database
      * @param       string $designDocId
      * @param       string $viewname
-     * 
+     *
      * @return      array
      */
     public function getView($database, $designDocId, $viewname)
@@ -186,24 +188,24 @@ class ExtendedCouchDbClient
 
         $curlHandle = $this->getCurlHandle();
         curl_setopt($curlHandle, CURLOPT_URL, $uri);
-        
+
         $resp = curl_exec($curlHandle);
-        
+
         $this->processCurlErrors($curlHandle);
-        
+
         $data = json_decode($resp, TRUE);
 
         return $data;
     }
-    
+
     /**
      * Create a design document for the given $docId.
-     * 
+     *
      * @param       string $database
      * @param       string $docId
      * @param       array $doc
-     * 
-     * @return type 
+     *
+     * @return type
      */
     public function createDesignDocument($database, $docId, array $doc)
     {
@@ -238,17 +240,17 @@ class ExtendedCouchDbClient
         curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($jsonDoc));
 
         curl_exec($curlHandle);
-        
+
         $this->processCurlErrors($curlHandle);
 
         fclose($file);
     }
-    
+
     /**
      * Create a database by the given $database name.
-     * 
+     *
      * @param       string $database
-     * 
+     *
      * @throws      CouchdbClientException e.g. If the database allready exists.
      */
     public function createDatabase($database)
@@ -260,21 +262,21 @@ class ExtendedCouchDbClient
      * Delete a database by the given $database name.
      *
      * @param       string $database
-     * 
+     *
      * @return      void
-     * 
+     *
      * @throws      CouchdbClientException e.g. database does not exists
      */
     public function deleteDatabase($database)
     {
         $this->compositeClient->deleteDatabase($database);
     }
-    
+
     // ---------------------------------- </PUBLIC METHODS> --------------------------------------
-    
-    
+
+
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-    
+
     /**
      * Returns our curl handle and initializes it upon first invocation.
      *
@@ -286,8 +288,9 @@ class ExtendedCouchDbClient
         {
             $this->curlHandle = ProjectCurl::create();
             curl_setopt($this->curlHandle, CURLOPT_HEADER, 'Content-Type: application/json; charset=utf-8');
+            curl_setopt($this->curlHandle, CURLOPT_PROXY, '');
         }
-        
+
         return $this->curlHandle;
     }
 
@@ -295,9 +298,9 @@ class ExtendedCouchDbClient
      * Check curl response status and throw exception on error.
      *
      * @param       Resource $curlHandle
-     * 
+     *
      * @return      void
-     * 
+     *
      * @throws      CouchdbClientException
      */
     protected function processCurlErrors($curlHandle)
@@ -305,13 +308,13 @@ class ExtendedCouchDbClient
         $error = curl_error($curlHandle);
         $errorNum = curl_errno($curlHandle);
         $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
-        
+
         if (200 > $respCode || 300 <= $respCode || $errorNum || $error)
         {
             throw new CouchdbClientException("CURL error: $error", $errorNum);
         }
     }
-    
+
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 
