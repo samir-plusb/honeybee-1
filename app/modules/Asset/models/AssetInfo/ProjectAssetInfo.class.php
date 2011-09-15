@@ -334,9 +334,14 @@ class ProjectAssetInfo implements IAssetInfo
 
         if (($moveOrigin && rename($src, $targetPath)) || copy($src, $targetPath))
         {
-            $fInfo = new SplFileInfo($targetPath);
-            $this->mimeType = $fInfo->getType();
-            $this->size = $fInfo->getSize();
+            $finfo = new finfo(FILEINFO_MIME, AgaviConfig::get('assets.mime_database')); // return mime type ala mimetype extension
+
+            if (!$finfo) 
+            {
+                throw new  Exception("Opening fileinfo database failed");
+            }
+            $this->mimeType = $finfo->file($this->getFullPath());
+            $this->size = filesize($this->getFullPath());
 
             return TRUE;
         }

@@ -67,6 +67,7 @@
         </settings>
         
         <settings prefix="assets.">
+            <setting name="mime_database">/usr/share/misc/magic.mgc</setting>
             <setting name="base_dir">%core.app_dir%/../data/assets</setting>
         </settings>
         
