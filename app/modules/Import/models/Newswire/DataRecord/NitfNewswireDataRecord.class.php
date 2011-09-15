@@ -48,6 +48,11 @@ class NitfNewswireDataRecord extends NewswireDataRecord
     const PROP_DATE_EXPIRE = 'expire';
 
     /**
+     * Holds the name of our table property.
+     */
+    const PROP_TABLE = 'table';
+
+    /**
      * Holds the base url to use when generating absolute links.
      *
      * @todo Move to config cause of evn awareness?
@@ -73,6 +78,8 @@ class NitfNewswireDataRecord extends NewswireDataRecord
 
     protected $keywords;
 
+    protected $table;
+
     /**
      * Holds an array with known keys and xpath expressions as values.
      * This $expressionMap is used to evaluate and collect data from a given DOMDocument,
@@ -86,24 +93,12 @@ class NitfNewswireDataRecord extends NewswireDataRecord
         self::PROP_SUBTITLE     => '//hedline/hl2',
         self::PROP_ABSTRACT     => '//abstract',
         self::PROP_CONTENT      => '//body.content/p',
-        self::PROP_MEDIA        => '/imperia/body/article//image',
         self::PROP_CATEGORY     => '//fixture/@fix-id',
         self::PROP_DATE_ISSUE   => '//date.issue/@norm',
         self::PROP_DATE_RELEASE => '//date.release/@norm',
         self::PROP_DATE_EXPIRE  => '//date.expire/@norm',
         self::PROP_COPYRIGHT    => '//doc.copyright/@holder',
         self::PROP_KEYWORDS     => '//keyword/@key'
-    );
-
-    protected static $expressionProcessors = array(
-        self::PROP_IDENT        => 'extractFirst',
-        self::PROP_TITLE        => 'extractFirst',
-        self::PROP_CONTENT      => 'extractCollection',
-        self::PROP_SUBTITLE     => 'extractFirst',
-        self::PROP_COPYRIGHT    => 'extractFirst',
-        self::PROP_DATE_ISSUE   => 'extractFirst',
-        self::PROP_DATE_RELEASE => 'extractFirst',
-        self::PROP_DATE_EXPIRE  => 'extractFirst'
     );
 
     // ---------------------------------- </MEMBERS> ---------------------------------------------
@@ -121,17 +116,17 @@ class NitfNewswireDataRecord extends NewswireDataRecord
         return $this->abstract;
     }
 
-    public function getDateIssue()
+    public function getIssue()
     {
         return $this->issue;
     }
 
-    public function getDateRelease()
+    public function getRelease()
     {
         return $this->release;
     }
 
-    public function getDateExpire()
+    public function getExpire()
     {
         return $this->expire;
     }
@@ -144,6 +139,11 @@ class NitfNewswireDataRecord extends NewswireDataRecord
     public function getKeywords()
     {
         return $this->keywords;
+    }
+
+    public function getTable()
+    {
+        return $this->table;
     }
 
     // ---------------------------------- </PUBLIC METHODS> --------------------------------------
@@ -176,9 +176,9 @@ class NitfNewswireDataRecord extends NewswireDataRecord
     protected function normalizeData(array $data)
     {
         $normalized = array(
-            self::PROP_MEDIA => $this->importMedia()
+            self::PROP_MEDIA => $this->importMedia(),
+            self::PROP_TABLE => $this->importTable()
         );
-        //$normalized['table'] = $this->importTable();
 
         $normalized[self::PROP_CONTENT] = $this->joinNodeList($data[self::PROP_CONTENT], "\n\n");
         $normalized[self::PROP_KEYWORDS] = $this->nodeListToArray($data[self::PROP_KEYWORDS]);
@@ -261,6 +261,11 @@ class NitfNewswireDataRecord extends NewswireDataRecord
     protected function setKeywords(array $keywords)
     {
         $this->keywords = $keywords;
+    }
+
+    protected function setTable($table)
+    {
+        $this->table = $table;
     }
 
     // ---------------------------------- </XmlBasedDataRecord IMPL> -----------------------------
