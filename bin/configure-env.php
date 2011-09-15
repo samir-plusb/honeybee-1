@@ -19,6 +19,7 @@ require_once $configure_script_class_file;
 //#---------------------------------------------- MAIN ------------------------------------------------------#
 //#----------------------------------------------------------------------------------------------------------#
 
+echo "Check environment and extensions ...\n";
 if (ini_get('safe_mode'))
 {
     die('Please switch off "safe_mode"');
@@ -30,6 +31,7 @@ foreach (array('fileinfo', 'couchdb') as $extension)
         die('Please enable extension: '.$extension);
     }
 }
+echo "pass.\n\n";
 
 $configure_script = new ConfigureEnvScript();
 $configure_script->run($argv);
