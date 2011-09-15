@@ -67,6 +67,7 @@ class EnvironmentConfigurator
 
         $this->generateConfig($config);
         $this->generateLocalConfigSh($config);
+        $this->generateTestingConfig($config);
     }
 
     protected function promptPhpPath()
@@ -158,9 +159,27 @@ class EnvironmentConfigurator
 
         if (false === file_put_contents($config_filepath, $config_code))
         {
-            // @todo Throw an exception or warn about the error.
+            die ('Can not write: '.$config_filepath);
         }
     }
+
+
+    protected function generateTestingConfig(array $config)
+    {
+        $config_filepath = str_replace('/local.', '/local.testing.', $this->getConfigFilePath());
+        $config[ProjectEnvironmentConfig::CFG_ENVIRONMENT] = 'testing.'.$config[ProjectEnvironmentConfig::CFG_ENVIRONMENT];
+
+        $config_code = sprintf(
+            $this->getConfigCodeTemplateString(),
+            var_export($config, true)
+        );
+
+        if (false === file_put_contents($config_filepath, $config_code))
+        {
+            die ('Can not write: '.$config_filepath);
+        }
+    }
+
 
     protected function generateLocalConfigSh(array $config)
     {
@@ -275,7 +294,9 @@ SH_CODE;
     {
         $local_dir = $this->getLocalSettingsBasePath();
 
-        return $local_dir . ProjectEnvironmentConfig::CONFIG_FILE_NAME;
+        return $local_dir
+            . ProjectEnvironmentConfig::CONFIG_FILE_PREFIX
+            . ProjectEnvironmentConfig::CONFIG_FILE_NAME;
     }
 
     protected function getLocalConfigShFilePath()
