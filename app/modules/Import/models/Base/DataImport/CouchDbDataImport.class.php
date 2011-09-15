@@ -156,7 +156,7 @@ class CouchDbDataImport extends BaseDataImport
      * In this case we add the data to our buffer and then flush if necessary.
      *
      * @param       array $data
-     * 
+     *
      * @return      boolean
      *
      * @uses        CouchDbDataImport::flushImportBuffer()
@@ -169,7 +169,7 @@ class CouchDbDataImport extends BaseDataImport
         {
             $this->flushImportBuffer();
         }
-        
+
         return TRUE;
     }
 
@@ -198,71 +198,78 @@ class CouchDbDataImport extends BaseDataImport
             $this->couchClient->storeDocs($database, $updateData);
         }
     }
-    
+
     /**
      * Checks the given reponse to our batch create request,
      * checks for conflicts and returns an array that can used to resolve them.
-     * 
+     *
      * @param       array $response
-     * 
+     *
      * @return      array
      */
     protected function handleCouchDbResponse(array $response)
     {
         $updateData = array();
-        
+
         foreach ($response as $resultItem)
         {
             if ($this->isCouchDbCreateConflict($resultItem))
             {
-                if (($newData = $this->createUpdateData($resultItem['id'])))
+                if (NULL != ($newData = $this->createUpdateData($resultItem['id'])))
                 {
                     $updateData[] = $newData;
                 }
             }
         }
-        
+
         return $updateData;
     }
-    
+
     /**
      * Helper method for querying a couchdb result for a potential create conflict.
-     * 
+     *
      * @param       array $response
-     * 
+     *
      * @return      boolean
      */
     protected function isCouchDbCreateConflict(array $response)
     {
         return (
-            isset($response['error']) 
-            && 
+            isset($response['error'])
+            &&
             self::COUCHDB_ERR_CONFLICT === $response['error']
         );
     }
-    
+
     /**
-     * Return an array that can be posted to couch as is 
-     * and that contains a valid revision 
+     * Return an array that can be posted to couch as is
+     * and that contains a valid revision
      * in order to update it's corresponding document.
-     * 
+     *
      * @param       string $docId
-     * 
-     * @return      array
+     *
+     * @return      array or NULL if no update necessary
      */
     protected function createUpdateData($docId)
     {
         $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
         $rev = $this->couchClient->statDoc($database, $docId);
-        $data = NULL;
-        
+
         if (0 !== $rev)
         {
             $data = $this->importBuffer[$docId];
-            $data[self::COUDB_REV_FIELD] = $rev;
+            $oldDoc = $this->couchClient->getDoc($database, $docId);
+            foreach ($data as $key => $val)
+            {
+                if (! array_key_exists($key, $oldDoc) || 0 != strcmp(serialize($val), serialize($oldDoc[$key])))
+                {
+                    $data[self::COUDB_REV_FIELD] = $rev;
+                    return $data;
+                }
+            }
         }
-        
-        return $data;
+
+        return NULL;
     }
 
     /**
