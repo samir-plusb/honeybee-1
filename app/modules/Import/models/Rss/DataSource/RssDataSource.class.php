@@ -41,6 +41,9 @@ class RssDataSource extends ImportBaseDataSource
      * Initialize our datasource.
      *
      * @see         ImportBaseDataSource::init()
+     *
+     * @throws      IOException on problems with temporary file
+     * @throws      DataSourceException on curl errors
      */
     protected function init()
     {
