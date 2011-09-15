@@ -3,109 +3,65 @@
 class RssDataRecord extends ImportBaseDataRecord
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------
-    
-    /**
-     * Holds the name of our title field.
-     */
-    const FIELD_TITLE = 'title';
-
-    /**
-     * Holds the name of our kicker field.
-     */
-    const FIELD_KICKER = 'kicker';
-
-    /**
-     * Holds the name of our text field.
-     */
-    const FIELD_TEXT = 'text';
-
-    /**
-     * Holds the name of our category field.
-     */
-    const FIELD_CATEGORY = 'category';
-    
-    /**
-     * Holds our default category.
-     */
-    const DEFAULT_CATEGORY = 'rss/unknown';
-    
+    const PROP_AUTHOR = 'author';
+    const PROP_TIMESTAMP = 'timestamp';
     // ---------------------------------- <CONSTANTS> --------------------------------------------
-    
-    
+
+    var $data;
+
     // ---------------------------------- <ImportBaseDataRecord IMPL> ----------------------------
-    
-    /**
-     * Returns the name of the field to use as the base for building our identifier.
-     * 
-     * @return      string
-     * 
-     * @see         ImportBaseDataRecord::getIdentifierFieldName()
-     */
-    protected function getIdentifierFieldName()
+
+    protected function setAuthor($param)
     {
-        return 'title';
+        $this->data['author'] = $param;
     }
-    
+
+    public function getAuthor()
+    {
+        return $this->data['author'];
+    }
+
+    protected function setTimestamp($param)
+    {
+        $this->data['lastchanged'] = new DateTime($param);
+        $this->data['timestamp'] = $this->data['lastchanged']->format('c');
+    }
+
+    public function getTimestamp()
+    {
+        return $this->data['lastchanged']->format(DATE_ISO8601);
+    }
+
+    public function getExposedProperties()
+     {
+        return array_merge(
+            parent::getExposedProperties(),
+            array(self::PROP_AUTHOR, self::PROP_TIMESTAMP));
+    }
+
+
+
     /**
-     * Parse the incoming ezcFeedEntryElement.
-     * 
+     * Parse the incoming feed item data
+     *
      * @param       mixed $data
-     * 
+     *
      * @return      array
-     * 
-     * @throws      DataRecordException If a wrong(other than ezcFeedEntryElement) input data-type is given.
-     * 
-     * @see         http://ezcomponents.org/docs/api/trunk/Feed/ezcFeedEntryElement.html
+     *
      * @see         ImportBaseDataRecord::parse()
      */
     protected function parseData($data)
     {
-        /* @var $data ezcFeedEntryElement */
-        $data;
-        
-        if (!($data instanceof ezcFeedEntryElement))
-        {
-            throw new DataRecordException(
-                "Incoming data by a different type than expected 'ezcFeedEntryElement' encountered. " .
-                "Instance of '" . get_class($data) . "' given. " .
-                "The RssDataRecord only supports 'ezcFeedEntryElement' instances as it's data."
-            );
-        }
-        
-        $content = '';
-        
-        if (isset($data->Content) && isset($data->Content->encoded))
-        {
-            $content = $data->Content->encoded->__toString();
-        }
-        
-        $categories = array();
-        
-        if (!empty($data->category))
-        {
-            foreach ($data->category as $category)
-            {
-                $categories[] = $category->term;
-            }
-        }
-        
-        $category = self::DEFAULT_CATEGORY;
-        
-        if (!empty ($categories))
-        {
-            $category = implode('/', $categories);
-        }
-        
-        $description = isset($data->description) ? $data->description->__toString() : '';
-        
+        $this->data = $data;
+
         return array(
-            self::FIELD_TITLE    => $data->title->__toString(),
-            self::FIELD_TEXT     => $content,
-            self::FIELD_CATEGORY => $category,
-            self::FIELD_KICKER   => $description
+            self::PROP_IDENT => $data['url'],
+            self::PROP_TITLE => $data['title'],
+            self::PROP_CONTENT => empty($data['html']) ? htmlspecialchars($data['teaser_text']) : $data['html'],
         );
     }
-    
+
+
     // ---------------------------------- </ImportBaseDataRecord IMPL> ---------------------------
 }
 
