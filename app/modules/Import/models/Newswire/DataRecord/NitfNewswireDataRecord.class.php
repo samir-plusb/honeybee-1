@@ -224,7 +224,8 @@ class NitfNewswireDataRecord extends NewswireDataRecord
                 self::PROP_COPYRIGHT,
                 self::PROP_DATE_ISSUE,
                 self::PROP_DATE_RELEASE,
-                self::PROP_DATE_EXPIRE
+                self::PROP_DATE_EXPIRE,
+                self::PROP_TABLE
             )
         );
     }
