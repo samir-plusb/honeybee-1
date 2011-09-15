@@ -130,18 +130,16 @@ class CouchDbDataImport extends BaseDataImport
     }
 
     /**
-     * Converts the given record into an array,
-     * thereby setting the couchdb id field.
-     *
+     * This method is responseable for converting data records 
+     * to a final array structure, suitable for data distribution to couchdb.
+     * 
      * @return      array
-     *
-     * @see         BaseDataImport::convertRecord()
      */
-    protected function convertRecord()
+    protected function convertRecord(IDataRecord $record)
     {
-        $data = parent::convertRecord();
+        $data = $record->toArray();
 
-        $data[self::COUDB_ID_FIELD] = $this->getCurrentRecord()->getIdentifier();
+        $data[self::COUDB_ID_FIELD] = $record->getIdentifier();
 
         return $data;
     }
@@ -161,9 +159,9 @@ class CouchDbDataImport extends BaseDataImport
      *
      * @uses        CouchDbDataImport::flushImportBuffer()
      */
-    protected function importData(array $data)
+    protected function processRecord()
     {
-        $this->importBuffer[$data[self::COUDB_ID_FIELD]] = $data;
+        $this->importBuffer[$this->getCurrentRecord()->getIdentifier()] = $this->getCurrentRecord();
 
         if ($this->importBufferSize === count($this->importBuffer))
         {
@@ -186,7 +184,12 @@ class CouchDbDataImport extends BaseDataImport
     protected function flushImportBuffer()
     {
         $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
-        $couchData = array_values($this->importBuffer);
+        $couchData = array();
+        
+        foreach ($this->importBuffer as $bufferedRecord)
+        {
+            $couchData[] = $this->convertRecord($bufferedRecord);
+        }
 
         $updateData = $this->handleCouchDbResponse(
             $this->couchClient->storeDocs($database, $couchData)
@@ -223,7 +226,7 @@ class CouchDbDataImport extends BaseDataImport
             else
             {
                 // @todo We should have a better check for success here.
-                $this->fireRecordImportedEvent($this->getCurrentRecord());
+                $this->fireRecordImportedEvent($this->importBuffer[$resultItem['id']]);
             }
         }
 

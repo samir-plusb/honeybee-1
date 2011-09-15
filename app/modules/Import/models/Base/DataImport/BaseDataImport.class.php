@@ -68,11 +68,14 @@ abstract class BaseDataImport implements IDataImport
     // ---------------------------------- <ABSTRACT METHODS> -------------------------------------
     
     /**
-     * Import the given data.
+     * This method is called once for each record, that is delivered by our datasource,
+     * when executing our run method.
+     * Shall return true if the import succeeded and false otherwise.
+     * Use the self::getCurrentRecord() method to obtain the current record.
      * 
-     * @param       array
+     * @return      boolean
      */
-    protected abstract function importData(array $data);
+    protected abstract function processRecord();
 
     // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
     
@@ -139,34 +142,6 @@ abstract class BaseDataImport implements IDataImport
     protected function init(IDataSource $dataSource) 
     {
         $this->dataSource = $dataSource;
-    }
-    
-    /**
-     * This method is called once for each record, that is delivered by our datasource,
-     * when executing our run method.
-     * Shall return true if the import succeeded and false otherwise.
-     * 
-     * @return      boolean
-     */
-    protected function processRecord()
-    {
-        $data = $this->convertRecord();
-        
-        return $this->importData($data);
-    }
-    
-    /**
-     * This method is responseable for converting data records 
-     * to a final array structure, suitable for data distribution.
-     * A concrete BaseDataImport implementation must be either be able to
-     * handle the default structure or override this method and define an own strategy,
-     * because the returned array is passed to our abstract method BaseDataImport::importData.
-     * 
-     * @return      array
-     */
-    protected function convertRecord()
-    {
-        return $this->getCurrentRecord()->toArray();
     }
     
     /**
