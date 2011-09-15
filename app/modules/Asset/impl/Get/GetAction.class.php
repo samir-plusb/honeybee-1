@@ -29,3 +29,5 @@ class Asset_GetAction extends AssetBaseAction
         return 'Success';
     }
 }
+
+?>

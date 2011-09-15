@@ -4,6 +4,7 @@
         <routes>
             <route pattern="import." module="Import">
                 <route pattern="run" action="Run" method="write" />
+                <route pattern="trigger.imperia" action="TriggerImperia" method="write" />
             </route>
         </routes>
     </ae:configuration>

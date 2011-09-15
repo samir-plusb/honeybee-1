@@ -11,6 +11,7 @@
             
             <!-- Lib/Validator -->
             <autoload name="ImportValidator">%core.module_dir%/Import/lib/validator/ImportValidator.class.php</autoload>
+            <autoload name="ImperiaJsonValidator">%core.module_dir%/Import/lib/validator/ImperiaJsonValidator.class.php</autoload>
             <!-- /Lib/Validator -->
             
             <!-- Lib/Testing -->

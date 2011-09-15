@@ -42,7 +42,6 @@ class Asset_Get_GetErrorView extends AssetBaseView
 
         $this->getResponse()->setContent($msg);
     }
-
 }
 
 ?>

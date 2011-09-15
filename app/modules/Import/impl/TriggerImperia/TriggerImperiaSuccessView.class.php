@@ -1,32 +1,31 @@
 <?php
 
 /**
- * The Asset_Put_PutSuccessView class handle the presentation logic for our Asset/Put actions's success data.
+ * The Import_TriggerImperia_TriggerImperiaSuccessView class handles the presentation logic for our 
+ * Import/TriggerImperia actions's success data.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Asset
+ * @package         Import
  * @subpackage      Mvc
  */
-class Asset_Put_PutSuccessView extends AssetBaseView
+class Import_TriggerImperia_TriggerImperiaSuccessView extends ImportBaseView
 {
     /**
-     * Handle presentation logic for the web  (html).
+     * Handle presentation logic for json.
      * 
      * @param       AgaviRequestDataHolder $parameters 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $this->setupHtml($parameters);
-
-        $this->setAttribute('info', $this->getAttribute('asset_info')->toArray());
-        $this->setAttribute('_title', 'Asset PUT - Html Form Interface / SUCCESS');
+        $data = array('ok' => TRUE);
+        $this->getResponse()->setContent(json_encode($data));
     }
-    
+
     /**
      * Handle presentation logic for commandline interfaces.
      * 
@@ -37,13 +36,10 @@ class Asset_Put_PutSuccessView extends AssetBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $msg = "Successfully stored your asset." . PHP_EOL;
-        $msg .= "Asset Information: " . PHP_EOL;
-        $msg .= var_export($this->getAttribute('asset_info')->toArray(), TRUE);
+        $msg = "Successfully imported your imperia data" . PHP_EOL;
 
         $this->getResponse()->setContent($msg);
     }
-
 }
 
 ?>

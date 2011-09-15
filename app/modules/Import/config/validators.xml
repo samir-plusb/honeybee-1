@@ -8,6 +8,12 @@
                     <ae:parameter name="expose_errors">true</ae:parameter>
                 </ae:parameters>
             </validator_definition>
+            
+            <validator_definition name="json" class="ImperiaJsonValidator">
+                <ae:parameters>
+                    <ae:parameter name="expose_errors">true</ae:parameter>
+                </ae:parameters>
+            </validator_definition>
         </validator_definitions>
     </ae:configuration>
     

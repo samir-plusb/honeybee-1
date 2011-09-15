@@ -190,6 +190,23 @@ class ProjectBaseView extends AgaviView
             )
         );
     }
+    
+    /**
+     * Return any reported validation error messages from our validation manager.
+     * 
+     * @return      array 
+     */
+    protected function getValidationErrorMessages()
+    {
+        $errors = array();
+        
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
+        {
+            $errors[] = $errMsg['message'];
+        }
+        
+        return $errors;
+    }
 }
 
 ?>

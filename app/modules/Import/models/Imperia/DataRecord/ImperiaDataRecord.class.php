@@ -193,7 +193,7 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
     protected function extractFirst(array $xPathResults, $key)
     {
-        if (!isset($xPathResults[$key]) || 0 === $xPathResults[$key]->length)
+        if (!$xPathResults[$key] || 0 === $xPathResults[$key]->length)
         {
             return NULL;
         }
@@ -203,7 +203,7 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
     protected function extractCollection(array $xPathResults, $key)
     {
-        if (!isset($xPathResults[$key]) || !$xPathResults[$key])
+        if (!$xPathResults[$key] || !$xPathResults[$key])
         {
             return array();
         }

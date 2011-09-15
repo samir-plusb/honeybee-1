@@ -35,7 +35,11 @@
                 <route pattern="^/put/$" action="Put" />
                 <route pattern="^/get/({aid:\d+})/$" action="Get" />
             </route>
-
+            
+            <route pattern="^/import" module="Import">
+                <route pattern="^/trigger/imperia/$" action="TriggerImperia" />
+            </route>
+            
             <!-- The last route in case the input URL is just "/". -->
             <route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
 
