@@ -177,7 +177,8 @@ class NitfNewswireDataRecord extends NewswireDataRecord
     {
         $normalized = array(
             self::PROP_MEDIA => $this->importMedia(),
-            self::PROP_TABLE => $this->importTable()
+            self::PROP_TABLE => $this->importTable(),
+            self::PROP_GEO   => array()
         );
 
         $normalized[self::PROP_CONTENT] = $this->joinNodeList($data[self::PROP_CONTENT], "\n\n");
@@ -238,17 +239,17 @@ class NitfNewswireDataRecord extends NewswireDataRecord
         $this->abstract = $abstract;
     }
 
-    protected function setDateIssue($issue)
+    protected function setIssue($issue)
     {
         $this->issue = $issue;
     }
 
-    protected function setDateRelease($release)
+    protected function setRelease($release)
     {
         $this->release = $release;
     }
 
-    protected function setDateExpire($expire)
+    protected function setExpire($expire)
     {
         $this->expire = $expire;
     }
