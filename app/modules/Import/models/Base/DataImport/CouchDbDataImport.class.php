@@ -220,6 +220,11 @@ class CouchDbDataImport extends BaseDataImport
                     $updateData[] = $newData;
                 }
             }
+            else
+            {
+                // @todo We should have a better check for success here.
+                $this->fireRecordImportedEvent($this->getCurrentRecord());
+            }
         }
 
         return $updateData;

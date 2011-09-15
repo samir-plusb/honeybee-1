@@ -113,11 +113,7 @@ abstract class BaseDataImport implements IDataImport
         
         while ($this->currentRecord = $dataSource->nextRecord())
         {
-            if ($this->processRecord())
-            {
-                $this->fireRecordImportedEvent($this->getCurrentRecord());
-            }
-            else
+            if (!$this->processRecord())
             {
                 // @todo Need to think of a smart error handling,
                 // as the overall import process is not allowed to be affected by single record related errors.
