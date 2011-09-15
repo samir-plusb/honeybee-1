@@ -198,7 +198,12 @@ abstract class XmlBasedDataRecord extends ImportBaseDataRecord
 
         for ($i = 0; $i < $nodeList->length; $i++)
         {
-            $content[] = $nodeList->item($i)->nodeValue;
+            $value = trim($nodeList->item($i)->nodeValue);
+
+            if ($value)
+            {
+                $content[] = $value;
+            }
         }
 
         return $content;
