@@ -75,20 +75,20 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
 
 
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-
+    
+    /**
+     * Holds our config object, used to conigure things such as our source and origin.
+     * 
+     * @var         DataRecordConfig 
+     */
+    protected $config;
+    
     /**
      * Holds our unique identifier.
      *
      * @var         string
      */
     private $identifier;
-
-    /**
-     * Holds our origin.
-     *
-     * @var         string
-     */
-    private $origin;
 
     /**
      * Holds this IDataRecord's source.
@@ -174,10 +174,11 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      * @uses        ImportBaseDataRecord::parse()
      * @uses        ImportBaseDataRecord::hydrate()
      */
-    public function __construct($data, $source, $origin)
+    public function __construct($data, DataRecordConfig $config)
     {
-        $this->source = $source;
-        $this->origin = $origin;
+        $this->config = $config;
+        
+        $this->source = $this->config->getSetting(DataRecordConfig::CFG_SOURCE);
 
         $this->hydrate(
             $this->parseData($data)
@@ -222,7 +223,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      */
     public function getOrigin()
     {
-        return $this->origin;
+        return $this->config->getSetting(DataRecordConfig::CFG_ORIGIN);
     }
 
     /**
@@ -398,7 +399,6 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     {
         return array(
             self::PROP_IDENT,
-            self::PROP_ORIGIN,
             self::PROP_SOURCE,
             self::PROP_TITLE,
             self::PROP_CONTENT,
@@ -418,7 +418,6 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     {
         return array(
             self::PROP_IDENT,
-            self::PROP_ORIGIN,
             self::PROP_SOURCE,
             self::PROP_TITLE,
             self::PROP_CONTENT,

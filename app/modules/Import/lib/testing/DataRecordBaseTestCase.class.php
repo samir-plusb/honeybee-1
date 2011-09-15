@@ -41,11 +41,18 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
     abstract protected function getDataRecordClass();
 
     /**
-     * Return the name of the data record to create.
+     * Return the name of the origin to pass to our data record.
      *
      * @return      string
      */
-    abstract protected function getDataRecordName();
+    abstract protected function getDataRecordOrigin();
+    
+    /**
+     * Return the name of the source to pass to our data record.
+     *
+     * @return      string
+     */
+    abstract protected function getDataRecordSource();
 
     // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
 
@@ -67,12 +74,15 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
         $setup->setup(TRUE);
 
         $recordImpl = $this->getDataRecordClass();
-        $origin = AgaviConfig::get('core.fixtures_dir') . $this->getRecordXmlFixturePath();
 
         $this->dataRecord = new $recordImpl(
             $this->loadXmlFixture(),
-            $this->getDataRecordName(),
-            $origin
+            new DataRecordConfig(
+                array(
+                    DataRecordConfig::CFG_ORIGIN => $this->getDataRecordOrigin(),
+                    DataRecordConfig::CFG_SOURCE => $this->getDataRecordSource()
+                )
+            )
         );
     }
 

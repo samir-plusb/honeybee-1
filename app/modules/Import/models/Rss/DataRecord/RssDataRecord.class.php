@@ -33,7 +33,7 @@ class RssDataRecord extends ImportBaseDataRecord
     }
 
     public function getExposedProperties()
-     {
+    {
         return array_merge(
             parent::getExposedProperties(),
             array(self::PROP_AUTHOR, self::PROP_TIMESTAMP));

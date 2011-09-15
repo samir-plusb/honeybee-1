@@ -179,8 +179,12 @@ abstract class ImportBaseDataSource implements IDataSource
         {
             $record = new $recordClass(
                 $rawData,
-                $this->getName(),
-                $this->getCurrentOrigin()
+                new DataRecordConfig(
+                    array(
+                        DataRecordConfig::CFG_ORIGIN => $this->getName(),
+                        DataRecordConfig::CFG_SOURCE => $this->getCurrentOrigin()
+                    )
+                )
             );
         }
         catch(DataRecordException $e)

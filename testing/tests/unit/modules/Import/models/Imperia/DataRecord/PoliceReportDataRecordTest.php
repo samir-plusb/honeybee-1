@@ -21,14 +21,19 @@ class PoliceReportDataRecordTest extends DataRecordBaseTestCase
         return 'PoliceReportDataRecord';
     }
 
-    protected function getDataRecordName()
-    {
-        return 'polizeimeldungen';
-    }
-
     protected function getDataRecordDescription()
     {
         return 'Foo the bar had a very fuzen buzen.';
+    }
+    
+    protected function getDataRecordSource()
+    {
+        return 'polizeimeldungen';
+    }
+    
+    protected function getDataRecordOrigin()
+    {
+        return 'polizeimeldungen/test';
     }
 }
 

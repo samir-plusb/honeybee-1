@@ -60,9 +60,13 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
 
         $expectedRecord = new $recordType(
             $this->loadRecordFixtureData(),
-            'imperia/polizeimeldungen',
-            NULL
-        );
+            new DataRecordConfig(
+                array(
+                    DataRecordCOnfig::CFG_SOURCE => 'imperia/polizeimeldungen',
+                    DataRecordConfig::CFG_ORIGIN => ''
+                )
+            )
+        );  
 
         $record = $this->dataSource->nextRecord();
 

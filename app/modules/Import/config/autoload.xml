@@ -43,6 +43,7 @@
 
             <!-- Base/DataRecord -->
             <autoload name="IDataRecord">%core.module_dir%/Import/models/Base/DataRecord/IDataRecord.iface.php</autoload>
+            <autoload name="DataRecordConfig">%core.module_dir%/Import/models/Base/DataRecord/DataRecordConfig.class.php</autoload>
             <autoload name="ImportBaseDataRecord">%core.module_dir%/Import/models/Base/DataRecord/ImportBaseDataRecord.class.php</autoload>
             <autoload name="XmlBasedDataRecord">%core.module_dir%/Import/models/Base/DataRecord/XmlBasedDataRecord.class.php</autoload>
             <autoload name="DataRecordException">%core.module_dir%/Import/models/Base/DataRecord/DataRecordException.class.php</autoload>
