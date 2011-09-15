@@ -76,7 +76,14 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      *
      * @var         string
      */
-    protected $identifier;
+    private $identifier;
+
+    /**
+     * Holds our origin.
+     *
+     * @var         string
+     */
+    private $origin;
 
     /**
      * Holds this IDataRecord's source.
@@ -86,13 +93,6 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      * @var         string
      */
     protected $source;
-
-    /**
-     * Holds our origin.
-     *
-     * @var         string
-     */
-    protected $origin;
 
     /**
      * Holds our title.
@@ -368,6 +368,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     {
         return array(
             self::PROP_IDENT,
+            self::PROP_ORIGIN,
             self::PROP_SOURCE,
             self::PROP_TITLE,
             self::PROP_CONTENT,
@@ -396,7 +397,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     }
 
     /**
-     * Return our source.
+     * Set our identifier.
      *
      * @param       string
      *
@@ -408,7 +409,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     }
 
     /**
-     * Return our title.
+     * Set our title.
      *
      * @param       string
      *
@@ -420,7 +421,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     }
 
     /**
-     * Return our content.
+     * Set our content.
      *
      * @param       string
      *
@@ -432,7 +433,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     }
 
     /**
-     * Return our category.
+     * Set our category.
      *
      * @param       string
      *
@@ -444,7 +445,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     }
 
     /**
-     * Return our media.
+     * Set our media.
      *
      * @param       array
      *
@@ -456,7 +457,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     }
 
     /**
-     * Return our geoData.
+     * Set our geoData.
      *
      * @param       array
      *

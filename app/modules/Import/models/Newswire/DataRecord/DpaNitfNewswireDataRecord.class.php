@@ -21,8 +21,7 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
     protected function getFieldMap()
     {
         return array_merge(
-            parent::getFieldMap(),
-            array(
+            parent::getFieldMap(), array(
                 self::PROP_SUBTITLE  => '//byline',
                 self::PROP_COPYRIGHT => '//meta[@name="copyright"]/@content',
                 'source'             => '//meta[@name="origin"]/@content'

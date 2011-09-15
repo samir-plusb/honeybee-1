@@ -108,22 +108,6 @@ class NitfNewswireDataRecord extends NewswireDataRecord
 
     // ---------------------------------- </MEMBERS> ---------------------------------------------
 
-    // ---------------------------------- <IDataRecord IMPL> -------------------------------------
-
-    /**
-     * Returns a hopefully unique identifier.
-     *
-     * @return      string
-     *
-     * @see         IDataRecord::getIdentifier()
-     */
-    public function getIdentifier()
-    {
-        return $this->identifier;
-    }
-
-    // ---------------------------------- </IDataRecord IMPL> ------------------------------------
-
 
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
 
@@ -242,6 +226,41 @@ class NitfNewswireDataRecord extends NewswireDataRecord
                 self::PROP_DATE_EXPIRE
             )
         );
+    }
+
+    protected function setSubtitle($subtitle)
+    {
+        $this->subtitle = $subtitle;
+    }
+
+    protected function setAbstract($abstract)
+    {
+        $this->abstract = $abstract;
+    }
+
+    protected function setDateIssue($issue)
+    {
+        $this->issue = $issue;
+    }
+
+    protected function setDateRelease($release)
+    {
+        $this->release = $release;
+    }
+
+    protected function setDateExpire($expire)
+    {
+        $this->expire = $expire;
+    }
+
+    protected function setCopyright($copyright)
+    {
+        $this->copyright = $copyright;
+    }
+
+    protected function setKeywords(array $keywords)
+    {
+        $this->keywords = $keywords;
     }
 
     // ---------------------------------- </XmlBasedDataRecord IMPL> -----------------------------
