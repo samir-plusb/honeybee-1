@@ -4,7 +4,7 @@
  * The ImportFactory class is a concrete implementation of the IImportFactory interface.
  * It provides factory methods for creating IDataImport and IDataSource instances
  * based on a given DataImport- and DataSourceConfig objects that hold the details.
- * 
+ *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
@@ -14,26 +14,26 @@
 class ImportFactory implements IImportFactory
 {
     const CONFIG_CLASS_SUFFIX = 'Config';
-    
+
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      * Holds our config object.
-     * 
-     * @var         IImportFactoryConfig 
+     *
+     * @var         IImportFactoryConfig
      */
     protected $factoryConfig;
-    
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-    
-    
+
+
     // ---------------------------------- <CONSTRCUTOR> ------------------------------------------
-    
+
     /**
      * Creates a new ImportFactory instance.
-     * 
-     * @param       IImportFactoryConfig $factoryConfig 
-     * 
+     *
+     * @param       IImportFactoryConfig $factoryConfig
+     *
      * @throws      ImportFactoryException If an invalid configuration is given.
      */
     public function __construct($factoryConfig)
@@ -51,83 +51,83 @@ class ImportFactory implements IImportFactory
             throw new ImportFactoryException("Invalid factory config given.");
         }
     }
-    
+
     // ---------------------------------- </CONSTRCUTOR> -----------------------------------------
-    
+
     /**
      * Fetch the factory information for the given import $name
      * from our config and build it.
-     * 
+     *
      * @param       string $name
      * @param       array $parameters
-     * 
+     *
      * @return      IDataImport
-     * 
+     *
      * @throws      ImportFactoryException
      */
     public function createDataImport($name, array $parameters = array())
     {
         $importConfig = $this->factoryConfig->getDataImportConfig($name);
-        
+
         $importSettings = array_merge(
             $importConfig[DataImportsFactoryConfig::CFG_SETTINGS],
             $parameters
         );
 
         $importClass = $importConfig[DataImportsFactoryConfig::CFG_CLASS];
-        
+
         if (!class_exists($importClass))
         {
             throw new ImportFactoryException(
                 "Unable to find provided import class: " . $importClass
             );
         }
-        
-        // This is a simple convention that prevents cross package dependencies 
+
+        // This is a simple convention that prevents cross package dependencies
         // concerning the usage of config objects.
-        // We always want an ImperiaDataImport to use a ImperiaDataImportConfig and 
+        // We always want an ImperiaDataImport to use a ImperiaDataImportConfig and
         // not a config object from a base or other domain level package.
         // So it is ok to enforce the creation of concrete config objects when implementing
         // concrete instances of other packages such as DataImport or DataSource.
         $configClass = $importClass . self::CONFIG_CLASS_SUFFIX;
-        
+
         if (!class_exists($configClass))
         {
             throw new ImportFactoryException(
-                "Unable to find corresponding config class for import class: " . $importClass . 
-                ". Please make sure that you have create a " . $configClass . " implementation along with your" . 
+                "Unable to find corresponding config class for import class: " . $importClass .
+                ". Please make sure that you have create a " . $configClass . " implementation along with your" .
                 $importClass
             );
         }
-        
+
         return new $importClass(
             new $configClass($importSettings)
         );
     }
-    
+
     /**
      * Fetch the factory information for the given datasource $name
      * from our config and build it.
-     * 
+     *
      * @param       string $name
      * @param       array $parameters
-     * 
+     *
      * @return      IDataSource
-     * 
+     *
      * @throws      ImportFactoryException
      */
     public function createDataSource($name, array $parameters = array())
     {
         $dataSourceConfig = $this->factoryConfig->getDataSourceConfig($name);
         $recordType = $dataSourceConfig[DataSourcesFactoryConfig::CFG_RECORD_TYPE];
-        
+
         if (!class_exists($recordType))
         {
             throw new ImportFactoryException(
                 "Unable to find provided datasource record implementor: " . $recordType
             );
         }
-        
+
         $dataSourceSettings = array_merge(
             $dataSourceConfig[DataSourcesFactoryConfig::CFG_SETTINGS],
             $parameters,
@@ -135,50 +135,52 @@ class ImportFactory implements IImportFactory
                 DataSourceConfig::CFG_RECORD_TYPE => $recordType
             )
         );
-        
+
         $dataSourceClass = $dataSourceConfig[DataSourcesFactoryConfig::CFG_CLASS];
-        
+
         if (!class_exists($dataSourceClass))
         {
             throw new ImportFactoryException(
                 "Unable to find provided data source class: " . $dataSourceClass
             );
         }
-        
+
         $configClass = $dataSourceClass . self::CONFIG_CLASS_SUFFIX;
-        
+
         if (!class_exists($configClass))
         {
             throw new ImportFactoryException(
-                "Unable to find corresponding config class for datasource class: " . $dataSourceClass . 
-                ". Please make sure that you have create a " . $configClass . " implementation along with your" . 
+                "Unable to find corresponding config class for datasource class: " . $dataSourceClass .
+                ". Please make sure that you have create a " . $configClass . " implementation along with your" .
                 $dataSourceClass
             );
         }
-        
+
         return new $dataSourceClass(
-            new $configClass($dataSourceSettings)
+            new $configClass($dataSourceSettings),
+            $name,
+            $dataSourceConfig['description']
         );
     }
-    
+
     /**
      * Return an array of datasources that are configured for the given import.
      * If $onlyThese is provided, only datasources that are also in the passed array are returned.
-     * 
+     *
      * @param       string $name
      * @param       array $onlyThese
-     * 
-     * @return      array 
+     *
+     * @return      array
      */
     public function createDataSourcesForImport($name, array $onlyThese = array())
     {
         $importConfig = $this->factoryConfig->getDataImportConfig($name);
         $dataSources = array();
-        
+
         if (isset($importConfig[DataImportsFactoryConfig::CFG_DATASOURCES]))
         {
             $dataSourceNames = $importConfig[DataImportsFactoryConfig::CFG_DATASOURCES];
-            
+
             if (is_array($dataSourceNames))
             {
                 foreach ($dataSourceNames as $dataSourceName)
@@ -198,7 +200,7 @@ class ImportFactory implements IImportFactory
                 $dataSources[] = $this->createDataSource($dataSourceNames);
             }
         }
-        
+
         return $dataSources;
     }
 }

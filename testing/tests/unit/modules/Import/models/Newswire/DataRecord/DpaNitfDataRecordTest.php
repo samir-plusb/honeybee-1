@@ -28,6 +28,11 @@ class DpaNitfDataRecordTest extends DataRecordBaseTestCase
     {
         return self::CFG_DATA_FIXTURE;
     }
+
+    protected function getDataRecordName()
+    {
+        return 'dpa-brandenburg-regio';
+    }
 }
 
 ?>

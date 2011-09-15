@@ -24,14 +24,14 @@ class NewswireDataSource extends ImportBaseDataSource
      */
     protected $lastImportTime;
 
-    public function __construct(IImportConfig $config)
+    public function __construct(IImportConfig $config, $name, $description = NULL)
     {
-        parent::__construct($config);
-        
+        parent::__construct($config, $name, $description = NULL);
+
         $this->timestampFile = $this->config->getSetting(
             NewswireDataSourceConfig::CFG_TIMESTAMP_FILE
         );
-        
+
         ProjectEventProxy::getInstance()->subscribe(
             BaseDataImport::EVENT_RECORD_SUCCESS,
             array($this, 'importSucceeded')
@@ -43,7 +43,7 @@ class NewswireDataSource extends ImportBaseDataSource
      *
      * @throws      UnexpectedValueException if the path cannot be found.
      * @throws      DataSourceException if timestamp file can not be written
-     * 
+     *
      * @see         ImportBaseDataSource::init()
      */
     protected function init()
@@ -52,7 +52,7 @@ class NewswireDataSource extends ImportBaseDataSource
         {
             $this->resetTimestamp();
         }
-        
+
         $this->lastImportTime = filemtime($this->timestampFile);
     }
 
@@ -71,7 +71,7 @@ class NewswireDataSource extends ImportBaseDataSource
         {
             $this->iterator = new GlobIterator($this->config->getSetting(NewswireDataSourceConfig::CFG_GLOB));
         }
-        
+
         while ($this->iterator->valid())
         {
             if ($this->iterator->getMTime() > $this->lastImportTime)
@@ -80,7 +80,7 @@ class NewswireDataSource extends ImportBaseDataSource
             }
             $this->iterator->next();
         }
-        
+
         return FALSE;
     }
 
@@ -94,15 +94,25 @@ class NewswireDataSource extends ImportBaseDataSource
         $file = $this->iterator->current();
         $content = file_get_contents($file);
         $this->updateTimestamp($this->iterator->getMTime());
-        
+
         return $content;
+    }
+
+    /**
+     * Return a path to our current data origin.
+     *
+     * @return      string
+     */
+    protected function getCurrentOrigin()
+    {
+        return $this->iterator->current();
     }
 
     /**
      * store the timestamp of last imported record
      *
      * @param       int $time unix timestamp
-     * 
+     *
      * @throws      DataSourceException if timestamp file can not be written
      */
     protected function updateTimestamp($time)
@@ -111,18 +121,18 @@ class NewswireDataSource extends ImportBaseDataSource
         {
             $time = $this->iterator->getMTime();
         }
-        
+
         if (! file_put_contents($this->timestampFile, $time))
         {
             throw new DataSourceException('Can not write timestamp file: '.$this->timestampFile);
         }
-        
+
         touch($this->timestampFile, $time);
     }
 
     /**
      * run the method after a successfull import of current record
-     * 
+     *
      * @uses        updateTimestamp()
      */
     public function importSucceeded()
@@ -132,7 +142,7 @@ class NewswireDataSource extends ImportBaseDataSource
 
     /**
      * reset the timestamp
-     * 
+     *
      * @uses        updateTimestamp()
      */
     public function resetTimestamp()
@@ -142,7 +152,7 @@ class NewswireDataSource extends ImportBaseDataSource
 
     /**
      * this is for the @'§x!"/(&/ phpunit process isolation
-     * 
+     *
      * @see         http://www.johnkleijn.nl/2010/Why-you-cant-or-shouldnt-unserialize-exceptions
      * @see         https://github.com/sebastianbergmann/phpunit/issues/282
      */

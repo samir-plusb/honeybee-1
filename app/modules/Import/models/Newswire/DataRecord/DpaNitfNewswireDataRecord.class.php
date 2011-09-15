@@ -11,88 +11,73 @@
 class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
 {
     /**
-     * return a list of field keys to corresponding xpath expressions
+     * Return a list of field keys to corresponding xpath expressions.
      *
      * @see         collectData()
      * @see         XmlBasedDataRecord::getFieldMap()
-     * 
+     *
      * @return      array
      */
     protected function getFieldMap()
     {
-        $fieldMap = array(
-            'subtitle' => '//byline',
-            'copyright' => '//meta[@name="copyright"]/@content',
-            'source' => '//meta[@name="origin"]/@content',
+        return array_merge(
+            parent::getFieldMap(),
+            array(
+                self::PROP_SUBTITLE  => '//byline',
+                self::PROP_COPYRIGHT => '//meta[@name="copyright"]/@content',
+                'source'             => '//meta[@name="origin"]/@content'
+            )
         );
-        
-        return array_merge(parent::getFieldMap(), $fieldMap);
     }
 
     /**
-     * collect data from xml document
-     *
-     * @uses        getFieldMap()
-     * @uses        importMedia()
-     * 
-     * @see         XmlBasedDataRecord::collectData()
-     */
-    protected function collectData(DOMDocument $domDoc)
-    {
-        $data = parent::collectData($domDoc);
-        $data['links'] = $this->importLinks($domDoc);
-
-        return $data;
-    }
-
-    /**
-     * import nitf tables
+     * Import nitf tables.
      *
      * @param       DOMDocument $domDoc
-     * 
+     *
      * @return      array of xml tagged strings
      */
-    protected function importLinks(DOMDocument $domDoc)
+    protected function importLinks()
     {
         $data = array();
+        $domDoc = $this->getDocument();
         $xpath = new DOMXPath($domDoc);
-        
-        foreach ($xpath->query('//body.content/block[@style="EXTERNAL-LINKS"]/p/a') as $nd)
+
+        foreach ($xpath->query('//body.content/block[@style="EXTERNAL-LINKS"]/p/a') as $node)
         {
-            $data[] = $this->nodeToString($nd);
+            $data[] = $this->nodeToString($node);
         }
-        
+
         return $data;
     }
 
     /**
-     * filter the collected data.
+     * Filter the collected data.
      *
      * Maps existing xml node lists to strings or array of strings.
      *
      * @see         XmlBasedDataRecord::normalizeData()
-     * 
+     *
      * @return      array
      */
     protected function normalizeData(array $data)
     {
-        $data = parent::normalizeData($data);
+        $normalized = parent::normalizeData($data);
+        $normalized['links'] = $this->importLinks();
 
-        list($data['id'], $data['revision']) = explode(':', $data['id']);
-
-        if (! empty($data['keywords']))
+        if (isset($data[self::PROP_KEYWORDS]) && $data[self::PROP_KEYWORDS])
         {
             $list = array();
-            
-            foreach ($data['keywords'] as $kw)
+
+            foreach ($data[self::PROP_KEYWORDS] as $keyword)
             {
-                $list = array_merge($list,explode('/', $kw));
+                $list = array_merge($list, explode('/', $keyword->nodeValue));
             }
-            
-            $data['keywords'] = array_filter($list);
+
+            $normalized[self::PROP_KEYWORDS] = array_filter($list);
         }
 
-        return $data;
+        return $normalized;
     }
 }
 

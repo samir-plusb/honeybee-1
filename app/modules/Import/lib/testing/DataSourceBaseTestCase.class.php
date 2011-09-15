@@ -7,21 +7,30 @@ abstract class DataSourceBaseTestCase extends AgaviUnitTestCase
     protected $dataSource;
 
     abstract protected function getDataSourceClass();
-    
+
     abstract protected function getDataSourceName();
-    
+
     abstract protected function getExpectedLoopCount();
-    
+
     abstract protected function getExpectedRecordType();
-    
+
+    /**
+     * Return a description of the data record to create.
+     *
+     * @return      string
+     */
+    abstract protected function getDataSourceDescription();
+
     protected function setUp()
     {
         parent::setUp();
-        
+
         $class = $this->getDataSourceClass();
-        
+
         $this->dataSource = new $class(
-            $this->createDataSourceConfig()
+            $this->createDataSourceConfig(),
+            $this->getDataSourceName(),
+            $this->getDataSourceDescription()
         );
     }
 
@@ -54,11 +63,11 @@ abstract class DataSourceBaseTestCase extends AgaviUnitTestCase
         $dataSourceConfig = $config->getDataSourceConfig(
             $this->getDataSourceName()
         );
-        
+
         $recordType = $dataSourceConfig[DataSourcesFactoryConfig::CFG_RECORD_TYPE];
         $settings = $dataSourceConfig[DataSourcesFactoryConfig::CFG_SETTINGS];
         $configClass = $this->getDataSourceClass() . ImportFactory::CONFIG_CLASS_SUFFIX;
-        
+
         return new $configClass(
             array_merge(
                 $settings,
@@ -69,7 +78,7 @@ abstract class DataSourceBaseTestCase extends AgaviUnitTestCase
             )
         );
     }
-    
+
     protected function getDataSourceParameters()
     {
         return array();

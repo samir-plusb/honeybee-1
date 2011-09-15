@@ -4,7 +4,7 @@
  * The ImportBaseDataSource class is an abstract implementation of the IDataSource interface.
  * It provides an base implementation of most IDataRecord methods and provides template methods
  * for inheriting classes to hook into normalizing the incoming data on record creation.
- * 
+ *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
@@ -14,71 +14,106 @@
 abstract class ImportBaseDataSource implements IDataSource
 {
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      * Holds a reference our config object.
-     * 
-     * @var         IImportConfig 
+     *
+     * @var         IImportConfig
      */
     protected $config;
-    
+
     /**
      *
-     * @var         A flag indicating whether we have been initialized or not. 
+     * @var         A flag indicating whether we have been initialized or not.
      */
     private $isInitialized = FALSE;
-    
+
+    /**
+     * Holds our name.
+     *
+     * @var         string
+     */
+    private $name;
+
+    /**
+     * Holds our description.
+     *
+     * @var         string
+     */
+    private $description;
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-    
-    
+
+    /**
+     * Return our name.
+     *
+     * @return      string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Return our description.
+     *
+     * @return      string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
     // ---------------------------------- <ABSTRACT METHODS> -------------------------------------
-    
+
     /**
      * This method is called once upon the first call to our nextRecord method.
      * This is the place to set things up for retrieving your data.
      */
     abstract protected function init();
-    
+
     /**
      * This method is responseable for moving on to the next set of data
      * coming from the data source that we reflect.
-     * 
+     *
      * @return      boolean Returns true if there is still data available and false otherwise.
      */
     abstract protected function forwardCursor();
-    
+
     /**
      * This method is responseable for actually retrieving the raw data,
      * that we are pointing to after forwardCursor() invocations, from our source.
-     * 
-     * @return      array
+     *
+     * @return      mixed
      */
     abstract protected function fetchData();
-    
+
     // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
-    
-    
+
+
     // ---------------------------------- <IDataSource IMPL> -------------------------------------
-    
+
     /**
      * Create a new ImportBaseDataSource instance.
-     * 
-     * @param       IImportConfig $config 
-     * 
+     *
+     * @param       IImportConfig $config
+     *
      * @see         IDataSource::__construct()
      */
-    public function __construct(IImportConfig $config)
+    public function __construct(IImportConfig $config, $name, $description = NULL)
     {
+        $this->description = $description;
         $this->config = $config;
+        $this->name = $name;
     }
-    
+
     /**
      * Return the next IDataRecord from our data source.
-     * 
+     *
      * @return      IDataRecord
-     * 
+     *
      * @see         IDataSource::nextRecord()
-     * 
+     *
      * @uses        ImportBaseDataSource::init()
      * @uses        ImportBaseDataSource::forwardCursor()
      * @uses        ImportBaseDataSource::createRecord()
@@ -91,39 +126,39 @@ abstract class ImportBaseDataSource implements IDataSource
             $this->init();
             $this->isInitialized = TRUE;
         }
-        
+
         if (!$this->forwardCursor())
         {
             return NULL;
         }
-        
+
         $record = $this->createRecord(
             $this->fetchData()
         );
-        
+
         $result = $record->validate();
-        
+
         if ($result['ok'])
         {
             return $record;
         }
-        
+
         return NULL;
     }
-    
+
     // ---------------------------------- </IDataSource IMPL> ------------------------------------
-    
-    
+
+
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-    
+
     /**
      * Create a new concrete IDataRecord from the given raw data
      * coming from our fetchData() method.
-     * 
+     *
      * @param       mixed $rawData
-     * 
-     * @return      IDataRecord 
-     * 
+     *
+     * @return      IDataRecord
+     *
      * @throws      DataSourceException If the configured record creation fails unexpectedly.
      */
     protected function createRecord($rawData)
@@ -139,10 +174,10 @@ abstract class ImportBaseDataSource implements IDataSource
                 )
             );
         }
-        
-        try 
+
+        try
         {
-            $record = new $recordClass($rawData);
+            $record = new $recordClass($rawData, $this->getName(), $this->getCurrentOrigin());
         }
         catch(DataRecordException $e)
         {
@@ -169,7 +204,12 @@ abstract class ImportBaseDataSource implements IDataSource
 
         return $record;
     }
-    
+
+    protected function getCurrentOrigin()
+    {
+        return NULL;
+    }
+
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 

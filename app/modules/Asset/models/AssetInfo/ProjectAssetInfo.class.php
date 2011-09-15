@@ -160,6 +160,14 @@ class ProjectAssetInfo implements IAssetInfo
         }
 
         $this->fullPath = $this->generateAbsTargetPath($this->assetId);
+
+        $originParts = parse_url($this->getOrigin());
+        $src = NULL;
+
+        if (!isset($originParts['scheme']))
+        {
+            throw new Exception("Invalid origin uri given: " . $this->getOrigin());
+        }
     }
 
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
