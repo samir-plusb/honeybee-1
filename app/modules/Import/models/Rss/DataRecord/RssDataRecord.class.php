@@ -54,10 +54,25 @@ class RssDataRecord extends ImportBaseDataRecord
     {
         $this->data = $data;
 
+        $media = array();
+        if (! empty($data['image']['url']))
+        {
+            $meta = array(
+                'title' => $data['title'],
+                'caption' => $data['teaser_text']
+            );
+            $asset = ProjectAssetService::getInstance()->put($data['image']['url'], $meta);
+            if ($asset)
+            {
+                $media[] = $asset->getId();
+            }
+        }
+
         return array(
             self::PROP_IDENT => $data['url'],
             self::PROP_TITLE => $data['title'],
             self::PROP_CONTENT => empty($data['html']) ? htmlspecialchars($data['teaser_text']) : $data['html'],
+            self::PROP_MEDIA => $media
         );
     }
 
