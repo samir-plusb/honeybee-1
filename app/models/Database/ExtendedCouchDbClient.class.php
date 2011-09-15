@@ -157,11 +157,11 @@ class ExtendedCouchDbClient
 
         $resp = curl_exec($curlHandle);
         $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
+
         if (404 == $respCode)
         {
             return 0;
         }
-        $this->processCurlErrors($curlHandle);
 
         if (preg_match_all('~Etag:\s*"(\d+-\w+)"~is', $resp, $matches, PREG_SET_ORDER))
         {
