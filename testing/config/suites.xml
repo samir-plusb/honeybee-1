@@ -30,6 +30,8 @@
 
                     <!-- Flow Tests -->
                     <testfile>fragment/Import/Imperia/ImperiaTriggerActionTest.class.php</testfile>
+                    <testfile>fragment/Import/Imperia/ImperiaTriggerSuccessViewTest.class.php</testfile>
+                    <testfile>fragment/Import/Imperia/ImperiaTriggerErrorViewTest.class.php</testfile>
                     <testfile>fragment/Import/Run/RunActionTest.class.php</testfile>
                     <testfile>fragment/Import/Run/RunSuccessViewTest.class.php</testfile>
                     <testfile>fragment/Import/Run/RunErrorViewTest.class.php</testfile>
