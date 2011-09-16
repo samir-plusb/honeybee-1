@@ -9,7 +9,7 @@
 
     <target name="cc" description="Clear the config cache.">
         <echo message="Clearing the config cache." />
-        <run command="rm -rf app/cache/config/*" dir="${project.directory}"/>
+        <run command="bin/clear-cache.sh" dir="${project.directory}"/>
     </target>
 
     <target name="phpcs" description="Run the php codesniffer.">
