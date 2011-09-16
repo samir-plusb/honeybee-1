@@ -26,7 +26,8 @@ class Items_ListAction extends ItemsBaseAction
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $couchClient = new ExtendedCouchDbClient($this->buildCouchDbUri());
-        $documents = $couchClient->getAllDocs(self::COUCHDB_DATABASE);
+        $documents = $couchClient->getView(self::COUCHDB_DATABASE, 'items', 'list');
+
         $items = array();
 
         if (isset($documents['rows']) && is_array($documents['rows']))
