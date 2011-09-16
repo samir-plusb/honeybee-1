@@ -23,7 +23,18 @@ class NewswireDataSource extends ImportBaseDataSource
      * @var         int UNIX timestamp
      */
     protected $lastImportTime;
+    /**
+     * @var         int UNIX timestamp of last fetched item
+     */
+    protected $lastItemModifiedTime;
 
+    /**
+     * initialize timestamp file and subscribe to success events
+     *
+     * @param IImportConfig $config
+     * @param string $name
+     * @param string $description
+     */
     public function __construct(IImportConfig $config, $name, $description = NULL)
     {
         parent::__construct($config, $name, $description = NULL);
@@ -54,6 +65,7 @@ class NewswireDataSource extends ImportBaseDataSource
         }
 
         $this->lastImportTime = filemtime($this->timestampFile);
+        $this->lastItemModifiedTime = $this->lastImportTime;
     }
 
     /**
@@ -93,7 +105,7 @@ class NewswireDataSource extends ImportBaseDataSource
     {
         $file = $this->iterator->current();
         $content = file_get_contents($file);
-        $this->updateTimestamp($this->iterator->getMTime());
+        $this->lastItemModifiedTime = $this->iterator->getMTime();
 
         return $content;
     }
@@ -133,11 +145,12 @@ class NewswireDataSource extends ImportBaseDataSource
     /**
      * run the method after a successfull import of current record
      *
+     * @param       IEvent $event
      * @uses        updateTimestamp()
      */
-    public function importSucceeded()
+    public function importSucceeded(IEvent $event)
     {
-        $this->updateTimestamp($this->iterator->getMTime());
+        $this->updateTimestamp($this->lastItemModifiedTime);
     }
 
     /**
