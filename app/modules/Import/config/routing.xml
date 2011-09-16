@@ -8,4 +8,9 @@
             </route>
         </routes>
     </ae:configuration>
+    <ae:configuration context="web">
+        <routes>
+            <route pattern="/imperia" action="TriggerImperia" />
+        </routes>
+    </ae:configuration>
 </ae:configurations>
