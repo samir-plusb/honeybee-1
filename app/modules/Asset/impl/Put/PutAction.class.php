@@ -3,7 +3,7 @@
 /**
  * The Asset_PutAction takes a given asset
  * - stores the binary the filesystem
- * - saves it's meta-data to a couchdb 
+ * - saves it's meta-data to a couchdb
  * - and returns a new id that is unqiue for the asset
  *
  * @version         $Id:$
@@ -16,11 +16,11 @@ class Asset_PutAction extends AssetBaseAction
 {
     /**
      * Execute the read logic for this action, hence prompt for an asset.
-     * 
+     *
      * @param       AgaviRequestDataHolder $parameters
-     * 
+     *
      * @return      string The name of the view to execute.
-     * 
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
@@ -31,11 +31,11 @@ class Asset_PutAction extends AssetBaseAction
 
     /**
      * Execute the write logic for this action, hence process the given asset.
-     * 
+     *
      * @param       AgaviRequestDataHolder $parameters
-     * 
+     *
      * @return      string The name of the view to execute.
-     * 
+     *
      * @codingStandardsIgnoreStart
      */
     public function executeWrite(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
@@ -48,5 +48,4 @@ class Asset_PutAction extends AssetBaseAction
 
         return 'Success';
     }
-
 }

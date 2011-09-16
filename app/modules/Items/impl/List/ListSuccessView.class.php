@@ -1,17 +1,13 @@
 <?php
-
 /**
- * The Asset_Put_PutSuccessView class handle the presentation logic for our Asset/Put actions's success data.
  *
- * @version         $Id:$
- * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
- * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Asset
- * @subpackage      Mvc
+ * @copyright BerlinOnline
+ * @version $Id$
+ * @package Items
  */
-class Asset_Put_PutSuccessView extends AssetBaseView
+class Items_List_ListSuccessView extends ItemsBaseView
 {
-    /**
+	/**
      * Handle presentation logic for the web  (html).
      *
      * @param       AgaviRequestDataHolder $parameters
@@ -23,8 +19,7 @@ class Asset_Put_PutSuccessView extends AssetBaseView
     {
         $this->setupHtml($parameters);
 
-        $this->setAttribute('info', $this->getAttribute('asset_info')->toArray());
-        $this->setAttribute('_title', 'Asset PUT - Html Form Interface / SUCCESS');
+        $this->setAttribute('_title', 'Items/List/Success@Html');
     }
 
     /**
@@ -37,12 +32,9 @@ class Asset_Put_PutSuccessView extends AssetBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $msg = "Successfully stored your asset." . PHP_EOL;
-        $msg .= "Asset Information: " . PHP_EOL;
-        $msg .= var_export($this->getAttribute('asset_info')->toArray(), TRUE);
+        $msg = "Items/List/Success@Text" . PHP_EOL;
+        $msg .= var_export($this->getAttribute('data')->toArray(), TRUE);
 
         $this->getResponse()->setContent($msg);
     }
 }
-
-?>

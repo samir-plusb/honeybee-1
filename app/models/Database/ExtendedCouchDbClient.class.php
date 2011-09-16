@@ -91,6 +91,22 @@ class ExtendedCouchDbClient
     }
 
     /**
+     * Fetch all documents from the given database.
+     *
+     * @param       string $database
+     *
+     * @return      array
+     *
+     * @throws      CouchdbClientException
+     */
+    public function getAllDocs($database)
+    {
+        $this->compositeClient->selectDb($database);
+
+        return (array)$this->compositeClient->getAllDocs();
+    }
+
+    /**
      * Stores the given document in the given database.
      *
      * @param       string $database
