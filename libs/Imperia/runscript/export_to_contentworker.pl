@@ -74,6 +74,7 @@ foreach my $url (split /\s+/, $importUrl)
 {
 	my $req = HTTP::Request->new(POST => $url);
 	$req->content_type('application/x-www-form-urlencoded');
+    $req->header('Accept' => 'application/json');
 	$req->content('data='.uri_escape($json_text));
 	my $res = $ua->request($req);
 	warn "$url: ".$res->status_line unless $res->is_success;
