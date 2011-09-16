@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Import_TriggerImperia_TriggerImperiaErrorView class handles the presentation logic for our 
+ * The Import_TriggerImperia_TriggerImperiaErrorView class handles the presentation logic for our
  * Import/TriggerImperia actions's error data.
  *
  * @version         $Id:$
@@ -14,9 +14,9 @@ class Import_TriggerImperia_TriggerImperiaErrorView extends ImportBaseView
 {
     /**
      * Handle presentation logic for json.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
@@ -24,24 +24,24 @@ class Import_TriggerImperia_TriggerImperiaErrorView extends ImportBaseView
     {
         $data = array(
             'ok'     => FALSE,
-            'errors' => $this->getValidationErrorMessages()
+            'errors' => $this->getErrorMessages()
         );
-        
+
         $this->getResponse()->setContent(json_encode($data));
     }
 
     /**
      * Handle presentation logic for commandline interfaces.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $msg = "An arror occured while trying to retieve your asset:" . PHP_EOL;
-        $msg .= '- ' . implode(PHP_EOL . '- ', $this->getValidationErrorMessages());
+        $msg .= '- ' . implode(PHP_EOL . '- ', $this->getErrorMessages());
 
         $this->getResponse()->setContent($msg);
     }

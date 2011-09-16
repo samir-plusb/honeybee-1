@@ -32,7 +32,7 @@ class ProjectBaseView extends AgaviView
       build.properties settings. Also, keep in mind that you can define templates
       for specific modules in case you require this.
      */
-    
+
     /**
      * Name of the default layout to use for slots.
      */
@@ -40,36 +40,36 @@ class ProjectBaseView extends AgaviView
 
     /**
      * Holds a reference to the current routing object.
-     * 
+     *
      * @var         AgaviRouting
      */
     protected $routing;
 
     /**
      * Holds a reference to the current request object.
-     * 
+     *
      * @var         AgaviRequest
      */
     protected $request;
 
     /**
      * Holds a reference to the translation manager.
-     * 
+     *
      * @var         AgaviTranslationManager
      */
     protected $translationManager;
 
     /**
      * Holds a reference to the user for the current session.
-     * 
+     *
      * @var         AgaviUser
      */
     protected $user;
 
     /**
      * Initialize the view thereby setting up our members.
-     * 
-     * @param       AgaviExecutionContainer $container 
+     *
+     * @param       AgaviExecutionContainer $container
      */
     public function initialize(AgaviExecutionContainer $container)
     {
@@ -80,13 +80,13 @@ class ProjectBaseView extends AgaviView
         $this->translationManager = $this->getContext()->getTranslationManager();
         $this->user = $this->getContext()->getUser();
     }
-    
+
     /**
      * If no output type specfic execute* method could be found on our current
      * concrete implemenation, then we will throw an exception letting the dev know.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
@@ -94,29 +94,29 @@ class ProjectBaseView extends AgaviView
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
-    
+
     /**
      * If this method is called someone has missed to provide html view support
      * for the current action.
      * Let them know ^^
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * 
+     *
      * @codingStandardsIgnoreStart
      */
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
-    
+
     /**
      * If this method is called someone has missed to provide json view support
      * for the current action.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
@@ -124,13 +124,13 @@ class ProjectBaseView extends AgaviView
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
-    
+
     /**
      * If this method is called someone has missed to provide text(console) view support
      * for the current action.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
@@ -138,13 +138,13 @@ class ProjectBaseView extends AgaviView
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
-    
+
     /**
      * Convenience method for setting up the correct html layout.
-     * 
+     *
      * @param       AgaviRequestDataHolder $parameters
-     * @param       string $layoutName 
-     * 
+     * @param       string $layoutName
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
@@ -162,11 +162,11 @@ class ProjectBaseView extends AgaviView
 
         $this->loadLayout($layoutName);
     }
-    
+
     /**
      * Convenience method for throwing an exception saying,
      * that the current output type is not implemented for this view instance.
-     * 
+     *
      * @throws      AgaviViewException
      */
     protected function throwOutputPutTypeNotImplementedException()
@@ -180,31 +180,36 @@ class ProjectBaseView extends AgaviView
                 'way, for example by forwarding to the default 404 error action, or by ' .
                 'showing some other meaningful error message to the user which explains ' .
                 'that the operation was unsuccessful beacuse the desired Output Type is ' .
-                'not implemented.', 
+                'not implemented.',
                 get_class($this),
-                $this->container->getOutputType()->getName(), 
+                $this->container->getOutputType()->getName(),
                 ucfirst(
                     strtolower($this->container->getOutputType()->getName())
-                ), 
+                ),
                 get_class()
             )
         );
     }
-    
+
     /**
      * Return any reported validation error messages from our validation manager.
-     * 
-     * @return      array 
+     *
+     * @return      array
      */
-    protected function getValidationErrorMessages()
+    protected function getErrorMessages()
     {
         $errors = array();
-        
+
         foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
         {
             $errors[] = $errMsg['message'];
         }
-        
+
+        foreach ($this->getAttribute('errors', array()) as $error)
+        {
+            $errors[] = $error;
+        }
+
         return $errors;
     }
 }

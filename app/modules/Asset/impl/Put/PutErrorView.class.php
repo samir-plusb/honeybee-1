@@ -13,9 +13,9 @@ class Asset_Put_PutErrorView extends AssetBaseView
 {
     /**
      * Handle presentation logic for the web  (html).
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
@@ -23,22 +23,22 @@ class Asset_Put_PutErrorView extends AssetBaseView
     {
         $this->setupHtml($parameters);
 
-        $this->setAttribute('errors', $this->getValidationErrorMessages());
+        $this->setAttribute('errors', $this->getErrorMessages());
         $this->setAttribute('_title', 'Asset PUT - Html Form Interface / ERROR');
     }
 
     /**
      * Handle presentation logic for commandline interfaces.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $msg = "An arror occured while trying to store your asset:" . PHP_EOL;
-        $msg .= '- ' . implode(PHP_EOL . '- ', $this->getValidationErrorMessages());
+        $msg .= '- ' . implode(PHP_EOL . '- ', $this->getErrorMessages());
 
         $this->getResponse()->setContent($msg);
     }
