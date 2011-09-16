@@ -112,29 +112,28 @@ abstract class BaseDataImport implements IDataImport
     {
         $this->init($dataSource);
 
-        do
+        $doImport = TRUE;
+
+        while ($doImport)
         {
             try
             {
-                $this->currentRecord = $dataSource->nextRecord();
+                $doImport = (FALSE !== ($this->currentRecord = $dataSource->nextRecord()));
 
                 if ($this->currentRecord instanceof IDataRecord)
                 {
                     $this->processRecord();
                 }
             }
-            catch(DataSourceException $e)
+            catch(Exception $e)
             {
+                $doImport = FALSE;
+                
                 // @todo Handle error (log the stuff or something like that.
                 throw $e;
             }
-            catch (DataImportException $e)
-            {
-                // @todo Handle error (log the stuff or something like that.
-                throw $e;
-            }
-        } while($this->currentRecord);
-
+        }
+        
         $this->cleanup();
     }
 

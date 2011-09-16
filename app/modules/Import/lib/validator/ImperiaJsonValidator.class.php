@@ -36,6 +36,11 @@ class ImperiaJsonValidator extends AgaviValidator
      * when no self::PARAM_EXPORT has been provided.
      */
     const DEFAULT_PARAM_EXPORT = 'ids';
+    
+    /**
+     * Holds the array key in our json data array that holds a specific imperia node id.
+     */
+    const IMPERIA_NODE_ID_FIELD = '__imperia_node_id';
 
     // ---------------------------------- </CONSTANTS> -------------------------------------------
 
@@ -53,6 +58,8 @@ class ImperiaJsonValidator extends AgaviValidator
         if (! is_scalar($jsonString))
         {
             $this->throwError(self::ERR_INVALID_JSON);
+            
+            return FALSE;
         }
 
         $data = @json_decode($jsonString, TRUE);
@@ -69,7 +76,11 @@ class ImperiaJsonValidator extends AgaviValidator
 
         foreach ($data as $info)
         {
-            if (! isset($info['__imperia_node_id']) || ! preg_match('#^/\d+[\d/]+$#', $info['__imperia_node_id']))
+            $imperiaNodeId = isset($info[self::IMPERIA_NODE_ID_FIELD]) 
+                ? $info[self::IMPERIA_NODE_ID_FIELD] 
+                : '';
+            
+            if (! preg_match('#^/\d+[\d/]+$#', $imperiaNodeId))
             {
                 $this->throwError(self::ERR_INVALID_NODEID);
                 return FALSE;

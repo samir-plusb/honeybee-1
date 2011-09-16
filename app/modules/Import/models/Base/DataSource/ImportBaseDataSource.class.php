@@ -129,7 +129,7 @@ abstract class ImportBaseDataSource implements IDataSource
 
         if (!$this->forwardCursor())
         {
-            return NULL;
+            return FALSE;
         }
 
         $record = $this->createRecord(
