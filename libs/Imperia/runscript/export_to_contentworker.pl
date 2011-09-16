@@ -70,8 +70,11 @@ my $json_text = $json->encode( \@docs );
 my $ua = LWP::UserAgent->new;
 $ua->agent('$Id$');
 
-my $req = HTTP::Request->new(POST => $importUrl);
-$req->content_type('application/x-www-form-urlencoded');
-$req->content('data='.uri_escape($json_text));
-my $res = $ua->request($req);
-die $res->status_line unless $res->is_success ;
+foreach my $url (split /\s+/, $importUrl))
+{
+	my $req = HTTP::Request->new(POST => $importUrl);
+	$req->content_type('application/x-www-form-urlencoded');
+	$req->content('data='.uri_escape($json_text));
+	my $res = $ua->request($req);
+	warn $res->status_line unless $res->is_success ;
+}
