@@ -117,7 +117,11 @@ abstract class BaseDataImport implements IDataImport
             try
             {
                 $this->currentRecord = $dataSource->nextRecord();
-                $this->processRecord();
+
+                if ($this->currentRecord instanceof IDataRecord)
+                {
+                    $this->processRecord();
+                }
             }
             catch(DataSourceException $e)
             {
