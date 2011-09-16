@@ -31,9 +31,10 @@
     </target>
     
     <target name="import" description="Import messages from all configured sources">
-    	<echo message="Import messages"/>
-    	<run command="unset DISPLAY; umask 002; sg www -c 'rsync --recursive --times --delete ftp@ftp.berlinonline.de:/srv/ftp/dpa/ /var/tmp/dpa/'" dir="${project.directory}"/>
-    	<run command="bin/cli import.run -i couchdb" dir="${project.directory}"/>
+        <echo message="Import messages"/>
+        <run command="unset DISPLAY; umask 002; rsync --recursive --times --delete ftp@ftp.berlinonline.de:/srv/ftp/dpa/ /var/tmp/dpa/" dir="${project.directory}"/>
+        <run command="chmod -R ug+rwX /var/tmp/dpa/" dir="${project.directory}"/>
+        <run command="bin/cli import.run -i couchdb" dir="${project.directory}"/>
     </target>
 
 </project>
