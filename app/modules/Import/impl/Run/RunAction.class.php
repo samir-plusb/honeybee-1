@@ -15,17 +15,17 @@ class Import_RunAction extends ImportBaseAction
      * Holds the name of our data_import parameter.
      */
     const PARAM_DATA_IMPORT = 'data_import';
-    
+
     /**
      * Holds the name of our data_source parameter.
      */
     const PARAM_DATA_SOURCE = 'data_sources';
-    
+
     /**
      * Execute the write logic for this action, hence run the import.
-     * 
+     *
      * @param       AgaviRequestDataHolder $parameters
-     * 
+     *
      * @return      string The name of the view to execute.
      */
     public function executeWrite(AgaviRequestDataHolder $parameters)
@@ -33,7 +33,7 @@ class Import_RunAction extends ImportBaseAction
         $import = $parameters->getParameter(self::PARAM_DATA_IMPORT);
         $dataSources = $parameters->getParameter(self::PARAM_DATA_SOURCE, array());
         $view = 'Success';
-        
+
         foreach ($dataSources as $dataSource)
         {
             try
@@ -42,6 +42,8 @@ class Import_RunAction extends ImportBaseAction
             }
             catch(Exception $e)
             {
+                /* @todo better exception handling */
+                $this->setAttribute('errors', array($e->getMessage()));
                 $view = 'Error';
             }
         }
