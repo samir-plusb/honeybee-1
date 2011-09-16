@@ -9,57 +9,78 @@
  * @package         Import
  * @subpackage      Validation
  */
-class ImperiaJsonValidator extends AgaviStringValidator
+class ImperiaJsonValidator extends AgaviValidator
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------
-    
+
     /**
      * Holds the name of the error thrown when invalid json data is encountered.
      */
     const ERR_INVALID_JSON = 'invalid_json';
-    
+    /**
+     * raised if json does not contains a root level array
+     */
+    const ERR_INVALID_STRUCTURE = 'invalid_structure';
+    /**
+     * raised if any item does not contain a valid '__imperia_node_id' key
+     */
+    const ERR_INVALID_NODEID = 'invalid_nodeid';
     /**
      * Holds the name of the parameter than can be used to set the name of the request-data field,
      * that we shall export the vaidated data to.
      */
     const PARAM_EXPORT = 'export';
-    
+
     /**
      * Holds the name of the default request-data field used to export data to,
      * when no self::PARAM_EXPORT has been provided.
      */
     const DEFAULT_PARAM_EXPORT = 'ids';
-    
+
     // ---------------------------------- </CONSTANTS> -------------------------------------------
-    
-    
+
+
     // ---------------------------------- <AgaviStringValidator OVERRIDES> -----------------------
-    
+
     /**
      * Validate that the given data is valid json and export the decoded value.
-     * 
+     *
      * @return      boolean
      */
     protected function validate()
     {
-        if (!parent::validate())
-        {
-            return FALSE;
-        }
-        
         $jsonString = $this->getData($this->getArgument());
-        $data = NULL;
-        
-        if (!($data = @json_decode($jsonString, TRUE)))
+        if (! is_scalar($jsonString))
         {
             $this->throwError(self::ERR_INVALID_JSON);
         }
-        
+
+        $data = @json_decode($jsonString, TRUE);
+        if (NULL === $data)
+        {
+            $this->throwError(self::ERR_INVALID_JSON);
+        }
+
+        if (! is_array($data))
+        {
+            $this->throwError(self::ERR_INVALID_STRUCTURE);
+            return FALSE;
+        }
+
+        foreach ($data as $info)
+        {
+            if (! isset($info['__imperia_node_id']) || ! preg_match('#^/\d+[\d/]+$#', $info['__imperia_node_id']))
+            {
+                $this->throwError(self::ERR_INVALID_NODEID);
+                return FALSE;
+            }
+        }
+
         $this->export($data, $this->getParameter(self::PARAM_EXPORT, self::DEFAULT_PARAM_EXPORT));
-        
+
         return TRUE;
     }
-    
+
     // ---------------------------------- </AgaviStringValidator OVERRIDES> ----------------------
 }
 

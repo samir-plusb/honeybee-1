@@ -29,6 +29,7 @@
                     <testfile>unit/modules/Import/models/Imperia/DataImport/ImperiaImportTest.php</testfile>
 
                     <!-- Flow Tests -->
+                    <testfile>fragment/Import/Imperia/ImperiaTriggerActionTest.class.php</testfile>
                     <testfile>fragment/Import/Run/RunActionTest.class.php</testfile>
                     <testfile>fragment/Import/Run/RunSuccessViewTest.class.php</testfile>
                     <testfile>fragment/Import/Run/RunErrorViewTest.class.php</testfile>

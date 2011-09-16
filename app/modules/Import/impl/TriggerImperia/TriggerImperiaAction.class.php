@@ -31,14 +31,23 @@ class Import_TriggerImperiaAction extends ImportBaseAction
      */
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
+        $docs = $parameters->getParameter(ImperiaJsonValidator::DEFAULT_PARAM_EXPORT, array());
+        if (empty($docs))
+        {
+            return 'Success';
+        }
+
+        $docIds = array();
+        foreach ($docs as $info)
+        {
+            $docIds[] = $info['__imperia_node_id'];
+        }
+
         $factoryConfig = new ImportFactoryConfig(
             AgaviConfig::get('import.config_dir')
         );
 
         $importFactory = new ImportFactory($factoryConfig);
-
-        $docIds = $parameters->getParameter(ImperiaJsonValidator::DEFAULT_PARAM_EXPORT, array());
-
         $import = $importFactory->createDataImport(self::DATAIMPORT_COUCHDB);
         $imperiaDataSource = $importFactory->createDataSource(
             self::DATASOURCE_IMPERIA,
@@ -53,6 +62,7 @@ class Import_TriggerImperiaAction extends ImportBaseAction
         }
         catch(Exception $e)
         {
+            $this->setAttribute('errors', array($e->getMessage()));
             return 'Error';
         }
 
