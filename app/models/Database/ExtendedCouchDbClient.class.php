@@ -229,7 +229,7 @@ class ExtendedCouchDbClient
 
         $removeWhitespace = function($funcString)
         {
-            return preg_replace('~[\n\r\t]+~', '', $funcString);
+            return preg_replace('/\s+/s', ' ', $funcString);
         };
 
         foreach ($doc['views'] as & $view)

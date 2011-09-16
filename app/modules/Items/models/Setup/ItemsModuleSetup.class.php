@@ -18,7 +18,7 @@ class ItemsModuleSetup
     /**
      * Holds our couchDbClient instance.
      *
-     * @var         ExtendedCouchCbClient
+     * @var         ExtendedCouchDbClient
      */
     protected $couchDbClient;
 
@@ -110,7 +110,7 @@ class ItemsModuleSetup
                 'list' => array(
                     'map' => 'function(doc)
                     {
-                        var key = NULL;
+                        var key = null;
 
                         if (doc.timestamp)
                         {
