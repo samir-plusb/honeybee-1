@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
-    <ae:configuration context="console">
+
+    <ae:configuration context="web">
         <routes>
-            <route pattern="items." module="Items">
-                <route pattern="list.all" action="List" method="write" />
+            <route pattern="^/items" module="Items">
+                <route pattern="^/list" action="List" />
             </route>
         </routes>
     </ae:configuration>
-    <ae:configuration context="web">
+
+    <ae:configuration context="console">
         <routes>
-            <route pattern="/items/list" action="List" />
+            <route pattern="items." module="Items">
+                <route pattern="setup" action="Setup" method="write" />
+            </route>
         </routes>
     </ae:configuration>
+
 </ae:configurations>

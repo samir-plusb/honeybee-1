@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Asset_Setup_SetupSuccessView class handle the presentation logic for our Asset/Setup actions's success data.
+ * The Items_Setup_SetupSuccessView class handle the presentation logic for our Items/Setup actions's success data.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -9,9 +9,9 @@
  * @package         Asset
  * @subpackage      Mvc
  */
-class Asset_Setup_SetupSuccessView extends AssetBaseView
+class Items_Setup_SetupSuccessView extends ItemsBaseView
 {
-    /**
+/**
      * Handle presentation logic for commandline interfaces.
      *
      * @param       AgaviRequestDataHolder $parameters
@@ -21,7 +21,7 @@ class Asset_Setup_SetupSuccessView extends AssetBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $this->getResponse()->setContent("Successfully setup your asset module.");
+        $this->getResponse()->setContent("Successfully setup your Items module.");
     }
 }
 

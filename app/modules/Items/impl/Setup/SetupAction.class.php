@@ -1,17 +1,13 @@
 <?php
-
 /**
- * The Asset_SetupAction is responseable for setting up our module for usage.
  *
- * @version         $Id:$
- * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
- * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Asset
- * @subpackage      Mvc
+ * @copyright BerlinOnline
+ * @version $Id$
+ * @package Items
  */
-class Asset_SetupAction extends AssetBaseAction
+class Items_SetupAction extends ItemsBaseAction
 {
-    /**
+	/**
      * Execute the write logic for this action, hence process the given asset.
      *
      * @param       AgaviRequestDataHolder $parameters
@@ -23,7 +19,7 @@ class Asset_SetupAction extends AssetBaseAction
      */
     public function executeWrite(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $moduleSetup = new AssetModuleSetup();
+        $moduleSetup = new ItemsModuleSetup();
 
         try
         {
@@ -40,5 +36,3 @@ class Asset_SetupAction extends AssetBaseAction
         return 'Success';
     }
 }
-
-?>

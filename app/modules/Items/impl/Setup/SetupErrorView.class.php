@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Asset_Setup_SetupSuccessView class handle the presentation logic for our Asset/Setup actions's success data.
+ * The Items_Setup_SetupErrorView class handle the presentation logic for our Items/Setup actions's error data.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -9,7 +9,7 @@
  * @package         Asset
  * @subpackage      Mvc
  */
-class Asset_Setup_SetupSuccessView extends AssetBaseView
+class Items_Setup_SetupErrorView extends AssetBaseView
 {
     /**
      * Handle presentation logic for commandline interfaces.
@@ -21,8 +21,12 @@ class Asset_Setup_SetupSuccessView extends AssetBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $this->getResponse()->setContent("Successfully setup your asset module.");
+        $errors = implode(PHP_EOL, $this->getAttribute('errors', array()));
+        $this->getResponse()->setContent(
+            "An error occured while trying to setup your Items module: " . PHP_EOL . $errors
+        );
     }
+
 }
 
 ?>
