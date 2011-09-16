@@ -43,16 +43,7 @@
                     <text format="textbr" align="">Zu einem Tötungsdelikt in Neukölln bittet die 7. Mordkommission des Landeskriminalamtes um Mithilfe und wendet sich mit  Fragen an die Bevölkerung.</text>
                 </paragraph>
                 <paragraph name="land_text">
-                    <text format="textbr" align="left">&lt;strong&gt;Die Polizei fragt:&lt;/strong&gt;
-                        <br />&lt;wiki&gt;
-                        <br />* Wer hat das Opfer in der Nacht vom 20. zum 21. Juni 2011 gesehen?
-                        <br />* Wer hat in dem Zeitraum verdächtige Wahrnehmungen rund um den Bereich des Löwensteinring gemacht?
-                        <br />* Wer kennt Personen, die das Opfer in dessen Wohnung im Löwensteinring 5 besucht bzw. aufgesucht haben?&lt;/wiki&gt;
-                        <br />&lt;strong&gt;Hinweise nimmt die 7.Mordkommission des Landeskriminalamtes unter der Telefonnummer (030) 4664-911702 oder jede andere Polizeidienststelle entgegen. &lt;/strong&gt;
-                        <br />
-                        <br />
-                        <br />
-                    </text>
+                    <text format="textbr" align="left">Wer hat das Opfer in der Nacht vom 20. zum 21. Juni 2011 gesehen?</text>
                 </paragraph>
                 <paragraph name="land_text_pdf">
                     <pdf>

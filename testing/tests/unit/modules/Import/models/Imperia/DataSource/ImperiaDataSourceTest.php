@@ -8,7 +8,7 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
 
     const RECORDS_ARE_EQUAL = 0;
 
-    static private $docIds = array( // normally these are provided by the imperia-trigger script.
+    static private $docIds = array( // normally these are provided by the imperia import trigger
         '/2/10330/10343/10890/1385807',
         '/2/10330/10343/10890/1385806',
         '/2/10330/10343/10890/1385805'
@@ -69,8 +69,7 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
         );  
 
         $record = $this->dataSource->nextRecord();
-
-
+        
         $this->assertEquals(self::RECORDS_ARE_EQUAL, $record->compareTo($expectedRecord));
     }
 

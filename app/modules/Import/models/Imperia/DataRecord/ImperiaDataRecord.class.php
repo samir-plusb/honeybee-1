@@ -96,6 +96,11 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
     // ---------------------------------- <IDataRecord IMPL> -------------------------------------
 
+    public function toArray()
+    {
+        return parent::toArray();
+    }
+    
     /**
      * Returns a hopefully unique identifier.
      *
@@ -208,12 +213,12 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
             return array();
         }
 
-        return $this->nodeListToArray($xPathResults[$key]);
+        return $this->joinNodeList($xPathResults[$key], "\n\n");
     }
 
     protected function extractCategory(array $xPathResults, $key)
     {
-        $categoryCrumbs = $this->extractCollection($xPathResults, $key);
+        $categoryCrumbs = $this->nodeListToArray($xPathResults[$key]);
 
         return sprintf('// %s', join(' // ', $categoryCrumbs));
     }

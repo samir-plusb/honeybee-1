@@ -490,7 +490,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      */
     protected function setContent($content)
     {
-        $this->content = $content;
+        $this->content = htmlspecialchars($content);
     }
 
     /**
