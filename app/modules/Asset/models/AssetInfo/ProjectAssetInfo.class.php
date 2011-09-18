@@ -101,7 +101,7 @@ class ProjectAssetInfo implements IAssetInfo
      *
      * @var         string
      */
-    protected $fullName;
+    protected $fullname;
 
     /**
      * The asset's bare name (excluding extension)
@@ -162,7 +162,6 @@ class ProjectAssetInfo implements IAssetInfo
         $this->fullPath = $this->generateAbsTargetPath($this->assetId);
 
         $originParts = parse_url($this->getOrigin());
-        $src = NULL;
 
         if (!isset($originParts['scheme']))
         {
@@ -203,7 +202,7 @@ class ProjectAssetInfo implements IAssetInfo
      */
     public function getFullName()
     {
-        return $this->fullName;
+        return $this->fullname;
     }
 
     /**
@@ -300,6 +299,18 @@ class ProjectAssetInfo implements IAssetInfo
                 $this->$setterMethod($data[$property]);
             }
         }
+        
+        if (isset($data[self::XPROP_META_DATA]) && is_array($data[self::XPROP_META_DATA]))
+        {
+            $this->hydrate($data[self::XPROP_META_DATA]);
+        }
+        
+        if (! $this->fullname)
+        {
+            $originParts = parse_url($this->getOrigin());
+            $explodedOrigin = explode('/', $originParts['path']);
+            $this->setFullname(end($explodedOrigin));
+        }
     }
 
     /**
@@ -341,7 +352,12 @@ class ProjectAssetInfo implements IAssetInfo
             {
                 throw new  Exception("Opening fileinfo database failed");
             }
-            $this->mimeType = $finfo->file($this->getFullPath());
+            
+            if (! $this->mimeType)
+            {
+                $this->mimeType = $finfo->file($this->getFullPath());
+            }
+            
             $this->size = filesize($this->getFullPath());
 
             return TRUE;
@@ -429,12 +445,12 @@ class ProjectAssetInfo implements IAssetInfo
     protected function setOrigin($origin)
     {
         $this->origin = $origin;
-
-        $originParts = parse_url($origin);
-        $explodedOrigin = explode('/', $originParts['path']);
-        $this->fullName = end($explodedOrigin);
-
-        $explodedName = explode('.', $this->fullName);
+    }
+    
+    protected function setFullname($name)
+    {
+        $this->fullname = $name;
+        $explodedName = explode('.', $this->fullname);
         $extension = array_pop($explodedName);
         $this->name = implode('.', $explodedName);
 

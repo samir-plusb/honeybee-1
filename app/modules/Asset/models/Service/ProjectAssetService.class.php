@@ -113,6 +113,7 @@ class ProjectAssetService implements IAssetService
      * 
      * @param       string $assetUri
      * @param       array $metaData
+     * @param       boolean $moveOrigin
      * 
      * @return      IAssetInfo
      */
