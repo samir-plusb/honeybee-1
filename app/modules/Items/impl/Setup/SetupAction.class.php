@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @copyright BerlinOnline
@@ -7,7 +8,7 @@
  */
 class Items_SetupAction extends ItemsBaseAction
 {
-	/**
+    /**
      * Execute the write logic for this action, hence process the given asset.
      *
      * @param       AgaviRequestDataHolder $parameters
@@ -35,4 +36,7 @@ class Items_SetupAction extends ItemsBaseAction
 
         return 'Success';
     }
+
 }
+
+?>

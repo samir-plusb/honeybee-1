@@ -13,7 +13,7 @@ class Items_ListAction extends ItemsBaseAction
 {
     const COUCHDB_DATABASE = 'midas_import';
 
-	/**
+    /**
      * Execute the read logic for this action, hence prompt for an asset.
      *
      * @param       AgaviRequestDataHolder $parameters
@@ -51,11 +51,10 @@ class Items_ListAction extends ItemsBaseAction
     protected function buildCouchDbUri()
     {
         return sprintf(
-            "http://%s:%d/",
-            AgaviConfig::get('couchdb.import.host'),
-            AgaviConfig::get('couchdb.import.port')
+                "http://%s:%d/", AgaviConfig::get('couchdb.import.host'), AgaviConfig::get('couchdb.import.port')
         );
     }
+
 }
 
 ?>

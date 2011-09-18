@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @copyright BerlinOnline
@@ -7,7 +8,7 @@
  */
 class Items_List_ListSuccessView extends ItemsBaseView
 {
-	/**
+    /**
      * Handle presentation logic for the web  (html).
      *
      * @param       AgaviRequestDataHolder $parameters
@@ -36,7 +37,7 @@ class Items_List_ListSuccessView extends ItemsBaseView
         $msg .= print_r($this->getAttribute('items'), TRUE);
         $this->getResponse()->setContent($msg);
     }
-    
+
     /**
      * Handle presentation logic for commandline interfaces.
      *
@@ -49,4 +50,7 @@ class Items_List_ListSuccessView extends ItemsBaseView
     {
         $this->getResponse()->setContent(json_encode($this->getAttribute('items')));
     }
+
 }
+
+?>

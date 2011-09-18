@@ -124,8 +124,9 @@ abstract class XmlBasedDataRecord extends ImportBaseDataRecord
     {
         libxml_clear_errors();
         $domDoc = new DOMDocument();
-
-        if (!@$domDoc->loadXML($xmlString))
+        
+        // @codingStandardsIgnoreStart
+        if (!@$domDoc->loadXML($xmlString)) // @codingStandardsIgnoreEnd
         {
             $errors = libxml_get_errors();
             $msg = array();

@@ -61,8 +61,11 @@ class ImperiaJsonValidator extends AgaviValidator
             
             return FALSE;
         }
-
+        
+        // @codingStandardsIgnoreStart
         $data = @json_decode($jsonString, TRUE);
+        //@codingStandardsIgnoreEnd
+        
         if (NULL === $data)
         {
             $this->throwError(self::ERR_INVALID_JSON);
