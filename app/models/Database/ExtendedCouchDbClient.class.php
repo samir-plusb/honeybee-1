@@ -200,7 +200,8 @@ class ExtendedCouchDbClient
     {
         $this->compositeClient->selectDb($database);
 
-        $uri = $this->baseUri . urlencode($database) . '/_design/' . urlencode($designDocId) . '/_view/' . urlencode($viewname);
+        $databaseUuri = $this->baseUri . urlencode($database);
+        $uri = $databaseUuri. '/_design/' . urlencode($designDocId) . '/_view/' . urlencode($viewname);
 
         $curlHandle = $this->getCurlHandle();
         curl_setopt($curlHandle, CURLOPT_URL, $uri);

@@ -451,6 +451,8 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      * @param       string
      *
      * @see         IDataRecord::getSource()
+     * 
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function setIdentifier($identifier)
     {
