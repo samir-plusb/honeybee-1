@@ -3,6 +3,15 @@
     <ae:configuration>
         <autoloads>
         <!-- LIBS -->
+            <!-- From libs include path -->
+            <autoload name="MimeMailParser">Mail/mailparse.php</autoload>
+            <autoload name="MimeMailParser_attachment">Mail/attachment.class.php</autoload>
+            <!-- /From libs include path -->
+            
+             <!-- Lib/Mail -->
+            <autoload name="ProjectMailParser">%core.module_dir%/Import/lib/mail/ProjectMailParser.class.php</autoload>
+            <!-- /Lib/Mail -->
+            
             <!-- Lib/Mvc -->
             <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/mvc/ImportBaseAction.class.php</autoload>
             <autoload name="ImportBaseModel">%core.module_dir%/Import/lib/mvc/ImportBaseModel.class.php</autoload>
@@ -61,7 +70,6 @@
             <!-- /Base/Import -->
             
             <!-- Base/ImportFactory-->
-            <autoload name="IDataImportFactory">%core.module_dir%/Import/models/Base/Factory/IDataImportFactory.iface.php</autoload>
             <autoload name="IImportFactory">%core.module_dir%/Import/models/Base/Factory/IImportFactory.iface.php</autoload>
             <autoload name="IImportFactoryConfig">%core.module_dir%/Import/models/Base/Factory/IImportFactoryConfig.iface.php</autoload>
             <autoload name="ImportFactoryConfig">%core.module_dir%/Import/models/Base/Factory/ImportFactoryConfig.class.php</autoload>
@@ -94,6 +102,12 @@
             <autoload name="RssDataSource">%core.module_dir%/Import/models/Rss/DataSource/RssDataSource.class.php</autoload>
             <autoload name="RssDataRecord">%core.module_dir%/Import/models/Rss/DataRecord/RssDataRecord.class.php</autoload>
             <!-- /Rss -->
+            
+            <!-- Mail -->
+            <autoload name="ImapDataSourceConfig">%core.module_dir%/Import/models/Mail/DataSource/ImapDataSourceConfig.class.php</autoload>
+            <autoload name="ImapDataSource">%core.module_dir%/Import/models/Mail/DataSource/ImapDataSource.class.php</autoload>
+            <autoload name="ImapDataRecord">%core.module_dir%/Import/models/Mail/DataRecord/ImapDataRecord.class.php</autoload>
+            <!-- /Mail -->
         <!-- /CONCRETE IMPLEMENTATION (DomainModels) -->
         </autoloads>
     </ae:configuration>

@@ -12,6 +12,7 @@
                     <datasource>imperia</datasource>
                     <datasource>rss</datasource>
                     <datasource>dpa</datasource>
+                    <datasource>imap</datasource>
                 </datasources>
                 <settings>
                     <setting name="couchdb_host">%couchdb.import.host%</setting>

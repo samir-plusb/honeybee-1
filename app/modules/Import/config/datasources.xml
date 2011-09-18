@@ -34,6 +34,19 @@
                 </settings>
             </datasource>
             
+            <datasource name="imap" class="ImapDataSource">
+                <description>Provides access to a mailbox account via imap or pop3.</description>
+                <recordType>ImapDataRecord</recordType>
+                <settings>
+                    <setting name="username">foo_account</setting>
+                    <setting name="password">foo_pwd</setting>
+                    <setting name="host">imap.googlemail.com</setting>
+                    <setting name="port">993</setting>
+                    <setting name="mailbox">INBOX</setting>
+                    <setting name="protocol">imap/ssl</setting>
+                </settings>
+            </datasource>
+            
         </datasources>        
     </ae:configuration>
 </ae:configurations>
