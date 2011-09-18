@@ -577,21 +577,23 @@ class ProjectAssetInfo implements IAssetInfo
         $curlHandle = ProjectCurl::create();
 
         $tempPath = $this->getDowloadTmpPath();
-        $fd = fopen($tempPath,'wb');
-        if (! $fd)
+        
+        $filePtr = fopen($tempPath,'wb');
+        
+        if (! $filePtr)
         {
             throw new Exception("Can not open file for writing: ".$tempPath);
         }
 
         curl_setopt($curlHandle, CURLOPT_URL, $this->getOrigin());
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 0);
-        curl_setopt($curlHandle, CURLOPT_FILE, $fd);
+        curl_setopt($curlHandle, CURLOPT_FILE, $filePtr);
         curl_exec($curlHandle);
 
         $error = curl_error($curlHandle);
         $errorNum = curl_errno($curlHandle);
         $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
-        fclose($fd);
+        fclose($filePtr);
 
         if (200 > $respCode || 300 <= $respCode || $errorNum || $error)
         {

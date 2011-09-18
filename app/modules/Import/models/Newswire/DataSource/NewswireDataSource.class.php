@@ -167,8 +167,11 @@ class NewswireDataSource extends ImportBaseDataSource
      *
      * @param       IEvent $event
      * @uses        updateTimestamp()
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function importSucceeded(IEvent $event)
+    public function importSucceeded(IEvent $event) // @codingStandardsIgnoreEnd
     {
         $this->updateTimestamp($this->lastItemModifiedTime);
     }

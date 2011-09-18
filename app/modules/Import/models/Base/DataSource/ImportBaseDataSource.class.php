@@ -226,7 +226,7 @@ abstract class ImportBaseDataSource implements IDataSource
                 sprintf(
                     "An invalid IDataRecord implementor was provided. " .
                     "'%s' does not implement the interface IDataRecord.",
-                    get_class($recordClass)
+                    get_class($record)
                 )
             );
         }

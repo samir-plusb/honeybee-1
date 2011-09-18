@@ -11,11 +11,25 @@
  */
 interface IRecordValidationResult
 {
+    // ---------------------------------- <CONSTANTS> --------------------------------------------
+    
+    /**
+     * Holds a value that that reflects successfull validation.
+     */
+    const STATE_OK = 'ok';
+    
+    /**
+     * Holds a value which indicates that validation errors have occured.
+     */
+    const STATE_ERR = 'error';
+    
+    // ---------------------------------- </CONSTANTS> -------------------------------------------
+    
     /**
      * Return our validation state.
      * Either self::STATE_OK or self::STATE_ERR.
      * 
-     * @return      boolean
+     * @return      string
      */
     public function getState();
     

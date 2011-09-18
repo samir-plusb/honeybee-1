@@ -11,21 +11,6 @@
  */
 class RecordValidationResult implements IRecordValidationResult
 {
-    // ---------------------------------- <CONSTANTS> --------------------------------------------
-    
-    /**
-     * Holds a value that that reflects successfull validation.
-     */
-    const STATE_OK = TRUE;
-    
-    /**
-     * Holds a value which indicates that validation errors have occured.
-     */
-    const STATE_ERR = FALSE;
-    
-    // ---------------------------------- </CONSTANTS> -------------------------------------------
-    
-    
     // ---------------------------------- <MEMBERS> ----------------------------------------------
     
     /**
@@ -57,7 +42,7 @@ class RecordValidationResult implements IRecordValidationResult
      */
     public function __construct()
     {
-        $this->state = self::STATE_OK;
+        $this->state = IRecordValidationResult::STATE_OK;
         $this->errors = array();
     }
     
@@ -69,7 +54,7 @@ class RecordValidationResult implements IRecordValidationResult
      * Return our validation state.
      * Either self::STATE_OK or self::STATE_ERR.
      * 
-     * @return      boolean
+     * @return      string
      */
     public function getState()
     {
@@ -112,9 +97,9 @@ class RecordValidationResult implements IRecordValidationResult
      */
     public function addError($name, $message)
     {
-        if (self::STATE_ERR !== $this->state)
+        if (IRecordValidationResult::STATE_ERR !== $this->state)
         {
-            $this->state = self::STATE_ERR;
+            $this->state = IRecordValidationResult::STATE_ERR;
         }
         
         $this->errors[$name] = $message;

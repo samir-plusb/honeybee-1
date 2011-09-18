@@ -311,7 +311,7 @@ class ImperiaDataSource extends ImportBaseDataSource
         {
             $errMsg = 'Error: The datasource is not logged in. ' . PHP_EOL . $errMsg;
             
-            throw new DataSourceException($errMsg, $errNo);
+            throw new DataSourceException($errMsg);
         }
     }
     

@@ -120,7 +120,7 @@ class ImapDataRecord extends ImportBaseDataRecord
             $this->writeMailToTmpFile($data[ImapDataSource::DATA_FIELD_RAW_DATA])
         );
         
-        $html = $parser->getMessageBody(ProjectMailParser::BODY_HTMl);
+        $html = $parser->getMessageBody(ProjectMailParser::BODY_HTML);
         $text = $parser->getMessageBody(ProjectMailParser::BODY_TEXT);
         
         return array(

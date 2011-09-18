@@ -38,8 +38,8 @@
                 <description>Provides access to a mailbox account via imap or pop3.</description>
                 <recordType>ImapDataRecord</recordType>
                 <settings>
-                    <setting name="username">foo_account</setting>
-                    <setting name="password">foo_pwd</setting>
+                    <setting name="username">tschmittrink@gmail.com</setting>
+                    <setting name="password">Th0rst3n!</setting>
                     <setting name="host">imap.googlemail.com</setting>
                     <setting name="port">993</setting>
                     <setting name="mailbox">INBOX</setting>
