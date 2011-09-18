@@ -1,12 +1,14 @@
 <?php
 
 /**
- * NITF processing
+ * The NitfNewswireDataRecord class is a concrete implementation of the NewswireDataRecord base class.
+ * It provides processing data in the nitf format.
  *
- * @version         $ID:$
- * @author          Tom Anheyer
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @package         Import
- * @subpackage      Newswire
+ * @subpackage      Newsire
  */
 class NitfNewswireDataRecord extends NewswireDataRecord
 {
@@ -64,20 +66,60 @@ class NitfNewswireDataRecord extends NewswireDataRecord
 
     // ---------------------------------- <MEMBERS> ----------------------------------------------
 
+    /**
+     * Holds our subtitle.
+     * 
+     * @var         string
+     */
     protected $subtitle;
-
+    
+    /**
+     * Holds our abstract.
+     * 
+     * @var         string
+     */
     protected $abstract;
 
+    /**
+     * Holds our issue.
+     * 
+     * @var         string
+     */
     protected $issue;
 
+    /**
+     * Holds our release.
+     * 
+     * @var         string
+     */
     protected $release;
 
+    /**
+     * Holds our expire.
+     * 
+     * @var         string
+     */
     protected $expire;
 
+    /**
+     * Holds our copyright.
+     * 
+     * @var         string
+     */
     protected $copyright;
 
+    /**
+     * Holds our keywords.
+     * 
+     * @var         string
+     */
     protected $keywords;
 
+    /**
+     * Holds our table.
+     * 
+     * @var         string
+     */
     protected $table;
 
     /**
@@ -105,42 +147,82 @@ class NitfNewswireDataRecord extends NewswireDataRecord
 
 
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
-
+    
+    /**
+     * Returns our subtitle.
+     * 
+     * @return      string
+     */
     public function getSubtitle()
     {
         return $this->subtitle;
     }
-
+    
+    /**
+     * Returns our abstract.
+     * 
+     * @return      string
+     */
     public function getAbstract()
     {
         return $this->abstract;
     }
-
+    
+    /**
+     * Returns our issue-date.
+     * 
+     * @return      string A ISO8601 date string.
+     */
     public function getIssue()
     {
         return $this->issue;
     }
-
+    
+    /**
+     * Returns our release-date.
+     * 
+     * @return      string A ISO8601 date string.
+     */
     public function getRelease()
     {
         return $this->release;
     }
-
+    
+    /**
+     * Returns our expire-date.
+     * 
+     * @return      string A ISO8601 date string.
+     */
     public function getExpire()
     {
         return $this->expire;
     }
 
+    /**
+     * Returns our copyright.
+     * 
+     * @return      string
+     */
     public function getCopyright()
     {
         return $this->copyright;
     }
-
+    
+    /**
+     * Returns an array of keywords.
+     * 
+     * @return      array
+     */
     public function getKeywords()
     {
         return $this->keywords;
     }
-
+    
+    /**
+     * Returns our table html string.
+     * 
+     * @return      string
+     */
     public function getTable()
     {
         return $this->table;
@@ -148,7 +230,92 @@ class NitfNewswireDataRecord extends NewswireDataRecord
 
     // ---------------------------------- </PUBLIC METHODS> --------------------------------------
 
+    
+    // ---------------------------------- <HYDRATE SETTERS> --------------------------------------
+    
+    /**
+     * Set our subtitle during hydrate.
+     * 
+     * @param       string $subtitle 
+     */
+    protected function setSubtitle($subtitle)
+    {
+        $this->subtitle = $subtitle;
+    }
+    
+    /**
+     * Set our abstract during hydrate.
+     * 
+     * @param       string $abstract 
+     */
+    protected function setAbstract($abstract)
+    {
+        $this->abstract = $abstract;
+    }
 
+    /**
+     * Set our issue-date during hydrate.
+     * 
+     * @param       string $issue 
+     */
+    protected function setIssue($issue)
+    {
+        $this->issue = $issue;
+    }
+
+    /**
+     * Set our release-date during hydrate.
+     * 
+     * @param       string $release 
+     */
+    protected function setRelease($release)
+    {
+        $this->release = $release;
+    }
+
+    /**
+     * Set our expire-date during hydrate.
+     * 
+     * @param       string $expire 
+     */
+    protected function setExpire($expire)
+    {
+        $this->expire = $expire;
+    }
+
+    /**
+     * Set our copyright during hydrate.
+     * 
+     * @param       string $copyright 
+     */
+    protected function setCopyright($copyright)
+    {
+        $this->copyright = $copyright;
+    }
+
+    /**
+     * Set our keywords during hydrate.
+     * 
+     * @param       array $keywords 
+     */
+    protected function setKeywords(array $keywords)
+    {
+        $this->keywords = $keywords;
+    }
+
+    /**
+     * Set our table(html string) during hydrate.
+     * 
+     * @param       string $table 
+     */
+    protected function setTable($table)
+    {
+        $this->table = $table;
+    }
+
+    // ---------------------------------- </HYDRATE SETTERS> -------------------------------------
+    
+    
     // ---------------------------------- <XmlBasedDataRecord IMPL> ------------------------------
 
     /**
@@ -212,7 +379,18 @@ class NitfNewswireDataRecord extends NewswireDataRecord
 
         return $normalized;
     }
+    
+    // ---------------------------------- </XmlBasedDataRecord IMPL> -----------------------------
+    
+    
+    // ---------------------------------- <ImportBaseDataRecord OVERRIDES> -----------------------
 
+    /**
+     * Return an array holding property names of properties,
+     * which we want to expose through our IDataRecord::toArray() method.
+     *
+     * @return      array
+     */
     protected function getExposedProperties()
     {
         return array_merge(
@@ -229,49 +407,12 @@ class NitfNewswireDataRecord extends NewswireDataRecord
             )
         );
     }
+    
+    // ---------------------------------- </ImportBaseDataRecord OVERRIDES> ----------------------
 
-    protected function setSubtitle($subtitle)
-    {
-        $this->subtitle = $subtitle;
-    }
 
-    protected function setAbstract($abstract)
-    {
-        $this->abstract = $abstract;
-    }
-
-    protected function setIssue($issue)
-    {
-        $this->issue = $issue;
-    }
-
-    protected function setRelease($release)
-    {
-        $this->release = $release;
-    }
-
-    protected function setExpire($expire)
-    {
-        $this->expire = $expire;
-    }
-
-    protected function setCopyright($copyright)
-    {
-        $this->copyright = $copyright;
-    }
-
-    protected function setKeywords(array $keywords)
-    {
-        $this->keywords = $keywords;
-    }
-
-    protected function setTable($table)
-    {
-        $this->table = $table;
-    }
-
-    // ---------------------------------- </XmlBasedDataRecord IMPL> -----------------------------
-
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
+    
     /**
      * import nitf tables
      *
@@ -356,6 +497,8 @@ class NitfNewswireDataRecord extends NewswireDataRecord
 
         return $images;
     }
+    
+    // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 
 ?>

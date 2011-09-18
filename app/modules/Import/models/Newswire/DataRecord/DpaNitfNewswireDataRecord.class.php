@@ -1,15 +1,19 @@
 <?php
 
 /**
- * DPA specific NITF processing
+ * The DpaNitfNewswireDataRecord class is a concrete implementation of the NitfNewswireDataRecord base class.
+ * It provides processing data in the nitf format for data coming from the dpa.
  *
- * @version         $ID:$
- * @author          Tom Anheyer
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @package         Import
- * @subpackage      Newswire
+ * @subpackage      Newsire
  */
 class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
 {
+    // ---------------------------------- <XmlBasedDataRecord IMPL> ------------------------------
+    
     /**
      * Return a list of field keys to corresponding xpath expressions.
      *
@@ -21,35 +25,15 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
     protected function getFieldMap()
     {
         return array_merge(
-            parent::getFieldMap(), array(
+            parent::getFieldMap(), 
+            array(
                 self::PROP_SUBTITLE  => '//byline',
                 self::PROP_COPYRIGHT => '//meta[@name="copyright"]/@content',
                 self::PROP_SOURCE    => '//meta[@name="origin"]/@content'
             )
         );
     }
-
-    /**
-     * Import nitf tables.
-     *
-     * @param       DOMDocument $domDoc
-     *
-     * @return      array of xml tagged strings
-     */
-    protected function importLinks()
-    {
-        $data = array();
-        $domDoc = $this->getDocument();
-        $xpath = new DOMXPath($domDoc);
-
-        foreach ($xpath->query('//body.content/block[@style="EXTERNAL-LINKS"]/p/a') as $node)
-        {
-            $data[] = $this->nodeToString($node);
-        }
-
-        return $data;
-    }
-
+    
     /**
      * Filter the collected data.
      *
@@ -78,6 +62,34 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
 
         return $normalized;
     }
+    
+    // ---------------------------------- </XmlBasedDataRecord IMPL> -----------------------------
+    
+    
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
+    
+    /**
+     * Import nitf tables.
+     *
+     * @param       DOMDocument $domDoc
+     *
+     * @return      array of xml tagged strings
+     */
+    protected function importLinks()
+    {
+        $data = array();
+        $domDoc = $this->getDocument();
+        $xpath = new DOMXPath($domDoc);
+
+        foreach ($xpath->query('//body.content/block[@style="EXTERNAL-LINKS"]/p/a') as $node)
+        {
+            $data[] = $this->nodeToString($node);
+        }
+
+        return $data;
+    }
+    
+    // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 
 ?>

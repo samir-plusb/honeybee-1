@@ -1,14 +1,19 @@
 <?php
 
 /**
- * Datasource for newswire imports
+ * The NewswireDataSource class is a concrete implementation of the ImportBaseDataSource base class.
+ * It provides fetching xml based data for our newswire providers from the filesystem.
  *
- * @author          tay
+ * @version         $Id$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @package         Import
  * @subpackage      Newswire
  */
 class NewswireDataSource extends ImportBaseDataSource
 {
+    // ---------------------------------- <MEMBERS> ----------------------------------------------
+    
     /**
      * @var         GlobIterator Iterator over the newswire messages
      */
@@ -27,7 +32,12 @@ class NewswireDataSource extends ImportBaseDataSource
      * @var         int UNIX timestamp of last fetched item
      */
     protected $lastItemModifiedTime;
+    
+    // ---------------------------------- </MEMBERS> ---------------------------------------------
 
+    
+    // ---------------------------------- <ImportBaseDataSource OVERRIDES> -----------------------
+    
     /**
      * initialize timestamp file and subscribe to success events
      *
@@ -48,7 +58,22 @@ class NewswireDataSource extends ImportBaseDataSource
             array($this, 'importSucceeded')
         );
     }
-
+    
+    /**
+     * Return a path to our current data origin.
+     *
+     * @return      string
+     */
+    protected function getCurrentOrigin()
+    {
+        return $this->iterator->current();
+    }
+    
+    // ---------------------------------- </ImportBaseDataSource OVERRIDES> ----------------------
+    
+    
+    // ---------------------------------- <ImportBaseDataSource IMPL> ----------------------------
+    
     /**
      * initialize internal used GlobIterator
      *
@@ -110,16 +135,11 @@ class NewswireDataSource extends ImportBaseDataSource
         return $content;
     }
 
-    /**
-     * Return a path to our current data origin.
-     *
-     * @return      string
-     */
-    protected function getCurrentOrigin()
-    {
-        return $this->iterator->current();
-    }
-
+    // ---------------------------------- </ImportBaseDataSource IMPL> ---------------------------
+    
+    
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
+    
     /**
      * store the timestamp of last imported record
      *
@@ -173,6 +193,8 @@ class NewswireDataSource extends ImportBaseDataSource
     {
         return array('config', 'timestampFile', 'lastImportTime');
     }
+    
+    // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 
 ?>

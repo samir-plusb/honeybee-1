@@ -14,7 +14,7 @@
 abstract class XmlBasedDataRecord extends ImportBaseDataRecord
 {
     /**
-     * Holds our domDocument during parse runtime.
+     * Holds our domDocument during parseData runtime.
      *
      * @var         DOMDocument
      */
@@ -52,7 +52,7 @@ abstract class XmlBasedDataRecord extends ImportBaseDataRecord
      *
      * @return      array
      *
-     * @see         ImportBaseDataRecord::parse()
+     * @see         ImportBaseDataRecord::parseData()
      *
      * @uses        XmlBasedDataRecord::createDom()
      * @uses        XmlBasedDataRecord::evaluateDocument()
@@ -73,18 +73,32 @@ abstract class XmlBasedDataRecord extends ImportBaseDataRecord
 
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-
+    
+    /**
+     * Set everything up for parsing our data.
+     * 
+     * @param       string $data 
+     */
     protected function setUp($data)
     {
         $this->domDocument = $this->createDom($data);
     }
 
+    /**
+     * Cleanup up after parsing data.
+     */
     protected function tearDown()
     {
         unset($this->domDocument);
         $this->domDocument = NULL;
     }
-
+    
+    /**
+     * Return the DOMDocument that we are currently parsing.
+     * May only be invoked between setUp() and tearDown().
+     * 
+     * @return      DOMDocument
+     */
     protected function getDocument()
     {
         if (NULL === $this->domDocument)

@@ -50,15 +50,42 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
 
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-
+    
+    /**
+     * Holds our subtitle.
+     * 
+     * @var         string 
+     */
     protected $subtitle;
 
+    /**
+     * Holds our kicker.
+     * 
+     * @var         string 
+     */
     protected $kicker;
 
+    /**
+     * Holds our directory.
+     * This value is used together with our $filename property
+     * to build our $link properties value.
+     * 
+     * @var         string 
+     */
     protected $directory;
 
+    /**
+     * Holds our filename.
+     * 
+     * @var         string 
+     */
     protected $filename;
 
+    /**
+     * Holds the link pointing to our web representation.
+     * 
+     * @var         string 
+     */
     protected $link;
 
     /**
@@ -78,7 +105,13 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
         self::PROP_FILENAME  => '/imperia/head/filename',
         self::PROP_MEDIA     => '/imperia/body/article//image'
     );
-
+    
+    /**
+     * An array used to map the results of evaluating our expression map
+     * to a set of corresponding processors, that extract our final values.
+     * 
+     * @var         array 
+     */
     protected static $expressionProcessors = array(
             self::PROP_TITLE     => 'extractFirst',
             self::PROP_CONTENT   => 'extractCollection',
@@ -91,16 +124,22 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
         );
 
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-
+    
+    
+    // ---------------------------------- <ABSTRACT> ---------------------------------------------
+    
+    /**
+     * Shall return the records type as a short string representation.
+     * 
+     * @return      string
+     */
     abstract protected function getSourceName();
+    
+    // ---------------------------------- </ABSTRACT> --------------------------------------------
+    
 
     // ---------------------------------- <IDataRecord IMPL> -------------------------------------
 
-    public function toArray()
-    {
-        return parent::toArray();
-    }
-    
     /**
      * Returns a hopefully unique identifier.
      *
@@ -117,17 +156,32 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
 
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
-
+    
+    /**
+     * Return our subtitle.
+     * 
+     * @return      string
+     */
     public function getSubtitle()
     {
         return $this->subtitle;
     }
-
+    
+    /**
+     * Return our kicker.
+     * 
+     * @return      string
+     */
     public function getKicker()
     {
         return $this->kicker;
     }
 
+    /**
+     * Return our link.
+     * 
+     * @return      string
+     */
     public function getLink()
     {
         return $this->link;
@@ -135,7 +189,54 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
     // ---------------------------------- </PUBLIC METHODS> --------------------------------------
 
+    
+    // ---------------------------------- <HYDRATE SETTERS> --------------------------------------
+    
+    /**
+     * Set our subtitle during hydrate.
+     * 
+     * @param       string $subtitle 
+     */
+    protected function setSubtitle($subtitle)
+    {
+        $this->subtitle = $subtitle;
+    }
+    
+    /**
+     * Set our subtitle during hydrate.
+     * 
+     * @param       string $subtitle 
+     */
+    protected function setKicker($kicker)
+    {
+        $this->kicker = $kicker;
+    }
 
+    /**
+     * Set our directory during hydrate.
+     * 
+     * @param       string $directory 
+     */
+    protected function setDirectory($directory)
+    {
+        $this->directory = $directory;
+        $this->applyLink();
+    }
+
+    /**
+     * Set our filename during hydrate.
+     * 
+     * @param       string $filename 
+     */
+    protected function setFilename($filename)
+    {
+        $this->filename = $filename;
+        $this->applyLink();
+    }
+    
+    // ---------------------------------- </HYDRATE SETTERS> -------------------------------------
+    
+    
     // ---------------------------------- <XmlBasedDataRecord IMPL> ------------------------------
 
     /**
@@ -178,6 +279,12 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
         return $data;
     }
 
+    /**
+     * Return an array holding property names of properties,
+     * which we want to expose through our IDataRecord::toArray() method.
+     *
+     * @return      array
+     */
     protected function getExposedProperties()
     {
         return array_merge(
@@ -193,9 +300,35 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
     // ---------------------------------- </XmlBasedDataRecord IMPL> -----------------------------
 
-
+    
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-
+    
+    /**
+     * Generates and assigns our link property.
+     */
+    protected function applyLink()
+    {
+        if ($this->filename && $this->directory)
+        {
+            $this->link = sprintf(
+                "%s%s/%s",
+                self::LINK_BASE_URL,
+                $this->directory,
+                $this->filename
+            );
+        }
+    }
+    
+    /**
+     * Extracts the value of the first node in a node list.
+     * The node list is pulled from the data that resulted
+     * from processing our $expressionMap.
+     * 
+     * @param       array $xPathResults
+     * @param       string $key
+     * 
+     * @return      mixed
+     */
     protected function extractFirst(array $xPathResults, $key)
     {
         if (!$xPathResults[$key] || 0 === $xPathResults[$key]->length)
@@ -205,7 +338,17 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
         return trim($xPathResults[$key]->item(0)->nodeValue);
     }
-
+    
+    /**
+     * Converts a node list to a collection mixed values that have been pulled from the nodes.
+     * The node list is pulled from the data that resulted
+     * from processing our $expressionMap.
+     * 
+     * @param       array $xPathResults
+     * @param       string $key
+     * 
+     * @return      mixed
+     */
     protected function extractCollection(array $xPathResults, $key)
     {
         if (!$xPathResults[$key] || !$xPathResults[$key])
@@ -215,14 +358,33 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
         return $this->joinNodeList($xPathResults[$key], "\n\n");
     }
-
+    
+    /**
+     * Extracts the imperia category nodes and returns
+     * their joined string representation.
+     * 
+     * @param       array $xPathResults
+     * @param       string $key
+     * 
+     * @return      mixed
+     */
     protected function extractCategory(array $xPathResults, $key)
     {
         $categoryCrumbs = $this->nodeListToArray($xPathResults[$key]);
 
         return sprintf('// %s', join(' // ', $categoryCrumbs));
     }
-
+    
+    /**
+     * Extracts the media found inside our parsed data
+     * and creates asset items thereby returning an array
+     * containing the id's of all stored assets.
+     * 
+     * @param       array $xPathResults
+     * @param       string $key
+     * 
+     * @return      array
+     */
     protected function extractMedia(array $xPathResults, $key)
     {
         $assets = array();
@@ -240,6 +402,14 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
         return $assets;
     }
 
+    /**
+     * Create an AssetInfo instance from the given DOMNode
+     * and return it's id.
+     * 
+     * @param       DOMNode $imageNode
+     * 
+     * @return      integer 
+     */
     protected function createAsset(DOMNode $imageNode)
     {
         $metaDataNodes = array('caption');
@@ -269,46 +439,6 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
     }
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-
-
-    // ---------------------------------- <HYDRATE SETTERS> --------------------------------------
-
-    protected function setSubtitle($subtitle)
-    {
-        $this->subtitle = $subtitle;
-    }
-
-    protected function setKicker($kicker)
-    {
-        $this->kicker = $kicker;
-    }
-
-    protected function setDirectory($directory)
-    {
-        $this->directory = $directory;
-        $this->applyLink();
-    }
-
-    protected function setFilename($filename)
-    {
-        $this->filename = $filename;
-        $this->applyLink();
-    }
-
-    protected function applyLink()
-    {
-        if ($this->filename && $this->directory)
-        {
-            $this->link = sprintf(
-                "%s%s/%s",
-                self::LINK_BASE_URL,
-                $this->directory,
-                $this->filename
-            );
-        }
-    }
-
-    // ---------------------------------- </HYDRATE SETTERS> -------------------------------------
 }
 
 ?>

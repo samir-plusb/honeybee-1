@@ -69,10 +69,25 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $msg = 'Usage: console.php <command> [OPTION]...' . PHP_EOL .
-            PHP_EOL . 'Available Commands:' . PHP_EOL;
-
-        $this->getResponse()->setContent($msg);
+        $lines = array();
+        $lines[] = PHP_EOL . "####################################" . PHP_EOL;
+        $lines[] = "Usage: bin/cli <command> [OPTION]" . PHP_EOL;
+        $lines[] = "Available Commands:";
+        $lines[] = "-------------------------------------";
+        $lines[] = PHP_EOL . "- Import Module";
+        $lines[] = "    import.run -i (import) [-d (src1), (src2) ...]";
+        $lines[] = "    import.imperia -data (json)";
+        $lines[] = PHP_EOL . "- Asset Module";
+        $lines[] = "    asset.setup";
+        $lines[] = "    asset.put -asset (uri)";
+        $lines[] = "    asset.get -aid (asset-id)";
+        $lines[] = "    asset.delete -aid (asset-id)";
+        $lines[] = PHP_EOL . "- Items Module";
+        $lines[] = "    items.setup";
+        $lines[] = "    items.list";
+        
+        $lines[] = PHP_EOL . "####################################";
+        $this->getResponse()->setContent(implode(PHP_EOL, $lines));
     }
 
 }

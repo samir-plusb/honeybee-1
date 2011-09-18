@@ -23,7 +23,7 @@ class Asset_Put_PutInputView extends AssetBaseView
     {
         $this->setupHtml($parameters);
 
-        $this->setAttribute('_title', 'Asset PUT - Html Form Interface');
+        $this->setAttribute('_title', 'Asset PUT - Html Form Interface / INPUT');
     }
 
 }

@@ -33,8 +33,20 @@ class Items_List_ListSuccessView extends ItemsBaseView
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $msg = "Items/List/Success@Text" . PHP_EOL;
-        $msg .= var_export($this->getAttribute('data')->toArray(), TRUE);
-
+        $msg .= print_r($this->getAttribute('items'), TRUE);
         $this->getResponse()->setContent($msg);
+    }
+    
+    /**
+     * Handle presentation logic for commandline interfaces.
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
+     */
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        $this->getResponse()->setContent(json_encode($this->getAttribute('items')));
     }
 }

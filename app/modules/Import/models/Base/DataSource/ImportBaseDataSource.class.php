@@ -131,11 +131,11 @@ abstract class ImportBaseDataSource implements IDataSource
         {
             return FALSE;
         }
-
+        
         $record = $this->createRecord(
             $this->fetchData()
         );
-
+        
         $validationResult = $record->validate();
 
         if (!$validationResult->hasError())
@@ -163,29 +163,16 @@ abstract class ImportBaseDataSource implements IDataSource
      */
     protected function createRecord($rawData)
     {
-        $recordClass = $this->config->getSetting(DataSourceConfig::CFG_RECORD_TYPE);
-
-        if (!class_exists($recordClass, TRUE))
-        {
-            throw new DataSourceException(
-                sprintf(
-                    "Unable to find provided datarecord class: %s",
-                    $recordClass
-                )
-            );
-        }
-
         try
         {
-            $record = new $recordClass(
-                $rawData,
-                new DataRecordConfig(
-                    array(
-                        DataRecordConfig::CFG_ORIGIN => $this->getName(),
-                        DataRecordConfig::CFG_SOURCE => $this->getCurrentOrigin()
-                    )
+            $recordConfig = new DataRecordConfig(
+                array(
+                    DataRecordConfig::CFG_SOURCE => $this->getCurrentOrigin(),
+                    DataRecordConfig::CFG_ORIGIN => $this->getName()
                 )
             );
+            $recordClass = $this->getRecordImplementor();
+            $record = new $recordClass($rawData, $recordConfig);
         }
         catch(DataRecordException $e)
         {
@@ -198,18 +185,52 @@ abstract class ImportBaseDataSource implements IDataSource
                 )
             );
         }
+        
+        return $this->verifyRecordImplementation($record);
+    }
+    
+    /**
+     * Returns the IDataRecord implementation to use for creating new record instances.
+     * 
+     * @return      string
+     */
+    protected function getRecordImplementor()
+    {
+        $recordClass = $this->config->getSetting(DataSourceConfig::CFG_RECORD_TYPE);
 
+        if (!class_exists($recordClass, TRUE))
+        {
+            throw new DataSourceException(
+                sprintf(
+                    "Unable to find provided datarecord class: %s",
+                    $recordClass
+                )
+            );
+        }
+        
+        return $recordClass;
+    }
+    
+    /**
+     * Verify that the given object is an implementation of the IDataRecord interface.
+     * 
+     * @param       object $record
+     * 
+     * @return      IDataRecord 
+     */
+    protected function verifyRecordImplementation($record)
+    {
         if (!($record instanceof IDataRecord))
         {
             throw new DataSourceException(
                 sprintf(
                     "An invalid IDataRecord implementor was provided. " .
                     "'%s' does not implement the interface IDataRecord.",
-                    $recordClass
+                    get_class($recordClass)
                 )
             );
         }
-
+        
         return $record;
     }
     

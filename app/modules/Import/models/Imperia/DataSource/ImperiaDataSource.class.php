@@ -199,21 +199,10 @@ class ImperiaDataSource extends ImportBaseDataSource
         curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
 
         $response = curl_exec($this->curlHandle);
-        $err = curl_error($this->curlHandle);
-        $errNo = curl_errno($this->curlHandle);
-        $respCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
-
-        if ($err || $errNo || 200 != $respCode)
-        {
-            $msg = sprintf(
-                "An error occured while trying to load doc-idlist from: %s Error: %s, Resp-code: %s",
-                $idListUrl,
-                $err,
-                $respCode
-            );
-
-            throw new DataSourceException($msg, $errNo);
-        }
+        
+        $this->processCurlErrors(
+            "An error occured while trying to load doc-idlist from: $idListUrl"
+        );
 
         if (!empty($response))
         {
@@ -241,29 +230,12 @@ class ImperiaDataSource extends ImportBaseDataSource
         curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
 
         $responseDoc = curl_exec($this->curlHandle);
-        $err = curl_error($this->curlHandle);
-        $errNo = curl_errno($this->curlHandle);
-        $respCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
-
-        if ($err || $errNo || 200 != $respCode)
-        {
-            $msg = sprintf(
-                "An error occured while loading: %s Error: %s, Resp-code: %s",
-                $idListUrl,
-                $err,
-                $respCode
-            );
-
-            throw new DataSourceException($msg, $errNo);
-        }
-
-        if (FALSE !== strpos($responseDoc, '<title>Access Denied!</title>'))
-        {
-            throw new DataSourceException(
-                "Currently not logged in to imperia and therefore can not continue."
-            );
-        }
-
+        
+        $this->checkImperiaSessionState(
+            $responseDoc,
+            "An error occured while loading: $idListUrl"
+         );
+        
         return $responseDoc;
     }
 
@@ -290,20 +262,7 @@ class ImperiaDataSource extends ImportBaseDataSource
         curl_setopt($this->curlHandle, CURLOPT_URL, $this->buildLoginUrl());
 
         $resp = curl_exec($this->curlHandle);
-        $err = curl_error($this->curlHandle);
-        $errNo = curl_errno($this->curlHandle);
-        $respCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
-
-        if ($err || $errNo || 200 != $respCode || FALSE !== strpos($resp, '<title>Access Denied!</title>'))
-        {
-            $msg = sprintf(
-                "Can not login to imperia. Error: %s, Resp-code: %d",
-                $err,
-                $respCode
-            );
-
-            throw new DataSourceException($msg, $errNo);
-        }
+        $this->checkImperiaSessionState($resp, "Unable to login to imperia.");
     }
 
     /**
@@ -331,6 +290,52 @@ class ImperiaDataSource extends ImportBaseDataSource
         $baseUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_URL);
 
         return $baseUrl . self::URL_PATH_LOGIN;
+    }
+    
+    /**
+     * Checks the state of a given imperia response right after it has
+     * been received and if our session is still valid, hence we are logged on
+     * and can continue work.
+     * To do this we first check our curl handle for errors
+     * and then check if imperia threw it's login screen at us.
+     * 
+     * @param       string $resp
+     * @param       string $errMsg 
+     */
+    protected function checkImperiaSessionState($resp, $errMsg = '')
+    {
+        $this->processCurlErrors($errMsg);
+        
+        // Is there a better way to find out that imperia didn't let us in?
+        if (FALSE !== strpos($resp, '<title>Access Denied!</title>'))
+        {
+            $errMsg = 'Error: The datasource is not logged in. ' . PHP_EOL . $errMsg;
+            
+            throw new DataSourceException($errMsg, $errNo);
+        }
+    }
+    
+    /**
+     * Check curl response status and throw exception on error.
+     *
+     * @param       string $msg
+     *
+     * @return      void
+     *
+     * @throws      CouchdbClientException
+     */
+    protected function processCurlErrors($msg = '')
+    {
+        $error = curl_error($this->curlHandle);
+        $errorNum = curl_errno($this->curlHandle);
+        $respCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
+
+        if (200 > $respCode || 300 <= $respCode || $errorNum || $error)
+        {
+            $msg = $msg . PHP_EOL . 'Curl Error: ' . PHP_EOL . $error;
+            
+            throw new DataSourceException($msg, $errorNum);
+        }
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------

@@ -323,12 +323,11 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     public function validate()
     {
         $data = $this->toArray();
+        
         $validationResult = new RecordValidationResult();
         
         foreach ($this->getRequiredProperties() as $propName)
         {
-            $validationMethod = self::METHOD_PREFIX_VALIDATE . ucfirst($propName);
-            
             if (!isset($data[$propName]))
             {
                 $errName = 'missing_' . $propName;
@@ -340,6 +339,8 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
                     )
                 );
             }
+            
+            $validationMethod = self::METHOD_PREFIX_VALIDATE . ucfirst($propName);
             
             if (is_callable(array($this, $validationMethod)))
             {
@@ -421,7 +422,6 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
             self::PROP_SOURCE,
             self::PROP_TITLE,
             self::PROP_CONTENT,
-            self::PROP_CATEGORY,
             self::PROP_MEDIA,
             self::PROP_GEO
         );

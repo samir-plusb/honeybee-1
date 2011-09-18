@@ -265,13 +265,15 @@ class CouchDbDataImport extends BaseDataImport
 
         if (0 !== $rev)
         {
-            $data = $this->importBuffer[$docId];
+            $data = $this->importBuffer[$docId]->toArray();
             $oldDoc = $this->couchClient->getDoc($database, $docId);
+            
             foreach ($data as $key => $val)
             {
                 if (! array_key_exists($key, $oldDoc) || 0 != strcmp(serialize($val), serialize($oldDoc[$key])))
                 {
                     $data[self::COUDB_REV_FIELD] = $rev;
+                    
                     return $data;
                 }
             }

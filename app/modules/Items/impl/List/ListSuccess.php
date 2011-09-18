@@ -9,7 +9,7 @@ foreach ($t['items'] as $item)
     <li>
         <h3><?php echo $item['title']; ?></h3>
         <p>
-            <?php echo $item['content']; ?>
+            <?php echo htmlspecialchars_decode($item['content']); ?>
         </p>
     </li>
 
