@@ -407,7 +407,6 @@ class ImperiaDataRecord extends ImportBaseDataRecord
      */
     protected function createAsset(array $imageInfo)
     {
-        $metaData = array();
         $src = self::LINK_BASE_URL . $imageInfo['src'];
         unset($imageInfo['src']);
         
