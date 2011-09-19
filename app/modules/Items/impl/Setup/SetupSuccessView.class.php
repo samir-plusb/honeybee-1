@@ -11,7 +11,7 @@
  */
 class Items_Setup_SetupSuccessView extends ItemsBaseView
 {
-/**
+    /**
      * Handle presentation logic for commandline interfaces.
      *
      * @param       AgaviRequestDataHolder $parameters

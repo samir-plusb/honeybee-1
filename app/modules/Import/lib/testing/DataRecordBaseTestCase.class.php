@@ -7,7 +7,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Base
+ * @subpackage      Testing
  */
 abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
 {
@@ -87,7 +87,6 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
     }
 
     // ---------------------------------- </AgaviPhpUnitTestCase OVERRIDES> ----------------------
-
 
 
     // ---------------------------------- <TESTS> ------------------------------------------------

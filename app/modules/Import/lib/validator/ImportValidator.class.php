@@ -10,7 +10,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Validation
+ * @subpackage      Validator
  */
 class ImportValidator extends AgaviStringValidator
 {

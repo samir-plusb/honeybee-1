@@ -1,10 +1,13 @@
 <?php
 
 /**
+ * The Items_SetupAction is repsonseable for setting up Items module.
  *
- * @copyright BerlinOnline
- * @version $Id$
- * @package Items
+ * @version         $Id:$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Items
+ * @subpackage      Mvc
  */
 class Items_SetupAction extends ItemsBaseAction
 {

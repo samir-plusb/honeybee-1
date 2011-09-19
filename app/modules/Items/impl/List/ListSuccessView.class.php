@@ -1,10 +1,13 @@
 <?php
 
 /**
+ * The Items_List_ListSuccessView class handles Items/List success data presentation.
  *
- * @copyright BerlinOnline
- * @version $Id$
- * @package Items
+ * @version         $Id: $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Items
+ * @subpackage      Mvc
  */
 class Items_List_ListSuccessView extends ItemsBaseView
 {

@@ -6,12 +6,20 @@
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Asset
+ * @package         Items
  * @subpackage      Setup
  */
 class ItemsModuleSetup
 {
+    // ---------------------------------- <CONSTANTS> --------------------------------------------
+    
+    /**
+     * Holds the name of our couchdb database.
+     */
     const COUCHDB_DATABASE = 'midas_import';
+    
+    // ---------------------------------- </CONSTANTS> -------------------------------------------
+    
 
     // ---------------------------------- <MEMBERS> ----------------------------------------------
 
