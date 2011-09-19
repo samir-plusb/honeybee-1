@@ -78,27 +78,6 @@ class ImperiaDataSource extends ImportBaseDataSource
     // ---------------------------------- </MEMBERS> ---------------------------------------------
 
 
-    // ---------------------------------- <ImportBaseDataSource OVERRIDES> -----------------------
-
-    /**
-     * Create a new ImperiaDataSource instance.
-     *
-     * @param       IImportConfig $config
-     *
-     * @see         ImportBaseDataSource::__construct()
-     */
-    public function __construct(IImportConfig $config, $name, $description = NULL)
-    {
-        parent::__construct($config, $name, $description);
-
-        $this->documentIds = $this->config->getSetting(
-            ImperiaDataSourceConfig::PARAM_DOCIDS
-        );
-    }
-
-    // ---------------------------------- </ImportBaseDataSource OVERRIDES> ----------------------
-
-
     // ---------------------------------- <ImportBaseDataSource IMPL> ----------------------------
 
     /**
@@ -113,13 +92,12 @@ class ImperiaDataSource extends ImportBaseDataSource
     protected function init()
     {
         $this->initCurlHandle();
-
-        if (empty($this->documentIds))
+        $this->documentIds = $this->loadDocumentIds();
+        
+        if (! empty($this->documentIds))
         {
-            $this->loadDocumentIds();
+            $this->login();
         }
-
-        $this->login();
 
         $this->cursorPos = -1;
     }
@@ -191,8 +169,14 @@ class ImperiaDataSource extends ImportBaseDataSource
      */
     protected function loadDocumentIds()
     {
-        $this->documentIds = array();
-
+        $documentIds = $this->config->getSetting(ImperiaDataSourceConfig::PARAM_DOCIDS, FALSE);
+        
+        if ($documentIds)
+        {
+            return $documentIds;
+        }
+        
+        $documentIds = array();
         $idListUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOC_IDLIST_URL);
 
         curl_setopt($this->curlHandle, CURLOPT_URL, $idListUrl);
@@ -206,8 +190,10 @@ class ImperiaDataSource extends ImportBaseDataSource
 
         if (!empty($response))
         {
-            $this->documentIds = explode(' ', trim($response));
+            $documentIds = explode(' ', trim($response));
         }
+        
+        return $documentIds;
     }
 
     /**
@@ -224,7 +210,8 @@ class ImperiaDataSource extends ImportBaseDataSource
      */
     protected function loadDocumentById($documentId)
     {
-        $idListUrl = $this->buildDocExportUrlById($documentId);
+        $urlDocumentPath = sprintf(self::URL_PATH_EXPORT, $documentId);
+        $idListUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_URL) . $urlDocumentPath;
 
         curl_setopt($this->curlHandle, CURLOPT_URL, $idListUrl);
         curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
@@ -256,42 +243,16 @@ class ImperiaDataSource extends ImportBaseDataSource
                 ImperiaDataSourceConfig::CFG_ACCOUNT_PASS
             )
         );
-
+        $loginUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_URL) . self::URL_PATH_LOGIN;
+        
         curl_setopt($this->curlHandle, CURLOPT_POST, 1);
         curl_setopt($this->curlHandle, CURLOPT_POSTFIELDS, http_build_query($post));
-        curl_setopt($this->curlHandle, CURLOPT_URL, $this->buildLoginUrl());
+        curl_setopt($this->curlHandle, CURLOPT_URL, $loginUrl);
 
         $resp = curl_exec($this->curlHandle);
         $this->checkImperiaSessionState($resp, "Unable to login to imperia.");
     }
 
-    /**
-     * Build an imperia export url for the given document id
-     * relative to the configured imperia baseurl.
-     *
-     * @param       string $documentId
-     *
-     * @return      string
-     */
-    protected function buildDocExportUrlById($documentId)
-    {
-        $baseUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_URL);
-
-        return $baseUrl . sprintf(self::URL_PATH_EXPORT, $documentId);
-    }
-
-    /**
-     * Build an imperia login url relative to the configured imperia baseurl.
-     *
-     * @return      string
-     */
-    protected function buildLoginUrl()
-    {
-        $baseUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_URL);
-
-        return $baseUrl . self::URL_PATH_LOGIN;
-    }
-    
     /**
      * Checks the state of a given imperia response right after it has
      * been received and if our session is still valid, hence we are logged on

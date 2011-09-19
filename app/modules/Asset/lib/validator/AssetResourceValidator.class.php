@@ -91,9 +91,15 @@ class AssetResourceValidator extends AgaviFileValidator
      * The method was overriden to add support for defining the request data source,
      * that the value is exported to.
      * 
+     * @internal    As we don't want further modifications of this method,
+     *              to keep the compatibilty impact as small as possible,
+     *              we'll ignore the pmd warnings for thsi method.
+     * 
      * @param       mixed $value
      * @param       string $name
      * @param       string $paramType
+     * 
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function export($value, $name = NULL, $paramType = NULL)
     {

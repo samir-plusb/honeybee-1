@@ -142,7 +142,7 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
         self::PROP_PUBLISH   => '/imperia/head/publish',
         self::PROP_EXPIRY    => '/imperia/head/expiry',
         self::PROP_KEYWORDS  => '/imperia/head/meta[@name="keywords"]/@content'
-        );
+    );
 
     /**
      * An array used to map the results of evaluating our expression map
@@ -151,19 +151,19 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
      * @var         array
      */
     protected static $expressionProcessors = array(
-            self::PROP_TITLE     => 'extractFirst',
-            self::PROP_CONTENT   => 'extractCollection',
-            self::PROP_CATEGORY  => 'extractCategory',
-            self::PROP_SUBTITLE  => 'extractFirst',
-            self::PROP_KICKER    => 'extractFirst',
-            self::PROP_DIRECTORY => 'extractFirst',
-            self::PROP_FILENAME  => 'extractFirst',
-            self::PROP_MEDIA     => 'extractMedia',
-            self::PROP_SOURCE    => 'extractSource',
-            self::PROP_TIMESTAMP => 'extractTimestamp',
-            self::PROP_PUBLISH   => 'extractPublishDate',
-            self::PROP_EXPIRY    => 'extractExpiryDate'
-            );
+        self::PROP_TITLE     => 'extractFirst',
+        self::PROP_CONTENT   => 'extractCollection',
+        self::PROP_CATEGORY  => 'extractCategory',
+        self::PROP_SUBTITLE  => 'extractFirst',
+        self::PROP_KICKER    => 'extractFirst',
+        self::PROP_DIRECTORY => 'extractFirst',
+        self::PROP_FILENAME  => 'extractFirst',
+        self::PROP_MEDIA     => 'extractMedia',
+        self::PROP_SOURCE    => 'extractSource',
+        self::PROP_TIMESTAMP => 'extractTimestamp',
+        self::PROP_PUBLISH   => 'extractPublishDate',
+        self::PROP_EXPIRY    => 'extractExpiryDate'
+    );
 
     // ---------------------------------- </MEMBERS> ---------------------------------------------
 
@@ -236,7 +236,6 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
      */
     public function getExpiryDate()
     {
-        print_r($this->expiryDate);
         return $this->expiryDate instanceof DateTime
             ? $this->expiryDate->format(DATE_ISO8601)
             : NULL;
