@@ -42,52 +42,11 @@ class RssDataSource extends ImportBaseDataSource
      */
     protected function init()
     {
-        $rawContent = $this->getRawContent();
-        if (! $rawContent)
-        {
-            throw new DataSourceException('Can not get content from: '.$fname);
-        }
-
-        $this->feedData = $this->parse($rawContent);
+        $this->feedData = $this->parse(
+            $this->getRawContent()
+        );
+        
         $this->cursorPos = -1;
-    }
-
-    /**
-     * get raw feed file contents
-     *
-     * @return string
-     */
-    protected function getRawContent()
-    {
-        $fname = $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL);
-        if (is_file($fname))
-        {
-            $rawContent = file_get_contents($fname);
-        }
-        else
-        {
-            $tmpname = tempnam('/var/tmp', basename(__FILE__));
-            $fd = fopen($tmpname, 'w');
-            if (! $tmpname || ! $fd)
-            {
-                throw new IOException('Can not open temporary file: '.$tempname);
-            }
-            $curlHandle = ProjectCurl::create();
-            curl_setopt($curlHandle, CURLOPT_URL, $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL));
-            curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 0);
-            curl_setopt($curlHandle, CURLOPT_FILE, $fd);
-            if (! curl_exec($curlHandle) || 200 != curl_getinfo($curlHandle, CURLINFO_HTTP_CODE))
-            {
-                fclose($fd);
-                unlink($tmpname);
-                throw new DataSourceException('Curl failed: '.curl_error($curlHandle), curl_errno($curlHandle));
-            }
-            curl_close($curlHandle);
-            fclose($fd);
-            $rawContent = file_get_contents($tmpname);
-            unlink($tmpname);
-        }
-        return $rawContent;
     }
 
     /**
@@ -113,253 +72,65 @@ class RssDataSource extends ImportBaseDataSource
     protected function fetchData()
     {
         return $this->feedData['items'][$this->cursorPos];
-     }
-
-
-    /**
-     * initialize feed data array
-     *
-     * @return array
-     */
-    protected function _initFeedData()
-    {
-        return array
-        (
-            'title' => '',
-            'description' => '',
-            'link' => '',
-            'copyright' => '',
-            'items' => array()
-        );
     }
 
-    /**
-     * initialize a feed item data array
-     *
-     * @return array
-     */
-    protected function _initItemData()
-    {
-        return array(
-            'author' => '',
-            'title' => '',
-            'link' => '',
-            'timestamp' => '',
-            'datetime' => '',
-            'teaser_text' => '',
-            'html' => ''
-        );
-    }
-
-
-    /**
-     * parse a ATOM Feed (tagesschau.de)
-     *
-     * @param DOMDocument $doc
-     * @param int $source_index
-     * @return array
-     */
-    protected function parseAtom(DOMDocument $doc)
-    {
-        $info = $this->_initFeedData();
-        $xpath = new DOMXpath($doc);
-        $xpath->registerNamespace('a', 'http://www.w3.org/2005/Atom');
-
-        $el = $xpath->query('/a:feed/a:title');
-        if ($el && $el->length > 0)
-        {
-            $info['title'] = $el->item(0)->nodeValue;
-        }
-        $el = $xpath->query('/a:feed/a:subtitle');
-        if ($el && $el->length > 0)
-        {
-            $info['description'] = $el->item(0)->nodeValue;
-        }
-        $el = $xpath->query('/a:feed/a:link/@href');
-        if ($el && $el->length > 0)
-        {
-            $info['link'] = $el->item(0)->nodeValue;
-        }
-        $el = $xpath->query('/a:feed/a:rights');
-        if ($el && $el->length > 0)
-        {
-            $info['copyright'] = $el->item(0)->nodeValue;
-        }
-
-        $el = $xpath->query('/a:feed/a:entry');
-        foreach ($el as $it)
-        {
-            $item = $this->_initItemData();
-            $e = $xpath->query('a:title', $it);
-            if ($e && $e->length > 0)
-            {
-                $item['title'] = $e->item(0)->nodeValue;
-            }
-            $e = $xpath->query('a:link/@href', $it);
-            if ($e && $e->length > 0)
-            {
-                $item['url'] = $e->item(0)->nodeValue;
-            }
-            $e = $xpath->query('a:updated', $it);
-            if ($e && $e->length > 0)
-            {
-                $item['lastchanged'] = new DateTime($e->item(0)->nodeValue);
-                $item['timestamp'] = $item['lastchanged']->format('c');
-            }
-            $e = $xpath->query('a:summary', $it);
-            if ($e && $e->length > 0)
-            {
-                $item['teaser_text'] = strip_tags($e->item(0)->nodeValue);
-            }
-            $e = $xpath->query('a:content', $it);
-            if ($e && $e->length > 0)
-            {
-                $item['html'] = $e->item(0)->nodeValue;
-            }
-
-            if ($item['timestamp'])
-            {
-                $info['items'][] = $item;
-            }
-        }
-        return $info;
-    }
-
-    /**
-     * parse a xml dom as rss
-     *
-     * @param DOMDocument $doc
-     * @param int $source_index
-     * @return array
-     */
-    protected function parseRss(DOMDocument $doc)
-    {
-        $xpath = new DOMXpath($doc);
-
-        $ns_content = $doc->documentElement->lookupPrefix('http://purl.org/rss/1.0/modules/content/');
-        $ns_content = empty($ns_content) ? 'content' : $ns_content;
-        $xpath->registerNamespace($ns_content, 'http://purl.org/rss/1.0/modules/content/');
-
-        $ns_dc = $doc->documentElement->lookupPrefix('http://purl.org/dc/elements/1.1/');
-        $ns_dc = empty($ns_dc) ? 'dc' : $ns_dc;
-        $xpath->registerNamespace($ns_dc, 'http://purl.org/dc/elements/1.1/');
-
-        $info = $this->_initFeedData();
-
-        $el = $xpath->query('/rss/channel/title');
-        if ($el && $el->length > 0)
-        {
-            $info['title'] = $el->item(0)->nodeValue;
-        }
-        $el = $xpath->query('/rss/channel/link');
-        if ($el && $el->length > 0)
-        {
-            $info['link'] = $el->item(0)->nodeValue;
-        }
-        $el = $xpath->query('/rss/channel/description');
-        if ($el && $el->length > 0)
-        {
-            $info['description'] = $el->item(0)->nodeValue;
-        }
-        $el = $xpath->query('/rss/channel/copyright');
-        if ($el && $el->length > 0)
-        {
-            $info['copyright'] = $el->item(0)->nodeValue;
-        }
-        $el = $xpath->query('/rss/channel/pubDate');
-        if ($el && $el->length > 0)
-        {
-            $info['lastchanged'] = new DateTime($el->item(0)->nodeValue);
-        }
-        else
-        {
-            $info['lastchanged'] = new DateTime();
-        }
-
-        $el = $xpath->query('/rss/channel/item');
-        foreach ($el as $it)
-        {
-            $item = $this->_initItemData();
-            $e = $xpath->query('title', $it);
-            if ($e && $e->length > 0)
-            {
-                $item['title'] = $e->item(0)->nodeValue;
-            }
-            $e = $xpath->query('link', $it);
-            if ($e && $e->length > 0)
-            {
-                $item['url'] = $e->item(0)->nodeValue;
-            }
-            $e = $xpath->query('pubDate', $it);
-            if ($e && $e->length > 0)
-            {
-                $item['lastchanged'] = new DateTime($e->item(0)->nodeValue);
-                $item['timestamp'] = $item['lastchanged']->format('c');
-            }
-            else
-            {
-                $e = $xpath->query($ns_dc.':date', $it);
-                if ($e && $e->length > 0)
-                {
-                    $item['lastchanged'] = new DateTime($e->item(0)->nodeValue);
-                    $item['timestamp'] = $item['lastchanged']->format('c');
-                }
-                else
-                {
-                    $item['lastchanged'] = $info['lastchanged'];
-                    $item['timestamp'] = $item['lastchanged']->format('c');
-                }
-            }
-            $e = $xpath->query('description', $it);
-            if ($e && $e->length > 0)
-            {
-                $item['teaser_text'] = $e->item(0)->nodeValue;
-                if (empty ($item['html']))
-                {
-                    $item['html'] = htmlspecialchars($item['teaser_text']);
-                }
-            }
-            $e = $xpath->query($ns_content.':encoded', $it);
-            if ($e && $e->length > 0)
-            {
-                $item['html'] = $e->item(0)->nodeValue;
-                if (empty ($item['teaser_text']))
-                {
-                    $item['teaser_text'] = strip_tags($item['html']);
-                }
-            }
-            $e = $xpath->query('enclosure[@type="image/jpeg"]/@url', $it);
-            if ($e && $e->length > 0)
-            {
-                $item['image']['url'] = $e->item(0)->nodeValue;
-            }
-            if ($item['timestamp'])
-            {
-                $info['items'][] = $item;
-            }
-        }
-
-        return $info;
-    }
-
+    // ---------------------------------- </ImportBaseDataSource IMPL> ---------------------------
+    
+    
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
+    
     /**
      * Parse the incoming feed content
      *
-     * @param       string $content raw feed file contents
+     * @param       string $feedContent raw feed file contents
      *
      * @return      array
      *
-     * @throws      DataRecordException If a wrong(other than ezcFeedEntryElement) input data-type is given.
+     * @throws      DataSourceException If parsing fails due to bad content.
      *
-     * @see         ImportBaseDataRecord::parse()
      */
-    protected function parse($content)
+    protected function parse($feedContent)
+    {
+        $feedDoc = $this->createFeedDocument(
+            $this->getRawContent()
+        );
+
+        $feed = array();
+        $root = $feedDoc->documentElement;
+        $parser = NULL;
+        
+        switch ($feedDoc->documentElement->tagName)
+        {
+            case 'rss':
+                $parser = new RssFeedParser();
+                break;
+            case 'feed':
+                $parser = new AtomFeedParser();
+                break;
+            default:
+                throw new DataSourceException('Feed type "'.$feedDoc->documentElement->tagName.'" not implemented: '.
+                    $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL));
+        }
+
+        return $parser->parseFeed($feedDoc);
+    }
+    
+    /**
+     * Creates a DOMDocument from the given raw feed content.
+     * 
+     * @param       string $content
+     * 
+     * @return      DOMDocument 
+     */
+    protected function createFeedDocument($content)
     {
         libxml_clear_errors();
         $doc = new DOMDocument();
+        
         if (! $doc || ! $doc->loadXML($content))
         {
             $xmlerror = libxml_get_last_error();
+            
             if ($xmlerror)
             {
                 throw new DataSourceException($xmlerror->file.' : '.$xmlerror->message);
@@ -367,29 +138,73 @@ class RssDataSource extends ImportBaseDataSource
             else
             {
                 throw new DataSourceException('Can not parse feed: '.
-                    $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL));
+                    $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL)
+                );
             }
         }
-
-        $feed = array();
-        $root = $doc->documentElement;
-        switch ($doc->documentElement->tagName)
+        
+        return $doc;
+    }
+    
+    /**
+     * Returns the raw feed content. (xml string)
+     *
+     * @return      string
+     */
+    protected function getRawContent()
+    {
+        $feedUri = $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL);
+        
+        if (is_file($feedUri) && is_readable($feedUri))
         {
-            case 'rss':
-                $feed = $this->parseRss($doc);
-                break;
-            case 'feed':
-                $feed = $this->parseAtom($doc);
-                break;
-            default:
-                throw new DataSourceException('Feed type "'.$doc->documentElement->tagName.'" not implemented: '.
-                    $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL));
+            $rawContent = file_get_contents($feedUri);
+        }
+        else
+        {
+            $rawContent = $this->loadFeedByUrl($feedUri);
+        }
+        
+        return $rawContent;
+    }
+    
+    /**
+     * Load and return the feed content for a given feed url.
+     * 
+     * @param       string $url
+     * 
+     * @return      string
+     */
+    protected function loadFeedByUrl($url)
+    {
+        $tmpname = tempnam('/var/tmp', basename(__FILE__));
+        $fd = fopen($tmpname, 'w');
+
+        if (! $tmpname || ! $fd)
+        {
+            throw new IOException('Can not open temporary file: '.$tempname);
         }
 
-        return $feed;
+        $curlHandle = ProjectCurl::create();
+        curl_setopt($curlHandle, CURLOPT_URL, $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL));
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 0);
+        curl_setopt($curlHandle, CURLOPT_FILE, $fd);
+
+        if (! curl_exec($curlHandle) || 200 != curl_getinfo($curlHandle, CURLINFO_HTTP_CODE))
+        {
+            fclose($fd);
+            unlink($tmpname);
+            throw new DataSourceException('Curl failed: '.curl_error($curlHandle), curl_errno($curlHandle));
+        }
+
+        curl_close($curlHandle);
+        fclose($fd);
+        $rawContent = file_get_contents($tmpname);
+        unlink($tmpname);
+
+        return $rawContent;
     }
 
-    // ---------------------------------- </ImportBaseDataSource IMPL> ---------------------------
+    // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 
 ?>

@@ -8,9 +8,16 @@
             <autoload name="MimeMailParser_attachment">Mail/attachment.class.php</autoload>
             <!-- /From libs include path -->
             
-             <!-- Lib/Mail -->
+            <!-- Lib/Mail -->
             <autoload name="ProjectMailParser">%core.module_dir%/Import/lib/mail/ProjectMailParser.class.php</autoload>
             <!-- /Lib/Mail -->
+            
+            <!-- Lib/Feed -->
+            <autoload name="IFeedParser">%core.module_dir%/Import/lib/feed/IFeedParser.iface.php</autoload>
+            <autoload name="BaseFeedParser">%core.module_dir%/Import/lib/feed/BaseFeedParser.class.php</autoload>
+            <autoload name="RssFeedParser">%core.module_dir%/Import/lib/feed/RssFeedParser.class.php</autoload>
+            <autoload name="AtomFeedParser">%core.module_dir%/Import/lib/feed/AtomFeedParser.class.php</autoload>
+            <!-- /Lib/Feed -->
             
             <!-- Lib/Mvc -->
             <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/mvc/ImportBaseAction.class.php</autoload>
