@@ -47,6 +47,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      * @return      boolean 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @codingStandardsIgnoreStart
      */
     public function onMatched(array &$parameters, AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
@@ -81,6 +82,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      * @return      boolean 
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @codingStandardsIgnoreStart
      */
     public function onNotMatched(AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
