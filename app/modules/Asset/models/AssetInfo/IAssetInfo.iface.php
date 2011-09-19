@@ -20,13 +20,6 @@ interface IAssetInfo
     public function getId();
     
     /**
-     * Return the uri that our asset orignates from.
-     * 
-     * @return      string
-     */
-    public function getOrigin();
-    
-    /**
      * Return the asset's full filename,
      * means name+extension
      * 
@@ -89,27 +82,6 @@ interface IAssetInfo
      * @param       array $data
      */
     public function hydrate(array $data);
-    
-    /**
-     * Move our binary to our target path on the filesystem.
-     * 
-     * @return      boolean
-     */
-    public function moveFile();
-    
-    /**
-     * Delete our binary from our target path on the filesystem.
-     * 
-     * @return      boolean
-     */
-    public function deleteFile();
-    
-    /**
-     * Move our binary to our target path on the filesystem.
-     * 
-     * @return      boolean
-     */
-    public function fileExists();
 }
 
 ?>

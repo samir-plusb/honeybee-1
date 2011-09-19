@@ -119,14 +119,34 @@ class ProjectAssetService implements IAssetService
      */
     public function put($assetUri, array $metaData = array(), $moveOrigin = TRUE)
     {
-        $asset = $this->create($assetUri, $metaData);
+        $assetId = $this->idSequence->nextId();
+        $assetFile = new AssetFile($assetId);
+        $assetFile->move($assetUri, $moveOrigin);
+        $data = $this->gatherAssetData($assetFile, $assetUri);
         
-        if ($asset->moveFile($moveOrigin))
+        // Mime-type override magic, we support setting a custom mime type.
+        if (isset($metaData[ProjectAssetInfo::XPROP_MIME_TYPE]))
         {
-            $this->store($asset);
+            $data[ProjectAssetInfo::XPROP_MIME_TYPE] = $metaData[ProjectAssetInfo::XPROP_MIME_TYPE];
+            unset($metaData[ProjectAssetInfo::XPROP_MIME_TYPE]);
         }
         
-        return $asset;
+        $assetData = array_merge(
+            $this->gatherAssetData($assetFile, $assetUri),
+            array(
+                ProjectAssetInfo::XPROP_META_DATA => $metaData
+            )
+        );
+        $assetInfo = new ProjectAssetInfo($assetId, $assetData);
+        
+        if (! $this->store($assetInfo))
+        {
+            $assetFile->delete();
+            
+            throw new Exception("Unable to store asset meta data for asset: " . $assetId);
+        }
+        
+        return $assetInfo;
     }
     
     /**
@@ -183,11 +203,11 @@ class ProjectAssetService implements IAssetService
     public function delete($assetId)
     {
         $assetData = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
-        $asset = new ProjectAssetInfo($assetData['_id'], $assetData);
+        $assetFile = new AssetFile($assetId);
         
-        if ($this->couchDbClient->deleteDoc(self::COUCHDB_DATABASE, $asset->getId(), $assetData['_rev']))
+        if ($this->couchDbClient->deleteDoc(self::COUCHDB_DATABASE, $assetId, $assetData['_rev']))
         {
-            return $asset->deleteFile();
+            return $assetFile->delete();
         }
         
         return FALSE;
@@ -213,22 +233,37 @@ class ProjectAssetService implements IAssetService
     }
     
     /**
-     * Create a new IAssetInfo from the given uri and meta-data.
+     * Collect data about a given asset and return it in way,
+     * that can be used to hydrate AIAssetInfo instances.
      * 
-     * @param       string
-     * @param       array $metaData
+     * @param       IAssetFile $file
+     * @param       string $assetUri
      * 
-     * @return      IAssetInfo
+     * @return      array
      */
-    protected function create($assetUri, array $metaData)
+    protected function gatherAssetData(IAssetFile $file, $assetUri)
     {
-        return new ProjectAssetInfo(
-            $this->idSequence->nextId(),
-            array(
-                ProjectAssetInfo::XPROP_ORIGIN    => $assetUri,
-                ProjectAssetInfo::XPROP_META_DATA => $metaData
-            )
+        $originParts = parse_url($assetUri);
+        $explodedOrigin = explode('/', $originParts['path']);
+        $fullname = end($explodedOrigin);
+        $explodedName = explode('.', $fullname);
+        $extension = array_pop($explodedName);
+        $name = implode('.', $explodedName);
+
+        $data = array(
+            'fullname'  => $fullname,
+            'name'      => $name,
+            'extension' => $extension ? strtolower($extension) : NULL,
+            'size'      => filesize($file->getPath())
         );
+        
+        
+        if (($finfo = new finfo(FILEINFO_MIME, AgaviConfig::get('assets.mime_database')))) 
+        {
+            $data['mimeType'] = $finfo->file($file->getPath());
+        }
+        
+        return $data;
     }
     
     /**

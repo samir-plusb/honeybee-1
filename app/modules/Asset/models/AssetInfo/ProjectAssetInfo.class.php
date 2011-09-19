@@ -16,11 +16,6 @@ class ProjectAssetInfo implements IAssetInfo
     // ---------------------------------- <CONSTANTS> --------------------------------------------
 
     /**
-     * Holds the max number of files per directory.
-     */
-    const ASSET_FOLDER_SIZE = 512;
-
-    /**
      * Holds the name of our id property.
      */
     const PROP_ASSET_ID = 'id';
@@ -44,11 +39,6 @@ class ProjectAssetInfo implements IAssetInfo
      * Holds the name of our size property.
      */
     const XPROP_SIZE = 'size';
-
-    /**
-     * Holds the name of our origin property.
-     */
-    const XPROP_ORIGIN = 'origin';
 
     /**
      * Holds the name of our mimeType property.
@@ -81,20 +71,6 @@ class ProjectAssetInfo implements IAssetInfo
      * @var         int
      */
     protected $assetId;
-
-    /**
-     * The asset's origin.
-     *
-     * @var         string
-     */
-    protected $origin;
-
-    /**
-     * The asset's absolute fs path.
-     *
-     * @var         string
-     */
-    protected $fullPath;
 
     /**
      * The asset's full name (including extension)
@@ -158,15 +134,6 @@ class ProjectAssetInfo implements IAssetInfo
         {
             $this->hydrate($assetData);
         }
-
-        $this->fullPath = $this->generateAbsTargetPath($this->assetId);
-
-        $originParts = parse_url($this->getOrigin());
-
-        if (!isset($originParts['scheme']))
-        {
-            throw new Exception("Invalid origin uri given: " . $this->getOrigin());
-        }
     }
 
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
@@ -182,16 +149,6 @@ class ProjectAssetInfo implements IAssetInfo
     public function getId()
     {
         return $this->assetId;
-    }
-
-    /**
-     * Return the uri that our asset orignates from.
-     *
-     * @return      string
-     */
-    public function getOrigin()
-    {
-        return $this->origin;
     }
 
     /**
@@ -299,110 +256,9 @@ class ProjectAssetInfo implements IAssetInfo
                 $this->$setterMethod($data[$property]);
             }
         }
-        
-        if (isset($data[self::XPROP_META_DATA]) && is_array($data[self::XPROP_META_DATA]))
-        {
-            $this->hydrate($data[self::XPROP_META_DATA]);
-        }
-        
-        if (! $this->fullname)
-        {
-            $originParts = parse_url($this->getOrigin());
-            $explodedOrigin = explode('/', $originParts['path']);
-            $this->setFullname(end($explodedOrigin));
-        }
-    }
-
-    /**
-     * Move our binary to our target path on the filesystem.
-     *
-     * @return      boolean
-     */
-    public function moveFile($moveOrigin = TRUE)
-    {
-        $originParts = parse_url($this->getOrigin());
-        $src = NULL;
-
-        if ('file' === $originParts['scheme'])
-        {
-            $src = $originParts['path'];
-        }
-        else
-        {
-            $src = $this->fetchAsset();
-        }
-
-        $targetPath = $this->getFullPath();
-        $dirname = dirname($targetPath);
-
-        if (!file_exists($dirname))
-        {
-            if (!mkdir($dirname, 0755, TRUE))
-            {
-                throw new Exception("Failed creating target directory: " . $dirname);
-            }
-        }
-
-        if (($moveOrigin && rename($src, $targetPath)) || copy($src, $targetPath))
-        {
-            // return mime type ala mimetype extension
-            $finfo = new finfo(FILEINFO_MIME, AgaviConfig::get('assets.mime_database'));
-
-            if (!$finfo) 
-            {
-                throw new  Exception("Opening fileinfo database failed");
-            }
-            
-            if (! $this->mimeType)
-            {
-                $this->mimeType = $finfo->file($this->getFullPath());
-            }
-            
-            $this->size = filesize($this->getFullPath());
-
-            return TRUE;
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * Delete our binary from our target path on the filesystem.
-     *
-     * @return      boolean
-     */
-    public function deleteFile()
-    {
-        $firstDir = dirname($this->getFullPath());
-        $secondDir = dirname($firstDir);
-
-        $return = unlink($this->getFullPath());
-
-        if (!$this->hasFiles($firstDir))
-        {
-            rmdir($firstDir);
-        }
-
-        if (!$this->hasFiles($secondDir))
-        {
-            rmdir($secondDir);
-        }
-
-        return $return;
-    }
-
-    /**
-     * Move our binary to our target path on the filesystem.
-     *
-     * @return      boolean
-     */
-    public function fileExists()
-    {
-        return file_exists($this->getFullPath());
     }
 
     // ---------------------------------- </IAssetInfo IMPL> -------------------------------------
-
 
 
     // ---------------------------------- <HYDRATE SETTERS> --------------------------------------
@@ -436,17 +292,12 @@ class ProjectAssetInfo implements IAssetInfo
     {
         $this->metaData = (array)$metaData;
     }
-
-    /**
-     * Set our origin.
-     *
-     * @param       string $origin
-     */
-    protected function setOrigin($origin)
-    {
-        $this->origin = $origin;
-    }
     
+    /**
+     * Sets our fullname.
+     * 
+     * @param       string $name 
+     */
     protected function setFullname($name)
     {
         $this->fullname = $name;
@@ -475,7 +326,6 @@ class ProjectAssetInfo implements IAssetInfo
     {
         return array(
             self::PROP_ASSET_ID,
-            self::XPROP_ORIGIN,
             self::XPROP_FULLNAME,
             self::XPROP_NAME,
             self::XPROP_EXTENSION,
@@ -483,151 +333,6 @@ class ProjectAssetInfo implements IAssetInfo
             self::XPROP_MIME_TYPE,
             self::XPROP_META_DATA
         );
-    }
-
-    /**
-     * Return a path relative to our asset base dir,
-     * that points the location for the given id.
-     *
-     * @param       int $assetId
-     *
-     * @return      string
-     */
-    protected function generateRelTargetPath($assetId)
-    {
-        $first = $assetId % self::ASSET_FOLDER_SIZE;
-        $second =  intval($assetId / self::ASSET_FOLDER_SIZE) % self::ASSET_FOLDER_SIZE;
-
-        return sprintf(
-            "%s%02x%s%02x%s",
-            DIRECTORY_SEPARATOR,
-            $first,
-            DIRECTORY_SEPARATOR,
-            $second,
-            DIRECTORY_SEPARATOR . $assetId
-        );
-    }
-
-    /**
-     * Return true if the given directory is empty,
-     * false otherwise.
-     *
-     * @param       string $directory
-     *
-     * @return      boolean
-     */
-    protected function hasFiles($directory)
-    {
-        $dirHandle = opendir($directory);
-
-        if (!$directory)
-        {
-            throw new Exception(
-                "Unable to open directory handle for dir: " . $directory
-            );
-        }
-
-        $ignoredFiles = array('.', '..');
-
-        while (FALSE !== ($file = readdir($dirHandle)))
-        {
-            if (!in_array($file, $ignoredFiles))
-            {
-                closedir($dirHandle);
-
-                return TRUE;
-            }
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * Return an absolute fs path pointing to our asset location.
-     *
-     * @param       int $assetId
-     *
-     * @return      string
-     */
-    protected function generateAbsTargetPath($assetId)
-    {
-        $relPath = $this->generateRelTargetPath($assetId);
-
-        $baseDir = realpath(AgaviConfig::get('assets.base_dir'));
-
-        $extension = $this->getExtension();
-
-        if ($extension)
-        {
-            $relPath .= '.' . $extension;
-        }
-
-        return $baseDir . $relPath;
-    }
-
-    /**
-     * Download our asset from it's origin
-     * to a temp path and return the latter.
-     *
-     * @throws      Exception on curl/file io errors
-     * @return      string
-     */
-    protected function fetchAsset()
-    {
-        $curlHandle = ProjectCurl::create();
-
-        $tempPath = $this->getDowloadTmpPath();
-        
-        $filePtr = fopen($tempPath,'wb');
-        
-        if (! $filePtr)
-        {
-            throw new Exception("Can not open file for writing: ".$tempPath);
-        }
-
-        curl_setopt($curlHandle, CURLOPT_URL, $this->getOrigin());
-        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 0);
-        curl_setopt($curlHandle, CURLOPT_FILE, $filePtr);
-        curl_exec($curlHandle);
-
-        $error = curl_error($curlHandle);
-        $errorNum = curl_errno($curlHandle);
-        $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
-        fclose($filePtr);
-
-        if (200 > $respCode || 300 <= $respCode || $errorNum || $error)
-        {
-            throw new Exception(
-                "Failed to download asset binary from uri: " . $this->getOrigin()
-            );
-        }
-
-        return $tempPath;
-    }
-
-    /**
-     * Build a temp path that we can safely download asset files to,
-     * before importing them.
-     *
-     * @return      string
-     */
-    protected function getDowloadTmpPath()
-    {
-        $baseDir = AgaviConfig::get('assets.base_dir');
-
-        $tmpDir = realpath($baseDir) . DIRECTORY_SEPARATOR .
-            'tmp' . DIRECTORY_SEPARATOR .
-            'download' . DIRECTORY_SEPARATOR;
-
-        if (!is_dir($tmpDir))
-        {
-            if (!mkdir($tmpDir, 0775, TRUE))
-            {
-                throw new Exception("Failed to create temp download path: " . $tmpDir);
-            }
-        }
-
-        return tempnam($tmpDir, 'dwn_');
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------

@@ -20,6 +20,8 @@
             <autoload name="AssetIdSequence">%core.module_dir%/Asset/models/Service/AssetIdSequence.class.php</autoload>
             <autoload name="IAssetInfo">%core.module_dir%/Asset/models/AssetInfo/IAssetInfo.iface.php</autoload>
             <autoload name="ProjectAssetInfo">%core.module_dir%/Asset/models/AssetInfo/ProjectAssetInfo.class.php</autoload>
+            <autoload name="IAssetFile">%core.module_dir%/Asset/models/AssetInfo/IAssetFile.iface.php</autoload>
+            <autoload name="AssetFile">%core.module_dir%/Asset/models/AssetInfo/AssetFile.class.php</autoload>
             <!-- /Models/Service -->
             
             <!-- Models/Setup -->
