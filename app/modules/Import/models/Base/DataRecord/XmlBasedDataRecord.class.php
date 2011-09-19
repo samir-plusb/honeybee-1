@@ -194,34 +194,24 @@ abstract class XmlBasedDataRecord extends ImportBaseDataRecord
      * @param       string $separator
      *
      * @return      string
+     * 
+     * @deprecated  Use BaseXmlParser::joinNodeList()
      */
     protected function joinNodeList(DOMNodeList $nodeList, $separator)
     {
-        $content = $this->nodeListToArray($nodeList);
-
-        return join($separator, $content);
+        return BaseXmlParser::joinNodeList($nodeList, $separator);
     }
 
     /**
      * Translate a node list to a simple string array.
      *
      * @param       DOMNodeList $nodeList
+     * 
+     * @deprecated  Use BaseXmlParser::nodeListToArray()
      */
     protected function nodeListToArray(DOMNodeList $nodeList)
     {
-        $content = array();
-
-        for ($i = 0; $i < $nodeList->length; $i++)
-        {
-            $value = trim($nodeList->item($i)->nodeValue);
-
-            if ($value)
-            {
-                $content[] = $value;
-            }
-        }
-
-        return $content;
+        return BaseXmlParser::nodeListToArray($nodeList);
     }
 
     /**
@@ -230,22 +220,12 @@ abstract class XmlBasedDataRecord extends ImportBaseDataRecord
      * @param       DOMNode $node XML-Node to output
      *
      * @return      string XML string
+     * 
+     * @deprecated  Use BaseXmlParser::nodeToString()
      */
     protected function nodeToString(DOMNode $node)
     {
-        if ($node instanceof DOMDocument)
-        {
-            $output = $node->saveXML();
-        }
-        else
-        {
-            $doc = new DOMDocument;
-            $domNode = $doc->importNode($node, TRUE);
-            $doc->appendChild($domNode);
-            $output = $doc->saveXML($domNode, LIBXML_NOXMLDECL);
-        }
-
-        return $output;
+        return BaseXmlParser::nodeToString($node);
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------

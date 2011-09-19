@@ -3,21 +3,23 @@
     <ae:configuration>
         <autoloads>
         <!-- LIBS -->
-            <!-- From libs include path -->
+            <!-- From global vendor libs include path -->
             <autoload name="MimeMailParser">Mail/mailparse.php</autoload>
             <autoload name="MimeMailParser_attachment">Mail/attachment.class.php</autoload>
-            <!-- /From libs include path -->
+            <!-- /From global vendor libs include path -->
             
-            <!-- Lib/Mail -->
-            <autoload name="ProjectMailParser">%core.module_dir%/Import/lib/mail/ProjectMailParser.class.php</autoload>
-            <!-- /Lib/Mail -->
+            <!-- Lib/Parser -->
+            <autoload name="ProjectMailParser">%core.module_dir%/Import/lib/parser/mail/ProjectMailParser.class.php</autoload>
             
-            <!-- Lib/Feed -->
-            <autoload name="IFeedParser">%core.module_dir%/Import/lib/feed/IFeedParser.iface.php</autoload>
-            <autoload name="BaseFeedParser">%core.module_dir%/Import/lib/feed/BaseFeedParser.class.php</autoload>
-            <autoload name="RssFeedParser">%core.module_dir%/Import/lib/feed/RssFeedParser.class.php</autoload>
-            <autoload name="AtomFeedParser">%core.module_dir%/Import/lib/feed/AtomFeedParser.class.php</autoload>
-            <!-- /Lib/Feed -->
+            <autoload name="IXmlParser">%core.module_dir%/Import/lib/parser/xml/IXmlParser.iface.php</autoload>
+            <autoload name="BaseXmlParser">%core.module_dir%/Import/lib/parser/xml/BaseXmlParser.class.php</autoload>
+            <autoload name="ImperiaXmlParser">%core.module_dir%/Import/lib/parser/xml/ImperiaXmlParser.class.php</autoload>
+            
+            <autoload name="IFeedParser">%core.module_dir%/Import/lib/parser/feed/IFeedParser.iface.php</autoload>
+            <autoload name="BaseFeedParser">%core.module_dir%/Import/lib/parser/feed/BaseFeedParser.class.php</autoload>
+            <autoload name="RssFeedParser">%core.module_dir%/Import/lib/parser/feed/RssFeedParser.class.php</autoload>
+            <autoload name="AtomFeedParser">%core.module_dir%/Import/lib/parser/feed/AtomFeedParser.class.php</autoload>
+            <!-- /lib/parser/feed -->
             
             <!-- Lib/Mvc -->
             <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/mvc/ImportBaseAction.class.php</autoload>

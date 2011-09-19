@@ -10,7 +10,7 @@
  * @package         Import
  * @subpackage      Imperia
  */
-abstract class ImperiaDataRecord extends XmlBasedDataRecord
+class ImperiaDataRecord extends ImportBaseDataRecord
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------
 
@@ -121,50 +121,6 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
      */
     protected $keywords;
 
-    /**
-     * Holds an array with known keys and xpath expressions as values.
-     * This $expressionMap is used to evaluate and collect data from a given DOMDocument,
-     * that has been initialized with imperia propetary xml.
-     *
-     * @var     array
-     */
-    protected static $expressionMap = array(
-        self::PROP_TITLE     => '/imperia/body/article/title',
-        self::PROP_SUBTITLE  => '/imperia/body/article/subtitle',
-        self::PROP_KICKER    => '/imperia/body/article/kicker',
-        self::PROP_CONTENT   => '/imperia/body/article//paragraph/text',
-        self::PROP_CATEGORY  => '/imperia/head/categories/category',
-        self::PROP_DIRECTORY => '/imperia/head/directory',
-        self::PROP_FILENAME  => '/imperia/head/filename',
-        self::PROP_MEDIA     => '/imperia/body/article//image',
-        self::PROP_SOURCE    => '/imperia/head/categories/category',
-        self::PROP_TIMESTAMP => '/imperia/head/modified',
-        self::PROP_PUBLISH   => '/imperia/head/publish',
-        self::PROP_EXPIRY    => '/imperia/head/expiry',
-        self::PROP_KEYWORDS  => '/imperia/head/meta[@name="keywords"]/@content'
-    );
-
-    /**
-     * An array used to map the results of evaluating our expression map
-     * to a set of corresponding processors, that extract our final values.
-     *
-     * @var         array
-     */
-    protected static $expressionProcessors = array(
-        self::PROP_TITLE     => 'extractFirst',
-        self::PROP_CONTENT   => 'extractCollection',
-        self::PROP_CATEGORY  => 'extractCategory',
-        self::PROP_SUBTITLE  => 'extractFirst',
-        self::PROP_KICKER    => 'extractFirst',
-        self::PROP_DIRECTORY => 'extractFirst',
-        self::PROP_FILENAME  => 'extractFirst',
-        self::PROP_MEDIA     => 'extractMedia',
-        self::PROP_SOURCE    => 'extractSource',
-        self::PROP_TIMESTAMP => 'extractTimestamp',
-        self::PROP_PUBLISH   => 'extractPublishDate',
-        self::PROP_EXPIRY    => 'extractExpiryDate'
-    );
-
     // ---------------------------------- </MEMBERS> ---------------------------------------------
 
     // ---------------------------------- <IDataRecord IMPL> -------------------------------------
@@ -215,7 +171,6 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
     {
         return $this->link;
     }
-
 
     /**
      * get ISO8601 formatted publish date
@@ -298,7 +253,6 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
         $this->applyLink();
     }
 
-
     /**
      * Set our publish date during hydrate.
      *
@@ -332,47 +286,50 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
     // ---------------------------------- </HYDRATE SETTERS> -------------------------------------
 
 
-    // ---------------------------------- <XmlBasedDataRecord IMPL> ------------------------------
+    // ---------------------------------- <ImportBaseDataRecord IMPL> ----------------------------
 
     /**
-     * Return an array holding fieldnames and corresponding xpath queries
-     * that will be evaluated and mapped to the correlating field.
+     * Parse the given xml data and return a normalized array.
+     *
+     * @param       mixed $data
      *
      * @return      array
      *
-     * @see         XmlBasedDataRecord::getFieldMap()
+     * @see         ImportBaseDataRecord::parseData()
      */
-    protected function getFieldMap()
+    protected function parseData($data)
     {
-        return self::$expressionMap;
-    }
-
-    /**
-     * Normalize the given xpath results.
-     *
-     * @param       array $data Contains result from processing our field map.
-     *
-     * @return      array
-     *
-     * @see         XmlBasedDataRecord::normalizeData()
-     */
-    protected function normalizeData(array $xPathResults)
-    {
-        $data = array();
-
-        foreach (self::$expressionProcessors as $propName => $processor)
+        $parser = new ImperiaXmlParser();
+        $parsedData = $parser->parseXml($data);
+        
+        $recordData = array();
+        $recordData[self::PROP_TITLE] = $parsedData['title']; 
+        $recordData[self::PROP_SUBTITLE] = $parsedData['subtitle'];
+        $recordData[self::PROP_DIRECTORY] = $parsedData['directory'];
+        $recordData[self::PROP_FILENAME] = $parsedData['filename'];
+        $recordData[self::PROP_KICKER] = $parsedData['kicker'];
+        $recordData[self::PROP_TIMESTAMP] = $parsedData['modified'];
+        $recordData[self::PROP_EXPIRY] = $parsedData['expiry'];
+        $recordData[self::PROP_PUBLISH] = $parsedData['publish'];
+        $recordData[self::PROP_SOURCE] = $this->generateSource($parsedData['categories']);
+        $recordData[self::PROP_CONTENT] = implode("\n\n", $parsedData['paragraphs']);
+        $recordData[self::PROP_CATEGORY] = sprintf('// %s', join(' // ', array_reverse($parsedData['categories'])));
+        $recordData[self::PROP_GEO] = array();
+        $recordData[self::PROP_MEDIA] = array();
+        
+        foreach ($parsedData['images'] as $imageInfo)
         {
-            if (is_callable(array($this, $processor)))
-            {
-                $data[$propName] = $this->$processor($xPathResults, $propName);
-            }
+            $recordData[self::PROP_MEDIA][] = $this->createAsset($imageInfo);
         }
-
-        $data[self::PROP_GEO] = array();
-
-        return $data;
+        
+        return $recordData;
     }
 
+    // ---------------------------------- </ImportBaseDataRecord IMPL> ---------------------------
+    
+    
+    // ---------------------------------- <ImportBaseDataRecord OVERRIDES> -----------------------
+    
     /**
      * Return an array holding property names of properties,
      * which we want to expose through our IDataRecord::toArray() method.
@@ -394,9 +351,9 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
         );
 
     }
-
-    // ---------------------------------- </XmlBasedDataRecord IMPL> -----------------------------
-
+    
+    // ---------------------------------- <ImportBaseDataRecord OVERRIDES> -----------------------
+    
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
 
@@ -417,187 +374,44 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
     }
 
     /**
-     * Extracts the value of the first node in a node list.
-     * The node list is pulled from the data that resulted
-     * from processing our $expressionMap.
+     * Generate the record's source info from the given categories.
      *
      * @param       array $xPathResults
      * @param       string $key
      *
      * @return      mixed
      */
-    protected function extractFirst(array $xPathResults, $key)
+    protected function generateSource(array $categories)
     {
-        if (!$xPathResults[$key] || 0 === $xPathResults[$key]->length)
-        {
-            return NULL;
-        }
-
-        return trim($xPathResults[$key]->item(0)->nodeValue);
-    }
-
-    /**
-     * Converts a node list to a collection mixed values that have been pulled from the nodes.
-     * The node list is pulled from the data that resulted
-     * from processing our $expressionMap.
-     *
-     * @param       array $xPathResults
-     * @param       string $key
-     *
-     * @return      mixed
-     */
-    protected function extractCollection(array $xPathResults, $key)
-    {
-        if (!$xPathResults[$key] || !$xPathResults[$key])
-        {
-            return array();
-        }
-
-        return $this->joinNodeList($xPathResults[$key], "\n\n");
-    }
-
-    /**
-     * Extracts the imperia category nodes and returns
-     * their joined string representation.
-     *
-     * @param       array $xPathResults
-     * @param       string $key
-     *
-     * @return      mixed
-     */
-    protected function extractCategory(array $xPathResults, $key)
-    {
-        $categoryCrumbs = $this->nodeListToArray($xPathResults[$key]);
-
-        return sprintf('// %s', join(' // ', array_reverse($categoryCrumbs)));
-    }
-
-    /**
-     * Extracts the organistion from category info
-     *
-     * @param       array $xPathResults
-     * @param       string $key
-     *
-     * @return      mixed
-     */
-    protected function extractSource(array $xPathResults, $key)
-    {
-        $categoryCrumbs = $this->nodeListToArray($xPathResults[$key]);
-        $cat = array_reverse($categoryCrumbs);
-        if ('Land' != $cat[0])
+        $catReverse = array_reverse($categories);
+        
+        if ('Land' != $catReverse[0])
         {
             return 'Imperia-Unknown';
         }
-        if ('Senatsverwaltungen' == $cat[1])
+        
+        if ('Senatsverwaltungen' == $catReverse[1])
         {
-            return $cat[2];
+            return $catReverse[2];
         }
-        else
-        {
-            return $cat[1];
-        }
+        
+        return $catReverse[1];
     }
 
     /**
-     * Convert imperia export timestamp into a DateTime instance.
+     * Create an AssetInfo instance from the given image data and returns it's id.
      *
-     * @param       string $timestamp parseable by strtotime
-     *
-     * @return      DateTime
-     */
-    protected function extractTimestamp(array $xPathResults)
-    {
-        return new DateTime($this->extractFirst($xPathResults, 'timestamp'));
-    }
-
-
-    /**
-     * Convert imperia export timestamp into a DateTime instance.
-     *
-     * @param       string $timestamp parseable by strtotime
-     *
-     * @return      DateTime
-     */
-    protected function extractPublishDate(array $xPathResults)
-    {
-        $value = $this->extractFirst($xPathResults, 'publishDate');
-        return empty($value) ? NULL : new DateTime($value);
-    }
-
-    /**
-     * Convert imperia export timestamp into a DateTime instance.
-     *
-     * @param       string $timestamp parseable by strtotime
-     *
-     * @return      DateTime
-     */
-    protected function extractExpiryDate(array $xPathResults)
-    {
-        $value = $this->extractFirst($xPathResults, 'expiryDate');
-        return empty($value) ? NULL : new DateTime($value);
-    }
-
-    /**
-     * Extracts the media found inside our parsed data
-     * and creates asset items thereby returning an array
-     * containing the id's of all stored assets.
-     *
-     * @param       array $xPathResults
-     * @param       string $key
-     *
-     * @return      array
-     */
-    protected function extractMedia(array $xPathResults, $key)
-    {
-        $assets = array();
-
-        if (!isset($xPathResults[$key]) || !$xPathResults[$key])
-        {
-            return $assets;
-        }
-
-        foreach ($xPathResults[$key] as $imageNode)
-        {
-            $assets[] = $this->createAsset($imageNode);
-        }
-
-        return $assets;
-    }
-
-    /**
-     * Create an AssetInfo instance from the given DOMNode
-     * and return it's id.
-     *
-     * @param       DOMNode $imageNode
+     * @param       array $imageInfo
      *
      * @return      integer
      */
-    protected function createAsset(DOMNode $imageNode)
+    protected function createAsset(array $imageInfo)
     {
-        $metaDataNodes = array('caption');
         $metaData = array();
-        $src = NULL;
-
-        foreach ($imageNode->childNodes as $childNode)
-        {
-            if ('src' === $childNode->nodeName)
-            {
-                $src = self::LINK_BASE_URL . trim($childNode->nodeValue);
-            }
-            elseif (in_array($childNode->nodeName, $metaDataNodes))
-            {
-                $metaData[$childNode->nodeName] = trim($childNode->nodeValue);
-            }
-        }
-
-        if ($src)
-        {
-            $assetInfo = ProjectAssetService::getInstance()->put($src, $metaData);
-
-            return $assetInfo->getId();
-        }
-
-        return NULL;
+        $src = self::LINK_BASE_URL . $imageInfo['src'];
+        unset($imageInfo['src']);
+        
+        return ProjectAssetService::getInstance()->put($src, $imageInfo)->getId();
     }
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
