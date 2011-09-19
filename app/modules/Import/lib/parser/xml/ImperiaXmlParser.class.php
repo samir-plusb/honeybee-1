@@ -52,14 +52,16 @@ class ImperiaXmlParser extends BaseXmlParser
         $data['modified'] = $this->fetchNodeValueAsDate($xPath, '/imperia/head/modified');
         $data['publish'] = $this->fetchNodeValueAsDate($xPath, '/imperia/head/publish');
         $data['expiry'] = $this->fetchNodeValueAsDate($xPath, '/imperia/head/expiry');
-        $data['keywords'] = explode('-', $this->fetchFirstNodeValue($xPath, '/imperia/head/meta[@name="keywords"]/@content'));
         $data['paragraphs'] = BaseXmlParser::nodeListToArray(
             $xPath->query('/imperia/body/article//paragraph/text')
         );
         $data['categories'] = BaseXmlParser::nodeListToArray(
              $xPath->query('/imperia/head/categories/category')
         );
-        
+        $data['keywords'] = explode(
+            '-',
+            $this->fetchFirstNodeValue($xPath, '/imperia/head/meta[@name="keywords"]/@content')
+        );
         $data['images'] = array();
         $imageList = $xPath->query('/imperia/body/article//image');
         
