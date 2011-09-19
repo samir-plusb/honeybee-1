@@ -62,6 +62,7 @@ class AssetInfoValidator extends AgaviNumberValidator
         }
         catch (CouchDbClientException $e)
         {
+            // @todo Log couchdb exceptions.
             $this->throwError();
             
             return FALSE;
