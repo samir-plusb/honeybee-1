@@ -3,11 +3,11 @@
 abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
 {
     abstract protected function getImportName();
-    
+
     abstract protected function getDataSourceNames();
-    
+
     abstract protected function getDataSourceParameters($dataSourceName);
-    
+
     // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
     // @codeCoverageIgnoreStart
 
@@ -17,7 +17,10 @@ abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
 
         self::setupDatabase();
     }
-    
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     protected static function setupDatabase()
     {
         $couchDbHost = AgaviConfig::get('couchdb.import.host');
@@ -37,9 +40,9 @@ abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
             $coucDbClient->createDatabase($couchDbDatabase);
         }
     }
-    
+
     // @codeCoverageIgnoreEnd
-    
+
     public function testCreateDataImport()
     {
         $importFactory = new ImportFactory(
@@ -47,34 +50,34 @@ abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
                 AgaviConfig::get('import.config_dir')
             )
         );
-        
+
         $import = $importFactory->createDataImport($this->getImportName());
 
         $this->assertInstanceOf('CouchDbDataImport', $import);
     }
-    
+
     /**
      *
-     * @param type $dataSourceName 
-     * 
+     * @param type $dataSourceName
+     *
      * @dataProvider provideDataSourceNames
      */
     public function testRunDataImportCreate($dataSourceName)
     {
         $this->runImport($dataSourceName);
     }
-    
+
     /**
      *
-     * @param type $dataSourceName 
-     * 
+     * @param type $dataSourceName
+     *
      * @dataProvider provideDataSourceNames
      */
     public function testRunDataImportUpdate($dataSourceName)
     {
         $this->runImport($dataSourceName);
     }
-    
+
     protected function runImport($dataSourceName)
     {
         $importFactory = new ImportFactory(
@@ -91,21 +94,21 @@ abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
         // And let them rock!
         $import->run($dataSource);
     }
-    
+
     // @codeCoverageIgnoreStart
-    
+
     public function provideDataSourceNames()
     {
         $arguments = array();
-        
+
         foreach ($this->getDataSourceNames() as $dataSourceName)
         {
             $arguments[] = array('dataSourceName' => $dataSourceName);
         }
-        
+
         return $arguments;
     }
-    
+
     // @codeCoverageIgnoreEnd
 }
 
