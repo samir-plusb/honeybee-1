@@ -1,65 +1,78 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <imperia>
-    <head>
-        <title>Tötungsdelikt im Löwensteinring – 5000 Euro Belohnung für Hinweise - Berlin.de</title>
-        <meta name="DC.Title" content="Tötungsdelikt im Löwensteinring – 5000 Euro Belohnung für Hinweise"/>
-        <meta name="DC.Date" content="2011-07-21"/>
-        <meta name="description" content="Zum Fall des am 29.7.2011 ermordet aufegfundenen Alik K. in Berlin-Neukölln bittet die 7.Mordkommission des Landeskriminalamtes um Mithilfe."/>
-        <meta name="keywords" content="Pressemeldung Polizei Berlin, 07.07.2011, Tötungsdelikt im Löwensteinring –  5000 Euro Belohnung für Hinweise"/>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-        <meta http-equiv="Content-Language" content="de"/>
-        <meta name="X-Imperia-Live-Info" content="c9014314-4573-55c5-b087-5ddc8f775df7/2/10330/10343/10890/1380596"/>
-        <filename>index.html</filename>
-        <directory>/polizei/presse-fahndung/archiv/350581</directory>
-        <node_id>/2/10330/10343/10890/1380596</node_id>
-        <created>2011-07-21</created>
-        <template>land_polizei_presse_fahndung</template>
-        <categories>
-            <category directory="/polizei/presse-fahndung/archiv" description="">neue Meldung</category>
-            <category directory="/polizei/presse-fahndung" description="">Presse Fahndung</category>
-            <category directory="/polizei" description="">Polizei</category>
-            <category directory="/land" description="">Land</category>
-        </categories>
-    </head>
-    <body>
-        <last_modified timezone="CEST">2011-09-14T19:56:38</last_modified>
-        <article>
-            <type>pressemeldung</type>
-            <kicker>Zeugen gesucht</kicker>
-            <title>Tötungsdelikt im Löwensteinring – 5000 Euro Belohnung für Hinweise</title>
-            <subtitle>Auffindezeit und -ort: 29. Juni 2011, Löwensteinring in Neukölln</subtitle>
-            <image type="small">
-                <src>/imperia/md/images/polizei/pressestelle/350581/350581.jpg</src>
-            </image>
-            <flexmodules>
-                <paragraph name="land_teaser_mit_bild">
-                    <link/>
-                    <image>
-                        <src>/imperia/md/images/polizei/pressestelle/350581/toter_alik_k___250_200x280.jpg</src>
-                        <alt>Opfer Alik K.</alt>
-                        <width>200</width>
-                        <caption>Opfer Alik K.</caption>
-                    </image>
-                    <text format="textbr" align="">Zu einem Tötungsdelikt in Neukölln bittet die 7. Mordkommission des Landeskriminalamtes um Mithilfe und wendet sich mit  Fragen an die Bevölkerung.</text>
-                </paragraph>
-                <paragraph name="land_text">
-                    <text format="textbr" align="left">Wer hat das Opfer in der Nacht vom 20. zum 21. Juni 2011 gesehen?</text>
-                </paragraph>
-                <paragraph name="land_text_pdf">
-                    <pdf>
-                        <icon alt="Toter Alik K.jpg">/imperia/md/thumbnails/images/polizei/pressestelle/350581/toter_alik_k.__600.jpg</icon>
-                        <src>/imperia/md/images/polizei/pressestelle/350581/toter_alik_k.__600.jpg</src>
-                        <size>137441</size>
-                        <title>Toter Alik K.jpg</title>
-                        <text/>
-                    </pdf>
-                    <title/>
-                    <text format="html"></text>
-                </paragraph>
-            </flexmodules>
-            <containerbereich>
-                <standardcontact used="used"/>
-            </containerbereich>
-        </article>
-    </body>
+<head>
+	<title>Tötungsdelikt im Löwensteinring – 5000 Euro Belohnung für Hinweise</title>
+	<meta name="DC.Title" content="Tötungsdelikt im Löwensteinring – 5000 Euro Belohnung für Hinweise"/>
+	<meta name="DC.Date" content="2011-07-21"/>
+	<meta name="description" content="Zum Fall des am 29.7.2011 ermordet aufegfundenen Alik K. in Berlin-Neukölln bittet die 7.Mordkommission des Landeskriminalamtes um Mithilfe."/>
+	<meta name="keywords" content="Pressemeldung Polizei Berlin, 07.07.2011, Tötungsdelikt im Löwensteinring –  5000 Euro Belohnung für Hinweise"/>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="Content-Language" content="de"/>
+	<meta name="X-Imperia-Live-Info" content="c9014314-4573-55c5-b087-5ddc8f775df7/2/10330/10343/10890/1380596"/>
+	<filename>index.html</filename>
+	<directory>/polizei/presse-fahndung/archiv/350581</directory>
+	<node_id>/2/10330/10343/10890/1380596</node_id>
+	<created>20110707T134924+0200</created>
+	<modified>20110721T090902+0200</modified>
+	<publish>2011-06-29 14:10</publish>
+	<expiry/>
+	<template>land_polizei_presse_fahndung</template>
+    <categories>
+        <category directory="/polizei/presse-fahndung/archiv" description="">neue Meldung</category>
+		<category directory="/polizei/presse-fahndung" description="">Presse Fahndung</category>
+		<category directory="/polizei" description="">Polizei</category>
+		<category directory="/land" description="">Land</category>
+    </categories>
+
+
+
+</head>
+<body>
+<last_modified timezone="CEST">2011-09-19T16:03:08</last_modified>
+<article>
+	<type>pressemeldung</type>
+	<kicker>Zeugen gesucht</kicker>
+	<title>Tötungsdelikt im Löwensteinring – 5000 Euro Belohnung für Hinweise</title>
+	<subtitle>Auffindezeit und -ort: 29. Juni 2011, Löwensteinring in Neukölln</subtitle>
+	<image type="small">
+		<src>/imperia/md/images/polizei/pressestelle/350581/350581.jpg</src>
+	</image>
+
+	<flexmodules>
+	<paragraph name="land_teaser_mit_bild">
+		<link/>
+		<image>
+			<src>/imperia/md/images/polizei/pressestelle/350581/toter_alik_k___250_200x280.jpg</src>
+			<alt>Opfer Alik K.</alt>
+			<width>200</width>
+			<caption>Opfer Alik K.</caption>
+		</image>
+		<text format="textbr" align=""><![CDATA[<br />Zu einem Tötungsdelikt in Neukölln bittet die 7. Mordkommission des Landeskriminalamtes um Mithilfe und wendet sich mit  Fragen an die Bevölkerung.]]></text>
+	</paragraph>
+
+		<paragraph name="land_text">
+			<text format="textbr" align="left"><![CDATA[Wer hat das Opfer in der Nacht vom 20. zum 21. Juni 2011 gesehen?]]></text>
+		</paragraph>
+
+	<paragraph name="land_text_pdf">
+		<pdf>
+			<icon alt="Toter Alik K.jpg">/imperia/md/thumbnails/images/polizei/pressestelle/350581/toter_alik_k.__600.jpg</icon>
+			<src>/imperia/md/images/polizei/pressestelle/350581/toter_alik_k.__600.jpg</src>
+			<size>137441</size>
+			<title>Toter Alik K.jpg</title>
+			<text/>
+		</pdf>
+		<title/>
+		<text format="html"><![CDATA[]]></text>
+	</paragraph>
+
+
+	</flexmodules>
+
+	<containerbereich>
+		<standardcontact used="used"/>
+
+	</containerbereich>
+</article>
+</body>
 </imperia>

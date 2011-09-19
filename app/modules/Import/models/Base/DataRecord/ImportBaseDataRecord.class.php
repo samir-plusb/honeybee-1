@@ -21,6 +21,11 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     const PROP_IDENT = 'identifier';
 
     /**
+     * DATE_ISO8601 formated timestamp (last change of record, issue date, import date)
+     */
+    const PROP_TIMESTAMP = 'timestamp';
+
+    /**
      * Holds the name of our origin property.
      */
     const PROP_ORIGIN = 'origin';
@@ -65,7 +70,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      * Same as the self::METHOD_PREFIX_GETTER, just for setters.
      */
     const METHOD_PREFIX_SETTER = 'set';
-    
+
     /**
      * Same as the self::METHOD_PREFIX_GETTER, just for validation.
      */
@@ -75,20 +80,27 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
 
 
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      * Holds our config object, used to conigure things such as our source and origin.
-     * 
-     * @var         DataRecordConfig 
+     *
+     * @var         DataRecordConfig
      */
     protected $config;
-    
+
     /**
      * Holds our unique identifier.
      *
      * @var         string
      */
     private $identifier;
+
+    /**
+     * This records timestampcan be record last change time, message issue date, mail date, ...
+     *
+     * @var         DateTime
+     */
+    protected $timestamp;
 
     /**
      * Holds this IDataRecord's source.
@@ -177,7 +189,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     public function __construct($data, DataRecordConfig $config)
     {
         $this->config = $config;
-        
+
         $this->source = $this->config->getSetting(DataRecordConfig::CFG_SOURCE);
 
         $this->hydrate(
@@ -212,6 +224,20 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * Return our timestamp
+     *
+     * @return      string DATE_ISO8601 formatted timestamp
+     *
+     * @see         IDataRecord::getTimestamp()
+     */
+    public function getTimestamp()
+    {
+        return $this->timestamp instanceof DateTime
+            ? $this->timestamp->format(DATE_ISO8601)
+            : date(DATE_ISO8601);
     }
 
     /**
@@ -315,7 +341,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      * and is ready to be thrown into the domain.
      * Subclasses may implement a validate{PROP_NAME} method,
      * if they want to hook into the validaton process for certain properties.
-     * 
+     *
      * @return      IRecordValidationResult
      *
      * @see         IDataRecord::validate()
@@ -323,9 +349,9 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     public function validate()
     {
         $data = $this->toArray();
-        
+
         $validationResult = new RecordValidationResult();
-        
+
         foreach ($this->getRequiredProperties() as $propName)
         {
             if (!isset($data[$propName]))
@@ -339,15 +365,15 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
                     )
                 );
             }
-            
+
             $validationMethod = self::METHOD_PREFIX_VALIDATE . ucfirst($propName);
-            
+
             if (is_callable(array($this, $validationMethod)))
             {
                 $this->$validationMethod($validationResult);
             }
         }
-        
+
         return $validationResult;
     }
 
@@ -401,6 +427,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
         return array(
             self::PROP_IDENT,
             self::PROP_SOURCE,
+            self::PROP_TIMESTAMP,
             self::PROP_TITLE,
             self::PROP_CONTENT,
             self::PROP_CATEGORY,
@@ -408,11 +435,11 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
             self::PROP_GEO
         );
     }
-    
+
     /**
-     * Return an array holding the names of properties 
+     * Return an array holding the names of properties
      * that must be initialized before a record is considered as in a valid state.
-     * 
+     *
      * @return      array
      */
     protected function getRequiredProperties()
@@ -420,13 +447,14 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
         return array(
             self::PROP_IDENT,
             self::PROP_SOURCE,
+            self::PROP_TIMESTAMP,
             self::PROP_TITLE,
             self::PROP_CONTENT,
             self::PROP_MEDIA,
             self::PROP_GEO
         );
     }
-    
+
     /**
      * Hydrate the given data into our object.
      *
@@ -451,12 +479,24 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      * @param       string
      *
      * @see         IDataRecord::getSource()
-     * 
+     *
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
+    }
+
+    /**
+     * Set our timestamp.
+     *
+     * @param       DateTime $timestamp value, can be NULL
+     *
+     * @see         IDataRecord::getTimestamp()
+     */
+    protected function setTimestamp(DateTime $timestamp = NULL)
+    {
+        $this->timestamp = $timestamp;
     }
 
     /**
@@ -492,7 +532,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      */
     protected function setContent($content)
     {
-        $this->content = htmlspecialchars($content);
+        $this->content = $content;
     }
 
     /**

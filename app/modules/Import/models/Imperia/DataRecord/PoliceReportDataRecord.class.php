@@ -12,12 +12,6 @@
  */
 class PoliceReportDataRecord extends ImperiaDataRecord
 {
-    const SOURCE_NAME = 'polizeimeldungen';
-    
-    protected function getSourceName()
-    {
-        return self::SOURCE_NAME;
-    }
 }
 
 ?>

@@ -31,6 +31,15 @@ interface IDataRecord
     public function getSource();
 
     /**
+     * Return this IDataRecord's timestamp.
+     *
+     * can be record last change time, message issue date, mail date, ...
+     *
+     * @return      string
+     */
+    public function getTimestamp();
+
+    /**
      * Return this IDataRecord's data origin (url, filepath eg).
      *
      * @return      string

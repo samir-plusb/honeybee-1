@@ -40,6 +40,21 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
     const PROP_FILENAME = 'filename';
 
     /**
+     * Imperia publish date
+     */
+    const PROP_PUBLISH = 'publishDate';
+
+    /**
+     * Imperia expiry date
+     */
+    const PROP_EXPIRY = 'expiryDate';
+
+    /**
+     * keywords meta field
+     */
+    const PROP_KEYWORDS = 'keywords';
+
+    /**
      * Holds the base url to use when generating absolute links.
      *
      * @todo Move to config cause of evn awareness?
@@ -50,18 +65,18 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
 
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      * Holds our subtitle.
-     * 
-     * @var         string 
+     *
+     * @var         string
      */
     protected $subtitle;
 
     /**
      * Holds our kicker.
-     * 
-     * @var         string 
+     *
+     * @var         string
      */
     protected $kicker;
 
@@ -69,24 +84,42 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
      * Holds our directory.
      * This value is used together with our $filename property
      * to build our $link properties value.
-     * 
-     * @var         string 
+     *
+     * @var         string
      */
     protected $directory;
 
     /**
      * Holds our filename.
-     * 
-     * @var         string 
+     *
+     * @var         string
      */
     protected $filename;
 
     /**
      * Holds the link pointing to our web representation.
-     * 
-     * @var         string 
+     *
+     * @var         string
      */
     protected $link;
+
+    /**
+     * Imperia publish date
+     * @var DateTime
+     */
+    protected $publishDate;
+
+    /**
+     * Imperia expiry date
+     * @var DateTime
+     */
+    protected $expiryDate;
+
+    /**
+     * Keywords
+     * @var string
+     */
+    protected $keywords;
 
     /**
      * Holds an array with known keys and xpath expressions as values.
@@ -103,14 +136,19 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
         self::PROP_CATEGORY  => '/imperia/head/categories/category',
         self::PROP_DIRECTORY => '/imperia/head/directory',
         self::PROP_FILENAME  => '/imperia/head/filename',
-        self::PROP_MEDIA     => '/imperia/body/article//image'
-    );
-    
+        self::PROP_MEDIA     => '/imperia/body/article//image',
+        self::PROP_SOURCE    => '/imperia/head/categories/category',
+        self::PROP_TIMESTAMP => '/imperia/head/modified',
+        self::PROP_PUBLISH   => '/imperia/head/publish',
+        self::PROP_EXPIRY    => '/imperia/head/expiry',
+        self::PROP_KEYWORDS  => '/imperia/head/meta[@name="keywords"]/@content'
+        );
+
     /**
      * An array used to map the results of evaluating our expression map
      * to a set of corresponding processors, that extract our final values.
-     * 
-     * @var         array 
+     *
+     * @var         array
      */
     protected static $expressionProcessors = array(
             self::PROP_TITLE     => 'extractFirst',
@@ -120,23 +158,14 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
             self::PROP_KICKER    => 'extractFirst',
             self::PROP_DIRECTORY => 'extractFirst',
             self::PROP_FILENAME  => 'extractFirst',
-            self::PROP_MEDIA     => 'extractMedia'
-        );
+            self::PROP_MEDIA     => 'extractMedia',
+            self::PROP_SOURCE    => 'extractSource',
+            self::PROP_TIMESTAMP => 'extractTimestamp',
+            self::PROP_PUBLISH   => 'extractPublishDate',
+            self::PROP_EXPIRY    => 'extractExpiryDate'
+            );
 
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-    
-    
-    // ---------------------------------- <ABSTRACT> ---------------------------------------------
-    
-    /**
-     * Shall return the records type as a short string representation.
-     * 
-     * @return      string
-     */
-    abstract protected function getSourceName();
-    
-    // ---------------------------------- </ABSTRACT> --------------------------------------------
-    
 
     // ---------------------------------- <IDataRecord IMPL> -------------------------------------
 
@@ -149,27 +178,27 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
      */
     public function getIdentifier()
     {
-        return $this->getTitle() . '/' . $this->getSource();
+        return $this->getLink();
     }
 
     // ---------------------------------- </IDataRecord IMPL> ------------------------------------
 
 
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
-    
+
     /**
      * Return our subtitle.
-     * 
+     *
      * @return      string
      */
     public function getSubtitle()
     {
         return $this->subtitle;
     }
-    
+
     /**
      * Return our kicker.
-     * 
+     *
      * @return      string
      */
     public function getKicker()
@@ -179,7 +208,7 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
     /**
      * Return our link.
-     * 
+     *
      * @return      string
      */
     public function getLink()
@@ -187,25 +216,61 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
         return $this->link;
     }
 
+
+    /**
+     * get ISO8601 formatted publish date
+     *
+     * @return      string
+     */
+    public function getPublishDate()
+    {
+        return $this->publishDate instanceof DateTime
+            ? $this->publishDate->format(DATE_ISO8601)
+            : $this->getTimestamp();
+    }
+
+    /**
+     * get ISO8601 formatted expiry date
+     *
+     * @return      string
+     */
+    public function getExpiryDate()
+    {
+        print_r($this->expiryDate);
+        return $this->expiryDate instanceof DateTime
+            ? $this->expiryDate->format(DATE_ISO8601)
+            : NULL;
+    }
+
+    /**
+     * get keywords.
+     *
+     * @return      string
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
+    }
+
     // ---------------------------------- </PUBLIC METHODS> --------------------------------------
 
-    
+
     // ---------------------------------- <HYDRATE SETTERS> --------------------------------------
-    
+
     /**
      * Set our subtitle during hydrate.
-     * 
-     * @param       string $subtitle 
+     *
+     * @param       string $subtitle
      */
     protected function setSubtitle($subtitle)
     {
         $this->subtitle = $subtitle;
     }
-    
+
     /**
      * Set our subtitle during hydrate.
-     * 
-     * @param       string $subtitle 
+     *
+     * @param       string $subtitle
      */
     protected function setKicker($kicker)
     {
@@ -214,8 +279,8 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
     /**
      * Set our directory during hydrate.
-     * 
-     * @param       string $directory 
+     *
+     * @param       string $directory
      */
     protected function setDirectory($directory)
     {
@@ -225,18 +290,49 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
     /**
      * Set our filename during hydrate.
-     * 
-     * @param       string $filename 
+     *
+     * @param       string $filename
      */
     protected function setFilename($filename)
     {
         $this->filename = $filename;
         $this->applyLink();
     }
-    
+
+
+    /**
+     * Set our publish date during hydrate.
+     *
+     * @param       DateTime $param
+     */
+    protected function setPublishDate(DateTime $param = NULL)
+    {
+        $this->publishDate = $param;
+    }
+
+    /**
+     * Set our expiry date during hydrate.
+     *
+     * @param       DateTime $param
+     */
+    protected function setExpiryDate(DateTime $param = NULL)
+    {
+        $this->expiryDate = $param;
+    }
+
+    /**
+     * Set our keywords during hydrate.
+     *
+     * @param       string $param
+     */
+    protected function setKeywords($param)
+    {
+        $this->keywords = $param;
+    }
+
     // ---------------------------------- </HYDRATE SETTERS> -------------------------------------
-    
-    
+
+
     // ---------------------------------- <XmlBasedDataRecord IMPL> ------------------------------
 
     /**
@@ -273,7 +369,6 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
             }
         }
 
-        $data[self::PROP_SOURCE] = $this->getSourceName();
         $data[self::PROP_GEO] = array();
 
         return $data;
@@ -292,7 +387,10 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
             array(
                 self::PROP_SUBTITLE,
                 self::PROP_KICKER,
-                self::PROP_LINK
+                self::PROP_LINK,
+                self::PROP_PUBLISH,
+                self::PROP_EXPIRY,
+                self::PROP_KEYWORDS
             )
         );
 
@@ -300,9 +398,9 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
     // ---------------------------------- </XmlBasedDataRecord IMPL> -----------------------------
 
-    
+
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-    
+
     /**
      * Generates and assigns our link property.
      */
@@ -318,15 +416,15 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
             );
         }
     }
-    
+
     /**
      * Extracts the value of the first node in a node list.
      * The node list is pulled from the data that resulted
      * from processing our $expressionMap.
-     * 
+     *
      * @param       array $xPathResults
      * @param       string $key
-     * 
+     *
      * @return      mixed
      */
     protected function extractFirst(array $xPathResults, $key)
@@ -338,15 +436,15 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
         return trim($xPathResults[$key]->item(0)->nodeValue);
     }
-    
+
     /**
      * Converts a node list to a collection mixed values that have been pulled from the nodes.
      * The node list is pulled from the data that resulted
      * from processing our $expressionMap.
-     * 
+     *
      * @param       array $xPathResults
      * @param       string $key
-     * 
+     *
      * @return      mixed
      */
     protected function extractCollection(array $xPathResults, $key)
@@ -358,31 +456,96 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
 
         return $this->joinNodeList($xPathResults[$key], "\n\n");
     }
-    
+
     /**
      * Extracts the imperia category nodes and returns
      * their joined string representation.
-     * 
+     *
      * @param       array $xPathResults
      * @param       string $key
-     * 
+     *
      * @return      mixed
      */
     protected function extractCategory(array $xPathResults, $key)
     {
         $categoryCrumbs = $this->nodeListToArray($xPathResults[$key]);
 
-        return sprintf('// %s', join(' // ', $categoryCrumbs));
+        return sprintf('// %s', join(' // ', array_reverse($categoryCrumbs)));
     }
-    
+
+    /**
+     * Extracts the organistion from category info
+     *
+     * @param       array $xPathResults
+     * @param       string $key
+     *
+     * @return      mixed
+     */
+    protected function extractSource(array $xPathResults, $key)
+    {
+        $categoryCrumbs = $this->nodeListToArray($xPathResults[$key]);
+        $cat = array_reverse($categoryCrumbs);
+        if ('Land' != $cat[0])
+        {
+            return 'Imperia-Unknown';
+        }
+        if ('Senatsverwaltungen' == $cat[1])
+        {
+            return $cat[2];
+        }
+        else
+        {
+            return $cat[1];
+        }
+    }
+
+    /**
+     * Convert imperia export timestamp into a DateTime instance.
+     *
+     * @param       string $timestamp parseable by strtotime
+     *
+     * @return      DateTime
+     */
+    protected function extractTimestamp(array $xPathResults)
+    {
+        return new DateTime($this->extractFirst($xPathResults, 'timestamp'));
+    }
+
+
+    /**
+     * Convert imperia export timestamp into a DateTime instance.
+     *
+     * @param       string $timestamp parseable by strtotime
+     *
+     * @return      DateTime
+     */
+    protected function extractPublishDate(array $xPathResults)
+    {
+        $value = $this->extractFirst($xPathResults, 'publishDate');
+        return empty($value) ? NULL : new DateTime($value);
+    }
+
+    /**
+     * Convert imperia export timestamp into a DateTime instance.
+     *
+     * @param       string $timestamp parseable by strtotime
+     *
+     * @return      DateTime
+     */
+    protected function extractExpiryDate(array $xPathResults)
+    {
+        $value = $this->extractFirst($xPathResults, 'expiryDate');
+        return empty($value) ? NULL : new DateTime($value);
+    }
+
     /**
      * Extracts the media found inside our parsed data
      * and creates asset items thereby returning an array
      * containing the id's of all stored assets.
-     * 
+     *
      * @param       array $xPathResults
      * @param       string $key
-     * 
+     *
      * @return      array
      */
     protected function extractMedia(array $xPathResults, $key)
@@ -405,10 +568,10 @@ abstract class ImperiaDataRecord extends XmlBasedDataRecord
     /**
      * Create an AssetInfo instance from the given DOMNode
      * and return it's id.
-     * 
+     *
      * @param       DOMNode $imageNode
-     * 
-     * @return      integer 
+     *
+     * @return      integer
      */
     protected function createAsset(DOMNode $imageNode)
     {

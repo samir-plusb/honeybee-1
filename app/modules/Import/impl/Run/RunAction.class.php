@@ -40,7 +40,7 @@ class Import_RunAction extends ImportBaseAction
             {
                 $import->run($dataSource);
             }
-            catch(Exception $e)
+            catch(AgaviAutoloadException $e)
             {
                 /* @todo better exception handling */
                 $this->setAttribute('errors', array($e->getMessage()));
