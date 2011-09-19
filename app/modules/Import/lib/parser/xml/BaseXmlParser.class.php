@@ -8,7 +8,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Base
+ * @subpackage      Parser
  */
 abstract class BaseXmlParser implements IXmlParser
 {
