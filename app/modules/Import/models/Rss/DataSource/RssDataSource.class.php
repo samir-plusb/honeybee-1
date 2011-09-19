@@ -80,6 +80,64 @@ class RssDataSource extends ImportBaseDataSource
     // ---------------------------------- <WORKING METHODS> --------------------------------------
     
     /**
+     * Returns the raw feed content. (xml string)
+     *
+     * @return      string
+     */
+    protected function getRawContent()
+    {
+        $feedUri = $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL);
+        
+        if (is_file($feedUri) && is_readable($feedUri))
+        {
+            $rawContent = file_get_contents($feedUri);
+        }
+        else
+        {
+            $rawContent = $this->loadFeedByUrl($feedUri);
+        }
+        
+        return $rawContent;
+    }
+    
+    /**
+     * Load and return the feed content for a given feed url.
+     * 
+     * @param       string $feedUrl
+     * 
+     * @return      string
+     */
+    protected function loadFeedByUrl($feedUrl)
+    {
+        $tmpName = tempnam('/var/tmp', basename(__FILE__));
+        $fileHandle = fopen($tmpName, 'w');
+
+        if (! $tmpName || ! $fileHandle)
+        {
+            throw new IOException('Can not open temporary file: '.$tmpName);
+        }
+
+        $curlHandle = ProjectCurl::create();
+        curl_setopt($curlHandle, CURLOPT_URL, $feedUrl);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 0);
+        curl_setopt($curlHandle, CURLOPT_FILE, $fileHandle);
+
+        if (! curl_exec($curlHandle) || 200 != curl_getinfo($curlHandle, CURLINFO_HTTP_CODE))
+        {
+            fclose($fileHandle);
+            unlink($tmpName);
+            throw new DataSourceException('Curl failed: '.curl_error($curlHandle), curl_errno($curlHandle));
+        }
+
+        curl_close($curlHandle);
+        fclose($fileHandle);
+        $rawContent = file_get_contents($tmpName);
+        unlink($tmpName);
+
+        return $rawContent;
+    }
+    
+    /**
      * Parse the incoming feed content
      *
      * @param       string $feedContent raw feed file contents
@@ -91,12 +149,7 @@ class RssDataSource extends ImportBaseDataSource
      */
     protected function parse($feedContent)
     {
-        $feedDoc = $this->createFeedDocument(
-            $this->getRawContent()
-        );
-
-        $feed = array();
-        $root = $feedDoc->documentElement;
+        $feedDoc = $this->createFeedDocument($feedContent);
         $parser = NULL;
         
         switch ($feedDoc->documentElement->tagName)
@@ -146,64 +199,6 @@ class RssDataSource extends ImportBaseDataSource
         return $doc;
     }
     
-    /**
-     * Returns the raw feed content. (xml string)
-     *
-     * @return      string
-     */
-    protected function getRawContent()
-    {
-        $feedUri = $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL);
-        
-        if (is_file($feedUri) && is_readable($feedUri))
-        {
-            $rawContent = file_get_contents($feedUri);
-        }
-        else
-        {
-            $rawContent = $this->loadFeedByUrl($feedUri);
-        }
-        
-        return $rawContent;
-    }
-    
-    /**
-     * Load and return the feed content for a given feed url.
-     * 
-     * @param       string $url
-     * 
-     * @return      string
-     */
-    protected function loadFeedByUrl($url)
-    {
-        $tmpname = tempnam('/var/tmp', basename(__FILE__));
-        $fd = fopen($tmpname, 'w');
-
-        if (! $tmpname || ! $fd)
-        {
-            throw new IOException('Can not open temporary file: '.$tempname);
-        }
-
-        $curlHandle = ProjectCurl::create();
-        curl_setopt($curlHandle, CURLOPT_URL, $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL));
-        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 0);
-        curl_setopt($curlHandle, CURLOPT_FILE, $fd);
-
-        if (! curl_exec($curlHandle) || 200 != curl_getinfo($curlHandle, CURLINFO_HTTP_CODE))
-        {
-            fclose($fd);
-            unlink($tmpname);
-            throw new DataSourceException('Curl failed: '.curl_error($curlHandle), curl_errno($curlHandle));
-        }
-
-        curl_close($curlHandle);
-        fclose($fd);
-        $rawContent = file_get_contents($tmpname);
-        unlink($tmpname);
-
-        return $rawContent;
-    }
-
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 
