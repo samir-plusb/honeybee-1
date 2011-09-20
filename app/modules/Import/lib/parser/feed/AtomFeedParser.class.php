@@ -6,13 +6,14 @@
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
  * @subpackage      Parser
  */
 class AtomFeedParser extends BaseFeedParser
 {
-    // ---------------------------------- <IFeedParser IMPL> -------------------------------------
+    // ---------------------------------- <BaseFeedParser IMPL> ----------------------------------
 
     /**
      * Parse the given xml dom as atom.
@@ -44,10 +45,11 @@ class AtomFeedParser extends BaseFeedParser
                 $feedData['items'][] = $itemData;
             }
         }
+        
         return TRUE;
     }
 
-    // ---------------------------------- </IFeedParser IMPL> ------------------------------------
+    // ---------------------------------- <BaseFeedParser IMPL> ----------------------------------
 }
 
 ?>

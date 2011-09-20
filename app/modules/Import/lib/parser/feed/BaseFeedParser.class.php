@@ -6,73 +6,106 @@
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
  * @subpackage      Parser
  */
 abstract class BaseFeedParser implements IFeedParser
 {
+    // ---------------------------------- <MEMBERS> ----------------------------------------------
+    
     /**
-     * XML Document of current feed
+     * Holds the XML Document of current feed.
      *
-     * @var DOMDocument
+     * @var         DOMDocument
      */
     protected $doc;
 
     /**
-     * XML XPath of current feed document
+     * Holds the XML XPath of current feed document.
      *
-     * @var DOMXPath
+     * @var         DOMXPath
      */
     protected $xpath;
 
     /**
-     * indikates parser state
-     * @var boolean
+     * Indicates parser the parser's state (parsed | not parsed).
+     * 
+     * @var         boolean
      */
     private $parsed;
 
     /**
-     *
-     * feed title
-     * @var string
+     * Holds our feed's title.
+     * 
+     * @var         string
      */
     protected $title;
 
     /**
-     *
-     * feed description or subtitle
-     * @var string
+     * Holds our feed's description or subtitle.
+     * 
+     * @var         string
      */
     protected $description;
 
     /**
-     * feed link or URL
-     * @var string
+     * Holds our feed's link or URL.
+     * 
+     * @var         string
      */
     protected $link;
 
     /**
-     * feed timestamp
-     * @var DateTime
+     * Holds the feed's timestamp.
+     * 
+     * @var         DateTime
      */
     protected $time;
 
     /**
-     * feed rights
-     * @var string
+     * Holds the feed's copyright.
+     * 
+     * @var         string
      */
     protected $copyright;
 
     /**
-     * list of feed items
-     * @var array
+     * Holds a list of feed items.
+     * 
+     * @var         array
      */
     protected $items;
-
+    
+    // ---------------------------------- </MEMBERS> ---------------------------------------------
+    
+    
+    // ---------------------------------- <CONSTRUCTOR> ------------------------------------------
+    
     /**
-     * (non-PHPdoc)
-     * @see IFeedParser::getTitle()
+     * Setup feed parsing
+     *
+     * @param DomDocument $doc
+     */
+    public function __construct(DomDocument $doc)
+    {
+        $this->doc = $doc;
+        $this->xpath = new DOMXPath($doc);
+        $this->items = array();
+    }
+    
+    // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
+    
+        
+    // ---------------------------------- <IFeedParser IMPL> -------------------------------------
+    
+    /**
+     * Returns our feed title.
+     * 
+     * @see         IFeedParser::getTitle()
+     * 
+     * @return      string
      */
     public function getTitle()
     {
@@ -80,6 +113,8 @@ abstract class BaseFeedParser implements IFeedParser
     }
 
     /**
+     * Sets our feed title.
+     * 
      * @param string xpath expression
      */
     protected function setTitle($expression)
@@ -92,19 +127,22 @@ abstract class BaseFeedParser implements IFeedParser
     }
 
     /**
-     * (non-PHPdoc)
-     * @see IFeedParser::getLink()
+     * Returns our feed link.
+     * 
+     * @see         IFeedParser::getLink()
+     * 
+     * @return      string
      */
     public function getLink()
     {
         return $this->link;
     }
 
-
     /**
-     * set feed url by xpath expression
-     *
-     * @param string $expression xpath expression
+     * Sets our feed link to the value resulting from
+     * evaluating the given $expression on our $xpath member..
+     * 
+     * @param string xpath expression
      */
     protected function setLink($expression)
     {
@@ -116,8 +154,11 @@ abstract class BaseFeedParser implements IFeedParser
     }
 
     /**
-     * (non-PHPdoc)
-     * @see IFeedParser::getCopyright()
+     * Returns our feed copyright.
+     * 
+     * @see         IFeedParser::getCopyright()
+     * 
+     * @return      string
      */
     public function getCopyright()
     {
@@ -125,9 +166,10 @@ abstract class BaseFeedParser implements IFeedParser
     }
 
     /**
-     * set feed rights by xpath expression
-     *
-     * @param string $expression xpath expression
+     * Sets our feed copyright to the value resulting from
+     * evaluating the given $expression on our $xpath member.
+     * 
+     * @param string xpath expression
      */
     protected function setCopyright($expression)
     {
@@ -139,8 +181,11 @@ abstract class BaseFeedParser implements IFeedParser
     }
 
     /**
-     * (non-PHPdoc)
-     * @see IFeedParser::getDescription()
+     * Returns our feed description.
+     * 
+     * @see         IFeedParser::getDescription()
+     * 
+     * @return      string
      */
     public function getDescription()
     {
@@ -148,9 +193,10 @@ abstract class BaseFeedParser implements IFeedParser
     }
 
     /**
-     * set feed description by xpath expression
-     *
-     * @param string $expression xpath expression
+     * Sets our feed description to the value resulting from
+     * evaluating the given $expression on our $xpath member.
+     * 
+     * @param string xpath expression
      */
     protected function setDescription($expression)
     {
@@ -162,19 +208,22 @@ abstract class BaseFeedParser implements IFeedParser
     }
 
     /**
-     * (non-PHPdoc)
-     * @see IFeedParser::getTime()
+     * Returns our feed timestamp.
+     * 
+     * @see         IFeedParser::getTime()
+     * 
+     * @return      DateTime
      */
     public function getTime()
     {
         return $this->time ? $this->time : new DateTime();
     }
 
-
     /**
-     * set feed description by xpath expression
-     *
-     * @param string $expression xpath expression
+     * Sets our feed timestamp to a DateTime created from the value,
+     * that is returned from our $expression evaluation.
+     * 
+     * @param string xpath expression
      */
     protected function setTime($expression)
     {
@@ -183,27 +232,34 @@ abstract class BaseFeedParser implements IFeedParser
     }
 
     /**
-     * (non-PHPdoc)
-     * @see IFeedParser::getItems()
+     * Returns our feed items.
+     * 
+     * @see         IFeedParser::getItems()
+     * 
+     * @return      array
      */
     public function getItems()
     {
         return $this->items;
     }
-
+    
     /**
-     * set items collection
+     * Add an item to our feed items list.
      *
-     * @param array $items
+     * @param       BaseFeedItem $item
      */
     public function addItem(BaseFeedItem $item)
     {
         $this->items[] = $item;
     }
-
+    
+    // ---------------------------------- </IFeedParser IMPL> ------------------------------------
+    
+    
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
 
     /**
-     * initialize a feed item data array
+     * Initialize a feed item data array.
      *
      * <ul>
      * <li>author - string
@@ -219,62 +275,64 @@ abstract class BaseFeedParser implements IFeedParser
     protected function initItemData()
     {
         return array(
+            'time'   => NULL,
             'author' => '',
-            'title' => '',
-            'link' => '',
-            'time' => NULL,
-            'text' => '',
-            'html' => ''
-            );
+            'title'  => '',
+            'link'   => '',
+            'text'   => '',
+            'html'   => ''
+        );
     }
 
-
     /**
-     * query current doc iwth xpath expression
+     * Query current doc with xpath expression.
      *
-     * @param string $expression
-     * @param DOMNode $contextnode
+     * @param       string $expression
+     * @param       DOMNode $contextnode
      *
-     * @return DOMNodeList or FALSE if no items found
+     * @return      DOMNodeList or FALSE if no items found
+     * 
+     * @todo        Is this really a public method? Maybe make it protected?
      */
     public function query($expression, DOMNode $contextnode = NULL)
     {
         libxml_clear_errors();
         $nl = $this->xpath->query($expression, $contextnode);
         $err = libxml_get_last_error();
+        
         if ($err)
         {
             error_log(__METHOD__."($expression) ".print_r($err,1));
         }
+        
         return ($nl && $nl->length > 0) ? $nl : FALSE;
     }
 
     /**
-     * return parser state
+     * Return our parser state.
      *
-     * @return boolean
+     * @return      boolean
      */
     final protected function isParseable()
     {
         return ! $this->parsed;
     }
+    
+    // ---------------------------------- </WORKING METHODS> -------------------------------------
 
+    
+    // ---------------------------------- <PHP SERIALIZE CALLBACKS> ------------------------------
+    
     /**
-     * Setup feed parsing
-     *
-     * @param DomDocument $doc
+     * Returns an array of property names,
+     * oof properties that shall be included into serialization.
+     * 
+     * @return      array
      */
-    public function __construct(DomDocument $doc)
-    {
-        $this->doc = $doc;
-        $this->xpath = new DOMXPath($doc);
-        $this->items = array();
-    }
-
-
     public function __sleep()
     {
-        $this->parsed = true;
+        $this->parsed = TRUE;
+        
         return array(
             'title',
             'link',
@@ -285,16 +343,17 @@ abstract class BaseFeedParser implements IFeedParser
             'parsed'
         );
     }
-
+    
+    /**
+     * Does stuff to restore our state after we have been deserialized.
+     */
     public function __wakeup()
     {
         $this->doc = NULL;
         $this->xpath = NULL;
     }
 
-    // ---------------------------------- </BASE WORKING METHODS> --------------------------------
-
-
+    // ---------------------------------- </PHP SERIALIZE CALLBACKS> -----------------------------
 }
 
 ?>

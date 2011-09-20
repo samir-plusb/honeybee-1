@@ -1,97 +1,129 @@
 <?php
 /**
- *
+ * The BaseFeedItem class defines a base implementation of the feeditem concept
+ * and also allready implements most of it.
+ * It serves as the base class to all feed items created on the project.
  *
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
- * @author          Tom Anheyer
+ * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @package         Lib
  * @subpackage      Parser
- *
  */
 abstract class BaseFeedItem
 {
+    // ---------------------------------- <MEMBERS> ----------------------------------------------
+    
     /**
-     * @var string
+     * Holds our identifier.
+     * 
+     * @var         string
      */
     protected  $id;
+    
     /**
-     * @var string
+     * Holds our author.
+     * 
+     * @var         string
      */
     protected $author;
 
     /**
-     * @var string
+     * Holds our title.
+     * 
+     * @var         string
      */
     protected $title;
 
     /**
-     * @var string
+     * Holds our link.
+     * 
+     * @var         string
      */
     protected $link;
 
     /**
-     * @var DateTime
+     * Holds our time.
+     * 
+     * @var         DateTime
      */
     protected $time;
 
     /**
-     * @var string
+     * Holds our text content.
+     * 
+     * @var         string
      */
     protected $text;
 
     /**
-     * @var string
+     * Holds our html content.
+     * 
+     * @var         string
      */
     protected $html;
 
     /**
-     * @var string
+     * Holds our image uri.
+     * 
+     * @var         string
      */
     protected $image;
 
     /**
-     *
-     * @var BaseFeedParser
+     * Holds our feed parser instance.
+     * 
+     * @var         IFeedParser
      */
     protected $feed;
 
     /**
-     *
-     * context node for xpath queries
-     * @var DOMNode
+     * Holds a context node used for xpath queries.
+     * 
+     * @var         DOMNode
      */
     protected $contextnode;
 
+    // ---------------------------------- </MEMBERS> ---------------------------------------------
+    
+    
+    // ---------------------------------- <CONSTRUCTOR> ------------------------------------------
+    
     /**
-     *
-     * Enter description here ...
-     * @param BaseFeedParser $feed
-     * @param DOMNode $contextnode
+     * Create a new BaseFeedItem instance, thereby providing an IFeedParser impl as our "parent",
+     * which means this is the parser that is creating us and a context node used for relative xpath queries.
+     * 
+     * @param       BaseFeedParser $feed
+     * @param       DOMNode $contextnode
      */
-    public function __construct(BaseFeedParser $feed, DOMNode $contextnode)
+    public function __construct(IFeedParser $feed, DOMNode $contextnode)
     {
         $this->feed = $feed;
         $this->contextnode = $contextnode;
         $this->parseItem();
     }
+    
+    // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
 
+    
+    // ---------------------------------- <ABSTRACT METHODS> -------------------------------------
+    
     /**
-     *
-     * parse xml node describing an item into our instance members
+     * Parse xml node describing an item into our instance members.
      */
     abstract protected function parseItem();
+    
+    // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
 
     public function getId()
     {
         return empty($this->id) ? $this->getLink() : $this->id;
     }
 
-
     /**
      * set feed description by xpath expression
      *
-     * @param string $expression xpath expression
+     * @param       string $expression xpath expression
      */
     protected function setId($expression)
     {
@@ -102,11 +134,10 @@ abstract class BaseFeedItem
         }
     }
 
-
     /**
      * Get feed item author.
      *
-     * @return string
+     * @return      string
      */
     public function getAuthor()
     {
@@ -114,9 +145,9 @@ abstract class BaseFeedItem
     }
 
     /**
-     * set feed description by xpath expression
+     * set feed description by xpath expression.
      *
-     * @param string $expression xpath expression
+     * @param       string $expression xpath expression
      */
     protected function setAuthor($expression)
     {
@@ -127,20 +158,20 @@ abstract class BaseFeedItem
         }
     }
 
-
     /**
-     * Get feed item title
+     * Get feed item title.
      *
-     * @return string
+     * @return      string
      */
-    public function getTitle() {
+    public function getTitle() 
+    {
         return $this->title;
     }
 
     /**
-     * set feed description by xpath expression
+     * set feed description by xpath expression.
      *
-     * @param string $expression xpath expression
+     * @param       string $expression xpath expression
      */
     protected function setTitle($expression)
     {
@@ -154,16 +185,17 @@ abstract class BaseFeedItem
     /**
      * Get feed item link or url.
      *
-     * @return string
+     * @return      string
      */
-    public function getLink() {
+    public function getLink() 
+    {
         return $this->link;
     }
 
     /**
      * set feed description by xpath expression
      *
-     * @param string $expression xpath expression
+     * @param       string $expression xpath expression
      */
     protected function setLink($expression)
     {
@@ -175,9 +207,9 @@ abstract class BaseFeedItem
     }
 
     /**
-     * Get feed item timestamp
+     * Get feed item timestamp.
      *
-     * @return DateTime
+     * @return      DateTime
      */
     public function getTime()
     {
@@ -185,9 +217,9 @@ abstract class BaseFeedItem
     }
 
     /**
-     * set feed description by xpath expression
+     * Set feed description by xpath expression.
      *
-     * @param string $expression xpath expression
+     * @param       string $expression xpath expression
      */
     protected function setTime($expression)
     {
@@ -198,9 +230,8 @@ abstract class BaseFeedItem
         }
     }
 
-
     /**
-     * Get feed item text
+     * Get feed item text.
      *
      * @return string
      */
@@ -210,9 +241,9 @@ abstract class BaseFeedItem
     }
 
     /**
-     * set feed description by xpath expression
+     * Set feed description by xpath expression.
      *
-     * @param string $expression xpath expression
+     * @param       string $expression xpath expression
      */
     protected function setText($expression)
     {
@@ -257,7 +288,6 @@ abstract class BaseFeedItem
         return $this->image;
     }
 
-
    /**
      * set feed description by xpath expression
      *
@@ -286,6 +316,6 @@ abstract class BaseFeedItem
     {
         return $this->feed->query($expression, $this->contextnode);
     }
-
-
 }
+
+?>

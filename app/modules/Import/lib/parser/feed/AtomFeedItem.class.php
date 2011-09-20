@@ -1,16 +1,22 @@
 <?php
 
 /**
- * The BaseFeedItem provides basic functionality that usefull to all xml based feed item implementations.
+ * The AtomFeedItem is a concrete implementation of the BaseFeedItem base class
+ * and is coded to support the concrete structure of atom.
  *
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
- * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @package         Import
  * @subpackage      Parser
  */
 class AtomFeedItem extends BaseFeedItem
 {
+    // ---------------------------------- <BaseFeedItem IMPL> ------------------------------------
+    
+    /**
+     * Parse xml node describing an item into our instance members.
+     */
     protected function parseItem()
     {
         $this->setId('a:id');
@@ -21,4 +27,8 @@ class AtomFeedItem extends BaseFeedItem
         $this->text = strip_tags($this->html);
         $this->setHtml('a:content');
     }
+    
+    // ---------------------------------- </BaseFeedItem IMPL> -----------------------------------
 }
+
+?>

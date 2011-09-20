@@ -1,16 +1,22 @@
 <?php
 
 /**
- * The BaseFeedItem provides basic functionality that usefull to all xml based feed item implementations.
+ * The RssFeedItem is a concrete implementation of the BaseFeedItem base class
+ * and is coded to support the concrete structure of rss 2.0. 
  *
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
- * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @package         Import
  * @subpackage      Parser
  */
 class RssFeedItem extends BaseFeedItem
 {
+    // ---------------------------------- <BaseFeedItem IMPL> ------------------------------------
+    
+    /**
+     * Parse xml node describing an item into our instance members.
+     */
     protected function parseItem()
     {
         $this->setId('guid');
@@ -35,4 +41,8 @@ class RssFeedItem extends BaseFeedItem
             $this->text = strip_tags($this->html);
         }
     }
+    
+    // ---------------------------------- </BaseFeedItem IMPL> -----------------------------------
 }
+
+?>

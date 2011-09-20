@@ -6,12 +6,15 @@
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
  * @subpackage      Parser
  */
 class RssFeedParser extends BaseFeedParser
 {
+    // ---------------------------------- <MEMBERS> ----------------------------------------------
+    
     /**
      *
      * Namespace prefix for http://purl.org/rss/1.0/modules/content/
@@ -25,8 +28,18 @@ class RssFeedParser extends BaseFeedParser
      * @var string
      */
     protected $nsElements;
+    
+    // ---------------------------------- </MEMBERS> ---------------------------------------------
 
-    public function __construct($doc)
+    
+    // ---------------------------------- <BaseFeedParser OVERRIDES> -----------------------------
+    
+    /**
+     * Create a new RssFeedParser instance.
+     * 
+     * @param        $doc 
+     */
+    public function __construct(DOMDocument $doc)
     {
         parent::__construct($doc);
 
@@ -43,6 +56,11 @@ class RssFeedParser extends BaseFeedParser
         $this->parseFeed();
     }
 
+    // ---------------------------------- </BaseFeedParser OVERRIDES> ----------------------------
+    
+    
+    // ---------------------------------- <BaseFeedParser IMPL> ----------------------------------
+    
     /**
      * Parse the given xml dom as rss.
      *
@@ -67,30 +85,32 @@ class RssFeedParser extends BaseFeedParser
         }
     }
 
-    // ---------------------------------- </IFeedParser IMPL> ------------------------------------
+    // ---------------------------------- </BaseFeedParser IMPL> ---------------------------------
 
 
+    // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
+    
     /**
-     * get namespace prefix for http://purl.org/dc/elements/1.1/
-     * @return string
+     * Get namespace prefix for http://purl.org/dc/elements/1.1/.
+     * 
+     * @return      string
      */
     public function getNamespaceElements()
     {
         return $this->nsElements;
     }
 
-
     /**
+     * Get namespace prefix for http://purl.org/rss/1.0/modules/content/.
      *
-     * get namespace prefix for http://purl.org/rss/1.0/modules/content/
-     *
-     * @return string
+     * @return      string
      */
     public function getNamespaceContent()
     {
         return $this->nsContent;
     }
-
+    
+    // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
 }
 
 ?>
