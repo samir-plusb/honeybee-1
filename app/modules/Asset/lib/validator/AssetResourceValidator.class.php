@@ -37,13 +37,15 @@ class AssetResourceValidator extends AgaviFileValidator
     const ARG_ASSET = 'asset';
 
     // ---------------------------------- </CONSTANTS> -------------------------------------------
+
+
     // ---------------------------------- <AgaviFileValidator OVERRIDES> -------------------------
 
     /**
      * Validates that given asset resource is either a valid uri or uploaded file.
-     * 
+     *
      * @return      boolean
-     * 
+     *
      * @see         AgaviFileValidator::validate()
      */
     protected function validate()
@@ -78,8 +80,8 @@ class AssetResourceValidator extends AgaviFileValidator
         }
 
         $this->export(
-            $fileUri, 
-            $this->getParameter(self::PARAM_EXPORT, self::DEFAULT_EXPORT), 
+            $fileUri,
+            $this->getParameter(self::PARAM_EXPORT, self::DEFAULT_EXPORT),
             AgaviRequestDataHolder::SOURCE_PARAMETERS
         );
 
@@ -90,15 +92,15 @@ class AssetResourceValidator extends AgaviFileValidator
      * Export a given value to our request data.
      * The method was overriden to add support for defining the request data source,
      * that the value is exported to.
-     * 
+     *
      * @internal    As we don't want further modifications of this method,
      *              to keep the compatibilty impact as small as possible,
      *              we'll ignore the pmd warnings for thsi method.
-     * 
+     *
      * @param       mixed $value
      * @param       string $name
      * @param       string $paramType
-     * 
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function export($value, $name = NULL, $paramType = NULL)
@@ -129,10 +131,10 @@ class AssetResourceValidator extends AgaviFileValidator
         }
         // CAUTION
         // we had a feature here during development that would allow [] at the end to append values to an array
-        // that would, however, mean that we have to cast the value to an array, 
+        // that would, however, mean that we have to cast the value to an array,
         // and, either way, a user would be able to manipulate the keys
-        // example: we export to foo[], and the user supplies ?foo[28] in the URL. 
-        // That means our export will be in foo[29]. foo[28] will be removed by the validation, 
+        // example: we export to foo[], and the user supplies ?foo[28] in the URL.
+        // That means our export will be in foo[29]. foo[28] will be removed by the validation,
         // but the keys are still potentially harmful, that's why we decided to remove this again.
         $arrayPath = new AgaviVirtualArrayPath($name);
         $arrayPath->setValue($array, $value);
@@ -149,8 +151,8 @@ class AssetResourceValidator extends AgaviFileValidator
                         new AgaviValidationArgument(
                             $arrayPath->pushRetNew($keyName)->__toString(),
                             $paramType
-                        ), 
-                        AgaviValidator::SUCCESS, 
+                        ),
+                        AgaviValidator::SUCCESS,
                         $this
                     );
                 }
@@ -160,23 +162,25 @@ class AssetResourceValidator extends AgaviFileValidator
                 new AgaviValidationArgument(
                     $arrayPath->__toString(),
                     $paramType
-                ), 
-                AgaviValidator::SUCCESS, 
+                ),
+                AgaviValidator::SUCCESS,
                 $this
             );
         }
     }
 
     // ---------------------------------- <AgaviFileValidator OVERRIDES> -------------------------
+
+    
     // ---------------------------------- <WORKING METHODS> --------------------------------------
 
     /**
      * Returns a valid uri, fixing a potentially
      * missing scheme for file uris.
-     * 
+     *
      * @param       string $assetUri
-     * 
-     * @return      string 
+     *
+     * @return      string
      */
     protected function fixUri($assetUri)
     {
@@ -199,9 +203,9 @@ class AssetResourceValidator extends AgaviFileValidator
 
     /**
      * Check if a given asset uri points to an available asset.
-     * 
+     *
      * @param       string $assetUri
-     * 
+     *
      * @return      boolean
      */
     protected function assetExists($assetUri)
@@ -236,7 +240,7 @@ class AssetResourceValidator extends AgaviFileValidator
 
     /**
      * Move a given uploaded file to a temp path.
-     * 
+     *
      * @return      string Return FALSE if something goes wrong.
      */
     protected function moveUploadedFile()
@@ -257,8 +261,8 @@ class AssetResourceValidator extends AgaviFileValidator
 
     /**
      *  Return a path pointing to our asset tmp dir.
-     * 
-     * @return      string 
+     *
+     * @return      string
      */
     protected function getAssetTmpDir()
     {
