@@ -18,11 +18,12 @@
                     <testfile>unit/modules/Import/models/Newswire/DataRecord/NitfDataRecordTest.php</testfile>
                     <testfile>unit/modules/Import/models/Newswire/DataRecord/NewswireDataRecordTest.php</testfile>
                     -->
-                    
+
                     <!-- IDataSource Tests -->
                     <testfile>unit/modules/Import/models/Imperia/DataSource/ImperiaDataSourceConfigTest.php</testfile>
                     <testfile>unit/modules/Import/models/Imperia/DataSource/ImperiaDataSourceTest.php</testfile>
                     <testfile>unit/modules/Import/models/Newswire/DataSource/NewswireDataSourceTest.php</testfile>
+                    <testfile>unit/modules/Import/models/Rss/DataSource/RssDataSourceTest.php</testfile>
 
                     <!-- IDataImport Tests -->
                     <testfile>unit/modules/Import/models/Imperia/DataImport/ImperiaImportConfigTest.php</testfile>

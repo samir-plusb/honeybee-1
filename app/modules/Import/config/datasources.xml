@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
+<ae:configurations
     xmlns="http://berlinonline.de/schemas/midas/config/datasource/definition/1.0"
     xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
 
     <ae:configuration environment=".*development.*">
         <datasources>
-            
+
             <datasource name="imperia" class="ImperiaDataSource">
                 <description>Provides access to imperia-cms content via imperia's export-xml api.</description>
                 <recordType>PoliceReportDataRecord</recordType>
@@ -18,12 +18,6 @@
                 </settings>
             </datasource>
 
-        </datasources>
-    </ae:configuration>
-
-    <ae:configuration>
-        <datasources>
-            
             <datasource name="rss" class="RssDataSource">
                 <description>Provides access to a given rss feed.</description>
                 <recordType>RssDataRecord</recordType>
@@ -31,7 +25,7 @@
                     <setting name="rss_url">http://www.spiegel.de/schlagzeilen/index.rss</setting>
                 </settings>
             </datasource>
-            
+
             <datasource name="dpa" class="NewswireDataSource">
                 <description>Provides access to the DPA messages.</description>
                 <recordType>DpaNitfNewswireDataRecord</recordType>
@@ -40,7 +34,7 @@
                     <setting name="timestamp_file">/var/tmp/dpa.time.stamp</setting>
                 </settings>
             </datasource>
-            
+
             <datasource name="imap" class="ImapDataSource">
                 <description>Provides access to a mailbox account via imap or pop3.</description>
                 <recordType>ImapDataRecord</recordType>
@@ -53,7 +47,7 @@
                     <setting name="protocol">imap/ssl</setting>
                 </settings>
             </datasource>
-            
+
         </datasources>
     </ae:configuration>
 </ae:configurations>
