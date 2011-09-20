@@ -185,11 +185,7 @@ class ImportFactory implements IImportFactory
             {
                 foreach ($dataSourceNames as $dataSourceName)
                 {
-                    if (empty ($onlyThese))
-                    {
-                        $dataSources[] = $this->createDataSource($dataSourceName);
-                    }
-                    elseif (in_array($dataSourceName, $onlyThese))
+                    if (empty($onlyThese) || in_array($dataSourceName, $onlyThese))
                     {
                         $dataSources[] = $this->createDataSource($dataSourceName);
                     }
