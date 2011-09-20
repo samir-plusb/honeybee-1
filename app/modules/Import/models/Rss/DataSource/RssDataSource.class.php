@@ -15,7 +15,7 @@ class RssDataSource extends ImportBaseDataSource
     // ---------------------------------- <MEMBERS> ----------------------------------------------
 
     /**
-     * @var         array parsed feed
+     * @var IFeedParser
      */
     private $feedData;
 
@@ -45,9 +45,11 @@ class RssDataSource extends ImportBaseDataSource
         $this->feedData = $this->parse(
             $this->getRawContent()
         );
-        
+
         $this->cursorPos = -1;
     }
+
+
 
     /**
      * Forward our cursor, hence move to our next $documentId.
@@ -59,7 +61,8 @@ class RssDataSource extends ImportBaseDataSource
     protected function forwardCursor()
     {
         $this->cursorPos ++;
-        return isset($this->feedData['items'][$this->cursorPos]);
+        $items = $this->feedData->getItems();
+        return isset($items[$this->cursorPos]);
     }
 
     /**
@@ -71,14 +74,15 @@ class RssDataSource extends ImportBaseDataSource
      */
     protected function fetchData()
     {
-        return $this->feedData['items'][$this->cursorPos];
+        $items = $this->feedData->getItems();
+        return $items[$this->cursorPos];
     }
 
     // ---------------------------------- </ImportBaseDataSource IMPL> ---------------------------
-    
-    
+
+
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-    
+
     /**
      * Returns the raw feed content. (xml string)
      *
@@ -87,7 +91,7 @@ class RssDataSource extends ImportBaseDataSource
     protected function getRawContent()
     {
         $feedUri = $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL);
-        
+
         if (is_file($feedUri) && is_readable($feedUri))
         {
             $rawContent = file_get_contents($feedUri);
@@ -96,15 +100,15 @@ class RssDataSource extends ImportBaseDataSource
         {
             $rawContent = $this->loadFeedByUrl($feedUri);
         }
-        
+
         return $rawContent;
     }
-    
+
     /**
      * Load and return the feed content for a given feed url.
-     * 
+     *
      * @param       string $feedUrl
-     * 
+     *
      * @return      string
      */
     protected function loadFeedByUrl($feedUrl)
@@ -136,13 +140,13 @@ class RssDataSource extends ImportBaseDataSource
 
         return $rawContent;
     }
-    
+
     /**
      * Parse the incoming feed content
      *
      * @param       string $feedContent raw feed file contents
      *
-     * @return      array
+     * @return      IFeedParser
      *
      * @throws      DataSourceException If parsing fails due to bad content.
      *
@@ -151,39 +155,39 @@ class RssDataSource extends ImportBaseDataSource
     {
         $feedDoc = $this->createFeedDocument($feedContent);
         $parser = NULL;
-        
+
         switch ($feedDoc->documentElement->tagName)
         {
             case 'rss':
-                $parser = new RssFeedParser();
+                $parser = new RssFeedParser($feedDoc);
                 break;
             case 'feed':
-                $parser = new AtomFeedParser();
+                $parser = new AtomFeedParser($feedDoc);
                 break;
             default:
                 throw new DataSourceException('Feed type "'.$feedDoc->documentElement->tagName.'" not implemented: '.
                     $this->config->getSetting(RssDataSourceConfig::CFG_RSS_URL));
         }
 
-        return $parser->parseFeed($feedDoc);
+        return $parser;
     }
-    
+
     /**
      * Creates a DOMDocument from the given raw feed content.
-     * 
+     *
      * @param       string $content
-     * 
-     * @return      DOMDocument 
+     *
+     * @return      DOMDocument
      */
     protected function createFeedDocument($content)
     {
         libxml_clear_errors();
         $doc = new DOMDocument();
-        
+
         if (! $doc || ! $doc->loadXML($content))
         {
             $xmlerror = libxml_get_last_error();
-            
+
             if ($xmlerror)
             {
                 throw new DataSourceException($xmlerror->file.' : '.$xmlerror->message);
@@ -195,10 +199,19 @@ class RssDataSource extends ImportBaseDataSource
                 );
             }
         }
-        
+
         return $doc;
     }
-    
+
+    /**
+     * (non-PHPdoc)
+     * @see ImportBaseDataSource::getCurrentOrigin()
+     */
+    protected function getCurrentOrigin()
+    {
+        return $this->feedData->getTitle();
+    }
+
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 

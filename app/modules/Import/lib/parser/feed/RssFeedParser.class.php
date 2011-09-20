@@ -12,138 +12,85 @@
  */
 class RssFeedParser extends BaseFeedParser
 {
-    // ---------------------------------- <IFeedParser IMPL> -------------------------------------
-    
+    /**
+     *
+     * Namespace prefix for http://purl.org/rss/1.0/modules/content/
+     * @var string
+     */
+    protected $nsContent;
+
+    /**
+     *
+     * Namespace prefix for http://purl.org/dc/elements/1.1/
+     * @var string
+     */
+    protected $nsElements;
+
+    public function __construct($doc)
+    {
+        parent::__construct($doc);
+
+        $nsContent = $this->doc->documentElement->lookupPrefix('http://purl.org/rss/1.0/modules/content/');
+        $nsContent = empty($nsContent) ? 'content' : $nsContent;
+        $this->nsContent = $nsContent;
+        $this->xpath->registerNamespace($nsContent, 'http://purl.org/rss/1.0/modules/content/');
+
+        $nsElements = $this->doc->documentElement->lookupPrefix('http://purl.org/dc/elements/1.1/');
+        $nsElements = empty($nsElements) ? 'dc' : $nsElements;
+        $this->nsElements = $nsElements;
+        $this->xpath->registerNamespace($nsElements, 'http://purl.org/dc/elements/1.1/');
+
+        $this->parseFeed();
+    }
+
     /**
      * Parse the given xml dom as rss.
      *
-     * @param       DOMDocument $doc
-     * 
      * @return      array
      */
-    public function parseFeed(DOMDocument $doc)
+    protected function parseFeed()
     {
-        $xpath = new DOMXpath($doc);
+        $this->setTitle('/rss/channel/title');
+        $this->setLink('/rss/channel/link');
+        $this->setDescription('/rss/channel/description');
+        $this->setCopyright('/rss/channel/copyright');
+        $this->setTime('/rss/channel/pubDate');
 
-        $nsContent = $doc->documentElement->lookupPrefix('http://purl.org/rss/1.0/modules/content/');
-        $nsContent = empty($nsContent) ? 'content' : $nsContent;
-        $xpath->registerNamespace($nsContent, 'http://purl.org/rss/1.0/modules/content/');
-
-        $nsElements = $doc->documentElement->lookupPrefix('http://purl.org/dc/elements/1.1/');
-        $nsElements = empty($nsElements) ? 'dc' : $nsElements;
-        $xpath->registerNamespace($nsElements, 'http://purl.org/dc/elements/1.1/');
-
-        $feedData = $this->initFeedData();
-
-        $nodeList = $xpath->query('/rss/channel/title');
-        if ($nodeList && $nodeList->length > 0)
+        $nodeList = $this->query('/rss/channel/item');
+        if ($nodeList)
         {
-            $feedData['title'] = $nodeList->item(0)->nodeValue;
-        }
-        
-        $nodeList = $xpath->query('/rss/channel/link');
-        if ($nodeList && $nodeList->length > 0)
-        {
-            $feedData['link'] = $nodeList->item(0)->nodeValue;
-        }
-        
-        $nodeList = $xpath->query('/rss/channel/description');
-        if ($nodeList && $nodeList->length > 0)
-        {
-            $feedData['description'] = $nodeList->item(0)->nodeValue;
-        }
-        
-        $nodeList = $xpath->query('/rss/channel/copyright');
-        if ($nodeList && $nodeList->length > 0)
-        {
-            $feedData['copyright'] = $nodeList->item(0)->nodeValue;
-        }
-        
-        $nodeList = $xpath->query('/rss/channel/pubDate');
-        if ($nodeList && $nodeList->length > 0)
-        {
-            $feedData['lastchanged'] = new DateTime($nodeList->item(0)->nodeValue);
-        }
-        else
-        {
-            $feedData['lastchanged'] = new DateTime();
-        }
-
-        $nodeList = $xpath->query('/rss/channel/item');
-        
-        foreach ($nodeList as $entryNode)
-        {
-            $itemData = $this->initItemData();
-            
-            $list = $xpath->query('title', $entryNode);
-            if ($list && $list->length > 0)
+            foreach ($nodeList as $entryNode)
             {
-                $itemData['title'] = $list->item(0)->nodeValue;
-            }
-            
-            $list = $xpath->query('link', $entryNode);
-            if ($list && $list->length > 0)
-            {
-                $itemData['url'] = $list->item(0)->nodeValue;
-            }
-            
-            $list = $xpath->query('pubDate', $entryNode);
-            if ($list && $list->length > 0)
-            {
-                $itemData['lastchanged'] = new DateTime($list->item(0)->nodeValue);
-                $itemData['timestamp'] = $itemData['lastchanged']->format('c');
-            }
-            else
-            {
-                $list = $xpath->query($nsElements.':date', $entryNode);
-                if ($list && $list->length > 0)
-                {
-                    $itemData['lastchanged'] = new DateTime($list->item(0)->nodeValue);
-                    $itemData['timestamp'] = $itemData['lastchanged']->format('c');
-                }
-                else
-                {
-                    $itemData['lastchanged'] = $feedData['lastchanged'];
-                    $itemData['timestamp'] = $itemData['lastchanged']->format('c');
-                }
-            }
-            
-            $list = $xpath->query('description', $entryNode);
-            if ($list && $list->length > 0)
-            {
-                $itemData['teaser_text'] = $list->item(0)->nodeValue;
-                if (empty ($itemData['html']))
-                {
-                    $itemData['html'] = htmlspecialchars($itemData['teaser_text']);
-                }
-            }
-            
-            $list = $xpath->query($nsContent.':encoded', $entryNode);
-            if ($list && $list->length > 0)
-            {
-                $itemData['html'] = $list->item(0)->nodeValue;
-                if (empty ($itemData['teaser_text']))
-                {
-                    $itemData['teaser_text'] = strip_tags($itemData['html']);
-                }
-            }
-            
-            $list = $xpath->query('enclosure[@type="image/jpeg"]/@url', $entryNode);
-            if ($list && $list->length > 0)
-            {
-                $itemData['image']['url'] = $list->item(0)->nodeValue;
-            }
-            
-            if ($itemData['timestamp'])
-            {
-                $feedData['items'][] = $itemData;
+                $item = new RssFeedItem($this, $entryNode);
+                $this->addItem($item);
             }
         }
-
-        return $feedData;
     }
-    
+
     // ---------------------------------- </IFeedParser IMPL> ------------------------------------
+
+
+    /**
+     * get namespace prefix for http://purl.org/dc/elements/1.1/
+     * @return string
+     */
+    public function getNamespaceElements()
+    {
+        return $this->nsElements;
+    }
+
+
+    /**
+     *
+     * get namespace prefix for http://purl.org/rss/1.0/modules/content/
+     *
+     * @return string
+     */
+    public function getNamespaceContent()
+    {
+        return $this->nsContent;
+    }
+
 }
 
 ?>

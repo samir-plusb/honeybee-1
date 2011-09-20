@@ -11,16 +11,12 @@
  */
 interface IFeedParser
 {
-    /**
-     * Parse the given xml dom thereby treating it as a concrete feed (rss, atom...)
-     * and return an assoc array reflecting the given feed's structure.
-     *
-     * @param       DOMDocument $doc
-     * @param       int $source_index
-     * 
-     * @return      array
-     */
-    public function parseFeed(DOMDocument $doc);
+    public function getTitle();
+    public function getDescription();
+    public function getLink();
+    public function getTime();
+    public function getCopyright();
+    public function getItems();
 }
 
 ?>
