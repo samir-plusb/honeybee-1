@@ -297,7 +297,7 @@ abstract class BaseFeedParser implements IFeedParser
     public function query($expression, DOMNode $contextnode = NULL)
     {
         libxml_clear_errors();
-        $nl = $this->xpath->query($expression, $contextnode);
+        $nodeList = $this->xpath->query($expression, $contextnode);
         $err = libxml_get_last_error();
         
         if ($err)
@@ -305,7 +305,7 @@ abstract class BaseFeedParser implements IFeedParser
             error_log(__METHOD__."($expression) ".print_r($err,1));
         }
         
-        return ($nl && $nl->length > 0) ? $nl : FALSE;
+        return ($nodeList && $nodeList->length > 0) ? $nodeList : FALSE;
     }
 
     /**
