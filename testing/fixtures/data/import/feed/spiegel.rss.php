@@ -1,6 +1,6 @@
 <?php
 
-$i = array(
+return array(
     array(
         'identifier' => 'http://www.spiegel.de/wirtschaft/soziales/0,1518,787285,00.html#ref=rss',
         'source' => '',
@@ -471,7 +471,5 @@ $i = array(
         'author' => '',
     ),
 );
-
-var_dump(count($i));exit;
 
 ?>
