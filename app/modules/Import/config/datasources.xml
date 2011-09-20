@@ -3,7 +3,8 @@
     xmlns="http://berlinonline.de/schemas/midas/config/datasource/definition/1.0"
     xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
-    <ae:configuration>        
+
+    <ae:configuration environment=".*development.*">
         <datasources>
             
             <datasource name="imperia" class="ImperiaDataSource">
@@ -16,6 +17,12 @@
                     <setting name="url">%imperia.base_url%</setting>
                 </settings>
             </datasource>
+
+        </datasources>
+    </ae:configuration>
+
+    <ae:configuration>
+        <datasources>
             
             <datasource name="rss" class="RssDataSource">
                 <description>Provides access to a given rss feed.</description>
@@ -47,6 +54,6 @@
                 </settings>
             </datasource>
             
-        </datasources>        
+        </datasources>
     </ae:configuration>
 </ae:configurations>
