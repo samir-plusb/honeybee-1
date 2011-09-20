@@ -2,13 +2,6 @@
 
 class RssDataSourceTest extends DataSourceBaseTestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->dataSource->resetTimestamp();
-    }
-
     protected function getDataSourceClass()
     {
         return 'RssDataSource';
