@@ -29,6 +29,7 @@
                 <directory suffix="Success.php">../../app/</directory>
                 <directory suffix="Input.php">../../app/</directory>
                 <directory suffix="Error.php">../../app/</directory>
+                <directory>../fixtures/</directory>
             </exclude>
         </whitelist>
     </filter>
