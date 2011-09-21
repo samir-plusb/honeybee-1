@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" parent="%core.module_dir%/Import/config/validators.xml">
-	
+
 	<ae:configuration>
-		
+
 		<validators>
-            <validator class="json" name="invalid_document_ids" method="write" required="true">
+            <validator class="ImperiaJsonValidator" name="invalid_document_ids" method="write" required="true">
                 <arguments>
                     <argument>data</argument>
                 </arguments>
@@ -13,7 +13,7 @@
                 </errors>
             </validator>
 		</validators>
-		
+
 	</ae:configuration>
-	
+
 </ae:configurations>

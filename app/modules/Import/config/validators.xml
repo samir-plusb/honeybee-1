@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" parent="%core.config_dir%/validators.xml">
-    
+
     <ae:configuration>
         <validator_definitions>
-            <validator_definition name="import" class="ImportValidator">
-                <ae:parameters>
-                    <ae:parameter name="expose_errors">true</ae:parameter>
-                </ae:parameters>
-            </validator_definition>
-            
-            <validator_definition name="json" class="ImperiaJsonValidator">
-                <ae:parameters>
-                    <ae:parameter name="expose_errors">true</ae:parameter>
-                </ae:parameters>
-            </validator_definition>
         </validator_definitions>
     </ae:configuration>
-    
+
 </ae:configurations>
