@@ -13,106 +13,106 @@
 abstract class BaseFeedItem
 {
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      * Holds our identifier.
-     * 
+     *
      * @var         string
      */
     protected  $id;
-    
+
     /**
      * Holds our author.
-     * 
+     *
      * @var         string
      */
     protected $author;
 
     /**
      * Holds our title.
-     * 
+     *
      * @var         string
      */
     protected $title;
 
     /**
      * Holds our link.
-     * 
+     *
      * @var         string
      */
     protected $link;
 
     /**
      * Holds our time.
-     * 
+     *
      * @var         DateTime
      */
     protected $time;
 
     /**
      * Holds our text content.
-     * 
+     *
      * @var         string
      */
     protected $text;
 
     /**
      * Holds our html content.
-     * 
+     *
      * @var         string
      */
     protected $html;
 
     /**
      * Holds our image uri.
-     * 
+     *
      * @var         string
      */
     protected $image;
 
     /**
      * Holds our feed parser instance.
-     * 
-     * @var         IFeedParser
+     *
+     * @var         BaseFeedParser
      */
     protected $feed;
 
     /**
      * Holds a context node used for xpath queries.
-     * 
+     *
      * @var         DOMNode
      */
     protected $contextnode;
 
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-    
-    
+
+
     // ---------------------------------- <CONSTRUCTOR> ------------------------------------------
-    
+
     /**
      * Create a new BaseFeedItem instance, thereby providing an IFeedParser impl as our "parent",
      * which means this is the parser that is creating us and a context node used for relative xpath queries.
-     * 
+     *
      * @param       BaseFeedParser $feed
      * @param       DOMNode $contextnode
      */
-    public function __construct(IFeedParser $feed, DOMNode $contextnode)
+    public function __construct(BaseFeedParser $feed, DOMNode $contextnode)
     {
         $this->feed = $feed;
         $this->contextnode = $contextnode;
         $this->parseItem();
     }
-    
+
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
 
-    
+
     // ---------------------------------- <ABSTRACT METHODS> -------------------------------------
-    
+
     /**
      * Parse xml node describing an item into our instance members.
      */
     abstract protected function parseItem();
-    
+
     // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
 
     public function getId()
@@ -163,7 +163,7 @@ abstract class BaseFeedItem
      *
      * @return      string
      */
-    public function getTitle() 
+    public function getTitle()
     {
         return $this->title;
     }
@@ -187,7 +187,7 @@ abstract class BaseFeedItem
      *
      * @return      string
      */
-    public function getLink() 
+    public function getLink()
     {
         return $this->link;
     }
@@ -315,6 +315,26 @@ abstract class BaseFeedItem
     protected function query($expression)
     {
         return $this->feed->query($expression, $this->contextnode);
+    }
+
+
+    /**
+     * return serializable member variables
+     *
+     * @return      array
+     */
+    public function __sleep()
+    {
+        return array(
+            'id',
+            'author',
+            'title',
+            'link',
+            'time',
+            'text',
+            'html',
+            'image'
+        );
     }
 }
 
