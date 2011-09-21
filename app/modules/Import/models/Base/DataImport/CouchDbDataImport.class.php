@@ -130,9 +130,9 @@ class CouchDbDataImport extends BaseDataImport
     }
 
     /**
-     * This method is responseable for converting data records 
+     * This method is responseable for converting data records
      * to a final array structure, suitable for data distribution to couchdb.
-     * 
+     *
      * @return      array
      */
     protected function convertRecord(IDataRecord $record)
@@ -185,7 +185,7 @@ class CouchDbDataImport extends BaseDataImport
     {
         $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
         $couchData = array();
-        
+
         foreach ($this->importBuffer as $bufferedRecord)
         {
             $couchData[] = $this->convertRecord($bufferedRecord);
@@ -265,15 +265,15 @@ class CouchDbDataImport extends BaseDataImport
 
         if (0 !== $rev)
         {
-            $data = $this->importBuffer[$docId]->toArray();
+            $data = $this->convertRecord($this->importBuffer[$docId]);
             $oldDoc = $this->couchClient->getDoc($database, $docId);
-            
+
             foreach ($data as $key => $val)
             {
                 if (! array_key_exists($key, $oldDoc) || 0 != strcmp(serialize($val), serialize($oldDoc[$key])))
                 {
                     $data[self::COUDB_REV_FIELD] = $rev;
-                    
+
                     return $data;
                 }
             }

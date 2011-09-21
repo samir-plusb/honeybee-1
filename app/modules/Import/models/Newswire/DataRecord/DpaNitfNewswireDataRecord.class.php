@@ -12,8 +12,42 @@
  */
 class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
 {
+    /**
+     * Holds the name of links property
+     */
+    const PROP_LINKS = 'links';
+
+
+    /**
+     * Holds our link array
+     *
+     * @var         string
+     */
+    protected $links;
+
+
+    /**
+     * get links data
+     *
+     *  @return array
+     */
+    public function getLinks()
+    {
+        return $this->links;
+    }
+
+    /**
+     * set links member from hydrate
+     *
+     * @param array $links
+     */
+    protected function setLinks($links)
+    {
+        $this->links = $links;
+    }
+
     // ---------------------------------- <XmlBasedDataRecord IMPL> ------------------------------
-    
+
     /**
      * Return a list of field keys to corresponding xpath expressions.
      *
@@ -25,7 +59,7 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
     protected function getFieldMap()
     {
         return array_merge(
-            parent::getFieldMap(), 
+            parent::getFieldMap(),
             array(
                 self::PROP_SUBTITLE  => '//byline',
                 self::PROP_COPYRIGHT => '//meta[@name="copyright"]/@content',
@@ -33,7 +67,7 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
             )
         );
     }
-    
+
     /**
      * Filter the collected data.
      *
@@ -46,7 +80,8 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
     protected function normalizeData(array $data)
     {
         $normalized = parent::normalizeData($data);
-        $normalized['links'] = $this->importLinks();
+        list($normalized[self::PROP_IDENT], $subid) = explode(':', $data[self::PROP_IDENT]->item(0)->nodeValue);
+        $normalized[self::PROP_LINKS] = $this->importLinks();
 
         if (isset($data[self::PROP_KEYWORDS]) && $data[self::PROP_KEYWORDS])
         {
@@ -62,12 +97,33 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
 
         return $normalized;
     }
-    
+
     // ---------------------------------- </XmlBasedDataRecord IMPL> -----------------------------
-    
-    
+
+
+    // ---------------------------------- <ImportBaseDataRecord OVERRIDES> -----------------------
+
+    /**
+     * Return an array holding property names of properties,
+     * which we want to expose through our IDataRecord::toArray() method.
+     *
+     * @return      array
+     */
+    protected function getExposedProperties()
+    {
+        return array_merge(
+            parent::getExposedProperties(),
+            array(
+                self::PROP_LINKS,
+            )
+        );
+    }
+
+    // ---------------------------------- </ImportBaseDataRecord OVERRIDES> ----------------------
+
+
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-    
+
     /**
      * Import nitf tables.
      *
@@ -88,7 +144,7 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
 
         return $data;
     }
-    
+
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 

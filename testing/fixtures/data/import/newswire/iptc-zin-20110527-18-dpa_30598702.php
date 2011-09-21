@@ -11,7 +11,7 @@ return array(
     'title'      => 'Ssangyong Korando: Der Comeback-Koreaner',
     'copyright'  => 'dpa-info.com GmbH',
     'source'     => 'dpa - Deutsche Presse-Agentur GmbH',
-    'issue'      => '20110608T091345+0200',
+    'timestamp'  => '2011-06-08T09:13:45+0200',
     'category'   => '/serviceline/auto_verkehr/autotest/',
     'keywords'   => array('Auto'),
     'content'    => 'Berlin (dpa-infocom) - Ssangyong ist zurück: Zwei Jahre, nachdem die Pleite des Importeurs die Koreaner zum Abschied aus Deutschland gezwungen hatte, wagt die Marke mit dem Hirschgeweih im Logo den Neuanfang - und zwar mit dem Geländewagen Korando.

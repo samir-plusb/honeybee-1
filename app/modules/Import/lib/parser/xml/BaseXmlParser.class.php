@@ -36,9 +36,9 @@ abstract class BaseXmlParser implements IXmlParser
     {
         $content = array();
 
-        for ($i = 0; $i < $nodeList->length; $i++)
+        foreach ($nodeList as $node)
         {
-            $value = trim($nodeList->item($i)->nodeValue);
+            $value = trim($node->nodeValue);
 
             if ($value)
             {
