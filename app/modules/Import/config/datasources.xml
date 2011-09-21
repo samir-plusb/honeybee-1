@@ -4,7 +4,7 @@
     xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
 
-    <ae:configuration environment=".*development.*">
+    <ae:configuration>
         <datasources>
 
             <datasource name="imperia" class="ImperiaDataSource">
