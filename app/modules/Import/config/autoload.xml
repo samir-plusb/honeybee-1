@@ -7,14 +7,14 @@
             <autoload name="MimeMailParser">Mail/mailparse.php</autoload>
             <autoload name="MimeMailParser_attachment">Mail/attachment.class.php</autoload>
             <!-- /From global vendor libs include path -->
-            
+
             <!-- Lib/Parser -->
             <autoload name="ProjectMailParser">%core.module_dir%/Import/lib/parser/mail/ProjectMailParser.class.php</autoload>
-            
+
             <autoload name="IXmlParser">%core.module_dir%/Import/lib/parser/xml/IXmlParser.iface.php</autoload>
             <autoload name="BaseXmlParser">%core.module_dir%/Import/lib/parser/xml/BaseXmlParser.class.php</autoload>
             <autoload name="ImperiaXmlParser">%core.module_dir%/Import/lib/parser/xml/ImperiaXmlParser.class.php</autoload>
-            
+
             <autoload name="IFeedParser">%core.module_dir%/Import/lib/parser/feed/IFeedParser.iface.php</autoload>
             <autoload name="BaseFeedParser">%core.module_dir%/Import/lib/parser/feed/BaseFeedParser.class.php</autoload>
             <autoload name="BaseFeedItem">%core.module_dir%/Import/lib/parser/feed/BaseFeedItem.class.php</autoload>
@@ -23,18 +23,17 @@
             <autoload name="AtomFeedParser">%core.module_dir%/Import/lib/parser/feed/AtomFeedParser.class.php</autoload>
             <autoload name="AtomFeedItem">%core.module_dir%/Import/lib/parser/feed/AtomFeedItem.class.php</autoload>
             <!-- /lib/parser/feed -->
-            
+
             <!-- Lib/Mvc -->
             <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/mvc/ImportBaseAction.class.php</autoload>
-            <autoload name="ImportBaseModel">%core.module_dir%/Import/lib/mvc/ImportBaseModel.class.php</autoload>
             <autoload name="ImportBaseView">%core.module_dir%/Import/lib/mvc/ImportBaseView.class.php</autoload>
             <!-- /Lib/Mvc -->
-            
+
             <!-- Lib/Validator -->
             <autoload name="ImportValidator">%core.module_dir%/Import/lib/validator/ImportValidator.class.php</autoload>
             <autoload name="ImperiaJsonValidator">%core.module_dir%/Import/lib/validator/ImperiaJsonValidator.class.php</autoload>
             <!-- /Lib/Validator -->
-            
+
             <!-- Lib/Testing -->
             <autoload name="ImportConfigBaseTestCase">%core.module_dir%/Import/lib/testing/ImportConfigBaseTestCase.class.php</autoload>
             <autoload name="DataSourceBaseTestCase">%core.module_dir%/Import/lib/testing/DataSourceBaseTestCase.class.php</autoload>
@@ -42,8 +41,8 @@
             <autoload name="CouchDbDataImportBaseTestCase">%core.module_dir%/Import/lib/testing/CouchDbDataImportBaseTestCase.class.php</autoload>
             <!-- /Lib/Testing -->
         <!-- /LIBS -->
-        
-        
+
+
         <!-- ABSTRACT CONCEPT (BaseModels) -->
             <!-- Base/Config -->
             <autoload name="IUriContainer">%core.module_dir%/Import/models/Base/Config/IUriContainer.iface.php</autoload>
@@ -71,7 +70,7 @@
             <autoload name="RecordValidationResult">%core.module_dir%/Import/models/Base/DataRecord/RecordValidationResult.class.php</autoload>
             <autoload name="IRecordValidationResult">%core.module_dir%/Import/models/Base/DataRecord/IRecordValidationResult.iface.php</autoload>
             <!-- /Base/DataRecord -->
-            
+
             <!-- Base/Import -->
             <autoload name="DataImportConfig">%core.module_dir%/Import/models/Base/DataImport/DataImportConfig.class.php</autoload>
             <autoload name="CouchDbDataImportConfig">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImportConfig.class.php</autoload>
@@ -80,7 +79,7 @@
             <autoload name="CouchDbDataImport">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImport.class.php</autoload>
             <autoload name="DataImportException">%core.module_dir%/Import/models/Base/DataImport/DataImportException.class.php</autoload>
             <!-- /Base/Import -->
-            
+
             <!-- Base/ImportFactory-->
             <autoload name="IImportFactory">%core.module_dir%/Import/models/Base/Factory/IImportFactory.iface.php</autoload>
             <autoload name="IImportFactoryConfig">%core.module_dir%/Import/models/Base/Factory/IImportFactoryConfig.iface.php</autoload>
@@ -108,13 +107,13 @@
             <autoload name="DpaNitfNewswireDataRecord">%core.module_dir%/Import/models/Newswire/DataRecord/DpaNitfNewswireDataRecord.class.php</autoload>
             <autoload name="NitfNewswireDataRecord">%core.module_dir%/Import/models/Newswire/DataRecord/NitfNewswireDataRecord.class.php</autoload>
             <!-- /Newswire -->
-            
+
              <!-- Rss -->
             <autoload name="RssDataSourceConfig">%core.module_dir%/Import/models/Rss/DataSource/RssDataSourceConfig.class.php</autoload>
             <autoload name="RssDataSource">%core.module_dir%/Import/models/Rss/DataSource/RssDataSource.class.php</autoload>
             <autoload name="RssDataRecord">%core.module_dir%/Import/models/Rss/DataRecord/RssDataRecord.class.php</autoload>
             <!-- /Rss -->
-            
+
             <!-- Mail -->
             <autoload name="ImapDataSourceConfig">%core.module_dir%/Import/models/Mail/DataSource/ImapDataSourceConfig.class.php</autoload>
             <autoload name="ImapDataSource">%core.module_dir%/Import/models/Mail/DataSource/ImapDataSource.class.php</autoload>

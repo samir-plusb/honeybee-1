@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" parent="%core.module_dir%/Import/config/validators.xml">
-    
+
     <ae:configuration>
         <validators>
-            
-            <validator class="import" name="invalid_import" required="true">
+
+            <validator class="ImportValidator" name="invalid_import" required="true">
                 <arguments>
                     <argument name="import">i</argument>
                 </arguments>
                 <errors>
                     <error>
 Please provide a valid data importname (-i) and optional datasources (-d).
-Enter -h to view the help text.    
+Enter -h to view the help text.
                     </error>
                     <error for="invalid_config">
 One of either the dataimports- or datasources.xml contains an invalid configuration.
@@ -27,8 +27,8 @@ At least one of the provided datasources(-d) does not exist.
                     <ae:parameter name="arg_datasources">d</ae:parameter>
                 </ae:parameters>
             </validator>
-            
+
         </validators>
     </ae:configuration>
-    
+
 </ae:configurations>
