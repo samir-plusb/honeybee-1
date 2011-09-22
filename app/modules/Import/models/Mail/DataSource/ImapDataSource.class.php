@@ -97,7 +97,7 @@ class ImapDataSource extends ImportBaseDataSource
     {
         $this->cursorPos++;
 
-        return $this->cursorPos < $this->maxCount;
+        return $this->cursorPos <= $this->maxCount;
     }
 
     /**
