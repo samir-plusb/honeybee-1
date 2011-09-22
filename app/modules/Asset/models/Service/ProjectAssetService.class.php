@@ -162,14 +162,14 @@ class ProjectAssetService implements IAssetService
 
         foreach ($metaData as $name => $value)
         {
-            if (!isset($curMetaData[$name]) || $curMetaData[$name] !== $value)
+            if (! isset($curMetaData[$name]) || $curMetaData[$name] !== $value)
             {
                 $isEqual = FALSE;
                 break;
             }
         }
 
-        if (!$isEqual)
+        if (! $isEqual)
         {
             $assetData[ProjectAssetInfo::XPROP_META_DATA] = $metaData;
             $asset = new ProjectAssetInfo($assetId, $assetData);
@@ -276,7 +276,6 @@ class ProjectAssetService implements IAssetService
             'extension' => $extension ? strtolower($extension) : NULL,
             'size'      => filesize($file->getPath())
         );
-
 
         if (($finfo = new finfo(FILEINFO_MIME, AgaviConfig::get('assets.mime_database'))))
         {
