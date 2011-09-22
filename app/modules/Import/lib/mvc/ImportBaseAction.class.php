@@ -11,7 +11,74 @@
  */
 class ImportBaseAction extends ProjectBaseAction
 {
+    /**
+     * Name of our couchdb data import definition.
+     */
+    const DATAIMPORT_COUCHDB = 'couchdb';
 
+    /**
+     * Name of our imperia data source definition.
+     */
+    const DATASOURCE_IMPERIA = 'imperia';
+
+    /**
+     * Name of our imap data source definition.
+     */
+    const DATASOURCE_IMAP = 'imap';
+
+    /**
+     * Handle our validation(write) errors.
+     *
+     * @param       AgaviRequestDataHolder $rd
+     *
+     * @return      type
+     */
+    public function handleWriteError(AgaviRequestDataHolder $rd)
+    {
+        return 'Error';
+    }
+
+    /**
+     * Creates and returns a new ImportFactory instance.
+     *
+     * @return      ImportFactory
+     */
+    protected function createImportFactory()
+    {
+        return new ImportFactory(
+            new ImportFactoryConfig(
+                AgaviConfig::get('import.config_dir')
+            )
+        );
+    }
+
+    /**
+     *
+     * @param       IDataImport $dataImport
+     * @param       array $dataSources
+     * 
+     * @return      string
+     */
+    protected function runImports(IDataImport $dataImport, array $dataSources)
+    {
+        $view = 'Success';
+
+        foreach ($dataSources as $dataSource)
+        {
+            try
+            {
+                $dataImport->run($dataSource);
+            }
+            catch(AgaviAutoloadException $e)
+            {
+                /* @todo better exception handling */
+                $this->setAttribute('errors', array($e->getMessage()));
+                $view = 'Error';
+            }
+        }
+
+        return $view;
+    }
 }
 
 ?>

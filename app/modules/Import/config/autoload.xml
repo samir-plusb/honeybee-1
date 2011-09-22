@@ -8,6 +8,11 @@
             <autoload name="MimeMailParser_attachment">Mail/attachment.class.php</autoload>
             <!-- /From global vendor libs include path -->
 
+            <!-- Lib/Mvc -->
+            <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/mvc/ImportBaseAction.class.php</autoload>
+            <autoload name="ImportBaseView">%core.module_dir%/Import/lib/mvc/ImportBaseView.class.php</autoload>
+            <!-- /Lib/Mvc -->
+
             <!-- Lib/Parser -->
             <autoload name="ProjectMailParser">%core.module_dir%/Import/lib/parser/mail/ProjectMailParser.class.php</autoload>
 
@@ -24,14 +29,10 @@
             <autoload name="AtomFeedItem">%core.module_dir%/Import/lib/parser/feed/AtomFeedItem.class.php</autoload>
             <!-- /lib/parser/feed -->
 
-            <!-- Lib/Mvc -->
-            <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/mvc/ImportBaseAction.class.php</autoload>
-            <autoload name="ImportBaseView">%core.module_dir%/Import/lib/mvc/ImportBaseView.class.php</autoload>
-            <!-- /Lib/Mvc -->
-
             <!-- Lib/Validator -->
             <autoload name="ImportValidator">%core.module_dir%/Import/lib/validator/ImportValidator.class.php</autoload>
             <autoload name="ImperiaJsonValidator">%core.module_dir%/Import/lib/validator/ImperiaJsonValidator.class.php</autoload>
+            <autoload name="ImportMailValidator">%core.module_dir%/Import/lib/validator/ImportMailValidator.class.php</autoload>
             <!-- /Lib/Validator -->
 
             <!-- Lib/Testing -->

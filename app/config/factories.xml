@@ -41,7 +41,10 @@
 
     <ae:configuration context="console">
 
-        <request class="AgaviConsoleRequest" />
+        <request class="AgaviConsoleRequest">
+            <ae:parameter name="read_stdin">on</ae:parameter>
+            <ae:parameter name="stdin_file_name">foobar</ae:parameter>
+        </request>
 
         <response class="AgaviConsoleResponse" />
 
@@ -50,9 +53,9 @@
         <user class="AgaviSecurityUser" />
 
     </ae:configuration>
-    
+
     <ae:configuration context="web" environment="testing.*">
-		
+
         <request class="AgaviWebRequest">
 			<!-- static values for unit tests -->
             <ae:parameter name="sources">
@@ -63,7 +66,7 @@
                 <ae:parameter name="SERVER_PROTOCOL">HTTP/1.1</ae:parameter>
             </ae:parameter>
         </request>
-		
+
     </ae:configuration>
 
 </ae:configurations>

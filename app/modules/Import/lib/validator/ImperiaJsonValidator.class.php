@@ -17,14 +17,17 @@ class ImperiaJsonValidator extends AgaviValidator
      * Holds the name of the error thrown when invalid json data is encountered.
      */
     const ERR_INVALID_JSON = 'invalid_json';
+
     /**
      * raised if json does not contains a root level array
      */
     const ERR_INVALID_STRUCTURE = 'invalid_structure';
+
     /**
      * raised if any item does not contain a valid '__imperia_node_id' key
      */
     const ERR_INVALID_NODEID = 'invalid_nodeid';
+
     /**
      * Holds the name of the parameter than can be used to set the name of the request-data field,
      * that we shall export the vaidated data to.
@@ -36,7 +39,7 @@ class ImperiaJsonValidator extends AgaviValidator
      * when no self::PARAM_EXPORT has been provided.
      */
     const DEFAULT_PARAM_EXPORT = 'ids';
-    
+
     /**
      * Holds the array key in our json data array that holds a specific imperia node id.
      */
@@ -58,14 +61,14 @@ class ImperiaJsonValidator extends AgaviValidator
         if (! is_scalar($jsonString))
         {
             $this->throwError(self::ERR_INVALID_JSON);
-            
+
             return FALSE;
         }
-        
+
         // @codingStandardsIgnoreStart
         $data = @json_decode($jsonString, TRUE);
-        //@codingStandardsIgnoreEnd
-        
+        // @codingStandardsIgnoreEnd
+
         if (NULL === $data)
         {
             $this->throwError(self::ERR_INVALID_JSON);
@@ -77,20 +80,24 @@ class ImperiaJsonValidator extends AgaviValidator
             return FALSE;
         }
 
+        $docIds = array();
+
         foreach ($data as $info)
         {
-            $imperiaNodeId = isset($info[self::IMPERIA_NODE_ID_FIELD]) 
-                ? $info[self::IMPERIA_NODE_ID_FIELD] 
+            $imperiaNodeId = isset($info[self::IMPERIA_NODE_ID_FIELD])
+                ? $info[self::IMPERIA_NODE_ID_FIELD]
                 : '';
-            
+
             if (! preg_match('#^/\d+[\d/]+$#', $imperiaNodeId))
             {
                 $this->throwError(self::ERR_INVALID_NODEID);
                 return FALSE;
             }
+
+            $docIds[] = $imperiaNodeId;
         }
 
-        $this->export($data, $this->getParameter(self::PARAM_EXPORT, self::DEFAULT_PARAM_EXPORT));
+        $this->export($docIds, $this->getParameter(self::PARAM_EXPORT, self::DEFAULT_PARAM_EXPORT));
 
         return TRUE;
     }

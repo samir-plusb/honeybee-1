@@ -13,16 +13,6 @@
 class Import_TriggerImperiaAction extends ImportBaseAction
 {
     /**
-     * Name of our couchdb data import definition.
-     */
-    const DATAIMPORT_COUCHDB = 'couchdb';
-
-    /**
-     * Name of our imperia data source definition.
-     */
-    const DATASOURCE_IMPERIA = 'imperia';
-
-    /**
      * Execute the write logic for this action, hence run the import.
      *
      * @param       AgaviRequestDataHolder $parameters
@@ -31,42 +21,23 @@ class Import_TriggerImperiaAction extends ImportBaseAction
      */
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
-        $docs = $parameters->getParameter(ImperiaJsonValidator::DEFAULT_PARAM_EXPORT, array());
-        if (empty($docs))
-        {
-            return 'Success';
-        }
-
-        $docIds = array();
-        foreach ($docs as $info)
-        {
-            $docIds[] = $info['__imperia_node_id'];
-        }
-
-        $factoryConfig = new ImportFactoryConfig(
-            AgaviConfig::get('import.config_dir')
+        $docIds = $parameters->getParameter(
+            ImperiaJsonValidator::DEFAULT_PARAM_EXPORT,
+            array()
         );
 
-        $importFactory = new ImportFactory($factoryConfig);
-        $import = $importFactory->createDataImport(self::DATAIMPORT_COUCHDB);
-        $imperiaDataSource = $importFactory->createDataSource(
-            self::DATASOURCE_IMPERIA,
-            array(
-                ImperiaDataSourceConfig::PARAM_DOCIDS => $docIds
+        $importFactory = $this->createImportFactory();
+        $dataImport = $importFactory->createDataImport(self::DATAIMPORT_COUCHDB);
+        $dataSources = array(
+            $importFactory->createDataSource(
+                self::DATASOURCE_IMPERIA,
+                array(
+                    ImperiaDataSourceConfig::PARAM_DOCIDS => $docIds
+                )
             )
         );
 
-        try
-        {
-            $import->run($imperiaDataSource);
-        }
-        catch(Exception $e)
-        {
-            $this->setAttribute('errors', array($e->getMessage()));
-            return 'Error';
-        }
-
-        return 'Success';
+        return $this->runImports($dataImport, $dataSources);
     }
 }
 
