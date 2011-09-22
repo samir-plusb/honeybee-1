@@ -29,11 +29,14 @@ class ImportBaseAction extends ProjectBaseAction
     /**
      * Handle our validation(write) errors.
      *
-     * @param       AgaviRequestDataHolder $rd
+     * @param       AgaviRequestDataHolder $parameters
      *
-     * @return      type
+     * @return      string Name of the error view to use.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function handleWriteError(AgaviRequestDataHolder $rd)
+    public function handleWriteError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         return 'Error';
     }
@@ -56,7 +59,7 @@ class ImportBaseAction extends ProjectBaseAction
      *
      * @param       IDataImport $dataImport
      * @param       array $dataSources
-     * 
+     *
      * @return      string
      */
     protected function runImports(IDataImport $dataImport, array $dataSources)

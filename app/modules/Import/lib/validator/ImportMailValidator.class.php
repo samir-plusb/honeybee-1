@@ -62,8 +62,11 @@ class ImportMailValidator extends AgaviValidator
      * @param       bollean $throwError
      *
      * @return      boolean
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    protected function checkAllArgumentsSet($throwError = TRUE)
+    protected function checkAllArgumentsSet($throwError = TRUE) // @codingStandardsIgnoreEnd
     {
         return TRUE;
     }

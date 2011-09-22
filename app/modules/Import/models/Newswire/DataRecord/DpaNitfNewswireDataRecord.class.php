@@ -80,7 +80,7 @@ class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
     protected function normalizeData(array $data)
     {
         $normalized = parent::normalizeData($data);
-        list($normalized[self::PROP_IDENT], $subid) = explode(':', $data[self::PROP_IDENT]->item(0)->nodeValue);
+        list($normalized[self::PROP_IDENT]) = explode(':', $data[self::PROP_IDENT]->item(0)->nodeValue);
         $normalized[self::PROP_LINKS] = $this->importLinks();
 
         if (isset($data[self::PROP_KEYWORDS]) && $data[self::PROP_KEYWORDS])
