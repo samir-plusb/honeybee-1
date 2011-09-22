@@ -19,7 +19,7 @@ class Import_TriggerMail_TriggerMailSuccessView extends ImportBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $rd)
+    public function executeText(AgaviRequestDataHolder $parameters)
     {
         $this->getResponse()->setContent(
             "Successfully imported your procmail mime-mail." . PHP_EOL
