@@ -22,9 +22,9 @@ class ImportBaseAction extends ProjectBaseAction
     const DATASOURCE_IMPERIA = 'imperia';
 
     /**
-     * Name of our imap data source definition.
+     * Name of our procmail data source definition.
      */
-    const DATASOURCE_IMAP = 'imap';
+    const DATASOURCE_PROCMAIL = 'procmail';
 
     /**
      * Handle our validation(write) errors.

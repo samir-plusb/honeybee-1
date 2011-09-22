@@ -69,11 +69,11 @@ class ImportFactory implements IImportFactory
     {
         $importConfig = $this->factoryConfig->getDataImportConfig($name);
 
-        $importSettings = array_merge(
-            $importConfig[DataImportsFactoryConfig::CFG_SETTINGS],
-            $parameters
-        );
+        $settings = isset($importConfig[DataImportsFactoryConfig::CFG_SETTINGS])
+            ? $importConfig[DataImportsFactoryConfig::CFG_SETTINGS]
+            : array();
 
+        $importSettings = array_merge($settings, $parameters);
         $importClass = $importConfig[DataImportsFactoryConfig::CFG_CLASS];
 
         if (!class_exists($importClass))
@@ -86,16 +86,16 @@ class ImportFactory implements IImportFactory
         // This is a simple convention that prevents cross package dependencies
         // concerning the usage of config objects.
         // We always want an ImperiaDataImport to use a ImperiaDataImportConfig and
-        // not a config object from a base or other domain level package.
-        // So it is ok to enforce the creation of concrete config objects when implementing
-        // concrete instances of other packages such as DataImport or DataSource.
+        // not a config object from a base or other domain package.
+        // So it is ok to enforce the creation of concrete config objects when for concrete
+        // concrete instances of IDataImport or IDataSource.
         $configClass = $importClass . self::CONFIG_CLASS_SUFFIX;
 
         if (!class_exists($configClass))
         {
             throw new ImportFactoryException(
                 "Unable to find corresponding config class for import class: " . $importClass .
-                ". Please make sure that you have create a " . $configClass . " implementation along with your" .
+                ". Please make sure that you have create a " . $configClass . " implementation along with your " .
                 $importClass
             );
         }
@@ -128,8 +128,12 @@ class ImportFactory implements IImportFactory
             );
         }
 
+        $settings = isset($dataSourceConfig[DataSourcesFactoryConfig::CFG_SETTINGS])
+            ? $dataSourceConfig[DataSourcesFactoryConfig::CFG_SETTINGS]
+            : array();
+
         $dataSourceSettings = array_merge(
-            $dataSourceConfig[DataSourcesFactoryConfig::CFG_SETTINGS],
+            $settings,
             $parameters,
             array(
                 DataSourceConfig::CFG_RECORD_TYPE => $recordType

@@ -29,9 +29,9 @@ class Import_TriggerMailAction extends ImportBaseAction
         $dataImport = $importFactory->createDataImport(self::DATAIMPORT_COUCHDB);
         $dataSources = array(
             $importFactory->createDataSource(
-                self::DATASOURCE_IMAP,
+                self::DATASOURCE_PROCMAIL,
                 array(
-                    ImapDataSourceConfig::PARAM_MAILITEM => $rawMail
+                    ArrayDataSourceConfig::CFG_DATA => array($rawMail)
                 )
             )
         );

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    See the testing/fixtures/config/import/datasources.xml for example configurations of all datasource types.
+-->
 <ae:configurations
     xmlns="http://berlinonline.de/schemas/midas/config/datasource/definition/1.0"
     xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
@@ -8,14 +11,8 @@
         <datasources>
 
             <datasource name="imperia" class="ImperiaDataSource">
-                <description>Provides access to imperia-cms content via imperia's export-xml api.</description>
+                <description>Provides imperia docids, when they are pushed by the imperia export service.</description>
                 <recordType>PoliceReportDataRecord</recordType>
-                <settings>
-                    <setting name="doc_idlist_url">%imperia.docid_api_url%</setting>
-                    <setting name="account_pass">P8TaamVVwOb4JGbPWtqwo</setting>
-                    <setting name="account_user">bo-xml-export</setting>
-                    <setting name="url">%imperia.base_url%</setting>
-                </settings>
             </datasource>
 
             <datasource name="rss" class="RssDataSource">
@@ -35,17 +32,9 @@
                 </settings>
             </datasource>
 
-            <datasource name="imap" class="ImapDataSource">
-                <description>Provides access to a mailbox account via imap or pop3.</description>
+            <datasource name="procmail" class="ArrayDataSource">
+                <description>Provides raw mime mail data, when it is pushed in by procmail.</description>
                 <recordType>ImapDataRecord</recordType>
-                <settings>
-                    <setting name="username">tschmittrink@gmail.com</setting>
-                    <setting name="password">Th0rst3n!</setting>
-                    <setting name="host">imap.googlemail.com</setting>
-                    <setting name="port">993</setting>
-                    <setting name="mailbox">INBOX</setting>
-                    <setting name="protocol">imap/ssl</setting>
-                </settings>
             </datasource>
 
         </datasources>

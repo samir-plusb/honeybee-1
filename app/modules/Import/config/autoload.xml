@@ -58,6 +58,8 @@
             <!-- Base/DataSource -->
             <autoload name="DataSourceConfig">%core.module_dir%/Import/models/Base/DataSource/DataSourceConfig.class.php</autoload>
             <autoload name="IDataSource">%core.module_dir%/Import/models/Base/DataSource/IDataSource.iface.php</autoload>
+            <autoload name="ArrayDataSourceConfig">%core.module_dir%/Import/models/Base/DataSource/ArrayDataSourceConfig.class.php</autoload>
+            <autoload name="ArrayDataSource">%core.module_dir%/Import/models/Base/DataSource/ArrayDataSource.class.php</autoload>
             <autoload name="ImportBaseDataSource">%core.module_dir%/Import/models/Base/DataSource/ImportBaseDataSource.class.php</autoload>
             <autoload name="DataSourceException">%core.module_dir%/Import/models/Base/DataSource/DataSourceException.class.php</autoload>
             <!-- /Base/DataSource -->
