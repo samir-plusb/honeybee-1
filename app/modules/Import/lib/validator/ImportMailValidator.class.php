@@ -43,12 +43,9 @@ class ImportMailValidator extends AgaviValidator
         }
 
         $this->export(
-            $contents,
-            $this->getParameter(
-                self::PARAM_EXPORT,
-                self::DEFAULT_PARAM_EXPORT
-            ),
-            AgaviRequestDataHolder::SOURCE_PARAMETERS
+            $contents, $this->getParameter(
+                self::PARAM_EXPORT, self::DEFAULT_PARAM_EXPORT
+            ), AgaviRequestDataHolder::SOURCE_PARAMETERS
         );
 
         return TRUE;
@@ -67,9 +64,9 @@ class ImportMailValidator extends AgaviValidator
      * @return      boolean
      */
     protected function checkAllArgumentsSet($throwError = TRUE)
-	{
-		return TRUE;
-	}
+    {
+        return TRUE;
+    }
 
     /**
      * Export a given value to our request data.
@@ -134,9 +131,7 @@ class ImportMailValidator extends AgaviValidator
                         new AgaviValidationArgument(
                             $arrayPath->pushRetNew($keyName)->__toString(),
                             $paramType
-                        ),
-                        AgaviValidator::SUCCESS,
-                        $this
+                        ), AgaviValidator::SUCCESS, $this
                     );
                 }
             }
@@ -145,13 +140,11 @@ class ImportMailValidator extends AgaviValidator
                 new AgaviValidationArgument(
                     $arrayPath->__toString(),
                     $paramType
-                ),
-                AgaviValidator::SUCCESS,
-                $this
+                ), AgaviValidator::SUCCESS, $this
             );
         }
     }
-
+    
     // ---------------------------------- </AgaviValidator OVERRIDES> ----------------------------
 }
 
