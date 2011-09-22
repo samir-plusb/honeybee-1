@@ -13,77 +13,84 @@
 class ImapDataSource extends ImportBaseDataSource
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------
-    
+
     /**
      * Holds the name of the array key where we expect our header,
      * which passed to to our parseData() method.
      */
     const DATA_FIELD_HEADER = 'header';
-    
+
     /**
      * Holds the name of the array key where we expect our rawData,
      * which passed to to our parseData() method.
      */
     const DATA_FIELD_RAW_DATA = 'rawData';
-    
+
     // ---------------------------------- </CONSTANTS> -------------------------------------------
-     
-    
+
+
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      * Holds our mailbox handle.
-     * 
-     * @var         resource 
+     *
+     * @var         resource
      */
     protected $mailBoxConnection;
-    
+
     /**
      * Holds our current position while iterating over our mails.
-     * 
+     *
      * @var         int
      */
     protected $cursorPos;
-    
+
     /**
-     * Holds the max number of iterations possible, 
+     * Holds the max number of iterations possible,
      * depending on the number of available mails.
-     * 
+     *
      * @var         int
      */
     protected $maxCount;
-    
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-    
-    
+
+
     // ---------------------------------- <ImportBaseDataSource OVERRIDES> -----------------------
-    
+
     /**
-     * Initialize our datasource, hence connect our mailbox 
+     * Initialize our datasource, hence connect our mailbox
      * and init our iteration variables.
      */
     protected function init()
     {
-        $this->connectMailbox();
-
-        if (($header = imap_check($this->mailBoxConnection)))
+        if ($this->config->getSetting(ImapDataSourceConfig::PARAM_MAILITEM, FALSE))
         {
-            $this->maxCount = $header->Nmsgs;
+            $this->maxCount = 1;
         }
         else
         {
-            throw new DataSourceException(
-                "Failed to retrieve mailbox header information."
-            );
+            $this->connectMailbox();
+
+            if (($header = imap_check($this->mailBoxConnection)))
+            {
+                $this->maxCount = $header->Nmsgs;
+            }
+            else
+            {
+                throw new DataSourceException(
+                    "Failed to retrieve mailbox header information."
+                );
+            }
         }
-        
+
         $this->cursorPos = 0;
     }
-    
+
     /**
      * Forward our current position inside the mail list
      * that we are currently iterating.
-     *  
+     *
      * @return      boolean
      */
     protected function forwardCursor()
@@ -92,29 +99,32 @@ class ImapDataSource extends ImportBaseDataSource
 
         return $this->cursorPos < $this->maxCount;
     }
-    
+
     /**
      * Return the data of the mail our cursor is currently pointing to.
-     * 
+     *
      * @return      array
      */
     protected function fetchData()
     {
-        $textHeader = imap_fetchheader($this->mailBoxConnection, $this->cursorPos, FT_PREFETCHTEXT);
-        $header = imap_headerinfo($this->mailBoxConnection, $this->cursorPos);
-        $rawBody = imap_body($this->mailBoxConnection, $this->cursorPos, FT_PEEK);
-        
-        return array(
-            self::DATA_FIELD_RAW_DATA => $textHeader . $rawBody,
-            self::DATA_FIELD_HEADER   => $header
-        );
+        $rawMimeMail = $this->config->getSetting(ImapDataSourceConfig::PARAM_MAILITEM, FALSE);
+
+        if (! $rawMimeMail)
+        {
+            $textHeader = imap_fetchheader($this->mailBoxConnection, $this->cursorPos, FT_PREFETCHTEXT);
+            $header = imap_headerinfo($this->mailBoxConnection, $this->cursorPos);
+            $rawBody = imap_body($this->mailBoxConnection, $this->cursorPos, FT_PEEK);
+            $rawMimeMail = $textHeader . $rawBody;
+        }
+
+        return $rawMimeMail;
     }
-    
+
     // ---------------------------------- </ImportBaseDataSource OVERRIDES> ----------------------
-    
-    
+
+
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-    
+
     /**
      * Connect to our configured imap/pop3 account.
      */
@@ -141,7 +151,7 @@ class ImapDataSource extends ImportBaseDataSource
 
         $this->mailBoxConnection = $mailBox;
     }
-    
+
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 
 }
