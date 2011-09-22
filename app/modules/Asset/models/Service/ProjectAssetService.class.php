@@ -128,7 +128,7 @@ class ProjectAssetService implements IAssetService
         {
             $assetFile->delete();
 
-            throw new Exception("Unable to store asset meta data for asset: " . $assetId);
+            throw new Exception("Unable to store asset meta data for asset: " . $assetFile->getId());
         }
 
         return $assetInfo;
