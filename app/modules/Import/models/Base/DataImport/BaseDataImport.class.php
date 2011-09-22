@@ -61,6 +61,13 @@ abstract class BaseDataImport implements IDataImport
      * @var         IDataRecord $currentRecord
      */
     private $currentRecord;
+    
+    /**
+     * Holds our import report.
+     * 
+     * @var         DataImportReport
+     */
+    protected $report;
 
     // ---------------------------------- </MEMBERS> ---------------------------------------------
 
@@ -110,6 +117,8 @@ abstract class BaseDataImport implements IDataImport
      */
     public function run(IDataSource $dataSource)
     {
+        $this->report = new DataImportReport();
+        
         $this->init($dataSource);
 
         $doImport = TRUE;
@@ -199,7 +208,19 @@ abstract class BaseDataImport implements IDataImport
         $this->dataSource = NULL;
         $this->currentRecord = NULL;
     }
+    
+    protected function onRecordSuccess(IDataRecord $record, $message)
+    {
+        $this->fireRecordImportedEvent($record);
+        
+        $this->report->addRecordSuccess($record, $message);
+    }    
 
+    protected function onRecordError(IDataRecord $record, $message)
+    {
+        $this->report->addRecordError($record, $message);
+    }
+    
     /**
      * Fire an event that indicates, that we have successfully imported the given record.
      *

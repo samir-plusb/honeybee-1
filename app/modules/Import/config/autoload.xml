@@ -75,6 +75,8 @@
             <!-- Base/Import -->
             <autoload name="DataImportConfig">%core.module_dir%/Import/models/Base/DataImport/DataImportConfig.class.php</autoload>
             <autoload name="CouchDbDataImportConfig">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImportConfig.class.php</autoload>
+            <autoload name="IDataImportReport">%core.module_dir%/Import/models/Base/DataImport/IDataImportReport.iface.php</autoload>
+            <autoload name="DataImportReport">%core.module_dir%/Import/models/Base/DataImport/DataImportReport.class.php</autoload>
             <autoload name="IDataImport">%core.module_dir%/Import/models/Base/DataImport/IDataImport.iface.php</autoload>
             <autoload name="BaseDataImport">%core.module_dir%/Import/models/Base/DataImport/BaseDataImport.class.php</autoload>
             <autoload name="CouchDbDataImport">%core.module_dir%/Import/models/Base/DataImport/CouchDbDataImport.class.php</autoload>

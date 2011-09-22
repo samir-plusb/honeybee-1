@@ -195,10 +195,14 @@ class CouchDbDataImport extends BaseDataImport
             $this->couchClient->storeDocs($database, $couchData)
         );
 
-        if (!empty($updateData))
+        if (! empty($updateData))
         {
             // @todo Handle unresolveable conflicts (exception?).
-            $this->couchClient->storeDocs($database, $updateData);
+            // @todo what about success notification for update records?
+            // maybe make a difference between create and update events?
+            $this->handleCouchDbResponse(
+                $this->couchClient->storeDocs($database, $updateData)
+            );
         }
     }
 
@@ -226,7 +230,10 @@ class CouchDbDataImport extends BaseDataImport
             else
             {
                 // @todo We should have a better check for success here.
-                $this->fireRecordImportedEvent($this->importBuffer[$resultItem['id']]);
+                $this->onRecordSuccess(
+                    $this->importBuffer[$resultItem['id']],
+                    print_r($resultItem, TRUE) // @todo dev and debugging purposed, remove later or die ^^
+                );
             }
         }
 
