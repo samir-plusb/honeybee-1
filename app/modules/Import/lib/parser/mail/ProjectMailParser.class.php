@@ -274,7 +274,8 @@ class ProjectMailParser extends MimeMailParser
      */
     protected function writeAttachmentToTmpFile(MimeMailParser_attachment $attachment)
     {
-        // @todo Find all sys_get_temp_dir usages and replace them with AgaviConfig::get('app.tmp_dir', sys_get_temp_dir())
+        // @todo Find all sys_get_temp_dir usages
+        // and replace them with AgaviConfig::get('app.tmp_dir', sys_get_temp_dir())
         $filePath = tempnam(sys_get_temp_dir(), self::ATTACHMENT_FILE_PREFIX);
 
         if (($filePtr = fopen($filePath, 'w')))
