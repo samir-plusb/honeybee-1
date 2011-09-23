@@ -274,17 +274,6 @@ class NitfNewswireDataRecord extends NewswireDataRecord
         $this->table = $table;
     }
 
-
-    /**
-     * Set our timestamp from NITF issue date during hydrate.
-     *
-     * @param       string $table
-     */
-    protected function setTimestamp($param)
-    {
-        parent::setTimestamp(new DateTime($param));
-    }
-
     // ---------------------------------- </HYDRATE SETTERS> -------------------------------------
 
 
@@ -338,11 +327,11 @@ class NitfNewswireDataRecord extends NewswireDataRecord
 
             if (preg_match('/^\d{8}T\d{6}[+-]\d{4}$/', $value))
             {
-                $value = $value;
+                $value = new DateTime($value);
             }
             else if (preg_match('/^(\d{8}T\d{6})Z$/', $value, $m))
             {
-                $value = $m[1].'+0000';
+                $value = new DateTime($m[1].'+0000');
             }
 
             $normalized[$key] = $value;

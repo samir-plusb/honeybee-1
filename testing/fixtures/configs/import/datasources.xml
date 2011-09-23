@@ -34,6 +34,11 @@
                 </settings>
             </datasource>
 
+            <datasource name="procmail" class="ArrayDataSource">
+                <description>Provides raw mime mail data, when it is pushed in by procmail.</description>
+                <recordType>ImapDataRecord</recordType>
+            </datasource>
+
         </datasources>
     </ae:configuration>
 </ae:configurations>

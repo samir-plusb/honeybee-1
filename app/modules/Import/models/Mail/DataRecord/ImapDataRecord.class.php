@@ -15,11 +15,6 @@ class ImapDataRecord extends ImportBaseDataRecord
     // ---------------------------------- <CONSTANTS> --------------------------------------------
 
     /**
-     * Holds the name of our timestamp property.
-     */
-    const PROP_TIMESTAMP = 'timestamp';
-
-    /**
      * Holds a file prefix, which is passed to php's tempname method
      * in order to build a tmp filepath for writing a mail to the disk
      * for further processing.
@@ -27,69 +22,6 @@ class ImapDataRecord extends ImportBaseDataRecord
     const TMP_FILE_PREFIX = 'midas.mail.';
 
     // ---------------------------------- </CONSTANTS> -------------------------------------------
-
-
-    // ---------------------------------- <MEMBERS> ----------------------------------------------
-
-    /**
-     * Holds our pub-timestamp in the ISO8601 format.
-     *
-     * @var         string
-     */
-    protected $timestamp;
-
-    // ---------------------------------- </MEMBERS> ---------------------------------------------
-
-
-    // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
-
-    /**
-     * Return our timestamp date string.
-     *
-     * @return      string A date string in the ISO8601 format.
-     */
-    public function getTimestamp()
-    {
-        return $this->timestamp;
-    }
-
-    // ---------------------------------- </PUBLIC METHODS> --------------------------------------
-
-
-    // ---------------------------------- <ImportBaseDataRecord::Hydrate SETTERS> ----------------
-
-    /**
-     * Sets our timestamp/date.
-     *
-     * @param       string $timestamp
-     */
-    protected function setTimestamp($timestamp)
-    {
-        $this->timestamp = $timestamp;
-    }
-
-    // ---------------------------------- </ImportBaseDataRecord::Hydrate SETTERS> ---------------
-
-
-    // ---------------------------------- <XmlBasedDataRecord OVERRIDES> -------------------------
-
-    /**
-     * Return an array holding property names of properties,
-     * which we want to expose through our IDataRecord::toArray() method.
-     *
-     * @return      array
-     *
-     * @see         XmlBasedDataRecord::getExposedProperties()
-     */
-    protected function getExposedProperties()
-    {
-        return array_merge(
-            parent::getExposedProperties(),
-            array(self::PROP_TIMESTAMP)
-        );
-    }
-
-    // ---------------------------------- </XmlBasedDataRecord OVERRIDES> ------------------------
 
 
     // ---------------------------------- <XmlBasedDataRecord IMPL> ------------------------------
@@ -119,7 +51,7 @@ class ImapDataRecord extends ImportBaseDataRecord
             self::PROP_IDENT     => uniqid(),
             self::PROP_MEDIA     => $this->createAssets($parser->getAttachments()),
             self::PROP_TITLE     => $parser->getSubject(),
-            self::PROP_TIMESTAMP => $parser->getDate(),
+            self::PROP_TIMESTAMP => new DateTime($parser->getDate()),
             self::PROP_SOURCE    => $parser->getFrom(),
             self::PROP_CONTENT   => $text . $html,
             self::PROP_GEO       => array()
@@ -130,28 +62,6 @@ class ImapDataRecord extends ImportBaseDataRecord
 
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-
-    /**
-     * Checks the data we have received from a datasource for consistence.
-     *
-     * @param       mixed $data Expected to be an array with the key 'header' and 'rawData'.
-     *
-     * @see         ImapDataRecord::DATA_FIELD_HEADER
-     * @see         ImapDataRecord::DATA_FIELD_RAW_DATA
-     */
-    protected function checkData($data)
-    {
-        if (
-            ! is_array($data) ||
-            ! isset($data[ImapDataSource::DATA_FIELD_HEADER]) ||
-            ! isset($data[ImapDataSource::DATA_FIELD_RAW_DATA])
-        )
-        {
-            throw new DataRecordException(
-                "Invalid data passed to ImapDataRecord instance's parseData method."
-            );
-        }
-    }
 
     /**
      * Write the given mime-mail data to a tmp file.

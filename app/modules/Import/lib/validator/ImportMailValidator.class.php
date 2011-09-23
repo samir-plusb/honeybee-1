@@ -29,13 +29,32 @@ class ImportMailValidator extends AgaviValidator
      */
     protected function validate()
     {
-        $stdinFileData = $this->getData($this->getArgument());
+        $stdinFileData = NULL;
 
-        var_dump($this->getArgument());exit;
+        if (strstr(AgaviConfig::get('core.environment'), 'testing'))
+        {
+            $stdinFileData = $this->getData('testmail');
+        }
+        else
+        {
+            $stdinFileData = $this->getData($this->getArgument());
+        }
 
-        $uploadedFile = new AgaviUploadedFile($stdinFileData);
+        if (! is_array($stdinFileData) || ! isset($stdinFileData['tmp_name']))
+        {
+            $this->throwError('invalid_data');
 
-        $contents = $uploadedFile->getContents();
+            return FALSE;
+        }
+
+        if (!is_readable($stdinFileData['tmp_name']))
+        {
+            $this->throwError('invalid_file');
+
+            return FALSE;
+        }
+
+        $contents = file_get_contents($stdinFileData['tmp_name']);
 
         if (empty($contents))
         {
