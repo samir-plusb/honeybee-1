@@ -92,7 +92,11 @@ class ImperiaDataSource extends ImportBaseDataSource
     protected function init()
     {
         $this->initCurlHandle();
-        $this->documentIds = $this->loadDocumentIds();
+        
+        $this->documentIds = $documentIds = $this->config->getSetting(
+            ImperiaDataSourceConfig::CFG_DOCIDS,
+            array()
+        );
 
         if (! empty($this->documentIds))
         {
@@ -157,43 +161,6 @@ class ImperiaDataSource extends ImportBaseDataSource
             curl_setopt($this->curlHandle, CURLOPT_COOKIEFILE, $this->cookiePath);
             curl_setopt($this->curlHandle, CURLOPT_COOKIEJAR, $this->cookiePath);
         }
-    }
-
-    /**
-     * Fetch a list of document ids to import
-     * from the imperia update-stream service-api.
-     *
-     * @return      array
-     *
-     * @throws      DataSourceException
-     */
-    protected function loadDocumentIds()
-    {
-        $documentIds = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOCIDS, FALSE);
-
-        if ($documentIds)
-        {
-            return $documentIds;
-        }
-
-        $documentIds = array();
-        $idListUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOC_IDLIST_URL);
-
-        curl_setopt($this->curlHandle, CURLOPT_URL, $idListUrl);
-        curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
-
-        $response = curl_exec($this->curlHandle);
-
-        $this->processCurlErrors(
-            "An error occured while trying to load doc-idlist from: $idListUrl"
-        );
-
-        if (!empty($response))
-        {
-            $documentIds = explode(' ', trim($response));
-        }
-
-        return $documentIds;
     }
 
     /**
