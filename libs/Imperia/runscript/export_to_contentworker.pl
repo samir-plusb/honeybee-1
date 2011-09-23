@@ -77,5 +77,9 @@ foreach my $url (split /\s+/, $importUrl)
     $req->header('Accept' => 'application/json');
 	$req->content('data='.uri_escape($json_text));
 	my $res = $ua->request($req);
-	warn "$url: ".$res->status_line unless $res->is_success;
+	if ($res->is_error)
+	{
+		warn "$url: ".$res->status_line;
+		warn $res->content;
+	}
 }
