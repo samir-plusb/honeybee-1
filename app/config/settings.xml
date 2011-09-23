@@ -122,12 +122,6 @@
     </ae:configuration>
 
     <!--        <SHRINK ENVIRONMENTS>         -->
-    <ae:configuration environment=".*development-shrink">
-        <settings prefix="imperia.">
-            <setting name="docid_api_url">http://localhost/importer.php</setting>
-        </settings>
-    </ae:configuration>
-
     <ae:configuration environment=".*development-shrink-work">
     	<settings prefix="curl.">
     		<setting name="proxy">proxy2:3128</setting>
