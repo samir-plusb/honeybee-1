@@ -40,7 +40,7 @@ class Import_TriggerImperia_TriggerImperiaErrorView extends ImportBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $msg = "An arror occured while trying to retieve your asset:" . PHP_EOL;
+        $msg = "An arror occured while trying to process the provided imperia data:" . PHP_EOL;
         $msg .= '- ' . implode(PHP_EOL . '- ', $this->getErrorMessages());
 
         $this->getResponse()->setContent($msg);

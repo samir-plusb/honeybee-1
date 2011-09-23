@@ -91,8 +91,7 @@ class ImperiaDataSource extends ImportBaseDataSource
      */
     protected function init()
     {
-        $this->initCurlHandle();
-        
+        $this->cursorPos = -1;
         $this->documentIds = $documentIds = $this->config->getSetting(
             ImperiaDataSourceConfig::CFG_DOCIDS,
             array()
@@ -100,10 +99,9 @@ class ImperiaDataSource extends ImportBaseDataSource
 
         if (! empty($this->documentIds))
         {
+            $this->initCurlHandle();
             $this->login();
         }
-
-        $this->cursorPos = -1;
     }
 
     /**
@@ -115,14 +113,9 @@ class ImperiaDataSource extends ImportBaseDataSource
      */
     protected function forwardCursor()
     {
-        if ($this->cursorPos < count($this->documentIds) - 1)
-        {
-            $this->cursorPos++;
+        $this->cursorPos++;
 
-            return TRUE;
-        }
-
-        return FALSE;
+        return $this->cursorPos < count($this->documentIds);
     }
 
     /**

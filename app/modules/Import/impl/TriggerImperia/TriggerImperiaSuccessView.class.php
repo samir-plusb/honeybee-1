@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Import_TriggerImperia_TriggerImperiaSuccessView class handles the presentation logic for our 
+ * The Import_TriggerImperia_TriggerImperiaSuccessView class handles the presentation logic for our
  * Import/TriggerImperia actions's success data.
  *
  * @version         $Id:$
@@ -14,9 +14,9 @@ class Import_TriggerImperia_TriggerImperiaSuccessView extends ImportBaseView
 {
     /**
      * Handle presentation logic for json.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
@@ -28,15 +28,15 @@ class Import_TriggerImperia_TriggerImperiaSuccessView extends ImportBaseView
 
     /**
      * Handle presentation logic for commandline interfaces.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $msg = "Successfully imported your imperia data" . PHP_EOL;
+        $msg = "Successfully imported your imperia data." . PHP_EOL;
 
         $this->getResponse()->setContent($msg);
     }
