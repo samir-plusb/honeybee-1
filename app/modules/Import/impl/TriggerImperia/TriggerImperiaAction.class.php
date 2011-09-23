@@ -32,7 +32,7 @@ class Import_TriggerImperiaAction extends ImportBaseAction
             $importFactory->createDataSource(
                 self::DATASOURCE_IMPERIA,
                 array(
-                    ImperiaDataSourceConfig::PARAM_DOCIDS => $docIds
+                    ImperiaDataSourceConfig::CFG_DOCIDS => $docIds
                 )
             )
         );

@@ -7,7 +7,7 @@ class ImperiaImportTest extends CouchDbDataImportBaseTestCase
         '/2/10330/10343/10890/1385806',
         '/2/10330/10343/10890/1385805'
     );
-    
+
     protected function getImportName()
     {
         return 'couchdb';
@@ -17,16 +17,16 @@ class ImperiaImportTest extends CouchDbDataImportBaseTestCase
     {
         return array('imperia');
     }
-    
+
     // @codeCoverageIgnoreStart
-    
+
     protected function getDataSourceParameters($dataSourceName)
     {
         return array(
-            ImperiaDataSourceConfig::PARAM_DOCIDS => self::$docIds
+            ImperiaDataSourceConfig::CFG_DOCIDS => self::$docIds
         );
     }
-    
+
     // @codeCoverageIgnoreEnd
 }
 

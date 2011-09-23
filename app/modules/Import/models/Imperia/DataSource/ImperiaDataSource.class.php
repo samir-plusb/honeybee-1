@@ -93,7 +93,7 @@ class ImperiaDataSource extends ImportBaseDataSource
     {
         $this->initCurlHandle();
         $this->documentIds = $this->loadDocumentIds();
-        
+
         if (! empty($this->documentIds))
         {
             $this->login();
@@ -169,13 +169,13 @@ class ImperiaDataSource extends ImportBaseDataSource
      */
     protected function loadDocumentIds()
     {
-        $documentIds = $this->config->getSetting(ImperiaDataSourceConfig::PARAM_DOCIDS, FALSE);
-        
+        $documentIds = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOCIDS, FALSE);
+
         if ($documentIds)
         {
             return $documentIds;
         }
-        
+
         $documentIds = array();
         $idListUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_DOC_IDLIST_URL);
 
@@ -183,7 +183,7 @@ class ImperiaDataSource extends ImportBaseDataSource
         curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
 
         $response = curl_exec($this->curlHandle);
-        
+
         $this->processCurlErrors(
             "An error occured while trying to load doc-idlist from: $idListUrl"
         );
@@ -192,7 +192,7 @@ class ImperiaDataSource extends ImportBaseDataSource
         {
             $documentIds = explode(' ', trim($response));
         }
-        
+
         return $documentIds;
     }
 
@@ -217,12 +217,12 @@ class ImperiaDataSource extends ImportBaseDataSource
         curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
 
         $responseDoc = curl_exec($this->curlHandle);
-        
+
         $this->checkImperiaSessionState(
             $responseDoc,
             "An error occured while loading: $idListUrl"
          );
-        
+
         return $responseDoc;
     }
 
@@ -244,7 +244,7 @@ class ImperiaDataSource extends ImportBaseDataSource
             )
         );
         $loginUrl = $this->config->getSetting(ImperiaDataSourceConfig::CFG_URL) . self::URL_PATH_LOGIN;
-        
+
         curl_setopt($this->curlHandle, CURLOPT_POST, 1);
         curl_setopt($this->curlHandle, CURLOPT_POSTFIELDS, http_build_query($post));
         curl_setopt($this->curlHandle, CURLOPT_URL, $loginUrl);
@@ -259,23 +259,23 @@ class ImperiaDataSource extends ImportBaseDataSource
      * and can continue work.
      * To do this we first check our curl handle for errors
      * and then check if imperia threw it's login screen at us.
-     * 
+     *
      * @param       string $resp
-     * @param       string $errMsg 
+     * @param       string $errMsg
      */
     protected function checkImperiaSessionState($resp, $errMsg = '')
     {
         $this->processCurlErrors($errMsg);
-        
+
         // Is there a better way to find out that imperia didn't let us in?
         if (FALSE !== strpos($resp, '<title>Access Denied!</title>'))
         {
             $errMsg = 'Error: The datasource is not logged in. ' . PHP_EOL . $errMsg;
-            
+
             throw new DataSourceException($errMsg);
         }
     }
-    
+
     /**
      * Check curl response status and throw exception on error.
      *
@@ -294,7 +294,7 @@ class ImperiaDataSource extends ImportBaseDataSource
         if (200 > $respCode || 300 <= $respCode || $errorNum || $error)
         {
             $msg = $msg . PHP_EOL . 'Curl Error: ' . PHP_EOL . $error;
-            
+
             throw new DataSourceException($msg, $errorNum);
         }
     }

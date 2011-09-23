@@ -5,7 +5,7 @@ class ImportFactoryTest extends AgaviPhpUnitTestCase
     const EXPECTED_IMPORT_INSTANCE = 'CouchDbDataImport';
 
     const EXPECTED_DATASOURCE_INSTANCE = 'ImperiaDataSource';
-    
+
     static private $docIds = array( // normally these are provided by the imperia-trigger script.
         '/2/10330/10343/10890/1385807',
         '/2/10330/10343/10890/1385806',
@@ -17,7 +17,7 @@ class ImportFactoryTest extends AgaviPhpUnitTestCase
     protected function setUp()
     {
         parent::setUp();
-        
+
         $this->factory = new ImportFactory(
             new ImportFactoryConfig(AgaviConfig::get('import.config_dir'))
         );
@@ -33,7 +33,7 @@ class ImportFactoryTest extends AgaviPhpUnitTestCase
     public function testCreateDataSource()
     {
         $parameters = array(
-            ImperiaDataSourceConfig::PARAM_DOCIDS => self::$docIds
+            ImperiaDataSourceConfig::CFG_DOCIDS => self::$docIds
         );
 
         $dataSource = $this->factory->createDataSource('imperia', $parameters);

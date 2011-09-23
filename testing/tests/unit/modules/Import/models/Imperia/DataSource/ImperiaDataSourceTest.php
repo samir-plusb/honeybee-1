@@ -37,7 +37,7 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
     protected function getDataSourceParameters()
     {
         return array(
-            ImperiaDataSourceConfig::PARAM_DOCIDS => self::$docIds
+            ImperiaDataSourceConfig::CFG_DOCIDS => self::$docIds
         );
     }
 
@@ -66,10 +66,10 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
                     DataRecordConfig::CFG_ORIGIN => ''
                 )
             )
-        );  
+        );
 
         $record = $this->dataSource->nextRecord();
-        
+
         $this->assertEquals(self::RECORDS_ARE_EQUAL, $record->compareTo($expectedRecord));
     }
 
