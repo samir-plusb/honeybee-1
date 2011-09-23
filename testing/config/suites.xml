@@ -36,6 +36,7 @@
                     <testfile>fragment/Import/Run/RunActionTest.class.php</testfile>
                     <testfile>fragment/Import/Run/RunSuccessViewTest.class.php</testfile>
                     <testfile>fragment/Import/Run/RunErrorViewTest.class.php</testfile>
+                    <testfile>fragment/Import/Mail/MailTriggerActionTest.class.php</testfile>
                 </testfiles>
             </suite>
         </suites>

@@ -5,7 +5,25 @@
 
             <validator class="ImportMailValidator" method="write">
                 <arguments>
-                    <argument>foobar</argument>
+                    <argument>stdin_buffer_filepath</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="source">files</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error>Invalid mail data given.</error>
+                </errors>
+            </validator>
+
+		</validators>
+	</ae:configuration>
+
+    <ae:configuration environment="testing*">
+		<validators>
+
+            <validator class="ImportMailValidator" method="write">
+                <arguments>
+                    <argument>testmail</argument>
                 </arguments>
                 <ae:parameters>
                     <ae:parameter name="source">files</ae:parameter>

@@ -43,7 +43,7 @@
 
         <request class="AgaviConsoleRequest">
             <ae:parameter name="read_stdin">on</ae:parameter>
-            <ae:parameter name="stdin_file_name">foobar</ae:parameter>
+            <ae:parameter name="stdin_file_name">stdin_buffer_filepath</ae:parameter>
         </request>
 
         <response class="AgaviConsoleResponse" />

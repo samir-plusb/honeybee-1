@@ -29,9 +29,11 @@ class ImportMailValidator extends AgaviValidator
      */
     protected function validate()
     {
-        $stdinFilePath = $this->getData($this->getArgument());
+        $stdinFileData = $this->getData($this->getArgument());
 
-        $uploadedFile = new AgaviUploadedFile($stdinFilePath);
+        var_dump($this->getArgument());exit;
+
+        $uploadedFile = new AgaviUploadedFile($stdinFileData);
 
         $contents = $uploadedFile->getContents();
 
