@@ -1,95 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/settings/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
     <ae:configuration>
-		
+
         <system_actions>
-			
+
             <system_action name="default">
                 <module>Default</module>
                 <action>Index</action>
             </system_action>
-			
+
             <system_action name="error_404">
                 <module>Default</module>
                 <action>Error404</action>
             </system_action>
-			
+
             <system_action name="login">
                 <module>Auth</module>
                 <action>Login</action>
             </system_action>
-			
+
             <system_action name="module_disabled">
                 <module>Default</module>
                 <action>ModuleDisabled</action>
             </system_action>
-			
+
             <system_action name="secure">
                 <module>Default</module>
                 <action>Secure</action>
             </system_action>
-			
+
             <system_action name="unavailable">
                 <module>Default</module>
                 <action>Unavailable</action>
             </system_action>
-			
+
         </system_actions>
-		
+
         <settings>
             <setting name="app_name">Midas - Content Refining Middleware</setting>
-			
+
             <setting name="available">true</setting>
             <setting name="debug">false</setting>
-			
+
             <setting name="use_database">false</setting>
             <setting name="use_logging">true</setting>
             <setting name="use_security">false</setting>
             <setting name="use_translation">true</setting>
         </settings>
-        
+
         <settings prefix="couchdb.import.">
             <setting name="host">localhost</setting>
             <setting name="port">5984</setting>
             <setting name="database">midas_import</setting>
         </settings>
-        
+
         <settings prefix="imperia.">
             <setting name="base_url">https://imperia.berlinonline.de/</setting>
             <setting name="docid_api_url">
                 https://imperia.berlinonline.de/imperia/ContentWorker/export-to-mail.php?getNotifications=1
             </setting>
         </settings>
-        
+
         <settings prefix="import.">
             <setting name="config_dir">%core.modules_dir%/Import/config/</setting>
             <setting name="newswire_dir">/var/tmp/dpa/regio-berlinbrandenburg/</setting>
         </settings>
-        
+
         <settings prefix="assets.">
             <setting name="mime_database">/usr/share/misc/magic.mgc</setting>
             <setting name="base_dir">%core.app_dir%/../data/assets</setting>
         </settings>
-        
+
         <exception_templates>
             <exception_template>%core.agavi_dir%/exception/templates/shiny.php</exception_template>
             <exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
         </exception_templates>
 
     </ae:configuration>
-	
+
     <ae:configuration environment="development*">
         <settings>
             <setting name="debug">true</setting>
         </settings>
     </ae:configuration>
-    
-    <ae:configuration environment="development-shrink">
-        <settings prefix="imperia.">
-            <setting name="docid_api_url">http://localhost/importer.php</setting>
-        </settings>
-    </ae:configuration>
-        
+
     <ae:configuration environment=".*cw-tay.*">
     	<settings prefix="curl.">
     		<setting name="proxy">proxy:3128</setting>
@@ -104,27 +98,50 @@
     		</setting>
     	</settings>
     </ae:configuration>
-    
+
     <ae:configuration environment=".*bo-devel.*">
     	<settings prefix="curl.">
     		<setting name="proxy">proxy:3128</setting>
     	</settings>
     </ae:configuration>
-	
+
     <ae:configuration environment="testing.*">
         <settings>
             <setting name="default_context">web</setting>
             <setting name="fixtures_dir">%core.testing_dir%/fixtures/</setting>
         </settings>
-        
+
         <settings prefix="couchdb.import.">
             <setting name="database">midas_import_testing</setting>
         </settings>
-        
+
         <settings prefix="import.">
             <setting name="config_dir">%core.testing_dir%/fixtures/configs/import/</setting>
             <setting name="newswire_dir">%core.testing_dir%/fixtures/data/import/newswire/</setting>
         </settings>
     </ae:configuration>
-	
+
+    <!--        <SHRINK ENVIRONMENTS>         -->
+    <ae:configuration environment=".*development-shrink">
+        <settings prefix="imperia.">
+            <setting name="docid_api_url">http://localhost/importer.php</setting>
+        </settings>
+    </ae:configuration>
+
+    <ae:configuration environment=".*development-shrink-work">
+    	<settings prefix="curl.">
+    		<setting name="proxy">proxy2:3128</setting>
+    	</settings>
+    	<settings prefix="php.">
+    		<setting name="default-stream">
+    			<ae:parameter name="http">
+    				<ae:parameter name="user_agent">Midas/0.1</ae:parameter>
+    				<ae:parameter name="proxy">tcp://proxy2:3128</ae:parameter>
+    				<ae:parameter name="request_fulluri">true</ae:parameter>
+    			</ae:parameter>
+    		</setting>
+    	</settings>
+    </ae:configuration>
+    <!--        </SHRINK ENVIRONMENTS>         -->
+
 </ae:configurations>
