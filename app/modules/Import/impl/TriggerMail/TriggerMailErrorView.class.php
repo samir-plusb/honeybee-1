@@ -1,7 +1,8 @@
 <?php
 
 /**
- * The Import_TriggerMail_TriggerMailErrorView class handle the presentation logic for our Import/TriggerMail actions's error data.
+ * The Import_TriggerMail_TriggerMailErrorView class handles the presentation logic
+ * for our Import/TriggerMail actions's error data.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -19,7 +20,7 @@ class Import_TriggerMail_TriggerMailErrorView extends ImportBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $msg = "An arror occured while trying to process your mail:" . PHP_EOL;
         $msg .= '- ' . implode(PHP_EOL . '- ', $this->getErrorMessages());
