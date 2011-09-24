@@ -7,7 +7,7 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
- * @package         Lib
+ * @package         Import
  * @subpackage      Parser
  */
 abstract class BaseFeedItem
