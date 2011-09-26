@@ -21,6 +21,11 @@ class ProjectAssetInfo implements IAssetInfo
     const PROP_ASSET_ID = 'id';
 
     /**
+     * Holds the name of our origin property.
+     */
+    const XPROP_ORIGIN = 'origin';
+
+    /**
      * Holds the name of our fullname property.
      */
     const XPROP_FULLNAME = 'fullname';
@@ -71,6 +76,13 @@ class ProjectAssetInfo implements IAssetInfo
      * @var         int
      */
     protected $assetId;
+
+    /**
+     * The asset's origin.
+     *
+     * @var         string
+     */
+    protected $origin;
 
     /**
      * The asset's full name (including extension)
@@ -149,6 +161,16 @@ class ProjectAssetInfo implements IAssetInfo
     public function getId()
     {
         return $this->assetId;
+    }
+
+    /**
+     * Return the asset's origin.
+     *
+     * @return      string
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
     }
 
     /**
@@ -264,6 +286,16 @@ class ProjectAssetInfo implements IAssetInfo
     // ---------------------------------- <HYDRATE SETTERS> --------------------------------------
 
     /**
+     * Set our origin.
+     *
+     * @param       string $origin
+     */
+    protected function setOrigin($origin)
+    {
+        $this->origin = $origin;
+    }
+
+    /**
      * Set our mime-type.
      *
      * @param       string $mimeType
@@ -292,11 +324,11 @@ class ProjectAssetInfo implements IAssetInfo
     {
         $this->metaData = (array)$metaData;
     }
-    
+
     /**
      * Sets our fullname.
-     * 
-     * @param       string $name 
+     *
+     * @param       string $name
      */
     protected function setFullname($name)
     {
@@ -326,6 +358,7 @@ class ProjectAssetInfo implements IAssetInfo
     {
         return array(
             self::PROP_ASSET_ID,
+            self::XPROP_ORIGIN,
             self::XPROP_FULLNAME,
             self::XPROP_NAME,
             self::XPROP_EXTENSION,

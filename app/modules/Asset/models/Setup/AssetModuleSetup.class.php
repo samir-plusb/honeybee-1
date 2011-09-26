@@ -12,19 +12,19 @@
 class AssetModuleSetup
 {
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      * Holds our couchDbClient instance.
-     * 
-     * @var         ExtendedCouchCbClient 
+     *
+     * @var         ExtendedCouchCbClient
      */
     protected $couchDbClient;
-    
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-    
-    
+
+
     // ---------------------------------- <CONSTRUCTOR> ------------------------------------------
-    
+
     /**
      * Create a new AssetModuleSetup instance.
      */
@@ -34,17 +34,17 @@ class AssetModuleSetup
             $this->buildCouchDbUri()
         );
     }
-    
+
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
-    
-    
+
+
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
-    
+
     /**
      * Setup everything required to provide the functionality exposed by our module.
      * In this case setup a couchdb database and view for our asset idsequence.
-     * 
-     * @param       boolean $tearDownFirst 
+     *
+     * @param       boolean $tearDownFirst
      */
     public function setup($tearDownFirst = FALSE)
     {
@@ -52,11 +52,12 @@ class AssetModuleSetup
         {
             $this->tearDown();
         }
-        
+
         $this->createDatabase(ProjectAssetService::COUCHDB_DATABASE);
+        $this->initAssetOriginView(ProjectAssetService::COUCHDB_DATABASE);
         $this->initIdSequence(AssetIdSequence::COUCHDB_DATABASE);
     }
-    
+
     /**
      * Tear down our current Asset module installation and clean up.
      */
@@ -65,12 +66,12 @@ class AssetModuleSetup
         $this->deleteDatabase(ProjectAssetService::COUCHDB_DATABASE);
         $this->deleteDatabase(AssetIdSequence::COUCHDB_DATABASE);
     }
-    
+
     // ---------------------------------- </PUBLIC METHODS> --------------------------------------
-    
-    
+
+
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-    
+
     /**
      * Create our couchdb database.
      */
@@ -78,34 +79,34 @@ class AssetModuleSetup
     {
         $this->couchDbClient->createDatabase($database);
     }
-    
+
     /**
      * Delete our couchdb database.
      */
     protected function deleteDatabase($database)
     {
-        try 
+        try
         {
             $this->couchDbClient->deleteDatabase($database);
         }
         catch (CouchDbClientException $e)
         {
             $error = json_decode($e->getMessage(), TRUE);
-            
+
             if (!isset($error['error']) || 'not_found' != $error['error'])
             {
                 throw $e;
             }
         }
     }
-    
+
     /**
      * Create a couchdb view used to fetch our current id from our idsequence.
      */
     protected function initIdSequence($database)
     {
         $this->createDatabase($database);
-        
+
         $designDoc = array(
             'views' => array(
                 'curId' => array(
@@ -116,17 +117,17 @@ class AssetModuleSetup
                 )
             )
         );
-        
+
         $this->couchDbClient->createDesignDocument($database, 'idsequence', $designDoc);
-        
+
         $firstDoc = array('curId' => 0);
         $this->couchDbClient->storeDocs($database, array($firstDoc));
     }
-    
+
     /**
      * Build a uri that can be used to connect to our couchdb.
      *
-     * @return      string 
+     * @return      string
      */
     protected function buildCouchDbUri()
     {
@@ -136,7 +137,29 @@ class AssetModuleSetup
             AgaviConfig::get('couchdb.import.port')
         );
     }
-    
+
+    /**
+     * Create a couchdb view used to fetch our current id from our idsequence.
+     */
+    protected function initAssetOriginView($database)
+    {
+        $designDoc = array(
+            'views' => array(
+                'origins' => array(
+                    'map' => 'function(doc)
+                    {
+                        if (doc.origin)
+                        {
+                            emit(doc.origin, doc);
+                        }
+                    }'
+                )
+            )
+        );
+
+        $this->couchDbClient->createDesignDocument($database, 'lists', $designDoc);
+    }
+
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 

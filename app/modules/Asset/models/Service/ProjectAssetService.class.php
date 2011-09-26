@@ -147,6 +147,18 @@ class ProjectAssetService implements IAssetService
     }
 
     /**
+     * Retrieves the corresponding IAssetInfo instance for a given $origin.
+     *
+     * @return      IAssetInfo
+     */
+    public function findByOrigin($origin)
+    {
+        $asset = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
+
+        return new ProjectAssetInfo($asset['_id'], $asset);
+    }
+
+    /**
      * Update the metadata of the asset with the given $assetId
      *
      * @param       int $assetId
@@ -237,11 +249,18 @@ class ProjectAssetService implements IAssetService
             unset($metaData[ProjectAssetInfo::XPROP_MIME_TYPE]);
         }
 
-        // Mime-type override magic, we support setting a custom mime type.
+        // Fullname override magic, we support setting a custom file name.
         if (isset($metaData[ProjectAssetInfo::XPROP_FULLNAME]))
         {
             $data[ProjectAssetInfo::XPROP_FULLNAME] = $metaData[ProjectAssetInfo::XPROP_FULLNAME];
             unset($metaData[ProjectAssetInfo::XPROP_FULLNAME]);
+        }
+
+        // Origin override magic, we support setting a custom origin.
+        if (isset($metaData[ProjectAssetInfo::XPROP_FULLNAME]))
+        {
+            $data[ProjectAssetInfo::XPROP_ORIGIN] = $metaData[ProjectAssetInfo::XPROP_ORIGIN];
+            unset($metaData[ProjectAssetInfo::XPROP_ORIGIN]);
         }
 
         return array_merge(
@@ -271,15 +290,16 @@ class ProjectAssetService implements IAssetService
         $name = implode('.', $explodedName);
 
         $data = array(
-            'fullname'  => $fullname,
-            'name'      => $name,
-            'extension' => $extension ? strtolower($extension) : NULL,
-            'size'      => filesize($file->getPath())
+            ProjectAssetInfo::XPROP_ORIGIN    => $assetUri,
+            ProjectAssetInfo::XPROP_FULLNAME  => $fullname,
+            ProjectAssetInfo::XPROP_NAME      => $name,
+            ProjectAssetInfo::XPROP_EXTENSION => $extension ? strtolower($extension) : NULL,
+            ProjectAssetInfo::XPROP_SIZE      => filesize($file->getPath())
         );
 
         if (($finfo = new finfo(FILEINFO_MIME, AgaviConfig::get('assets.mime_database'))))
         {
-            $data['mimeType'] = $finfo->file($file->getPath());
+            $data[ProjectAssetInfo::XPROP_MIME_TYPE] = $finfo->file($file->getPath());
         }
 
         return $data;
