@@ -29,7 +29,6 @@ return array(
             'recordType' => 'PoliceReportDataRecord',
             'settings' =>
             array(
-                'doc_idlist_url' => 'https://imperia.berlinonline.de/imperia/ContentWorker/export-to-mail.php?getNotifications=1',
                 'account_pass' => 'P8TaamVVwOb4JGbPWtqwo',
                 'account_user' => 'bo-xml-export',
                 'url' => 'https://imperia.berlinonline.de/'
