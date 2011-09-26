@@ -13,6 +13,11 @@
             <datasource name="imperia" class="ImperiaDataSource">
                 <description>Provides imperia docids, when they are pushed by the imperia export service.</description>
                 <recordType>PoliceReportDataRecord</recordType>
+                <settings>
+                    <setting name="account_pass">P8TaamVVwOb4JGbPWtqwo</setting>
+                    <setting name="account_user">bo-xml-export</setting>
+                    <setting name="url">%imperia.base_url%</setting>
+                </settings>
             </datasource>
 
             <datasource name="rss" class="RssDataSource">
