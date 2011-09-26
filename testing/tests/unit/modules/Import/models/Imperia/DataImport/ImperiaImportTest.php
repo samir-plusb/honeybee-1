@@ -13,12 +13,12 @@ class ImperiaImportTest extends CouchDbDataImportBaseTestCase
         return 'couchdb';
     }
 
+    // @codeCoverageIgnoreStart
+
     protected function getDataSourceNames()
     {
         return array('imperia');
     }
-
-    // @codeCoverageIgnoreStart
 
     protected function getDataSourceParameters($dataSourceName)
     {

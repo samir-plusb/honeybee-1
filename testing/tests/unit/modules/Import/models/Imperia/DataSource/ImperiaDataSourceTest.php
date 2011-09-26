@@ -43,7 +43,7 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
 
     protected function getDataSourceDescription()
     {
-        return 'Foo the bar had a very fuzen buzen (Imperia).';
+        return 'Provides imperia export xml data.';
     }
 
     public function testValidRecordData()

@@ -7,18 +7,18 @@ class RunActionTest extends AgaviActionTestCase
 {
     // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
     // @codeCoverageIgnoreStart
-    
+
     public function __construct($name = NULL, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        
+
         $this->contextName = 'console';
         $this->moduleName = 'Import';
         $this->actionName = 'Run';
     }
-    
+
     // @codeCoverageIgnoreEnd
-    
+
     public function testRunImportMissingParam()
     {
         $this->runActionWithParameters('write', array());
@@ -30,12 +30,12 @@ class RunActionTest extends AgaviActionTestCase
         $this->runActionWithParameters('write', array('i' => 'foobar'));
         $this->assertViewNameEquals('Error');
     }
-    
+
     /**
      *
      * @param       string $importName
-     * @param       string $datasourceNames 
-     * 
+     * @param       string $datasourceNames
+     *
      * @dataProvider provideTestRunImportArgs
      */
     public function testRunImport($importName, $dataSourceNames)
@@ -45,7 +45,7 @@ class RunActionTest extends AgaviActionTestCase
         $this->assertValidatedArgument('data_sources');
         $this->assertViewNameEquals('Success');
     }
-    
+
     /**
      * run this action
      *
@@ -55,7 +55,7 @@ class RunActionTest extends AgaviActionTestCase
     protected function runActionWithParameters($method, array $arguments)
     {
         $this->setRequestMethod($method);
-        
+
         $this->setArguments(
             $this->createRequestDataHolder(
                 array(
@@ -63,10 +63,12 @@ class RunActionTest extends AgaviActionTestCase
                 )
             )
         );
-        
+
         $this->runAction();
     }
-    
+
+    // @codeCoverageIgnoreStart
+
     public function provideTestRunImportArgs()
     {
         return array(
@@ -80,6 +82,8 @@ class RunActionTest extends AgaviActionTestCase
             )
         );
     }
+
+    // @codeCoverageIgnoreEnd
 }
 
 ?>

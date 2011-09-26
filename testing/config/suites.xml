@@ -14,10 +14,6 @@
                     <!-- IDataRecord Tests -->
                     <testfile>unit/modules/Import/models/Imperia/DataRecord/PoliceReportDataRecordTest.php</testfile>
                     <testfile>unit/modules/Import/models/Newswire/DataRecord/DpaNitfDataRecordTest.php</testfile>
-                    <!--
-                    <testfile>unit/modules/Import/models/Newswire/DataRecord/NitfDataRecordTest.php</testfile>
-                    <testfile>unit/modules/Import/models/Newswire/DataRecord/NewswireDataRecordTest.php</testfile>
-                    -->
 
                     <!-- IDataSource Tests -->
                     <testfile>unit/modules/Import/models/Imperia/DataSource/ImperiaDataSourceConfigTest.php</testfile>
