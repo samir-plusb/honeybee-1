@@ -10,7 +10,6 @@
                 <description>Provides access to imperia-cms content via imperia's export-xml api.</description>
                 <recordType>PoliceReportDataRecord</recordType>
                 <settings>
-                    <setting name="doc_idlist_url">%imperia.docid_api_url%</setting>
                     <setting name="account_pass">P8TaamVVwOb4JGbPWtqwo</setting>
                     <setting name="account_user">bo-xml-export</setting>
                     <setting name="url">%imperia.base_url%</setting>
