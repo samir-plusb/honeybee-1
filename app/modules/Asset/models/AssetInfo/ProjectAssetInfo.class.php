@@ -160,7 +160,7 @@ class ProjectAssetInfo implements IAssetInfo
      */
     public function getId()
     {
-        return $this->assetId;
+        return (int)$this->assetId;
     }
 
     /**

@@ -95,17 +95,21 @@ class RssDataRecord extends ImportBaseDataRecord
 
         $media = array();
 
-        if ($data->getImage())
+        if (($assetUri = $data->getImage()))
         {
             $meta = array(
                 'caption' => $data->getText(),
                 'title'   => $data->getTitle()
             );
 
-            if (($asset = ProjectAssetService::getInstance()->put($data->getImage(), $meta)))
+            $asset = ProjectAssetService::getInstance()->findByOrigin($assetUri);
+
+            if (! $asset)
             {
-                $media[] = $asset->getId();
+                $asset = ProjectAssetService::getInstance()->put($assetUri, $meta);
             }
+
+            $media[] = $asset->getId();
         }
 
         return array(

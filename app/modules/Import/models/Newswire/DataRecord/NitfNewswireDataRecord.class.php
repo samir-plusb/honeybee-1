@@ -413,7 +413,7 @@ class NitfNewswireDataRecord extends NewswireDataRecord
             $pixels = -1;
             $image = array();
 
-            foreach ($xpath->query('//media-reference', $mediaNode) as $mediaReference)
+            foreach ($xpath->query('.//media-reference', $mediaNode) as $mediaReference)
             {
                 $attribute = $mediaReference->attributes;
                 $width = intval($attribute->getNamedItem("width")->nodeValue);
@@ -438,17 +438,23 @@ class NitfNewswireDataRecord extends NewswireDataRecord
 
         $images = array();
 
-        foreach ($media as $image)
+        foreach ($media as $curImage)
         {
             $relSrc = realpath(
-                dirname($this->getOrigin()) . DIRECTORY_SEPARATOR . $image['source']
+                dirname($this->getOrigin()) . DIRECTORY_SEPARATOR . $curImage['source']
             );
 
             if ($relSrc)
             {
-                unset($image['source']);
-                $imageUri = 'file://'.$relSrc;
-                $assetInfo = ProjectAssetService::getInstance()->put($imageUri, $image, FALSE);
+                unset($curImage['source']);
+
+                $imageUri = 'file://' . $relSrc;
+                $assetInfo = ProjectAssetService::getInstance()->findByOrigin($imageUri);
+
+                if (! $assetInfo)
+                {
+                    $assetInfo = ProjectAssetService::getInstance()->put($imageUri, $curImage, FALSE);
+                }
 
                 $images[] = $assetInfo->getId();
             }
