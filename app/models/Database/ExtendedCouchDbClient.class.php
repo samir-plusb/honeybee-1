@@ -196,16 +196,24 @@ class ExtendedCouchDbClient
      *
      * @return      array
      */
-    public function getView($database, $designDocId, $viewname, $key = NULL)
+    public function getView($database, $designDocId, $viewname, $key = NULL, $limit = 0)
     {
         $this->compositeClient->selectDb($database);
 
         $databaseUuri = $this->baseUri . urlencode($database);
-        $uri = $databaseUuri. '/_design/' . urlencode($designDocId) . '/_view/' . urlencode($viewname) . '?descending=true';
+        $uri = $databaseUuri. '/_design/' .
+            urlencode($designDocId) . '/_view/' .
+            urlencode($viewname) .
+            '?descending=true';
 
         if ($key)
         {
             $uri .= '&key="' . urlencode($key) . '"';
+        }
+
+        if ($limit)
+        {
+            $uri .= '&limit=' . $limit;
         }
 
         $curlHandle = $this->getCurlHandle();
