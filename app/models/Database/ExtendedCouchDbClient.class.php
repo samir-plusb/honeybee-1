@@ -201,11 +201,11 @@ class ExtendedCouchDbClient
         $this->compositeClient->selectDb($database);
 
         $databaseUuri = $this->baseUri . urlencode($database);
-        $uri = $databaseUuri. '/_design/' . urlencode($designDocId) . '/_view/' . urlencode($viewname);
+        $uri = $databaseUuri. '/_design/' . urlencode($designDocId) . '/_view/' . urlencode($viewname) . '?descending=true';
 
         if ($key)
         {
-            $uri .= '?key="' . urlencode($key) . '"';
+            $uri .= '&key="' . urlencode($key) . '"';
         }
 
         $curlHandle = $this->getCurlHandle();
