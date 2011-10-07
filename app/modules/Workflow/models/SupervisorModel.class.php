@@ -1,4 +1,14 @@
 <?php
+/**
+ * The Workflow supervisor
+ * * aims as factory for workflow handlers and tickets
+ * * acts as interface to the UI
+ *
+ * @package Workflow
+ * @author tay
+ * @version $Id$
+ *
+ */
 
 class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
 {
@@ -62,11 +72,10 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
      * find and initialize a plugin by its name
      *
      * @param string $pluginName name of plugin
-     * @param array $parameters parameters for plugin as defined in the workflow step
      * @return IWorkflowPlugin
      * @throws WorkflowException on class not found errors or initialize problems
      */
-    public function getPluginByName($pluginName, array $parameters = NULL)
+    public function getPluginByName($pluginName)
     {
         $className = 'Workflow'.$pluginName.'Plugin';
         if (! class_exists($className, TRUE))
@@ -74,13 +83,21 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
             throw new WorkflowException("Can not find class '$class' for plugin: ".$pluginName, WorkflowException::PLUGIN_MISSING);
         }
 
-        $plugin = new $className($parameters);
+        $plugin = new $className();
         if (! $plugin instanceof IWorkflowPlugin)
         {
             throw new WorkflowException('Class for plugin is not instance of IWorkflowPlugin: '.$className, WorkflowException::PLUGIN_MISSING);
         }
 
         return $plugin;
+    }
+
+    /**
+     * check if in interactive session
+     */
+    public function isInteractive()
+    {
+        return FALSE;
     }
 }
 

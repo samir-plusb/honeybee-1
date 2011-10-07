@@ -9,7 +9,14 @@
  */
 interface IWorkflowPlugin
 {
-    public function __construct(WorkflowTicket $ticket, array $parameters);
+    /**
+     * initialize plugin
+     *
+     * @param WorkflowTicket $ticket workflow state
+     * @param array $parameters plugn parameters as defined in the current workflow step
+     * @return IWorkflowPlugin return $this for fluid interface
+     */
+    public function initialize(WorkflowTicket $ticket, array $parameters);
 
     /**
      * process the ticket

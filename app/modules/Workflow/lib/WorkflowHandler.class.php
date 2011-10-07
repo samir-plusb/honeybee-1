@@ -97,20 +97,41 @@ class WorkflowHandler
      */
     public function run(WorkflowTicket $ticket)
     {
-        $this->ticket = $ticket;
+        $this->setTicket($ticket);
 
-        if ($ticket->isNew())
-        {
-            $ticket->setWorkflow($this);
-            $ticket->setCurrentStep($this->firstStep);
-        }
-
-        if (! array_key_exists($ticket->getCurrentStep(), $this->steps))
+        if (! array_key_exists($this->getTicket()->getCurrentStep(), $this->steps))
         {
             throw new WorkflowException('Workflow step does not exists: '.$ticket->getCurrentStep(), WorkflowException::INVALID_STEP);
         }
 
         $plugin = $this->getPluginForCurrentStep();
+        if (! $plugin->isInteractive())
+        {
+            $result = $plugin->process();
+        }
+        else if (Workflow_SupervisorModel::getInstance()->isInteractive())
+        {
+            $result = $plugin->process();
+        }
+
+
+        return $result;
+    }
+
+
+    /**
+     * assoziate the ticket to the workflow
+     *
+     * @param WorkflowTicket $ticket
+     */
+    protected function setTicket(WorkflowTicket $ticket)
+    {
+        if ($ticket->isNew())
+        {
+            $ticket->setWorkflow($this);
+            $ticket->setCurrentStep($this->firstStep);
+        }
+        $this->ticket = $ticket;
     }
 
     /**
@@ -146,6 +167,25 @@ class WorkflowHandler
     }
 
 
+    /**
+     * get the plugin parameters of current workflow step
+     *
+     * @return array
+     */
+    protected function getStepParameters()
+    {
+        if (array_key_exists('parameters', $this->steps[$this->getCurrentStep()]))
+        {
+            return $this->steps[$this->getCurrentStep()]['parameters'];
+        }
+        return array();
+    }
+
+    /**
+     *
+     * @return IWorkflowPlugin
+     * @throws WorkflowException
+     */
     protected function getPluginForCurrentStep()
     {
         if (! isset($this->steps[$ticket->getCurrentStep()]['plugin']))
@@ -153,7 +193,10 @@ class WorkflowHandler
             throw new WorkflowException('Workflow step does not define plugin: '.$ticket->getCurrentStep(), WorkflowException::STEP_MISSING);
         }
         $pluginName = $this->steps[$ticket->getCurrentStep()]['plugin'];
-        $plugin = Workflow_SupervisorModel::getInstance()->getPlugin($pluginName);
+        $plugin = Workflow_SupervisorModel::getInstance()->getPluginByName($pluginName);
+        $plugin->initialize($this->getTicket(), $this->getStepParameters());
+
+        return $plugin;
     }
 }
 
