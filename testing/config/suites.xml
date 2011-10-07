@@ -41,6 +41,11 @@
                     <testfile>fragment/Import/Mail/MailTriggerErrorViewTest.class.php</testfile>
                 </testfiles>
             </suite>
+            <suite name="Workflow">
+                <testfiles>
+                    <testfile>unit/modules/Workflow/config/WorkflowConfigSyntaxTest.php</testfile>
+                </testfiles>
+            </suite>
         </suites>
     </ae:configuration>
 </ae:configurations>
