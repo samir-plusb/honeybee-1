@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <imperia>
 <head>
-	<title>Verkehrsunfall mit Polizeifahrzeug</title>
-	<meta name="DC.Title" content="Verkehrsunfall mit Polizeifahrzeug"/>
-	<meta name="DC.Date" content="2011-09-01"/>
-	<meta name="description" content="Während einer Einsatzfahrt mit Blaulicht und Martinshorn stieß gestern Nachmittag ein Polizeifahrzeug mit einem Pkw in Tempelhof zusammen. "/>
-	<meta name="keywords" content="Pressemeldung Polizei Berlin vom 1.9.2011 - Verkehrsunfall mit Polizeifahrzeug"/>
+	<title>Brandstiftungen</title>
+	<meta name="DC.Title" content="Brandstiftungen"/>
+	<meta name="DC.Date" content="2011-10-07"/>
+	<meta name="description" content="Unbekannte haben gestern Abend eine Couch in Kreuzberg und in der vergangenen Nacht, zwei Müllcontainer in Friedrichshagen angezündet."/>
+	<meta name="keywords" content="Pressemeldung Polizei Berlin, 07.10.2011, Brandstiftungen"/>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 	<meta http-equiv="Content-Language" content="de"/>
-	<meta name="X-Imperia-Live-Info" content="c9014314-4573-55c5-b087-5ddc8f775df7/2/10330/10343/10890/1385807"/>
+	<meta name="X-Imperia-Live-Info" content="c9014314-4573-55c5-b087-5ddc8f775df7/2/10330/10343/10890/1389367"/>
 	<filename>index.html</filename>
-	<directory>/polizei/presse-fahndung/archiv/357025</directory>
-	<node_id>/2/10330/10343/10890/1385807</node_id>
-	<created>20110901T092429+0200</created>
-	<modified>20110901T092555+0200</modified>
-	<publish>2011-09-01 09:25</publish>
+	<directory>/polizei/presse-fahndung/archiv/360776</directory>
+	<node_id>/2/10330/10343/10890/1389367</node_id>
+	<created>20111007T084316+0200</created>
+	<modified>20111007T084538+0200</modified>
+	<publish>2011-10-07 08:45</publish>
 	<expiry/>
 	<template>land_polizei_presse_fahndung</template>
     <categories>
@@ -28,17 +28,17 @@
 
 </head>
 <body>
-<last_modified timezone="CEST">2011-09-19T15:55:27</last_modified>
+<last_modified timezone="CEST">2011-10-07T16:34:41</last_modified>
 <article>
 	<type>pressemeldung</type>
 	<kicker>Pressemeldung</kicker>
-	<date type="ticker" label="Eingabe">01.09.2011 - 09:25 Uhr</date>
-	<title>Verkehrsunfall mit Polizeifahrzeug</title>
-	<subtitle>Tempelhof-Schöneberg</subtitle>
+	<date type="ticker" label="Eingabe">07.10.2011 - 08:45 Uhr</date>
+	<title>Brandstiftungen</title>
+	<subtitle>Friedrichshain-Kreuzberg/Treptow-Köpenick</subtitle>
 
 	<flexmodules>
 		<paragraph name="land_text">
-			<text format="textbr" align="justify"><![CDATA[# 3243<br /><br />Während einer Einsatzfahrt mit Blaulicht und Martinshorn stieß gestern Nachmittag ein Polizeifahrzeug mit einem Pkw in Tempelhof zusammen. Der „VW Touran“ der Polizei wendete gegen 15 Uhr 30 in der Attila- in Höhe der Kaiser-Wilhelm-Straße. Dabei stieß das Einsatzfahrzeug mit dem „Passat“ eines 21-Jährigen zusammen. Verletzt wurde niemand.]]></text>
+			<text format="textbr" align="left"><![CDATA[Unbekannte haben gestern Abend eine Couch in Kreuzberg und in der vergangenen Nacht, zwei Müllcontainer in Friedrichshagen angezündet. In beiden Fällen wurde niemand verletzt. Die Ermittlungen eines Brandkommissariates beim Landeskriminalamt dauern an.<br /><br /># 3675	<br /><br />Kurz nach 20 Uhr brannte eine im Hausflur eines Mehrfamilienhauses in der Reichenberger Straße abgestellte Couch. Einsatzkräfte der Feuerwehr löschten die durch das Feuer völlig zerstörte Sitzgelegenheit.<br /><br /># 3676	<br /><br />Gegen 1 Uhr 50 bemerkte eine Anwohnerin des Fürstenwalder Damms eine brennende Mülltonne auf dem Innenhof und alarmierte die Feuerwehr. Während des Einsatzes stellten die Feuerwehrleute in der Nähe einen weiteren in Flammen stehenden Container fest. Die Einsatzkräfte löschten beide Container.<br />]]></text>
 		</paragraph>
 
 	</flexmodules>

@@ -7,9 +7,9 @@ class ImportFactoryTest extends AgaviPhpUnitTestCase
     const EXPECTED_DATASOURCE_INSTANCE = 'ImperiaDataSource';
 
     static private $docIds = array( // normally these are provided by the imperia-trigger script.
-        '/2/10330/10343/10890/1385807',
-        '/2/10330/10343/10890/1385806',
-        '/2/10330/10343/10890/1385805'
+        '/2/10330/10343/10890/1389047',
+        '/2/10330/10343/10890/1385317',
+        '/2/10/65/368/1388875'
     );
 
     protected $factory;

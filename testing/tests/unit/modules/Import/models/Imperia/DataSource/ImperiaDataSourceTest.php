@@ -9,9 +9,9 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
     const RECORDS_ARE_EQUAL = 0;
 
     static private $docIds = array( // normally these are provided by the imperia import trigger
-        '/2/10330/10343/10890/1385807',
-        '/2/10330/10343/10890/1385806',
-        '/2/10330/10343/10890/1385805'
+        '/2/10330/10343/10890/1389367',    // without media !!!
+        '/2/10330/10343/10890/1385317',
+        '/2/10/65/368/1388875'
     );
 
     protected function getDataSourceClass()
@@ -62,8 +62,8 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
             $this->loadRecordFixtureData(),
             new DataRecordConfig(
                 array(
-                    DataRecordCOnfig::CFG_SOURCE => 'imperia/polizeimeldungen',
-                    DataRecordConfig::CFG_ORIGIN => ''
+                    DataRecordCOnfig::CFG_SOURCE => '',
+                    DataRecordConfig::CFG_ORIGIN => 'imperia'
                 )
             )
         );
