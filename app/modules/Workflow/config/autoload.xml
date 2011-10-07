@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ae:configuration>
+        <!-- Base -->
+        <autoload name="ProjectWorkflowBaseAction">%core.module_dir%/Workflow/lib/base/ProjectWorkflowBaseAction.class.php</autoload>
+        <autoload name="ProjectWorkflowBaseModel">%core.module_dir%/Workflow/lib/base/ProjectWorkflowBaseModel.class.php</autoload>
+        <autoload name="ProjectWorkflowBaseView">%core.module_dir%/Workflow/lib/base/ProjectWorkflowBaseView.class.php</autoload>
+        <autoload name="IWorkflowImportItem">%core.module_dir%/Workflow/lib/base/IWorkflowImportItem.iface.php</autoload>
+        <autoload name="IWorkflowPlugin">%core.module_dir%/Workflow/lib/base/IWorkflowPlugin.iface.php</autoload>
+        <autoload name="WorkflowPluginResult">%core.module_dir%/Workflow/lib/base/WorkflowPluginResult.class.php</autoload>
+        <!-- -->
+        <autoload name="WorkflowException">%core.module_dir%/Workflow/lib/WorkflowException.class.php</autoload>
+        <autoload name="WorkflowHandler">%core.module_dir%/Workflow/lib/WorkflowHandler.class.php</autoload>
+        <autoload name="WorkflowTicket">%core.module_dir%/Workflow/lib/WorkflowTicket.class.php</autoload>
+        <!-- Models -->
+        <autoload name="Workflow_SupervisorModel">%core.module_dir%/Workflow/models/SupervisorModel.class.php</autoload>
+        <!-- Plugins -->
+        <autoload name="WorkflowNullPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowNullPlugin.class.php</autoload>
+    </ae:configuration>
+</ae:configurations>

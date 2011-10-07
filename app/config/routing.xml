@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <ae:configuration context="web">
         <routes>
@@ -36,7 +36,7 @@
             <route pattern="^/import" module="Import">
                 <xi:include
                     href="%core.app_dir%/modules/Import/config/routing.xml"
-                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
+                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
                         xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
                         xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
             </route>
@@ -56,14 +56,14 @@
     </ae:configuration>
 
     <xi:include href="%core.app_dir%/modules/Import/config/routing.xml"
-    	xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/ae:configuration[@context='console'])/">
+    	xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/ae:configuration[@context='console'])/">
     </xi:include>
 
-    <xi:include href="%core.app_dir%/modules/Asset/config/routing.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
+    <xi:include href="%core.app_dir%/modules/Asset/config/routing.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
     	xpointer(/ae:configurations/ae:configuration[@context='console'])/">
     </xi:include>
 
-    <xi:include href="%core.app_dir%/modules/Items/config/routing.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
+    <xi:include href="%core.app_dir%/modules/Items/config/routing.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
     	xpointer(/ae:configurations/ae:configuration[@context='console'])/">
     </xi:include>
 </ae:configurations>
