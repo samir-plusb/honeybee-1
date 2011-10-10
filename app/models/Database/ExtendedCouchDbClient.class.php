@@ -27,35 +27,73 @@ class ExtendedCouchDbClient
      */
     const DEFAULT_URL = 'http://localhost:5984';
 
+    /**
+     * HTTP request method GET
+     */
     const METHOD_GET = 'GET';
+    /**
+     * HTTP request method PUT
+     */
     const METHOD_PUT = 'PUT';
+    /**
+     * HTTP request method POST
+     */
     const METHOD_POST = 'POST';
+    /**
+     * HTTP request method DELETE
+     */
     const METHOD_DELETE = 'DELETE';
 
     /**
      * Request completed successfully.
+     * @see http://wiki.apache.org/couchdb/HTTP_status_list
      */
     const STATUS_OK = 200;
     /**
      * Document created successfully.
+     * @see http://wiki.apache.org/couchdb/HTTP_status_list
      */
     const STATUS_CREATED = 201;
     /**
      * Request for database compaction completed successfully.
+     * @see http://wiki.apache.org/couchdb/HTTP_status_list
      */
     const STATUS_ACCEPTED = 202;
     /**
      * Etag not modified since last update.
+     * @see http://wiki.apache.org/couchdb/HTTP_status_list
      */
     const STATUS_NOT_MODIFIED = 304;
     /**
      * Request given is not valid in some way.
+     * @see http://wiki.apache.org/couchdb/HTTP_status_list
      */
     const STATUS_BAD_REQUEST = 400;
     /**
      * Such as a request via the HttpDocumentApi for a document which doesn't exist.
+     * @see http://wiki.apache.org/couchdb/HTTP_status_list
      */
     const STATUS_NOT_FOUND = 404;
+    /**
+     * Request was accessing a non-existent URL. For example, if you have a malformed URL, or are using a third party library that is targeting a different version of CouchDB.
+     * @see http://wiki.apache.org/couchdb/HTTP_status_list
+     */
+    const STATUS_RESOURCE_NOT_ALLOWED = 405;
+    /**
+     * Request resulted in an update conflict.
+     * @see http://wiki.apache.org/couchdb/HTTP_status_list
+     */
+    const STATUS_CONFLICT = 409;
+    /**
+     * Request attempted to created database which already exists.
+     * @see http://wiki.apache.org/couchdb/HTTP_status_list
+     */
+    const STATUS_PRECONDITION_FAILED = 412;
+    /**
+     * Request contained invalid JSON, probably happens in other cases too.
+     * @see http://wiki.apache.org/couchdb/HTTP_status_list
+     */
+    const STATUS_INTERNAL_SERVER_ERROR = 500;
 
     // ---------------------------------- <MEMBERS> ----------------------------------------------
 
