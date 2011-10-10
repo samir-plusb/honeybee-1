@@ -4,7 +4,7 @@
  * The ExtendedCouchDbClient is a wrapper around php couchdb pecl library,
  * that extends the latter by composing it and adding in some missing functionality.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Project
