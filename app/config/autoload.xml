@@ -11,6 +11,7 @@
 
             <autoload name="IComparable">%core.app_dir%/models/Core/IComparable.iface.php</autoload>
             <autoload name="ExtendedCouchDbClient">%core.app_dir%/models/Database/ExtendedCouchDbClient.class.php</autoload>
+            <autoload name="CouchDatabase">%core.app_dir%/models/Database/CouchDatabase.class.php</autoload>
             
             <autoload name="IEvent">%core.app_dir%/models/Event/IEvent.iface.php</autoload>
             <autoload name="IEventProxy">%core.app_dir%/models/Event/IEventProxy.iface.php</autoload>

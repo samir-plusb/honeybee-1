@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/databases/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <databases default="CouchWorkflow">
+            <database name="CouchWorkflow" class="CouchDatabase">
+                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="database">workflow</ae:parameter>
+                <ae:parameter name="user">admin</ae:parameter>
+                <ae:parameter name="password">admin</ae:parameter>
+            </database>
+        </databases>
+    </ae:configuration>
+</ae:configurations>

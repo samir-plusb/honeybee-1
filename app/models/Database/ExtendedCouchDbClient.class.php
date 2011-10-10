@@ -12,6 +12,51 @@
  */
 class ExtendedCouchDbClient
 {
+    /**
+     * default couch db host ist localhost
+     */
+    const DEFAULT_HOST = 'localhost';
+
+    /**
+     * default couch database port is 5984
+     */
+    const DEFAULT_PORT = '5984';
+
+    /**
+     * default couch database connect url
+     */
+    const DEFAULT_URL = 'http://localhost:5984';
+
+    const METHOD_GET = 'GET';
+    const METHOD_PUT = 'PUT';
+    const METHOD_POST = 'POST';
+    const METHOD_DELETE = 'DELETE';
+
+    /**
+     * Request completed successfully.
+     */
+    const STATUS_OK = 200;
+    /**
+     * Document created successfully.
+     */
+    const STATUS_CREATED = 201;
+    /**
+     * Request for database compaction completed successfully.
+     */
+    const STATUS_ACCEPTED = 202;
+    /**
+     * Etag not modified since last update.
+     */
+    const STATUS_NOT_MODIFIED = 304;
+    /**
+     * Request given is not valid in some way.
+     */
+    const STATUS_BAD_REQUEST = 400;
+    /**
+     * Such as a request via the HttpDocumentApi for a document which doesn't exist.
+     */
+    const STATUS_NOT_FOUND = 404;
+
     // ---------------------------------- <MEMBERS> ----------------------------------------------
 
     /**
@@ -35,6 +80,11 @@ class ExtendedCouchDbClient
      */
     private $curlHandle = NULL;
 
+    /**
+     * holds filename of cookie file used for session auth
+     */
+    private $cookieFile;
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
 
 
@@ -47,15 +97,59 @@ class ExtendedCouchDbClient
      */
     public function __construct($uri)
     {
+        if ('/' != substr($uri, -1, 1))
+        {
+            $uri .= '/';
+        }
         $this->baseUri = $uri;
 
         $this->compositeClient = new CouchDbClient($uri);
+    }
+
+
+    /**
+     * close system resources
+     */
+    public function __destruct()
+    {
+        @curl_close($this->curlHandle);
+        @unlink($this->cookieFile);
     }
 
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
 
 
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
+
+    /**
+     * open a user session and login
+     *
+     * @param string $user user account name
+     * @param string $password user password
+     * @throws CouchdbClientException on protocol errors
+     * @return mixed TRUE on login success or error message
+     */
+    public function login($user, $password)
+    {
+        $uri = $this->baseUri.'_session';
+        $curlHandle = $this->getCurlHandle($uri);
+        curl_setopt($curlHandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($curlHandle, CURLOPT_USERPWD, "$user:password");
+
+        $response = curl_exec($curlHandle);
+        $this->processCurlErrors($curlHandle);
+        $data = json_decode($response, TRUE);
+        if (NULL === $data)
+        {
+            throw new CouchdbClientException('Response body can not be parsed to JSON');
+        }
+        return isset($data['error'])
+            ? $data['error']
+            : isset($data['ok']) && $data['ok']
+                ? TRUE
+                : 'General Gaddafi';
+    }
+
 
     /**
      * Send a batch create/update request to the given couch database
@@ -126,6 +220,9 @@ class ExtendedCouchDbClient
     /**
      * Delete a document from the given couchdb database by id and revision.
      *
+     * @see http://wiki.apache.org/couchdb/HTTP_Document_API#DELETE
+     * @throws CouchdbClientException on protocol errors
+     *
      * @param       string $database
      * @param       string $docId
      * @param       string $revision
@@ -134,16 +231,11 @@ class ExtendedCouchDbClient
      */
     public function deleteDoc($database, $docId, $revision)
     {
-        $curlHandle = $this->getCurlHandle();
-
         $uri = $this->baseUri . urlencode($database) . '/' . urlencode($docId) . '?' . 'rev=' . urlencode($revision);
-
-        curl_setopt($curlHandle, CURLOPT_URL, $uri);
-        curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, 'DELETE');
-
+        $curlHandle = $this->getCurlHandle($uri, self::METHOD_DELETE);
         $response = curl_exec($curlHandle);
 
-        $this->processCurlErrors($curlHandle);
+        $this->processCurlErrors($curlHandle, self::STATUS_NOT_FOUND);
 
         $data = json_decode($response, TRUE);
 
@@ -155,6 +247,8 @@ class ExtendedCouchDbClient
      * information on the given $docId.
      * If the document does not exist 0 is returned.
      *
+     * @see http://wiki.apache.org/couchdb/HTTP_Document_API#HEAD
+     *
      * @param       string $database
      * @param       string $docId
      *
@@ -162,19 +256,17 @@ class ExtendedCouchDbClient
      */
     public function statDoc($database, $docId)
     {
-        $curlHandle = $this->getCurlHandle();
-
         $uri = $this->baseUri . urlencode($database) . '/' . urlencode($docId);
+        $curlHandle = $this->getCurlHandle($uri);
 
-        curl_setopt($curlHandle, CURLOPT_URL, $uri);
         curl_setopt($curlHandle, CURLOPT_HEADER, 1);
         curl_setopt($curlHandle, CURLOPT_NOBODY, 1);
-        curl_setopt ($curlHandle, CURLOPT_RETURNTRANSFER, 1);
 
         $resp = curl_exec($curlHandle);
         $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
+        $this->processCurlErrors($curlHandle, self::STATUS_NOT_FOUND);
 
-        if (404 == $respCode)
+        if (404 == curl_getinfo($curlHandle, CURLINFO_HTTP_CODE))
         {
             return 0;
         }
@@ -189,6 +281,7 @@ class ExtendedCouchDbClient
 
     /**
      * Fetch the data for the given view.
+     *
      *
      * @param       string $database
      * @param       string $designDocId
@@ -216,14 +309,18 @@ class ExtendedCouchDbClient
             $uri .= '&limit=' . $limit;
         }
 
-        $curlHandle = $this->getCurlHandle();
-        curl_setopt($curlHandle, CURLOPT_URL, $uri);
-
+        $curlHandle = $this->getCurlHandle($uri);
         $resp = curl_exec($curlHandle);
 
         $this->processCurlErrors($curlHandle);
 
         $data = json_decode($resp, TRUE);
+        if (NULL === $data)
+        {
+            /* @todo Remove debug code ExtendedCouchDbClient.class.php from 10.10.2011 */
+            error_log(date('r').' :: '.__METHOD__.' :: '.__LINE__."\n".print_r(curl_getinfo($curlHandle),1)."\n",3,'/tmp/errors.log');
+            throw new CouchdbClientException($uri.': Response body can not be parsed to JSON'. $resp);
+        }
 
         return $data;
     }
@@ -256,24 +353,45 @@ class ExtendedCouchDbClient
             }
         }
 
-        $curlHandle = $this->getCurlHandle();
-
         $uri = $this->baseUri . urlencode($database) . '/_design/' . urlencode($docId);
         $file = tmpfile();
         $jsonDoc = json_encode($doc);
         fwrite($file, $jsonDoc);
         fseek($file, 0);
 
-        curl_setopt($curlHandle, CURLOPT_URL, $uri);
-        curl_setopt($curlHandle, CURLOPT_PUT, TRUE);
+        $curlHandle = $this->getCurlHandle($uri, self::METHOD_PUT);
         curl_setopt($curlHandle, CURLOPT_INFILE, $file);
         curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($jsonDoc));
 
         curl_exec($curlHandle);
+        fclose($file);
 
         $this->processCurlErrors($curlHandle);
+    }
 
-        fclose($file);
+    /**
+     * get database information
+     *
+     * @see http://wiki.apache.org/couchdb/HTTP_database_API#Database_Information
+     *
+     * @throws CouchdbClientException on protocol errors or result is not json
+     * @param string $database
+     * @return array
+     */
+    public function getDatabase($database)
+    {
+        $uri = $this->baseUri.urlencode($database).'/';
+        $curlHandle = $this->getCurlHandle($uri);
+
+        $body = curl_exec($curlHandle);
+        $this->processCurlErrors($curlHandle, self::STATUS_OK);
+
+        $result = json_decode($body, TRUE);
+        if (NULL === $result)
+        {
+            throw new CouchdbClientException('Response body can not be parsed to JSON');
+        }
+        return $result;
     }
 
     /**
@@ -312,13 +430,37 @@ class ExtendedCouchDbClient
      *
      * @return      Resource
      */
-    protected function getCurlHandle()
+    protected function getCurlHandle($uri, $method = self::METHOD_GET)
     {
         if (! $this->curlHandle)
         {
             $this->curlHandle = ProjectCurl::create();
             curl_setopt($this->curlHandle, CURLOPT_HEADER, 'Content-Type: application/json; charset=utf-8');
             curl_setopt($this->curlHandle, CURLOPT_PROXY, '');
+            $this->cookieFile = tempnam(AgaviConfig::get('core.cache_dir'), get_class($this).'_');
+            curl_setopt($this->curlHandle, CURLOPT_COOKIEFILE, $this->cookieFile);
+            curl_setopt($this->curlHandle, CURLOPT_COOKIEJAR, $this->cookieFile);
+        }
+
+        // allways reset some parameters to standard
+        curl_setopt($this->curlHandle, CURLOPT_URL, $uri);
+        curl_setopt($this->curlHandle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($this->curlHandle, CURLOPT_HEADER, 0);
+
+        switch ($method)
+        {
+            case self::METHOD_GET:
+                curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
+                break;
+            case self::METHOD_POST:
+                curl_setopt($this->curlHandle, CURLOPT_POST, 1);
+                break;
+            case self::METHOD_PUT:
+                curl_setopt($this->curlHandle, CURLOPT_PUT, 1);
+                break;
+            default:
+                curl_setopt($this->curlHandle, CURLOPT_CUSTOMREQUEST, $method);
+                break;
         }
 
         return $this->curlHandle;
@@ -328,20 +470,21 @@ class ExtendedCouchDbClient
      * Check curl response status and throw exception on error.
      *
      * @param       Resource $curlHandle
+     * @param       integer expected alternative or method specific HTTP status code.
+     *                      Codes between 200 <= x < 400 are allways OK
      *
      * @return      void
      *
      * @throws      CouchdbClientException
      */
-    protected function processCurlErrors($curlHandle)
+    protected function processCurlErrors($curlHandle, $validReturnCode = self::STATUS_OK)
     {
-        $error = curl_error($curlHandle);
-        $errorNum = curl_errno($curlHandle);
         $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
-
-        if (200 > $respCode || 300 <= $respCode || $errorNum || $error)
+        if ((self::STATUS_OK > $respCode || $respCode >= self::STATUS_BAD_REQUEST) && $validReturnCode != $respCode)
         {
-            throw new CouchdbClientException("CURL error: $error", $errorNum);
+            $error = curl_error($curlHandle);
+            $errorNum = curl_errno($curlHandle);
+            throw new CouchdbClientException('CURL error: '.$error, $errorNum);
         }
     }
 
