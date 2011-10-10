@@ -466,6 +466,8 @@ class ExtendedCouchDbClient
     /**
      * Returns our curl handle and initializes it upon first invocation.
      *
+     * @param       string $uri complete url to couchdb object/request
+     * @param       string $method http method to use for this request
      * @return      Resource
      */
     protected function getCurlHandle($uri, $method = self::METHOD_GET)
