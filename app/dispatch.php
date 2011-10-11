@@ -10,6 +10,9 @@ $phpUnitDir = $libsDir . DIRECTORY_SEPARATOR . 'PHPUnit';
 $includes = array($libsDir, $ezComponentsDir, $phpUnitDir);
 set_include_path(implode(PATH_SEPARATOR, $includes).PATH_SEPARATOR.get_include_path());
 
+// make generated files group writeable for easy switch between web/console
+umask(02);
+
 // +---------------------------------------------------------------------------+
 // | Setup ezcomponents autoloading.                                           |
 // +---------------------------------------------------------------------------+
