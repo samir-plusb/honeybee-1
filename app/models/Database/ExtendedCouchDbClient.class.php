@@ -174,13 +174,8 @@ class ExtendedCouchDbClient
         curl_setopt($curlHandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         curl_setopt($curlHandle, CURLOPT_USERPWD, "$user:password");
 
-        $response = curl_exec($curlHandle);
-        $this->processCurlErrors($curlHandle);
-        $data = json_decode($response, TRUE);
-        if (NULL === $data)
-        {
-            throw new CouchdbClientException('Response body can not be parsed to JSON');
-        }
+        $data = $this->getJsonData($curlHandle);
+
         return isset($data['error'])
             ? $data['error']
             : isset($data['ok']) && $data['ok']
@@ -210,16 +205,21 @@ class ExtendedCouchDbClient
      *
      * @param       string $database
      * @param       string $documentId
+     * @param       string $revision optional revision id if not accessing the head revision
      *
      * @return      array
      *
      * @throws      CouchdbClientException
      */
-    public function getDoc($database, $documentId)
+    public function getDoc($database, $documentId, $revision = NULL)
     {
-        $this->compositeClient->selectDb($database);
-
-        return (array)$this->compositeClient->getDoc($documentId);
+        $uri = $this->baseUri.urlencode($database).'/'.urlencode($documentId);
+        if (NULL !== $revision)
+        {
+            $uri .= '?'.http_build_query(array('rev', $revision));
+        }
+        $curlHandle = $this->getCurlHandle($uri);
+        return $this->getJsonData($curlHandle);
     }
 
     /**
@@ -271,12 +271,7 @@ class ExtendedCouchDbClient
     {
         $uri = $this->baseUri . urlencode($database) . '/' . urlencode($docId) . '?' . 'rev=' . urlencode($revision);
         $curlHandle = $this->getCurlHandle($uri, self::METHOD_DELETE);
-        $response = curl_exec($curlHandle);
-
-        $this->processCurlErrors($curlHandle, self::STATUS_NOT_FOUND);
-
-        $data = json_decode($response, TRUE);
-
+        $data = $this->getJsonData($curlHandle, self::STATUS_NOT_FOUND);
         return (isset($data['ok']) && TRUE === $data['ok']);
     }
 
@@ -348,17 +343,7 @@ class ExtendedCouchDbClient
         }
 
         $curlHandle = $this->getCurlHandle($uri);
-        $resp = curl_exec($curlHandle);
-
-        $this->processCurlErrors($curlHandle);
-
-        $data = json_decode($resp, TRUE);
-        if (NULL === $data)
-        {
-            /* @todo Remove debug code ExtendedCouchDbClient.class.php from 10.10.2011 */
-            error_log(date('r').' :: '.__METHOD__.' :: '.__LINE__."\n".print_r(curl_getinfo($curlHandle),1)."\n",3,'/tmp/errors.log');
-            throw new CouchdbClientException($uri.': Response body can not be parsed to JSON'. $resp);
-        }
+        $data = $this->getJsonData($curlHandle);
 
         return $data;
     }
@@ -420,15 +405,7 @@ class ExtendedCouchDbClient
     {
         $uri = $this->baseUri.urlencode($database).'/';
         $curlHandle = $this->getCurlHandle($uri);
-
-        $body = curl_exec($curlHandle);
-        $this->processCurlErrors($curlHandle, self::STATUS_OK);
-
-        $result = json_decode($body, TRUE);
-        if (NULL === $result)
-        {
-            throw new CouchdbClientException('Response body can not be parsed to JSON');
-        }
+        $result = $this->getJsonData($curlHandle);
         return $result;
     }
 
@@ -527,6 +504,40 @@ class ExtendedCouchDbClient
             throw new CouchdbClientException('CURL error: '.$error, $errorNum);
         }
     }
+
+    /**
+     * decode json response
+     *
+     * @param string $response http body string to decode
+     * @throws CouchdbClientException
+     * @return array
+     */
+    protected function decodeJson($response)
+    {
+        $data = json_decode($response, TRUE);
+        if (NULL === $data)
+        {
+            throw new CouchdbClientException($uri.': Response body can not be parsed to JSON'. $resp);
+        }
+        return $data;
+    }
+
+    /**
+     * execute http request and decode json response to php array
+     *
+     * @param resource $curlHandle
+     * @param integer $validReturnCode
+     * @throws CouchdbClientException
+     * @return array
+     */
+    protected function getJsonData($curlHandle, $validReturnCode = self::STATUS_OK)
+    {
+        $response = curl_exec($curlHandle);
+        $this->processCurlErrors($curlHandle, $validReturnCode);
+        $data = $this->decodeJson($response);
+        return $data;
+    }
+
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
