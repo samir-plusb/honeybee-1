@@ -192,7 +192,7 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
         }
         $result['errors'] = $errors;
 
-        return $result
+        return $result;
     }
 
 
