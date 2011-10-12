@@ -1,0 +1,24 @@
+#!/bin/sh
+
+LOCAL_CONFIG_SH=`dirname $0`/../etc/local/local.config.sh
+
+if [ -f $LOCAL_CONFIG_SH ] ; then
+  . $LOCAL_CONFIG_SH
+else
+  echo "Required config file does not exists: ${LOCAL_CONFIG_SH}"
+  echo "Have you run bin/configure-env.php allready?"
+exit 0
+fi
+
+NODE_DIR="`dirname $0`/../dev/nodejs/node_modules"
+LESS_DIR="${NODE_DIR}/less/"
+LESSC_BIN="${LESS_DIR}/bin/lessc"
+LESS_LIB_DIR="${LESS_DIR}/lib/less"
+NODE_PATH=${LESS_LIB_DIR}:${NODE_PATH} 
+
+if (test -z "$LESSC_BIN") ; then
+  echo "WARNING: 'lessc' node executable not found at location: ${LESSC_BIN}"
+  exit 1
+fi
+
+$LESSC_BIN "$@"
