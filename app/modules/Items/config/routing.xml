@@ -5,6 +5,7 @@
         <routes>
             <route pattern="^/items" module="Items">
                 <route pattern="^/list" action="List" />
+                <route pattern="^/edit" action="Edit" />
             </route>
         </routes>
     </ae:configuration>
