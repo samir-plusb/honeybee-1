@@ -58,11 +58,57 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      * @param AgaviRequestDataHolder $rd
      * @return AgaviExecutionContainer
      */
+    public function executeRss(AgaviRequestDataHolder $rd)
+    {
+        return $this->executeAny($rd);
+    }
+
+    /**
+     * force error response as text/html
+     *
+     * @author tay
+     * @since 08.10.2011
+     * @param AgaviRequestDataHolder $rd
+     * @return AgaviExecutionContainer
+     */
+    public function executeKml(AgaviRequestDataHolder $rd)
+    {
+        return $this->executeAny($rd);
+    }
+
+    /**
+     * force error response as text/html
+     *
+     * @author tay
+     * @since 08.10.2011
+     * @param AgaviRequestDataHolder $rd
+     * @return AgaviExecutionContainer
+     */
+    public function executeAny(AgaviRequestDataHolder $rd)
+    {
+        return $this->createForwardContainer(
+            $this->getContainer()->getModuleName(),
+            $this->getContainer()->getActionName(),
+            NULL, 'html', 'read');
+    }
+
+
+    /**
+     * force error response as text/html
+     *
+     * @author tay
+     * @since 08.10.2011
+     * @param AgaviRequestDataHolder $rd
+     * @return AgaviExecutionContainer
+     */
     public function executeXml(AgaviRequestDataHolder $rd)
     {
         $response = $this->getContainer()->getResponse();
         /* @var $response AgaviWebResponse */
         $response->setHttpStatusCode($this->getAttribute('status', 404));
+
+        $this->findRelatedAction();
+        $this->logError();
 
         return '<?xml version="1.0" encoding="UTF-8"?><error>'.$this->encodeXml($this->toArray()).'</error>';
     }
@@ -94,45 +140,19 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
     }
 
     /**
-     * force error response as text/html
+     * Handle presentation logic for commandline interfaces.
      *
-     * @author tay
-     * @since 08.10.2011
-     * @param AgaviRequestDataHolder $rd
-     * @return AgaviExecutionContainer
+     * @param       AgaviRequestDataHolder $parameters
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeRss(AgaviRequestDataHolder $rd)
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        return $this->executeAny($rd);
-    }
+        $tpl404 = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'action.list';
+        $content404 = print_r($this->toArray(),1) . file_get_contents($tpl404);
 
-    /**
-     * force error response as text/html
-     *
-     * @author tay
-     * @since 08.10.2011
-     * @param AgaviRequestDataHolder $rd
-     * @return AgaviExecutionContainer
-     */
-    public function executeKml(AgaviRequestDataHolder $rd)
-    {
-        return $this->executeAny($rd);
-    }
-
-    /**
-     * force error response as text/html
-     *
-     * @author tay
-     * @since 08.10.2011
-     * @param AgaviRequestDataHolder $rd
-     * @return AgaviExecutionContainer
-     */
-    public function executeAny(AgaviRequestDataHolder $rd)
-    {
-        return $this->createForwardContainer(
-        $this->getContainer()->getModuleName(),
-        $this->getContainer()->getActionName(),
-        NULL, 'html', 'read');
+        $this->getResponse()->setContent($content404);
     }
 
     /**
@@ -155,8 +175,11 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
              $this->setAttribute('url',$request->getUrl());
         }
 
-        $response = $this->getContainer()->getResponse();
+        $this->findRelatedAction();
+        $this->logError();
+
         /* @var $response AgaviWebResponse */
+        $response = $this->getContainer()->getResponse();
         $response->setContentType('text/html');
 
         $this->container->getResponse()->setHttpStatusCode($this->getAttribute('status', 404));
@@ -177,12 +200,46 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
         $response->setHttpStatusCode($this->getAttribute('status', 404));
         $response->setContentType('application/json');
 
+        $this->findRelatedAction();
+        $this->logError();
         return json_encode($this->toArray());
     }
 
 
     /**
+     * identify related module/action and sets the appropiate atttributes
+     *
+     * @see AgaviExecutionContainer::createSystemActionForwardContainer()
+     */
+    protected function findRelatedAction()
+    {
+        if ($this->hasAttribute('_action'))
+        {
+            return;
+        }
+        $container =  $this->getContainer();
+        foreach (array('error_404', 'module_disabled', 'secure', 'login', 'unavailable') as $type)
+        {
+            // @see AgaviExecutionContainer::createSystemActionForwardContainer()
+            $ns = 'org.agavi.controller.forwards.'.$type;
+            if ($container->hasAttributeNamespace($ns))
+            {
+                $this->setAttribute('_module', $container->getAttribute('requested_module', $ns));
+                $this->setAttribute('_action', $container->getAttribute('requested_action', $ns));
+                $exception = $container->getAttribute('exception', $ns);
+                if ($exception instanceof Exception)
+                {
+                    $this->setAttribute('exception', $exception);
+                }
+                break;
+            }
+        }
+    }
+
+    /**
      * get attributes as array for json and xml output
+     *
+     * @return array
      */
     protected function toArray()
     {
@@ -200,6 +257,15 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
         }
 
         $errors = array();
+        $exception = $this->getAttribute('exception', NULL);
+        if ($exception instanceof Exception)
+        {
+            while ($exception->getPrevious())
+            {
+                $exception = $exception->getPrevious();
+            }
+            $errors[] = array('arguments' => get_class($exception), 'message' => $exception->getMessage());
+        }
         foreach ($this->getAttribute('errors', array()) as $error)
         {
             if ($error instanceof AgaviValidationError)
@@ -214,21 +280,50 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
 
 
     /**
-     * Handle presentation logic for commandline interfaces.
-     *
-     * @param       AgaviRequestDataHolder $parameters
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @codingStandardsIgnoreStart
+     * Log message to agavi log system
      */
-    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    protected function logError()
     {
-        $tpl404 = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'action.list';
-        $content404 = file_get_contents($tpl404);
+        $logger = $this->getContext()->getLoggerManager();
 
-        $this->getResponse()->setContent($content404);
+        $where = array();
+        foreach (array('_module', '_action', '_method') as $name)
+        {
+            if ($this->getAttribute($name))
+            {
+                $where[] = $this->getAttribute($name);
+            }
+        }
+        $message = empty($where) ? '' : join('/', $where).' :: ';
+
+        $exception = $this->getAttribute('exception');
+        if ($exception instanceof Exception)
+        {
+            while ($exception->getPrevious())
+            {
+                $exception = $exception->getPrevious();
+            }
+            $message .= $exception->getMessage();
+            if ($logger)
+            {
+                $logger->log($exception->__toString(), AgaviILogger::INFO);
+            }
+        }
+
+        if (! $this->getContainer()->getParameter('is_slot'))
+        {
+            $message .= sprintf("'%s' :: %s", $this->getAttribute('url'), $this->getAttribute('_title'));
+        }
+        else
+        {
+            $message .= $this->getAttribute('_title');
+        }
+
+        if ($logger)
+        {
+            $logger->log($message, AgaviILogger::ERROR);
+        }
     }
-
 }
 
 ?>
