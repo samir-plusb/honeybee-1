@@ -1,15 +1,8 @@
 <?php
-// +---------------------------------------------------------------------------+
-// | Require our dispatch script, that takes care loading libs and environment.|
-// +---------------------------------------------------------------------------+
-$testingEnabled = true;
-require dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'dispatch.php';
 
-// +---------------------------------------------------------------------------+
-// | Then setup the rest and run our suites.                                   |
-// +---------------------------------------------------------------------------+
-require 'agavi/testing.php';
-require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php';
+$testingEnabled = true;
+
+require dirname(__DIR__) . '/app/dispatch.php';
 
 AgaviToolkit::clearCache();
 

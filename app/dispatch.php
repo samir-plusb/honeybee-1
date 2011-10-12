@@ -4,9 +4,9 @@
 // | Initialize some common directory vars and set our include path.           |
 // +---------------------------------------------------------------------------+
 $rootDir = dirname(dirname(__FILE__));
-$libsDir = $rootDir . DIRECTORY_SEPARATOR . 'libs';
-$ezComponentsDir = $libsDir . DIRECTORY_SEPARATOR . 'ezc';
-$phpUnitDir = $libsDir . DIRECTORY_SEPARATOR . 'PHPUnit';
+$libsDir = $rootDir . '/libs';
+$ezComponentsDir = $libsDir . '/ezc';
+$phpUnitDir = $libsDir . '/PHPUnit';
 
 $includes = array($libsDir, $ezComponentsDir, $phpUnitDir);
 set_include_path(implode(PATH_SEPARATOR, $includes).PATH_SEPARATOR.get_include_path());
@@ -14,18 +14,24 @@ set_include_path(implode(PATH_SEPARATOR, $includes).PATH_SEPARATOR.get_include_p
 // make generated files group writeable for easy switch between web/console
 umask(02);
 
-require 'agavi/agavi.php';
-require $rootDir . DIRECTORY_SEPARATOR . '/app/config.php';
+require $libsDir . '/agavi/agavi.php';
+require $rootDir . '/app/config.php';
+
+if (isset($testingEnabled))
+{
+    require $rootDir . '/testing/config.php';
+    require $libsDir . '/agavi/testing.php';
+}
 
 // +---------------------------------------------------------------------------+
 // | Setup ezcomponents autoloading.                                           |
 // +---------------------------------------------------------------------------+
-require $ezComponentsDir . DIRECTORY_SEPARATOR . 'Base/src/ezc_bootstrap.php';
+require $ezComponentsDir . '/Base/src/ezc_bootstrap.php';
 spl_autoload_register(array('ezcBase', 'autoload'));
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to our environment config provider.           |
 // +---------------------------------------------------------------------------+
-require $rootDir . DIRECTORY_SEPARATOR . 'app/lib/config/ProjectEnvironmentConfig.class.php';
+require $rootDir . '/app/lib/config/ProjectEnvironmentConfig.class.php';
 ProjectEnvironmentConfig::load(isset($testingEnabled));
 
 

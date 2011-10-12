@@ -16,7 +16,7 @@ fi
 group=$( id -g $user )
 directories="data app/cache app/log"
 
-find app/log -mtime +5 -print0 | xargs -0 /bin/rm
+find app/log -mtime +10 -exec /bin/rm -fv '{}' \;
 rm -rf app/cache/*
 
 chgrp -R $group $directories
