@@ -29,7 +29,12 @@
         <run command="/bin/mkdir -p etc/integration/build/api" dir="${project.directory}"/>
         <run command="libs/PhpDocumentor/phpdoc --directory app/ --target ${project.directory}/etc/integration/build/api -i /.svn/,/cache/ -ti 'Midas API' -dn 'Midas' -o HTML:frames:DOM/earthli" dir="${project.directory}" />
     </target>
-    
+
+    <target name="compile-css" description="Compile our less code into real css.">
+        <echo message="Compiling less syntax into real css."/>
+        <run command="bin/lessc pub/less/*.less" dir="${project.directory}" />
+    </target>
+
     <target name="import" description="Import messages from all configured sources">
         <echo message="Import messages"/>
         <run command="unset DISPLAY; umask 002; rsync --recursive --times --delete ftp@ftp.berlinonline.de:/srv/ftp/dpa/ /var/tmp/dpa/" dir="${project.directory}"/>
