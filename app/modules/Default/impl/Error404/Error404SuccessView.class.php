@@ -146,7 +146,14 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
-        $this->setAttribute('_title', $this->translationManager->_($this->getAttribute('_title', '404 Not Found')));
+
+        $title = $this->getAttribute('_title');
+        $this->setAttribute('_title', empty($title) ? '404 Not Found' : $title);
+
+        $request = $this->getContext()->getRequest();
+        if ($request instanceof AgaviWebRequest) {
+             $this->setAttribute('url',$request->getUrl());
+        }
 
         $response = $this->getContainer()->getResponse();
         /* @var $response AgaviWebResponse */
@@ -181,11 +188,17 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
     {
         $result = array(
             'result' => 'error',
-            'message' => '404 - Not found',
+            'message' => $this->getAttribute('_title', '404 Not Found'),
             'module' => $this->getAttribute('_module', NULL),
             'action' => $this->getAttribute('_action', NULL),
             'method' => $this->getAttribute('method', NULL)
         );
+
+        $request = $this->getContext()->getRequest();
+        if ($request instanceof AgaviWebRequest) {
+            $result['url'] = $request->getUrl();
+        }
+
         $errors = array();
         foreach ($this->getAttribute('errors', array()) as $error)
         {

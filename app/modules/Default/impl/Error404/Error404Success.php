@@ -1,11 +1,13 @@
-<!-- <?php echo htmlspecialchars(__FILE__) ?> -->
+<!-- BEGIN <?php echo htmlspecialchars(__FILE__) ?> -->
 <div class="error">
-	<h1><?php echo $tm->_($t['_title']); ?></h1>
+<?php if (! empty($t['url'])) : ?>
+	<p class="url">URL: <?php echo htmlspecialchars($t['url'])?></p>
+<?php endif ?>
 <?php if (! empty($t['_module'])) : ?>
 	<div class="module"><?php echo htmlspecialchars($tm->_('Module').": ".$t['_module'])?></div>
 	<div class="action"><?php echo htmlspecialchars($tm->_('Action').": ".$t['_action'])?></div>
-	<div class="errors">
 <?php endif ?>
+	<div class="messages">
 <?php
 	if (! empty($t['errors']) && is_array($t['errors']))
 	{
@@ -23,4 +25,4 @@
 ?>
 	</div>
 </div>
-<!-- /<?php echo htmlspecialchars(__FILE__) ?> -->
+<!-- END <?php echo htmlspecialchars(__FILE__) ?> -->
