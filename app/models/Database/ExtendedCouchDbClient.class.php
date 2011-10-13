@@ -278,22 +278,10 @@ class ExtendedCouchDbClient
         {
             return $this->storeDocAutoId($database, $document);
         }
-        $curlHandle = $this->getCurlHandle(
+        return $this->putData(
             $this->baseUri.urlencode($database).'/'.urlencode($document['_id']),
-            self::METHOD_PUT);
-
-        $body = $this->encodeDocumentToJson($document);
-        $this->lastBody = $document;
-        $docFd = fopen('data://text/plain,'.urlencode($body), 'r');
-        if (! $docFd)
-        {
-            throw new CouchdbClientException('Can not setup PUT data.');
-        }
-        curl_setopt($curlHandle, CURLOPT_INFILE, $docFd);
-        curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($body));
-        $data = $this->getJsonData($curlHandle, self::STATUS_CONFLICT);
-        fclose($docFd);
-        return $data;
+            $document,
+            self::STATUS_CONFLICT);
     }
 
 
@@ -371,32 +359,48 @@ class ExtendedCouchDbClient
     /**
      * Fetch the data for the given view.
      *
+     * @see http://wiki.apache.org/couchdb/HTTP_view_API#Access.2BAC8-Query
+     *
+     * Resulting array looks like
+     * <pre>
+     * Array
+     *   (
+     *       [total_rows] => 1
+     *       [offset] => 0
+     *       [rows] => Array
+     *           (
+     *               [0] => Array
+     *                   (
+     *                      …
+     *                   )
+     *           )
+     *   )
+     * </pre>
      *
      * @param       string $database
      * @param       string $designDocId
      * @param       string $viewname
+     * @param       string $key json expression for key search or NULL
+     * @param       integer
      *
      * @return      array
      */
     public function getView($database, $designDocId, $viewname, $key = NULL, $limit = 0)
     {
-        $this->compositeClient->selectDb($database);
-
-        $databaseUuri = $this->baseUri . urlencode($database);
-        $uri = $databaseUuri. '/_design/' .
-            urlencode($designDocId) . '/_view/' .
-            urlencode($viewname) .
-            '?descending=true';
-
+        $query = array('descending' => 'true');
         if ($key)
         {
-            $uri .= '&key="' . urlencode($key) . '"';
+            $query['key'] = $key;
         }
-
         if ($limit)
         {
-            $uri .= '&limit=' . $limit;
+            $query['limit'] = $limit;
         }
+
+        $uri = $this->baseUri . urlencode($database) .
+            '/_design/' . urlencode($designDocId) .
+            '/_view/' . urlencode($viewname) .
+            '?' . http_build_query($query);
 
         $curlHandle = $this->getCurlHandle($uri);
         $data = $this->getJsonData($curlHandle);
@@ -419,7 +423,13 @@ class ExtendedCouchDbClient
 
         $removeWhitespace = function($funcString)
         {
-            return preg_replace('/\s+/s', ' ', $funcString);
+            // strip /* … */ comments
+            $funcString = preg_replace('#/\*.*?\*/#s', ' ', $funcString);
+            // strip // … comments
+            $funcString = preg_replace('#//.*#', ' ', $funcString);
+            // strip multiple white spaces
+            $funcString = preg_replace('/\s+/s', ' ', $funcString);
+            return trim($funcString);
         };
 
         foreach ($doc['views'] as & $view)
@@ -431,38 +441,57 @@ class ExtendedCouchDbClient
                 $view['reduce'] = $removeWhitespace($view['map']);
             }
         }
-
         $uri = $this->baseUri . urlencode($database) . '/_design/' . urlencode($docId);
-        $file = tmpfile();
-        $jsonDoc = $this->encodeDocumentToJson($doc);
-        fwrite($file, $jsonDoc);
-        fseek($file, 0);
+        return $this->putData($uri, $doc, self::STATUS_CONFLICT);
+    }
 
-        $curlHandle = $this->getCurlHandle($uri, self::METHOD_PUT);
-        curl_setopt($curlHandle, CURLOPT_INFILE, $file);
-        curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($jsonDoc));
 
-        curl_exec($curlHandle);
-        fclose($file);
-
-        $this->processCurlErrors($curlHandle);
+    /**
+     * get infomation about a design document
+     *
+     * @see http://wiki.apache.org/couchdb/Complete_HTTP_API_Reference#Special_design_documents
+     *
+     * @param string $database
+     * @param integer $docid
+     * @throws CouchdbClientException on protocol errors or result is not json
+     * @return mixed array or boolean FALSE
+     */
+    public function getDesignDocument($database, $docid)
+    {
+        $uri = $this->baseUri.urlencode($database).'/_design/'.urlencode($docid);
+        $curlHandle = $this->getCurlHandle($uri);
+        $result = $this->getJsonData($curlHandle, self::STATUS_NOT_FOUND);
+        return isset($result['error']) ? FALSE : $result;
     }
 
     /**
      * get database information
      *
+     * returned array contains
+     * <ul>
+     * <li>db_name - Name of the database (string)
+     * <li>doc_count - Number of documents (including design documents) in the database (int)
+     * <li>update_seq - Current number of updates to the database (int)
+     * <li>purge_seq - Number of purge operations (int)
+     * <li>compact_running - Indicates, if a compaction is running (boolean)
+     * <li>disk_size - Current size in Bytes of the database (Note: Size of views indexes on disk are not included)
+     * <li>instance_start_time - Timestamp of CouchDBs start time (int in ms)
+     * <li>disk_format_version - Current version of the internal database format on disk (int)
+     * </ul>
+     *
      * @see http://wiki.apache.org/couchdb/HTTP_database_API#Database_Information
      *
      * @throws CouchdbClientException on protocol errors or result is not json
      * @param string $database
-     * @return array
+     *
+     * @return mixed array or boolean FALSE
      */
     public function getDatabase($database)
     {
         $uri = $this->baseUri.urlencode($database).'/';
         $curlHandle = $this->getCurlHandle($uri);
-        $result = $this->getJsonData($curlHandle);
-        return $result;
+        $result = $this->getJsonData($curlHandle, self::STATUS_NOT_FOUND);
+        return isset($result['error']) ? FALSE : $result;
     }
 
     /**
@@ -610,17 +639,8 @@ class ExtendedCouchDbClient
         {
             $error = curl_error($curlHandle);
             $errorNum = curl_errno($curlHandle);
-            /* @todo Remove debug code ExtendedCouchDbClient.class.php from 13.10.2011 */
-            $data = array(
-                'uri' => $this->lastUri,
-                'method' => $this->lastMethod,
-                'body' => $this->lastBody,
-                'response' => $this->lastResponse
-            );
-            error_log(date('r').' :: '.__METHOD__.' :: '.__LINE__."\n".print_r($data,1)."\n",3,'/tmp/errors.log');
             throw new CouchdbClientException(
-                curl_getinfo($curlHandle, CURLINFO_EFFECTIVE_URL).
-                " ($respCode): error: '$error'", $errorNum);
+                $this->lastUri." ($respCode): error: '$error'", $errorNum);
         }
     }
 
@@ -640,8 +660,7 @@ class ExtendedCouchDbClient
         if (NULL === $data)
         {
             throw new CouchdbClientException(
-                curl_getinfo($curlHandle, CURLINFO_EFFECTIVE_URL).
-                ': Response body can not be parsed to JSON: '. $response);
+                $this->lastUri.': Response body can not be parsed to JSON: '. $response);
         }
         return $data;
     }
@@ -659,6 +678,33 @@ class ExtendedCouchDbClient
             $document['_id'] = (string)$document['_id'];
         }
         return json_encode($document);
+    }
+
+
+    /**
+     * execute a PUT request to the database
+     *
+     * @param string $uri complete api URL
+     * @param array $document
+     * @param int $validReturnCode
+     * @throws CouchdbClientException
+     * @return array
+     */
+    protected function putData($uri, array $document, $validReturnCode)
+    {
+        $curlHandle = $this->getCurlHandle($uri, self::METHOD_PUT);
+
+        $body = $this->encodeDocumentToJson($document);
+        $docFd = fopen('data://text/plain,'.urlencode($body), 'r');
+        if (! $docFd)
+        {
+            throw new CouchdbClientException('Can not setup PUT data.');
+        }
+        curl_setopt($curlHandle, CURLOPT_INFILE, $docFd);
+        curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($body));
+        $data = $this->getJsonData($curlHandle, self::STATUS_CONFLICT);
+        fclose($docFd);
+        return $data;
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------

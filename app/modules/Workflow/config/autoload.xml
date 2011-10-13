@@ -8,7 +8,7 @@
         <autoload name="ProjectWorkflowBaseView">%core.module_dir%/Workflow/lib/base/ProjectWorkflowBaseView.class.php</autoload>
         <autoload name="IWorkflowImportItem">%core.module_dir%/Workflow/lib/base/IWorkflowImportItem.iface.php</autoload>
         <autoload name="IWorkflowPlugin">%core.module_dir%/Workflow/lib/base/IWorkflowPlugin.iface.php</autoload>
-        <autoload name="WorkflowPluginResult">%core.module_dir%/Workflow/lib/base/WorkflowPluginResult.class.php</autoload>
+        <autoload name="WorkflowModuleSetup">%core.module_dir%/Workflow/lib/setup/WorkflowModuleSetup.class.php</autoload>
         <!-- -->
         <autoload name="WorkflowException">%core.module_dir%/Workflow/lib/WorkflowException.class.php</autoload>
         <autoload name="WorkflowHandler">%core.module_dir%/Workflow/lib/WorkflowHandler.class.php</autoload>

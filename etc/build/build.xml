@@ -7,7 +7,7 @@
     <property userProperty="true" override="true" file="${project.directory.etc}/build/build.properties" />
 	<taskdef name="run" classname="BoPhingRunTask" classpath="${project.directory}/dev/phing"/>
 
-    <target name="cc" description="Clear the config cache.">
+    <target name="cc" description="Clear the config cache." depends="project-cache-remove">
         <echo message="Clearing the config cache." />
         <run command="bin/clear-cache.sh" dir="${project.directory}"/>
     </target>

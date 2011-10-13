@@ -59,7 +59,7 @@ class CouchDatabase extends AgaviDatabase
             return;
         }
 
-        if (! $this->connection->getDatabase($this->resource))
+        if (FALSE === $this->connection->getDatabase($this->resource))
         {
             try
             {

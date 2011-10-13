@@ -26,6 +26,23 @@ class ImportBaseAction extends ProjectBaseAction
      */
     const DATASOURCE_PROCMAIL = 'procmail';
 
+
+    /**
+     * (non-PHPdoc)
+     * @see AgaviAction::initialize()
+     */
+    public function initialize(AgaviExecutionContainer $container)
+    {
+        parent::initialize($container);
+
+        // register workflow start on import success
+        $workflowSupervisor = Workflow_SupervisorModel::getInstance();
+        ProjectEventProxy::getInstance()->subscribe(
+            BaseDataImport::EVENT_RECORD_SUCCESS,
+            array($workflowSupervisor, 'importRecordImportedCallback'));
+    }
+
+
     /**
      * Handle our validation(write) errors.
      *
