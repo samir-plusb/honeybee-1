@@ -1,5 +1,14 @@
 <?php
-
+/**
+ * test handling workflow definition handling
+ *
+ * @package Testing
+ * @subpackage Workflow
+ * @author tay
+ * @version $Id$
+ * @since 13.10.2011
+ *
+ */
 class WorkflowConfigSyntaxTest extends AgaviUnitTestCase
 {
     /**

@@ -43,6 +43,10 @@ class ExtendedCouchDbClient
      * HTTP request method DELETE
      */
     const METHOD_DELETE = 'DELETE';
+    /**
+     * HTTP request method HEAD
+     */
+    const METHOD_HEAD = 'HEAD';
 
     /**
      * Request completed successfully.
@@ -122,6 +126,24 @@ class ExtendedCouchDbClient
      * holds filename of cookie file used for session auth
      */
     private $cookieFile;
+
+    /**
+     * holds the last used url for internal error reporting
+     * @var string
+     */
+    private $lastUri;
+
+    /**
+     * holds the last used method for internal error reporting
+     * @var unknown_type
+     */
+    private $lastMethod;
+
+    /**
+     * holds the last raw response for internal error reporting
+     * @var string
+     */
+    private $lastResponse;
 
     // ---------------------------------- </MEMBERS> ---------------------------------------------
 
@@ -239,20 +261,58 @@ class ExtendedCouchDbClient
     }
 
     /**
-     * Stores the given document in the given database.
+     * Create or update document in the given database.
+     *
+     * @see http://wiki.apache.org/couchdb/HTTP_Document_API#PUT
      *
      * @param       string $database
-     * @param       string $documentId
+     * @param       array $document assoziative array with document data
      *
      * @return      array
      *
      * @throws      CouchdbClientException
      */
-    public function storeDoc($database, $document)
+    public function storeDoc($database, array $document)
     {
-        $this->compositeClient->selectDb($database);
+        if (empty($document['_id']))
+        {
+            return $this->storeDocAutoId($database, $document);
+        }
+        $curlHandle = $this->getCurlHandle(
+            $this->baseUri.urlencode($database).'/'.urlencode($document['_id']),
+            self::METHOD_PUT);
 
-        return $this->compositeClient->storeDoc($document);
+        $body = $this->encodeDocumentToJson($document);
+        $this->lastBody = $document;
+        $docFd = fopen('data://text/plain,'.urlencode($body), 'r');
+        if (! $docFd)
+        {
+            throw new CouchdbClientException('Can not setup PUT data.');
+        }
+        curl_setopt($curlHandle, CURLOPT_INFILE, $docFd);
+        curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($body));
+        $data = $this->getJsonData($curlHandle, self::STATUS_CONFLICT);
+        fclose($docFd);
+        return $data;
+    }
+
+
+    /**
+     * Store new document using the POST api method
+     *
+     * @see http://wiki.apache.org/couchdb/HTTP_Document_API#POST
+     *
+     * @param       string $database
+     * @param       array $document
+     * @throws      CouchdbClientException
+     * @return      array
+     */
+    public function storeDocAutoId($database, array $document)
+    {
+        $curlHandle = $this->getCurlHandle($this->baseUri.urlencode($database), self::METHOD_POST);
+        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, urlencode($this->encodeDocumentToJson($document)));
+        $data = $this->getJsonData($curlHandle, self::STATUS_CONFLICT);
+        return $data;
     }
 
     /**
@@ -290,11 +350,7 @@ class ExtendedCouchDbClient
     public function statDoc($database, $docId)
     {
         $uri = $this->baseUri . urlencode($database) . '/' . urlencode($docId);
-        $curlHandle = $this->getCurlHandle($uri);
-
-        curl_setopt($curlHandle, CURLOPT_HEADER, 1);
-        curl_setopt($curlHandle, CURLOPT_NOBODY, 1);
-
+        $curlHandle = $this->getCurlHandle($uri, self::METHOD_HEAD);
         $resp = curl_exec($curlHandle);
         $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
         $this->processCurlErrors($curlHandle, self::STATUS_NOT_FOUND);
@@ -378,7 +434,7 @@ class ExtendedCouchDbClient
 
         $uri = $this->baseUri . urlencode($database) . '/_design/' . urlencode($docId);
         $file = tmpfile();
-        $jsonDoc = json_encode($doc);
+        $jsonDoc = $this->encodeDocumentToJson($doc);
         fwrite($file, $jsonDoc);
         fseek($file, 0);
 
@@ -412,27 +468,61 @@ class ExtendedCouchDbClient
     /**
      * Create a database by the given $database name.
      *
-     * @param       string $database
+     * Couch responses:
      *
-     * @throws      CouchdbClientException e.g. If the database allready exists.
+     * Database successfully created
+     * <ul>
+     * <li>HTTP 201
+     * <li>Json: {"ok":true}
+     * </ul>
+     *
+     * Database exists
+     * <ul>
+     * <li>HTTP 412
+     * <li>{"error":"file_exists","reason":"The database could not be created, the file already exists."}
+     * </ul>
+     *
+     * @see http://wiki.apache.org/couchdb/HTTP_database_API#PUT_.28Create_New_Database.29
+     *
+     * @param string $database name of new database
+     * @return boolean TRUE on database created, FALSE on database already exists
+     * @throws CouchdbClientException on protocol errors, access denied, etc.
      */
     public function createDatabase($database)
     {
-        $this->compositeClient->createDatabase($database);
+        $curlHandle = $this->getCurlHandle($this->baseUri.urlencode($database).'/', self::METHOD_PUT);
+        $data = $this->getJsonData($curlHandle, self::STATUS_PRECONDITION_FAILED);
+        return isset($data['ok']);
     }
 
     /**
      * Delete a database by the given $database name.
      *
-     * @param       string $database
+     * Database successfully delete
+     * <ul>
+     * <li>HTTP 201
+     * <li>Json: {"ok":true}
+     * </ul>
      *
-     * @return      void
+     * Database exists
+     * <ul>
+     * <li>HTTP 440
+     * <li>{"error":"not_found","reason":"missing"}
+     * </ul>
      *
-     * @throws      CouchdbClientException e.g. database does not exists
+     * @see http://wiki.apache.org/couchdb/HTTP_database_API#PUT_.28Create_New_Database.29
+     *
+     * @param string $database name of existing database
+     *
+     * @return boolean TRUE on database found and deleted, FALSE on database missing
+     *
+     * @throws CouchdbClientException on protocol errors, access denied, etc.
      */
     public function deleteDatabase($database)
     {
-        $this->compositeClient->deleteDatabase($database);
+        $curlHandle = $this->getCurlHandle($this->baseUri.urlencode($database).'/', self::METHOD_DELETE);
+        $data = $this->getJsonData($curlHandle, self::STATUS_NOT_FOUND);
+        return isset($data['ok']);
     }
 
     // ---------------------------------- </PUBLIC METHODS> --------------------------------------
@@ -449,38 +539,57 @@ class ExtendedCouchDbClient
      */
     protected function getCurlHandle($uri, $method = self::METHOD_GET)
     {
-        if (! $this->curlHandle)
+        if (TRUE || ! $this->curlHandle)
         {
-            $this->curlHandle = ProjectCurl::create();
-            curl_setopt($this->curlHandle, CURLOPT_HEADER, 'Content-Type: application/json; charset=utf-8');
-            curl_setopt($this->curlHandle, CURLOPT_PROXY, '');
+            $curlHandle = $this->curlHandle = ProjectCurl::create();
+            curl_setopt($curlHandle, CURLOPT_PROXY, '');
+            curl_setopt($curlHandle, CURLOPT_FAILONERROR, 0);
             $this->cookieFile = tempnam(AgaviConfig::get('core.cache_dir'), get_class($this).'_');
-            curl_setopt($this->curlHandle, CURLOPT_COOKIEFILE, $this->cookieFile);
-            curl_setopt($this->curlHandle, CURLOPT_COOKIEJAR, $this->cookieFile);
+            curl_setopt($curlHandle, CURLOPT_COOKIEFILE, $this->cookieFile);
+            curl_setopt($curlHandle, CURLOPT_COOKIEJAR, $this->cookieFile);
+
+            $headers = array(
+                'Content-Type: application/json; charset=utf-8',
+                'Accept: application/json',
+                'Connection: keep-alive',
+                'Expect:'
+            );
+            curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $headers);
+        }
+        else
+        {
+            $curlHandle = $this->curlHandle;
         }
 
+        $this->lastUri = $uri;
+        $this->lastMethod = $method;
+        $this->lastResponse = NULL;
+
         // allways reset some parameters to standard
-        curl_setopt($this->curlHandle, CURLOPT_URL, $uri);
-        curl_setopt($this->curlHandle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($this->curlHandle, CURLOPT_HEADER, 0);
+        curl_setopt($curlHandle, CURLOPT_URL, $uri);
+        curl_setopt($curlHandle, CURLOPT_NOBODY, 0);
 
         switch ($method)
         {
             case self::METHOD_GET:
-                curl_setopt($this->curlHandle, CURLOPT_HTTPGET, 1);
+                curl_setopt($curlHandle, CURLOPT_HTTPGET, 1);
+                break;
+            case self::METHOD_HEAD:
+                curl_setopt($curlHandle, CURLOPT_HTTPGET, 1);
+                curl_setopt($curlHandle, CURLOPT_NOBODY, 1);
                 break;
             case self::METHOD_POST:
-                curl_setopt($this->curlHandle, CURLOPT_POST, 1);
+                curl_setopt($curlHandle, CURLOPT_POST, 1);
                 break;
             case self::METHOD_PUT:
-                curl_setopt($this->curlHandle, CURLOPT_PUT, 1);
+                curl_setopt($curlHandle, CURLOPT_PUT, 1);
                 break;
             default:
-                curl_setopt($this->curlHandle, CURLOPT_CUSTOMREQUEST, $method);
+                curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, $method);
                 break;
         }
 
-        return $this->curlHandle;
+        return $curlHandle;
     }
 
     /**
@@ -501,25 +610,18 @@ class ExtendedCouchDbClient
         {
             $error = curl_error($curlHandle);
             $errorNum = curl_errno($curlHandle);
-            throw new CouchdbClientException('CURL error: '.$error, $errorNum);
+            /* @todo Remove debug code ExtendedCouchDbClient.class.php from 13.10.2011 */
+            $data = array(
+                'uri' => $this->lastUri,
+                'method' => $this->lastMethod,
+                'body' => $this->lastBody,
+                'response' => $this->lastResponse
+            );
+            error_log(date('r').' :: '.__METHOD__.' :: '.__LINE__."\n".print_r($data,1)."\n",3,'/tmp/errors.log');
+            throw new CouchdbClientException(
+                curl_getinfo($curlHandle, CURLINFO_EFFECTIVE_URL).
+                " ($respCode): error: '$error'", $errorNum);
         }
-    }
-
-    /**
-     * decode json response
-     *
-     * @param string $response http body string to decode
-     * @throws CouchdbClientException
-     * @return array
-     */
-    protected function decodeJson($response)
-    {
-        $data = json_decode($response, TRUE);
-        if (NULL === $data)
-        {
-            throw new CouchdbClientException($uri.': Response body can not be parsed to JSON'. $resp);
-        }
-        return $data;
     }
 
     /**
@@ -532,12 +634,32 @@ class ExtendedCouchDbClient
      */
     protected function getJsonData($curlHandle, $validReturnCode = self::STATUS_OK)
     {
-        $response = curl_exec($curlHandle);
+        $response = $this->lastResponse = curl_exec($curlHandle);
         $this->processCurlErrors($curlHandle, $validReturnCode);
-        $data = $this->decodeJson($response);
+        $data = json_decode($response, TRUE);
+        if (NULL === $data)
+        {
+            throw new CouchdbClientException(
+                curl_getinfo($curlHandle, CURLINFO_EFFECTIVE_URL).
+                ': Response body can not be parsed to JSON: '. $response);
+        }
         return $data;
     }
 
+    /**
+     * encode document data array as JSON
+     *
+     * @param array $document
+     * @return array
+     */
+    protected function encodeDocumentToJson(array $document)
+    {
+        if (array_key_exists('_id', $document))
+        {
+            $document['_id'] = (string)$document['_id'];
+        }
+        return json_encode($document);
+    }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
