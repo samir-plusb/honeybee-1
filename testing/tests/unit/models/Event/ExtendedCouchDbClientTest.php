@@ -192,6 +192,59 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
      /**
       *
       */
+     public function testStatDocument()
+     {
+         $this->client->createDatabase(self::DATABASE);
+         $this->client->storeDoc(self::DATABASE, $this->document);
+         $revision = $this->client->statDoc(self::DATABASE, $this->document['_id']);
+         self::assertRegExp('/\d+-[a-f\d]+$/', $revision);
+     }
+
+     /**
+      *
+      */
+     public function testStatDocumentMissingDocument()
+     {
+         $this->client->createDatabase(self::DATABASE);
+         $revision = $this->client->statDoc(self::DATABASE, $this->document['_id']);
+         self::assertEquals(0, $revision);
+     }
+
+     /**
+      *
+      */
+     public function testUpdateDocument()
+     {
+         $this->client->createDatabase(self::DATABASE);
+         $this->client->storeDoc(self::DATABASE, $this->document);
+         $revistion = $this->client->statDoc(self::DATABASE, $this->document['_id']);
+         $document = $this->document;
+         $document['_rev'] = $revistion;
+         $result = $this->client->storeDoc(self::DATABASE, $document);
+         self::assertArrayHasKey('ok', $result);
+         self::assertRegExp('/^2-/', $result['rev']);
+     }
+
+
+     /**
+      *
+      */
+     public function testGetDocumentRelease()
+     {
+         $this->client->createDatabase(self::DATABASE);
+         $this->client->storeDoc(self::DATABASE, $this->document);
+         $revistion = $this->client->statDoc(self::DATABASE, $this->document['_id']);
+         $document = $this->document;
+         $document['_rev'] = $revistion;
+         $this->client->storeDoc(self::DATABASE, $document);
+         $result = $this->client->getDoc(self::DATABASE, $this->document['_id'], $revistion);
+         self::assertEquals($this->document['_id'], $result['_id']);
+         self::assertEquals($revistion, $result['_rev']);
+     }
+
+     /**
+      *
+      */
      public function testCreateDesignDocument()
      {
          $this->client->createDatabase(self::DATABASE);
@@ -245,6 +298,21 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
          self::assertArrayHasKey('total_rows', $result);
          self::assertArrayHasKey('rows', $result);
          self::assertEquals($result['total_rows'], count($result['rows']));
+         self::assertEquals($this->document['_id'], $result['rows'][0]['id']);
+     }
+
+     /**
+      *
+      */
+     public function testGetViewIncludeDocument()
+     {
+         $this->client->createDatabase(self::DATABASE);
+         $this->client->createDesignDocument(self::DATABASE, 'designTest', $this->designDoc);
+         $this->client->storeDoc(self::DATABASE, $this->document);
+         $result = $this->client->getView(self::DATABASE, 'designTest', 'ticketByImportitem',
+             json_encode("boom"), 0, array('include_docs' => 'true'));
+         self::assertArrayHasKey('doc', $result['rows'][0]);
+         self::assertEquals($this->document['_id'], $result['rows'][0]['doc']['_id']);
      }
 }
 

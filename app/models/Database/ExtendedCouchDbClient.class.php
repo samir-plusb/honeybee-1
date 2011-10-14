@@ -238,7 +238,7 @@ class ExtendedCouchDbClient
         $uri = $this->baseUri.urlencode($database).'/'.urlencode($documentId);
         if (NULL !== $revision)
         {
-            $uri .= '?'.http_build_query(array('rev', $revision));
+            $uri .= '?'.http_build_query(array('rev' => $revision));
         }
         $curlHandle = $this->getCurlHandle($uri);
         return $this->getJsonData($curlHandle);
@@ -340,9 +340,9 @@ class ExtendedCouchDbClient
         $uri = $this->baseUri . urlencode($database) . '/' . urlencode($docId);
         $curlHandle = $this->getCurlHandle($uri, self::METHOD_HEAD);
         $resp = curl_exec($curlHandle);
-        $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
         $this->processCurlErrors($curlHandle, self::STATUS_NOT_FOUND);
 
+        $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
         if (404 == curl_getinfo($curlHandle, CURLINFO_HTTP_CODE))
         {
             return 0;
@@ -377,30 +377,32 @@ class ExtendedCouchDbClient
      *   )
      * </pre>
      *
-     * @param       string $database
-     * @param       string $designDocId
+     *
+     * @param       string $database name of database to use
+     * @param       string $designDocId design document identifier
      * @param       string $viewname
      * @param       string $key json expression for key search or NULL
-     * @param       integer
+     * @param       integer $limit optional maxmimum number of results to return
+     * @param       array $parameters addition view query parameters as described in the couchdb api documentation
      *
      * @return      array
      */
-    public function getView($database, $designDocId, $viewname, $key = NULL, $limit = 0)
+    public function getView($database, $designDocId, $viewname, $key = NULL, $limit = 0, array $parameters = array())
     {
         $query = array('descending' => 'true');
         if ($key)
         {
             $query['key'] = $key;
         }
-        if ($limit)
+        if ($limit > 0)
         {
-            $query['limit'] = $limit;
+            $query['limit'] = intval($limit);
         }
 
         $uri = $this->baseUri . urlencode($database) .
             '/_design/' . urlencode($designDocId) .
             '/_view/' . urlencode($viewname) .
-            '?' . http_build_query($query);
+            '?' . http_build_query(array_merge($query, $parameters));
 
         $curlHandle = $this->getCurlHandle($uri);
         $data = $this->getJsonData($curlHandle);
@@ -597,6 +599,7 @@ class ExtendedCouchDbClient
         // allways reset some parameters to standard
         curl_setopt($curlHandle, CURLOPT_URL, $uri);
         curl_setopt($curlHandle, CURLOPT_NOBODY, 0);
+        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
 
         switch ($method)
         {
@@ -606,6 +609,7 @@ class ExtendedCouchDbClient
             case self::METHOD_HEAD:
                 curl_setopt($curlHandle, CURLOPT_HTTPGET, 1);
                 curl_setopt($curlHandle, CURLOPT_NOBODY, 1);
+                curl_setopt($curlHandle, CURLOPT_HEADER, 1);
                 break;
             case self::METHOD_POST:
                 curl_setopt($curlHandle, CURLOPT_POST, 1);
