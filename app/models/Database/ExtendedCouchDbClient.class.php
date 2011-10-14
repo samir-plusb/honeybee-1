@@ -572,36 +572,25 @@ class ExtendedCouchDbClient
      */
     protected function getCurlHandle($uri, $method = self::METHOD_GET)
     {
-        if (TRUE || ! $this->curlHandle)
-        {
-            $curlHandle = $this->curlHandle = ProjectCurl::create();
-            curl_setopt($curlHandle, CURLOPT_PROXY, '');
-            curl_setopt($curlHandle, CURLOPT_FAILONERROR, 0);
-            $this->cookieFile = tempnam(AgaviConfig::get('core.cache_dir'), get_class($this).'_');
-            curl_setopt($curlHandle, CURLOPT_COOKIEFILE, $this->cookieFile);
-            curl_setopt($curlHandle, CURLOPT_COOKIEJAR, $this->cookieFile);
+        $curlHandle = $this->curlHandle = ProjectCurl::create();
+        curl_setopt($curlHandle, CURLOPT_URL, $uri);
+        curl_setopt($curlHandle, CURLOPT_PROXY, '');
+        curl_setopt($curlHandle, CURLOPT_FAILONERROR, 0);
+        $this->cookieFile = tempnam(AgaviConfig::get('core.cache_dir'), get_class($this).'_');
+        curl_setopt($curlHandle, CURLOPT_COOKIEFILE, $this->cookieFile);
+        curl_setopt($curlHandle, CURLOPT_COOKIEJAR, $this->cookieFile);
 
-            $headers = array(
-                'Content-Type: application/json; charset=utf-8',
-                'Accept: application/json',
-                'Connection: keep-alive',
-                'Expect:'
-            );
-            curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $headers);
-        }
-        else
-        {
-            $curlHandle = $this->curlHandle;
-        }
+        $headers = array(
+            'Content-Type: application/json; charset=utf-8',
+            'Accept: application/json',
+            'Connection: keep-alive',
+            'Expect:'
+        );
+        curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $headers);
 
         $this->lastUri = $uri;
         $this->lastMethod = $method;
         $this->lastResponse = NULL;
-
-        // allways reset some parameters to standard
-        curl_setopt($curlHandle, CURLOPT_URL, $uri);
-        curl_setopt($curlHandle, CURLOPT_NOBODY, 0);
-        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
 
         switch ($method)
         {
