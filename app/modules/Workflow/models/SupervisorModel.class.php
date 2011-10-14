@@ -113,14 +113,17 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     {
         $result = $this->getCouchClient()->getView(
             self::DATABASE_NAME, self::DESIGNDOC, "ticketByImportitem",
-            json_encode($record->getIdentifier())
+            json_encode($record->getIdentifier()),
+            0,
+            array('include_docs' => 'true')
         );
+
         if (empty($result['rows']))
         {
-            return new WorkflowTicket();
+            return $this->createNewTicketFroImportItem($record);
         }
 
-        $data = $this->getCouchClient()->getDoc(self::DATABASE_NAME, $result['rows'][0]['id']);
+        $data = $result['rows'][0]['doc'];
         /* @todo Remove debug code SupervisorModel.class.php from 13.10.2011 */
         error_log(date('r').' :: '.__METHOD__.' :: '.__LINE__."\n".print_r($data,1)."\n",3,'/tmp/errors.log');
         return new WorkflowTicket();
@@ -138,7 +141,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     public function createNewTicketFroImportItem(IDataRecord $record)
     {
         $ticket = new WorkflowTicket();
-        $ticket->setImportItem($importItem);
+        $ticket->setImportItem($record);
         $ticket->setWorkflow($this->getWorkflowByName('_init'));
         $this->saveTicket($ticket);
         return $ticket;
@@ -154,8 +157,6 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     {
         $document = $ticket->toArray();
         $result = $this->couchClient->storeDoc(self::DATABASE_NAME, $document);
-        /* @todo Remove debug code SupervisorModel.class.php from 13.10.2011 */
-        error_log(date('r').' :: '.__METHOD__.' :: '.__LINE__."\n".print_r($result,1)."\n",3,'/tmp/errors.log');
         return TRUE;
     }
 
@@ -173,10 +174,13 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     }
 
     /**
+     * load a saved import item for use in tickets
      *
+     * @see WorkflowTicket::fromArray()
+     * @todo implement Workflow_SupervisorModel::getImportItem
      *
      * @param string $identifier
-     * @return IImportItem
+     * @return IDataRecord
      */
     public function getImportItem($identifier)
     {
@@ -184,9 +188,12 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     }
 
     /**
+     * get a new WorkflowHandler instance for a named workflow
      *
-     * @throws AgaviUnreadableException
-     * @param string $name
+     * Workflows are defined by XML files under directory {@see WORKFLOW_CONFIG_DIR}
+     *
+     * @throws WorkflowExceptionon unreadable workflow configuration, etc.
+     * @param string $name name of workflow
      * @return WorkflowHandler
      */
     public function getWorkflowByName($name)

@@ -124,11 +124,11 @@ class WorkflowTicket implements Serializable
     /**
      * Sets the workflow attribute.
      *
-     * @param Workflow the new value for workflow
+     * @param WorkflowHandler the new value for workflow
      *
      * @return void
      */
-    public function setWorkflow(Workflow $workflow)
+    public function setWorkflow(WorkflowHandler $workflow)
     {
         $this->workflow = $workflow;
     }
@@ -136,7 +136,7 @@ class WorkflowTicket implements Serializable
     /**
      * Retrieves the workflow attribute.
      *
-     * @return       Workflow the value for workflow
+     * @return       WorkflowHandler the value for workflow
      */
     public function getWorkflow()
     {
@@ -172,7 +172,7 @@ class WorkflowTicket implements Serializable
      *
      * @return       void
      */
-    public function setImportItem(IImportItem $importItem)
+    public function setImportItem(IDataRecord $importItem)
     {
         $this->importItem = $importItem;
     }
@@ -180,7 +180,7 @@ class WorkflowTicket implements Serializable
     /**
      * Retrieves the importItem attribute.
      *
-     * @return       IImportItem the value for importItem
+     * @return       IDataRecord the value for importItem
      */
     public function getImportItem()
     {
@@ -304,8 +304,8 @@ class WorkflowTicket implements Serializable
     public function toArray()
     {
          $data = array(
-             'importItem' => $this->getImportItem()->getIdentifer(),
-             'workflow' => $this->getWorkflow()->getIdentifier(),
+             'importItem' => $this->getImportItem()->getIdentifier(),
+             'workflow' => $this->getWorkflow()->getName(),
              'currentStep' => $this->getCurrentStep(),
              'blocked' => $this->getBlocked(),
              'waitUntil' => $this->waitUntil instanceof DateTime ? $this->waitUntil->format(DATE_ISO8601) : NULL
