@@ -32,7 +32,12 @@
 
     <target name="compile-css" description="Compile our less code into real css.">
         <echo message="Compiling less syntax into real css."/>
-        <run command="bin/lessc pub/less/*.less" dir="${project.directory}" />
+        <run command="bin/lessc pub/less pub/css" dir="${project.directory}" />
+    </target>
+
+    <target name="watch-css" description="Watch our css code for changes and recompile when they occur.">
+        <echo message="Precompiling once and starting less file watcher."/>
+        <run command="bin/lessc pub/less pub/css -watch" dir="${project.directory}" />
     </target>
 
     <target name="import" description="Import messages from all configured sources">

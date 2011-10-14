@@ -10,15 +10,12 @@ else
 exit 0
 fi
 
-NODE_DIR="`dirname $0`/../dev/nodejs/node_modules"
-LESS_DIR="${NODE_DIR}/less/"
-LESSC_BIN="${LESS_DIR}/bin/lessc"
-LESS_LIB_DIR="${LESS_DIR}/lib/less"
-NODE_PATH=${LESS_LIB_DIR}:${NODE_PATH} 
+NODE_DIR="`dirname $0`/../dev/nodejs/"
+LESS_BIN="`readlink -f $NODE_DIR`/custom/less_compile/bin/cli.js"
 
-if (test -z "$LESSC_BIN") ; then
-  echo "WARNING: 'lessc' node executable not found at location: ${LESSC_BIN}"
+if (test -z "$LESS_BIN") ; then
+  echo "WARNING: executable not found at location: '$LESS_BIN'"
   exit 1
 fi
 
-$LESSC_BIN "$@"
+node $LESS_BIN "$@"
