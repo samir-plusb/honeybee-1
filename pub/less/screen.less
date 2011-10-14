@@ -1,0 +1,16 @@
+@image_basepath: "../images";
+@body_background: %("%s/bg-grey-slightlydarker.png", @image_basepath);
+@header_background: %("%s/bg-dark-repeatable.png", @image_basepath);
+
+body
+{
+	background: url(@body_background);
+    font-family: "Lucida Grande",Arial,sans-serif;
+
+    header
+    {
+        background: url(@header_background);
+    }
+}
+
+
