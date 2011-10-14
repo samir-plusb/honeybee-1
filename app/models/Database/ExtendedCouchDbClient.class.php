@@ -298,7 +298,8 @@ class ExtendedCouchDbClient
     public function storeDocAutoId($database, array $document)
     {
         $curlHandle = $this->getCurlHandle($this->baseUri.urlencode($database), self::METHOD_POST);
-        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, urlencode($this->encodeDocumentToJson($document)));
+        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $this->encodeDocumentToJson($document));
+        curl_setopt($curlHandle, CURLOPT_VERBOSE, 1);
         $data = $this->getJsonData($curlHandle, self::STATUS_CONFLICT);
         return $data;
     }
@@ -372,6 +373,8 @@ class ExtendedCouchDbClient
      *               [0] => Array
      *                   (
      *                      …
+     *                      [id] => …
+     *                      [[doc] => …]
      *                   )
      *           )
      *   )

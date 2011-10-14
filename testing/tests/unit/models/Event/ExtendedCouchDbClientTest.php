@@ -158,7 +158,7 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
          $this->client->createDatabase(self::DATABASE);
          $document = $this->document;
          unset($document['_id']);
-         $status = $this->client->storeDoc(self::DATABASE, $this->document);
+         $status = $this->client->storeDoc(self::DATABASE, $document);
          self::assertArrayHasKey('ok', $status);
          self::assertArrayHasKey('id', $status);
          self::assertArrayHasKey('rev', $status);
