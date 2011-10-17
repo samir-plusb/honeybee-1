@@ -1,223 +1,63 @@
-/**--------------------------------------------------------------------------------------
-    Global variables that define some basic look and feel params. Gather them here and
-    they'll be easy to change for the whole project with one modification.
---------------------------------------------------------------------------------------**/
+/**
+ * @section Variables
+ *
+ * @desc    Global variables that define some basic look and feel params. Gather them here and
+ *          they'll be easy to change for the whole project with one modification.
+ */
 @image_basepath: "../images";
 @body_background: %("%s/bg-grey-slightlydarker.png", @image_basepath);
 @header_background: %("%s/bg-dark-repeatable.png", @image_basepath);
-@content_full: 95%;
-@content_half: 45%;
 
-/**--------------------------------------------------------------------------------------
-    Form defaults.
---------------------------------------------------------------------------------------**/
-label
-{
-    display: block;
-    margin-bottom: 0.3em;
-    font-size: 0.9em;
-}
+@layout_spacing: 1em;
 
-textarea,
-input,
-select
-{
-    border: 1px solid #CCCCCC;
-}
+@editing_section_width: 60%;
+@editing_section_left_col: 60%;
+@editing_section_right_col: 40%; /* 100% - @editing_section_left_col */
 
-input,
-select
-{
-    box-shadow: 0 1px 0 #FFFFFF;
-    padding: 0.1em;
-    font-family: "EB Garamond";
-    font-size: 19px;
-}
+@data_section_width: 40%; /* 100% - @editing_section_width */
 
-select
-{
-    height: 30px;
-}
 
-/**---------------------------------------------------------------------------------------
-    Common style definitions that do not depend on the document structure
-    and are therefore broadly reusable.
---------------------------------------------------------------------------------------**/
-/*
-    Common base look for a list of buttons that trigger actions.
+/**
+ * @section Forms
+ *
+ * @desc    Defines the basic styling for all forms used inside the project.
  */
-.action-button-list
+form
 {
-    display: block;
-    overflow: hidden;
-    padding: 1em;
-
-    li
+    label
     {
-        background:rgba(0,0,0,0.05);
-        border: 0.1em solid rgba(0, 0, 0, 0.3);
-        box-shadow: 0 0.07em 0 rgba(255, 255, 255, 0.7) inset;
-        float: left;
-        list-style: none outside none;
-        text-decoration: none !important;
-        text-shadow:0px 0.05em 0px rgba(255,255,255,0.7);
-        border-radius: 5px 5px 5px 5px;
-        margin-right: 1em;
-        position: relative;
-
-        a
-        {
-             color: #000000;
-             text-decoration: none;
-             font-size: 0.9em;
-             display: block;
-             padding: 0.3em 1em;
-        }
-
-        a:active
-        {
-            outline: none;
-        }
-    }
-
-    li:hover
-    {
-        background:rgba(0,0,0,0.1);
-
-        a
-        {
-            color: #fff;
-            text-shadow: 0px 0px 4px #fff;
-        }
-    }
-}
-
-/*
-    Common styles for small info boxes.
- */
-.info-small
-{
-    background-color: #FF0000;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 2px 2px 2px 2px;
-    color: #FFFFFF;
-    font-family: arial;
-    font-size: 13px !important;
-}
-
-/*
-    General styling for content panels.
- */
-@legend_height: 2em;
-.content-panel
-{
-    background-color: #F6F6F6;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    box-shadow: 0 5px 3px rgba(0, 0, 0, 0.2);
-    background: none repeat scroll 0 0 #FDFEFE;
-    border-radius: 5px 5px 5px 5px;
-    text-shadow: 0 1px 0 #FFFFFF;
-    margin-bottom: 1em;
-    margin-left: 1em;
-    position: relative;
-    padding: @legend_height 1em 1em 1em;
-
-    legend
-    {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        border-bottom: 1px solid #CCCCCC;
-        box-shadow: 0 0.05em 0 #FFFFFF;
         display: block;
         font-size: 0.9em;
-        padding: 0.5em 1em;
-        width: auto;
-    }
-}
-
-
-/*---------------------------------------------------------------------------------------
-    Document specific styles.
----------------------------------------------------------------------------------------*/
-body
-{
-	background: url(@body_background);
-    font-family: "Lucida Grande", Arial, sans-serif;
-}
-
-header
-{
-    background: url(@header_background);
-    color: #ffffff;
-    position: relative;
-
-    h1
-    {
-        padding: 1em;
-
-        a
-        {
-            color: #FFFFFF;
-            font-weight: bold;
-            text-decoration: none;
-        }
+        margin-bottom: 0.3em;
+        text-shadow: 0 0.05em 0 #FFFFFF;
     }
 
-    .personal-info
+    textarea,
+    input,
+    select
     {
-        padding: 1.1em;
-        position: absolute;
-        right: 0;
-        top: 0;
-
-        h2
-        {
-            display: none;
-        }
-
-        p
-        {
-            font-size: 0.9em;
-        }
-    }
-}
-
-menu
-{
-    clear: both;
-    overflow: hidden;
-
-    h2
-    {
-        display: none;
+        border: 1px solid #CCCCCC;
     }
 
-    .info-small
+    input,
+    select,
+    textarea
     {
-        padding: 0 4px;
-        text-align: center;
-        position: absolute;
-        left: 53px;
-        top: -7px;
+        box-shadow: 0 0.05em 0 #FFFFFF;
+        font-family: "EB Garamond", Garamond, serif;
+        font-size: 1.2em;
+        padding: 0.1em;
     }
-}
 
-.document-editing
-{
-    width: 55%;
-    float: left;
-
-    h2
+    select
     {
-        display: none;
+        height: 1.5em;
     }
 
     .input-full,
     .input-left
     {
-        margin-top: 1em;
+        margin-top: @layout_spacing;
     }
 
     .input-full
@@ -236,56 +76,208 @@ menu
     .input-left
     {
         float: left;
-        margin-right: 1em;
+        margin-right: @layout_spacing;
+    }
+}
+
+/**
+ * @section Commons
+ *
+ * @desc    Common style definitions that do not depend on the document structure
+ *          and are therefore broadly reusable.
+ */
+.action-button-list
+{
+    overflow: hidden;
+    padding: @layout_spacing;
+
+    li
+    {
+        background: rgba(0, 0, 0, 0.05);
+        border: 0.1em solid rgba(0, 0, 0, 0.3);
+        border-radius: 5px 5px 5px 5px;
+        box-shadow: 0 0.07em 0 rgba(255, 255, 255, 0.7) inset;
+        float: left;
+        list-style: none outside none;
+        margin-right: @layout_spacing;
+        position: relative;
+        text-shadow: 0 0.05em 0 rgba(255, 255, 255, 0.7);
+
+        a
+        {
+            color: #000000;
+            display: block;
+            font-size: 0.9em;
+            padding: 0.3em 1em;
+            text-decoration: none;
+
+            &:active
+            {
+                outline: none;
+            }
+        }
+
+        &:hover
+        {
+            background: rgba(0, 0 , 0, 0.1);
+
+            a
+            {
+                color: #ffffff;
+                text-shadow: 0 0 4px #ffffff;
+            }
+        }
+    }
+}
+
+/* Common styles for small info boxes. */
+.info-small
+{
+    background-color: #FF0000;
+    border: 0.05em solid rgba(0, 0, 0, 0.3);
+    border-radius: 2px 2px 2px 2px;
+    color: #FFFFFF;
+    font-family: arial;
+    font-size: 0.8em;
+}
+
+/* General styling for content panels. */
+@legend_height: 2em;
+.content-panel
+{
+    background: none repeat scroll 0 0 #F6F6F6;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 5px 3px rgba(0, 0, 0, 0.2);
+    margin-bottom: @layout_spacing;
+    margin-left: @layout_spacing;
+    padding: @legend_height 1em 1em 1em;
+    position: relative;
+
+    .legend,
+    legend
+    {
+        border-bottom: 1px solid #CCCCCC;
+        box-shadow: 0 0.05em 0 #FFFFFF;
+        display: block;
+        font-size: 0.9em;
+        padding: 0.5em 1em;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: auto;
+    }
+}
+
+
+/**
+ * @section EditItemSuccess
+ *
+ * @desc    Holds the styles for the /Items/EditSuccess template.
+ */
+body
+{
+	background: url(@body_background);
+    color: #333333;
+    font-family: "Lucida Grande", Arial, sans-serif;
+}
+
+/* Header styles, hence page-title and individual, user dedicated data. */
+header
+{
+    background: url(@header_background);
+    color: #ffffff;
+    position: relative;
+
+    h1
+    {
+        padding: @layout_spacing;
+
+        a
+        {
+            color: #FFFFFF;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    }
+
+    .personal-info
+    {
+        padding: @layout_spacing;
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        h2
+        {
+            display: none;
+        }
+    }
+}
+
+/* The main form section of the edit success markup. */
+.document-editing
+{
+    float: left;
+    position: relative;
+    width: @editing_section_width;
+
+    h2
+    {
+        display: none;
+    }
+
+    .action-button-list
+    {
+        .info-small
+        {
+            left: 53px;
+            padding: 0 4px;
+            position: absolute;
+            text-align: center;
+            top: -7px;
+        }
     }
 
     .editor
     {
-        margin-bottom: 1em;
+        margin-bottom: @layout_spacing;
     }
 
     .title
     {
+        border-top: 1px solid #CCCCCC;
         clear: both;
         padding-top: 1em;
-        border-top: 1px solid #CCCCCC;
     }
 
-    .geo-data,
-    .datetime-data,
-    .nearby-items
-    {
-        width: 42.7%;
-        float: left;
-    }
-
-    .datetime-data,
-    .nearby-items
-    {
-        margin: 0;
-    }
-
-    .datetime-data
-    {
-        margin-bottom: 1em;
-    }
-
-    .geo-data
+    .extra-data-left
     {
         float: left;
-        margin-right: 1em;
+        width: 60%;
+    }
+
+    .extra-data-right
+    {
+        float: left;
+        width: 40%;
     }
 }
 
+/* Styles that go with the import item data displayed inside the right column. */
 .document-data
 {
-    width: 44%;
     float: left;
-    margin-left: 0.3em;
+    width: @data_section_width;
+
+    h2
+    {
+        display: none;
+    }
 
     .content-panel
     {
-        margin: 0 0 1em 0;
+        margin-right: @layout_spacing;
     }
-
 }
