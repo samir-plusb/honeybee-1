@@ -8,7 +8,7 @@
  * @author          Tom Anheyer
  * @package         Workflow
  */
-class WorkflowModuleSetup
+class WorkflowModuleSetup implements ICouchDatabaseSetup
 {
     /**
      *
@@ -65,7 +65,7 @@ class WorkflowModuleSetup
      */
     protected function createDatabase()
     {
-        $this->getDatabase()->createDatabase(Workflow_SupervisorModel::DATABASE_NAME);
+        $this->getDatabase()->createDatabase($this->supervisor->getDatabaseName());
     }
 
     /**
@@ -73,7 +73,7 @@ class WorkflowModuleSetup
      */
     protected function deleteDatabase()
     {
-        $this->getDatabase()->deleteDatabase(Workflow_SupervisorModel::DATABASE_NAME);
+        $this->getDatabase()->deleteDatabase($this->supervisor->getDatabaseName());
     }
 
     /**
@@ -92,13 +92,13 @@ class WorkflowModuleSetup
         );
 
         $docId = 'designWorkflow';
-        $stat = $this->getDatabase()->getDesignDocument(Workflow_SupervisorModel::DATABASE_NAME, $docId);
+        $stat = $this->getDatabase()->getDesignDocument($this->supervisor->getDatabaseName(), $docId);
         if (isset($stat['_rev']))
         {
             $doc['_rev'] = $stat['_rev'];
         }
 
-        $stat = $this->getDatabase()->createDesignDocument(Workflow_SupervisorModel::DATABASE_NAME, $docId, $doc);
+        $stat = $this->getDatabase()->createDesignDocument($this->supervisor->getDatabaseName(), $docId, $doc);
         if (isset($stat['ok']))
         {
             echo 'Successfully saved _design/'.$docId."\n";

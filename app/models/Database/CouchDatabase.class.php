@@ -2,6 +2,7 @@
 /**
  * Provide couch database connection handle
  *
+ * @package Database
  * @author tay
  * @version $Id$
  * @since 10.10.2011
@@ -47,7 +48,8 @@ class CouchDatabase extends AgaviDatabase
     }
 
     /**
-     * uses parameter 'database' for setup a default database
+     * uses parameter 'database' for setup a default database and the parameter 'setup' to initialize the
+     * freshly generated database
      *
      * @throws AgaviDatabaseException
      */
@@ -69,9 +71,41 @@ class CouchDatabase extends AgaviDatabase
             {
                 throw new AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
             }
-        }
 
+            if ($this->hasParameter('setup'))
+            {
+                $this->setupDatabase($this->getParameter('setup'));
+            }
+        }
     }
+
+
+    /**
+     * prepare database for use using the class defined in the parameter 'setup'
+     *
+     * The setup class must implement the interface ICouchDatabaseSetup
+     *
+     * @see ICouchDatabaseSetup
+     * @param string $class name of class that implements ICouchDatabaseSetup
+     * @throws AgaviDatabaseException
+     */
+    protected function setupDatabase($class)
+    {
+        if (! class_exists($class))
+        {
+            throw new AgaviDatabaseException('Setup class does not exists: '.$class);
+        }
+        $setup = new $class();
+        if ($setup instanceof ICouchDatabaseSetup)
+        {
+            $setup->setup();
+        }
+        else
+        {
+            throw new AgaviDatabaseException('Setup class does not implement ICouchDatabaseSetup: '.$class);
+        }
+    }
+
 
     /**
      * uses parameters 'user' and 'password' for user authentification

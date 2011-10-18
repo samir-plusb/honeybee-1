@@ -46,6 +46,12 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     private $couchClient;
 
     /**
+     *
+     * @var string name of couchdb database
+     */
+    private $databaseName;
+
+    /**
      * @return Workflow_SupervisorModel
      */
     static function getInstance()
@@ -61,6 +67,20 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         return $model;
     }
 
+
+    /**
+     * (non-PHPdoc)
+     * @see AgaviModel::initialize()
+     */
+    public function initialize(AgaviContext $context, array $parameters = array())
+    {
+        parent::initialize($context, $parameters);
+        $database = $this->context->getDatabaseManager()->getDatabase(self::DATABASE_CONFIG_NAME);
+        $this->couchClient = $database->getConnection();
+        $this->databaseName = $database->getResource();
+    }
+
+
     /**
      * get couchdb client handle instance from agavi database manager
      *
@@ -68,11 +88,17 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
      */
     public function getCouchClient()
     {
-        if (! $this->couchClient)
-        {
-            $this->couchClient = AgaviContext::getInstance()->getDatabaseConnection(self::DATABASE_CONFIG_NAME);
-        }
         return $this->couchClient;
+    }
+
+
+    /**
+     * get couchdb database name as defined in the agavi database config
+     * @return string
+     */
+    public function getDatabaseName()
+    {
+        return $this->databaseName;
     }
 
 
@@ -112,7 +138,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     public function getTicketByImportitem(IDataRecord $record)
     {
         $result = $this->getCouchClient()->getView(
-            self::DATABASE_NAME, self::DESIGNDOC, "ticketByImportitem",
+            $this->getDatabaseName(), self::DESIGNDOC, "ticketByImportitem",
             json_encode($record->getIdentifier()),
             0,
             array('include_docs' => 'true')
@@ -156,7 +182,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     public function saveTicket(WorkflowTicket $ticket)
     {
         $document = $ticket->toArray();
-        $result = $this->couchClient->storeDoc(self::DATABASE_NAME, $document);
+        $result = $this->couchClient->storeDoc($this->getDatabaseName(), $document);
         return TRUE;
     }
 

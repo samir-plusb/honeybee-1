@@ -5,6 +5,18 @@
             <database name="CouchWorkflow" class="CouchDatabase">
                 <ae:parameter name="url">http://localhost:5984/</ae:parameter>
                 <ae:parameter name="database">workflow</ae:parameter>
+                <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
+<!--                 <ae:parameter name="user">admin</ae:parameter> -->
+<!--                 <ae:parameter name="password">admin</ae:parameter> -->
+            </database>
+        </databases>
+    </ae:configuration>
+    <ae:configuration  environment="testing.*">
+        <databases default="CouchWorkflow">
+            <database name="CouchWorkflow" class="CouchDatabase">
+                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="database">workflowtesting</ae:parameter>
+                <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
 <!--                 <ae:parameter name="user">admin</ae:parameter> -->
 <!--                 <ae:parameter name="password">admin</ae:parameter> -->
             </database>
