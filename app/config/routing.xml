@@ -41,7 +41,7 @@
                         xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
             </route>
 
-            <route pattern="^/worflow" module="Workflow">
+            <route pattern="^/workflow" module="Workflow">
                 <xi:include
                     href="%core.app_dir%/modules/Import/config/routing.xml"
                     xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
@@ -50,7 +50,11 @@
             </route>
 
             <route pattern="^/items" module="Items">
-                <route pattern="^/list/$" action="List" />
+                <xi:include
+                    href="%core.app_dir%/modules/Items/config/routing.xml"
+                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+                        xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
+                        xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
             </route>
 
             <!-- The last route in case the input URL is just "/". -->
@@ -71,6 +75,12 @@
 
     <xi:include 
         href="%core.app_dir%/modules/Asset/config/routing.xml" 
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
+    </xi:include>
+
+    <xi:include 
+        href="%core.app_dir%/modules/Items/config/routing.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
             xpointer(/ae:configurations/ae:configuration[@context='console'])/">
     </xi:include>
