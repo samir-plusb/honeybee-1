@@ -29,11 +29,13 @@ LessCompiler.compileFile = function(less_file, target_path)
         {
             if (err)
             {
-                util.log("[LessCompiler][Error] Failed to parse " + less_file + "\n" + err.toString());
+                util.log("Error - LessCompiler.compileFile - Failed to parse " + less_file + "\n" + err.toString());
             }
-
-            filesystem.writeFileSync(target_path, compiled_css);
-            util.log("[LessCompiler][INFO] Compiled: " + less_file);
+            else
+            {
+                filesystem.writeFileSync(target_path, compiled_css);
+                util.log("INFO - LessCompiler.compileFile - Compiled: " + less_file);
+            }
         })
     });
 };
