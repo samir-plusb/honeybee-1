@@ -1,0 +1,191 @@
+/**
+ * @section Variables
+ *
+ * @desc    Global variables that define some basic look and feel params. Gather them here and
+ *          they'll be easy to change for the whole project with one modification.
+ */
+/* 100% - @editing_section_left_col */
+/* 100% - @editing_section_width */
+/**
+ * @section Forms
+ *
+ * @desc    Defines the basic styling for all forms used inside the project.
+ */
+form label {
+  display: block;
+  font-size: 0.9em;
+  margin-bottom: 0.3em;
+  text-shadow: 0 0.05em 0 #FFFFFF;
+}
+form textarea, form input, form select {
+  border: 1px solid #CCCCCC;
+}
+form input, form select, form textarea {
+  box-shadow: 0 0.05em 0 #FFFFFF;
+  font-family: "EB Garamond", Garamond, serif;
+  font-size: 1.2em;
+  padding: 0.1em;
+}
+form select {
+  height: 1.5em;
+}
+form .input-full, form .input-left {
+  margin-top: 1em;
+}
+form .input-full {
+  position: relative;
+}
+form .input-full textarea, form .input-full input, form .input-full select {
+  display: block;
+  width: 100%;
+}
+form .input-left {
+  float: left;
+  margin-right: 1em;
+}
+/**
+ * @section Commons
+ *
+ * @desc    Common style definitions that do not depend on the document structure
+ *          and are therefore broadly reusable.
+ */
+.action-button-list {
+  overflow: hidden;
+  padding: 1em;
+}
+.action-button-list li {
+  background: rgba(0, 0, 0, 0.05);
+  border: 0.1em solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0 0.07em 0 rgba(255, 255, 255, 0.7) inset;
+  float: left;
+  list-style: none outside none;
+  margin-right: 1em;
+  position: relative;
+  text-shadow: 0 0.05em 0 rgba(255, 255, 255, 0.7);
+}
+.action-button-list li a {
+  color: #000000;
+  display: block;
+  font-size: 0.9em;
+  padding: 0.3em 1em;
+  text-decoration: none;
+}
+.action-button-list li a:active {
+  outline: none;
+}
+.action-button-list li:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+.action-button-list li:hover a {
+  color: #ffffff;
+  text-shadow: 0 0 4px #ffffff;
+}
+/* Common styles for small info boxes. */
+.info-small {
+  background-color: #FF0000;
+  border: 0.05em solid rgba(0, 0, 0, 0.3);
+  border-radius: 2px 2px 2px 2px;
+  color: #FFFFFF;
+  font-family: arial;
+  font-size: 0.8em;
+}
+/* General styling for content panels. */
+.content-panel {
+  background: none repeat scroll 0 0 #F6F6F6;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0 5px 3px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1em;
+  margin-left: 1em;
+  padding: 2em 1em 1em 1em;
+  position: relative;
+}
+.content-panel .legend, .content-panel legend {
+  border-bottom: 1px solid #CCCCCC;
+  box-shadow: 0 0.05em 0 #FFFFFF;
+  display: block;
+  font-size: 0.9em;
+  padding: 0.5em 1em;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
+/**
+ * @section EditItemSuccess
+ *
+ * @desc    Holds the styles for the /Items/EditSuccess template.
+ */
+body {
+  background: url("../images/bg-grey-slightlydarker.png");
+  color: #333333;
+  font-family: "Lucida Grande", Arial, sans-serif;
+}
+/* Header styles, hence page-title and individual, user dedicated data. */
+header {
+  background: url("../images/bg-dark-repeatable.png");
+  color: #ffffff;
+  position: relative;
+}
+header h1 {
+  padding: 1em;
+}
+header h1 a {
+  color: #FFFFFF;
+  font-weight: bold;
+  text-decoration: none;
+}
+header .personal-info {
+  padding: 1em;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+header .personal-info h2 {
+  display: none;
+}
+/* The main form section of the edit success markup. */
+.document-editing {
+  float: left;
+  position: relative;
+  width: 60%;
+}
+.document-editing h2 {
+  display: none;
+}
+.document-editing .action-button-list .info-small {
+  left: 53px;
+  padding: 0 4px;
+  position: absolute;
+  text-align: center;
+  top: -7px;
+}
+.document-editing .editor {
+  margin-bottom: 1em;
+}
+.document-editing .title {
+  border-top: 1px solid #CCCCCC;
+  clear: both;
+  padding-top: 1em;
+}
+.document-editing .extra-data-left {
+  float: left;
+  width: 60%;
+}
+.document-editing .extra-data-right {
+  float: left;
+  width: 40%;
+}
+/* Styles that go with the import item data displayed inside the right column. */
+.document-data {
+  float: left;
+  width: 40%;
+}
+.document-data h2 {
+  display: none;
+}
+.document-data .content-panel {
+  margin-right: 1em;
+}
