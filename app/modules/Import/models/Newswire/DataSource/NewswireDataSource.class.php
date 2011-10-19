@@ -13,7 +13,7 @@
 class NewswireDataSource extends ImportBaseDataSource
 {
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      * @var         GlobIterator Iterator over the newswire messages
      */
@@ -32,12 +32,12 @@ class NewswireDataSource extends ImportBaseDataSource
      * @var         int UNIX timestamp of last fetched item
      */
     protected $lastItemModifiedTime;
-    
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
 
-    
+
     // ---------------------------------- <ImportBaseDataSource OVERRIDES> -----------------------
-    
+
     /**
      * initialize timestamp file and subscribe to success events
      *
@@ -58,7 +58,7 @@ class NewswireDataSource extends ImportBaseDataSource
             array($this, 'importSucceeded')
         );
     }
-    
+
     /**
      * Return a path to our current data origin.
      *
@@ -68,12 +68,12 @@ class NewswireDataSource extends ImportBaseDataSource
     {
         return $this->iterator->current();
     }
-    
+
     // ---------------------------------- </ImportBaseDataSource OVERRIDES> ----------------------
-    
-    
+
+
     // ---------------------------------- <ImportBaseDataSource IMPL> ----------------------------
-    
+
     /**
      * initialize internal used GlobIterator
      *
@@ -129,6 +129,8 @@ class NewswireDataSource extends ImportBaseDataSource
     protected function fetchData()
     {
         $file = $this->iterator->current();
+        $__logger=AgaviContext::getInstance()->getLoggerManager();
+        $__logger->log(__CLASS__.' import: '.$file, AgaviILogger::INFO);
         $content = file_get_contents($file);
         $this->lastItemModifiedTime = $this->iterator->getMTime();
 
@@ -136,10 +138,10 @@ class NewswireDataSource extends ImportBaseDataSource
     }
 
     // ---------------------------------- </ImportBaseDataSource IMPL> ---------------------------
-    
-    
+
+
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-    
+
     /**
      * store the timestamp of last imported record
      *
@@ -167,12 +169,16 @@ class NewswireDataSource extends ImportBaseDataSource
      *
      * @param       IEvent $event
      * @uses        updateTimestamp()
-     * 
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
     public function importSucceeded(IEvent $event) // @codingStandardsIgnoreEnd
     {
+        /* @todo Remove debug code NewswireDataSource.class.php from 19.10.2011 */
+        $__logger=AgaviContext::getInstance()->getLoggerManager();
+        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__);
+        $__logger->log(print_r($event,1));
         $this->updateTimestamp($this->lastItemModifiedTime);
     }
 
@@ -196,7 +202,7 @@ class NewswireDataSource extends ImportBaseDataSource
     {
         return array('config', 'timestampFile', 'lastImportTime');
     }
-    
+
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 

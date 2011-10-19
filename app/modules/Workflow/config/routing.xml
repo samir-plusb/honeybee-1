@@ -12,7 +12,6 @@
     <ae:configuration context="console">
         <routes>
             <route pattern="workflow." module="Workflow">
-                <route pattern="setup" action="Setup" />
             </route>
         </routes>
     </ae:configuration>

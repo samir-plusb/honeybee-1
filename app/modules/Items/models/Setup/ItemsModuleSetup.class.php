@@ -3,23 +3,24 @@
 /**
  * The ItemsModuleSetup is responseable for setting up our module for usage.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Items
  * @subpackage      Setup
  */
-class ItemsModuleSetup
+class ItemsModuleSetup implements ICouchDatabaseSetup
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------
-    
+
     /**
      * Holds the name of our couchdb database.
      */
     const COUCHDB_DATABASE = 'midas_import';
-    
+    const DESIGN_DOCID = 'items';
+
     // ---------------------------------- </CONSTANTS> -------------------------------------------
-    
+
 
     // ---------------------------------- <MEMBERS> ----------------------------------------------
 
@@ -40,9 +41,9 @@ class ItemsModuleSetup
      */
     public function __construct()
     {
-        $this->couchDbClient = new ExtendedCouchDbClient(
-            $this->buildCouchDbUri()
-        );
+        /* @var AgaviDatabase */
+        $database = AgaviContext::getInstance()->getDatabaseManager()->getDatabase(self::COUCHDB_DATABASE);
+        $this->couchDbClient = $database->getConnection();
     }
 
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
@@ -63,8 +64,8 @@ class ItemsModuleSetup
             $this->tearDown();
         }
 
-        $this->createDatabase(self::COUCHDB_DATABASE);
-        $this->initItemsView(self::COUCHDB_DATABASE);
+        $this->createDatabase();
+        $this->initViews();
     }
 
     /**
@@ -72,7 +73,7 @@ class ItemsModuleSetup
      */
     public function tearDown()
     {
-        $this->deleteDatabase(self::COUCHDB_DATABASE);
+        $this->deleteDatabase();
     }
 
     // ---------------------------------- </PUBLIC METHODS> --------------------------------------
@@ -83,19 +84,19 @@ class ItemsModuleSetup
     /**
      * Create our couchdb database.
      */
-    protected function createDatabase($database)
+    protected function createDatabase()
     {
-        $this->couchDbClient->createDatabase($database);
+        $this->couchDbClient->createDatabase(NULL);
     }
 
     /**
      * Delete our couchdb database.
      */
-    protected function deleteDatabase($database)
+    protected function deleteDatabase()
     {
         try
         {
-            $this->couchDbClient->deleteDatabase($database);
+            $this->couchDbClient->deleteDatabase(NULL);
         }
         catch (CouchDbClientException $e)
         {
@@ -108,30 +109,41 @@ class ItemsModuleSetup
         }
     }
 
+
     /**
      * Create a couchdb view used to fetch our current id from our idsequence.
      */
-    protected function initItemsView($database)
+    protected function initViews()
     {
-        $designDoc = array(
-            'views' => array(
-                'list' => array(
-                    'map' => 'function(doc)
-                    {
-                        var key = null;
-
-                        if (doc.timestamp)
-                        {
-                            key = doc.timestamp;
-                        }
-
-                        emit(key, doc);
-                    }'
-                )
-            )
+        $views = array();
+        foreach (glob(__DIR__.'/*.map.js') as $fname)
+        {
+            $viewName = preg_replace('/.*\/(.*?)\.map\.js$/', '$1', $fname);
+            $views[$viewName]['map'] = file_get_contents($fname);
+        }
+        $doc = array(
+            'views' => $views
         );
 
-        $this->couchDbClient->createDesignDocument($database, 'items', $designDoc);
+        $docId = self::DESIGN_DOCID;
+        $stat = $this->couchDbClient->getDesignDocument(NULL, $docId);
+        if (isset($stat['_rev']))
+        {
+            $doc['_rev'] = $stat['_rev'];
+        }
+
+        $stat = $this->couchDbClient->createDesignDocument(NULL, $docId, $doc);
+        if (isset($stat['ok']))
+        {
+            $__logger=AgaviContext::getInstance()->getLoggerManager();
+            $__logger->log('Successfully saved '.$this->getDatabase()->getDatabaseName().'_design/'.$docId, AgaviILogger::INFO);
+        }
+        else
+        {
+            $__logger=AgaviContext::getInstance()->getLoggerManager();
+            $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__, AgaviILogger::ERROR);
+            $__logger->log(print_r($stat,1), AgaviILogger::ERROR);
+        }
     }
 
     /**

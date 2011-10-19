@@ -146,7 +146,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
 
         if (empty($result['rows']))
         {
-            return $this->createNewTicketFroImportItem($record);
+            return $this->createNewTicketFromImportItem($record);
         }
 
         $data = $result['rows'][0]['doc'];
@@ -159,12 +159,12 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     /**
      * create a ticket for a newly imported item
      *
-     * @todo move method createNewTicketFroImportItem to a ticket handler class
+     * @todo move method createNewTicketFromImportItem to a ticket handler class
      *
      * @param IDataRecord $record
      * @return WorkflowTicket
      */
-    public function createNewTicketFroImportItem(IDataRecord $record)
+    public function createNewTicketFromImportItem(IDataRecord $record)
     {
         $ticket = new WorkflowTicket();
         $ticket->setImportItem($record);

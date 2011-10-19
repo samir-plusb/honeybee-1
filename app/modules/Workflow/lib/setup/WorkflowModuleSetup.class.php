@@ -39,7 +39,7 @@ class WorkflowModuleSetup implements ICouchDatabaseSetup
         }
 
         $this->createDatabase();
-        $this->initItemsView();
+        $this->initViews();
     }
 
     /**
@@ -65,7 +65,7 @@ class WorkflowModuleSetup implements ICouchDatabaseSetup
      */
     protected function createDatabase()
     {
-        $this->getDatabase()->createDatabase($this->supervisor->getDatabaseName());
+        $this->getDatabase()->createDatabase(NULL);
     }
 
     /**
@@ -73,13 +73,13 @@ class WorkflowModuleSetup implements ICouchDatabaseSetup
      */
     protected function deleteDatabase()
     {
-        $this->getDatabase()->deleteDatabase($this->supervisor->getDatabaseName());
+        $this->getDatabase()->deleteDatabase(NULL);
     }
 
     /**
      * Create a couchdb view used to fetch our current id from our idsequence.
      */
-    protected function initItemsView()
+    protected function initViews()
     {
         $views = array();
         foreach (glob(__DIR__.'/*.map.js') as $fname)
@@ -92,21 +92,23 @@ class WorkflowModuleSetup implements ICouchDatabaseSetup
         );
 
         $docId = 'designWorkflow';
-        $stat = $this->getDatabase()->getDesignDocument($this->supervisor->getDatabaseName(), $docId);
+        $stat = $this->getDatabase()->getDesignDocument(NULL, $docId);
         if (isset($stat['_rev']))
         {
             $doc['_rev'] = $stat['_rev'];
         }
 
-        $stat = $this->getDatabase()->createDesignDocument($this->supervisor->getDatabaseName(), $docId, $doc);
+        $stat = $this->getDatabase()->createDesignDocument(NULL, $docId, $doc);
         if (isset($stat['ok']))
         {
-            echo 'Successfully saved _design/'.$docId."\n";
+            $__logger=AgaviContext::getInstance()->getLoggerManager();
+            $__logger->log('Successfully saved '.$this->getDatabase()->getDatabaseName().'_design/'.$docId, AgaviILogger::INFO);
         }
         else
         {
-            error_log(__METHOD__.":".__LINE__);
-            error_log(print_r($stat));
+            $__logger=AgaviContext::getInstance()->getLoggerManager();
+            $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__, AgaviILogger::ERROR);
+            $__logger->log(print_r($stat,1), AgaviILogger::ERROR);
         }
     }
 

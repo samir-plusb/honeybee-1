@@ -122,22 +122,9 @@ abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
      */
     protected static function setupDatabase()
     {
-        $couchDbHost = AgaviConfig::get('couchdb.import.host', ExtendedCouchDbClient::DEFAULT_HOST);
-        $couchDbPort = AgaviConfig::get('couchdb.import.port', ExtendedCouchDbClient::DEFAULT_PORT);
-        $couchDbDatabase = AgaviConfig::get('couchdb.import.database');
-        $couchUri = sprintf('http://%s:%d/', $couchDbHost, $couchDbPort);
-
-        $coucDbClient = new ExtendedCouchDbClient($couchUri);
-
-        try
-        {
-            $coucDbClient->createDatabase($couchDbDatabase);
-        }
-        catch(CouchdbClientException $e)
-        {
-            $coucDbClient->deleteDatabase($couchDbDatabase);
-            $coucDbClient->createDatabase($couchDbDatabase);
-        }
+        $coucDbClient = AgaviContext::getInstance()->getDatabaseConnection(CouchDbDataImport::DATABASE_CONFIG);
+        $coucDbClient->deleteDatabase(NULL);
+        $coucDbClient->createDatabase(NULL);
     }
 
     // @codeCoverageIgnoreEnd

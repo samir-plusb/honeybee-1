@@ -6,19 +6,25 @@
                 <ae:parameter name="url">http://localhost:5984/</ae:parameter>
                 <ae:parameter name="database">workflow</ae:parameter>
                 <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
-<!--                 <ae:parameter name="user">admin</ae:parameter> -->
-<!--                 <ae:parameter name="password">admin</ae:parameter> -->
+            </database>
+             <database name="midas_import" class="CouchDatabase">
+                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="database">midas_import</ae:parameter>
+                <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
             </database>
         </databases>
     </ae:configuration>
-    <ae:configuration  environment="testing.*">
+    <ae:configuration environment="testing.*">
         <databases default="CouchWorkflow">
             <database name="CouchWorkflow" class="CouchDatabase">
                 <ae:parameter name="url">http://localhost:5984/</ae:parameter>
                 <ae:parameter name="database">workflowtesting</ae:parameter>
                 <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
-<!--                 <ae:parameter name="user">admin</ae:parameter> -->
-<!--                 <ae:parameter name="password">admin</ae:parameter> -->
+            </database>
+             <database name="midas_import" class="CouchDatabase">
+                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="database">midas_import_testing</ae:parameter>
+                <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
             </database>
         </databases>
     </ae:configuration>

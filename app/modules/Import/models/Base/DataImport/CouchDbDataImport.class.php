@@ -36,6 +36,11 @@ class CouchDbDataImport extends BaseDataImport
      */
     const DEFAULT_BUFFER_SIZE = 50;
 
+    /**
+     * Name of database config section
+     */
+    const DATABASE_CONFIG = 'midas_import';
+
     // ---------------------------------- </CONSTANTS> -------------------------------------------
 
 
@@ -103,9 +108,7 @@ class CouchDbDataImport extends BaseDataImport
     {
         parent::init($dataSource);
 
-        $this->couchClient = new ExtendedCouchDbClient(
-            $this->buildCouchDbUri()
-        );
+        $this->couchClient = AgaviContext::getInstance()->getDatabaseConnection(self::DATABASE_CONFIG);
 
         $this->importBuffer = array();
         $this->importBufferSize = $this->config->getSetting(
@@ -183,7 +186,6 @@ class CouchDbDataImport extends BaseDataImport
      */
     protected function flushImportBuffer()
     {
-        $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
         $couchData = array();
 
         foreach ($this->importBuffer as $bufferedRecord)
@@ -192,7 +194,7 @@ class CouchDbDataImport extends BaseDataImport
         }
 
         $updateData = $this->handleCouchDbResponse(
-            $this->couchClient->storeDocs($database, $couchData)
+            $this->couchClient->storeDocs(NULL, $couchData)
         );
 
         if (! empty($updateData))
@@ -201,7 +203,7 @@ class CouchDbDataImport extends BaseDataImport
             // @todo what about success notification for update records?
             // maybe make a difference between create and update events?
             $this->handleCouchDbResponse(
-                $this->couchClient->storeDocs($database, $updateData)
+                $this->couchClient->storeDocs(NULL, $updateData)
             );
         }
     }
@@ -267,13 +269,12 @@ class CouchDbDataImport extends BaseDataImport
      */
     protected function createUpdateData($docId)
     {
-        $database = $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE);
-        $rev = $this->couchClient->statDoc($database, $docId);
+        $rev = $this->couchClient->statDoc(NULL, $docId);
 
         if (0 !== $rev)
         {
             $data = $this->convertRecord($this->importBuffer[$docId]);
-            $oldDoc = $this->couchClient->getDoc($database, $docId);
+            $oldDoc = $this->couchClient->getDoc(NULL, $docId);
 
             foreach ($data as $key => $val)
             {
