@@ -8,20 +8,22 @@
             <autoload name="ProjectBaseView">%core.lib_dir%/base/ProjectBaseView.class.php</autoload>
 
             <autoload name="ProjectLanguageRoutingCallback">%core.lib_dir%/routing/ProjectLanguageRoutingCallback.class.php</autoload>
+            <autoload name="ProjectScriptFilter">%core.lib_dir%/filter/ProjectScriptFilter.class.php</autoload>
+            <autoload name="ProjectScriptsConfigHandler">%core.lib_dir%/config_handler/ProjectScriptsConfigHandler.class.php</autoload>
 
             <autoload name="IComparable">%core.app_dir%/models/Core/IComparable.iface.php</autoload>
             <autoload name="ExtendedCouchDbClient">%core.app_dir%/models/Database/ExtendedCouchDbClient.class.php</autoload>
             <autoload name="CouchDatabase">%core.app_dir%/models/Database/CouchDatabase.class.php</autoload>
             <autoload name="ICouchDatabaseSetup">%core.app_dir%/models/Database/ICouchDatabaseSetup.iface.php</autoload>
-            
+
             <autoload name="IEvent">%core.app_dir%/models/Event/IEvent.iface.php</autoload>
             <autoload name="IEventProxy">%core.app_dir%/models/Event/IEventProxy.iface.php</autoload>
             <autoload name="ProjectEventProxy">%core.app_dir%/models/Event/ProjectEventProxy.class.php</autoload>
             <autoload name="ProjectEvent">%core.app_dir%/models/Event/ProjectEvent.class.php</autoload>
-            
+
             <autoload name="ProjectCurl">%core.app_dir%/models/Curl/ProjectCurl.class.php</autoload>
 
-            <xi:include href="%core.app_dir%/../libs/PhpDebugToolbar/lib/agavi/autoload.xml" 
+            <xi:include href="%core.app_dir%/../libs/PhpDebugToolbar/lib/agavi/autoload.xml"
                 xpointer="xmlns(a=http://agavi.org/agavi/config/parts/autoload/1.0) xpointer(//a:autoload)">
             </xi:include>
 
@@ -31,12 +33,12 @@
     <xi:include href="%core.app_dir%/modules/Import/config/autoload.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
     </xi:include>
-    
-    <xi:include href="%core.app_dir%/modules/Asset/config/autoload.xml" 
+
+    <xi:include href="%core.app_dir%/modules/Asset/config/autoload.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
     </xi:include>
-    
-    <xi:include href="%core.app_dir%/modules/Workflow/config/autoload.xml" 
+
+    <xi:include href="%core.app_dir%/modules/Workflow/config/autoload.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
     </xi:include>
 </ae:configurations>

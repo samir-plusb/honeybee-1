@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://berlinonline.de/schemas/midas/config/scripts/1.0"
+    targetNamespace="http://berlinonline.de/schemas/midas/config/scripts/1.0"
+    elementFormDefault="qualified">
+
+    <xs:group name="configuration">
+        <xs:sequence>
+            <xs:element name="javascripts" type="ScriptsContainerType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="stylesheets" type="ScriptsContainerType" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:group>
+
+    <xs:complexType name="ScriptsContainerType">
+        <xs:sequence>
+            <xs:element name="scripts" type="ScriptCollectionType" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ScriptCollectionType">
+        <xs:sequence>
+            <xs:element name="script" type="ScriptType" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="view" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="ScriptType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="type" use="optional" default="local">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="local"/>
+                            <xs:enumeration value="external"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>

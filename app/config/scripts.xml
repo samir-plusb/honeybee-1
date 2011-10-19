@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://berlinonline.de/schemas/midas/config/scripts/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <ae:configuration>
+
+        <!--
+            @todo Actually this is the place where would want to intoduce a settings block or so,
+            in order to control combining and minifying stuff.
+        -->
+
+        <javascripts>
+            <scripts view="*">
+                <script>js/libs/jquery-1.6.4.js</script>
+                <script type="external">http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js</script>
+            </scripts>
+        </javascripts>
+
+        <stylesheets>
+            <scripts view="items.*">
+                <script>css/reset.css</script>
+                <script type="external">http://fonts.googleapis.com/css?family=EB+Garamond</script>
+                <script>css/screen.css</script>
+                <script>css/jquery-ui.1.8.13.custom.css</script>
+            </scripts>
+        </stylesheets>
+
+    </ae:configuration>
+</ae:configurations>
