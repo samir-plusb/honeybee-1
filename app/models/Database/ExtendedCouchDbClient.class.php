@@ -116,6 +116,12 @@ class ExtendedCouchDbClient
     protected $baseUri;
 
     /**
+     * Name of default database to use
+     * @var         string
+     */
+    protected $defaultDatabase;
+
+    /**
      * Holds a curl handle that is internally used for submitting requests.
      *
      * @var         Resource
@@ -155,13 +161,14 @@ class ExtendedCouchDbClient
      *
      * @param       string $uri
      */
-    public function __construct($uri)
+    public function __construct($uri, $database = NULL)
     {
         if ('/' != substr($uri, -1, 1))
         {
             $uri .= '/';
         }
         $this->baseUri = $uri;
+        $this->defaultDatabase = $database;
 
         $this->compositeClient = new CouchDbClient($uri);
     }
@@ -180,6 +187,19 @@ class ExtendedCouchDbClient
 
 
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
+
+    /**
+     * gets our default database name
+     *
+     * The default database name is used by all methods if no database name is given for the database argument.
+     *
+     * @return string
+     */
+    public function getDatabaseName()
+    {
+        return $this->defaultDatabase;
+    }
+
 
     /**
      * open a user session and login
@@ -217,7 +237,7 @@ class ExtendedCouchDbClient
      */
     public function storeDocs($database, array $documentData)
     {
-        $this->compositeClient->selectDb($database);
+        $this->compositeClient->selectDb(empty($database) ? $this->defaultDatabase : $database);
 
         return $this->compositeClient->storeDocs($documentData);
     }
@@ -235,7 +255,7 @@ class ExtendedCouchDbClient
      */
     public function getDoc($database, $documentId, $revision = NULL)
     {
-        $uri = $this->baseUri.urlencode($database).'/'.urlencode($documentId);
+        $uri = $this->getDatabaseUrl($database).urlencode($documentId);
         if (NULL !== $revision)
         {
             $uri .= '?'.http_build_query(array('rev' => $revision));
@@ -255,7 +275,7 @@ class ExtendedCouchDbClient
      */
     public function getAllDocs($database)
     {
-        $this->compositeClient->selectDb($database);
+        $this->compositeClient->selectDb(empty($database) ? $this->defaultDatabase : $database);
 
         return (array)$this->compositeClient->getAllDocs();
     }
@@ -279,7 +299,7 @@ class ExtendedCouchDbClient
             return $this->storeDocAutoId($database, $document);
         }
         return $this->putData(
-            $this->baseUri.urlencode($database).'/'.urlencode($document['_id']),
+            $this->getDatabaseUrl($database).urlencode($document['_id']),
             $document,
             self::STATUS_CONFLICT);
     }
@@ -297,7 +317,7 @@ class ExtendedCouchDbClient
      */
     public function storeDocAutoId($database, array $document)
     {
-        $curlHandle = $this->getCurlHandle($this->baseUri.urlencode($database), self::METHOD_POST);
+        $curlHandle = $this->getCurlHandle($this->getDatabaseUrl($database), self::METHOD_POST);
         curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $this->encodeDocumentToJson($document));
         $data = $this->getJsonData($curlHandle, self::STATUS_CONFLICT);
         return $data;
@@ -317,7 +337,7 @@ class ExtendedCouchDbClient
      */
     public function deleteDoc($database, $docId, $revision)
     {
-        $uri = $this->baseUri . urlencode($database) . '/' . urlencode($docId) . '?' . 'rev=' . urlencode($revision);
+        $uri = $this->getDatabaseUrl($database) . urlencode($docId) . '?' . 'rev=' . urlencode($revision);
         $curlHandle = $this->getCurlHandle($uri, self::METHOD_DELETE);
         $data = $this->getJsonData($curlHandle, self::STATUS_NOT_FOUND);
         return (isset($data['ok']) && TRUE === $data['ok']);
@@ -337,7 +357,7 @@ class ExtendedCouchDbClient
      */
     public function statDoc($database, $docId)
     {
-        $uri = $this->baseUri . urlencode($database) . '/' . urlencode($docId);
+        $uri = $this->getDatabaseUrl($database) . urlencode($docId);
         $curlHandle = $this->getCurlHandle($uri, self::METHOD_HEAD);
         $resp = curl_exec($curlHandle);
         $this->processCurlErrors($curlHandle, self::STATUS_NOT_FOUND);
@@ -401,8 +421,8 @@ class ExtendedCouchDbClient
             $query['limit'] = intval($limit);
         }
 
-        $uri = $this->baseUri . urlencode($database) .
-            '/_design/' . urlencode($designDocId) .
+        $uri = $this->getDatabaseUrl($database) .
+            '_design/' . urlencode($designDocId) .
             '/_view/' . urlencode($viewname) .
             '?' . http_build_query(array_merge($query, $parameters));
 
@@ -445,7 +465,7 @@ class ExtendedCouchDbClient
                 $view['reduce'] = $removeWhitespace($view['map']);
             }
         }
-        $uri = $this->baseUri . urlencode($database) . '/_design/' . urlencode($docId);
+        $uri = $this->getDatabaseUrl($database) . '/_design/' . urlencode($docId);
         return $this->putData($uri, $doc, self::STATUS_CONFLICT);
     }
 
@@ -462,7 +482,7 @@ class ExtendedCouchDbClient
      */
     public function getDesignDocument($database, $docid)
     {
-        $uri = $this->baseUri.urlencode($database).'/_design/'.urlencode($docid);
+        $uri = $this->getDatabaseUrl($database).'_design/'.urlencode($docid);
         $curlHandle = $this->getCurlHandle($uri);
         $result = $this->getJsonData($curlHandle, self::STATUS_NOT_FOUND);
         return isset($result['error']) ? FALSE : $result;
@@ -492,7 +512,7 @@ class ExtendedCouchDbClient
      */
     public function getDatabase($database)
     {
-        $uri = $this->baseUri.urlencode($database).'/';
+        $uri = $this->getDatabaseUrl($database);
         $curlHandle = $this->getCurlHandle($uri);
         $result = $this->getJsonData($curlHandle, self::STATUS_NOT_FOUND);
         return isset($result['error']) ? FALSE : $result;
@@ -523,7 +543,7 @@ class ExtendedCouchDbClient
      */
     public function createDatabase($database)
     {
-        $curlHandle = $this->getCurlHandle($this->baseUri.urlencode($database).'/', self::METHOD_PUT);
+        $curlHandle = $this->getCurlHandle($this->getDatabaseUrl($database), self::METHOD_PUT);
         $data = $this->getJsonData($curlHandle, self::STATUS_PRECONDITION_FAILED);
         return isset($data['ok']);
     }
@@ -553,7 +573,7 @@ class ExtendedCouchDbClient
      */
     public function deleteDatabase($database)
     {
-        $curlHandle = $this->getCurlHandle($this->baseUri.urlencode($database).'/', self::METHOD_DELETE);
+        $curlHandle = $this->getCurlHandle($this->getDatabaseUrl($database), self::METHOD_DELETE);
         $data = $this->getJsonData($curlHandle, self::STATUS_NOT_FOUND);
         return isset($data['ok']);
     }
@@ -700,6 +720,17 @@ class ExtendedCouchDbClient
         $data = $this->getJsonData($curlHandle, self::STATUS_CONFLICT);
         fclose($docFd);
         return $data;
+    }
+
+    /**
+     * get the url to current database
+     *
+     * @param string $database optional database name; defaults to database name given in constructor
+     * @return string
+     */
+    protected function getDatabaseUrl($database = NULL)
+    {
+        return $this->baseUri.urlencode(empty($database) ? $this->defaultDatabase : $database).'/';
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------

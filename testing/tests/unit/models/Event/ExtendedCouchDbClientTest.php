@@ -62,13 +62,28 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
              throw new Exception("Setup failed with: ($status) ".curl_error($ch));
          }
 
-         $this->client = new ExtendedCouchDbClient(self::BASEURL);
+         $this->client = new ExtendedCouchDbClient(self::BASEURL, self::DATABASE);
      }
 
 
      public function tearDown()
      {
          $this->setup();
+     }
+
+     public function provideDatabaseParameter()
+     {
+         return array(
+             array('database' => self::DATABASE),
+             array('database' => NULL)
+         );
+     }
+
+     /**
+      */
+     public function testGetDatabaseName()
+     {
+         self::assertEquals(self::DATABASE, $this->client->getDatabaseName());
      }
 
      /**
@@ -82,19 +97,29 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
      /**
       *
       */
+     public function testCreateDatabaseExistsUseDefaultDatabaseName()
+     {
+         $this->client->createDatabase(NULL);
+         self::assertFalse($this->client->createDatabase(self::DATABASE));
+     }
+
+     /**
+      *
+      */
      public function testCreateDatabaseExists()
      {
-         $this->client->createDatabase(self::DATABASE);
-         self::assertFalse($this->client->createDatabase(self::DATABASE));
+         $this->client->createDatabase(NULL);
+         self::assertFalse($this->client->createDatabase(NULL));
      }
 
 
      /**
       *
+      * @dataProvider provideDatabaseParameter
       */
-     public function testCreateDatabaseMissing()
+     public function testCreateDatabaseMissing($database)
      {
-         self::assertFalse($this->client->deleteDatabase(self::DATABASE));
+         self::assertFalse($this->client->deleteDatabase($database));
      }
 
      /**
@@ -102,37 +127,40 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
       */
      public function testDeleteDatabaseExists()
      {
-         $this->client->createDatabase(self::DATABASE);
-         self::assertTrue($this->client->deleteDatabase(self::DATABASE));
+         $this->client->createDatabase(NULL);
+         self::assertTrue($this->client->deleteDatabase(NULL));
      }
 
 
      /**
       *
+      * @dataProvider provideDatabaseParameter
       */
-     public function testGetDatabaseMissing()
+     public function testGetDatabaseMissing($database)
      {
-         self::assertFalse($this->client->getDatabase(self::DATABASE));
+         self::assertFalse($this->client->getDatabase($database));
      }
 
 
      /**
       *
+      * @dataProvider provideDatabaseParameter
       */
-     public function testGetDatabaseExists()
+     public function testGetDatabaseExists($database)
      {
-         $this->client->createDatabase(self::DATABASE);
-         self::assertArrayHasKey('db_name', $this->client->getDatabase(self::DATABASE));
+         $this->client->createDatabase($database);
+         self::assertArrayHasKey('db_name', $this->client->getDatabase($database));
      }
 
 
      /**
       *
+      * @dataProvider provideDatabaseParameter
       */
-     public function testCreateDocument()
+     public function testCreateDocument($database)
      {
-         $this->client->createDatabase(self::DATABASE);
-         $status = $this->client->storeDoc(self::DATABASE, $this->document);
+         $this->client->createDatabase($database);
+         $status = $this->client->storeDoc($database, $this->document);
          self::assertArrayHasKey('ok', $status);
          self::assertArrayHasKey('rev', $status);
      }
@@ -142,10 +170,10 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
       */
      public function testCreateDocumentNumericId()
      {
-         $this->client->createDatabase(self::DATABASE);
+         $this->client->createDatabase(NULL);
          $document = $this->document;
          $document['_id'] = 42;
-         $status = $this->client->storeDoc(self::DATABASE, $document);
+         $status = $this->client->storeDoc(NULL, $document);
          self::assertArrayHasKey('ok', $status);
          self::assertArrayHasKey('rev', $status);
      }
@@ -155,10 +183,10 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
       */
      public function testCreateDocumentAutoId()
      {
-         $this->client->createDatabase(self::DATABASE);
+         $this->client->createDatabase(NULL);
          $document = $this->document;
          unset($document['_id']);
-         $status = $this->client->storeDoc(self::DATABASE, $document);
+         $status = $this->client->storeDoc(NULL, $document);
          self::assertArrayHasKey('ok', $status);
          self::assertArrayHasKey('id', $status);
          self::assertArrayHasKey('rev', $status);
@@ -169,21 +197,22 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
       */
      public function testCreateDocumentConflict()
      {
-         $this->client->createDatabase(self::DATABASE);
-         $this->client->storeDoc(self::DATABASE, $this->document);
-         $status = $this->client->storeDoc(self::DATABASE, $this->document);
+         $this->client->createDatabase(NULL);
+         $this->client->storeDoc(NULL, $this->document);
+         $status = $this->client->storeDoc(NULL, $this->document);
          self::assertArrayHasKey('error', $status);
          self::assertEquals('conflict', $status['error']);
      }
 
      /**
       *
+      * @dataProvider provideDatabaseParameter
       */
-     public function testGetDocument()
+     public function testGetDocument($database)
      {
-         $this->client->createDatabase(self::DATABASE);
-         $this->client->storeDoc(self::DATABASE, $this->document);
-         $returned_document = $this->client->getDoc(self::DATABASE, $this->document['_id']);
+         $this->client->createDatabase($database);
+         $this->client->storeDoc($database, $this->document);
+         $returned_document = $this->client->getDoc($database, $this->document['_id']);
          self::assertArrayHasKey('_rev', $returned_document);
          unset($returned_document['_rev']);
          self::assertEquals($this->document, $returned_document);
@@ -191,12 +220,13 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
 
      /**
       *
+      * @dataProvider provideDatabaseParameter
       */
-     public function testStatDocument()
+     public function testStatDocument($database)
      {
-         $this->client->createDatabase(self::DATABASE);
-         $this->client->storeDoc(self::DATABASE, $this->document);
-         $revision = $this->client->statDoc(self::DATABASE, $this->document['_id']);
+         $this->client->createDatabase($database);
+         $this->client->storeDoc($database, $this->document);
+         $revision = $this->client->statDoc($database, $this->document['_id']);
          self::assertRegExp('/\d+-[a-f\d]+$/', $revision);
      }
 
@@ -205,22 +235,23 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
       */
      public function testStatDocumentMissingDocument()
      {
-         $this->client->createDatabase(self::DATABASE);
-         $revision = $this->client->statDoc(self::DATABASE, $this->document['_id']);
+         $this->client->createDatabase(NULL);
+         $revision = $this->client->statDoc(NULL, $this->document['_id']);
          self::assertEquals(0, $revision);
      }
 
      /**
       *
+      * @dataProvider provideDatabaseParameter
       */
      public function testUpdateDocument()
      {
-         $this->client->createDatabase(self::DATABASE);
-         $this->client->storeDoc(self::DATABASE, $this->document);
-         $revistion = $this->client->statDoc(self::DATABASE, $this->document['_id']);
+         $this->client->createDatabase(NULL);
+         $this->client->storeDoc(NULL, $this->document);
+         $revistion = $this->client->statDoc(NULL, $this->document['_id']);
          $document = $this->document;
          $document['_rev'] = $revistion;
-         $result = $this->client->storeDoc(self::DATABASE, $document);
+         $result = $this->client->storeDoc(NULL, $document);
          self::assertArrayHasKey('ok', $result);
          self::assertRegExp('/^2-/', $result['rev']);
      }
@@ -231,24 +262,25 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
       */
      public function testGetDocumentRelease()
      {
-         $this->client->createDatabase(self::DATABASE);
-         $this->client->storeDoc(self::DATABASE, $this->document);
-         $revistion = $this->client->statDoc(self::DATABASE, $this->document['_id']);
+         $this->client->createDatabase(NULL);
+         $this->client->storeDoc(NULL, $this->document);
+         $revistion = $this->client->statDoc(NULL, $this->document['_id']);
          $document = $this->document;
          $document['_rev'] = $revistion;
-         $this->client->storeDoc(self::DATABASE, $document);
-         $result = $this->client->getDoc(self::DATABASE, $this->document['_id'], $revistion);
+         $this->client->storeDoc(NULL, $document);
+         $result = $this->client->getDoc(NULL, $this->document['_id'], $revistion);
          self::assertEquals($this->document['_id'], $result['_id']);
          self::assertEquals($revistion, $result['_rev']);
      }
 
      /**
       *
+      * @dataProvider provideDatabaseParameter
       */
-     public function testCreateDesignDocument()
+     public function testCreateDesignDocument($database)
      {
-         $this->client->createDatabase(self::DATABASE);
-         self::assertArrayHasKey('ok', $this->client->createDesignDocument(self::DATABASE, 'designTest', $this->designDoc));
+         $this->client->createDatabase($database);
+         self::assertArrayHasKey('ok', $this->client->createDesignDocument($database, 'designTest', $this->designDoc));
      }
 
      /**
@@ -256,19 +288,20 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
       */
      public function testCreateDesignDocumentConflict()
      {
-         $this->client->createDatabase(self::DATABASE);
-         $this->client->createDesignDocument(self::DATABASE, 'designTest', $this->designDoc);
-         self::assertArrayHasKey('error', $this->client->createDesignDocument(self::DATABASE, 'designTest', $this->designDoc));
+         $this->client->createDatabase(NULL);
+         $this->client->createDesignDocument(NULL, 'designTest', $this->designDoc);
+         self::assertArrayHasKey('error', $this->client->createDesignDocument(NULL, 'designTest', $this->designDoc));
      }
 
      /**
       *
+      * @dataProvider provideDatabaseParameter
       */
-     public function testGetDesignDocument()
+     public function testGetDesignDocument($database)
      {
-         $this->client->createDatabase(self::DATABASE);
-         $this->client->createDesignDocument(self::DATABASE, 'designTest', $this->designDoc);
-         $stat =  $this->client->getDesignDocument(self::DATABASE, 'designTest');
+         $this->client->createDatabase($database);
+         $this->client->createDesignDocument($database, 'designTest', $this->designDoc);
+         $stat =  $this->client->getDesignDocument($database, 'designTest');
          self::assertArrayHasKey('_id', $stat);
          self::assertArrayHasKey('_rev', $stat);
      }
@@ -278,23 +311,24 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
       */
      public function testUpdateDesignDocument()
      {
-         $this->client->createDatabase(self::DATABASE);
-         $this->client->createDesignDocument(self::DATABASE, 'designTest', $this->designDoc);
-         $stat =  $this->client->getDesignDocument(self::DATABASE, 'designTest');
+         $this->client->createDatabase(NULL);
+         $this->client->createDesignDocument(NULL, 'designTest', $this->designDoc);
+         $stat =  $this->client->getDesignDocument(NULL, 'designTest');
          $document = $this->designDoc;
          $document['_rev'] = $stat['_rev'];
-         self::assertArrayHasKey('ok', $this->client->createDesignDocument(self::DATABASE, 'designTest', $document));
+         self::assertArrayHasKey('ok', $this->client->createDesignDocument(NULL, 'designTest', $document));
      }
 
      /**
       *
+      * @dataProvider provideDatabaseParameter
       */
-     public function testGetView()
+     public function testGetView($database)
      {
-         $this->client->createDatabase(self::DATABASE);
-         $this->client->createDesignDocument(self::DATABASE, 'designTest', $this->designDoc);
-         $this->client->storeDoc(self::DATABASE, $this->document);
-         $result = $this->client->getView(self::DATABASE, 'designTest', 'ticketByImportitem', json_encode("boom"));
+         $this->client->createDatabase($database);
+         $this->client->createDesignDocument($database, 'designTest', $this->designDoc);
+         $this->client->storeDoc($database, $this->document);
+         $result = $this->client->getView($database, 'designTest', 'ticketByImportitem', json_encode("boom"));
          self::assertArrayHasKey('total_rows', $result);
          self::assertArrayHasKey('rows', $result);
          self::assertEquals($result['total_rows'], count($result['rows']));
@@ -306,10 +340,10 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
       */
      public function testGetViewIncludeDocument()
      {
-         $this->client->createDatabase(self::DATABASE);
-         $this->client->createDesignDocument(self::DATABASE, 'designTest', $this->designDoc);
-         $this->client->storeDoc(self::DATABASE, $this->document);
-         $result = $this->client->getView(self::DATABASE, 'designTest', 'ticketByImportitem',
+         $this->client->createDatabase(NULL);
+         $this->client->createDesignDocument(NULL, 'designTest', $this->designDoc);
+         $this->client->storeDoc(NULL, $this->document);
+         $result = $this->client->getView(NULL, 'designTest', 'ticketByImportitem',
              json_encode("boom"), 0, array('include_docs' => 'true'));
          self::assertArrayHasKey('doc', $result['rows'][0]);
          self::assertEquals($this->document['_id'], $result['rows'][0]['doc']['_id']);
