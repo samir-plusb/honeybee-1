@@ -50,11 +50,8 @@
             </route>
 
             <route pattern="^/items" module="Items">
-                <xi:include
-                    href="%core.app_dir%/modules/Items/config/routing.xml"
-                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
-                        xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                        xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
+                <route pattern="^/list" action="List" />
+                <route pattern="^/edit" action="Edit" />
             </route>
 
             <!-- The last route in case the input URL is just "/". -->
@@ -67,25 +64,25 @@
         </routes>
     </ae:configuration>
 
-    <xi:include 
+    <xi:include
         href="%core.app_dir%/modules/Import/config/routing.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) 
-            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
-    </xi:include>
-
-    <xi:include 
-        href="%core.app_dir%/modules/Asset/config/routing.xml" 
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
             xpointer(/ae:configurations/ae:configuration[@context='console'])/">
     </xi:include>
 
-    <xi:include 
+    <xi:include
+        href="%core.app_dir%/modules/Asset/config/routing.xml"
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
+    </xi:include>
+
+    <xi:include
         href="%core.app_dir%/modules/Items/config/routing.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
             xpointer(/ae:configurations/ae:configuration[@context='console'])/">
     </xi:include>
 
-    <xi:include 
+    <xi:include
         href="%core.app_dir%/modules/Workflow/config/routing.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
             xpointer(/ae:configurations/ae:configuration[@context='console'])/">
