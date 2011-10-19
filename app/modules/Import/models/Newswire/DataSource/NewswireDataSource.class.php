@@ -175,11 +175,14 @@ class NewswireDataSource extends ImportBaseDataSource
      */
     public function importSucceeded(IEvent $event) // @codingStandardsIgnoreEnd
     {
-        /* @todo Remove debug code NewswireDataSource.class.php from 19.10.2011 */
-        $__logger=AgaviContext::getInstance()->getLoggerManager();
-        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__);
-        $__logger->log(print_r($event,1));
-        $this->updateTimestamp($this->lastItemModifiedTime);
+        $data = $event->getData();
+        $record = $data['record'];
+        if ($record instanceof NewswireDataRecord)
+        {
+            $__logger=AgaviContext::getInstance()->getLoggerManager();
+            $__logger->log(__CLASS__.' … new ID: '.$record->getIdentifier());
+            $this->updateTimestamp($this->lastItemModifiedTime);
+        }
     }
 
     /**
