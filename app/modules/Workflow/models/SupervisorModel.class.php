@@ -150,8 +150,10 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         }
 
         $data = $result['rows'][0]['doc'];
-        /* @todo Remove debug code SupervisorModel.class.php from 13.10.2011 */
-        error_log(date('r').' :: '.__METHOD__.' :: '.__LINE__."\n".print_r($data,1)."\n",3,'/tmp/errors.log');
+        /* @todo Remove debug code SupervisorModel.class.php from 20.10.2011 */
+        $__logger=AgaviContext::getInstance()->getLoggerManager();
+        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__, AgaviILogger::DEBUG);
+        $__logger->log(print_r($data,1), AgaviILogger::DEBUG);
         return new WorkflowTicket();
     }
 

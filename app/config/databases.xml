@@ -10,7 +10,7 @@
              <database name="midas_import" class="CouchDatabase">
                 <ae:parameter name="url">http://localhost:5984/</ae:parameter>
                 <ae:parameter name="database">midas_import</ae:parameter>
-                <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
+                <ae:parameter name="setup">ItemsModuleSetup</ae:parameter>
             </database>
         </databases>
     </ae:configuration>
@@ -24,7 +24,7 @@
              <database name="midas_import" class="CouchDatabase">
                 <ae:parameter name="url">http://localhost:5984/</ae:parameter>
                 <ae:parameter name="database">midas_import_testing</ae:parameter>
-                <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
+                <ae:parameter name="setup">ItemsModuleSetup</ae:parameter>
             </database>
         </databases>
     </ae:configuration>

@@ -6,6 +6,9 @@ require dirname(__DIR__) . '/app/dispatch.php';
 
 AgaviToolkit::clearCache();
 
+// Workaround to prevent session_start() warnings after previous output
+session_start();
+
 AgaviTesting::bootstrap(
     ProjectEnvironmentConfig::toEnvString()
 );

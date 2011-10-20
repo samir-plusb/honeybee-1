@@ -38,28 +38,6 @@ abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
 
     // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
 
-
-    // ---------------------------------- <AgaviPhpUnitTestCase OVERRIDES> -----------------------
-    //
-    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
-    // @codeCoverageIgnoreStart
-
-    /**
-     * Setup method that is called once before the first test is run.
-     * Reset our database to have a clean state for import.
-     */
-    public static function setUpBeforeClass()
-    {
-        parent::setUpBeforeClass();
-
-        self::setupDatabase();
-    }
-
-    // @codeCoverageIgnoreEnd
-
-    // ---------------------------------- </AgaviPhpUnitTestCase OVERRIDES> ----------------------
-
-
     // ---------------------------------- <TESTS> ------------------------------------------------
 
     /**
@@ -109,25 +87,6 @@ abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
     }
 
     // ---------------------------------- </TESTS> -----------------------------------------------
-
-
-    // ---------------------------------- <WORKING METHODS> --------------------------------------
-
-    // @codeCoverageIgnoreStart
-
-    /**
-     * Deletes and recreates our testing database and leaves a green field for our tests.
-     *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
-    protected static function setupDatabase()
-    {
-        $coucDbClient = AgaviContext::getInstance()->getDatabaseConnection(CouchDbDataImport::DATABASE_CONFIG);
-        $coucDbClient->deleteDatabase(NULL);
-        $coucDbClient->createDatabase(NULL);
-    }
-
-    // @codeCoverageIgnoreEnd
 
     /**
      * Convenience method that actually runs the import for a given datasource.
