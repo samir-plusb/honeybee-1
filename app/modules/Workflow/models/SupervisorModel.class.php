@@ -45,11 +45,6 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
      */
     private $couchClient;
 
-    /**
-     *
-     * @var string name of couchdb database
-     */
-    private $databaseName;
 
     /**
      * @return Workflow_SupervisorModel
@@ -77,7 +72,6 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         parent::initialize($context, $parameters);
         $database = $this->context->getDatabaseManager()->getDatabase(self::DATABASE_CONFIG_NAME);
         $this->couchClient = $database->getConnection();
-        $this->databaseName = $database->getResource();
     }
 
 
@@ -89,16 +83,6 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     public function getCouchClient()
     {
         return $this->couchClient;
-    }
-
-
-    /**
-     * get couchdb database name as defined in the agavi database config
-     * @return string
-     */
-    public function getDatabaseName()
-    {
-        return $this->databaseName;
     }
 
 
@@ -123,6 +107,11 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         }
 
         $ticket = $this->getTicketByImportitem($data['record']);
+		/* @todo remove debug code (tay, 20.10.2011 20:29:45) */
+		$__logger = AgaviContext::getInstance()->getLoggerManager();
+		$__logger->log(__METHOD__.":".__LINE__,AgaviILogger::DEBUG);
+		$__logger->log(print_r($ticket,1),AgaviILogger::DEBUG);
+
     }
 
     /**
@@ -138,7 +127,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     public function getTicketByImportitem(IDataRecord $record)
     {
         $result = $this->getCouchClient()->getView(
-            $this->getDatabaseName(), self::DESIGNDOC, "ticketByImportitem",
+            NULL, self::DESIGNDOC, "ticketByImportitem",
             json_encode($record->getIdentifier()),
             0,
             array('include_docs' => 'true')
@@ -150,11 +139,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         }
 
         $data = $result['rows'][0]['doc'];
-        /* @todo Remove debug code SupervisorModel.class.php from 20.10.2011 */
-        $__logger=AgaviContext::getInstance()->getLoggerManager();
-        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__, AgaviILogger::DEBUG);
-        $__logger->log(print_r($data,1), AgaviILogger::DEBUG);
-        return new WorkflowTicket();
+        return new WorkflowTicket($data);
     }
 
 
@@ -184,7 +169,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     public function saveTicket(WorkflowTicket $ticket)
     {
         $document = $ticket->toArray();
-        $result = $this->couchClient->storeDoc($this->getDatabaseName(), $document);
+        $result = $this->couchClient->storeDoc(NULL, $document);
         return TRUE;
     }
 
