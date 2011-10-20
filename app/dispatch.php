@@ -32,7 +32,7 @@ spl_autoload_register(array('ezcBase', 'autoload'));
 // | An absolute filesystem path to our environment config provider.           |
 // +---------------------------------------------------------------------------+
 require $rootDir . '/app/lib/config/ProjectEnvironmentConfig.class.php';
-ProjectEnvironmentConfig::load(isset($testingEnabled));
+ProjectEnvironmentConfig::load(isset($testingEnabled) && $testingEnabled);
 
 
 // +---------------------------------------------------------------------------+
