@@ -10,7 +10,8 @@ return array(
             'datasources' =>
             array(
                 0 => 'imperia',
-                1 => 'dpa'
+                1 => 'dpa',
+                2 => 'rss'
             ),
             'settings' =>
             array(

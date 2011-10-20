@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
+<ae:configurations
     xmlns="http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0"
     xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
-    <ae:configuration>        
+    <ae:configuration>
         <dataimports>
-            
+
             <dataimport name="couchdb" class="CouchDbDataImport">
                 <description>Imports data into a configured coucdb database.</description>
                 <datasources>
                     <datasource>imperia</datasource>
                     <datasource>dpa</datasource>
+                    <datasource>rss</datasource>
                 </datasources>
                 <settings>
                     <setting name="couchdb_host">%couchdb.import.host%</setting>
@@ -18,7 +19,7 @@
                     <setting name="couchdb_database">%couchdb.import.database%</setting>
                 </settings>
             </dataimport>
-            
+
         </dataimports>
     </ae:configuration>
 </ae:configurations>

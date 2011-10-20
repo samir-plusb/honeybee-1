@@ -79,6 +79,10 @@ class RunActionTest extends AgaviActionTestCase
             array( // Test the Import/Newsiwire Package
                 'importName'      => 'couchdb',
                 'dataSourceNames' => 'dpa'
+            ),
+            array( // Test the Import/Newsiwire Package
+                'importName'      => 'couchdb',
+                'dataSourceNames' => 'rss'
             )
         );
     }
