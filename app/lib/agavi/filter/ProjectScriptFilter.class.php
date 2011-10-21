@@ -26,28 +26,17 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 	 */
 	protected $xmlnsPrefix = '';
 
-    protected $scriptConfig;
-
     protected $loadedScripts = array();
 
     protected $loadedPackages = array();
 
-    protected $packscripts = TRUE;
-
-    protected $jsCacheDir;
-
-    protected $cssCacheDir;
+    protected $config;
 
     public function initialize(AgaviContext $context, array $parameters = array())
     {
         parent::initialize($context, $parameters);
 
-        $this->packscripts = (isset($parameters['pack_scripts']) && TRUE === $parameters['pack_scripts']);
-        $configDir = AgaviConfig::get('core.config_dir') . DIRECTORY_SEPARATOR;
-        $this->scriptConfig = include AgaviConfigCache::checkConfig($configDir . 'scripts.xml');
-
-        $this->cssCacheDir = $parameters['css_cache'];
-        $this->jsCacheDir = $parameters['js_cache'];
+        $this->config = new ProjectScriptFilterConfig($parameters);
     }
 
 	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
@@ -58,9 +47,16 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 
 		if(! $response->isContentMutable() || ! ($output = $response->getContent()))
         {
-            // throw exception? we cant really live without the scripts.
+            // throw exception? we cant really live without our scripts...
 			return FALSE;
 		}
+
+        $curOutputType = $response->getOutputType()->getName();
+        if (! $this->config->isOutputTypeSupported($curOutputType))
+        {
+            // ot not supported, log to info or debug?
+            return FALSE;
+        }
 
         $this->loadDom($output);
 
@@ -68,7 +64,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             $this->buildViewPath($container)
         );
 
-        if ($this->packscripts)
+        if ($this->config->isPackingEnabled())
         {
             $this->addJavascripts(
                 $this->packJavascripts($javascripts)
@@ -88,14 +84,9 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         );
     }
 
-    public function getJsCacheDir()
+    public function getConfig()
     {
-        return $this->jsCacheDir;
-    }
-
-    public function getCssCacheDir()
-    {
-        return $this->cssCacheDir;
+        return $this->config;
     }
 
     protected function loadDom($content)
@@ -141,10 +132,9 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 
         $javascripts = array();
         $stylesheets = array();
-
         foreach ($deployData['packages'] as $packageName)
         {
-            $package = $this->scriptConfig['packages'][$packageName];
+            $package = $this->config->getPackageData($packageName);
             foreach ($package['javascripts'] as $javascript)
             {
                 if (! in_array($javascript, $javascripts))
@@ -152,7 +142,6 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
                     $javascripts[] = $javascript;
                 }
             }
-
             foreach ($package['stylesheets'] as $stylesheet)
             {
                 if (! in_array($stylesheet, $stylesheets))
@@ -161,7 +150,6 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
                 }
             }
         }
-
         $javascripts = array_merge($javascripts, $deployData['javascripts']);
         $stylesheets = array_merge($stylesheets, $deployData['stylesheets']);
 
@@ -174,7 +162,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $affectedJavascripts = array();
         $affectedStylesheets = array();
 
-        foreach ($this->scriptConfig['deployments'] as $curViewpath => $deploymentInfo)
+        foreach ($this->config->getDeployments() as $curViewpath => $deploymentInfo)
         {
             $escapedPath = str_replace(
                 self::$viewPathSearch,
@@ -217,7 +205,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
          * Make sure we have our loaded packages in the exact same order
          * as defined inside our scripts.xml config.
          */
-        foreach (array_keys($this->scriptConfig['packages']) as $packageName)
+        foreach ($this->config->getPackageNames() as $packageName)
         {
             if (in_array($packageName, $affectedPackages))
             {
@@ -230,19 +218,9 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 
     protected function loadPackage($packageName, array & $loadedPackages)
     {
-        if (! isset($this->scriptConfig['packages'][$packageName]))
-        {
-            throw new Exception(
-                sprintf(
-                    "Encountered undefined script package: '%s'",
-                    $packageName
-                )
-            );
-        }
-
         if (! in_array($packageName, $loadedPackages))
         {
-            $package = $this->scriptConfig['packages'][$packageName];
+            $package = $this->config->getPackageData($packageName);
             $loadedPackages[] = $packageName;
 
             foreach ($package['deps'] as $depPackage)
@@ -255,10 +233,8 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
     protected function packJavascripts(array $scripts)
     {
         $deployHash = $this->calculateDeployHash($scripts);
-        $pubDir = realpath(
-            dirname(AgaviConfig::get('core.app_dir')) . '/pub/'
-        );
-        $deployPath =realpath($this->jsCacheDir) . DIRECTORY_SEPARATOR . $deployHash . '.js';
+        $pubDir = $this->config->get(ProjectScriptFilterConfig::CFG_PUB_DIR);
+        $deployPath = $this->config->getJsCacheDir() . DIRECTORY_SEPARATOR . $deployHash . '.js';
         $pubPath = substr(str_replace($pubDir, '', $deployPath), 1);
 
         if (! file_exists($deployPath))
@@ -275,10 +251,8 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
     protected function packStylesheets(array $scripts)
     {
         $deployHash = $this->calculateDeployHash($scripts);
-        $pubDir = realpath(
-            dirname(AgaviConfig::get('core.app_dir')) . '/pub/'
-        );
-        $deployPath = realpath($this->cssCacheDir) . DIRECTORY_SEPARATOR . $deployHash . '.css';
+        $pubDir = $this->config->get(ProjectScriptFilterConfig::CFG_PUB_DIR);
+        $deployPath = $this->config->getCssCacheDir() . DIRECTORY_SEPARATOR . $deployHash . '.css';
         $pubPath = substr(str_replace($pubDir, '', $deployPath), 1);
 
         if (! file_exists($deployPath))
@@ -297,20 +271,15 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 
     protected function adjustRelativeCssPaths(array $cssFiles)
     {
-        $stylesheets = array();
+        $pubDir = $this->config->get(ProjectScriptFilterConfig::CFG_PUB_DIR);
+        $cacheDir = realpath($this->config->getCssCacheDir()) . DIRECTORY_SEPARATOR;
+        $cacheRelPath = substr(str_replace($pubDir, '', $cacheDir), 1);
 
+        $stylesheets = array();
         foreach ($cssFiles as $cssFile)
         {
-            $that = $this;
-
-            $replaceCallback = function (array $matches) use ($that, $cssFile)
+            $replaceCallback = function (array $matches) use ($pubDir, $cssFile, $cacheRelPath)
             {
-                $pubDir = realpath(
-                    dirname(AgaviConfig::get('core.app_dir')) . '/pub/'
-                );
-                $cacheDir = realpath($that->getCssCacheDir()) . DIRECTORY_SEPARATOR;
-                $cacheRelPath = substr(str_replace($pubDir, '', $cacheDir), 1);
-
                 $filename = basename($cssFile);
                 $dirName = dirname($cssFile) . DIRECTORY_SEPARATOR;
                 $srcRelpath = str_replace($pubDir, '', $dirName);
@@ -348,8 +317,9 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
                 file_get_contents($cssFile)
             );
 
-            $tmpPath = tempnam(sys_get_temp_dir(), 'css.adjust.');
+            $tmpPath = tempnam(sys_get_temp_dir(), 'midas.adjust.css_');
             file_put_contents($tmpPath, $adjustedCss);
+
             $stylesheets[] = $tmpPath;
         }
 
