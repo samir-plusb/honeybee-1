@@ -45,6 +45,12 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
      */
     private $couchClient;
 
+    /**
+     * list of allready loaded workflows
+     *
+     * @var array
+     */
+    private $workflowByName = array();
 
     /**
      * @return Workflow_SupervisorModel
@@ -107,11 +113,8 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         }
 
         $ticket = $this->getTicketByImportitem($data['record']);
-		/* @todo remove debug code (tay, 20.10.2011 20:29:45) */
-		$__logger = AgaviContext::getInstance()->getLoggerManager();
-		$__logger->log(__METHOD__.":".__LINE__,AgaviILogger::DEBUG);
-		$__logger->log(print_r($ticket,1),AgaviILogger::DEBUG);
-
+        $workflow = $this->getWorkflowByName($ticket->getWorkflow());
+        $workflow->run($ticket);
     }
 
     /**
@@ -139,7 +142,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         }
 
         $data = $result['rows'][0]['doc'];
-        return new WorkflowTicket($data);
+        return new WorkflowTicket($data, $record);
     }
 
 
@@ -155,7 +158,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     {
         $ticket = new WorkflowTicket();
         $ticket->setImportItem($record);
-        $ticket->setWorkflow($this->getWorkflowByName('_init'));
+        $ticket->setWorkflow('_init');
         $this->saveTicket($ticket);
         return $ticket;
     }
@@ -214,22 +217,31 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         $name = strtolower($name);
         if (! preg_match('/^_?[a-z][a-z-0-9]+$/', $name))
         {
-            throw new WorkflowException('Workflow name contains invalid characters: '.$name, WorkflowException::INVALID_WORKFLOW_NAME);
+            throw new WorkflowException(
+               'Workflow name contains invalid characters: '.$name,
+                WorkflowException::INVALID_WORKFLOW_NAME);
         }
-        $configPath = self::WORKFLOW_CONFIG_DIR . $name . '.workflow.xml';
-        try
+        if (! array_key_exists($name, $this->workflowByName))
         {
-            $config = include AgaviConfigCache::checkConfig($configPath);
+            $configPath = self::WORKFLOW_CONFIG_DIR . $name . '.workflow.xml';
+            try
+            {
+                $config = include AgaviConfigCache::checkConfig($configPath);
+            }
+            catch (AgaviUnreadableException $e)
+            {
+                throw new WorkflowException($e->getMessage(), WorkflowException::WORKFLOW_NOT_FOUND, $e);
+            }
+
+            if (! array_key_exists('workflow', $config))
+            {
+                throw new WorkflowException(
+                    'Workflow definition structure is invalid.',
+                    WorkflowException::INVALID_WORKFLOW);
+            }
+            $this->workflowByName[$name] = new WorkflowHandler($config['workflow']);
         }
-        catch (AgaviUnreadableException $e)
-        {
-            throw new WorkflowException($e->getMessage(), WorkflowException::WORKFLOW_NOT_FOUND, $e);
-        }
-        if (! array_key_exists('workflow', $config))
-        {
-            throw new WorkflowException('Workflow definition structure is invalid.', WorkflowException::INVALID_WORKFLOW);
-        }
-        return new WorkflowHandler($config['workflow']);
+        return $this->workflowByName[$name];
     }
 
 

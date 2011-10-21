@@ -10,21 +10,6 @@
 class WorkflowTicket implements Serializable
 {
     /**
-     * plugin has an internal error. A message is available.
-     */
-    const ERROR = 0;
-
-    /**
-     * plugin has successfully processed
-     */
-    const OK = 1;
-
-    /**
-     * The ticket should be suspended until time
-     */
-    const WAIT_UNTIL = 2;
-
-    /**
      *
      * @var string document id in database
      */
@@ -45,7 +30,7 @@ class WorkflowTicket implements Serializable
     /**
      * The ticket belongs to this workflow
      *
-     * @var WorkflowHandler
+     * @var string
      */
     protected $workflow;
 
@@ -92,14 +77,21 @@ class WorkflowTicket implements Serializable
 
 
     /**
-     * set the plugin result state
+     * Set the plugin result state
      *
-     * @param integer $state
+     * This method must only used by plugings to store their result state
+     *
+     * @see WorkflowHandler::run()
+     * @see IWorkflowPlugin::process()
+     *
+     * @param WorkflowPluginResult $result from plugin process
+     *
+     * @return void
      */
-    public function setPluginResult($state, $message)
+    public function setPluginResult(WorkflowPluginResult $result)
     {
-        $this->state = $state;
-        $this->message = $message;
+        $this->state = $result->getState();
+        $this->message = $result->getMessage();
     }
 
     /**
@@ -124,11 +116,11 @@ class WorkflowTicket implements Serializable
     /**
      * Sets the workflow attribute.
      *
-     * @param WorkflowHandler the new value for workflow
+     * @param string $workflow name of used workflow
      *
      * @return void
      */
-    public function setWorkflow(WorkflowHandler $workflow)
+    public function setWorkflow($workflow)
     {
         $this->workflow = $workflow;
     }
@@ -136,7 +128,7 @@ class WorkflowTicket implements Serializable
     /**
      * Retrieves the workflow attribute.
      *
-     * @return       WorkflowHandler the value for workflow
+     * @return string name of used workflow
      */
     public function getWorkflow()
     {
@@ -289,8 +281,13 @@ class WorkflowTicket implements Serializable
      *
      * @param array $data from deserializing or database loading
      */
-    public function __construct(array $data = NULL)
+    public function __construct(array $data = NULL, IDataRecord $record = NULL)
     {
+        if ($record)
+        {
+            $data['importItem'] = $record;
+        }
+
         $this->setBlocked(TRUE);
         if (is_array($data))
         {
@@ -305,7 +302,7 @@ class WorkflowTicket implements Serializable
     {
          $data = array(
              'importItem' => $this->getImportItem()->getIdentifier(),
-             'workflow' => $this->getWorkflow()->getName(),
+             'workflow' => $this->getWorkflow(),
              'currentStep' => $this->getCurrentStep(),
              'blocked' => $this->getBlocked(),
              'waitUntil' => $this->waitUntil instanceof DateTime ? $this->waitUntil->format(DATE_ISO8601) : NULL
@@ -333,12 +330,22 @@ class WorkflowTicket implements Serializable
         $supervisor = Workflow_SupervisorModel::getInstance();
         $this->id = empty($data['id']) ? NULL : $data['id'];
         $this->rev = empty($data['rev']) ? NULL : $data['rev'];
-        $this->setImportItem($supervisor->getImportItem($data['importItem']));
+
+        if (array_key_exists('importItem', $data))
+        {
+            if ($data['importItem'] instanceof IDataRecord)
+            {
+                $this->setImportItem($data['importItem']);
+            }
+            else
+            {
+                $this->setImportItem($supervisor->getImportItem($data['importItem']));
+            }
+        }
+
         $this->setBlocked($data['blocked'] ? TRUE : FALSE);
         $this->setWaitUntilFromIso8601($data['waitUntil']);
-
-        $workflow = $supervisor->getWorkflowByName($data['workflow']);
-        $this->setWorkflow($workflow);
+        $this->setWorkflow($data['workflow']);
         $this->setCurrentStep($data['currentStep']);
     }
 
@@ -371,6 +378,20 @@ class WorkflowTicket implements Serializable
         }
         $this->fromArray($data);
         return $data;
+    }
+
+
+    /**
+     * Ticket as printable string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf('%s(Item "%s", Workflow %s/%s, State %d/"%s")',
+            get_class($this),
+            ($this->importItem ? $this->importItem->getIdentifier() : ''),
+            $this->workflow, $this->currentStep, $this->state, $this->message);
     }
 }
 

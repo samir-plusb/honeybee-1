@@ -7,7 +7,7 @@
  * @version $Id$
  *
  */
-class WorkflowNullPlugin extends IWorkflowPlugin
+class WorkflowNullPlugin implements IWorkflowPlugin
 {
     public function initialize(WorkflowTicket $ticket, array $parameters)
     {
@@ -16,7 +16,7 @@ class WorkflowNullPlugin extends IWorkflowPlugin
 
     public function process()
     {
-        return new WorkflowPluginResult(WorkflowPluginResult::OK, 0);
+        return new WorkflowPluginResult(WorkflowPluginResult::STATE_OK, WorkflowPluginResult::GATE_DEFAULT);
     }
 
     public function processRequest(AgaviParameterHolder $rd)

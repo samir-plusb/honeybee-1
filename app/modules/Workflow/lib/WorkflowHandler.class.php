@@ -99,11 +99,6 @@ class WorkflowHandler
     {
         $this->setTicket($ticket);
 
-        if (! array_key_exists($this->getTicket()->getCurrentStep(), $this->steps))
-        {
-            throw new WorkflowException('Workflow step does not exists: '.$ticket->getCurrentStep(), WorkflowException::INVALID_STEP);
-        }
-
         $plugin = $this->getPluginForCurrentStep();
         if (! $plugin->isInteractive())
         {
@@ -113,6 +108,21 @@ class WorkflowHandler
         {
             $result = $plugin->process();
         }
+
+        $ticket->setPluginResult($result);
+
+        if ($result->canProceedToNextStep())
+        {
+            /* @todo Remove debug code WorkflowHandler.class.php from 21.10.2011 */
+            $__logger=AgaviContext::getInstance()->getLoggerManager();
+            $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
+            $__logger->log($this->getTicket(),AgaviILogger::DEBUG);
+
+        }
+        /* @todo Remove debug code WorkflowHandler.class.php from 21.10.2011 */
+        $__logger=AgaviContext::getInstance()->getLoggerManager();
+        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
+        $__logger->log($result,AgaviILogger::DEBUG);
 
 
         return $result;
@@ -153,13 +163,27 @@ class WorkflowHandler
      */
     public function getCurrentStep()
     {
-        return $this->getTicket()->getCurrentStep();
+        $step = $this->getTicket()->getCurrentStep();
+        if (! $step)
+        {
+            $step = $this->firstStep;
+            $this->getTicket()->setCurrentStep($step);
+        }
+
+        if (! array_key_exists($step, $this->steps))
+        {
+            throw new WorkflowException(
+                'Workflow step does not exists: '.$ticket->getCurrentStep(),
+                WorkflowException::STEP_MISSING);
+        }
+
+        return $step;
     }
 
     /**
      * Retrieves the ticket attribute.
      *
-     * @return       Workflow_TicketModel the value for ticket
+     * @return       WorkflowTicket the value for ticket
      */
     public function getTicket()
     {
@@ -181,6 +205,7 @@ class WorkflowHandler
         return array();
     }
 
+
     /**
      *
      * @return IWorkflowPlugin
@@ -188,11 +213,12 @@ class WorkflowHandler
      */
     protected function getPluginForCurrentStep()
     {
-        if (! isset($this->steps[$ticket->getCurrentStep()]['plugin']))
+        $currentStep = $this->getCurrentStep();
+        if (! isset($this->steps[$currentStep]['plugin']))
         {
             throw new WorkflowException('Workflow step does not define plugin: '.$ticket->getCurrentStep(), WorkflowException::STEP_MISSING);
         }
-        $pluginName = $this->steps[$ticket->getCurrentStep()]['plugin'];
+        $pluginName = $this->steps[$currentStep]['plugin'];
         $plugin = Workflow_SupervisorModel::getInstance()->getPluginByName($pluginName);
         $plugin->initialize($this->getTicket(), $this->getStepParameters());
 
