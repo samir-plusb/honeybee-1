@@ -18,7 +18,7 @@
         <databases default="CouchWorkflow">
             <database name="CouchWorkflow" class="CouchDatabase">
                 <ae:parameter name="url">http://localhost:5984/</ae:parameter>
-                <ae:parameter name="database">workflowtesting</ae:parameter>
+                <ae:parameter name="database">workflow_testing</ae:parameter>
                 <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
             </database>
              <database name="midas_import" class="CouchDatabase">
