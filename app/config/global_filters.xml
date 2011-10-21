@@ -33,8 +33,8 @@
                 </ae:parameter>
 
                 <ae:parameter name="pack_scripts">on</ae:parameter>
-                <ae:parameter name="js_cache">%core.app_dir%/../pub/js/.cache/</ae:parameter>
-                <ae:parameter name="css_cache">%core.app_dir%/../pub/css/.cache/</ae:parameter>
+                <ae:parameter name="js_cache">%core.app_dir%/../pub/js/_cache/</ae:parameter>
+                <ae:parameter name="css_cache">%core.app_dir%/../pub/css/_cache/</ae:parameter>
             </filter>
 
             <!-- <filter name="TidyFilter" class="AgaviTidyFilter">
