@@ -6,10 +6,17 @@
     <ae:configuration>
 
         <packages>
-            <package name="core">
+            <package name="libs">
                 <javascripts>
                     <script>js/libs/jquery-1.6.4.js</script>
                     <script>js/libs/jquery-ui-1.8.13.js</script>
+                </javascripts>
+            </package>
+
+            <package name="core" depends="libs">
+                <javascripts>
+                    <script>js/midas/core/Module.js</script>
+                    <script>js/midas/core/Behaviour.js</script>
                 </javascripts>
 
                 <stylesheets>

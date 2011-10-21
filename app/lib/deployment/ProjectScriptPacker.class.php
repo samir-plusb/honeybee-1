@@ -16,7 +16,7 @@ class ProjectScriptPacker
                 );
             }
 
-            $combined .= file_get_contents($file) . "\n\n\n;\n\n\n";
+            $combined .= file_get_contents($file) . "\n\n\n";
         }
 
         return $this->compressScript($combined, $type);
