@@ -14,6 +14,52 @@
  */
 interface IDataRecord
 {
+
+    /**
+     * Holds the name of our identifier property.
+     */
+    const PROP_IDENT = 'identifier';
+
+    /**
+     * DATE_ISO8601 formated timestamp (last change of record, issue date, import date)
+     */
+    const PROP_TIMESTAMP = 'timestamp';
+
+    /**
+     * Holds the name of our origin property.
+     */
+    const PROP_ORIGIN = 'origin';
+
+    /**
+     * Holds the name of our source property.
+     */
+    const PROP_SOURCE = 'source';
+
+    /**
+     * Holds the name of our title property.
+     */
+    const PROP_TITLE = 'title';
+
+    /**
+     * Holds the name of our category property.
+     */
+    const PROP_CONTENT = 'content';
+
+    /**
+     * Holds the name of our category property.
+     */
+    const PROP_CATEGORY = 'category';
+
+    /**
+     * Holds the name of our media property.
+     */
+    const PROP_MEDIA = 'media';
+
+    /**
+     * Holds the name of our geoData property.
+     */
+    const PROP_GEO = 'geoData';
+
     /**
      * Return an unique string that identifies this record.
      *
