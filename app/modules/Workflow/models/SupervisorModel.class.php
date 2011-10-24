@@ -113,8 +113,40 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         }
 
         $ticket = $this->getTicketByImportitem($data['record']);
-        $workflow = $this->getWorkflowByName($ticket->getWorkflow());
-        return $workflow->run($ticket);
+        return $this->processTicket($ticket);
+    }
+
+
+    /**
+     *
+     *
+     * @param WorkflowTicket $ticket
+     */
+    public function processTicket(WorkflowTicket $ticket)
+    {
+        while (TRUE)
+        {
+            $workflow = $this->getWorkflowByName($ticket->getWorkflow());
+            $code = $workflow->run($ticket);
+
+            /* @todo Remove debug code SupervisorModel.class.php from 24.10.2011 */
+            $__logger=AgaviContext::getInstance()->getLoggerManager();
+            $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
+            $__logger->log('Workflow result code: '.$code,AgaviILogger::DEBUG);
+
+            switch($code)
+            {
+                case WorkflowHandler::STATE_NEXT_WORKFLOW:
+                    break;
+                case WorkflowHandler::STATE_END:
+                    return TRUE;
+                default:
+                    throw new WorkflowException(
+                        'Workflow exitited with unexpected code:'.$code,
+                        WorkflowException::UNEXPECTED_EXIT_CODE);
+            }
+        }
+        return FALSE;
     }
 
     /**

@@ -33,5 +33,9 @@ class WorkflowException extends Exception
      * plugin not defined in workflow step
      */
     const PLUGIN_MISSING = 6;
+    /**
+     * unexpected workflow return code
+     */
+    const UNEXPECTED_EXIT_CODE = 7;
 
 }

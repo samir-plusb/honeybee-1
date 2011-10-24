@@ -10,6 +10,27 @@
 class WorkflowHandler
 {
     /**
+     * workflow process error
+     */
+    const STATE_ERROR = 0;
+
+    /**
+     * Workflow has changed; start the new one
+     */
+    const STATE_NEXT_WORKFLOW = 1;
+
+    /**
+     * Workflow has ended successfully
+     */
+    const STATE_END = 2;
+
+    /**
+     * process the next workflow step
+     */
+    const STATE_NEXT_STEP = 3;
+
+
+    /**
      * Name of workflow
      *
      * @var string
@@ -43,6 +64,8 @@ class WorkflowHandler
      * @var WorkflowTicket
      */
     protected $ticket;
+
+
 
 
     /**
@@ -97,7 +120,41 @@ class WorkflowHandler
      */
     public function run(WorkflowTicket $ticket)
     {
+        /* @todo Remove debug code WorkflowHandler.class.php from 24.10.2011 */
+        $__logger=AgaviContext::getInstance()->getLoggerManager();
+        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
+        $__logger->log($this,AgaviILogger::DEBUG);
+
         $this->setTicket($ticket);
+
+        while (TRUE)
+        {
+            $code = $this->main();
+
+            /* @todo Remove debug code WorkflowHandler.class.php from 24.10.2011 */
+            $__logger=AgaviContext::getInstance()->getLoggerManager();
+            $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
+            $__logger->log('Step return code: '.$code,AgaviILogger::DEBUG);
+
+            switch ($code)
+            {
+                case STATE_NEXT_STEP:
+                    continue;
+            }
+        }
+        return $code;
+    }
+
+    /**
+     *
+     * @return integer workflow state code
+     */
+    protected function main()
+    {
+        /* @todo Remove debug code WorkflowHandler.class.php from 24.10.2011 */
+        $__logger=AgaviContext::getInstance()->getLoggerManager();
+        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
+        $__logger->log('process step: '.$this->getCurrentStep(),AgaviILogger::DEBUG);
 
         $plugin = $this->getPluginForCurrentStep();
         if (! $plugin->isInteractive())
@@ -109,23 +166,46 @@ class WorkflowHandler
             $result = $plugin->process();
         }
 
-        $ticket->setPluginResult($result);
+        $this->getTicket()->setPluginResult($result);
 
         if ($result->canProceedToNextStep())
         {
-            /* @todo Remove debug code WorkflowHandler.class.php from 21.10.2011 */
-            $__logger=AgaviContext::getInstance()->getLoggerManager();
-            $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
-            $__logger->log($this->getTicket(),AgaviILogger::DEBUG);
-
+            $gate = $this->getGate($result);
+            if (! empty($gate['workflow']))
+            {
+                 $this->getTicket()->setWorkflow($gate['workflow']);
+                 return self::STATE_NEXT_WORKFLOW;
+            }
+            else if (! empty($gate['value']))
+            {
+                $this->setCurrentStep($currentStep);
+                return self::STATE_NEXT_STEP;
+            }
+            else
+            {
+                return self::STATE_END;
+            }
         }
+
         /* @todo Remove debug code WorkflowHandler.class.php from 21.10.2011 */
         $__logger=AgaviContext::getInstance()->getLoggerManager();
         $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
+        $__logger->log($this->getTicket(),AgaviILogger::DEBUG);
         $__logger->log($result,AgaviILogger::DEBUG);
 
 
-        return TRUE;
+        return self::STATE_ERROR;
+    }
+
+
+    /**
+     *
+     *
+     * @param WorkflowPluginResult $result
+     */
+    protected function getGate(WorkflowPluginResult $result)
+    {
+        return $this->steps[$this->getTicket()]['gates'][$result->getGate()];
     }
 
 
@@ -167,7 +247,7 @@ class WorkflowHandler
         if (! $step)
         {
             $step = $this->firstStep;
-            $this->getTicket()->setCurrentStep($step);
+            $this->setCurrentStep($step);
         }
 
         if (! array_key_exists($step, $this->steps))
@@ -223,6 +303,17 @@ class WorkflowHandler
         $plugin->initialize($this->getTicket(), $this->getStepParameters());
 
         return $plugin;
+    }
+
+    /**
+     * return instance info as string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf('%s(name "%s"; first %s; steps=%s)',
+            get_class($this), $this->name, $this->firstStep, implode(', ', array_keys($this->steps)));
     }
 }
 
