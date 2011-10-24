@@ -1,6 +1,4 @@
-var Midas = {};
-
-Midas.Module = (function()
+midas.core.Module = (function()
 {
     // Used to verify that our module_def constructor
     // is being called from inside this scope.
@@ -8,8 +6,6 @@ Midas.Module = (function()
 
     /**
      * Return if the passed argument is a function or not.
-     *
-     * @param fn
      */
     var is_func = function(fn)
     {
@@ -34,11 +30,11 @@ Midas.Module = (function()
                 return;
             }
 
-            if (is_func(this.initialize))
+            if (is_func(this.init))
             {
                 // When invoked without a matching init_token,
                 // we do our '_initialize' constructor method thingy.
-                this.initialize.apply(this, arguments);
+                this.init.apply(this, arguments);
             }
         };
 

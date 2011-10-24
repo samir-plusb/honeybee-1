@@ -10,13 +10,18 @@
                 <javascripts>
                     <script>js/libs/jquery-1.6.4.js</script>
                     <script>js/libs/jquery-ui-1.8.13.js</script>
+                    <script>js/libs/jquery-easing-1.3.js</script>
                 </javascripts>
             </package>
 
-            <package name="core" depends="libs">
+            <package name="midas.core" depends="libs">
                 <javascripts>
+                    <script>js/midas/core/core.js</script>
                     <script>js/midas/core/Module.js</script>
                     <script>js/midas/core/Behaviour.js</script>
+                    <script>js/midas/core/BaseObject.js</script>
+                    <script>js/midas/core/BaseView.js</script>
+                    <script>js/midas/core/CommandTriggerList.js</script>
                 </javascripts>
 
                 <stylesheets>
@@ -30,8 +35,16 @@
         </packages>
 
         <deployments>
-            <deployment viewpath="*"> <!-- require the core package for all views -->
-                <package ref="core" />
+            <deployment viewpath="items.edit.*">
+                <package ref="midas.core" />
+
+                <javascripts>
+                    <script>js/midas/items/items.js</script>
+                    <script>js/midas/items/edit/SlidePanel.js</script>
+                    <script>js/midas/items/edit/EditView.js</script>
+                    <script>js/midas/items/edit/EditController.js</script>
+                    <script>js/midas/items/edit/init.js</script>
+                </javascripts>
             </deployment>
         </deployments>
 

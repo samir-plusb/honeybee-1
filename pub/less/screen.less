@@ -22,62 +22,59 @@
  *
  * @desc    Defines the basic styling for all forms used inside the project.
  */
-form
+label
 {
-    label
-    {
-        display: block;
-        font-size: 0.9em;
-        margin-bottom: 0.3em;
-        text-shadow: 0 0.05em 0 #FFFFFF;
-    }
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 0.3em;
+    text-shadow: 0 0.05em 0 #FFFFFF;
+}
+
+textarea,
+input,
+select
+{
+    border: 1px solid #CCCCCC;
+}
+
+input,
+select,
+textarea
+{
+    box-shadow: 0 0.05em 0 #FFFFFF;
+    font-family: "EB Garamond", Garamond, serif;
+    font-size: 1.2em;
+    padding: 0.1em;
+}
+
+select
+{
+    height: 1.5em;
+}
+
+.input-full,
+.input-left
+{
+    margin-top: @layout_spacing;
+}
+
+.input-full
+{
+    position: relative;
 
     textarea,
     input,
     select
     {
-        border: 1px solid #CCCCCC;
+        display: block;
+        width: 100%;
     }
+}
 
-    input,
-    select,
-    textarea
-    {
-        box-shadow: 0 0.05em 0 #FFFFFF;
-        font-family: "EB Garamond", Garamond, serif;
-        font-size: 1.2em;
-        padding: 0.1em;
-    }
-
-    select
-    {
-        height: 1.5em;
-    }
-
-    .input-full,
-    .input-left
-    {
-        margin-top: @layout_spacing;
-    }
-
-    .input-full
-    {
-        position: relative;
-
-        textarea,
-        input,
-        select
-        {
-            display: block;
-            width: 100%;
-        }
-    }
-
-    .input-left
-    {
-        float: left;
-        margin-right: @layout_spacing;
-    }
+.input-left
+{
+    float: left;
+    margin-right: @layout_spacing;
 }
 
 /**
@@ -228,6 +225,7 @@ header
         display: none;
     }
 
+    /* content item command menu */
     .action-button-list
     {
         .info-small
@@ -240,32 +238,47 @@ header
         }
     }
 
-    .editor
+    /* content items list */
+    .content-items
     {
-        margin-bottom: @layout_spacing;
+        position: absolute;
+
+        .content-panel
+        {
+            width: 17em;
+        }
     }
 
-    .title
+    /* content item editing form */
+    form
     {
-        border-top: 1px solid #CCCCCC;
-        clear: both;
-        padding-top: 1em;
-    }
+        .editor
+        {
+            margin-bottom: @layout_spacing;
+        }
 
-    .extra-data-left
-    {
-        float: left;
-        width: 60%;
-    }
+        .title
+        {
+            border-top: 1px solid #CCCCCC;
+            clear: both;
+            padding-top: 1em;
+        }
 
-    .extra-data-right
-    {
-        float: left;
-        width: 40%;
+        .extra-data-left
+        {
+            float: left;
+            width: 60%;
+        }
+
+        .extra-data-right
+        {
+            float: left;
+            width: 40%;
+        }
     }
 }
 
-/* Styles that go with the import item data displayed inside the right column. */
+/* Styles that go with the import item data. */
 .document-data
 {
     float: left;
@@ -279,5 +292,19 @@ header
     .content-panel
     {
         margin-right: @layout_spacing;
+    }
+
+    .item-content
+    {
+        .input-full
+        {
+            height: 10em;
+            margin: 0;
+
+            textarea
+            {
+                height: 100%;
+            }
+        }
     }
 }

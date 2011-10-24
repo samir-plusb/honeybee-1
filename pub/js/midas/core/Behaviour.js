@@ -1,4 +1,4 @@
-Midas.Behaviour = {
+midas.core.Behaviour = {
     prefix: 'jsb_',
 
     handlers: {},
@@ -19,7 +19,7 @@ Midas.Behaviour = {
             throw new Error('The handler ' + key + ' is not defined!');
         }
 
-        var input_element = $('input:first', dom_element);
+        var input_element = $('input', dom_element).first();
 
         if (input_element)
         {
@@ -35,27 +35,26 @@ Midas.Behaviour = {
         {
             this.handler_instances[key].addEvent('event_fired', JsBehaviourToolkit.dispatchEvent);
         }
-
-        this.fireEvent('behaviour_applied', [{'behaviour_name': key, 'behaviour': this.handler_instances[key]}]);
     },
 
     apply: function(dom_element)
     {
-        var dom_elements = $(dom_element).getElements('.' + this.prefix);
+        var dom_elements = $('.' + this.prefix, dom_element);
         var dom_elements_length = dom_elements.length;
 
+        var dom_element;
+        var key;
         for (var i = 0; i < dom_elements_length; i++)
         {
-            var dom_element = dom_elements[i];
-            var key = dom_element.get('class').match(/jsb_([^\s]+)/)[1];
+            dom_element = dom_elements[i];
+            key = dom_element.attr('class').match(/jsb_([^\s]+)/)[1];
             this.call(key, dom_element);
             dom_element.removeClass(this.prefix);
             dom_element.removeClass(this.prefix + '' + key);
         }
-
     }
 };
 
 $(document).ready(function() {
-    Mida.Behaviour.apply(window.document);
+    midas.core.Behaviour.apply(window.document);
 });

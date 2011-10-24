@@ -11,35 +11,35 @@
  *
  * @desc    Defines the basic styling for all forms used inside the project.
  */
-form label {
+label {
   display: block;
   font-size: 0.9em;
   margin-bottom: 0.3em;
   text-shadow: 0 0.05em 0 #FFFFFF;
 }
-form textarea, form input, form select {
+textarea, input, select {
   border: 1px solid #CCCCCC;
 }
-form input, form select, form textarea {
+input, select, textarea {
   box-shadow: 0 0.05em 0 #FFFFFF;
   font-family: "EB Garamond", Garamond, serif;
   font-size: 1.2em;
   padding: 0.1em;
 }
-form select {
+select {
   height: 1.5em;
 }
-form .input-full, form .input-left {
+.input-full, .input-left {
   margin-top: 1em;
 }
-form .input-full {
+.input-full {
   position: relative;
 }
-form .input-full textarea, form .input-full input, form .input-full select {
+.input-full textarea, .input-full input, .input-full select {
   display: block;
   width: 100%;
 }
-form .input-left {
+.input-left {
   float: left;
   margin-right: 1em;
 }
@@ -188,4 +188,17 @@ header .personal-info h2 {
 }
 .document-data .content-panel {
   margin-right: 1em;
+}
+.document-data .item-content .input-full {
+  height: 10em;
+  margin: 0;
+}
+.document-data .item-content .input-full textarea {
+  height: 100%;
+}
+.content-items {
+  position: absolute;
+}
+.content-items .content-panel {
+  width: 17em;
 }
