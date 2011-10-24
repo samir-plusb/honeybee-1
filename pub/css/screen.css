@@ -151,6 +151,12 @@ header .personal-info h2 {
   float: left;
   position: relative;
   width: 60%;
+  /* content item command menu */
+
+  /* content items list */
+
+  /* content item editing form */
+
 }
 .document-editing h2 {
   display: none;
@@ -162,23 +168,29 @@ header .personal-info h2 {
   text-align: center;
   top: -7px;
 }
-.document-editing .editor {
+.document-editing .content-items {
+  position: absolute;
+}
+.document-editing .content-items .content-panel {
+  width: 17em;
+}
+.document-editing form .editor {
   margin-bottom: 1em;
 }
-.document-editing .title {
+.document-editing form .title {
   border-top: 1px solid #CCCCCC;
   clear: both;
   padding-top: 1em;
 }
-.document-editing .extra-data-left {
+.document-editing form .extra-data-left {
   float: left;
   width: 60%;
 }
-.document-editing .extra-data-right {
+.document-editing form .extra-data-right {
   float: left;
   width: 40%;
 }
-/* Styles that go with the import item data displayed inside the right column. */
+/* Styles that go with the import item data. */
 .document-data {
   float: left;
   width: 40%;
@@ -195,10 +207,4 @@ header .personal-info h2 {
 }
 .document-data .item-content .input-full textarea {
   height: 100%;
-}
-.content-items {
-  position: absolute;
-}
-.content-items .content-panel {
-  width: 17em;
 }
