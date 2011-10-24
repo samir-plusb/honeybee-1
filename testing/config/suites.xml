@@ -49,6 +49,7 @@
             <suite name="Workflow">
                 <testfiles>
                     <testfile>unit/modules/Workflow/config/WorkflowConfigSyntaxTest.php</testfile>
+                    <testfile>unit/modules/Workflow/models/WorkflowSupervisorTest.php</testfile>
                 </testfiles>
             </suite>
         </suites>

@@ -10,7 +10,9 @@
         <autoload name="IWorkflowPlugin">%core.module_dir%/Workflow/lib/base/IWorkflowPlugin.iface.php</autoload>
         <autoload name="WorkflowModuleSetup">%core.module_dir%/Workflow/lib/setup/WorkflowModuleSetup.class.php</autoload>
         <autoload name="WorkflowPluginResult">%core.module_dir%/Workflow/lib/WorkflowPluginResult.class.php</autoload>
-        <!-- -->
+        <!--  -->
+        <autoload name="WorkflowItem">%core.module_dir%/Workflow/lib/item/WorkflowItem.class.php</autoload>
+        <!--  -->
         <autoload name="WorkflowException">%core.module_dir%/Workflow/lib/WorkflowException.class.php</autoload>
         <autoload name="WorkflowHandler">%core.module_dir%/Workflow/lib/WorkflowHandler.class.php</autoload>
         <autoload name="WorkflowTicket">%core.module_dir%/Workflow/lib/WorkflowTicket.class.php</autoload>

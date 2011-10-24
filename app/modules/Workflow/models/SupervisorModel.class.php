@@ -114,7 +114,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
 
         $ticket = $this->getTicketByImportitem($data['record']);
         $workflow = $this->getWorkflowByName($ticket->getWorkflow());
-        $workflow->run($ticket);
+        return $workflow->run($ticket);
     }
 
     /**

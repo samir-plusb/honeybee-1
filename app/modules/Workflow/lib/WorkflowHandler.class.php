@@ -125,7 +125,7 @@ class WorkflowHandler
         $__logger->log($result,AgaviILogger::DEBUG);
 
 
-        return $result;
+        return TRUE;
     }
 
 

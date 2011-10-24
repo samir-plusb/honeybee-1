@@ -23,9 +23,9 @@ class WorkflowTicket implements Serializable
 
     /**
      *
-     * @var integer plugins global return state
+     * @var WorkflowPluginResult result of last processed plugin
      */
-    protected $state;
+    protected $result;
 
     /**
      * The ticket belongs to this workflow
@@ -68,13 +68,6 @@ class WorkflowTicket implements Serializable
      */
     protected $waitUntil;
 
-    /**
-     * status message for displinging in the ui
-     *
-     * @var string
-     */
-    protected $message;
-
 
     /**
      * Set the plugin result state
@@ -90,8 +83,7 @@ class WorkflowTicket implements Serializable
      */
     public function setPluginResult(WorkflowPluginResult $result)
     {
-        $this->state = $result->getState();
-        $this->message = $result->getMessage();
+        $this->result = $result;
     }
 
     /**
@@ -100,7 +92,7 @@ class WorkflowTicket implements Serializable
      */
     public function getState()
     {
-        return $this->state;
+        return $this->result->getState();
     }
 
     /**
@@ -110,7 +102,7 @@ class WorkflowTicket implements Serializable
      */
     public function getMessage()
     {
-        return $this->getMessage();
+        return $this->result->getMessage();
     }
 
     /**
@@ -188,7 +180,7 @@ class WorkflowTicket implements Serializable
      */
     public function setBlocked($blocked)
     {
-        $this->blocked = $blocked;
+        $this->blocked = $blocked ? TRUE : FALSE;
     }
 
     /**
@@ -305,7 +297,8 @@ class WorkflowTicket implements Serializable
              'workflow' => $this->getWorkflow(),
              'currentStep' => $this->getCurrentStep(),
              'blocked' => $this->getBlocked(),
-             'waitUntil' => $this->waitUntil instanceof DateTime ? $this->waitUntil->format(DATE_ISO8601) : NULL
+             'waitUntil' => $this->waitUntil instanceof DateTime ? $this->waitUntil->format(DATE_ISO8601) : NULL,
+             'result' => $this->result ? $this->result->toArray() : NULL
          );
          if (NULL !== $this->id)
          {
@@ -347,6 +340,11 @@ class WorkflowTicket implements Serializable
         $this->setWaitUntilFromIso8601($data['waitUntil']);
         $this->setWorkflow($data['workflow']);
         $this->setCurrentStep($data['currentStep']);
+
+        if (isset($data['result']))
+        {
+            $this->setPluginResult(WorkflowPluginResult::fromArray($data['result']));
+        }
     }
 
     /*
@@ -388,10 +386,10 @@ class WorkflowTicket implements Serializable
      */
     public function __toString()
     {
-        return sprintf('%s(Item "%s", Workflow %s/%s, State %d/"%s")',
+        return sprintf('%s(Item "%s", Workflow %s/%s, %s)',
             get_class($this),
             ($this->importItem ? $this->importItem->getIdentifier() : ''),
-            $this->workflow, $this->currentStep, $this->state, $this->message);
+            $this->workflow, $this->currentStep, $this->result);
     }
 }
 

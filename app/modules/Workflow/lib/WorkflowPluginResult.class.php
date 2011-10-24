@@ -52,11 +52,41 @@ class WorkflowPluginResult
      */
     private $message;
 
+    /**
+     *
+     *
+     * @param integer $state
+     * @param integer $gate
+     * @param string $message
+     */
     public function __construct($state, $gate = self::GATE_NONE, $message = NULL)
     {
         $this->state = intval($state);
         $this->gate = intval($gate);
         $this->message = $message;
+    }
+
+
+    /**
+     * construct result from array
+     *
+     * @param array $data assoziative array of member data
+     * @return WorkflowPluginResult
+     */
+    public static function fromArray(array $data)
+    {
+        return new self($data['state'], $data['gate'], $data['message']);
+    }
+
+
+    /**
+     * provide our member data as array as base for json export
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return get_object_vars($this);
     }
 
     /**
@@ -99,6 +129,7 @@ class WorkflowPluginResult
     {
         return self::STATE_OK == $this->state && self::GATE_DEFAULT <= $this->gate;
     }
+
 
     /**
      * convert instance to string
