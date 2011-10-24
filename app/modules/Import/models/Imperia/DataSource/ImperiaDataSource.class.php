@@ -259,6 +259,22 @@ class ImperiaDataSource extends ImportBaseDataSource
         }
     }
 
+
+    /**
+     * release system resources
+     */
+    public function __destruct()
+    {
+        if (is_resource($this->curlHandle))
+        {
+            curl_close($this->curlHandle);
+        }
+        if (! empty($this->cookiePath))
+        {
+            @unlink($this->cookiePath);
+        }
+    }
+
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 

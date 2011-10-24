@@ -4,7 +4,7 @@
  * The ImapDataRecord class is a concrete implementation of the ImportBaseDataRecord base class.
  * It serves as a DTO for mail data.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
@@ -21,8 +21,18 @@ class ImapDataRecord extends ImportBaseDataRecord
      */
     const TMP_FILE_PREFIX = 'midas.mail.';
 
+
+    private $tempFileName;
+
     // ---------------------------------- </CONSTANTS> -------------------------------------------
 
+    /**
+     * free system resources
+     */
+    public function __destruct()
+    {
+        $this->removeTmpFile();
+    }
 
     // ---------------------------------- <XmlBasedDataRecord IMPL> ------------------------------
 
@@ -46,6 +56,7 @@ class ImapDataRecord extends ImportBaseDataRecord
 
         $html = $parser->getMessageBody(ProjectMailParser::BODY_HTML);
         $text = $parser->getMessageBody(ProjectMailParser::BODY_TEXT);
+        $this->removeTmpFile();
 
         return array(
             self::PROP_IDENT     => uniqid(),
@@ -64,6 +75,19 @@ class ImapDataRecord extends ImportBaseDataRecord
     // ---------------------------------- <WORKING METHODS> --------------------------------------
 
     /**
+     * unlink temporary generated file
+     */
+    protected function removeTmpFile()
+    {
+        if (! empty($this->tempFileName))
+        {
+            unlink($this->tempFileName);
+            $this->tempFileName = NULL;
+        }
+    }
+
+
+    /**
      * Write the given mime-mail data to a tmp file.
      *
      * @param       string $rawMail The raw mime content.
@@ -72,7 +96,7 @@ class ImapDataRecord extends ImportBaseDataRecord
      */
     protected function writeMailToTmpFile($rawMail)
     {
-        $filePath = tempnam(sys_get_temp_dir(), self::TMP_FILE_PREFIX);
+        $filePath = $this->tempFileName = tempnam(sys_get_temp_dir(), self::TMP_FILE_PREFIX);
 
         if (! file_put_contents($filePath, $rawMail))
         {
