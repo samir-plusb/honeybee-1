@@ -1,8 +1,11 @@
 /**
+ * @class
+ *
  * The EditView module manages all behaviour for the system's Items/EditView.
  */
-midas.items.edit.EditView = midas.core.BaseView.extend({
-
+midas.items.edit.EditView = midas.core.BaseView.extend(
+/** @lends midas.items.edit.EditView# */
+{
     log_prefix: "EditView",
 
     content_panel: null,
@@ -15,13 +18,13 @@ midas.items.edit.EditView = midas.core.BaseView.extend({
     {
         this.initContentTabs();
 
-        this.content_item_menu = new midas.core.CommandTriggerList(
-            $('#content-item-menu').first()[0]
-        );
-
         this.slide_panel = new midas.items.edit.SlidePanel(
             $('.slide-panel', this.layout_root)
             .css({ 'position': 'absolute', 'width': '100%' })
+        );
+
+        this.content_item_menu = new midas.core.CommandTriggerList(
+            $('#content-item-menu').first()[0]
         );
 
         this.content_item_menu.registerCommands({

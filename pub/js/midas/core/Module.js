@@ -14,6 +14,9 @@ midas.core.Module = (function()
 
     var module = function() {};
 
+    /**
+     *
+     */
     module.create = function(module_def)
     {
         /**

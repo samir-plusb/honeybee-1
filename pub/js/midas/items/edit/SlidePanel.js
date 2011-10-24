@@ -62,6 +62,6 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend({
     {
         this.panel.animate({
             left: range
-        }, this.options.duration || 500, this.options.duration || 'easeOutExpo', callback);
+        }, this.options.duration || 500, this.options.transition || 'easeOutExpo', callback);
     }
 });

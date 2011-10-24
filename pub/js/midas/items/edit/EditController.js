@@ -1,5 +1,11 @@
-midas.items.edit.EditController = midas.core.BaseObject.extend({
-
+/**
+ * The EditView module manages all behaviour for the system's Items/EditView.
+ * @augments midas.core.BaseObject
+ * @class
+ */
+midas.items.edit.EditController = midas.core.BaseObject.extend(
+/** @lends midas.items.edit.EditController# */
+{
     log_prefix: "EditController",
 
     view: null,
