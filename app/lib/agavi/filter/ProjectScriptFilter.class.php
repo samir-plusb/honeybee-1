@@ -242,6 +242,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             $script_packer = new ProjectScriptPacker();
             $packedJs = $script_packer->pack($scripts, 'js');
 
+            array_map( "unlink", glob($this->config->getJsCacheDir().'/*.js')); // remove all prev caches
             file_put_contents($deployPath, $packedJs);
         }
 
@@ -263,6 +264,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
                 'css'
             );
 
+            array_map( "unlink", glob($this->config->getCssCacheDir().'/*.css')); // remove all prev caches
             file_put_contents($deployPath, $packedCss);
         }
 
