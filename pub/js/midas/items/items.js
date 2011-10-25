@@ -1,12 +1,11 @@
 /**
- * This file sets up and documents the midas.items namespace sections.
+ * @namespace The midas.items namespace holds all Items module related stuff.
+ * @name midas.items
  */
-(function(env)
-{
-    env.midas.items = {
-        /**
-         * The edit package holds all Items/Edit related code.
-         */
-        edit: {}
-    };
-})(window);
+midas.items = {
+    /**
+     * @namespace The midas.items.edit namespace holds all Items/Edit* related stuff.
+     * @name midas.items.edit
+     */
+    edit: {}
+};

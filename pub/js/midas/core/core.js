@@ -1,17 +1,16 @@
 /**
- * This file sets up and documents the different midas namespace sections.
+ * @namespace The midas namespace holds all midas related stuff.
+ * @name midas
  */
-(function(env)
-{
-    env.midas = {
-        /**
-         * The core package holds all midas core objects, such as Module, Behaviour and Logger.
-         */
-        core: {},
-        /**
-         * The view package holds code related to the different views of the system.
-         * Mostly you will have a subnamespace for each view that holds all the dedicated components.
-         */
-        views: {}
-    };
-})(window);
+var midas = {
+    /**
+     * @namespace The midas.core namespace holds all core base stuff.
+     * @name midas.core
+     */
+    core: {},
+    /**
+     * @namespace The midas.views namespace holds all view related base stuff.
+     * @name midas.views
+     */
+    views: {}
+};

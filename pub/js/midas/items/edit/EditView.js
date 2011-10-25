@@ -1,19 +1,41 @@
 /**
  * @class
- *
- * The EditView module manages all behaviour for the system's Items/EditView.
+ * @augments midas.core.BaseObject
+ * @description The EditView module manages all behaviour for the system's Items/EditSuccessView.
+ * @author <a href="mailto:tschmittrink@gmail.com">Thorsten Schmit-Rink</a>
+ * @version $Id:$
  */
 midas.items.edit.EditView = midas.core.BaseView.extend(
-/** @lends midas.items.edit.EditView# */
+/** @lends midas.items.edit.EditView.prototype */
 {
+    /**
+     * The prefix to use when logging messages from this class.
+     * @type string
+     */
     log_prefix: "EditView",
 
+    /**
+     * Holds a jquery element, that represents our import item content-panel.
+     * @type jquery
+     */
     content_panel: null,
 
+    /**
+     * Holds an SlidePanel instance used to slide our content.
+     * @type midas.core.CommandTriggerList
+     */
     content_item_menu: null,
 
+    /**
+     * Holds an SlidePanel instance used to slide our content.
+     * @type midas.items.edit.SlidePanel
+     */
     slide_panel: null,
 
+    /**
+     * @description <p>Initializes our gui (behaviours).</p>
+     * <p>This method is invoked from midas.core.BaseView, upon init invocation.</p>
+     */
     onInitGui: function()
     {
         this.initContentTabs();
@@ -40,6 +62,9 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         this.logInfo(items_container.css('padding'));
     },
 
+    /**
+     * @description Initializes the jquery-ui tabs for our content_panel.
+     */
     initContentTabs: function()
     {
         this.content_panel = $(this.options.tabs_container, this.layout_root);
