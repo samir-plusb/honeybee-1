@@ -33,6 +33,12 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     slide_panel: null,
 
     /**
+     * Holds a jquery element, that represents our content-item editing form.
+     * @type jquery
+     */
+    editing_form: null,
+
+    /**
      * @description <p>Initializes our gui (behaviours).</p>
      * <p>This method is invoked from midas.core.BaseView, upon init invocation.</p>
      */
@@ -56,10 +62,14 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             'list': this.slide_panel.toggle.bind(this.slide_panel)
         });
 
+        this.editing_form = new midas.items.edit.EditForm(
+            $('.document-editing form', this.layout_root)
+        );
+
         var items_container = $('.content-items').first();
         items_container.css('left', -items_container.outerWidth());
 
-        this.logInfo(items_container.css('padding'));
+        this.logInfo("Check that form", this.editing_form);
     },
 
     /**

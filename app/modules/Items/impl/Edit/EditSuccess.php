@@ -135,7 +135,7 @@
                     </div>
                 </div> <!-- </fieldset> -->
             </div>
-            
+
             <div class="extra-data-right">
                 <div class="datetime-data content-panel"> <!-- <fieldset> -->
                     <h3 class="legend">Zeiten</h3>
@@ -148,11 +148,11 @@
                         <label for="date[from]">
                             Wann findet das statt? <span>Bei Ausstellungen: Startdatum = Enddatum</span>. von
                         </label>
-                        <input name="data[date[from]]" type="text" id="date[from]" />
+                        <input name="data[date[from]]" class="date-picker" type="text" id="date[from]" />
                     </div>
                     <div class="input-full">
                         <label for="date[till]">bis</label>
-                        <input name="data[date[till]]" type="text" id="date[till]" />
+                        <input name="data[date[till]]" class="date-picker" type="text" id="date[till]" />
                     </div>
                 </div> <!-- </fieldset> -->
 
