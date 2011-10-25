@@ -10,9 +10,9 @@ midas.core.BaseObject = midas.core.Module.create(
 {
     /**
      * The prefix to use when logging messages from this class.
-     * @type string
+     * @type String
      */
-    log_prefix: "[BaseObject]",
+    log_prefix: "BaseObject",
 
     /**
      * Holds our currently used logger instance.
@@ -22,61 +22,83 @@ midas.core.BaseObject = midas.core.Module.create(
 
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
-     * @param {object} options An optional object containing options that are used to configure runtime behaviour.
+     * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
      */
     init: function(options)
     {
+        this.options = options || {};
         this.logger = {}; // @todo create a logger class and use it here.
     },
 
     /**
      * @description Logs a debug message to our debug logging destination.
-     * @param {string} msg The message to log.
+     * @param {String} msg The message to log.
      */
     logDebug: function(msg)
     {
-        var msg = "["+(new Date()).getTime()+"] ["+this.log_prefix+"] " + msg;
-        var args = [msg];
-
+        var args = [];
         for (var i = 1; i < arguments.length; i++)
         {
             args.push(arguments[i]);
         }
-        // @todo use logger as soon as available.
-        if (console && console.log) console.log.apply(console, args);
+
+        this.log(msg, 'debug', args);
     },
 
     /**
      * @description Logs a info message to our info logging destination.
-     * @param {string} msg The message to log.
+     * @param {String} msg The message to log.
      */
     logInfo: function(msg)
     {
-        var msg = "["+(new Date()).getTime()+"] ["+this.log_prefix+"] " + msg;
-        var args = [msg];
-
+        var args = [];
         for (var i = 1; i < arguments.length; i++)
         {
             args.push(arguments[i]);
         }
-        // @todo use logger as soon as available.
-        if (console && console.info) console.info.apply(console, args);
+
+        this.log(msg, 'info', args);
     },
 
     /**
      * @description Logs a error message to our error logging destination.
-     * @param {string} msg The message to log.
+     * @param {String} msg The message to log.
      */
-    logError: function(msg)
+    logWarning: function(msg)
     {
-        var msg = "["+(new Date()).getTime()+"] ["+this.log_prefix+"] " + msg;
-        var args = [msg];
-
+        var args = [];
         for (var i = 1; i < arguments.length; i++)
         {
             args.push(arguments[i]);
         }
+
+        this.log(msg, 'warn', args);
+    },
+
+    /**
+     * @description Logs a a given message to the output dest. matching the provided severity.
+     * @param {String} msg The message to log.
+     * @param {String} severity The severity of the given log message (log, info ,error);
+     */
+    log: function(msg, severity, args)
+    {
+        // %c, args.unshift('color: white; background-color:black');
+
+        args.unshift(
+            "[" + new Date().getTime() + "] [" + this.log_prefix + "] " + msg
+        );
+
         // @todo use logger as soon as available.
-        if (console && console.error) console.error.apply(console, args);
+        if (console && console[severity]) console[severity].apply(console, args);
+    },
+
+    /**
+     * @description <p>Handles the given error.</p>
+     * <p>In development a stacktrace is printed to the logging.</p>
+     * @param {Error} exception
+     */
+    handleException: function(exception)
+    {
+        if (console && console.exception) console.exception.apply(console, [exception]);
     }
 });

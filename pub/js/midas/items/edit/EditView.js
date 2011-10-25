@@ -48,7 +48,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
         this.slide_panel = new midas.items.edit.SlidePanel(
             $('.slide-panel', this.layout_root)
-            .css({ 'position': 'absolute', 'width': '100%' })
+            .css({ 'position': 'absolute', 'width': '100%' }),
+            { range: '20em' }
         );
 
         this.content_item_menu = new midas.core.CommandTriggerList(
@@ -68,8 +69,6 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
         var items_container = $('.content-items').first();
         items_container.css('left', -items_container.outerWidth());
-
-        this.logInfo("Check that form", this.editing_form);
     },
 
     /**

@@ -26,14 +26,21 @@ midas.items.edit.EditController = midas.core.BaseObject.extend(
      */
     init: function(options)
     {
-        this.parent(options);
-        
-        this.view = new midas.items.edit.EditView(
-            this,
-            $(document.body)[0], {
-                'tabs_container': '.item-content'
-            }
-        );
+        try
+        {
+            this.parent(options);
+
+            this.view = new midas.items.edit.EditView(
+                this,
+                $(document.body)[0], {
+                    'tabs_container': '.item-content'
+                }
+            );
+        }
+        catch(err)
+        {
+            this.handleException(err);
+        }
     },
 
     /**

@@ -1,21 +1,54 @@
-midas.items.edit.SlidePanel = midas.core.BaseObject.extend({
-
+/**
+ * @class
+ * @augments midas.core.BaseObject
+ * @description The EditView module manages all behaviour for the system's Items/EditSuccessView.
+ * @author <a href="mailto:tschmittrink@gmail.com">Thorsten Schmit-Rink</a>
+ * @version $Id:$
+ */
+midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
+/** @lends midas.items.edit.DateRangeInput.prototype */
+{
+    /**
+     * The prefix to use when logging messages from this class.
+     * @type String
+     */
     log_prefix: 'SlidePanel',
 
-    panel: null,
+    /**
+     * Holds the panel that wraps our content and makes it slideable.
+     * @type jQuery
+     */
+    element: null,
 
-    options: null,
-
+    /**
+     * Internal helper var, that stores our slide state.
+     * @type Boolean
+     */
     has_slided: false,
 
-    init: function(panel, options)
+    /**
+     * @description 'Magic' method called during our prototype's constructor execution.
+     * @param {jQuery} element The block level element (panel), that we will make slideable.
+     * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
+     */
+    init: function(element, options)
     {
-        $(window.document.body).css('overflow-x', 'hidden');
+        this.parent(options);
+        this.element = element;
 
-        this.panel = panel;
-        this.options = options || {};
+        if (! this.options.range)
+        {
+            this.logWarning("No valid range options supplied. Options:", this.options);
+            throw "[SlidePanel] You must provide a valid range option.";
+        }
+
+        $(window.document.body).css('overflow-x', 'hidden');
     },
 
+    /**
+     * @description Toggle our slide state, thereby sliding in or out,
+     * depending on wether we have previously been slided in or out.
+     */
     toggle: function()
     {
         if (! this.has_slided)
@@ -32,6 +65,9 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend({
         }
     },
 
+    /**
+     * @description Slide our panel in (left to right).
+     */
     slideIn: function()
     {
         if (this.has_slided)
@@ -39,12 +75,15 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend({
             return false;
         }
 
-        this.slide('+=20em', function()
+        this.slide("+=" + this.options.range, function()
         {
             this.logInfo("slideIn complete.");
         }.bind(this));
     },
 
+    /**
+     * @description Slide our panel out (right to left).
+     */
     slideOut: function()
     {
         if (! this.has_slided)
@@ -52,15 +91,21 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend({
             return false;
         }
 
-        this.slide('-=20em', function()
+        this.slide("-=" + this.options.range, function()
         {
             this.logInfo("slideOut complete.");
         }.bind(this));
     },
 
+    /**
+     * @description <p>Slide from left to right by the given range.</p>
+     * <p>Negativ ranges will result in the oposite slide direction (right to left).</p>
+     * @param {String} range A string determining how far to slide. For example: "23%".
+     * @param {Function} (optional) Callback that is invoked when sliding has finished.
+     */
     slide: function(range, callback)
     {
-        this.panel.animate({
+        this.element.animate({
             left: range
         }, this.options.duration || 500, this.options.transition || 'easeOutExpo', callback);
     }
