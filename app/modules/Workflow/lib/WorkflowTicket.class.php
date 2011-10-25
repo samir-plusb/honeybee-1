@@ -68,6 +68,15 @@ class WorkflowTicket implements Serializable
      */
     protected $waitUntil;
 
+    /**
+     * get the persistent id of ticket if available
+     *
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->id;
+    }
 
     /**
      * Set the plugin result state
@@ -332,7 +341,8 @@ class WorkflowTicket implements Serializable
             }
             else
             {
-                $this->setImportItem($supervisor->getImportItem($data['importItem']));
+                $itemPeer = $supervisor->getItemPeer();
+                $this->setImportItem($itemPeer->getItemByIdentifier($data['importItem']));
             }
         }
 

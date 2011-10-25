@@ -127,7 +127,8 @@ class WorkflowHandler
 
         $this->setTicket($ticket);
 
-        while (TRUE)
+        $code = self::STATE_NEXT_STEP;
+        while (self::STATE_NEXT_STEP === $code)
         {
             $code = $this->main();
 
@@ -135,13 +136,8 @@ class WorkflowHandler
             $__logger=AgaviContext::getInstance()->getLoggerManager();
             $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
             $__logger->log('Step return code: '.$code,AgaviILogger::DEBUG);
-
-            switch ($code)
-            {
-                case STATE_NEXT_STEP:
-                    continue;
-            }
         }
+
         return $code;
     }
 
@@ -173,8 +169,8 @@ class WorkflowHandler
             $gate = $this->getGate($result);
             if (! empty($gate['workflow']))
             {
-                 $this->getTicket()->setWorkflow($gate['workflow']);
-                 return self::STATE_NEXT_WORKFLOW;
+                $this->getTicket()->setWorkflow($gate['workflow']);
+                return self::STATE_NEXT_WORKFLOW;
             }
             else if (! empty($gate['value']))
             {
@@ -205,7 +201,7 @@ class WorkflowHandler
      */
     protected function getGate(WorkflowPluginResult $result)
     {
-        return $this->steps[$this->getTicket()]['gates'][$result->getGate()];
+        return $this->steps[$this->getCurrentStep()]['gates'][$result->getGate()];
     }
 
 

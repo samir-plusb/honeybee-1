@@ -45,6 +45,9 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
      */
     private $couchClient;
 
+
+    private $itemPeer;
+
     /**
      * list of allready loaded workflows
      *
@@ -86,9 +89,24 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
      *
      * @return ExtendedCouchDbClient
      */
-    public function getCouchClient()
+    public function getDatabase()
     {
         return $this->couchClient;
+    }
+
+
+    /**
+     * get item peer handler instance to access import items in the database
+     *
+     * @return WorkflowItemPeer
+     */
+    public function getItemPeer()
+    {
+        if (! $this->itemPeer)
+        {
+            $this->itemPeer = new WorkflowItemPeer();
+        }
+        return $this->itemPeer;
     }
 
 
@@ -116,15 +134,17 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         return $this->processTicket($ticket);
     }
 
-
     /**
-     *
+     * process a ticket in a workflow until the workflow is ended or stopped
      *
      * @param WorkflowTicket $ticket
+     * @return boolean
+     * @throws WorkflowException
      */
     public function processTicket(WorkflowTicket $ticket)
     {
-        while (TRUE)
+        $code = WorkflowHandler::STATE_NEXT_WORKFLOW;
+        while (WorkflowHandler::STATE_NEXT_WORKFLOW === $code)
         {
             $workflow = $this->getWorkflowByName($ticket->getWorkflow());
             $code = $workflow->run($ticket);
@@ -134,7 +154,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
             $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
             $__logger->log('Workflow result code: '.$code,AgaviILogger::DEBUG);
 
-            switch($code)
+            switch ($code)
             {
                 case WorkflowHandler::STATE_NEXT_WORKFLOW:
                     break;
@@ -146,6 +166,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
                         WorkflowException::UNEXPECTED_EXIT_CODE);
             }
         }
+
         return FALSE;
     }
 
@@ -161,7 +182,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
      */
     public function getTicketByImportitem(IDataRecord $record)
     {
-        $result = $this->getCouchClient()->getView(
+        $result = $this->getDatabase()->getView(
             NULL, self::DESIGNDOC, "ticketByImportitem",
             json_encode($record->getIdentifier()),
             0,
@@ -196,7 +217,7 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     }
 
     /**
-     *
+     * store ticket in the database
      *
      * @param WorkflowTicket $ticket
      * @return boolean
@@ -209,30 +230,19 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     }
 
     /**
+     * get a ticket by its document id
      *
+     * @see WorkflowTicketValidator
      *
      * @param string $identifier
+     * @return WorkflowTicket
      */
     public function getTicketById($identifier)
     {
-        $db = $this->getCouchClient();
+        $db = $this->getDatabase();
         $data = $db->getDoc(self::DATABASE_TICKETS, $identifier);
         $ticket = new WorkflowTicket($data);
         return $ticket;
-    }
-
-    /**
-     * load a saved import item for use in tickets
-     *
-     * @see WorkflowTicket::fromArray()
-     * @todo implement Workflow_SupervisorModel::getImportItem
-     *
-     * @param string $identifier
-     * @return IDataRecord
-     */
-    public function getImportItem($identifier)
-    {
-        return NULL;
     }
 
     /**
@@ -273,7 +283,13 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
             }
             $this->workflowByName[$name] = new WorkflowHandler($config['workflow']);
         }
-        return $this->workflowByName[$name];
+        /* @todo Remove debug code SupervisorModel.class.php from 25.10.2011 */
+        $__logger=AgaviContext::getInstance()->getLoggerManager();
+        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
+        $__logger->log("Workflow: $name",AgaviILogger::DEBUG);
+
+        // return only fresh instances
+        return clone $this->workflowByName[$name];
     }
 
 
@@ -286,10 +302,10 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
      */
     public function getPluginByName($pluginName)
     {
-        $className = 'Workflow'.$pluginName.'Plugin';
+        $className = 'Workflow'.ucfirst($pluginName).'Plugin';
         if (! class_exists($className, TRUE))
         {
-            throw new WorkflowException("Can not find class '$class' for plugin: ".$pluginName, WorkflowException::PLUGIN_MISSING);
+            throw new WorkflowException("Can not find class '$className' for plugin: ".$pluginName, WorkflowException::PLUGIN_MISSING);
         }
 
         $plugin = new $className();
@@ -307,6 +323,12 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     public function isInteractive()
     {
         return FALSE;
+    }
+
+
+    public function __sleep()
+    {
+        return array();
     }
 }
 

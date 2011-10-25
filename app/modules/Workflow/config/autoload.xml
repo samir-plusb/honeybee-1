@@ -12,6 +12,7 @@
         <autoload name="WorkflowPluginResult">%core.module_dir%/Workflow/lib/WorkflowPluginResult.class.php</autoload>
         <!--  -->
         <autoload name="WorkflowItem">%core.module_dir%/Workflow/lib/item/WorkflowItem.class.php</autoload>
+        <autoload name="WorkflowItemPeer">%core.module_dir%/Workflow/lib/item/WorkflowItemPeer.class.php</autoload>
         <!--  -->
         <autoload name="WorkflowException">%core.module_dir%/Workflow/lib/WorkflowException.class.php</autoload>
         <autoload name="WorkflowHandler">%core.module_dir%/Workflow/lib/WorkflowHandler.class.php</autoload>

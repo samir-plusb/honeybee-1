@@ -15,7 +15,7 @@ class WorkflowModuleSetup extends BaseCouchDatabaseSetup
      */
     public function __construct()
     {
-        $this->setDatabase(Workflow_SupervisorModel::getInstance()->getCouchClient());
+        $this->setDatabase(Workflow_SupervisorModel::getInstance()->getDatabase());
     }
 
 
