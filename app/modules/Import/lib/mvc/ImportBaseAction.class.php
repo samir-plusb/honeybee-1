@@ -35,11 +35,14 @@ class ImportBaseAction extends ProjectBaseAction
     {
         parent::initialize($container);
 
-        // register workflow start on import success
-        $workflowSupervisor = Workflow_SupervisorModel::getInstance();
-        ProjectEventProxy::getInstance()->subscribe(
-            BaseDataImport::EVENT_RECORD_SUCCESS,
-            array($workflowSupervisor, 'importRecordImportedCallback'));
+        if (AgaviConfig::get('import.trigger_workflow', TRUE))
+        {
+            // register workflow start on import success
+            $workflowSupervisor = Workflow_SupervisorModel::getInstance();
+                ProjectEventProxy::getInstance()->subscribe(
+                BaseDataImport::EVENT_RECORD_SUCCESS,
+                array($workflowSupervisor, 'importRecordImportedCallback'));
+        }
     }
 
 
