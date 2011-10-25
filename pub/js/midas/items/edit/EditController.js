@@ -50,7 +50,7 @@ midas.items.edit.EditController = midas.core.BaseObject.extend(
      */
     onNewItemIntent: function()
     {
-        this.logInfo("onNewItemIntent");
+        this.logDebug("onNewItemIntent");
     },
 
     /**
@@ -60,7 +60,7 @@ midas.items.edit.EditController = midas.core.BaseObject.extend(
      */
     onStoreItemIntent: function()
     {
-        this.logInfo("onStoreItemIntent");
+        this.logDebug("onStoreItemIntent");
     },
 
     /**
@@ -70,6 +70,6 @@ midas.items.edit.EditController = midas.core.BaseObject.extend(
      */
     onDeleteItemIntent: function()
     {
-        this.logInfo("onDeleteItemIntent");
+        this.logDebug("onDeleteItemIntent");
     }
 });

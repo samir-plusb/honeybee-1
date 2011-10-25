@@ -1,6 +1,6 @@
 /**
  * @class
- * @augments midas.core.DateRangeInput
+ * @augments midas.core.BaseObject
  * @description <p>The DateRangeInput wraps to input fields describing a start and an end date.</p>
  * @author <a href="mailto:tschmittrink@gmail.com">Thorsten Schmit-Rink</a>
  * @version $Id:$
@@ -36,6 +36,7 @@ midas.items.edit.DateRangeInput = midas.core.BaseObject.extend(
 
         this.start_field = start_date_input;
         this.end_field = end_date_input;
+        this.end_field.datepicker();
 
         this.start_field.datepicker({
             onSelect: function(date_string)

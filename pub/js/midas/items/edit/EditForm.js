@@ -7,7 +7,7 @@
  * @version $Id:$
  */
 midas.items.edit.EditForm = midas.core.BaseObject.extend(
-/** @lends midas.items.edit.EditFrom.prototype */
+/** @lends midas.items.edit.EditForm.prototype */
 {
     /**
      * The prefix to use when logging messages from this class.

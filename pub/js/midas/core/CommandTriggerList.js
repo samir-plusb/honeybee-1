@@ -1,13 +1,41 @@
-midas.core.CommandTriggerList = midas.core.BaseObject.extend({
-
+/**
+ * @class
+ * @augments midas.core.BaseObject
+ * @description <p>The CommandTriggerList is a generic component for handling click events on a list of elements
+ * and mapping them to specific commands.</p>
+ * @author <a href="mailto:tschmittrink@gmail.com">Thorsten Schmit-Rink</a>
+ * @version $Id:$
+ */
+midas.core.CommandTriggerList = midas.core.BaseObject.extend(
+/** @lends midas.core.CommandTriggerList.prototype */
+{
+    /**
+     * The prefix to use when logging messages from this class.
+     * @type String
+     */
     log_prefix: "CommandTriggerList",
 
+    /**
+     * Holds a jQuery element that is treated as a trigger container (ul) and searched for items (li a).
+     * @type jQuery
+     */
     container: null,
 
+    /**
+     * Holds an object that is used to store our command items together with their related actions.
+     * @type Object
+     */
     command_items: {},
 
-    init: function(container)
+    /**
+     * @description 'Magic' method called during our prototype's constructor execution.
+     * @param {jQuery} container The container (list) that contains our command item elements.
+     * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
+     */
+    init: function(container, options)
     {
+        this.parent(options);
+
         this.container = container;
 
         $('li a', this.container).each(function(idx, item)
@@ -28,8 +56,17 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend({
                 event.target
             );
         }.bind(this));
+
+        if (this.options.commands)
+        {
+            this.registerCommands(this.options.commands);
+        }
     },
 
+    /**
+     * @description Registers the given commands.
+     * @param {Object} callback_map
+     */
     registerCommands: function(callback_map)
     {
         for (var name in callback_map)
@@ -38,6 +75,11 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend({
         }
     },
 
+    /**
+     * @description Registers the given command.
+     * @param {String} name
+     * @param {Function} callback
+     */
     registerCommand: function(name, callback)
     {
         if ('function' != typeof callback)
@@ -53,6 +95,11 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend({
         this.command_items[name].callback = callback;
     },
 
+    /**
+     * @description Dispatches the given command.
+     * @param {String} name
+     * @param {jQuery} affected_item
+     */
     dispatchCommand: function(name, affected_item)
     {
         if (! this.command_items[name])
@@ -68,6 +115,11 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend({
         }
     },
 
+    /**
+     * @description Resolve the command name for a given command item.
+     * @param {jQuery} item
+     * @return {String} The parsed command name.
+     */
     parseCommandName: function(item)
     {
         var name_string = $(item).attr('href');

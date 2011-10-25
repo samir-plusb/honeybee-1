@@ -1,12 +1,12 @@
 /**
  * @class
  * @augments midas.core.BaseObject
- * @description The EditView module manages all behaviour for the system's Items/EditSuccessView.
+ * @description The SlidePanel allows you to slide a container from left to right.
  * @author <a href="mailto:tschmittrink@gmail.com">Thorsten Schmit-Rink</a>
  * @version $Id:$
  */
 midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
-/** @lends midas.items.edit.DateRangeInput.prototype */
+/** @lends midas.items.edit.SlidePanel.prototype */
 {
     /**
      * The prefix to use when logging messages from this class.
@@ -38,7 +38,7 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
 
         if (! this.options.range)
         {
-            this.logWarning("No valid range options supplied. Options:", this.options);
+            this.logWarning("No valid range option supplied. Options:", this.options);
             throw "[SlidePanel] You must provide a valid range option.";
         }
 
@@ -53,13 +53,11 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
     {
         if (! this.has_slided)
         {
-            this.logInfo("open");
             this.slideIn();
             this.has_slided = true;
         }
         else
         {
-            this.logInfo("close");
             this.slideOut();
             this.has_slided = false;
         }
@@ -72,12 +70,12 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
     {
         if (this.has_slided)
         {
-            return false;
+            return;
         }
 
         this.slide("+=" + this.options.range, function()
         {
-            this.logInfo("slideIn complete.");
+            this.logDebug("slideIn complete.");
         }.bind(this));
     },
 
@@ -88,12 +86,12 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
     {
         if (! this.has_slided)
         {
-            return false;
+            return;
         }
 
         this.slide("-=" + this.options.range, function()
         {
-            this.logInfo("slideOut complete.");
+            this.logDebug("slideOut complete.");
         }.bind(this));
     },
 

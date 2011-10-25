@@ -34,7 +34,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
     /**
      * Holds a jquery element, that represents our content-item editing form.
-     * @type jQuery
+     * @type midas.items.edit.EditForm
      */
     editing_form: null,
 
