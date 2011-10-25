@@ -10,13 +10,13 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 {
     /**
      * The prefix to use when logging messages from this class.
-     * @type string
+     * @type String
      */
     log_prefix: "EditView",
 
     /**
      * Holds a jquery element, that represents our import item content-panel.
-     * @type jquery
+     * @type jQuery
      */
     content_panel: null,
 
@@ -34,7 +34,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
     /**
      * Holds a jquery element, that represents our content-item editing form.
-     * @type jquery
+     * @type jQuery
      */
     editing_form: null,
 

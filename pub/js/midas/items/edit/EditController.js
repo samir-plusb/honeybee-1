@@ -22,10 +22,12 @@ midas.items.edit.EditController = midas.core.BaseObject.extend(
 
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
-     * @param {object} options An optional object containing options that are used to configure runtime behaviour.
+     * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
      */
-    init: function()
+    init: function(options)
     {
+        this.parent(options);
+        
         this.view = new midas.items.edit.EditView(
             this,
             $(document.body)[0], {

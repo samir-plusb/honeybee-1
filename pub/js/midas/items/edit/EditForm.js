@@ -18,6 +18,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
     init: function(element, options)
     {
         this.parent(options);
+        
         this.form = element;
 
         $('input, select, textarea').each(function(idx, field)
