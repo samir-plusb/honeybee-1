@@ -27,6 +27,20 @@
                 <stylesheets>
                     <script>css/reset.css</script>
                     <script>css/fonts.css</script>
+                </stylesheets>
+            </package>
+
+            <package name="midas.items" depends="midas.core">
+                <javascripts>
+                    <script>js/midas/items/items.js</script>
+                    <script>js/midas/items/edit/SlidePanel.js</script>
+                    <script>js/midas/items/edit/DateRangeInput.js</script>
+                    <script>js/midas/items/edit/EditForm.js</script>
+                    <script>js/midas/items/edit/EditView.js</script>
+                    <script>js/midas/items/edit/EditController.js</script>
+                </javascripts>
+
+                <stylesheets>
                     <script>css/screen.css</script>
                     <script>css/jquery-ui.1.8.13.custom.css</script>
                 </stylesheets>
@@ -35,16 +49,10 @@
         </packages>
 
         <deployments>
-            <deployment viewpath="items.edit.*">
-                <package ref="midas.core" />
+            <deployment viewpath="items.*">
+                <package ref="midas.items" />
 
                 <javascripts>
-                    <script>js/midas/items/items.js</script>
-                    <script>js/midas/items/edit/SlidePanel.js</script>
-                    <script>js/midas/items/edit/DateRangeInput.js</script>
-                    <script>js/midas/items/edit/EditForm.js</script>
-                    <script>js/midas/items/edit/EditView.js</script>
-                    <script>js/midas/items/edit/EditController.js</script>
                     <script>js/midas/items/edit/init.js</script>
                 </javascripts>
             </deployment>
