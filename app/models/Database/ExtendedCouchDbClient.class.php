@@ -179,8 +179,14 @@ class ExtendedCouchDbClient
      */
     public function __destruct()
     {
-        @curl_close($this->curlHandle);
-        @unlink($this->cookieFile);
+        if (is_resource($this->curlHandle))
+        {
+            curl_close($this->curlHandle);
+        }
+        if (! empty($this->cookieFile))
+        {
+            unlink($this->cookieFile);
+        }
     }
 
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
