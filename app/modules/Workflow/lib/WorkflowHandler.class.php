@@ -292,7 +292,9 @@ class WorkflowHandler
         $currentStep = $this->getCurrentStep();
         if (! isset($this->steps[$currentStep]['plugin']))
         {
-            throw new WorkflowException('Workflow step does not define plugin: '.$ticket->getCurrentStep(), WorkflowException::STEP_MISSING);
+            throw new WorkflowException(
+                'Workflow step does not define plugin: '.$ticket->getCurrentStep(),
+                WorkflowException::STEP_MISSING);
         }
         $pluginName = $this->steps[$currentStep]['plugin'];
         $plugin = Workflow_SupervisorModel::getInstance()->getPluginByName($pluginName);

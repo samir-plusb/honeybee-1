@@ -79,7 +79,9 @@ class ExtendedCouchDbClient
      */
     const STATUS_NOT_FOUND = 404;
     /**
-     * Request was accessing a non-existent URL. For example, if you have a malformed URL, or are using a third party library that is targeting a different version of CouchDB.
+     * Request was accessing a non-existent URL. For example, if you have a malformed URL,
+     * or are using a third party library that is targeting a different version of CouchDB.
+     *
      * @see http://wiki.apache.org/couchdb/HTTP_status_list
      */
     const STATUS_RESOURCE_NOT_ALLOWED = 405;
@@ -220,7 +222,7 @@ class ExtendedCouchDbClient
         $uri = $this->baseUri.'_session';
         $curlHandle = $this->getCurlHandle($uri);
         curl_setopt($curlHandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($curlHandle, CURLOPT_USERPWD, "$user:password");
+        curl_setopt($curlHandle, CURLOPT_USERPWD, $user.':'.$password);
 
         $data = $this->getJsonData($curlHandle);
 
@@ -723,7 +725,7 @@ class ExtendedCouchDbClient
         }
         curl_setopt($curlHandle, CURLOPT_INFILE, $docFd);
         curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($body));
-        $data = $this->getJsonData($curlHandle, self::STATUS_CONFLICT);
+        $data = $this->getJsonData($curlHandle, $validReturnCode);
         fclose($docFd);
         return $data;
     }

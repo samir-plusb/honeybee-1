@@ -38,7 +38,7 @@ class ProjectBaseAction extends AgaviAction
      */
     public function handleError(AgaviRequestDataHolder $parameters)
     {
-    	$container = $this->getContainer();
+        $container = $this->getContainer();
         $validation_manager = $container->getValidationManager();
         $this->setAttribute('_module', $container->getModuleName());
         $this->setAttribute('_action', $container->getActionName());
@@ -48,7 +48,9 @@ class ProjectBaseAction extends AgaviAction
             $this->setAttribute("method", __METHOD__);
         }
         $this->getContext()->getTranslationManager()->setDefaultDomain($container->getModuleName().'.errors');
-        return array(AgaviConfig::get('actions.error_404_module', 'Default'), AgaviConfig::get('actions.error_404_action','Error404').'Success');
+        return array(
+            AgaviConfig::get('actions.error_404_module', 'Default'),
+            AgaviConfig::get('actions.error_404_action', 'Error404').'Success');
     }
 
 

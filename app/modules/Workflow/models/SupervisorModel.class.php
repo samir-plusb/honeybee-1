@@ -305,13 +305,17 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         $className = 'Workflow'.ucfirst($pluginName).'Plugin';
         if (! class_exists($className, TRUE))
         {
-            throw new WorkflowException("Can not find class '$className' for plugin: ".$pluginName, WorkflowException::PLUGIN_MISSING);
+            throw new WorkflowException(
+                "Can not find class '$className' for plugin: ".$pluginName,
+                WorkflowException::PLUGIN_MISSING);
         }
 
         $plugin = new $className();
         if (! $plugin instanceof IWorkflowPlugin)
         {
-            throw new WorkflowException('Class for plugin is not instance of IWorkflowPlugin: '.$className, WorkflowException::PLUGIN_MISSING);
+            throw new WorkflowException(
+                'Class for plugin is not instance of IWorkflowPlugin: '.$className,
+                WorkflowException::PLUGIN_MISSING);
         }
 
         return $plugin;

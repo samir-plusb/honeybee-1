@@ -301,23 +301,23 @@ class WorkflowTicket implements Serializable
      */
     public function toArray()
     {
-         $data = array(
+        $data = array(
              'importItem' => $this->getImportItem()->getIdentifier(),
              'workflow' => $this->getWorkflow(),
              'currentStep' => $this->getCurrentStep(),
              'blocked' => $this->getBlocked(),
              'waitUntil' => $this->waitUntil instanceof DateTime ? $this->waitUntil->format(DATE_ISO8601) : NULL,
              'result' => $this->result ? $this->result->toArray() : NULL
-         );
-         if (NULL !== $this->id)
-         {
-             $data['_id'] = $this->id;
-         }
-         if (NULL !== $this->rev)
-         {
-             $data['_rev'] = $this->rev;
-         }
-         return $data;
+        );
+        if (NULL !== $this->id)
+        {
+            $data['_id'] = $this->id;
+        }
+        if (NULL !== $this->rev)
+        {
+            $data['_rev'] = $this->rev;
+        }
+        return $data;
     }
 
 
