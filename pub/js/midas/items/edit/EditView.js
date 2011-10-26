@@ -125,11 +125,6 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         };
     },
 
-    attachController: function(controller)
-    {
-        this.controller = controller;
-    },
-
     onStoreContentItem: function()
     {
         if (! this.controller)

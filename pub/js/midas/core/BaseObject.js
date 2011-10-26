@@ -21,6 +21,12 @@ midas.core.BaseObject = midas.core.Module.create(
     logger: null,
 
     /**
+     * An object holding our registered event listeners.
+     * @type Object
+     */
+    listeners: {},
+
+    /**
      * @description 'Magic' method called during our prototype's constructor execution.
      * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
      */
@@ -28,6 +34,40 @@ midas.core.BaseObject = midas.core.Module.create(
     {
         this.options = options || {};
         this.logger = {}; // @todo create a logger class and use it here.
+    },
+
+    /**
+     * @description Add a listener for the given event.
+     * @param {String} event The name of the event to listen for.
+     * @param {Function} callback A callback function that is invoked when the event is fired.
+     */
+    on: function(event, callback)
+    {
+        if (! this.listeners[event])
+        {
+            this.listeners[event] = [];
+        }
+
+        this.listeners[event].push(callback);
+    },
+
+    /**
+     * @description Propagate the given event to all listeners that registered for it,
+     * thereby passing in the given state.
+     * @param {String} event The name of the event to listen for.
+     * @param {Object} state Holds the state that goes along with the event.
+     */
+    fire: function(event, state)
+    {
+        if (! this.listeners[event])
+        {
+            return;
+        }
+
+        for (var i = 0; i < this.listeners[event].length; i++)
+        {
+            this.listeners[event][i](state);
+        }
     },
 
     /**

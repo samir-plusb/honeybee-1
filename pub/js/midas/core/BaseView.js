@@ -17,10 +17,10 @@ midas.core.BaseView = midas.core.BaseObject.extend(
     log_prefix: "BaseView",
 
     /**
-     * Holds the controller that owns (and created) this view instance.
-     * @type midas.items.edit.EditController
+     * Holds a list of controllers (midas.core.BaseController) that are currently attached to this view.
+     * @type Array
      */
-    controller: null,
+    controllers: null,
 
     /**
      * Holds a jQuery element that represents the layout root for the view's gui.
@@ -46,5 +46,40 @@ midas.core.BaseView = midas.core.BaseObject.extend(
         {
             this.onInitGui.apply(this);
         }
+    },
+
+    /**
+     * @description <p>Attaches the given controller to the view.</p>
+     * <p>Controllers that are attached to a view participate in the view's intent propagation and may take action,
+     * if they feel responseable for handling a certain action.</p>
+     * @type {midas.core.BaseController}
+     */
+    attach: function(controller)
+    {
+        for (var i = 0; i < this.controllers.length; i++)
+        {
+            if (this.conrollers[i] === controller)
+            {
+                this.logWarning("The given controller has allready been attached.");
+                return;
+            }
+        }
+
+        this.controllers.push(controller);
+    },
+
+
+    dettach: function(controller)
+    {
+        for (var i = 0; i < this.controllers.length; i++)
+        {
+            if (this.conrollers[i] === controller)
+            {
+                this.logWarning("The given controller has allready been attached.");
+                return;
+            }
+        }
+
+        this.controllers.push(controller);
     }
 });
