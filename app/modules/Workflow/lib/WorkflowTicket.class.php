@@ -193,11 +193,11 @@ class WorkflowTicket implements Serializable
     }
 
     /**
-     * Retrieves the blocked attribute.
+     * Check the blocked attribute.
      *
      * @return       boolean the value for blocked
      */
-    public function getBlocked()
+    public function isBlocked()
     {
         return $this->blocked;
     }
@@ -305,7 +305,7 @@ class WorkflowTicket implements Serializable
              'importItem' => $this->getImportItem()->getIdentifier(),
              'workflow' => $this->getWorkflow(),
              'currentStep' => $this->getCurrentStep(),
-             'blocked' => $this->getBlocked(),
+             'blocked' => $this->isBlocked(),
              'waitUntil' => $this->waitUntil instanceof DateTime ? $this->waitUntil->format(DATE_ISO8601) : NULL,
              'result' => $this->result ? $this->result->toArray() : NULL
         );

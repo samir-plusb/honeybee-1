@@ -283,6 +283,7 @@ class WorkflowHandler
 
 
     /**
+     * find plugin for the current workflow step
      *
      * @return IWorkflowPlugin
      * @throws WorkflowException
@@ -293,7 +294,7 @@ class WorkflowHandler
         if (! isset($this->steps[$currentStep]['plugin']))
         {
             throw new WorkflowException(
-                'Workflow step does not define plugin: '.$ticket->getCurrentStep(),
+                'Workflow step does not define plugin: '.$currentStep,
                 WorkflowException::STEP_MISSING);
         }
         $pluginName = $this->steps[$currentStep]['plugin'];
