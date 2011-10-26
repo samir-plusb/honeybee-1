@@ -34,11 +34,12 @@ midas.items.edit.DateRangeInput = midas.core.BaseObject.extend(
     {
         this.parent(options);
 
-        this.start_field = start_date_input;
         this.end_field = end_date_input;
-        this.end_field.datepicker();
+        this.end_field.datepicker({ dateFormat: this.getDateFormat() });
 
+        this.start_field = start_date_input;
         this.start_field.datepicker({
+            dateFormat: this.getDateFormat(),
             onSelect: function(date_string)
             {
                 if (! this.end_field.val())
@@ -47,5 +48,10 @@ midas.items.edit.DateRangeInput = midas.core.BaseObject.extend(
                 }
             }.bind(this)
         });
+    },
+
+    getDateFormat: function()
+    {
+        return this.options.date_format || 'dd.mm.yy';
     }
 });
