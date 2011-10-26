@@ -107,8 +107,6 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend(
             throw "There is no command item that maps to the given command name: " + name;
         }
 
-        this.logInfo(name);
-
         if (this.command_items[name].callback)
         {
             this.command_items[name].callback(affected_item);

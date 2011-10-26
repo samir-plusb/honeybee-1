@@ -14,7 +14,7 @@
 <div class="slide-panel">
     <section class="document-editing">
         <h2>Document editing form</h2>
-        <menu class="action-button-list">
+        <menu id="content-item-menu" class="action-button-list">
             <li>
                 <a href="#list">Liste</a>
                 <span class="info-small">1</span>
@@ -172,11 +172,11 @@
 
     <section class="document-data">
         <h2>Current Import Item Data</h2>
-        <menu class="action-button-list">
-            <li><a href="#store">Zur&uuml;ck</a></li>
-            <li><a href="#new">Abhaken</a></li>
+        <menu id="import-item-menu" class="action-button-list">
+            <li><a href="#prev">Zur&uuml;ck</a></li>
+            <li><a href="#mark">Abhaken</a></li>
             <li><a href="#delete">L&ouml;schen</a></li>
-            <li><a href="#complete">Vor</a></li>
+            <li><a href="#next">Vor</a></li>
         </menu>
 
         <div class="item-meta-data content-panel">
