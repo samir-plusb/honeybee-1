@@ -59,12 +59,13 @@
                 </div>
                 <div class="input-left priority">
                     <label for="Priorität">Priorität</label>
-                    <select name="data[priority]">
+                    <select class="jsb-input" name="data[priority]">
                         <option value=""></option>
-                        <option value="0">niedrig</option>
-                        <option value="1" selected="selected">mittel</option>
-                        <option value="2">hoch</option>
+                        <option value="1">niedrig</option>
+                        <option value="2" selected="selected">mittel</option>
+                        <option value="3">hoch</option>
                     </select>
+                    <input type="hidden" value='{ "min": 1, "max": 3, "mandatory": true }' class="jsb-input-options" />
                 </div>
                 <div class="input-left editor">
                     <label for="username">Bearbeiter:</label>
@@ -73,27 +74,30 @@
                 <div class="input-full title">
                     <label for="title">Titel</label>
                     <input class="jsb-input" name="data[title]" type="text" />
-                    <input type="hidden" value='{ "min_length": 10, "mandatory": true }' class="jsb-input-options" />
+                    <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
                 </div>
                 <div class="input-full">
                     <label for="teaser">
                         Teaser. Die ersten drei Sätze Deines Texts, die Du selber schreiben kannst.
                     </label>
                     <textarea class="jsb-input" name="data[teaser]" cols="2" rows="6"></textarea>
+                    <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
                 </div>
                 <div class="input-full">
                     <label for="text">
                         <strong>Text</strong>. Der Rest des Texts. Hier sollst Du vor allem kürzen.
                     </label>
                     <textarea class="jsb-input" name="data[text]" rows="10" cols="30"></textarea>
+                    <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
                 </div>
                 <div class="input-full">
                     <label for="source">Quelle (Wer hat das geschickt. Z.B.: Bezirksamt Marzahn-Hellersdorf. Unbedingt ausfüllen.)</label>
                     <input class="jsb-input" name="data[source]" type="text" />
+                    <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
                 </div>
                 <div class="input-full">
                     <label for="url">URL (Verknüpfte Internetadresse)</label>
-                    <input class="jsb-input" name="data[url]" type="text" />
+                    <input name="data[url]" type="text" />
                 </div>
             </div> <!-- </fieldset> as soon as the firefox render bug is fixed -->
 
@@ -103,7 +107,7 @@
                     <input type="hidden" name="data[location[longitude]]" id="location[longitude]" />
                     <input type="hidden" name="data[location[latitude]]" id="location[latitude]" />
                     <div class="input-full">
-                        <select class="jsb-input" name="data[location[relevance]]" id="location[relevance]">
+                        <select name="data[location[relevance]]" id="location[relevance]">
                             <option value="" selected="selected"></option>
                             <option value="0" selected="selected">Betrifft den Bezirk (z.B. Wilmersdorf)</option>
                             <option value="1">Betrifft den Verwaltungsbezirk (z.B. Charlottenburg-Wilmersdorf)</option>
@@ -112,19 +116,19 @@
                     </div>
                     <div class="input-full">
                         <label for="location[name]">Name des Orts (z.B: KaDeWe)</label>
-                        <input class="jsb-input" name="data[location[name]]" type="text" />
+                        <input name="data[location[name]]" type="text" />
                     </div>
                     <div class="input-full"
                          ><label for="location[locationdetail]">Zusätzliche Ortsangabe (z.B.: Haus 3)</label>
-                        <input class="jsb-input" name="data[location[locationdetail]]" type="text" />
+                        <input name="data[location[locationdetail]]" type="text" />
                     </div>
                     <div class="input-full">
                         <label for="location[street]">Straße, Hausnummer</label>
-                        <input class="jsb-input" name="data[location[street]]" type="text" />
+                        <input name="data[location[street]]" type="text" />
                     </div>
                     <div class="input-full">
                         <label for="location[uzip]">PLZ</label>
-                        <input class="jsb-input" name="data[location[uzip]]" type="text" />
+                        <input name="data[location[uzip]]" type="text" />
                     </div>
                     <div class="input-full">
                         <label for="location[neighborhood]">Bezirk</label>
@@ -143,19 +147,19 @@
                     <div class="input-full">
                         <label for="date[isevent]">Ist Teilnahme des Nutzers durch den Veranstalter erwünscht?</label>
                         <input type="hidden" name="data[date[isevent]]" value="0" />
-                        <input class="jsb-input" type="checkbox" name="data[date[isevent]]" value="1" />
+                        <input type="checkbox" name="data[date[isevent]]" value="1" />
                     </div>
                     <div class="input-full">
                         <label for="date[from]">
                             Wann findet das statt? <span>Bei Ausstellungen: Startdatum = Enddatum</span>. von
                         </label>
-                        <input name="data[date[from]]" class="date-picker jsb-input" type="text" />
-                        <input type="hidden" value='{  "mandatory": true, "regex": "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{4,4}$" }' class="jsb-input-options" />
+                        <input name="data[date[from]]" class="jsb-input-date" type="text" />
+                        <input type="hidden" value='{ "regex": "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{4,4}$", "date_format": "dd.mm.yy" }' class="jsb-input-date-options" />
                     </div>
                     <div class="input-full">
                         <label for="date[till]">bis</label>
-                        <input name="data[date[till]]" class="date-picker jsb-input" type="text" />
-                        <input type="hidden" value='{  "mandatory": true, "regex": "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{4,4}$" }' class="jsb-input-options" />
+                        <input name="data[date[till]]" class="jsb-input-date" type="text" />
+                        <input type="hidden" value='{  "regex": "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{4,4}$", "date_format": "dd.mm.yy" }' class="jsb-input-date-options" />
                     </div>
                 </div> <!-- </fieldset> -->
 

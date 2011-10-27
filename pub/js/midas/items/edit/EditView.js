@@ -54,13 +54,6 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             $('.document-editing form', this.layout_root)
         );
 
-        /*
-        this.editing_form.on('changed', function(event)
-        {
-            this.logInfo("Changed event: ", event);
-            this.onInputDataChanged(event);
-        }.bind(this));
-        */
         this.slide_panel = new midas.items.edit.SlidePanel(
             $('.slide-panel', this.layout_root)
             .css({ 'position': 'absolute', 'width': '100%' }),
@@ -130,22 +123,6 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             'mark': function() { this.logDebug('onImportItemMark'); }.bind(this),
             'next': function() { this.logDebug('onImportItemNext'); }.bind(this)
         };
-    },
-
-    onInputDataChanged: function(event)
-    {
-        var validation_res = this.editing_form.validate();
-
-        this.logInfo("Validated form: ", validation_res);
-
-        if (true === validation_res.success)
-        {
-            this.content_item_menu.enable('store');
-        }
-        else
-        {
-            this.content_item_menu.disable('store');
-        }
     },
 
     onNewContentItem: function()

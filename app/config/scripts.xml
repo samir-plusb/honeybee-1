@@ -37,7 +37,7 @@
                     <script>js/midas/items/items.js</script>
                     <script>js/midas/items/edit/SlidePanel.js</script>
                     <script>js/midas/items/edit/Input.js</script>
-                    <script>js/midas/items/edit/DateRangeInput.js</script>
+                    <script>js/midas/items/edit/DateInput.js</script>
                     <script>js/midas/items/edit/EditForm.js</script>
                     <script>js/midas/items/edit/EditView.js</script>
                     <script>js/midas/items/edit/EditController.js</script>

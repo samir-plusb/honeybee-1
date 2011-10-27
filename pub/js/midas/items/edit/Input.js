@@ -8,17 +8,33 @@
 midas.items.edit.Input = midas.core.Behaviour.extend(
 /** @lends midas.items.edit.Input.prototype */
 {
+    prefix: 'jsb-input',
+
     log_prefix: 'Input',
 
     name: null,
 
-    init: function(element)
+    prev_val: null,
+
+    init: function(element, options)
     {
-        this.parent(element);
+        this.parent(element, options);
+
+        if (undefined === this.options.validate_correction)
+        {
+            this.options.validate_correction = true;
+        }
+
         this.name = this.element.attr('name');
         this.element.change(function(event)
         {
+            this.revalidate();
             this.fire('changed', event);
+        }.bind(this));
+
+        this.element.focus(function(event)
+        {
+            this.prev_val = this.element.val();
         }.bind(this));
     },
 
@@ -29,10 +45,34 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
 
     val: function()
     {
-        return this.element.val.apply(
+        var ret = this.element.val.apply(
             this.element,
             arguments
         );
+
+        if (1 === arguments.length && this.prev_val != arguments[0])
+        {
+            this.revalidate();
+        }
+
+        return ret;
+    },
+
+    revalidate: function()
+    {
+        var result = null;
+
+        if (true === this.options.validate_correction && this.element.hasClass('ui-state-error'))
+        {
+            result = this.validate()
+
+            if (true === result.success)
+            {
+                this.element.removeClass('ui-state-error');
+            }
+        }
+
+        return result;
     },
 
     validate: function()
@@ -43,11 +83,16 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         };
 
         var value = this.val();
-
-        if (this.options.mandatory && ! value)
+        // empty values are not validated but may throw a mandatory error.
+        if (true === this.options.mandatory && 0 == value.length)
         {
             result.success = false;
             result.messages.mandatory = "Mandatory err";
+            return result;
+        }
+        else if(0 == value.length)
+        {
+            return result;
         }
 
         if (this.options.regex && ! value.match(this.options.regex))
@@ -56,13 +101,14 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
             result.messages.regex = "Regexp err for pattern " + this.options.regex;
         }
 
-        if (this.options.min && value.length < this.options.min)
+        var maybe_int = parseInt(value);
+        var compare = isNaN(maybe_int) ? value.length : maybe_int;
+        if (this.options.min && compare < this.options.min)
         {
             result.success = false;
             result.messages.min = "Err for min " + this.options.min;
         }
-
-        if (this.options.max && value.length > this.options.max)
+        if (this.options.max && compare > this.options.max)
         {
             result.success = false;
             result.messages.max = "Err for min " + this.options.max;

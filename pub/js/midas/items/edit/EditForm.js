@@ -45,26 +45,32 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         this.element = element;
         this.fields = {};
 
-        $('input, select, textarea').each(function(idx, field)
+        this.element.find('input[type!=hidden], select, textarea').each(function(idx, field)
         {
-            field = new midas.items.edit.Input(field);
-            field.on('changed', function(event)
+            var implementor = this.resolveInputFieldClass(field);
+
+            if (! midas.items.edit[implementor])
             {
-                this.logInfo("Changed event", event);
+                implementor = 'Input';
+            }
+
+            var input_field = new midas.items.edit[implementor](field);
+            input_field.on('changed', function(event)
+            {
+                if ('data[date[from]]' == input_field.getName())
+                {
+                    if (0 >= this.fields['data[date[till]]'].val().length)
+                    {
+                        this.fields['data[date[till]]'].val(
+                            input_field.val()
+                        );
+                    }
+                }
+
                 this.fire('changed', event);
             }.bind(this));
 
-            this.fields[field.getName()] = field;
-        }.bind(this));
-
-        var start_date = this.fields['data[date[from]]'];
-        var end_date = this.fields['data[date[till]]'];
-        this.publish_period = new midas.items.edit.DateRangeInput(start_date, end_date);
-
-        this.publish_period.on('changed', function(event)
-        {
-            this.logInfo("Changed event", event);
-            this.fire('changed', event);
+            this.fields[input_field.getName()] = input_field;
         }.bind(this));
     },
 
@@ -102,5 +108,35 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         }.bind(this));
 
         return result;
+    },
+
+    resolveInputFieldClass: function(input_field)
+    {
+        var classes = $(input_field).attr('class');
+        var type_key = '';
+        var resolved_class = '';
+
+        if (typeof classes !== 'undefined' && classes !== false)
+        {
+            $.each(classes.split(" "), function(idx, cur_class)
+            {
+                if (! type_key && cur_class.match('jsb-input'))
+                {
+                    // @todo use constant pattern instead of magic string.
+                    type_key = cur_class.replace(/(jsb-input)-?/, '');
+                }
+            }.bind(this));
+        }
+
+        if (type_key)
+        {
+            // make first char uppercase
+            var first = type_key.charAt(0).toUpperCase();
+            resolved_class = first + type_key.substr(1);
+        }
+
+        resolved_class += 'Input';
+
+        return resolved_class;
     }
 });
