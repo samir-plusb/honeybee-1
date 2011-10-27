@@ -46,10 +46,10 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
             result.messages.mandatory = "Mandatory err";
         }
 
-        if (this.options.regexp && ! this.val().match(this.options.regexp))
+        if (this.options.regex && ! this.val().match(this.options.regex))
         {
             result.success = false;
-            result.messages.mandatory = "Regexp err for pattern " + this.options.regexp;
+            result.messages.regex = "Regexp err for pattern " + this.options.regex;
         }
 
         return result;
