@@ -25,7 +25,7 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend(
      * Holds an object that is used to store our command items together with their related actions.
      * @type Object
      */
-    command_items: {},
+    command_items: null,
 
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
@@ -36,21 +36,29 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend(
     {
         this.parent(options);
 
+        this.command_items = {};
         this.container = container;
+        var items = this.container.find('li a');
 
-        $('li a', this.container).each(function(idx, item)
+        items.each(function(idx, item)
         {
             var command_name = this.parseCommandName(item);
             this.command_items[command_name] = {
                 name: command_name,
-                item: item,
+                item: $(item),
                 callback: null
             };
         }.bind(this));
 
-        $('li a', this.container).live('click', function(event)
+        items.live('click', function(event)
         {
             event.preventDefault();
+
+            if ($(event.target).parent('li').hasClass('inactive'))
+            {
+                return;
+            }
+
             this.dispatchCommand(
                 this.parseCommandName(event.target),
                 event.target
@@ -128,5 +136,25 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend(
         }
 
         return name_string.substr(1);
+    },
+
+    enable: function(command)
+    {
+        if (! this.command_items[command])
+        {
+            throw "There is no command item that maps to the given command name: " + command;
+        }
+
+        this.command_items[command].item.parent('li').removeClass('inactive');
+    },
+
+    disable: function(command)
+    {
+        if (! this.command_items[command])
+        {
+            throw "There is no command item that maps to the given command name: " + command;
+        }
+
+        this.command_items[command].item.parent('li').addClass('inactive');
     }
 });

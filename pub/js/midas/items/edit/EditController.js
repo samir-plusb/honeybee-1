@@ -1,11 +1,11 @@
 /**
  * @class
- * @augments midas.core.BaseObject
+ * @augments midas.core.BaseController
  * @description The EditController serves as the main controller for all Items/EditSuccessView related behaviour.
  * @author <a href="mailto:tschmittrink@gmail.com">Thorsten Schmit-Rink</a>
  * @version $Id:$
  */
-midas.items.edit.EditController = midas.core.BaseObject.extend(
+midas.items.edit.EditController = midas.core.BaseController.extend(
 /** @lends midas.items.edit.EditController.prototype */
 {
     /**
@@ -23,9 +23,13 @@ midas.items.edit.EditController = midas.core.BaseObject.extend(
         this.parent(options);
     },
 
-    applyIntent: function(intent)
+    getIntentFilters: function()
     {
-        this.logDebug("Incoming intent:", intent);
+        return {
+            '/midas/intents/contentItem/store': this.onStoreContentItemIntent.bind(this),
+            '/midas/intents/contentItem/delete': 'onDeleteContentItemIntent',
+            '/midas/intents/contentItem/new': 'onNewContentItemIntent'
+        };
     },
 
     /**
@@ -35,7 +39,7 @@ midas.items.edit.EditController = midas.core.BaseObject.extend(
      */
     onNewContentItemIntent: function()
     {
-        this.logDebug("onNewContentItemIntent");
+        this.logDebug("Executing: onNewContentItemIntent");
     },
 
     /**
@@ -45,7 +49,16 @@ midas.items.edit.EditController = midas.core.BaseObject.extend(
      */
     onStoreContentItemIntent: function(intent)
     {
-        this.logDebug("onStoreContentItemIntent");
+        if (intent.data.title === 'foo')
+        {
+            this.logDebug("Skipping: onStoreContentItemIntent");
+
+            return false;
+        }
+
+        this.logDebug("Executing: onStoreContentItemIntent");
+
+        return true;
     },
 
     /**
@@ -55,7 +68,7 @@ midas.items.edit.EditController = midas.core.BaseObject.extend(
      */
     onDeleteContentItemIntent: function()
     {
-        this.logDebug("onDeleteContentItemIntent");
+        this.logDebug("Executing: onDeleteContentItemIntent");
     },
 
     /**

@@ -48,8 +48,9 @@ midas.core.Module = (function()
         // Then copy our new attributes to our fresh class instance.
         for (attribute_name in module_def) (function(attribute_value, parent_attribute_value)
         {
-            if (!is_func(attribute_value) || !is_func(parent_attribute_value))
+            if (! is_func(attribute_value) || ! is_func(parent_attribute_value))
             {
+                // clone objects or define they can eariliest be defined inside init?
                 new_module.prototype[attribute_name] = attribute_value;
             }
             else

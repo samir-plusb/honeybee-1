@@ -24,7 +24,7 @@ midas.core.BaseObject = midas.core.Module.create(
      * An object holding our registered event listeners.
      * @type Object
      */
-    listeners: {},
+    listeners: null,
 
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
@@ -34,6 +34,7 @@ midas.core.BaseObject = midas.core.Module.create(
     {
         this.options = options || {};
         this.logger = {}; // @todo create a logger class and use it here.
+        this.listeners = {};
     },
 
     /**

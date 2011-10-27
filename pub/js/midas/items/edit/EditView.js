@@ -54,6 +54,12 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             $('.document-editing form', this.layout_root)
         );
 
+        this.editing_form.on('changed', function(event)
+        {
+            this.logInfo("Changed event: ", event);
+            this.onInputDataChanged(event);
+        }.bind(this));
+
         this.slide_panel = new midas.items.edit.SlidePanel(
             $('.slide-panel', this.layout_root)
             .css({ 'position': 'absolute', 'width': '100%' }),
@@ -85,12 +91,12 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     initMenus: function()
     {
         this.content_item_menu = new midas.core.CommandTriggerList(
-            $('#content-item-menu').first()[0],
+            $('#content-item-menu'),
             { 'commands': this.getContentItemCommandBindings() }
         );
 
         this.import_item_menu = new midas.core.CommandTriggerList(
-            $('#import-item-menu').first()[0],
+            $('#import-item-menu'),
             { 'commands': this.getImportItemCommandBindings() }
         );
     },
@@ -105,7 +111,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         return {
             'store': this.onStoreContentItem.bind(this),
             'delete': this.onDeleteContentItem.bind(this),
-            'new': function() { this.logDebug("onImportDeletePrev"); }.bind(this),
+            'new': this.onNewContentItem.bind(this),
             'list': this.slide_panel.toggle.bind(this.slide_panel)
         };
     },
@@ -119,31 +125,51 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         return {
             'prev': function() { this.logDebug('onImportItemPrev'); }.bind(this),
-            'delete': function() { this.logDebug("onImportDeletePrev"); }.bind(this),
-            'mark': function() { this.logDebug('onImportItemPrev'); }.bind(this),
+            'delete': function() { this.logDebug("onImportItemDelete"); }.bind(this),
+            'mark': function() { this.logDebug('onImportItemMark'); }.bind(this),
             'next': function() { this.logDebug('onImportItemNext'); }.bind(this)
         };
     },
 
+    onInputDataChanged: function(event)
+    {
+        var validation_res = this.editing_form.validate();
+
+        this.logInfo("Validated form: ", validation_res);
+
+        if (true === validation_res.success)
+        {
+            this.content_item_menu.enable('store');
+        }
+        else
+        {
+            this.content_item_menu.disable('store');
+        }
+    },
+
+    onNewContentItem: function()
+    {
+        this.propagateIntent({
+            'name': '/midas/intents/contentItem/new',
+            'data': {}
+        });
+    },
+
     onStoreContentItem: function()
     {
-        if (! this.controller)
-        {
-            this.logWarning("No controller attached to view.");
-            return;
-        }
-
-        this.controller.applyIntent({ 'name': 'storeContentItem', 'src': this });
+        this.propagateIntent({
+            'name': '/midas/intents/contentItem/store',
+            'data': {
+                title: this.editing_form.val('data[title]')
+            }
+        });
     },
 
     onDeleteContentItem: function()
     {
-        if (! this.controller)
-        {
-            this.logWarning("No controller attached to view.");
-            return;
-        }
-
-        this.controller.applyIntent({ 'name': 'storeDeleteItem', 'src': this });
+        this.propagateIntent({
+            'name': '/midas/intents/contentItem/delete',
+            'data': {}
+        });
     }
 });

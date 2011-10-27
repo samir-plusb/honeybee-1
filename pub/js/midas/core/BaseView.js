@@ -34,11 +34,10 @@ midas.core.BaseView = midas.core.BaseObject.extend(
      * @param {jQuery} layout_root
      * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
      */
-    init: function(controller, layout_root, options)
+    init: function(layout_root, options)
     {
         this.parent(options);
-
-        this.controller = controller;
+        this.controllers = [];
         this.layout_root = layout_root;
 
         // Hook method that child classes may implement.
@@ -46,6 +45,21 @@ midas.core.BaseView = midas.core.BaseObject.extend(
         {
             this.onInitGui.apply(this);
         }
+    },
+
+    propagateIntent: function(intent)
+    {
+        for (var i = 0; i < this.controllers.length; i++)
+        {
+            if (this.controllers[i].apply(intent))
+            {
+                return true;
+            }
+        }
+
+        this.logWarning("No one liked your intent.");
+
+        return false;
     },
 
     /**
