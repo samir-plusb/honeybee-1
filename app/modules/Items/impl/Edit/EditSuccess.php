@@ -19,7 +19,7 @@
                 <a href="#list">Liste</a>
                 <span class="info-small">1</span>
             </li>
-            <li class="inactive"><a href="#store">Speichern</a></li>
+            <li><a href="#store">Speichern</a></li>
             <li><a href="#new">Neues Item</a></li>
             <li><a href="#delete">L&ouml;schen</a></li>
         </menu>
