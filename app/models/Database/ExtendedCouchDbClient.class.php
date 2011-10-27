@@ -171,7 +171,7 @@ class ExtendedCouchDbClient
         }
         $this->baseUri = $uri;
         $this->defaultDatabase = $database;
-
+        $this->cookieFile = tempnam(AgaviConfig::get('core.cache_dir'), get_class($this).'_');
         $this->compositeClient = new CouchDbClient($uri);
     }
 
@@ -184,9 +184,7 @@ class ExtendedCouchDbClient
         if (is_resource($this->curlHandle))
         {
             curl_close($this->curlHandle);
-        }
-        if (! empty($this->cookieFile))
-        {
+            $this->curlHandle = NULL;
             unlink($this->cookieFile);
         }
     }
@@ -604,7 +602,6 @@ class ExtendedCouchDbClient
         curl_setopt($curlHandle, CURLOPT_URL, $uri);
         curl_setopt($curlHandle, CURLOPT_PROXY, '');
         curl_setopt($curlHandle, CURLOPT_FAILONERROR, 0);
-        $this->cookieFile = tempnam(AgaviConfig::get('core.cache_dir'), get_class($this).'_');
         curl_setopt($curlHandle, CURLOPT_COOKIEFILE, $this->cookieFile);
         curl_setopt($curlHandle, CURLOPT_COOKIEJAR, $this->cookieFile);
 
