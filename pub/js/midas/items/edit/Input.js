@@ -18,7 +18,6 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         this.name = this.element.attr('name');
         this.element.change(function(event)
         {
-            this.logInfo("Changed event ", event);
             this.fire('changed', event);
         }.bind(this));
     },
@@ -30,7 +29,10 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
 
     val: function()
     {
-        return this.element.val.apply(this.element, arguments);
+        return this.element.val.apply(
+            this.element,
+            arguments
+        );
     },
 
     validate: function()
@@ -40,16 +42,30 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
             messages: {}
         };
 
-        if (this.options.mandatory && ! this.val())
+        var value = this.val();
+
+        if (this.options.mandatory && ! value)
         {
             result.success = false;
             result.messages.mandatory = "Mandatory err";
         }
 
-        if (this.options.regex && ! this.val().match(this.options.regex))
+        if (this.options.regex && ! value.match(this.options.regex))
         {
             result.success = false;
             result.messages.regex = "Regexp err for pattern " + this.options.regex;
+        }
+
+        if (this.options.min && value.length < this.options.min)
+        {
+            result.success = false;
+            result.messages.min = "Err for min " + this.options.min;
+        }
+
+        if (this.options.max && value.length > this.options.max)
+        {
+            result.success = false;
+            result.messages.max = "Err for min " + this.options.max;
         }
 
         return result;

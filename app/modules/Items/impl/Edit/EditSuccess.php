@@ -150,11 +150,12 @@
                             Wann findet das statt? <span>Bei Ausstellungen: Startdatum = Enddatum</span>. von
                         </label>
                         <input name="data[date[from]]" class="date-picker jsb-input" type="text" />
-                        <input type="hidden" value='{  "mandatory": true, "regex": "[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{4}" }' class="jsb-input-options" />
+                        <input type="hidden" value='{  "mandatory": true, "regex": "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{4,4}$" }' class="jsb-input-options" />
                     </div>
                     <div class="input-full">
                         <label for="date[till]">bis</label>
                         <input name="data[date[till]]" class="date-picker jsb-input" type="text" />
+                        <input type="hidden" value='{  "mandatory": true, "regex": "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{4,4}$" }' class="jsb-input-options" />
                     </div>
                 </div> <!-- </fieldset> -->
 

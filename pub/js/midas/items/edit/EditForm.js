@@ -93,6 +93,11 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
             {
                 result.success = false;
                 result.messages[name] = validation_res.messages;
+                field.element.addClass('ui-state-error');
+            }
+            else
+            {
+                field.element.removeClass('ui-state-error');
             }
         }.bind(this));
 
