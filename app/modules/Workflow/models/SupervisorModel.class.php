@@ -18,22 +18,6 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
     const DATABASE_CONFIG_NAME = 'CouchWorkflow';
 
     /**
-     * database name
-     */
-    const DATABASE_NAME = 'workflow';
-
-    /**
-     *
-     * name of couchdb design document to use
-     */
-    const DESIGNDOC = 'designWorkflow';
-
-    /**
-     * ticket database name
-     */
-    const DATABASE_TICKETS = 'tickets';
-
-    /**
      * path relative to app directory to workflow xml definitions
      */
     const WORKFLOW_CONFIG_DIR = 'modules/Workflow/config/workflows/';
@@ -45,8 +29,17 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
      */
     private $couchClient;
 
-
+    /**
+     *
+     * @var WorkflowItemPeer
+     */
     private $itemPeer;
+
+    /**
+     *
+     * @var WorkflowTicketPeer
+     */
+    private $ticketPeer;
 
     /**
      * list of allready loaded workflows
@@ -111,6 +104,20 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
 
 
     /**
+     * get ticket peer handler instance to access tickets in the database
+     *
+     * @return WorkflowTicketPeer
+     */
+    public function getTicketPeer()
+    {
+        if (! $this->ticketPeer)
+        {
+            $this->ticketPeer = new WorkflowTicketPeer($this->getDatabase());
+        }
+        return $this->ticketPeer;
+    }
+
+    /**
      * callback method is called after a successfully import an item
      *
      * @param IEvent $event expected is a BaseDataImport::EVENT_RECORD_SUCCESS event
@@ -130,120 +137,49 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
             return;
         }
 
-        $ticket = $this->getTicketByImportitem($data['record']);
-        return $this->processTicket($ticket);
+        $ticket = $this->getTicketPeer()->getTicketByImportitem($data['record']);
+        $this->processTicket($ticket);
     }
 
     /**
      * process a ticket in a workflow until the workflow is ended or stopped
      *
      * @param WorkflowTicket $ticket
-     * @return boolean
+     * @param AgaviExecutionContainer $container execution container in interactive mode
+     *
+     * @return AgaviExecutionContainer or NULL
+     *
      * @throws WorkflowException
      */
-    public function processTicket(WorkflowTicket $ticket)
+    public function processTicket(WorkflowTicket $ticket, AgaviExecutionContainer $container = NULL)
     {
         $code = WorkflowHandler::STATE_NEXT_WORKFLOW;
         while (WorkflowHandler::STATE_NEXT_WORKFLOW === $code)
         {
             $workflow = $this->getWorkflowByName($ticket->getWorkflow());
+            $ticket->setExecutionContainer($container);
             $code = $workflow->run($ticket);
 
             /* @todo Remove debug code SupervisorModel.class.php from 24.10.2011 */
             $__logger=AgaviContext::getInstance()->getLoggerManager();
             $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
             $__logger->log('Workflow result code: '.$code,AgaviILogger::DEBUG);
-
-            switch ($code)
-            {
-                case WorkflowHandler::STATE_NEXT_WORKFLOW:
-                    break;
-                case WorkflowHandler::STATE_END:
-                    return TRUE;
-                default:
-                    throw new WorkflowException(
-                        'Workflow exitited with unexpected code:'.$code,
-                        WorkflowException::UNEXPECTED_EXIT_CODE);
-            }
         }
 
-        return FALSE;
-    }
-
-    /**
-     * find a workflow ticket using its correpondenting import item
-     *
-     * This method gets registered in {@see ImportBaseAction::initialize()}
-     *
-     * @todo move method getTicketByImportitem to a ticket handler class
-     *
-     * @param IDataRecord $record
-     * @return WorkflowTicket
-     */
-    public function getTicketByImportitem(IDataRecord $record)
-    {
-        $result = $this->getDatabase()->getView(
-            NULL, self::DESIGNDOC, "ticketByImportitem",
-            json_encode($record->getIdentifier()),
-            0,
-            array('include_docs' => 'true')
-        );
-
-        if (empty($result['rows']))
+        if (WorkflowHandler::STATE_ERROR == $code)
         {
-            return $this->createNewTicketFromImportItem($record);
+            throw new WorkflowException(
+                'Workflow exitited with unexpected code:'.$code,
+                WorkflowException::UNEXPECTED_EXIT_CODE);
         }
 
-        $data = $result['rows'][0]['doc'];
-        return new WorkflowTicket($data, $record);
+        if ($container !== NULL && $container !== $ticket->getExecutionContainer())
+        {
+            return $ticket->getExecutionContainer();
+        }
+        return NULL;
     }
 
-
-    /**
-     * create a ticket for a newly imported item
-     *
-     * @todo move method createNewTicketFromImportItem to a ticket handler class
-     *
-     * @param IDataRecord $record
-     * @return WorkflowTicket
-     */
-    public function createNewTicketFromImportItem(IDataRecord $record)
-    {
-        $ticket = new WorkflowTicket();
-        $ticket->setImportItem($record);
-        $ticket->setWorkflow('_init');
-        $this->saveTicket($ticket);
-        return $ticket;
-    }
-
-    /**
-     * store ticket in the database
-     *
-     * @param WorkflowTicket $ticket
-     * @return boolean
-     */
-    public function saveTicket(WorkflowTicket $ticket)
-    {
-        $document = $ticket->toArray();
-        $result = $this->couchClient->storeDoc(NULL, $document);
-        return TRUE;
-    }
-
-    /**
-     * get a ticket by its document id
-     *
-     * @see WorkflowTicketValidator
-     *
-     * @param string $identifier
-     * @return WorkflowTicket
-     */
-    public function getTicketById($identifier)
-    {
-        $db = $this->getDatabase();
-        $data = $db->getDoc(self::DATABASE_TICKETS, $identifier);
-        $ticket = new WorkflowTicket($data);
-        return $ticket;
-    }
 
     /**
      * get a new WorkflowHandler instance for a named workflow
@@ -319,20 +255,6 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
         }
 
         return $plugin;
-    }
-
-    /**
-     * check if in interactive session
-     */
-    public function isInteractive()
-    {
-        return FALSE;
-    }
-
-
-    public function __sleep()
-    {
-        return array();
     }
 }
 

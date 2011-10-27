@@ -17,14 +17,14 @@ class WorkflowTicketValidator extends AgaviValidator
     {
         $originalValue =& $this->getData($this->getArgument());
 
-        $ticket = Workflow_SupervisorModel::getInstance()->getTicketById($originalValue);
+        $ticket = Workflow_SupervisorModel::getInstance()->getTicketPeer()->getTicketById($originalValue);
         if (! $ticket instanceof WorkflowTicket)
         {
             $this->throwError('instance');
             return FALSE;
         }
 
-        $this->export($originalValue, $this->getParameter('export', NULL));
+        $this->export($ticket, $this->getParameter('export', NULL));
         return TRUE;
     }
 }

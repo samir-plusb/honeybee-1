@@ -27,6 +27,11 @@ class WorkflowPluginResult
     const STATE_WAIT_UNTIL = 2;
 
     /**
+     * The ticket should be suspended until interactive request
+     */
+    const STATE_EXPECT_INPUT = 3;
+
+    /**
      * default gate number when to stop the workflow
      */
     const GATE_NONE = -1;
@@ -75,7 +80,10 @@ class WorkflowPluginResult
      */
     public static function fromArray(array $data)
     {
-        return new self($data['state'], $data['gate'], $data['message']);
+        return new self(
+            array_key_exists('state', $data) ? $data['state'] : self::STATE_ERROR,
+            array_key_exists('gate', $data) ? $data['gate'] : self::GATE_NONE,
+            array_key_exists('message', $data) ? $data['message'] : NULL);
     }
 
 
@@ -86,7 +94,7 @@ class WorkflowPluginResult
      */
     public function toArray()
     {
-        return get_object_vars($this);
+        return array_filter(get_object_vars($this));
     }
 
     /**

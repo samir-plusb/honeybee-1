@@ -37,5 +37,9 @@ class WorkflowException extends Exception
      * unexpected workflow return code
      */
     const UNEXPECTED_EXIT_CODE = 7;
+    /**
+     * maximum number of workflow step executions exceeded
+     */
+    const MAX_STEP_EXECUTIONS_EXCEEDED = 8;
 
 }

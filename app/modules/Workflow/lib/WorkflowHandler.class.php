@@ -10,6 +10,11 @@
 class WorkflowHandler
 {
     /**
+     * maximal number of executions of one specific workflow step to avoid endless workflow loops
+     */
+    const MAX_STEP_EXECUTIONS = 20;
+
+    /**
      * workflow process error
      */
     const STATE_ERROR = 0;
@@ -29,6 +34,10 @@ class WorkflowHandler
      */
     const STATE_NEXT_STEP = 3;
 
+    /**
+     * interupt workflow on current step
+     */
+    const STATE_WAITING = 4;
 
     /**
      * Name of workflow
@@ -63,16 +72,44 @@ class WorkflowHandler
      *
      * @var WorkflowTicket
      */
-    protected $ticket;
-
-
-
+    private $ticket;
 
     /**
      * initialize workflow
      *
      * This method is called by {@see Workflow_SupervisorModel::getWorkflowByName()} after reading and parsing a
      * workflow xml definition.
+     *
+     * The array for $config parameter has the form:
+     *
+     * <pre>
+     * array(
+     *     [name] => …
+     *     [description] => …
+     *     [steps] => Array
+     *     (
+     *         [start] => {ID OF FIRST WORKFLOW STEP}
+     *         [ID STEP 1] => Array
+     *         (
+     *              [name] => {WORKFLOW STEP NAME}
+     *              [plugin] => {PLUGIN NAME}
+     *              [gates] => Array
+     *              (
+     *                  [0] => Array
+     *                  (
+     *                      // one of the following:
+     *                      [workflow] => {NAME OF NEXT WORKFLOW}
+     *                      [value] => {NEXT STEP ID}
+     *                  )
+     *                  [1] => Arrray(…)
+     *                  …
+     *               )
+     *          )
+     *          [ID STEP 2] => Array(…)
+     *          …
+     *      )
+     *  )
+     *  </pre>
      *
      * @throws WorkflowException on invalid workflow structure
      * @see Workflow_SupervisorModel::getWorkflowByName()
@@ -112,6 +149,7 @@ class WorkflowHandler
         return $this->name;
     }
 
+
     /**
      * pull the ticket through the workflow
      *
@@ -130,69 +168,107 @@ class WorkflowHandler
         $code = self::STATE_NEXT_STEP;
         while (self::STATE_NEXT_STEP === $code)
         {
-            $code = $this->main();
+            $currentStep = $this->getCurrentStep();
+            /* @todo Remove debug code WorkflowHandler.class.php from 27.10.2011 */
+            $__logger=AgaviContext::getInstance()->getLoggerManager();
+            $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
+            $__logger->log(sprintf('start "%s" step: %s', $this->name, $currentStep),AgaviILogger::DEBUG);
+
+            if ($ticket->countStep() > self::MAX_STEP_EXECUTIONS)
+            {
+                throw new WorkflowException(
+                    sprintf('To many workflow executions for "%s/%s"', $this->getName(), $currentStep),
+                    WorkflowException::MAX_STEP_EXECUTIONS_EXCEEDED);
+            }
+
+            $result = $this->executePlugin();
+            $ticket->setPluginResult($result);
+            $code = $this->prepareNextAction($result);
 
             /* @todo Remove debug code WorkflowHandler.class.php from 24.10.2011 */
             $__logger=AgaviContext::getInstance()->getLoggerManager();
             $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
             $__logger->log('Step return code: '.$code,AgaviILogger::DEBUG);
+
+            $this->getPeer()->saveTicket($this->getTicket());
         }
 
         return $code;
     }
 
     /**
+     * prepare next workflow action by evaluating the plugin result
      *
      * @return integer workflow state code
+     *
+     * @throws WorkflowException
      */
-    protected function main()
+    protected function prepareNextAction(WorkflowPluginResult $result)
     {
-        /* @todo Remove debug code WorkflowHandler.class.php from 24.10.2011 */
-        $__logger=AgaviContext::getInstance()->getLoggerManager();
-        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
-        $__logger->log('process step: '.$this->getCurrentStep(),AgaviILogger::DEBUG);
-
-        $plugin = $this->getPluginForCurrentStep();
-        if (! $plugin->isInteractive())
+        $ticket = $this->getTicket();
+        switch ($result->getState())
         {
-            $result = $plugin->process();
+            case WorkflowPluginResult::STATE_OK:
+                $gate = $this->getGate($result);
+                if (! empty($gate['workflow']))
+                {
+                    $ticket->reset();
+                    $ticket->setWorkflow($gate['workflow']);
+                    return self::STATE_NEXT_WORKFLOW;
+                }
+                else if (! empty($gate['value']))
+                {
+                    $this->setCurrentStep($gate['value']);
+                    return self::STATE_NEXT_STEP;
+                }
+                else
+                {
+                    $ticket->reset();
+                    $ticket->setBlocked(FALSE);
+                    return self::STATE_END;
+                }
+                break;
+
+            case WorkflowPluginResult::STATE_EXPECT_INPUT:
+                return self::STATE_WAITING;
+
+            case WorkflowPluginResult::STATE_WAIT_UNTIL:
+                $ticket->setBlocked(FALSE);
+                return self::STATE_WAITING;
+
+            default:
+                return self::STATE_ERROR;
         }
-        else if (Workflow_SupervisorModel::getInstance()->isInteractive())
-        {
-            $result = $plugin->process();
-        }
+    }
 
-        $this->getTicket()->setPluginResult($result);
 
-        if ($result->canProceedToNextStep())
+    /**
+     * execute the plugin for current workflow step
+     *
+     * @return WorkflowPluginResult
+     */
+    protected function executePlugin()
+    {
+        $result = NULL;
+        $plugin = $this->getPluginFor($this->getCurrentStep());
+        if ($plugin->isInteractive())
         {
-            $gate = $this->getGate($result);
-            if (! empty($gate['workflow']))
+            if ($this->getTicket()->isInteractive() && $this->isAuthenticated())
             {
-                $this->getTicket()->setWorkflow($gate['workflow']);
-                return self::STATE_NEXT_WORKFLOW;
-            }
-            else if (! empty($gate['value']))
-            {
-                $this->setCurrentStep($currentStep);
-                return self::STATE_NEXT_STEP;
+                $result = $plugin->process();
             }
             else
             {
-                return self::STATE_END;
+                $this->getTicket()->setBlocked(FALSE);
+                $result = new WorkflowPluginResult(WorkflowPluginResult::STATE_EXPECT_INPUT);
             }
         }
-
-        /* @todo Remove debug code WorkflowHandler.class.php from 21.10.2011 */
-        $__logger=AgaviContext::getInstance()->getLoggerManager();
-        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
-        $__logger->log($this->getTicket(),AgaviILogger::DEBUG);
-        $__logger->log($result,AgaviILogger::DEBUG);
-
-
-        return self::STATE_ERROR;
+        else
+        {
+            $result = $plugin->process();
+        }
+        return $result;
     }
-
 
     /**
      *
@@ -285,12 +361,14 @@ class WorkflowHandler
     /**
      * find plugin for the current workflow step
      *
+     * @param string $currentStep id of workflow step
+     *
      * @return IWorkflowPlugin
+     *
      * @throws WorkflowException
      */
-    protected function getPluginForCurrentStep()
+    protected function getPluginFor($currentStep)
     {
-        $currentStep = $this->getCurrentStep();
         if (! isset($this->steps[$currentStep]['plugin']))
         {
             throw new WorkflowException(
@@ -302,6 +380,16 @@ class WorkflowHandler
         $plugin->initialize($this->getTicket(), $this->getStepParameters());
 
         return $plugin;
+    }
+
+
+    /**
+     *
+     * @return WorkflowTicketPeer
+     */
+    public function getPeer()
+    {
+        return Workflow_SupervisorModel::getInstance()->getTicketPeer();
     }
 
     /**

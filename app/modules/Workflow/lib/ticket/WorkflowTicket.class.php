@@ -9,6 +9,7 @@
  */
 class WorkflowTicket implements Serializable
 {
+
     /**
      *
      * @var string document id in database
@@ -69,6 +70,25 @@ class WorkflowTicket implements Serializable
     protected $waitUntil;
 
     /**
+     * modification time
+     *
+     * @var DateTime
+     */
+    protected $timestamp;
+
+    /**
+     *
+     * @var array
+     */
+    protected $stepCounts = array();
+
+    /**
+     *
+     * @var AgaviExecutionContainer
+     */
+    private $container;
+
+    /**
      * get the persistent id of ticket if available
      *
      * @return string
@@ -77,6 +97,39 @@ class WorkflowTicket implements Serializable
     {
         return $this->id;
     }
+
+    /**
+     * set identifier (primary key)
+     *
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->id = $identifier;
+    }
+
+
+    /**
+     * get sub revison id
+     *
+     * @return string
+     */
+    public function getRevision()
+    {
+        return $this->rev;
+    }
+
+
+    /**
+     * set sub revision id (version) of ticket
+     *
+     * @param string $revision
+     */
+    public function setRevision($revision)
+    {
+        $this->rev = $revision;
+    }
+
 
     /**
      * Set the plugin result state
@@ -93,6 +146,32 @@ class WorkflowTicket implements Serializable
     public function setPluginResult(WorkflowPluginResult $result)
     {
         $this->result = $result;
+    }
+
+
+    /**
+     * return the number of executions of the current step
+     *
+     * @return integer
+     */
+    public function countStep()
+    {
+        $this->stepCounts[$this->currentStep] =
+            isset($this->stepCounts[$this->currentStep])
+                ? $this->stepCounts[$this->currentStep] + 1
+                : 1;
+        return $this->stepCounts[$this->currentStep];
+    }
+
+
+    /**
+     * reset the ticket to start a new workflow
+     */
+    public function reset()
+    {
+        $this->workflow = NULL;
+        $this->currentStep = NULL;
+        $this->stepCounts = array();
     }
 
     /**
@@ -290,6 +369,7 @@ class WorkflowTicket implements Serializable
         }
 
         $this->setBlocked(TRUE);
+        $this->touch();
         if (is_array($data))
         {
             $this->fromArray($data);
@@ -302,22 +382,18 @@ class WorkflowTicket implements Serializable
     public function toArray()
     {
         $data = array(
-             'importItem' => $this->getImportItem()->getIdentifier(),
-             'workflow' => $this->getWorkflow(),
-             'currentStep' => $this->getCurrentStep(),
-             'blocked' => $this->isBlocked(),
-             'waitUntil' => $this->waitUntil instanceof DateTime ? $this->waitUntil->format(DATE_ISO8601) : NULL,
-             'result' => $this->result ? $this->result->toArray() : NULL
+            '_id' => $this->id,
+            '_rev' => $this->rev,
+            'ts' => $this->timestamp->format(DATE_ISO8601),
+            'item' => $this->getImportItem()->getIdentifier(),
+            'workflow' => $this->getWorkflow(),
+            'step' => $this->getCurrentStep(),
+            'blocked' => $this->isBlocked(),
+            'wait' => $this->waitUntil instanceof DateTime ? $this->waitUntil->format(DATE_ISO8601) : NULL,
+            'result' => $this->result ? $this->result->toArray() : NULL,
+            'counts' => $this->stepCounts
         );
-        if (NULL !== $this->id)
-        {
-            $data['_id'] = $this->id;
-        }
-        if (NULL !== $this->rev)
-        {
-            $data['_rev'] = $this->rev;
-        }
-        return $data;
+        return array_filter($data);
     }
 
 
@@ -329,32 +405,72 @@ class WorkflowTicket implements Serializable
      */
     public function fromArray(array $data)
     {
-        $supervisor = Workflow_SupervisorModel::getInstance();
-        $this->id = empty($data['id']) ? NULL : $data['id'];
-        $this->rev = empty($data['rev']) ? NULL : $data['rev'];
+        $this->id = empty($data['_id']) ? NULL : $data['_id'];
+        $this->rev = empty($data['_rev']) ? NULL : $data['_rev'];
+        $this->timestamp = new DateTime(empty($data['ts']) ? NULL : $data['ts']);
 
-        if (array_key_exists('importItem', $data))
+        if (array_key_exists('item', $data))
         {
-            if ($data['importItem'] instanceof IDataRecord)
+            if ($data['item'] instanceof IDataRecord)
             {
-                $this->setImportItem($data['importItem']);
+                $this->setImportItem($data['item']);
             }
             else
             {
-                $itemPeer = $supervisor->getItemPeer();
-                $this->setImportItem($itemPeer->getItemByIdentifier($data['importItem']));
+                $itemPeer = Workflow_SupervisorModel::getInstance()->getItemPeer();
+                $this->setImportItem($itemPeer->getItemByIdentifier($data['item']));
             }
         }
 
-        $this->setBlocked($data['blocked'] ? TRUE : FALSE);
-        $this->setWaitUntilFromIso8601($data['waitUntil']);
-        $this->setWorkflow($data['workflow']);
-        $this->setCurrentStep($data['currentStep']);
+        $this->setBlocked( isset($data['blocked']) && $data['blocked']);
+        $this->setWaitUntilFromIso8601( empty($data['wait']) ? NULL : $data['wait']);
+        $this->setWorkflow( empty($data['workflow']) ? NULL : $data['workflow']);
+        $this->setCurrentStep( empty($data['step']) ? NULL : $data['step']);
 
         if (isset($data['result']))
         {
             $this->setPluginResult(WorkflowPluginResult::fromArray($data['result']));
         }
+    }
+
+    /**
+     * freshen timestamp
+     */
+    public function touch()
+    {
+        $this->timestamp = new DateTime();
+    }
+
+    /**
+     * set the used current excution container while in interactive mode
+     *
+     * @param AgaviExecutionContainer $container execution container in interactive mode
+     */
+    public function setExecutionContainer(AgaviExecutionContainer $container = NULL)
+    {
+        $this->container = $container;
+    }
+
+
+    /**
+     * gets the execution container in interactive mode
+     *
+     * @return AgaviExecutionContainer
+     */
+    public function getExecutionContainer()
+    {
+        return $this->container;
+    }
+
+
+    /**
+     * check if in interactive mode
+     *
+     * @return boolean
+     */
+    public function isInteractive()
+    {
+        return NULL != $this->container;
     }
 
     /*

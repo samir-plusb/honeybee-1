@@ -25,16 +25,6 @@ interface IWorkflowPlugin
      */
     public function process();
 
-
-    /**
-     * process the ticket
-     *
-     * @param AgaviParameterHolder $rd parameters from a request
-     * @return WorkflowPluginResult
-     */
-    public function processRequest(AgaviParameterHolder $rd);
-
-
     /**
      *
      * @return boolean TRUE if plugin will interact with user

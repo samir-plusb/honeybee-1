@@ -49,8 +49,9 @@
             <suite name="Workflow">
                 <testfiles>
                     <testfile>unit/modules/Workflow/config/WorkflowConfigSyntaxTest.php</testfile>
-                    <testfile>unit/modules/Workflow/lib/items/WorkflowItemPeerTest.php</testfile>
                     <testfile>unit/modules/Workflow/models/WorkflowSupervisorTest.php</testfile>
+                    <testfile>unit/modules/Workflow/lib/item/WorkflowItemPeerTest.php</testfile>
+                    <testfile>unit/modules/Workflow/lib/ticket/WorkflowTicketTest.php</testfile>
                 </testfiles>
             </suite>
         </suites>
