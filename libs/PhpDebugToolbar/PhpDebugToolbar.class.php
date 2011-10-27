@@ -17,7 +17,6 @@ abstract class PhpDebugToolbar
         'extensions' => array(),
         'log_strict_errors' => true,
         'log_deprecated_errors' => true,
-        'ui_css_location' => 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/cupertino/jquery-ui.css',
         'cookie' => 'php_debug_toolbar'
     );
 
@@ -63,7 +62,7 @@ abstract class PhpDebugToolbar
         {
             $log_level = $log_level | E_DEPRECATED;
         }
-        
+
         set_error_handler(
             array(
                 __CLASS__,
@@ -71,7 +70,7 @@ abstract class PhpDebugToolbar
             ),
             $log_level
         );
-        
+
         foreach (self::$options['extensions'] as $extension)
         {
             self::$extensions[] = new $extension();
@@ -79,9 +78,9 @@ abstract class PhpDebugToolbar
 
         self::startSection('bootstrap');
         self::$bootstrapping = true;
-        
+
         $bt = debug_backtrace(true);
-        
+
         self::setValue('location', $bt[0]['file'] . ':' . $bt[0]['line']);
     }
 
@@ -171,7 +170,7 @@ abstract class PhpDebugToolbar
             self::$sections[self::$current_section_id][$key][] = $value;
         }
     }
-    
+
     static function log($level, $message, $callee = null)
     {
         if ($callee === null)
@@ -179,12 +178,12 @@ abstract class PhpDebugToolbar
             $callee = debug_backtrace(true);
             $callee = $callee[2];
         }
-        
+
         if (!in_array($level, array('debug', 'warning', 'error')))
         {
             throw new Exception('Log level must be one of: debug, warning or error.');
         }
-        
+
         self::appendValue('logs', array(
             'message' => $message,
             'level' => $level,
@@ -201,8 +200,7 @@ abstract class PhpDebugToolbar
         }
 
         $content = array();
-        $content[] = '<link rel="stylesheet" href="' . self::$options['ui_css_location'] . '" type="text/css" />';
-        
+
         if (isset(self::$options['css_location']))
         {
             $content[] = '<link rel="stylesheet" href="' . self::$options['css_location'] . '" type="text/css" />';
@@ -225,7 +223,7 @@ abstract class PhpDebugToolbar
 
         $content = array();
         $content[] = '<div id="php_debug_toolbar"> </div>';
-        
+
         if (isset(self::$options['js_location']))
         {
             $content[] = '<script src="' . self::$options['js_location'] . '" type="text/javascript" charset="utf-8"> </script>';
@@ -242,7 +240,6 @@ abstract class PhpDebugToolbar
         $content[] = 'new PhpDebugToolbar(document.getElementById("php_debug_toolbar"), ';
         $content[] =    json_encode(array(
             'sections' => self::getSections(),
-            'ui_css_location' => self::$options['ui_css_location'],
             'cookie' => self::$options['cookie']
         )). ');';
         $content[] = '// -->';
@@ -250,11 +247,11 @@ abstract class PhpDebugToolbar
 
         return implode(PHP_EOL, $content);
     }
-    
+
     public static function handleErrorsHandler($severity, $message, $filename, $line)
     {
         $log_level = 'debug';
-        
+
         switch ($severity)
         {
             case E_ERROR:
@@ -296,8 +293,8 @@ abstract class PhpDebugToolbar
             'file' => $filename,
             'line' => $line
         ));
-        
+
         return false;
     }
-    
+
 }

@@ -81,6 +81,17 @@ select {
   color: #ffffff;
   text-shadow: 0 0 4px #ffffff;
 }
+.action-button-list li.inactive {
+  opacity: 0.5;
+}
+.action-button-list li.inactive:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.action-button-list li.inactive:hover a {
+  color: #000000;
+  cursor: default;
+  text-shadow: 0 0.05em 0 rgba(255, 255, 255, 0.7);
+}
 /* Common styles for small info boxes. */
 .info-small {
   background-color: #FF0000;

@@ -8,6 +8,7 @@
         <packages>
             <package name="libs">
                 <javascripts>
+                    <script>js/libs/json2.js</script>
                     <script>js/libs/jquery-1.6.4.js</script>
                     <script>js/libs/jquery-ui-1.8.13.js</script>
                     <script>js/libs/jquery-easing-1.3.js</script>
@@ -18,8 +19,9 @@
                 <javascripts>
                     <script>js/midas/core/core.js</script>
                     <script>js/midas/core/Module.js</script>
-                    <script>js/midas/core/Behaviour.js</script>
                     <script>js/midas/core/BaseObject.js</script>
+                    <script>js/midas/core/Behaviour.js</script>
+                    <script>js/midas/core/BaseController.js</script>
                     <script>js/midas/core/BaseView.js</script>
                     <script>js/midas/core/CommandTriggerList.js</script>
                 </javascripts>
@@ -34,6 +36,7 @@
                 <javascripts>
                     <script>js/midas/items/items.js</script>
                     <script>js/midas/items/edit/SlidePanel.js</script>
+                    <script>js/midas/items/edit/Input.js</script>
                     <script>js/midas/items/edit/DateRangeInput.js</script>
                     <script>js/midas/items/edit/EditForm.js</script>
                     <script>js/midas/items/edit/EditView.js</script>

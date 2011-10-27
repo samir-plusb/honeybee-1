@@ -19,7 +19,7 @@
                 <a href="#list">Liste</a>
                 <span class="info-small">1</span>
             </li>
-            <li><a href="#store">Speichern</a></li>
+            <li class="inactive"><a href="#store">Speichern</a></li>
             <li><a href="#new">Neues Item</a></li>
             <li><a href="#delete">L&ouml;schen</a></li>
         </menu>
@@ -48,7 +48,7 @@
                 <h3 class="legend">Redaktionelle Einstellungen</h3>
                 <div class="input-left category">
                     <label for="Kategorie">Kategorie</label>
-                    <select name="data[category]" id="category">
+                    <select name="data[category]">
                         <option value=""></option>
                         <option value="Polizeimeldungen">Polizeimeldungen</option>
                         <option value="Kiezleben">Kiezleben</option>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="input-left priority">
                     <label for="Priorität">Priorität</label>
-                    <select name="data[priority]" id="priority">
+                    <select name="data[priority]">
                         <option value=""></option>
                         <option value="0">niedrig</option>
                         <option value="1" selected="selected">mittel</option>
@@ -68,31 +68,32 @@
                 </div>
                 <div class="input-left editor">
                     <label for="username">Bearbeiter:</label>
-                    <input name="data[username]" type="text" disabled="disabled" class="username" id="username" />
+                    <input name="data[username]" type="text" readonly="readonly" />
                 </div>
                 <div class="input-full title">
                     <label for="title">Titel</label>
-                    <input name="data[title]" type="text" id="title" />
+                    <input class="jsb-input" name="data[title]" type="text" />
+                    <input type="hidden" value='{ "min_length": 10, "mandatory": true }' class="jsb-input-options" />
                 </div>
                 <div class="input-full">
                     <label for="teaser">
                         Teaser. Die ersten drei Sätze Deines Texts, die Du selber schreiben kannst.
                     </label>
-                    <textarea name="data[teaser]" cols="2" rows="6" id="teaser" ></textarea>
+                    <textarea class="jsb-input" name="data[teaser]" cols="2" rows="6"></textarea>
                 </div>
                 <div class="input-full">
                     <label for="text">
                         <strong>Text</strong>. Der Rest des Texts. Hier sollst Du vor allem kürzen.
                     </label>
-                    <textarea name="data[text]" rows="10" cols="30" id="text" ></textarea>
+                    <textarea class="jsb-input" name="data[text]" rows="10" cols="30"></textarea>
                 </div>
                 <div class="input-full">
                     <label for="source">Quelle (Wer hat das geschickt. Z.B.: Bezirksamt Marzahn-Hellersdorf. Unbedingt ausfüllen.)</label>
-                    <input name="data[source]" type="text" id="source" />
+                    <input class="jsb-input" name="data[source]" type="text" />
                 </div>
                 <div class="input-full">
                     <label for="url">URL (Verknüpfte Internetadresse)</label>
-                    <input name="data[url]" type="text" id="url" />
+                    <input class="jsb-input" name="data[url]" type="text" />
                 </div>
             </div> <!-- </fieldset> as soon as the firefox render bug is fixed -->
 
@@ -102,7 +103,7 @@
                     <input type="hidden" name="data[location[longitude]]" id="location[longitude]" />
                     <input type="hidden" name="data[location[latitude]]" id="location[latitude]" />
                     <div class="input-full">
-                        <select name="data[location[relevance]]" id="location[relevance]">
+                        <select class="jsb-input" name="data[location[relevance]]" id="location[relevance]">
                             <option value="" selected="selected"></option>
                             <option value="0" selected="selected">Betrifft den Bezirk (z.B. Wilmersdorf)</option>
                             <option value="1">Betrifft den Verwaltungsbezirk (z.B. Charlottenburg-Wilmersdorf)</option>
@@ -111,27 +112,27 @@
                     </div>
                     <div class="input-full">
                         <label for="location[name]">Name des Orts (z.B: KaDeWe)</label>
-                        <input name="data[location[name]]" type="text" id="location[name]" />
+                        <input class="jsb-input" name="data[location[name]]" type="text" />
                     </div>
                     <div class="input-full"
                          ><label for="location[locationdetail]">Zusätzliche Ortsangabe (z.B.: Haus 3)</label>
-                        <input name="data[location[locationdetail]]" type="text" id="location[locationdetail]" />
+                        <input class="jsb-input" name="data[location[locationdetail]]" type="text" />
                     </div>
                     <div class="input-full">
                         <label for="location[street]">Straße, Hausnummer</label>
-                        <input name="data[location[street]]" type="text" id="location[street]" />
+                        <input class="jsb-input" name="data[location[street]]" type="text" />
                     </div>
                     <div class="input-full">
                         <label for="location[uzip]">PLZ</label>
-                        <input name="data[location[uzip]]" type="text" id="location[uzip]" />
+                        <input class="jsb-input" name="data[location[uzip]]" type="text" />
                     </div>
                     <div class="input-full">
                         <label for="location[neighborhood]">Bezirk</label>
-                        <input name="data[location[neighborhood]]" type="text" disabled="disabled" id="location[neighborhood]" />
+                        <input name="data[location[neighborhood]]" type="text" readonly="readonly" />
                     </div>
                     <div class="input-full">
                         <label for="location[subneighborhood]">Alter Bezirksname</label>
-                        <input name="data[location[subneighborhood]]" type="text" disabled="disabled" id="location[subneighborhood]" />
+                        <input name="data[location[subneighborhood]]" type="text" readonly="readonly" />
                     </div>
                 </div> <!-- </fieldset> -->
             </div>
@@ -141,18 +142,19 @@
                     <h3 class="legend">Zeiten</h3>
                     <div class="input-full">
                         <label for="date[isevent]">Ist Teilnahme des Nutzers durch den Veranstalter erwünscht?</label>
-                        <input type="hidden" name="data[date[isevent]]" id="date[isevent]_" value="0" />
-                        <input type="checkbox" name="data[date[isevent]]" value="1" id="date[isevent]" />
+                        <input type="hidden" name="data[date[isevent]]" value="0" />
+                        <input class="jsb-input" type="checkbox" name="data[date[isevent]]" value="1" />
                     </div>
                     <div class="input-full">
                         <label for="date[from]">
                             Wann findet das statt? <span>Bei Ausstellungen: Startdatum = Enddatum</span>. von
                         </label>
-                        <input name="data[date[from]]" class="date-picker" type="text" id="date[from]" />
+                        <input name="data[date[from]]" class="date-picker jsb-input" type="text" />
+                        <input type="hidden" value='{  "mandatory": true, "regex": "[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}" }' class="jsb-input-options" />
                     </div>
                     <div class="input-full">
                         <label for="date[till]">bis</label>
-                        <input name="data[date[till]]" class="date-picker" type="text" id="date[till]" />
+                        <input name="data[date[till]]" class="date-picker jsb-input" type="text" />
                     </div>
                 </div> <!-- </fieldset> -->
 
