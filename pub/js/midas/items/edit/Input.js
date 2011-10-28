@@ -81,7 +81,6 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
             success: true,
             messages: {}
         };
-
         var value = this.val();
         // empty values are not validated but may throw a mandatory error.
         if (true === this.options.mandatory && 0 == value.length)
@@ -94,13 +93,13 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         {
             return result;
         }
-
+        // default regex validation
         if (this.options.regex && ! value.match(this.options.regex))
         {
             result.success = false;
             result.messages.regex = "Regexp err for pattern " + this.options.regex;
         }
-
+        // min & max validation for numeric and common strings
         var maybe_int = parseInt(value);
         var compare = isNaN(maybe_int) ? value.length : maybe_int;
         if (this.options.min && compare < this.options.min)
@@ -113,7 +112,15 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
             result.success = false;
             result.messages.max = "Err for min " + this.options.max;
         }
-
         return result;
+    },
+
+    getSelection: function()
+    {
+        var text = this.val().substring(
+            this.element[0].selectionStart,
+            this.element[0].selectionEnd
+        );
+        return text.replace(/[\<\>&]/g, ' ');
     }
 });

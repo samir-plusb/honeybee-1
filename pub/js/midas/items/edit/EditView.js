@@ -15,10 +15,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     log_prefix: "EditView",
 
     /**
-     * Holds a jquery element, that represents our import item content-panel.
-     * @type jQuery
+     * Holds an SlidePanel instance used to slide our content.
+     * @type midas.items.edit.SlidePanel
      */
-    content_panel: null,
+    slide_panel: null,
 
     /**
      * Represents a set of commands that can be triggered for manipulating content-item state.
@@ -27,22 +27,36 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     content_item_menu: null,
 
     /**
+     * Holds a jquery element, that represents our content-item editing form.
+     * @type midas.items.edit.EditForm
+     */
+    editing_form: null,
+
+    /**
      * Represents a set of commands that can be triggered for manipulating import-item state.
      * @type midas.core.CommandTriggerList
      */
     import_item_menu: null,
 
     /**
-     * Holds an SlidePanel instance used to slide our content.
-     * @type midas.items.edit.SlidePanel
+     * Holds a jquery element, that represents our import item content-panel.
+     * @type jQuery
      */
-    slide_panel: null,
+    import_item_container: null,
 
     /**
-     * Holds a jquery element, that represents our content-item editing form.
-     * @type midas.items.edit.EditForm
+     * Holds an object that maps context-menu item-keys to view actions.
+     * @type Object
      */
-    editing_form: null,
+    context_menu_actions: null,
+
+    edit_service: null,
+
+    init: function(element, options)
+    {
+        this.parent(element, options);
+        this.edit_service = new midas.items.edit.EditService();
+    },
 
     /**
      * @description <p>Initializes our gui (behaviours).</p>
@@ -50,49 +64,39 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      */
     onInitGui: function()
     {
-        this.editing_form = new midas.items.edit.EditForm(
-            $('.document-editing form', this.layout_root)
-        );
-
         this.slide_panel = new midas.items.edit.SlidePanel(
-            $('.slide-panel', this.layout_root)
+            this.layout_root.find('.slide-panel').first()
             .css({ 'position': 'absolute', 'width': '100%' }),
             { range: '20em' }
         );
-
+        this.editing_form = new midas.items.edit.EditForm(
+            this.layout_root.find('.document-editing form')
+        );
+        this.editing_form.on(
+            'contextMenuSelect',
+            this.onContextMenuClicked.bind(this)
+        );
+        this.import_item_container = new midas.items.edit.ImportItemContainer(
+            this.layout_root.find('.document-data').first(),
+            { tabs_container: '.item-content'}
+        );
+        this.import_item_container.on(
+            'contextMenuSelect',
+            this.onContextMenuClicked.bind(this)
+        );
+        this.context_menu_actions = this.getContextMenuBindings();
+        this.content_item_menu = new midas.core.CommandTriggerList(
+            this.layout_root.find('#content-item-menu'),
+            { 'commands': this.getContentItemMenuBindings() }
+        );
+        this.import_item_menu = new midas.core.CommandTriggerList(
+            this.layout_root.find('#import-item-menu'),
+            { 'commands': this.getImportItemMenuBindings() }
+        );
         // Set our content-items-list container position to be just outside our viewport,
         // so it will slide in to view when our slide_panel's slideIn method is executed.
-        var items_container = $('.content-items').first();
+        var items_container = this.layout_root.find('.content-items').first();
         items_container.css('left', -items_container.outerWidth());
-
-        this.initMenus();
-        this.initContentTabs();
-    },
-
-    /**
-     * @description Initializes the jquery-ui tabs for our content_panel.
-     */
-    initContentTabs: function()
-    {
-        this.content_panel = $(this.options.tabs_container, this.layout_root);
-        $('.legend', this.content_panel[0]).css('display', 'none');
-        this.content_panel.tabs();
-    },
-
-    /**
-     * @description Initializes the content-item and import-item menu.
-     */
-    initMenus: function()
-    {
-        this.content_item_menu = new midas.core.CommandTriggerList(
-            $('#content-item-menu'),
-            { 'commands': this.getContentItemCommandBindings() }
-        );
-
-        this.import_item_menu = new midas.core.CommandTriggerList(
-            $('#import-item-menu'),
-            { 'commands': this.getImportItemCommandBindings() }
-        );
     },
 
     /**
@@ -100,7 +104,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      * of commands available for manipulating content-item state.
      * @returns {Object}
      */
-    getContentItemCommandBindings: function()
+    getContentItemMenuBindings: function()
     {
         return {
             'store': this.onStoreContentItem.bind(this),
@@ -115,7 +119,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      * of commands available for manipulating import-item state.
      * @returns {Object}
      */
-    getImportItemCommandBindings: function()
+    getImportItemMenuBindings: function()
     {
         return {
             'prev': function() { this.logDebug('onImportItemPrev'); }.bind(this),
@@ -123,6 +127,70 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             'mark': function() { this.logDebug('onImportItemMark'); }.bind(this),
             'next': function() { this.logDebug('onImportItemNext'); }.bind(this)
         };
+    },
+
+    getContextMenuBindings: function()
+    {
+        var setInputValue = function(target_fieldname, append, src_field)
+        {
+            var value = src_field.getSelection();
+            if (true === append)
+            {
+                value = this.editing_form.val(target_fieldname) + value;
+            }
+
+            this.editing_form.val(target_fieldname, value);
+        };
+
+        return {
+            'set_title': setInputValue.bind(this, 'data[title]', false),
+            'append_title': setInputValue.bind(this, 'data[title]', true),
+            'set_text': setInputValue.bind(this, 'data[text]', false),
+            'append_text': setInputValue.bind(this, 'data[text]', true),
+            'remove_hyphens': function(src_field)
+            {
+                var selection = src_field.getSelection();
+                src_field.val(
+                    src_field.val().replace(
+                        selection,
+                        this.edit_service.removeHyphens(selection)
+                    )
+                );
+            }.bind(this),
+            'remove_linefeeds': function(src_field)
+            {
+                var selection = src_field.getSelection();
+                src_field.val(
+                    src_field.val().replace(
+                        selection,
+                        this.edit_service.removeLineFeeds(selection)
+                    )
+                );
+            }.bind(this),
+            'set_url': function(src_field)
+            {
+                var selection = src_field.getSelection();
+                var urls = this.edit_service.extractUrls(selection);
+                if (0 < urls.length)
+                {
+                    var url = urls[0].trim();
+
+                    if (-1 === url.indexOf('http'))
+                    {
+                        url = 'http://' + url;
+                    }
+                    this.editing_form.val('data[url]', url);
+                }
+            }.bind(this)
+        };
+    },
+
+    onContextMenuClicked: function(content_field, menu_item)
+    {
+        if (this.context_menu_actions[menu_item.key])
+        {
+            this.context_menu_actions[menu_item.key].apply(this, [content_field]);
+        }
     },
 
     onNewContentItem: function()

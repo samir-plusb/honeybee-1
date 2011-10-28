@@ -207,7 +207,15 @@
             </ul>
             <div id="content-tabs-1">
                 <div class="input-full">
-                    <textarea id="textinner" readonly="readonly" class="textinner"></textarea>
+                    <textarea readonly="readonly">Lorem ipsum -dolor sit amet-,
+consectetur adipisc--ing elit.
+Aliquam -id elit at - www.heise.de
+libero t-incidunt luctus id:
+http://www.google.de
+quis nulla. Praesent molestie porttitor ultricies.
+Etiam viverra tempor magna, eget rutru
+m erat volutpat non. Aliquam vitae eros urna. Etiam viverra porttitor urna, in blandit purus tincidunt non.
+Donec a adipiscing magna. Etiam consectetur blandit diam, et pretium tellus congue ut.</textarea>
                 </div>
             </div>
         </div>

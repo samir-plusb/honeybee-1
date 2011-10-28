@@ -38,7 +38,7 @@ midas.core.BaseView = midas.core.BaseObject.extend(
     {
         this.parent(options);
         this.controllers = [];
-        this.layout_root = layout_root;
+        this.layout_root = $(layout_root);
 
         // Hook method that child classes may implement.
         if (typeof this.onInitGui == "function")

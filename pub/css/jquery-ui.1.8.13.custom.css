@@ -576,3 +576,29 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  */
 .ui-progressbar { height:2em; text-align: left; }
 .ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; }
+
+.context-menu {
+    background-color: #FCFDFD;
+    border: 1px solid #999999;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.context-menu li {
+    margin: 0;
+    padding: 10px;
+}
+.context-menu li:hover {
+    background: url("images/ui-bg_gloss-wave_50_6eac2c_500x100.png") repeat-x scroll 50% 50% #6EAC2C;
+}
+.menu-item-break {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.context-menu a {
+    color: #333333;
+    display: block;
+    font-weight: normal;
+    text-decoration: none;
+}

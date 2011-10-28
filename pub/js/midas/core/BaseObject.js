@@ -67,7 +67,7 @@ midas.core.BaseObject = midas.core.Module.create(
 
         for (var i = 0; i < this.listeners[event].length; i++)
         {
-            this.listeners[event][i](state);
+            this.listeners[event][i].apply(null, state);
         }
     },
 

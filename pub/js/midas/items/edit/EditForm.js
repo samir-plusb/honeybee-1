@@ -2,7 +2,7 @@
  * @class
  * @augments midas.core.BaseObject
  * @description <p>The EditForm serves as the behavioural pendant to the Items/EditSuccessView's html form element.</p>
- * <p>It takes care of managing field related behaviours such as validation and formatting.</p>
+ * <p>It takes care of managing field related behaviours such as validation, formatting, retrieving and setting values.</p>
  * @author <a href="mailto:tschmittrink@gmail.com">Thorsten Schmit-Rink</a>
  * @version $Id:$
  */
@@ -72,13 +72,24 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
 
             this.fields[input_field.getName()] = input_field;
         }.bind(this));
+
+        this.createContextMenu();
     },
 
-    val: function(field)
+    val: function(field, value)
     {
-        if (this.fields[field])
+        if (! field)
+        {
+            // @todo return all values.
+            return {};
+        }
+        else if (this.fields[field] && undefined == value)
         {
             return this.fields[field].val();
+        }
+        else if (this.fields[field])
+        {
+            return this.fields[field].val(value);
         }
 
         return null;
@@ -138,5 +149,61 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         resolved_class += 'Input';
 
         return resolved_class;
+    },
+
+    getSelection: function(field)
+    {
+        if (this.fields[field])
+        {
+            return this.fields[field].getSelection();
+        }
+
+        return '';
+    },
+
+    createContextMenu: function()
+    {
+        var items = this.getMenuItems();
+        var prepared_items = {};
+        var item;
+
+        for (var i = 0; i < items.length; i++)
+        {
+            item = items[i];
+            prepared_items[item.label] = {
+                'click': function(item)
+                {
+                    this.fire('contextMenuSelect', [this.fields['data[text]'], item]);
+                }.bind(this, item)
+            };
+
+            if (item['class'])
+            {
+                prepared_items[item.label].klass = item['class'];
+            }
+        }
+
+        this.fields['data[text]'].element.contextMenu(
+            'content-data-menu',
+            prepared_items,
+            { disable_native_context_menu: false, leftClick: false }
+        );
+    },
+
+    getMenuItems: function()
+    {
+        return [
+            { 'key': 'new_item', 'label': 'neues Item aus Auswahl', 'class': 'menu-item-break' },
+            { 'key': 'localize_item', 'label': 'lokalisieren', 'class': 'menu-item-break' },
+            { 'key': 'set_title', 'label': 'als Überschrift setzen' },
+            { 'key': 'append_title', 'label': 'an Überschrift anhängen' },
+            { 'key': 'set_text', 'label': 'als Textkörper setzen' },
+            { 'key': 'append_text', 'label': 'an Textkörper anhängen' },
+            { 'key': 'set_url', 'label': 'als Url setzen' },
+            { 'key': 'set_startdate', 'label': 'als Startdatum setzen' },
+            { 'key': 'set_enddate', 'label': 'als Enddatum setzen', 'class': 'menu-item-break' },
+            { 'key': 'remove_hyphens', 'label': 'Bindestriche entfernen' },
+            { 'key': 'remove_linefeeds', 'label': 'Umbrüche entfernen' }
+        ];
     }
 });
