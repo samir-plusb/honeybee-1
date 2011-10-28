@@ -24,7 +24,7 @@ class WorkflowTicketValidator extends AgaviValidator
             return FALSE;
         }
 
-        $this->export($ticket, $this->getParameter('export', NULL));
+        $this->export($ticket, $this->getParameter('export', $this->getArgument()));
         return TRUE;
     }
 }

@@ -11,7 +11,7 @@ class Workflow_RunAction extends ProjectWorkflowBaseAction
      * (non-PHPdoc)
      * @see AgaviAction::getDefaultViewName()
      */
-    public function getDefaultViewName()
+    public function execute(AgaviParameterHolder $rd)
     {
         return 'Input';
     }

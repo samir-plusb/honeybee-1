@@ -8,8 +8,11 @@
         <autoload name="ProjectWorkflowBaseView">%core.module_dir%/Workflow/lib/base/ProjectWorkflowBaseView.class.php</autoload>
         <autoload name="IWorkflowImportItem">%core.module_dir%/Workflow/lib/base/IWorkflowImportItem.iface.php</autoload>
         <autoload name="IWorkflowPlugin">%core.module_dir%/Workflow/lib/base/IWorkflowPlugin.iface.php</autoload>
+        <autoload name="WorkflowBasePlugin">%core.module_dir%/Workflow/lib/base/WorkflowBasePlugin.class.php</autoload>
+        <autoload name="WorkflowBaseInteractivePlugin">%core.module_dir%/Workflow/lib/base/WorkflowBaseInteractivePlugin.class.php</autoload>
         <autoload name="WorkflowModuleSetup">%core.module_dir%/Workflow/lib/setup/WorkflowModuleSetup.class.php</autoload>
         <autoload name="WorkflowPluginResult">%core.module_dir%/Workflow/lib/WorkflowPluginResult.class.php</autoload>
+        <autoload name="WorkflowInteractivePluginResult">%core.module_dir%/Workflow/lib/WorkflowInteractivePluginResult.class.php</autoload>
         <autoload name="WorkflowException">%core.module_dir%/Workflow/lib/WorkflowException.class.php</autoload>
         <autoload name="WorkflowHandler">%core.module_dir%/Workflow/lib/WorkflowHandler.class.php</autoload>
         <!--  -->
@@ -20,6 +23,8 @@
         <autoload name="WorkflowTicketPeer">%core.module_dir%/Workflow/lib/ticket/WorkflowTicketPeer.class.php</autoload>
         <!-- Models -->
         <autoload name="Workflow_SupervisorModel">%core.module_dir%/Workflow/models/SupervisorModel.class.php</autoload>
+        <!-- Validator -->
+        <autoload name="WorkflowTicketValidator">%core.module_dir%//Workflow/lib/validate/WorkflowTicketValidator.class.php</autoload>
         <!-- Plugins -->
         <autoload name="WorkflowNullPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowNullPlugin.class.php</autoload>
     </ae:configuration>

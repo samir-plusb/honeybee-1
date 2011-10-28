@@ -8,16 +8,8 @@
  * @version $Id$
  *
  */
-class WorkflowNullPlugin implements IWorkflowPlugin
+class WorkflowNullPlugin extends WorkflowBasePlugin
 {
-    /**
-     * (non-PHPdoc)
-     * @see IWorkflowPlugin::initialize()
-     */
-    public function initialize(WorkflowTicket $ticket, array $parameters)
-    {
-        return $this;
-    }
 
     /**
      * (non-PHPdoc)
@@ -26,14 +18,5 @@ class WorkflowNullPlugin implements IWorkflowPlugin
     public function process()
     {
         return new WorkflowPluginResult(WorkflowPluginResult::STATE_OK, WorkflowPluginResult::GATE_DEFAULT);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see IWorkflowPlugin::isInteractive()
-     */
-    public function isInteractive()
-    {
-        return FALSE;
     }
 }

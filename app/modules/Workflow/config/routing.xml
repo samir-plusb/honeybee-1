@@ -12,6 +12,7 @@
     <ae:configuration context="console">
         <routes>
             <route pattern="workflow." module="Workflow">
+                <route pattern="^run" action="Run" />
             </route>
         </routes>
     </ae:configuration>

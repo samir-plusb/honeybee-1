@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations 
+    xmlns="http://agavi.org/agavi/config/parts/validators/1.1" 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    parent="%core.module_dir%/Workflow/Run/Run.validate.xml">
+    <ae:configuration>
+        <validators>
+            <validator class="number">
+                <argument>gate</argument>
+                <ae:parameter name="min">0</ae:parameter>
+                <ae:parameter name="type">int</ae:parameter>
+                <ae:parameter name="cast_to">int</ae:parameter>
+                <error>Must be an integer number greater equal 0</error>
+            </validator>
+        </validators>
+    </ae:configuration>
+</ae:configurations>
