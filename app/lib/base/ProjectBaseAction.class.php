@@ -50,7 +50,8 @@ class ProjectBaseAction extends AgaviAction
         $this->getContext()->getTranslationManager()->setDefaultDomain($container->getModuleName().'.errors');
         return array(
             AgaviConfig::get('actions.error_404_module', 'Default'),
-            AgaviConfig::get('actions.error_404_action', 'Error404').'Success');
+            AgaviConfig::get('actions.error_404_action', 'Error404')
+                .'/'.AgaviConfig::get('actions.error_404_action', 'Error404').'Success');
     }
 
 
