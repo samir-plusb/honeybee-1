@@ -58,7 +58,7 @@ class WorkflowPluginResult
     private $message;
 
     /**
-     *
+     * construct a result
      *
      * @param integer $state
      * @param integer $gate

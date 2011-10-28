@@ -173,9 +173,9 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
                 WorkflowException::UNEXPECTED_EXIT_CODE);
         }
 
-        if ($container !== NULL && $container !== $ticket->getExecutionContainer())
+        if ($ticket->getPluginResult() instanceof WorkflowInteractivePluginResult)
         {
-            return $ticket->getExecutionContainer();
+            return $ticket->getPluginResult()->getContainer();
         }
         return NULL;
     }

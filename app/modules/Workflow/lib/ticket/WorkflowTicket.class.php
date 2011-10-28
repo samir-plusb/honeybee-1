@@ -150,6 +150,36 @@ class WorkflowTicket implements Serializable
 
 
     /**
+     * get last plugin result if any
+     *
+     * @return WorkflowPluginResult
+     */
+    public function getPluginResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * gets the plugin result state
+     * @return integer
+     */
+    public function getState()
+    {
+        return $this->result->getState();
+    }
+
+    /**
+     * get status message
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->result->getMessage();
+    }
+
+
+    /**
      * return the number of executions of the current step
      *
      * @return integer
@@ -172,25 +202,6 @@ class WorkflowTicket implements Serializable
         $this->workflow = NULL;
         $this->currentStep = NULL;
         $this->stepCounts = array();
-    }
-
-    /**
-     * gets the plugin result state
-     * @return integer
-     */
-    public function getState()
-    {
-        return $this->result->getState();
-    }
-
-    /**
-     * get status message
-     *
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->result->getMessage();
     }
 
     /**
@@ -315,16 +326,6 @@ class WorkflowTicket implements Serializable
         $this->waitUntil = $waitUntil;
     }
 
-
-    /**
-     * set display
-     *
-     * @param unknown_type $message
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
-    }
 
     /**
      * Sets the waitUntil attribute.
