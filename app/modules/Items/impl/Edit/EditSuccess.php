@@ -87,8 +87,8 @@
                     <label for="text">
                         <strong>Text</strong>. Der Rest des Texts. Hier sollst Du vor allem kürzen.
                     </label>
-                    <textarea class="jsb-input" name="data[text]" rows="10" cols="30"></textarea>
-                    <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
+                    <textarea class="jsb-input-assistive-text" name="data[text]" rows="10" cols="30"></textarea>
+                    <input type="hidden" value='{ "mandatory": true }' class="jsb-input-assistive-text-options" />
                 </div>
                 <div class="input-full">
                     <label for="source">Quelle (Wer hat das geschickt. Z.B.: Bezirksamt Marzahn-Hellersdorf. Unbedingt ausfüllen.)</label>

@@ -73,7 +73,11 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
             this.fields[input_field.getName()] = input_field;
         }.bind(this));
 
-        this.createContextMenu();
+        // delegate contextmenu events from our text data to the outside world.
+        this.fields['data[text]'].on('contextMenuSelect', function(field, item)
+        {
+            this.fire('contextMenuSelect', [field, item]);
+        }.bind(this));
     },
 
     val: function(field, value)
@@ -141,9 +145,10 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
 
         if (type_key)
         {
-            // make first char uppercase
-            var first = type_key.charAt(0).toUpperCase();
-            resolved_class = first + type_key.substr(1);
+            // camelize class name
+            resolved_class = type_key.replace(/^([a-z])|[\s\-]+([a-z])/g, function ($1) {
+                return $1.toUpperCase().replace('-', '');
+            });
         }
 
         resolved_class += 'Input';
@@ -159,51 +164,5 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         }
 
         return '';
-    },
-
-    createContextMenu: function()
-    {
-        var items = this.getMenuItems();
-        var prepared_items = {};
-        var item;
-
-        for (var i = 0; i < items.length; i++)
-        {
-            item = items[i];
-            prepared_items[item.label] = {
-                'click': function(item)
-                {
-                    this.fire('contextMenuSelect', [this.fields['data[text]'], item]);
-                }.bind(this, item)
-            };
-
-            if (item['class'])
-            {
-                prepared_items[item.label].klass = item['class'];
-            }
-        }
-
-        this.fields['data[text]'].element.contextMenu(
-            'content-data-menu',
-            prepared_items,
-            { disable_native_context_menu: false, leftClick: false }
-        );
-    },
-
-    getMenuItems: function()
-    {
-        return [
-            { 'key': 'new_item', 'label': 'neues Item aus Auswahl', 'class': 'menu-item-break' },
-            { 'key': 'localize_item', 'label': 'lokalisieren', 'class': 'menu-item-break' },
-            { 'key': 'set_title', 'label': 'als Überschrift setzen' },
-            { 'key': 'append_title', 'label': 'an Überschrift anhängen' },
-            { 'key': 'set_text', 'label': 'als Textkörper setzen' },
-            { 'key': 'append_text', 'label': 'an Textkörper anhängen' },
-            { 'key': 'set_url', 'label': 'als Url setzen' },
-            { 'key': 'set_startdate', 'label': 'als Startdatum setzen' },
-            { 'key': 'set_enddate', 'label': 'als Enddatum setzen', 'class': 'menu-item-break' },
-            { 'key': 'remove_hyphens', 'label': 'Bindestriche entfernen' },
-            { 'key': 'remove_linefeeds', 'label': 'Umbrüche entfernen' }
-        ];
     }
 });
