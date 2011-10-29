@@ -1,8 +1,7 @@
 <?php
 
 /**
- * The ExtendedCouchDbClient is a wrapper around php couchdb pecl library,
- * that extends the latter by composing it and adding in some missing functionality.
+ * The ExtendedCouchDbClient wraps a selection of couchdb api calls to php using CURL
  *
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -104,13 +103,6 @@ class ExtendedCouchDbClient
     // ---------------------------------- <MEMBERS> ----------------------------------------------
 
     /**
-     * Holds a reference to our composed pecl CouchDbClient.
-     *
-     * @var         CouchDbClient
-     */
-    protected $compositeClient;
-
-    /**
      * Holds base uri used to talk to couch db.
      *
      * @var         string
@@ -172,7 +164,6 @@ class ExtendedCouchDbClient
         $this->baseUri = $uri;
         $this->defaultDatabase = $database;
         $this->cookieFile = tempnam(AgaviConfig::get('core.cache_dir'), get_class($this).'_');
-        $this->compositeClient = new CouchDbClient($uri);
     }
 
 
@@ -236,16 +227,33 @@ class ExtendedCouchDbClient
      * Send a batch create/update request to the given couch database
      * and return the resulting response information.
      *
+     * @see http://wiki.apache.org/couchdb/HTTP_Bulk_Document_API#Modify_Multiple_Documents_With_a_Single_Request
+     *
      * @param       string $database
      * @param       array $documentData
+     * @param       boolean $allOrNothing
      *
      * @return      array
      */
-    public function storeDocs($database, array $documentData)
+    public function storeDocs($database, array $documentData, $allOrNothing = FALSE)
     {
-        $this->compositeClient->selectDb(empty($database) ? $this->defaultDatabase : $database);
+    	foreach ($documentData as $key => $doc)
+    	{
+    		if (array_key_exists('_id', $doc))
+    		{
+    			$documentData[$key]['_id'] = (string)$doc['_id'];
+    		}
+    	}
 
-        return $this->compositeClient->storeDocs($documentData);
+    	$data = ($allOrNothing)
+	    	? array('all_or_nothing' => TRUE, 'docs' => $documentData)
+	    	: array('docs' => $documentData);
+
+		$uri = $this->getDatabaseUrl($database).'_bulk_docs';
+		$curlHandle = $this->getCurlHandle($uri, self::METHOD_POST);
+    	curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($data));
+        $data = $this->getJsonData($curlHandle, self::STATUS_CONFLICT);
+        return $data;
     }
 
     /**
@@ -273,17 +281,35 @@ class ExtendedCouchDbClient
     /**
      * Fetch all documents from the given database.
      *
-     * @param       string $database
+     * @see http://wiki.apache.org/couchdb/HTTP_Bulk_Document_API#Fetch_Multiple_Documents_With_a_Single_Request
      *
-     * @return      array
+     * @param       string $database
+     * @param       array $parameters parameters for the _all_docs api call (include_docs, start_key, end_key, …)
+     * @param       array $keys list of document ids to lookup
+     *
+     * @return      array with view result
      *
      * @throws      CouchdbClientException
      */
-    public function getAllDocs($database)
+    public function getAllDocs($database, array $parameters = NULL, array $keys = NULL)
     {
-        $this->compositeClient->selectDb(empty($database) ? $this->defaultDatabase : $database);
-
-        return (array)$this->compositeClient->getAllDocs();
+    	$uri = $this->getDatabaseUrl($database).'_all_docs';
+    	if (NULL !== $parameters)
+    	{
+    		$uri .= '?'.http_build_query($parameters);
+    	}
+    	if (NULL === $keys)
+    	{
+    		$curlHandle = $this->getCurlHandle($uri, self::METHOD_GET);
+    	}
+    	else
+    	{
+    		$kreq = array('keys' => $keys);
+    		$curlHandle = $this->getCurlHandle($uri, self::METHOD_POST);
+    		curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($kreq));
+    	}
+        $data = $this->getJsonData($curlHandle, self::STATUS_OK);
+        return $data;
     }
 
     /**
@@ -450,27 +476,6 @@ class ExtendedCouchDbClient
     public function createDesignDocument($database, $docId, array $doc)
     {
         $doc['_id'] = $docId;
-
-        $removeWhitespace = function($funcString)
-        {
-            // strip /* … */ comments
-            $funcString = preg_replace('#/\*.*?\*/#s', ' ', $funcString);
-            // strip // … comments
-            $funcString = preg_replace('#//.*#', ' ', $funcString);
-            // strip multiple white spaces
-            $funcString = preg_replace('/\s+/s', ' ', $funcString);
-            return trim($funcString);
-        };
-
-        foreach ($doc['views'] as & $view)
-        {
-            $view['map'] = $removeWhitespace($view['map']);
-
-            if (isset($view['reduce']))
-            {
-                $view['reduce'] = $removeWhitespace($view['map']);
-            }
-        }
         $uri = $this->getDatabaseUrl($database) . '/_design/' . urlencode($docId);
         return $this->putData($uri, $doc, self::STATUS_CONFLICT);
     }
@@ -547,7 +552,7 @@ class ExtendedCouchDbClient
      * @return boolean TRUE on database created, FALSE on database already exists
      * @throws CouchdbClientException on protocol errors, access denied, etc.
      */
-    public function createDatabase($database)
+    public function createDatabase($database = NULL)
     {
         $curlHandle = $this->getCurlHandle($this->getDatabaseUrl($database), self::METHOD_PUT);
         $data = $this->getJsonData($curlHandle, self::STATUS_PRECONDITION_FAILED);
@@ -680,7 +685,8 @@ class ExtendedCouchDbClient
         if (NULL === $data)
         {
             throw new CouchdbClientException(
-                $this->lastUri.': Response body can not be parsed to JSON: '. $response);
+                $this->lastUri.': Response body can not be parsed to JSON: '. $response,
+                CouchdbClientException::UNPARSEABLE_RESPONSE);
         }
         return $data;
     }
@@ -718,7 +724,7 @@ class ExtendedCouchDbClient
         $docFd = fopen('data://text/plain,'.urlencode($body), 'r');
         if (! $docFd)
         {
-            throw new CouchdbClientException('Can not setup PUT data.');
+            throw new CouchdbClientException('Can not setup PUT data.', CouchdbClientException::PUT_DATA);
         }
         curl_setopt($curlHandle, CURLOPT_INFILE, $docFd);
         curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($body));

@@ -4,6 +4,7 @@
     <ae:configuration>
         <autoloads>
             <autoload name="ExtendedCouchDbClient">%core.app_dir%/models/Database/ExtendedCouchDbClient.class.php</autoload>
+            <autoload name="CouchdbClientException">%core.app_dir%/models/Database/CouchdbClientException.class.php</autoload>
             <autoload name="CouchDatabase">%core.app_dir%/models/Database/CouchDatabase.class.php</autoload>
             <autoload name="ICouchDatabaseSetup">%core.app_dir%/models/Database/ICouchDatabaseSetup.iface.php</autoload>
             <autoload name="BaseCouchDatabaseSetup">%core.app_dir%/models/Database/BaseCouchDatabaseSetup.class.php</autoload>

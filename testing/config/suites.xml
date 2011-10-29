@@ -4,7 +4,7 @@
         <suites>
             <suite name="couch">
                 <testfiles>
-                    <testfile>unit/models/Event/ExtendedCouchDbClientTest.php</testfile>
+                    <testfile>unit/models/couchdb/ExtendedCouchDbClientTest.php</testfile>
                 </testfiles>
             </suite>
             <suite name="Default">
