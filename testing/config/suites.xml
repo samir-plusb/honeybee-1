@@ -52,6 +52,7 @@
                     <testfile>unit/modules/Workflow/models/WorkflowSupervisorTest.php</testfile>
                     <testfile>unit/modules/Workflow/lib/item/WorkflowItemPeerTest.php</testfile>
                     <testfile>unit/modules/Workflow/lib/ticket/WorkflowTicketTest.php</testfile>
+                    <testfile>flow/Workflow/Run/WorkflowRunFlowTest.php</testfile>
                 </testfiles>
             </suite>
         </suites>
