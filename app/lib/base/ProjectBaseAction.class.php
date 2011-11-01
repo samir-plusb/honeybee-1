@@ -35,6 +35,8 @@ class ProjectBaseAction extends AgaviAction
      *
      * @param AgaviRequestDataHolder $parameters
      * @return array (modulename, viewname)
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handleError(AgaviRequestDataHolder $parameters)
     {

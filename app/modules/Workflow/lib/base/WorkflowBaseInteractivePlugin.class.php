@@ -48,7 +48,7 @@ abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
      * Creates a new container with the same output type and request method as
      * this view's container.
      *
-     * This container will have a parameter called 'is_forward' set to true.
+     * This container will have a parameter called 'is_forward' set to TRUE.
      *
      * @param string $actionName The name of the action.
      * @param string $moduleName The name of the module. Defaults to current Module
@@ -82,8 +82,9 @@ abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
             $arguments = $container->getArguments();
         }
 
-        $pluginContainer = $container->createExecutionContainer($moduleName, $actionName, $arguments, $outputType, $requestMethod);
-        $pluginContainer->setParameter('is_forward', true);
+        $pluginContainer = $container->createExecutionContainer(
+            $moduleName, $actionName, $arguments, $outputType, $requestMethod);
+        $pluginContainer->setParameter('is_forward', TRUE);
 
         // put the gate labels as parameter to the plugin container
         $pluginContainer->setParameter('gates', $this->getGates());

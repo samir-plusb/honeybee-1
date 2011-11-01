@@ -12,7 +12,7 @@
  */
 class CouchdbClientException extends Exception
 {
-	const UNPARSEABLE_RESPONSE = -1;
-	const PUT_DATA = -2;
+    const UNPARSEABLE_RESPONSE = -1;
+    const PUT_DATA = -2;
 
 }

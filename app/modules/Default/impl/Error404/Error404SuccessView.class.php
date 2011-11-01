@@ -81,8 +81,12 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      *
      * @author tay
      * @since 08.10.2011
+     *
      * @param AgaviRequestDataHolder $rd
+     *
      * @return AgaviExecutionContainer
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeAny(AgaviRequestDataHolder $rd)
     {
@@ -98,8 +102,12 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      *
      * @author tay
      * @since 08.10.2011
+     *
      * @param AgaviRequestDataHolder $rd
+     *
      * @return AgaviExecutionContainer
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeXml(AgaviRequestDataHolder $rd)
     {

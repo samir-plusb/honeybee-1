@@ -146,6 +146,7 @@ class WorkflowPluginResult
      */
     public function __toString()
     {
-        return sprintf(get_class($this).'(State %d, Gate %d, Message: "%s")', $this->state, $this->gate, $this->message);
+        return sprintf('%s(State %d, Gate %d, Message: "%s")',
+            get_class($this), $this->state, $this->gate, $this->message);
     }
 }

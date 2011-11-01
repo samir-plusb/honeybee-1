@@ -237,21 +237,21 @@ class ExtendedCouchDbClient
      */
     public function storeDocs($database, array $documentData, $allOrNothing = FALSE)
     {
-    	foreach ($documentData as $key => $doc)
-    	{
-    		if (array_key_exists('_id', $doc))
-    		{
-    			$documentData[$key]['_id'] = (string)$doc['_id'];
-    		}
-    	}
+        foreach ($documentData as $key => $doc)
+        {
+            if (array_key_exists('_id', $doc))
+            {
+                $documentData[$key]['_id'] = (string)$doc['_id'];
+            }
+        }
 
-    	$data = ($allOrNothing)
-	    	? array('all_or_nothing' => TRUE, 'docs' => $documentData)
-	    	: array('docs' => $documentData);
+        $data = ($allOrNothing)
+            ? array('all_or_nothing' => TRUE, 'docs' => $documentData)
+            : array('docs' => $documentData);
 
-		$uri = $this->getDatabaseUrl($database).'_bulk_docs';
-		$curlHandle = $this->getCurlHandle($uri, self::METHOD_POST);
-    	curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($data));
+        $uri = $this->getDatabaseUrl($database).'_bulk_docs';
+        $curlHandle = $this->getCurlHandle($uri, self::METHOD_POST);
+        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($data));
         $data = $this->getJsonData($curlHandle, self::STATUS_CONFLICT);
         return $data;
     }
@@ -293,21 +293,21 @@ class ExtendedCouchDbClient
      */
     public function getAllDocs($database, array $parameters = NULL, array $keys = NULL)
     {
-    	$uri = $this->getDatabaseUrl($database).'_all_docs';
-    	if (NULL !== $parameters)
-    	{
-    		$uri .= '?'.http_build_query($parameters);
-    	}
-    	if (NULL === $keys)
-    	{
-    		$curlHandle = $this->getCurlHandle($uri, self::METHOD_GET);
-    	}
-    	else
-    	{
-    		$kreq = array('keys' => $keys);
-    		$curlHandle = $this->getCurlHandle($uri, self::METHOD_POST);
-    		curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($kreq));
-    	}
+        $uri = $this->getDatabaseUrl($database).'_all_docs';
+        if (NULL !== $parameters)
+        {
+            $uri .= '?'.http_build_query($parameters);
+        }
+        if (NULL === $keys)
+        {
+            $curlHandle = $this->getCurlHandle($uri, self::METHOD_GET);
+        }
+        else
+        {
+            $kreq = array('keys' => $keys);
+            $curlHandle = $this->getCurlHandle($uri, self::METHOD_POST);
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($kreq));
+        }
         $data = $this->getJsonData($curlHandle, self::STATUS_OK);
         return $data;
     }

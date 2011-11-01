@@ -18,6 +18,8 @@ class WorkflowPluginBaseAction extends ProjectBaseAction
      *                     of the view to be executed and the view to be
      *                     executed.</li>
      *                   </ul>^
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeRead(AgaviRequestDataHolder $rd)
     {
@@ -36,6 +38,8 @@ class WorkflowPluginBaseAction extends ProjectBaseAction
      *                     of the view to be executed and the view to be
      *                     executed.</li>
      *                   </ul>^
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function executeWrite(AgaviRequestDataHolder $rd)
     {
