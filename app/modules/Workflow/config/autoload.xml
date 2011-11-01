@@ -3,9 +3,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <ae:configuration>
         <!-- Base -->
-        <autoload name="ProjectWorkflowBaseAction">%core.module_dir%/Workflow/lib/base/ProjectWorkflowBaseAction.class.php</autoload>
-        <autoload name="ProjectWorkflowBaseModel">%core.module_dir%/Workflow/lib/base/ProjectWorkflowBaseModel.class.php</autoload>
-        <autoload name="ProjectWorkflowBaseView">%core.module_dir%/Workflow/lib/base/ProjectWorkflowBaseView.class.php</autoload>
+        <autoload name="WorkflowPluginBaseAction">%core.module_dir%/Workflow/lib/base/WorkflowPluginBaseAction.class.php</autoload>
+        <autoload name="WorkflowPluginBaseView">%core.module_dir%/Workflow/lib/base/WorkflowPluginBaseView.class.php</autoload>
         <autoload name="IWorkflowImportItem">%core.module_dir%/Workflow/lib/base/IWorkflowImportItem.iface.php</autoload>
         <autoload name="IWorkflowPlugin">%core.module_dir%/Workflow/lib/base/IWorkflowPlugin.iface.php</autoload>
         <autoload name="WorkflowBasePlugin">%core.module_dir%/Workflow/lib/base/WorkflowBasePlugin.class.php</autoload>
@@ -27,5 +26,6 @@
         <autoload name="WorkflowTicketValidator">%core.module_dir%//Workflow/lib/validate/WorkflowTicketValidator.class.php</autoload>
         <!-- Plugins -->
         <autoload name="WorkflowNullPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowNullPlugin.class.php</autoload>
+        <autoload name="WorkflowChoosePlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowChoosePlugin.class.php</autoload>
     </ae:configuration>
 </ae:configurations>

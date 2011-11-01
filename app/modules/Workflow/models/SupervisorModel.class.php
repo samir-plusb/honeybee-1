@@ -10,7 +10,7 @@
  *
  */
 
-class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
+class Workflow_SupervisorModel extends ProjectBaseModel
 {
     /**
      * database config name
@@ -159,23 +159,19 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
             $workflow = $this->getWorkflowByName($ticket->getWorkflow());
             $ticket->setExecutionContainer($container);
             $code = $workflow->run($ticket);
-
-            /* @todo Remove debug code SupervisorModel.class.php from 24.10.2011 */
-            $__logger=AgaviContext::getInstance()->getLoggerManager();
-            $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
-            $__logger->log('Workflow result code: '.$code,AgaviILogger::DEBUG);
         }
 
         if (WorkflowHandler::STATE_ERROR == $code)
         {
-            throw new WorkflowException(
-                'Workflow exitited with unexpected code:'.$code,
-                WorkflowException::UNEXPECTED_EXIT_CODE);
+            $message = $ticket->getPluginResult()->getMessage()
+                ? $ticket->getPluginResult()->getMessage()
+                : 'Workflow halted with error';
+            throw new WorkflowException($message, WorkflowException::UNEXPECTED_EXIT_CODE);
         }
 
         if ($ticket->getPluginResult() instanceof WorkflowInteractivePluginResult)
         {
-            return $ticket->getPluginResult()->getContainer();
+            return $ticket->getPluginResult()->getResponse();
         }
         return NULL;
     }
@@ -219,10 +215,6 @@ class Workflow_SupervisorModel extends ProjectWorkflowBaseModel
             }
             $this->workflowByName[$name] = new WorkflowHandler($config['workflow']);
         }
-        /* @todo Remove debug code SupervisorModel.class.php from 25.10.2011 */
-        $__logger=AgaviContext::getInstance()->getLoggerManager();
-        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
-        $__logger->log("Workflow: $name",AgaviILogger::DEBUG);
 
         // return only fresh instances
         return clone $this->workflowByName[$name];

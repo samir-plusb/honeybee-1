@@ -13,10 +13,12 @@ interface IWorkflowPlugin
      * initialize plugin
      *
      * @param WorkflowTicket $ticket workflow state
-     * @param array $parameters plugn parameters as defined in the current workflow step
+     * @param array $parameters plugin parameters as defined in the current workflow step
+     * @param array $gates collection of gate labels
+     *
      * @return IWorkflowPlugin return $this for fluid interface
      */
-    public function initialize(WorkflowTicket $ticket, array $parameters);
+    public function initialize(WorkflowTicket $ticket, array $parameters, array $gates);
 
     /**
      * process the ticket

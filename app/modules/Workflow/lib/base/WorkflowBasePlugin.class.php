@@ -23,13 +23,20 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
     protected $parameters;
 
     /**
+     *
+     * @var array
+     */
+    protected $gates;
+
+    /**
      * (non-PHPdoc)
      * @see IWorkflowPlugin::initialize()
      */
-    public function initialize(WorkflowTicket $ticket, array $parameters)
+    public function initialize(WorkflowTicket $ticket, array $parameters, array $gates)
     {
         $this->ticket = $ticket;
         $this->parameters = $parameters;
+        $this->gates = $gates;
         return $this;
     }
 
@@ -43,5 +50,16 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
     public function isInteractive()
     {
         return FALSE;
+    }
+
+
+    /**
+     * get a list of gate labels
+     *
+     * @return array
+     */
+    protected function getGates()
+    {
+        return $this->gates;
     }
 }

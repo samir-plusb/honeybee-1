@@ -1,5 +1,16 @@
 <?php
 
+/**
+ *
+ *
+ * @author tay
+ * @version $Id:$
+ * @since 31.10.2011
+ *
+ * @agaviRoutingInput workflow.run
+ * @agaviRequestMethod Read
+ * @agaviIsolationDefaultContext console
+ */
 class WorkflowRunFlowTest extends AgaviFlowTestCase
 {
 
@@ -23,14 +34,11 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
      */
     protected $supervisor;
 
-
-	public function __construct($name = NULL, array $data = array(), $dataName = '')
-	{
-		parent::__construct($name, $data, $dataName);
-		$this->actionName = 'Run';
-		$this->moduleName = 'Workflow';
-		$this->input = 'workflow.run';
-	}
+    public function __construct($name = NULL, array $data = array(), $dataName = '')
+    {
+        $_SERVER['argv'] = array($this->getDispatchScriptName(), $this->getRoutingInput());
+        parent::__construct($name, $data, $dataName);
+    }
 
 
     /**
@@ -57,13 +65,31 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
         $ticket->setWorkflow('TestInteractive');
         $this->supervisor->getTicketPeer()->saveTicket($ticket);
         $this->ticket = $ticket;
+
+        $_SERVER['SERVER_SOFTWARE'] = 'Apache/2';
     }
 
 
-    public function testInteractiveWorkflow()
+    /**
+     *
+     */
+    public function testInteractiveWorkflowPrompt()
     {
-    	$this->dispatch(array('ticket' => $this->ticket->getIdentifier()));
-    	/* @todo remove debug code (tay, 30.10.2011 20:23:40) */
-    	error_log(date('r').' :: '.__METHOD__.' :: '.__LINE__."\n".print_r($this->response->getContent() ,1)."\n",3,'/tmp/debug.log');
+        $this->dispatch(array('ticket' => $this->ticket->getIdentifier()));
+        self::assertStringStartsWith('Choose a gate', $this->response->getContent());
     }
+
+    /**
+     * @agaviRequestMethod Write
+     */
+    public function testInteractiveWorkflowPost()
+    {
+        $args = array(
+            'ticket' => $this->ticket->getIdentifier(),
+            'gate' => 1
+        );
+        $this->dispatch($args);
+        self::assertStringStartsWith('Gate choosen', $this->response->getContent());
+    }
+
 }

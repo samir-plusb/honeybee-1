@@ -99,7 +99,9 @@ class WorkflowHandler
      *                  (
      *                      // one of the following:
      *                      [workflow] => {NAME OF NEXT WORKFLOW}
-     *                      [value] => {NEXT STEP ID}
+     *                      [ref] => {ID OF NEXT STEP}
+     *                      [end] => {WORKFLOW END}
+     *                      [value] => {GATE DESCRIPTION}
      *                  )
      *                  [1] => Arrray(…)
      *                  …
@@ -182,13 +184,13 @@ class WorkflowHandler
             }
 
             $result = $this->executePlugin();
-            $ticket->setPluginResult($result);
-            $code = $this->prepareNextAction($result);
-
-            /* @todo Remove debug code WorkflowHandler.class.php from 24.10.2011 */
+            /* @todo Remove debug code WorkflowHandler.class.php from 31.10.2011 */
             $__logger=AgaviContext::getInstance()->getLoggerManager();
             $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
-            $__logger->log('Step return code: '.$code,AgaviILogger::DEBUG);
+            $__logger->log($result,AgaviILogger::DEBUG);
+
+            $ticket->setPluginResult($result);
+            $code = $this->prepareNextAction($result);
 
             $this->getPeer()->saveTicket($this->getTicket());
         }
@@ -216,16 +218,20 @@ class WorkflowHandler
                     $ticket->setWorkflow($gate['workflow']);
                     return self::STATE_NEXT_WORKFLOW;
                 }
-                else if (! empty($gate['value']))
+                else if (! empty($gate['ref']))
                 {
-                    $this->setCurrentStep($gate['value']);
+                    $this->setCurrentStep($gate['ref']);
                     return self::STATE_NEXT_STEP;
                 }
-                else
+                else if (array_key_exists('end', $gate) && $gate['end'])
                 {
                     $ticket->reset();
                     $ticket->setBlocked(FALSE);
                     return self::STATE_END;
+                }
+                else
+                {
+                    throw new WorkflowException('Gate has no action', WorkflowException::GATE_WITHOUT_ACTION);
                 }
                 break;
 
@@ -324,9 +330,7 @@ class WorkflowHandler
 
         if (! array_key_exists($step, $this->steps))
         {
-            throw new WorkflowException(
-                'Workflow step does not exists: '.$ticket->getCurrentStep(),
-                WorkflowException::STEP_MISSING);
+            throw new WorkflowException('Workflow step does not exists: '.$step, WorkflowException::STEP_MISSING);
         }
 
         return $step;
@@ -359,6 +363,23 @@ class WorkflowHandler
 
 
     /**
+     * get the labes of defined gates in the current step
+     *
+     * @return array
+     */
+    protected function getCurrentGates()
+    {
+        $gates = $this->steps[$this->getCurrentStep()]['gates'];
+        $ginfo = array();
+        foreach ($gates as $idx => $gate)
+        {
+            $ginfo[] = empty($gate['value']) ? 'Gate '.$idx : $gate['value'];
+        }
+        return $ginfo;
+    }
+
+
+    /**
      * find plugin for the current workflow step
      *
      * @param string $currentStep id of workflow step
@@ -375,9 +396,11 @@ class WorkflowHandler
                 'Workflow step does not define plugin: '.$currentStep,
                 WorkflowException::STEP_MISSING);
         }
-        $pluginName = $this->steps[$currentStep]['plugin'];
+        $step = $this->steps[$currentStep];
+
+        $pluginName = $step['plugin'];
         $plugin = Workflow_SupervisorModel::getInstance()->getPluginByName($pluginName);
-        $plugin->initialize($this->getTicket(), $this->getStepParameters());
+        $plugin->initialize($this->getTicket(), $this->getStepParameters(), $this->getCurrentGates());
 
         return $plugin;
     }

@@ -160,26 +160,6 @@ class WorkflowTicket implements Serializable
     }
 
     /**
-     * gets the plugin result state
-     * @return integer
-     */
-    public function getState()
-    {
-        return $this->result->getState();
-    }
-
-    /**
-     * get status message
-     *
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->result->getMessage();
-    }
-
-
-    /**
      * return the number of executions of the current step
      *
      * @return integer

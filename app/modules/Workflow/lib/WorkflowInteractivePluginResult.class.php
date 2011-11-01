@@ -12,11 +12,11 @@
 class WorkflowInteractivePluginResult extends WorkflowPluginResult
 {
     /**
-     * forward container to interact with user
+     * plugin action response to interact with user
      *
-     * @var AgaviExecutionContainer
+     * @var AgaviResponse
      */
-    private $container;
+    private $response;
 
     /**
      *
@@ -27,20 +27,20 @@ class WorkflowInteractivePluginResult extends WorkflowPluginResult
      * @param int $gate
      * @param string $message
      */
-    public function __construct(AgaviExecutionContainer $container, $state, $gate = self::GATE_NONE, $message = NULL)
+    public function __construct(AgaviResponse $response, $state, $gate = self::GATE_NONE, $message = NULL)
     {
         parent::__construct($state, $gate, $message);
-        $this->container = $container;
+        $this->response = $response;
     }
 
 
     /**
-     * return forward container for interacting with user
+     * return response for interacting with user
      *
-     * @return AgaviExecutionContainer
+     * @return AgaviResponse
      */
-    public function getContainer()
+    public function getResponse()
     {
-        return $this->getContainer();
+        return $this->response;
     }
 }

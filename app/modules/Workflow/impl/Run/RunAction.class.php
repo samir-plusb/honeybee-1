@@ -5,7 +5,7 @@
  * @version $Id$
  * @package Workflow
  */
-class Workflow_RunAction extends ProjectWorkflowBaseAction
+class Workflow_RunAction extends ProjectBaseAction
 {
     /**
      * (non-PHPdoc)

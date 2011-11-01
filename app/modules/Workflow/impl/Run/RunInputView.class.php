@@ -5,7 +5,7 @@
  * @version $Id$
  * @package Workflow
  */
-class Workflow_Run_RunInputView extends ProjectWorkflowBaseView
+class Workflow_Run_RunInputView extends ProjectBaseView
 {
 
 
@@ -57,6 +57,6 @@ class Workflow_Run_RunInputView extends ProjectWorkflowBaseView
 
         $supervisor = Workflow_SupervisorModel::getInstance();
         $result = $supervisor->processTicket($ticket, $this->getContainer());
-        return ($result instanceof AgaviExecutionContainer) ? $result : NULL;
+        return $result instanceof AgaviResponse ? $result->getContent() : $result;
     }
 }

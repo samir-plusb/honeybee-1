@@ -41,5 +41,9 @@ class WorkflowException extends Exception
      * maximum number of workflow step executions exceeded
      */
     const MAX_STEP_EXECUTIONS_EXCEEDED = 8;
+    /**
+     * Gate has no action (next step, next workflow, workflow end)
+     */
+    const GATE_WITHOUT_ACTION = 9;
 
 }

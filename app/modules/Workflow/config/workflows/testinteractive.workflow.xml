@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <workflow name="TestInteractive">
+            <description>This workflow is for testing interactive workflows.</description>
+            <steps start="choose">
+                <step id="choose" name="Chosse a gate">
+                    <plugin>Choose</plugin>
+                    <gates>
+                        <gate ref="backToFirst">Back to first step</gate>
+                        <gate end="true">Workflow end</gate>
+                    </gates>
+                </step>
+                <step id="backToFirst" name="Zurück">
+                    <plugin>null</plugin>
+                    <gates>
+                        <gate ref="choose">Zurück zum Anfang</gate>
+                    </gates>
+                </step>
+            </steps>
+        </workflow>
+    </ae:configuration>
+</ae:configurations>
