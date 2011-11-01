@@ -7,7 +7,7 @@
  * @version $Id$
  *
  */
-class WorkflowTicket implements Serializable
+class WorkflowTicket extends AgaviParameterHolder implements Serializable
 {
 
     /**
@@ -365,6 +365,7 @@ class WorkflowTicket implements Serializable
         $data = array(
             '_id' => $this->id,
             '_rev' => $this->rev,
+            'type' => get_class($this),
             'ts' => $this->timestamp->format(DATE_ISO8601),
             'item' => $this->getImportItem()->getIdentifier(),
             'workflow' => $this->getWorkflow(),
@@ -372,7 +373,8 @@ class WorkflowTicket implements Serializable
             'blocked' => $this->isBlocked(),
             'wait' => $this->waitUntil instanceof DateTime ? $this->waitUntil->format(DATE_ISO8601) : NULL,
             'result' => $this->result ? $this->result->toArray() : NULL,
-            'counts' => $this->stepCounts
+            'counts' => $this->stepCounts,
+            'p' => $this->getParameters()
         );
         return array_filter($data);
     }
@@ -389,6 +391,7 @@ class WorkflowTicket implements Serializable
         $this->id = empty($data['_id']) ? NULL : $data['_id'];
         $this->rev = empty($data['_rev']) ? NULL : $data['_rev'];
         $this->timestamp = new DateTime(empty($data['ts']) ? NULL : $data['ts']);
+        $this->parameters = isset($data['p']) && is_array($data['p']) ? $data['p'] : array();
 
         if (array_key_exists('item', $data))
         {
