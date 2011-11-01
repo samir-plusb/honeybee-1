@@ -82,7 +82,7 @@ select {
   text-shadow: 0 0 4px #ffffff;
 }
 .action-button-list li.inactive {
-  opacity: 0.5;
+  opacity: 0.3;
 }
 .action-button-list li.inactive:hover {
   background: rgba(0, 0, 0, 0.05);
@@ -109,7 +109,7 @@ select {
   box-shadow: 0 5px 3px rgba(0, 0, 0, 0.2);
   margin-bottom: 1em;
   margin-left: 1em;
-  padding: 2em 1em 1em 1em;
+  padding: 1.9em 1em 1em 1em;
   position: relative;
 }
 .content-panel .legend, .content-panel legend {
@@ -164,8 +164,6 @@ header .personal-info h2 {
   width: 60%;
   /* content item command menu */
 
-  /* content items list */
-
   /* content item editing form */
 
 }
@@ -178,12 +176,6 @@ header .personal-info h2 {
   position: absolute;
   text-align: center;
   top: -7px;
-}
-.document-editing .content-items {
-  position: absolute;
-}
-.document-editing .content-items .content-panel {
-  width: 17em;
 }
 .document-editing form .editor {
   margin-bottom: 1em;
@@ -218,4 +210,57 @@ header .personal-info h2 {
 }
 .document-data .item-content .input-full textarea {
   height: 100%;
+}
+.content-items {
+  position: absolute;
+}
+.content-items .content-panel {
+  width: 19em;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+.content-items .content-panel ul {
+  overflow: hidden;
+}
+.content-items .content-panel .content-item {
+  border-bottom: 1px solid #cccccc;
+  box-shadow: 0px 1px 0px #ffffff;
+  font-size: 0.83em;
+  cursor: pointer;
+  display: block;
+  list-style-type: none;
+  margin: 0;
+  padding: 5px 10px 5px 10px;
+  /* @todo em pls thx */
+
+  position: relative;
+}
+.content-items .content-panel .content-item h3 {
+  color: #000000;
+  display: block;
+  font-size: 0.9em;
+  font-weight: bold;
+  width: 75%;
+}
+.content-items .content-panel .content-item p {
+  font-size: 0.9em;
+  margin-top: 0.6em;
+}
+.content-items .content-panel .content-item .ui-state-active {
+  border: none;
+}
+.content-items .content-panel .content-item .date {
+  font-size: 0.85em;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-weight: normal;
+}
+.content-items .content-panel .content-item:last-child {
+  border-bottom: none;
+}
+.content-items .content-panel .content-item:hover {
+  background: url("../images/ui-bg_gloss-wave_50_6eac2c_500x100.png") repeat-x scroll 50% 50% #6eac2c;
+  color: #ffffff;
 }
