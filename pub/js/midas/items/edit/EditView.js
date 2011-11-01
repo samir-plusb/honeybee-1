@@ -8,6 +8,10 @@
 midas.items.edit.EditView = midas.core.BaseView.extend(
 /** @lends midas.items.edit.EditView.prototype */
 {
+    // -----------
+    // --------------- PROPERTIES
+    // -----------
+
     /**
      * The prefix to use when logging messages from this class.
      * @type String
@@ -52,6 +56,12 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
     edit_service: null,
 
+    items_list: null,
+
+    // -----------
+    // --------------- CONSTRUCTION / GUI INITIALIZING
+    // -----------
+
     init: function(element, options)
     {
         this.parent(element, options);
@@ -64,18 +74,38 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      */
     onInitGui: function()
     {
+        this.createSlidePanel();
+        this.createContentItemsList();
+        this.createImportItemContainer();
+        this.createMenus();
+        this.createEditForm();
+    },
+
+    createSlidePanel: function()
+    {
         this.slide_panel = new midas.items.edit.SlidePanel(
             this.layout_root.find('.slide-panel').first()
             .css({ 'position': 'absolute', 'width': '100%' }),
             { range: '20em' }
         );
-        this.editing_form = new midas.items.edit.EditForm(
-            this.layout_root.find('.document-editing form')
+    },
+
+    createContentItemsList: function()
+    {
+        // Set our content-items-list container position to be just outside our viewport,
+        // so it will slide in to view when our slide_panel's slideIn method is executed.
+        var items_container = this.layout_root.find('.content-items').first();
+        items_container.css('left', -items_container.outerWidth());
+
+        this.items_list = new midas.items.edit.ContentItemsList(
+            items_container.find('ul').first(),
+            { items: this.loadItems(), state_display: this.layout_root.find('.info-small') }
         );
-        this.editing_form.on(
-            'contextMenuSelect',
-            this.onContextMenuClicked.bind(this)
-        );
+        this.items_list.on('itemClicked', this.onContentItemSelected.bind(this));
+    },
+
+    createImportItemContainer: function()
+    {
         this.import_item_container = new midas.items.edit.ImportItemContainer(
             this.layout_root.find('.document-data').first(),
             { tabs_container: '.item-content'}
@@ -84,7 +114,23 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             'contextMenuSelect',
             this.onContextMenuClicked.bind(this)
         );
-        this.context_menu_actions = this.getContextMenuBindings();
+    },
+
+    createEditForm: function()
+    {
+        this.editing_form = new midas.items.edit.EditForm(
+            this.layout_root.find('.document-editing form')
+        );
+
+        this.editing_form.on('changed', function()
+        {
+            this.editing_form.markDirty();
+        }.bind(this));
+        this.editing_form.on('contextMenuSelect', this.onContextMenuClicked.bind(this));
+    },
+
+    createMenus: function()
+    {
         this.content_item_menu = new midas.core.CommandTriggerList(
             this.layout_root.find('#content-item-menu'),
             { 'commands': this.getContentItemMenuBindings() }
@@ -93,11 +139,24 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             this.layout_root.find('#import-item-menu'),
             { 'commands': this.getImportItemMenuBindings() }
         );
-        // Set our content-items-list container position to be just outside our viewport,
-        // so it will slide in to view when our slide_panel's slideIn method is executed.
-        var items_container = this.layout_root.find('.content-items').first();
-        items_container.css('left', -items_container.outerWidth());
+
+        this.context_menu_actions = this.getContextMenuBindings();
     },
+
+    loadItems: function()
+    {
+        return [
+            {
+                'title': 'Mondkuchenfest in den Gärten der Welt ',
+                'text': 'Ein buntes Bühnenprogramm mit asiatischen Drachentänzen, Ausschnitten aus der Peking-Oper und asi... ',
+                'date[from]': '28.12.1981'
+            }
+        ];
+    },
+
+    // -----------
+    // --------------- INTERACTION BINDINGS
+    // -----------
 
     /**
      * @description Returns a set of bound functions that define the set
@@ -143,10 +202,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         };
 
         return {
-            'set_title': setInputValue.bind(this, 'data[title]', false),
-            'append_title': setInputValue.bind(this, 'data[title]', true),
-            'set_text': setInputValue.bind(this, 'data[text]', false),
-            'append_text': setInputValue.bind(this, 'data[text]', true),
+            'set_title': setInputValue.bind(this, 'title', false),
+            'append_title': setInputValue.bind(this, 'title', true),
+            'set_text': setInputValue.bind(this, 'text', false),
+            'append_text': setInputValue.bind(this, 'text', true),
             'remove_hyphens': function(src_field)
             {
                 var selection = src_field.getSelection();
@@ -179,10 +238,20 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     {
                         url = 'http://' + url;
                     }
-                    this.editing_form.val('data[url]', url);
+                    this.editing_form.val('url', url);
                 }
             }.bind(this)
         };
+    },
+
+    // -----------
+    // --------------- EVENT HANDLERS
+    // -----------
+
+    onContentItemSelected: function(item)
+    {
+        this.editing_form.val(item.data);
+        this.slide_panel.toggle();
     },
 
     onContextMenuClicked: function(content_field, menu_item)
@@ -195,10 +264,19 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
     onNewContentItem: function()
     {
+        if (this.editing_form.isDirty())
+        {
+            // @todo show confirm dialog.
+            this.logWarning("form is not in a clean state, store first.");
+            return;
+        }
+
         this.propagateIntent({
             'name': '/midas/intents/contentItem/new',
             'data': {}
         });
+
+        this.editing_form.reset();
     },
 
     onStoreContentItem: function()
@@ -207,13 +285,18 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
         if (true === validation_res.success)
         {
-            this.propagateIntent({
+            var intent = {
                 'name': '/midas/intents/contentItem/store',
-                'data': {
-                    title: this.editing_form.val('data[title]')
-                }
-            });
+                'data': this.editing_form.val()
+            };
+            this.propagateIntent(intent);
+            this.items_list.add(intent.data);
         }
+    },
+
+    onContentItemStored: function()
+    {
+        this.editing_form.markClean();
     },
 
     onDeleteContentItem: function()

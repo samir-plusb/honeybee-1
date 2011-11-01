@@ -35,12 +35,15 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
      */
     publish_period: null,
 
+    is_dirty: null,
+
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
      * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
      */
     init: function(element, options)
     {
+        this.is_dirty = false;
         this.parent(options);
         this.element = element;
         this.fields = {};
@@ -57,16 +60,17 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
             var input_field = new midas.items.edit[implementor](field);
             input_field.on('changed', function(event)
             {
-                if ('data[date[from]]' == input_field.getName())
+                if ('date[from]' == input_field.getName())
                 {
-                    if (0 >= this.fields['data[date[till]]'].val().length)
+                    if (0 >= this.fields['date[till]'].val().length)
                     {
-                        this.fields['data[date[till]]'].val(
+                        this.fields['date[till]'].val(
                             input_field.val()
                         );
                     }
                 }
 
+                this.markDirty();
                 this.fire('changed', event);
             }.bind(this));
 
@@ -74,7 +78,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         }.bind(this));
 
         // delegate contextmenu events from our text data to the outside world.
-        this.fields['data[text]'].on('contextMenuSelect', function(field, item)
+        this.fields['text'].on('contextMenuSelect', function(field, item)
         {
             this.fire('contextMenuSelect', [field, item]);
         }.bind(this));
@@ -84,8 +88,23 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
     {
         if (! field)
         {
-            // @todo return all values.
-            return {};
+            var data = {};
+            $.each(this.fields, function(name, field)
+            {
+                data[name] = field.val();
+            });
+
+            return data;
+        }
+        else if('object' == typeof field)
+        {
+            $.each(field, function(name, value)
+            {
+                if (this.fields[name])
+                {
+                    this.fields[name].val(value);
+                }
+            }.bind(this));
         }
         else if (this.fields[field] && undefined == value)
         {
@@ -164,5 +183,29 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         }
 
         return '';
+    },
+
+    markClean: function()
+    {
+        this.is_dirty = false;
+    },
+
+    markDirty: function()
+    {
+        this.is_dirty = true;
+    },
+
+    isDirty: function()
+    {
+        return this.is_dirty;
+    },
+
+    reset: function()
+    {
+        this.element.find(':input')
+         .not(':button, :submit, :reset, :hidden')
+         .val('')
+         .removeAttr('checked')
+         .removeAttr('selected');
     }
 });

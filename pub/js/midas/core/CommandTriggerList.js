@@ -38,9 +38,8 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend(
 
         this.command_items = {};
         this.container = container;
-        var items = this.container.find('li a');
 
-        items.each(function(idx, item)
+        this.container.find('li a').each(function(idx, item)
         {
             var command_name = this.parseCommandName(item);
             this.command_items[command_name] = {
@@ -50,7 +49,7 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend(
             };
         }.bind(this));
 
-        items.live('click', function(event)
+        this.container.delegate('li a', 'click', function(event)
         {
             event.preventDefault();
 
