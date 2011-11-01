@@ -50,15 +50,28 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
         {
             throw "Can not item that has no valid cid.";
         }
+
         var rendered_item = ich['content-item-tpl'](item);
-        this.content_items[item.cid] = {
-            element: rendered_item,
-            data: item
-        };
-        this.content_items.length++;
         rendered_item[0].cid = item.cid;
-        this.element.append(rendered_item);
-        this.updateGui();
+        
+        if (this.content_items[item.cid]) // update item
+        {
+            this.content_items[item.cid].element.replaceWith(rendered_item);
+            this.content_items[item.cid] = {
+                element: rendered_item,
+                data: item
+            };
+        }
+        else // create item
+        {
+            this.content_items[item.cid] = {
+                element: rendered_item,
+                data: item
+            };
+            this.content_items.length++;
+            this.element.append(rendered_item);
+            this.updateGui();
+        }
     },
 
     remove: function(item_id)

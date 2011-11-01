@@ -249,42 +249,108 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     // --------------- EVENT HANDLERS
     // -----------
 
+    confirm: function(title, message, abort, confirm)
+    {
+        if (! this.layout_root.confirm_dialog)
+        {
+            this.layout_root.confirm_dialog = ich['dialog-tpl']({ title: title, message: message });
+            this.layout_root.append(this.layout_root.confirm_dialog);
+
+            this.layout_root.confirm_dialog.dialog({
+                resizable: false,
+                modal: true,
+                width: '20em',
+                buttons: {
+                    "Ja": function() {
+                        $( this ).dialog( "close" );
+                        if (abort) abort();
+                    },
+                    "Nein": function() {
+                        $( this ).dialog( "close" );
+                        if (confirm) confirm();
+                    }
+                }
+            });
+        }
+        else
+        {
+            this.layout_root.confirm_dialog.dialog("open");
+        }
+    },
+
+    alert: function(title, message, ok)
+    {
+        if (! this.layout_root.alert_dialog)
+        {
+            this.layout_root.alert_dialog = ich['dialog-tpl']({ title: title, message: message });
+            this.layout_root.append(this.layout_root.alert_dialog);
+
+            this.layout_root.alert_dialog.dialog({
+                resizable: false,
+                modal: true,
+                width: '20em',
+                buttons: {
+                    "Ok": function() {
+                        $( this ).dialog( "close" );
+                        if (ok) ok();
+                    }
+                }
+            }).prev().addClass('ui-state-error'); ;
+        }
+        else
+        {
+            this.layout_root.alert_dialog.dialog("open");
+        }
+    },
+
     loadContentItem: function(item)
     {
+        var load = function()
+        {
+            this.editing_form.val(item.data);
+            this.slide_panel.toggle();
+        }.bind(this);
+
         if (this.editing_form.isDirty())
         {
-            if (! confirm("Item wurde noch nicht gespeichert. Jetzt speichern?"))
+            this.confirm("Item wurde noch nicht gespeichert!", "Jetzt speichern?", function()
             {
-                return;
-            }
+                if (! this.storeContentItem())
+                {
+                    this.alert("Fehler", "Item konnte aufgrund unvollständiger Daten nicht gespeichert werden.");
 
-            if (! this.storeContentItem())
-            {
-                alert("Konnte item nicht speichern");
+                    return false;
+                }
 
-                return false;
-            }
+                load();
+
+                return true;
+            }.bind(this));
         }
-
-        this.editing_form.val(item.data);
-        this.slide_panel.toggle();
-
-        return true;
+        else
+        {
+            load();
+        }
     },
 
     createContentItem: function()
     {
         if (this.editing_form.isDirty())
         {
-            if (! confirm("Item wurde noch nicht gespeichert. Jetzt speichern?"))
-            {
-                return;
-            }
-
-            this.storeContentItem();
+            this.confirm(
+                "Drohender Datenverlust",
+                "Item wurde noch nicht gespeichert. Jetzt speichern?",
+                function()
+                {
+                    this.storeContentItem();
+                    this.editing_form.reset();
+                }.bind(this)
+            );
         }
-
-        this.editing_form.reset();
+        else
+        {
+            this.editing_form.reset();
+        }
     },
 
     storeContentItem: function()
@@ -308,6 +374,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             this.propagateIntent(intent);
             this.items_list.add(item);
 
+            this.editing_form.markClean(); // @todo fe dev only, remove l8r
+            this.editing_form.highlight();
             return true;
         }
 

@@ -86,36 +86,55 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
 
     val: function(field, value)
     {
-        if (! field)
+        if (! field) // toObject
         {
             var data = {};
-            $.each(this.fields, function(name, field)
+            this.element.find(':input')
+             .not(':button, :submit, :reset')
+             .each(function(idx, input_field)
             {
-                data[name] = field.val();
-            });
+                var name = $(input_field).attr('name');
 
+                if (name)
+                {
+                    data[name] = $(input_field).val();
+                }
+            }.bind(this));
             return data;
         }
-        else if('object' == typeof field)
+        else if('object' == typeof field) // hydrate
         {
-            $.each(field, function(name, value)
+            this.element.find(':input')
+             .not(':button, :submit, :reset')
+             .each(function(idx, input_field)
             {
-                if (this.fields[name])
+                var name = $(input_field).attr('name');
+
+                if (name && field[name])
                 {
-                    this.fields[name].val(value);
+                    $(input_field).val(field[name]);
                 }
             }.bind(this));
         }
-        else if (this.fields[field] && undefined == value)
+        else if (field && undefined == value) // input-field getter
         {
-            return this.fields[field].val();
-        }
-        else if (this.fields[field])
-        {
-            return this.fields[field].val(value);
-        }
+            if (this.fields[field])
+            {
+                return this.fields[field].val();
+            }
 
-        return null;
+            return this.element.find('input[name='+field+']').val();
+        }
+        else // input-field setter
+        {
+            if (this.fields[field])
+            {
+                return this.fields[field].val(value);
+            }
+
+            return this.element.find('input[name='+field+']').val(value);
+        }
+        return this;
     },
 
     validate: function()
@@ -203,9 +222,16 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
     reset: function()
     {
         this.element.find(':input')
-         .not(':button, :submit, :reset, :hidden')
+         .not(':button, :submit, :reset')
          .val('')
          .removeAttr('checked')
          .removeAttr('selected');
+    },
+
+    highlight: function()
+    {
+        this.element.find(':input')
+         .not(':button, :submit, :reset')
+         .effect("highlight", {}, 500);
     }
 });

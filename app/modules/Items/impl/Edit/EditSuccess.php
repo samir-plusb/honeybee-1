@@ -43,6 +43,7 @@
 
         <form accept-charset="utf-8" action="#postdata" method="post">
             <input type="hidden" name="status" id="status" />
+            <input type="hidden" name="cid" value="0" />
 
             <div class="main-data content-panel"> <!-- <fieldset> as soon as the firefox (legend position render) bug is fixed -->
                 <h3 class="legend">Redaktionelle Einstellungen</h3>
@@ -178,6 +179,13 @@
                 </section>
             </div>
         </form>
+        <script id="dialog-tpl" type="text/html">
+            <div title="{{ title }}">
+                <p>
+                    {{ message }}
+                </p>
+            </div>
+        </script>
     </section>
 
     <section class="document-data">
