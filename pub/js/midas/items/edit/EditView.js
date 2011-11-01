@@ -342,8 +342,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 "Item wurde noch nicht gespeichert. Jetzt speichern?",
                 function()
                 {
-                    this.storeContentItem();
-                    this.editing_form.reset();
+                    if (this.storeContentItem())
+                    {
+                        this.editing_form.reset();
+                    }
                 }.bind(this)
             );
         }
@@ -382,12 +384,16 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         return false;
     },
 
-    deleteContentItem: function(cid)
+    deleteContentItem: function()
     {
-        this.propagateIntent({
-            'name': '/midas/intents/contentItem/delete',
-            'data': {}
-        });
+        if (this.items_list.remove(this.editing_form.val('cid')))
+        {
+            this.editing_form.reset();
+            this.propagateIntent({
+                'name': '/midas/intents/contentItem/delete',
+                'data': {}
+            });
+        }
     },
 
     onContextMenuClicked: function(content_field, menu_item)

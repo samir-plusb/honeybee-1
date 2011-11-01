@@ -53,7 +53,7 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
 
         var rendered_item = ich['content-item-tpl'](item);
         rendered_item[0].cid = item.cid;
-        
+
         if (this.content_items[item.cid]) // update item
         {
             this.content_items[item.cid].element.replaceWith(rendered_item);
@@ -74,9 +74,15 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
         }
     },
 
-    remove: function(item_id)
+    remove: function(cid)
     {
-
+        if (this.content_items[cid])
+        {
+            this.content_items.length--;
+            this.content_items[cid].element.remove();
+            delete this.content_items[cid];
+            this.updateGui();
+        }
     },
 
     get: function(item_cid)

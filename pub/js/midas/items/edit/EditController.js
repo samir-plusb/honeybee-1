@@ -27,8 +27,7 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
     {
         return {
             '/midas/intents/contentItem/store': this.onStoreContentItemIntent.bind(this),
-            '/midas/intents/contentItem/delete': 'onDeleteContentItemIntent',
-            '/midas/intents/contentItem/new': 'onNewContentItemIntent'
+            '/midas/intents/contentItem/delete': 'onDeleteContentItemIntent'
         };
     },
 
