@@ -22,10 +22,12 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
         this.element = element;
         this.element.delegate('li', 'click', function(event)
         {
-            var item = this.content_items[event.currentTarget._data_idx];
+            var item = this.content_items[event.currentTarget.cid];
             this.fire('itemClicked', [item]);
         }.bind(this));
-        this.content_items = [];
+        this.content_items = {
+            length: 0
+        };
 
         if (! this.options.items_template)
         {
@@ -44,17 +46,27 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
 
     add: function(item)
     {
+        if (! item.cid)
+        {
+            throw "Can not item that has no valid cid.";
+        }
         var rendered_item = ich['content-item-tpl'](item);
-        this.content_items.push({
+        this.content_items[item.cid] = {
             element: rendered_item,
             data: item
-        });
-        rendered_item[0]._data_idx = this.content_items.length - 1;
+        };
+        this.content_items.length++;
+        rendered_item[0].cid = item.cid;
         this.element.append(rendered_item);
         this.updateGui();
     },
 
     remove: function(item_id)
+    {
+
+    },
+
+    get: function(item_cid)
     {
 
     },

@@ -85,8 +85,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         this.slide_panel = new midas.items.edit.SlidePanel(
             this.layout_root.find('.slide-panel').first()
-            .css({ 'position': 'absolute', 'width': '100%' }),
-            { range: '20em' }
+            .css({'position': 'absolute', 'width': '100%'}),
+            {range: '20em'}
         );
     },
 
@@ -99,16 +99,16 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
         this.items_list = new midas.items.edit.ContentItemsList(
             items_container.find('ul').first(),
-            { items: this.loadItems(), state_display: this.layout_root.find('.info-small') }
+            {items: this.loadItems(), state_display: this.layout_root.find('.info-small')}
         );
-        this.items_list.on('itemClicked', this.onContentItemSelected.bind(this));
+        this.items_list.on('itemClicked', this.loadContentItem.bind(this));
     },
 
     createImportItemContainer: function()
     {
         this.import_item_container = new midas.items.edit.ImportItemContainer(
             this.layout_root.find('.document-data').first(),
-            { tabs_container: '.item-content'}
+            {tabs_container: '.item-content'}
         );
         this.import_item_container.on(
             'contextMenuSelect',
@@ -133,11 +133,11 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         this.content_item_menu = new midas.core.CommandTriggerList(
             this.layout_root.find('#content-item-menu'),
-            { 'commands': this.getContentItemMenuBindings() }
+            {'commands': this.getContentItemMenuBindings()}
         );
         this.import_item_menu = new midas.core.CommandTriggerList(
             this.layout_root.find('#import-item-menu'),
-            { 'commands': this.getImportItemMenuBindings() }
+            {'commands': this.getImportItemMenuBindings()}
         );
 
         this.context_menu_actions = this.getContextMenuBindings();
@@ -147,6 +147,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         return [
             {
+                'cid': midas.core.CidSequence.nextCid('content_items'),
                 'title': 'Mondkuchenfest in den Gärten der Welt ',
                 'text': 'Ein buntes Bühnenprogramm mit asiatischen Drachentänzen, Ausschnitten aus der Peking-Oper und asi... ',
                 'date[from]': '28.12.1981'
@@ -166,9 +167,9 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     getContentItemMenuBindings: function()
     {
         return {
-            'store': this.onStoreContentItem.bind(this),
-            'delete': this.onDeleteContentItem.bind(this),
-            'new': this.onNewContentItem.bind(this),
+            'store': this.storeContentItem.bind(this),
+            'delete': this.deleteContentItem.bind(this),
+            'new': this.createContentItem.bind(this),
             'list': this.slide_panel.toggle.bind(this.slide_panel)
         };
     },
@@ -181,10 +182,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     getImportItemMenuBindings: function()
     {
         return {
-            'prev': function() { this.logDebug('onImportItemPrev'); }.bind(this),
-            'delete': function() { this.logDebug("onImportItemDelete"); }.bind(this),
-            'mark': function() { this.logDebug('onImportItemMark'); }.bind(this),
-            'next': function() { this.logDebug('onImportItemNext'); }.bind(this)
+            'prev': function() {this.logDebug('onImportItemPrev');}.bind(this),
+            'delete': function() {this.logDebug("onImportItemDelete");}.bind(this),
+            'mark': function() {this.logDebug('onImportItemMark');}.bind(this),
+            'next': function() {this.logDebug('onImportItemNext');}.bind(this)
         };
     },
 
@@ -248,10 +249,77 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     // --------------- EVENT HANDLERS
     // -----------
 
-    onContentItemSelected: function(item)
+    loadContentItem: function(item)
     {
+        if (this.editing_form.isDirty())
+        {
+            if (! confirm("Item wurde noch nicht gespeichert. Jetzt speichern?"))
+            {
+                return;
+            }
+
+            if (! this.storeContentItem())
+            {
+                alert("Konnte item nicht speichern");
+
+                return false;
+            }
+        }
+
         this.editing_form.val(item.data);
         this.slide_panel.toggle();
+
+        return true;
+    },
+
+    createContentItem: function()
+    {
+        if (this.editing_form.isDirty())
+        {
+            if (! confirm("Item wurde noch nicht gespeichert. Jetzt speichern?"))
+            {
+                return;
+            }
+
+            this.storeContentItem();
+        }
+
+        this.editing_form.reset();
+    },
+
+    storeContentItem: function()
+    {
+        var validation_res = this.editing_form.validate();
+
+        if (true === validation_res.success)
+        {
+            var item = this.editing_form.val();
+
+            if (! item.cid)
+            {
+                item.cid = midas.core.CidSequence.nextCid('content_item');
+            }
+
+            var intent = {
+                'name': '/midas/intents/contentItem/store',
+                'data': item
+            };
+
+            this.propagateIntent(intent);
+            this.items_list.add(item);
+
+            return true;
+        }
+
+        return false;
+    },
+
+    deleteContentItem: function(cid)
+    {
+        this.propagateIntent({
+            'name': '/midas/intents/contentItem/delete',
+            'data': {}
+        });
     },
 
     onContextMenuClicked: function(content_field, menu_item)
@@ -262,48 +330,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         }
     },
 
-    onNewContentItem: function()
+    onContentItemStored: function(cid)
     {
-        if (this.editing_form.isDirty())
-        {
-            // @todo show confirm dialog.
-            this.logWarning("form is not in a clean state, store first.");
-            return;
-        }
+        this.logInfo("Content item with cid: " + cid + " has successfully been stored.");
 
-        this.propagateIntent({
-            'name': '/midas/intents/contentItem/new',
-            'data': {}
-        });
-
-        this.editing_form.reset();
-    },
-
-    onStoreContentItem: function()
-    {
-        var validation_res = this.editing_form.validate();
-
-        if (true === validation_res.success)
-        {
-            var intent = {
-                'name': '/midas/intents/contentItem/store',
-                'data': this.editing_form.val()
-            };
-            this.propagateIntent(intent);
-            this.items_list.add(intent.data);
-        }
-    },
-
-    onContentItemStored: function()
-    {
         this.editing_form.markClean();
-    },
-
-    onDeleteContentItem: function()
-    {
-        this.propagateIntent({
-            'name': '/midas/intents/contentItem/delete',
-            'data': {}
-        });
     }
 });

@@ -22,6 +22,7 @@
                     <script>js/midas/core/core.js</script>
                     <script>js/midas/core/Module.js</script>
                     <script>js/midas/core/BaseObject.js</script>
+                    <script>js/midas/core/CidSequence.js</script>
                     <script>js/midas/core/Behaviour.js</script>
                     <script>js/midas/core/BaseController.js</script>
                     <script>js/midas/core/BaseView.js</script>
