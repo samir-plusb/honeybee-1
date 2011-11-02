@@ -51,7 +51,6 @@ class EnvironmentConfigurator
         $config = array(
             ProjectEnvironmentConfig::CFG_PHP         => $php_path,
             ProjectEnvironmentConfig::CFG_ENVIRONMENT => $environment,
-            ProjectEnvironmentConfig::CFG_DB          => $database_settings
         );
 
         $config_filepath = $this->getConfigFilePath();
