@@ -72,9 +72,19 @@ class WorkflowSupervisorTest extends AgaviUnitTestCase
     /**
      *
      */
+    public function testGetWorkflowByName()
+    {
+        self::assertInstanceOf('WorkflowHandler', $this->supervisor->getWorkflowByName('_init'));
+    }
+
+
+    /**
+     *
+     */
     public function testGetPluginByName()
     {
-        self::assertInstanceOf('IWorkflowPlugin', $this->supervisor->getPluginByName('null'));
+        $workflow = $this->supervisor->getWorkflowByName('_init');
+        self::assertInstanceOf('IWorkflowPlugin', $workflow->getPluginByName('null'));
     }
 
     /**
@@ -84,7 +94,8 @@ class WorkflowSupervisorTest extends AgaviUnitTestCase
     {
         try
         {
-            $plugin = $this->supervisor->getPluginByName('__noplugin');
+            $workflow = $this->supervisor->getWorkflowByName('_init');
+            $plugin = $workflow->getPluginByName('__noplugin');
             self::assertEquals('WorkflowException', 'no exception');
         }
         catch (WorkflowException $e)

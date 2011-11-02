@@ -399,12 +399,40 @@ class WorkflowHandler
         $step = $this->steps[$currentStep];
 
         $pluginName = $step['plugin'];
-        $plugin = Workflow_SupervisorModel::getInstance()->getPluginByName($pluginName);
+        $plugin = $this->getPluginByName($pluginName);
         $plugin->initialize($this->getTicket(), $this->getStepParameters(), $this->getCurrentGates());
 
         return $plugin;
     }
 
+
+    /**
+     * find and initialize a plugin by its name
+     *
+     * @param string $pluginName name of plugin
+     * @return IWorkflowPlugin
+     * @throws WorkflowException on class not found errors or initialize problems
+     */
+    public function getPluginByName($pluginName)
+    {
+        $className = 'Workflow'.ucfirst($pluginName).'Plugin';
+        if (! class_exists($className, TRUE))
+        {
+            throw new WorkflowException(
+                "Can not find class '$className' for plugin: ".$pluginName,
+                WorkflowException::PLUGIN_MISSING);
+        }
+
+        $plugin = new $className();
+        if (! $plugin instanceof IWorkflowPlugin)
+        {
+            throw new WorkflowException(
+                'Class for plugin is not instance of IWorkflowPlugin: '.$className,
+                WorkflowException::PLUGIN_MISSING);
+        }
+
+        return $plugin;
+    }
 
     /**
      *

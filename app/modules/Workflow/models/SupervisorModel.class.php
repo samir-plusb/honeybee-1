@@ -42,13 +42,8 @@ class Workflow_SupervisorModel extends ProjectBaseModel
     private $ticketPeer;
 
     /**
-     * list of allready loaded workflows
+     * get a singleton instance for this model
      *
-     * @var array
-     */
-    private $workflowByName = array();
-
-    /**
      * @return Workflow_SupervisorModel
      */
     static function getInstance()
@@ -195,7 +190,10 @@ class Workflow_SupervisorModel extends ProjectBaseModel
                'Workflow name contains invalid characters: '.$name,
                 WorkflowException::INVALID_WORKFLOW_NAME);
         }
-        if (! array_key_exists($name, $this->workflowByName))
+        $request = AgaviContext::getInstance()->getRequest();
+        $namespace = __CLASS__.'.WorkFlow';
+        $workflow = $request->getAttribute($name, $namespace, NULL);
+        if (! $workflow)
         {
             $configPath = self::WORKFLOW_CONFIG_DIR . $name . '.workflow.xml';
             try
@@ -213,41 +211,14 @@ class Workflow_SupervisorModel extends ProjectBaseModel
                     'Workflow definition structure is invalid.',
                     WorkflowException::INVALID_WORKFLOW);
             }
-            $this->workflowByName[$name] = new WorkflowHandler($config['workflow']);
+            $workflow = new WorkflowHandler($config['workflow']);
+            $request->setAttribute($name, $workflow, $namespace);
         }
 
         // return only fresh instances
-        return clone $this->workflowByName[$name];
+        return clone $workflow;
     }
 
-
-    /**
-     * find and initialize a plugin by its name
-     *
-     * @param string $pluginName name of plugin
-     * @return IWorkflowPlugin
-     * @throws WorkflowException on class not found errors or initialize problems
-     */
-    public function getPluginByName($pluginName)
-    {
-        $className = 'Workflow'.ucfirst($pluginName).'Plugin';
-        if (! class_exists($className, TRUE))
-        {
-            throw new WorkflowException(
-                "Can not find class '$className' for plugin: ".$pluginName,
-                WorkflowException::PLUGIN_MISSING);
-        }
-
-        $plugin = new $className();
-        if (! $plugin instanceof IWorkflowPlugin)
-        {
-            throw new WorkflowException(
-                'Class for plugin is not instance of IWorkflowPlugin: '.$className,
-                WorkflowException::PLUGIN_MISSING);
-        }
-
-        return $plugin;
-    }
 }
 
 ?>
