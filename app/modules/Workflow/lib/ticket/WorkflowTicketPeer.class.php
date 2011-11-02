@@ -1,4 +1,15 @@
 <?php
+
+/**
+ * WorkflowTicketPeer contains methods to access WorkflowTickets in the database
+ *
+ *
+ * @package Workflow
+ * @author tay
+ * @version $Id$
+ * @since 02.11.2011
+ *
+ */
 class WorkflowTicketPeer
 {
 
@@ -31,8 +42,6 @@ class WorkflowTicketPeer
 
     /**
      * create a ticket for a newly imported item
-     *
-     * @todo move method createNewTicketFromImportItem to a ticket handler class
      *
      * @param IDataRecord $record
      * @return WorkflowTicket
@@ -86,8 +95,6 @@ class WorkflowTicketPeer
      * find a workflow ticket using its correpondenting import item
      *
      * This method gets registered in {@see ImportBaseAction::initialize()}
-     *
-     * @todo move method getTicketByImportitem to a ticket handler class
      *
      * @param IDataRecord $record
      * @return WorkflowTicket

@@ -1,7 +1,8 @@
 <?php
 /**
+ * Validator for WorkflowTicket identifier arguments
  *
- *
+ * @package Workflow
  * @author tay
  * @version $Id$
  * @since 10.10.2011
