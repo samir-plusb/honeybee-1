@@ -48,9 +48,6 @@ class EnvironmentConfigurator
 
         while (!($environment = $this->promptEnvironment()));
 
-        print(PHP_EOL . "- Section: Database Settings" . PHP_EOL);
-        $database_settings = $this->promptDatabaseSettings();
-
         $config = array(
             ProjectEnvironmentConfig::CFG_PHP         => $php_path,
             ProjectEnvironmentConfig::CFG_ENVIRONMENT => $environment,
@@ -97,21 +94,6 @@ class EnvironmentConfigurator
         );
 
         return (self::CONFIRM_POSITIVE === $answer) ? $environment : false;
-    }
-
-    protected function promptDatabaseSettings()
-    {
-        $db_settings = array();
-
-        while (!$this->testDatabaseSettings($db_settings))
-        {
-            $db_settings[ProjectEnvironmentConfig::CFG_DB_HOST]   = $this->readline('Enter host', 'localhost');
-
-            while (!is_numeric($port = $this->readline('Enter port', '5984')));
-            $db_settings[ProjectEnvironmentConfig::CFG_DB_PORT] = (int) $port;
-        }
-
-        return $db_settings;
     }
 
     protected function readline($label, $default = null, $promptchar = ':', $hide_input = false)
@@ -249,28 +231,6 @@ SH_CODE;
     protected function testEnvironment($environment)
     {
         return !empty($environment) && 3 <= strlen($environment);
-    }
-
-    protected function testDatabaseSettings(array $database_settings)
-    {
-        return true;
-        if (empty ($database_settings)) return false;
-
-        $port = $database_settings[ProjectEnvironmentConfig::CFG_DB_PORT];
-        $host = $database_settings[ProjectEnvironmentConfig::CFG_DB_HOST];
-
-        try
-        {
-            $client = new CouchDbClient(sprintf('http://%s:%d/', $host, $port));
-        }
-        catch (PDOException $e)
-        {
-            print($e->getMessage() . PHP_EOL);
-
-            return false;
-        }
-
-        return true;
     }
 
     // ---------------------------------- </VALUE CHECKING> ---------------------------------------------
