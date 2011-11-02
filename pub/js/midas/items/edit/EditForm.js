@@ -264,6 +264,8 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
                 }
             }
         );
+
+        this.markClean();
     },
 
     highlight: function()

@@ -46,7 +46,6 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
             {
                 this.prev_val = this.val().slice(0);
                 this.selected_tags.push(tag);
-                this.logInfo("onTagAdded", this.selected_tags, this.prev_val);
                 this.revalidate();
                 this.fire('changed', [{prev: this.prev_val, cur: this.val()}]);
             }.bind(this),
@@ -57,7 +56,6 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
                     this.selected_tags.indexOf(tag),
                     1
                 );
-                this.logInfo("onTagRemoved", this.selected_tags, this.prev_val);
                 this.revalidate();
                 this.fire('changed', [{prev: this.prev_val, cur: this.val()}]);
             }.bind(this)
@@ -109,7 +107,6 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
 
     reset: function()
     {
-        this.logInfo("fooo reset");
         this.val([]);
         this.unmarkAs('invalid');
     }

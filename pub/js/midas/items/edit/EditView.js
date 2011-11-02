@@ -149,14 +149,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
     loadItems: function()
     {
-        return [
-            {
-                'cid': midas.core.CidSequence.nextCid('content_items'),
-                'title': 'Mondkuchenfest in den Gärten der Welt ',
-                'text': 'Ein buntes Bühnenprogramm mit asiatischen Drachentänzen, Ausschnitten aus der Peking-Oper und asi... ',
-                'date[from]': '28.12.1981'
-            }
-        ];
+        return [];
     },
 
     // -----------
@@ -253,7 +246,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     // --------------- EVENT HANDLERS
     // -----------
 
-    confirm: function(title, message, abort, confirm)
+    confirm: function(title, message, confirm, abort)
     {
         if (! this.layout_root.confirm_dialog)
         {
@@ -267,11 +260,17 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 buttons: {
                     "Ja": function() {
                         $( this ).dialog( "close" );
-                        if (confirm) confirm();
+                        if (confirm)
+                        {
+                            confirm();
+                        }
                     },
                     "Nein": function() {
                         $( this ).dialog( "close" );
-                        if (abort) abort();
+                        if (abort)
+                        {
+                            abort();
+                        }
                     }
                 }
             });
@@ -312,32 +311,28 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var load = function()
         {
             this.editing_form.val(item.data);
-            this.editing_form.markClean(); 
+            this.editing_form.markClean();
             this.slide_panel.toggle();
         }.bind(this);
 
-        this.logInfo("loadContentItem", item);
+        var store_and_load = function()
+        {
+            if (! this.storeContentItem())
+            {
+                this.warn("Fehler", "Item konnte aufgrund unvollständiger Daten nicht gespeichert werden.");
+            }
+            else
+            {
+                load();
+            }
+        }.bind(this);
 
         if (this.editing_form.isDirty())
         {
-            this.confirm("Item wurde noch nicht gespeichert!", "Jetzt speichern?", function()
+            this.confirm("Item wurde noch nicht gespeichert!", "Jetzt speichern?", store_and_load, function()
             {
                 load();
-
-                return true;
-            }, function()
-            {
-                if (! this.storeContentItem())
-                {
-                    this.warn("Fehler", "Item konnte aufgrund unvollständiger Daten nicht gespeichert werden.");
-
-                    return false;
-                }
-
-                load();
-
-                return true;
-            }.bind(this));
+            });
         }
         else
         {
@@ -358,7 +353,9 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     {
                         this.editing_form.reset();
                     }
-                }.bind(this)
+                }.bind(this),
+
+                this.editing_form.reset.bind(this.editing_form)
             );
         }
         else
