@@ -127,6 +127,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             this.editing_form.markDirty();
         }.bind(this));
         this.editing_form.on('contextMenuSelect', this.onContextMenuClicked.bind(this));
+        this.editing_form.on('createTagDenied', function(form, field, msg)
+        {
+            this.warn("Aktion nicht erlaubt", msg);
+        }.bind(this));
     },
 
     createMenus: function()
@@ -263,11 +267,11 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 buttons: {
                     "Ja": function() {
                         $( this ).dialog( "close" );
-                        if (abort) abort();
+                        if (confirm) confirm();
                     },
                     "Nein": function() {
                         $( this ).dialog( "close" );
-                        if (confirm) confirm();
+                        if (abort) abort();
                     }
                 }
             });
@@ -278,14 +282,14 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         }
     },
 
-    alert: function(title, message, ok)
+    warn: function(title, message, ok)
     {
-        if (! this.layout_root.alert_dialog)
+        if (! this.layout_root.warn_dialog)
         {
-            this.layout_root.alert_dialog = ich['dialog-tpl']({ title: title, message: message });
-            this.layout_root.append(this.layout_root.alert_dialog);
+            this.layout_root.warn_dialog = ich['dialog-tpl']({ title: title, message: message });
+            this.layout_root.append(this.layout_root.warn_dialog);
 
-            this.layout_root.alert_dialog.dialog({
+            this.layout_root.warn_dialog.dialog({
                 resizable: false,
                 modal: true,
                 width: '20em',
@@ -299,7 +303,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         }
         else
         {
-            this.layout_root.alert_dialog.dialog("open");
+            this.layout_root.warn_dialog.dialog("open");
         }
     },
 
@@ -308,16 +312,24 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var load = function()
         {
             this.editing_form.val(item.data);
+            this.editing_form.markClean(); 
             this.slide_panel.toggle();
         }.bind(this);
+
+        this.logInfo("loadContentItem", item);
 
         if (this.editing_form.isDirty())
         {
             this.confirm("Item wurde noch nicht gespeichert!", "Jetzt speichern?", function()
             {
+                load();
+
+                return true;
+            }, function()
+            {
                 if (! this.storeContentItem())
                 {
-                    this.alert("Fehler", "Item konnte aufgrund unvollständiger Daten nicht gespeichert werden.");
+                    this.warn("Fehler", "Item konnte aufgrund unvollständiger Daten nicht gespeichert werden.");
 
                     return false;
                 }

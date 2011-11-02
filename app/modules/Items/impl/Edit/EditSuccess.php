@@ -64,7 +64,7 @@
                     <select class="jsb-input" name="priority">
                         <option value=""></option>
                         <option value="1">niedrig</option>
-                        <option value="2" selected="selected">mittel</option>
+                        <option value="2">mittel</option>
                         <option value="3">hoch</option>
                     </select>
                     <input type="hidden" value='{ "min": 1, "max": 3, "mandatory": true }' class="jsb-input-options" />
@@ -72,6 +72,15 @@
                 <div class="input-left editor">
                     <label for="username">Bearbeiter:</label>
                     <input name="username" type="text" readonly="readonly" />
+                </div>
+                <div class="input-full tags">
+                    <label for="input_tags">Tags</label>
+                    <ul class="tagHandlerContainer">
+                        <li class="tagInput">
+                            <input class="jsb-input-tag tagInputField ui-autocomplete-input" name="tags" type="text" id="input_tags" />
+                            <input type="hidden" value="<?php echo htmlspecialchars(json_encode($t['tag_options'])); ?>" class="jsb-input-tag-options" />
+                        </li>
+                    </ul>
                 </div>
                 <div class="input-full title">
                     <label for="title">Titel</label>
@@ -82,8 +91,7 @@
                     <label for="teaser">
                         Teaser. Die ersten drei Sätze Deines Texts, die Du selber schreiben kannst.
                     </label>
-                    <textarea class="jsb-input" name="teaser" cols="2" rows="6"></textarea>
-                    <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
+                    <textarea name="teaser" cols="2" rows="6"></textarea>
                 </div>
                 <div class="input-full">
                     <label for="text">
@@ -110,8 +118,8 @@
                     <input type="hidden" name="location[latitude]" id="location[latitude" />
                     <div class="input-full">
                         <select class="jsb-input" name="location[relevance]" id="location[relevance">
-                            <option value="" selected="selected"></option>
-                            <option value="0" selected="selected">Betrifft den Bezirk (z.B. Wilmersdorf)</option>
+                            <option value=""></option>
+                            <option value="0">Betrifft den Bezirk (z.B. Wilmersdorf)</option>
                             <option value="1">Betrifft den Verwaltungsbezirk (z.B. Charlottenburg-Wilmersdorf)</option>
                             <option value="2">Betrifft die ganze Stadt</option>
                         </select>
@@ -119,8 +127,7 @@
                     </div>
                     <div class="input-full">
                         <label for="location[name">Name des Orts (z.B: KaDeWe)</label>
-                        <input class="jsb-input" name="location[name]" type="text" />
-                        <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
+                        <input name="location[name]" type="text" />
                     </div>
                     <div class="input-full"
                          ><label for="location[locationdetail">Zusätzliche Ortsangabe (z.B.: Haus 3)</label>

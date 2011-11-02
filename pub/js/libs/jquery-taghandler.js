@@ -3,118 +3,118 @@
     Copyright (C) 2010-2011 Mark Jubenville
     Mark Jubenville - ioncache@gmail.com
     http://ioncache.github.com/Tag-Handler
-    
+
     Development time supported by:
     Raybec Communications
     http://www.raybec.com
     http://www.mysaleslink.com
-    
+
     Modified by Javier Fernandez Escribano - fesjav@gmail.com
     Added autocomplete queries as the user writes
-    
+
     Development time supported by:
     Tourist Eye
     http://www.touristeye.com
-    
+
     Based heavily on:
     Tag it! by Levy Carneiro Jr (http://levycarneiro.com/)
     http://levycarneiro.com/projects/tag-it/example.html
     http://github.com/levycarneiro/tag-it
     http://plugins.jquery.com/project/tag-it
-    
+
     Tag icons/cursors converted from:
     From the famfamfam.com Silk icon set:
     http://www.famfamfam.com/lab/icons/silk/
-    
+
     Loader image created at:
     Preloaders.net
     http://preloaders.net/
-    
+
     ------------------------------------------------------------------------------
-    Description 
+    Description
     ------------------------------------------------------------------------------
-    
-    Tag Handler is a jQuery plugin used for managing tag-type metadata. 
-    
+
+    Tag Handler is a jQuery plugin used for managing tag-type metadata.
+
     ------------------------------------------------------------------------------
     Basic Usage Instructions
     ------------------------------------------------------------------------------
-    
+
     * Tag Handler must be attached to one or more <ul> tags in your HTML.
-    
+
     * To add a tag, click on the tag box, type in a name, and hit enter or comma.
-    
+
     * Tags may be removed from the tag box by hitting backspace inside the box or
       by clicking on the tag.
-    
+
     * The list of tags may be initialized in 1 of 3 ways:
-    
+
          1. By passing arrays of tag names as options to the plugin
             ("availableTags" and "assignedTags"); or,
-    
+
          2. By supplying a "getURL" for the tags to be retrieved via AJAX.
-    
+
             When using this method, the server must supply a JSON formatted array
             named "availableTags" and optionally an additional array named
             "assignedTags".
-         
+
          3. By supplying a "getURL" and initLoad: false.
-    
-            When using this method, it will get the "assignedTags" from the array as in 
+
+            When using this method, it will get the "assignedTags" from the array as in
             method 1. When the user writes a tag, it will query the server searching for
-            similar tags.        
-         
-      
+            similar tags.
+
+
       Either way, the information from these 3 methods will be used in the
       following manner:
-    
+
       availableTags: each item in this array will populate the autocomplete
       drop-down list
-    
+
       assignedTags: each item this array will become a tag in the tag box
-    
+
     * Tags may be sent back to the server by supplying an "updateURL". In this case,
       an array will be sent back to the server named "tags".
-    
+
     * You can define whether the user can create new tags or select tags only.
-    
+
     * You can define if the user can edit the tags.
-    
+
     * A sample CSS file is included that can be used to help with formatting tags.
-    
-    
+
+
     ------------------------------------------------------------------------------
     Plugin Examples
     ------------------------------------------------------------------------------
-    
+
     Example 1: The Tag Handler will be initialized with no options and no default
                tags:
-    
+
         $("#basic_tag_handler").tagHandler();
-    
+
     Example 2: The Tag Handler will be initialized with preset tags from the
                assignedTags and availableTags arrays, and autocomplete witll be
                turned on:
-    
+
         $("#array_tag_handler").tagHandler({
             assignedTags: [ 'Perl' ],
             availableTags: [ 'C', 'C++', 'C#', 'Java', 'Perl', 'PHP', 'Python' ],
             autocomplete: true
         });
-    
+
     Example 3: The Tag Handler will be initialized and pull data via ajax, also
                sending some data to the server:
-    
+
         $("#ajaxget_tag_handler").tagHandler({
             getData: { id: 'user123', type: 'user' },
             getURL: '/ajaxtest/get',
             autocomplete: true
         });
-    
+
     Example 4: Same as Example 3, but a different user is set in the getData /
                UpdateData options and now the tags will save when clicking the save
                button:
-               
+
         $("#ajaxupdate_tag_handler").tagHandler({
             getData: { id: 'user234', type: 'user' },
             getURL: '/ajaxtest/get',
@@ -122,10 +122,10 @@
             updateURL: '/ajaxtest/update',
             autocomplete: true
         });
-    
+
     Example 5: Same as Example 4, but autoUpdate is true, tags will save
                automatically (no save button will be shown):
-    
+
         $("#ajaxautoupdate_tag_handler").tagHandler({
             getData: { id: 'user234', type: 'user' },
             getURL: '/ajaxtest/get',
@@ -134,10 +134,10 @@
             autocomplete: true,
             autoUpdate: true
         });
-    
+
     Example 6: The Tag Handler will be initialized but it will request the tag list
     when the user writes more than 2 chars, also sending some data to the server:
-    
+
         $("#ajaxget_tag_handler").tagHandler({
             getData: { id: 'user123', type: 'user' },
             initLoad: false,
@@ -145,9 +145,9 @@
             autocomplete: true,
             minChars: 2
         });
-    
+
     Example 7: Same as example 6, but the user cannot create new tags:
-    
+
         $("#ajaxget_tag_handler").tagHandler({
             getData: { id: 'user123', type: 'user' },
             initLoad: false,
@@ -156,15 +156,15 @@
             minChars: 2,
             allowAdd: false
         });
-        
-            
+
+
     ------------------------------------------------------------------------------
     Plugin Options
     ------------------------------------------------------------------------------
-    
+
     Tag data specific options:
     --------------------------
-    
+
     Option          Description                                     Default Value
     --------------  ----------------------------------------------  --------------
     assignedTags    array to pass a list of already assigned tags   []
@@ -174,10 +174,10 @@
     initLoad        indicates if all tags should be loaded on init  true
     updatetData     data field with additional info for updtateURL  ''
     updateURL       URL for saving tags via ajax                    ''
-    
+
     Miscellaneous options:
     ----------------------
-    
+
     Option          Description                                     Default Value
     --------------  ----------------------------------------------  --------------
     allowAdd        indicates whether the user can add new tags     true
@@ -187,10 +187,10 @@
                     whenever a tag is added/deleted - if set true,
                     the save button will not be shown
     className       base class name that will be added to the tag   'tagHandler'
-                    container 
+                    container
     debug           will turn on some console logging debug info    false
     delimiter       extra delimiter to use to separate tags         ''
-                    note 'enter' and 'comma' are always allowed 
+                    note 'enter' and 'comma' are always allowed
     maxTags         sets a limit to the number of allowed tags, set 0
                     to 0 to allow unlimited
     minChars        minimum number of chars to type before starting 0
@@ -204,21 +204,21 @@
                                                                     tag.'
     queryname       query term used to send user typed data         'q'
     sortTags        sets sorting of tag names alphabetically        true
-    
+
     ------------------------------------------------------------------------------
     License
     ------------------------------------------------------------------------------
-    
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the Lesser GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Lesser GNU General Public License for more details.
-    
+
     You should have received a copy of the Lesser GNU General Public License
     along with this program.  If not, see < http://www.gnu.org/licenses/ >.
 
@@ -278,7 +278,7 @@
             // initializes the tag lists
             // tag lists will be pulled from a URL
             if (opts.getURL !== '' && opts.initLoad) {
-                
+
                 $.ajax({
                     url: opts.getURL,
                     cache: false,
@@ -296,7 +296,7 @@
                             tags.assignedTags = data.assignedTags.slice();
                             if (opts.sortTags) {
                                 tags = sortTags(tags);
-                            }     
+                            }
 
                             tags = addAssignedTags(opts, tags, inputField, tagContainer);
 
@@ -309,8 +309,8 @@
                         debug(xhr, text, error);
                         alert(opts.msgError);
                     }
-                });              
-            
+                });
+
             // show assigned tags only if we load the data as we write
             } else if( opts.getURL !== '' ) {
 
@@ -321,16 +321,16 @@
 
                 tags = addAssignedTags(opts, tags, inputField, tagContainer);
 
-            // or load the lists of tags   
+            // or load the lists of tags
             } else {
-                
+
                 if (opts.availableTags.length) {
                     tags.availableTags = opts.availableTags.slice();
                     tags.originalTags = tags.availableTags.slice();
                 }
                 if (opts.sortTags) {
                     tags = sortTags(tags);
-                }  
+                }
                 if (opts.assignedTags.length) {
                     tags.assignedTags = opts.assignedTags.slice();
                     if (opts.sortTags) {
@@ -349,7 +349,7 @@
                 // delegates a click event function to all future <li> elements with
                 // the tagItem class that will remove the tag upon click
                 tagContainerObject.delegate("li.tagItem", "click", function() {
-                    tags = removeTag($(this), tags, opts.sortTags);
+                    tags = removeTag($(this), tags, opts.sortTags, opts.onTagRemoved);
                     if (opts.updateURL !=='' && opts.autoUpdate) {
                         saveTags(tags, opts, tagContainer.id);
                     }
@@ -364,17 +364,21 @@
                     if (e.which === 13 || e.which === 44 || e.which === opts.delimiter.charCodeAt(0)) {
                         e.preventDefault();
                         if ($(this).val() !=="" && !checkTag($.trim($(this).val()), tags.assignedTags)) {
-                            
+
                             // check if the tag is in availableTags
                             if( !opts.allowAdd && !checkTag($.trim($(this).val()), tags.availableTags)){
-                              alert(opts.msgNoNewTag);
+                              if (opts.msgNoCallback) {
+                                  opts.msgNoCallback(opts.msgNoNewTag)
+                              } else {
+                                alert(opts.msgNoNewTag);
+                              }
                               return;
                             }
-                            
+
                             if ( opts.maxTags > 0 && tags.assignedTags.length >= opts.maxTags ) {
                                 alert('Maximum tags allowed: ' + opts.maxTags);
                             } else {
-                                tags = addTag(this, $.trim($(this).val()), tags, opts.sortTags);
+                                tags = addTag(this, $.trim($(this).val()), tags, opts.sortTags, opts.onTagAdded);
                                 if (opts.updateURL !=='' && opts.autoUpdate) {
                                     saveTags(tags, opts, tagContainer.id);
                                 }
@@ -405,7 +409,7 @@
 
                 // adds autocomplete functionality for the tag names
                 if  ( opts.autocomplete && typeof($.fn.autocomplete) == 'function' && opts.initLoad ) {
-                    
+
                     $(inputField).autocomplete({
                         source: tags.availableTags,
                         select: function(event, ui) {
@@ -413,7 +417,7 @@
                                 if ( opts.maxTags > 0 && tags.assignedTags.length >= opts.maxTags ) {
                                     alert('Maximum tags allowed: ' + opts.maxTags);
                                 } else {
-                                    tags = addTag(this, $.trim(ui.item.value), tags, opts.sortTags);
+                                    tags = addTag(this, $.trim(ui.item.value), tags, opts.sortTags, opts.onTagAdded);
                                     if (opts.updateURL !=='' && opts.autoUpdate) {
                                         saveTags(tags, opts, tagContainer.id);
                                     }
@@ -453,7 +457,7 @@
                                 if ( opts.maxTags > 0 && tags.assignedTags.length >= opts.maxTags ) {
                                     alert('Maximum tags allowed: ' + opts.maxTags);
                                 } else {
-                                    tags = addTag(this, $.trim(ui.item.value), tags, opts.sortTags);
+                                    tags = addTag(this, $.trim(ui.item.value), tags, opts.sortTags, opts.onTagAdded);
                                     if (opts.updateURL !=='' && opts.autoUpdate) {
                                         saveTags(tags, opts, tagContainer.id);
                                     }
@@ -508,7 +512,7 @@
         updatetData: '',
         updateURL: ''
     };
-    
+
     // checks to to see if a tag is already found in a list of tags
     function checkTag(value, tags) {
         var check = false;
@@ -534,7 +538,7 @@
     }
 
     // adds a tag to the tag box and the assignedTags list
-    function addTag(tagField, value, tags, sort) {
+    function addTag(tagField, value, tags, sort, callback) {
         tags.assignedTags.push(value);
         tags.availableTags = removeTagFromList(value, tags.availableTags);
         $("<li />").addClass("tagItem").html(value).insertBefore($(tagField).parent());
@@ -542,11 +546,16 @@
         if (sort) {
             tags = sortTags(tags);
         }
+
+        if (callback) {
+            callback(value)
+        }
+
         return tags;
     }
 
     // removes a tag from the tag box and the assignedTags list
-    function removeTag(tag, tags, sort) {
+    function removeTag(tag, tags, sort, callback) {
         var value = $(tag).html();
         tags.assignedTags = removeTagFromList(value, tags.assignedTags);
         if (checkTag(value, tags.originalTags)) {
@@ -557,6 +566,11 @@
         if (sort) {
             tags = sortTags(tags);
         }
+
+        if (callback) {
+            callback(value);
+        }
+
         return tags;
     }
 

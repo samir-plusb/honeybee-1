@@ -23,6 +23,10 @@ class Items_Edit_EditSuccessView extends ItemsBaseView
     {
         $this->setupHtml($parameters);
         $this->setAttribute('_title', 'BerlinOnline Newsdata Prototype');
+        $this->setAttribute('tag_options', array(
+            'mandatory' => true,
+            'tags' => AgaviConfig::get('items.tags', array())
+        ));
     }
 
     /**

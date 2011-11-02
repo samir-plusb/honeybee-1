@@ -17,7 +17,6 @@ midas.items.edit.DateInput = midas.items.edit.Input.extend(
     init: function(element, options)
     {
         this.parent(element, options);
-        this.prev_val = "";
 
         this.element.datepicker({
             dateFormat: this.getDateFormat(),

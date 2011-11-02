@@ -82,37 +82,60 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         {
             this.fire('contextMenuSelect', [field, item]);
         }.bind(this));
+
+        this.fields['tags'].on('createTagDenied', function(field, msg)
+        {
+            this.fire("createTagDenied", [this, field, msg]);
+        }.bind(this));
     },
 
     val: function(field, value)
     {
+        var processed_inputs = [];
+
         if (! field) // toObject
         {
             var data = {};
+
+            for (var input_name in this.fields)
+            {
+                data[input_name] = this.val(input_name);
+                processed_inputs.push(input_name);
+            }
+
             this.element.find(':input')
              .not(':button, :submit, :reset')
              .each(function(idx, input_field)
             {
                 var name = $(input_field).attr('name');
 
-                if (name)
+                if (-1 === processed_inputs.indexOf(name))
                 {
                     data[name] = $(input_field).val();
+                    processed_inputs.push(name);
                 }
             }.bind(this));
+
             return data;
         }
         else if('object' == typeof field) // hydrate
         {
+            for (var name in this.fields)
+            {
+                this.fields[name].val(field[name] || '');
+                processed_inputs.push(name);
+            }
+
             this.element.find(':input')
              .not(':button, :submit, :reset')
              .each(function(idx, input_field)
             {
                 var name = $(input_field).attr('name');
 
-                if (name && field[name])
+                if (-1 === processed_inputs.indexOf(name))
                 {
-                    $(input_field).val(field[name]);
+                    $(input_field).val(field[name] || '');
+                    processed_inputs.push(name);
                 }
             }.bind(this));
         }
@@ -152,11 +175,11 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
             {
                 result.success = false;
                 result.messages[name] = validation_res.messages;
-                field.element.addClass('ui-state-error');
+                field.markAs('invalid');
             }
             else
             {
-                field.element.removeClass('ui-state-error');
+                field.unmarkAs('invalid');
             }
         }.bind(this));
 
@@ -221,11 +244,26 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
 
     reset: function()
     {
+        var processed_inputs = [];
+
+        for (var name in this.fields)
+        {
+            this.fields[name].reset();
+            processed_inputs.push(name);
+        }
+
         this.element.find(':input')
-         .not(':button, :submit, :reset')
-         .val('')
-         .removeAttr('checked')
-         .removeAttr('selected');
+         .not(':button, :submit, :reset').each(
+            function(idx, input)
+            {
+                if (-1 === processed_inputs.indexOf($(input).attr('name')))
+                {
+                    $(input).val('')
+                     .removeAttr('checked')
+                     .removeAttr('selected');
+                }
+            }
+        );
     },
 
     highlight: function()

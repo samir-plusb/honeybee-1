@@ -75,7 +75,6 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
 
         this.slide("+=" + this.options.range, function()
         {
-            this.logDebug("slideIn complete.");
         }.bind(this));
     },
 
@@ -91,7 +90,6 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
 
         this.slide("-=" + this.options.range, function()
         {
-            this.logDebug("slideOut complete.");
         }.bind(this));
     },
 

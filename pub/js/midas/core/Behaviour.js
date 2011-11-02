@@ -36,8 +36,9 @@ midas.core.Behaviour = midas.core.BaseObject.extend(
 
                     if (0 < config_input.length)
                     {
-                        var parsed_conf = JSON.parse(config_input.val());
-
+                        var parsed_conf = $.parseJSON(config_input.val());
+                        config_input.remove();
+                        this.element.removeClass(cur_class);
                         for(var prop in parsed_conf)
                         {
                             this.options[prop] = parsed_conf[prop];

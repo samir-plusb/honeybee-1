@@ -264,10 +264,55 @@ header
             margin-bottom: @layout_spacing;
         }
 
+        .tags
+        {
+            clear: both;
+
+            .tagHandlerContainer
+            {
+                -webkit-border-radius: 0;
+                -moz-border-radius: 0;
+                border: 1px solid #CCCCCC;
+                box-shadow: 0 0.05em 0 #FFFFFF;
+                font-family: "EB Garamond", Garamond, serif;
+                min-height: 0;
+                background-color: #ffffff;
+
+                li
+                {
+                    padding: 5px 10px;
+                    margin: 3px 5px 0 0;
+                    overflow: hidden;
+                    height: auto;
+                    font-weight: bold;
+                    background: url("../images/ui-bg_gloss-wave_50_6eac2c_500x100.png") repeat-x scroll 50% 50% #6EAC2C;
+
+                    &.tagInput
+                    {
+                        padding: 0;
+                        margin: 0;
+                        border-radius: 0;
+                        background: none;
+
+                        input
+                        {
+                            font-size: 1.2em;
+                            border: none;
+                            background: none;
+                        }
+                    }
+                }
+
+                &.ui-state-error
+                {
+                    background-color: none;
+                }
+            }
+        }
+
         .title
         {
             border-top: 1px solid #CCCCCC;
-            clear: both;
             padding-top: 1em;
         }
 

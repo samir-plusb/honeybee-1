@@ -180,9 +180,42 @@ header .personal-info h2 {
 .document-editing form .editor {
   margin-bottom: 1em;
 }
+.document-editing form .tags {
+  clear: both;
+}
+.document-editing form .tags .tagHandlerContainer {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border: 1px solid #CCCCCC;
+  box-shadow: 0 0.05em 0 #FFFFFF;
+  font-family: "EB Garamond", Garamond, serif;
+  min-height: 0;
+  background-color: #ffffff;
+}
+.document-editing form .tags .tagHandlerContainer li {
+  padding: 5px 10px;
+  margin: 3px 5px 0 0;
+  overflow: hidden;
+  height: auto;
+  font-weight: bold;
+  background: url("../images/ui-bg_gloss-wave_50_6eac2c_500x100.png") repeat-x scroll 50% 50% #6eac2c;
+}
+.document-editing form .tags .tagHandlerContainer li.tagInput {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  background: none;
+}
+.document-editing form .tags .tagHandlerContainer li.tagInput input {
+  font-size: 1.2em;
+  border: none;
+  background: none;
+}
+.document-editing form .tags .tagHandlerContainer.ui-state-error {
+  background-color: none;
+}
 .document-editing form .title {
   border-top: 1px solid #CCCCCC;
-  clear: both;
   padding-top: 1em;
 }
 .document-editing form .extra-data-left {

@@ -25,6 +25,11 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
             this.options.validate_correction = true;
         }
 
+        if (undefined === this.options.ui_states)
+        {
+            this.options.ui_states = { invalid: 'ui-state-error' };
+        }
+
         this.name = this.element.attr('name');
         this.element.change(function(event)
         {
@@ -62,13 +67,13 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
     {
         var result = null;
 
-        if (true === this.options.validate_correction && this.element.hasClass('ui-state-error'))
+        if (true === this.options.validate_correction && this.isMarkedAs('invalid'))
         {
             result = this.validate()
 
             if (true === result.success)
             {
-                this.element.removeClass('ui-state-error');
+                this.unmarkAs('invalid');
             }
         }
 
@@ -122,5 +127,37 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
             this.element[0].selectionEnd
         );
         return text.replace(/[\<\>&]/g, ' ');
+    },
+
+    markAs: function(state)
+    {
+        var css_class = this.options.ui_states[state]
+         || 'input-' + state;
+
+        this.element.addClass(css_class);
+    },
+
+    unmarkAs: function(state)
+    {
+        var css_class = this.options.ui_states[state]
+         || 'input-' + state;
+
+        this.element.removeClass(css_class);
+    },
+
+    isMarkedAs: function(state)
+    {
+        var css_class = this.options.ui_states[state]
+         || 'input-' + state;
+
+        return this.element.hasClass(css_class);
+    },
+
+    reset: function()
+    {
+        this.element.val('')
+         .removeAttr('checked')
+         .removeAttr('selected');
+        this.unmarkAs('invalid');
     }
 });
