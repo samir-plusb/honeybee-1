@@ -2,6 +2,12 @@
 
 /**
  * The base action from which all Workflow module actions inherit.
+ *
+ * @package Workflow
+ * @author tay
+ * @version $Id$
+ * @since 02.11.2011
+ *
  */
 class WorkflowPluginBaseAction extends ProjectBaseAction
 {
