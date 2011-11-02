@@ -1,18 +1,27 @@
 <?php
 
 /**
- * The ExtendedCouchDbClient is a wrapper around php couchdb pecl library,
- * that extends the latter by composing it and adding in some missing functionality.
+ * Exception class for ExtendedCouchDbClient exceptions
+ *
+ * Postive exception codes are CURL error codes.
+ *
+ * @see ExtendedCouchDbClient
  *
  * @version         $Id: ExtendedCouchDbClient.class.php 460 2011-10-27 07:58:02Z tay $
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
- * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Project
- * @subpackage      Database
+ * @author          tay
+ * @package         Database
  */
 class CouchdbClientException extends Exception
 {
+    /**
+     * response from couch db server is not parseable
+     */
     const UNPARSEABLE_RESPONSE = -1;
+
+    /**
+     * prepararing data for PUT requests failed
+     */
     const PUT_DATA = -2;
 
 }
