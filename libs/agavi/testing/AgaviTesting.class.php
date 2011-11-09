@@ -169,7 +169,7 @@ class AgaviTesting
 			'log-xml=',
 			'include-suite=',
 			'exclude-suite=',
-            'configuration=',
+                        'configuration=',
 		);
 
 		try {
@@ -253,6 +253,9 @@ class AgaviTesting
 
 				case '--exclude-suite':
 					$arguments['exclude-suite'] = $option[1];
+					break;
+                                case '--configuration':
+					$arguments['configuration'] = $option[1];
 					break;
 			}
 		}
