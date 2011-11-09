@@ -7,8 +7,9 @@ $rootDir = dirname(dirname(__FILE__));
 $libsDir = $rootDir . '/libs';
 $ezComponentsDir = $libsDir . '/ezc';
 $phpUnitDir = $libsDir . '/PHPUnit';
+$zend = $libsDir . '/Zend';
 
-$includes = array($libsDir, $ezComponentsDir, $phpUnitDir);
+$includes = array($libsDir, $ezComponentsDir, $phpUnitDir, $zend);
 set_include_path(implode(PATH_SEPARATOR, $includes).PATH_SEPARATOR.get_include_path());
 
 // make generated files group writeable for easy switch between web/console

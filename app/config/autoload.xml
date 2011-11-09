@@ -14,14 +14,21 @@
 
             <autoload name="ProjectScriptPacker">%core.lib_dir%/deployment/ProjectScriptPacker.class.php</autoload>
 
+            <!-- Zend -->
+            <autoload name="Zend_Acl">%core.app_dir%/../libs/Zend/Acl.php</autoload>
+			<autoload name="Zend_Acl_Assert_Interface">%core.app_dir%/../libs/Zend/Acl/Assert/Interface.php</autoload>
+			<autoload name="Zend_Acl_Resource_Interface">%core.app_dir%/../libs/Zend/Acl/Resource/Interface.php</autoload>
+			<autoload name="Zend_Acl_Role_Interface">%core.app_dir%/../libs/Zend/Acl/Role/Interface.php</autoload>
+            <!-- /Zend -->
+
             <autoload name="IComparable">%core.app_dir%/models/Core/IComparable.iface.php</autoload>
 
             <autoload name="IEvent">%core.app_dir%/models/Event/IEvent.iface.php</autoload>
             <autoload name="IEventProxy">%core.app_dir%/models/Event/IEventProxy.iface.php</autoload>
             <autoload name="ProjectEventProxy">%core.app_dir%/models/Event/ProjectEventProxy.class.php</autoload>
             <autoload name="ProjectEvent">%core.app_dir%/models/Event/ProjectEvent.class.php</autoload>
-
             <autoload name="ProjectCurl">%core.app_dir%/models/Curl/ProjectCurl.class.php</autoload>
+            <autoload name="ProjectSecurityUser">%core.app_dir%/lib/user/ProjectSecurityUser.class.php</autoload>
 
             <xi:include href="%core.app_dir%/models/Database/autoload.xml"
                 xpointer="xmlns(a=http://agavi.org/agavi/config/parts/autoload/1.1) xpointer(//a:autoload)">
