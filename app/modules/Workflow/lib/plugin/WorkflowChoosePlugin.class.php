@@ -12,9 +12,9 @@ class WorkflowChoosePlugin extends WorkflowBaseInteractivePlugin implements IWor
 {
     /**
      * (non-PHPdoc)
-     * @see IWorkflowPlugin::process()
+     * @see WorkflowBasePlugin::doProcess()
      */
-    public function process()
+    protected function doProcess()
     {
         return $this->executePluginAction('Plugin_Choose');
     }

@@ -32,6 +32,11 @@ class WorkflowPluginResult
     const STATE_EXPECT_INPUT = 3;
 
     /**
+     * The requested plugin execution has been denied, due to insufficient privleges.
+     */
+    const STATE_NOT_ALLOWED = 4;
+
+    /**
      * default gate number when to stop the workflow
      */
     const GATE_NONE = -1;

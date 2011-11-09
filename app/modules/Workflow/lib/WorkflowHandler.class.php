@@ -257,9 +257,10 @@ class WorkflowHandler
     {
         $result = NULL;
         $plugin = $this->getPluginFor($this->getCurrentStep());
+
         if ($plugin->isInteractive())
         {
-            if ($this->getTicket()->isInteractive() && $this->isAuthenticated())
+            if ($this->getTicket()->hasUserSession())
             {
                 $result = $plugin->process();
             }

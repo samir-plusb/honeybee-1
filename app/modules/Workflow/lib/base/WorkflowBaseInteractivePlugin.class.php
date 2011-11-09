@@ -41,7 +41,7 @@ abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
      */
     public function isInteractive()
     {
-        return FALSE;
+        return TRUE;
     }
 
     /**

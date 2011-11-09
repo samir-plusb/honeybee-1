@@ -29,6 +29,11 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
     protected $gates;
 
     /**
+     * Do the actual processing of the plugin buisiness.
+     */
+    protected abstract function doProcess();
+
+    /**
      * (non-PHPdoc)
      * @see IWorkflowPlugin::initialize()
      */
@@ -38,6 +43,19 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
         $this->parameters = $parameters;
         $this->gates = $gates;
         return $this;
+    }
+
+    public function process()
+    {
+        if ($this->mayProcess())
+        {
+            return $this->doProcess();
+        }
+
+        return new WorkflowPluginResult(
+            WorkflowPluginResult::STATE_NOT_ALLOWED,
+            WorkflowPluginResult::GATE_NONE
+        );
     }
 
     /**
@@ -52,6 +70,15 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
         return FALSE;
     }
 
+    /**
+     * Returns whether the plugin is executable at the current app/session state.
+     *
+     * @return boolean
+     */
+    protected function mayProcess()
+    {
+        return TRUE;
+    }
 
     /**
      * get a list of gate labels

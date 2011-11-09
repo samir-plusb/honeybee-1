@@ -327,7 +327,6 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
         return $this->waitUntil;
     }
 
-
     /**
      * check if this ticket is freshly injected in the workflow
      */
@@ -335,7 +334,6 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     {
         return ! empty($this->currentStep);
     }
-
 
     /**
      * initialize instance
@@ -452,7 +450,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
      *
      * @return boolean
      */
-    public function isInteractive()
+    public function hasUserSession()
     {
         return NULL != $this->container;
     }
