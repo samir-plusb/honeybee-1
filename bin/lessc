@@ -9,9 +9,8 @@ else
   echo "Have you run bin/configure-env.php allready?"
 exit 0
 fi
-
-NODE_DIR="`dirname $0`/../dev/nodejs/"
-LESS_BIN="`readlink -f $NODE_DIR`/custom/less_compile/bin/cli.js"
+BASE_DIR="`dirname $0`/.."
+LESS_BIN="`readlink -f ${BASE_DIR}`/dev/less-compile/bin/lessw.js"
 
 if (test -z "$LESS_BIN") ; then
   echo "WARNING: executable not found at location: '$LESS_BIN'"
