@@ -11,10 +11,9 @@
             <autoload name="ProjectScriptFilter">%core.lib_dir%/agavi/filter/ProjectScriptFilter.class.php</autoload>
             <autoload name="ProjectScriptFilterConfig">%core.lib_dir%/agavi/filter/ProjectScriptFilterConfig.class.php</autoload>
             <autoload name="ProjectScriptsConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectScriptsConfigHandler.class.php</autoload>
-
             <autoload name="ProjectScriptPacker">%core.lib_dir%/deployment/ProjectScriptPacker.class.php</autoload>
 
-            <!-- Zend -->
+            <!-- Zend (can be removed when agavi delivers integration) -->
             <autoload name="Zend_Acl">%core.app_dir%/../libs/Zend/Acl.php</autoload>
 			<autoload name="Zend_Acl_Assert_Interface">%core.app_dir%/../libs/Zend/Acl/Assert/Interface.php</autoload>
 			<autoload name="Zend_Acl_Resource_Interface">%core.app_dir%/../libs/Zend/Acl/Resource/Interface.php</autoload>
@@ -28,7 +27,10 @@
             <autoload name="ProjectEventProxy">%core.app_dir%/models/Event/ProjectEventProxy.class.php</autoload>
             <autoload name="ProjectEvent">%core.app_dir%/models/Event/ProjectEvent.class.php</autoload>
             <autoload name="ProjectCurl">%core.app_dir%/models/Curl/ProjectCurl.class.php</autoload>
-            <autoload name="ProjectSecurityUser">%core.app_dir%/lib/user/ProjectSecurityUser.class.php</autoload>
+
+            <autoload name="ProjectZendAclSecurityUser">%core.app_dir%/lib/user/ProjectZendAclSecurityUser.class.php</autoload>
+            <autoload name="ProjectUserMayDoNothingAssertion">%core.app_dir%/lib/user/assertions/ProjectUserMayDoNothingAssertion.class.php</autoload>
+
 
             <xi:include href="%core.app_dir%/models/Database/autoload.xml"
                 xpointer="xmlns(a=http://agavi.org/agavi/config/parts/autoload/1.1) xpointer(//a:autoload)">
