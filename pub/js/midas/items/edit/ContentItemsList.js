@@ -51,7 +51,10 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
             throw "Can not item that has no valid cid.";
         }
 
-        var rendered_item = ich['content-item-tpl'](item);
+        var rendered_html = ich['content-item-tpl'](item, true);
+        var tmp_item = $('<div></div>').html(rendered_html.replace('&gt;', '>').replace('&lt;', '<'));
+
+        var rendered_item = tmp_item.find('li');
         rendered_item[0].cid = item.cid;
 
         if (this.content_items[item.cid]) // update item
@@ -85,9 +88,9 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
         }
     },
 
-    get: function(item_cid)
+    getItem: function(cid)
     {
-
+        return this.content_items[cid] || null;
     },
 
     updateGui: function()

@@ -71,7 +71,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
                 }
 
                 this.markDirty();
-                this.fire('changed', event);
+                this.fire('changed', [event]);
             }.bind(this));
 
             this.fields[input_field.getName()] = input_field;

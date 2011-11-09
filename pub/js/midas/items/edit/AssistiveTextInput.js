@@ -39,7 +39,7 @@ midas.items.edit.AssistiveTextInput = midas.items.edit.Input.extend(
         }
 
         this.element.contextMenu(
-            'content-data-menu',
+            'content-data-menu-'+(this.getName() || 'default'),
             prepared_items,
             { disable_native_context_menu: false, leftClick: false }
         );
@@ -54,7 +54,7 @@ midas.items.edit.AssistiveTextInput = midas.items.edit.Input.extend(
             { 'key': 'append_title', 'label': 'an Überschrift anhängen' },
             { 'key': 'set_text', 'label': 'als Textkörper setzen' },
             { 'key': 'append_text', 'label': 'an Textkörper anhängen' },
-            { 'key': 'set_url', 'label': 'als Url setzen' },
+            { 'key': 'set_url', 'label': 'als Url setzen', 'class': 'menu-item-break' },
             { 'key': 'set_startdate', 'label': 'als Startdatum setzen' },
             { 'key': 'set_enddate', 'label': 'als Enddatum setzen', 'class': 'menu-item-break' },
             { 'key': 'remove_hyphens', 'label': 'Bindestriche entfernen' },

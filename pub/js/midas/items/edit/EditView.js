@@ -199,11 +199,23 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             this.editing_form.val(target_fieldname, value);
         };
 
+        var setDate = function(target_fieldname, src_field)
+        {
+            var selection = src_field.getSelection();
+            var that = this;
+            $.getJSON('http://localhost/contentworker/index.php/items/extract_date', {date_text: selection}, function(data)
+            {
+                that.editing_form.val(target_fieldname, data.date);
+            });
+        }
+
         return {
             'set_title': setInputValue.bind(this, 'title', false),
             'append_title': setInputValue.bind(this, 'title', true),
             'set_text': setInputValue.bind(this, 'text', false),
             'append_text': setInputValue.bind(this, 'text', true),
+            'set_startdate': setDate.bind(this, 'date[from]'),
+            'set_enddate': setDate.bind(this, 'date[till]'),
             'remove_hyphens': function(src_field)
             {
                 var selection = src_field.getSelection();
@@ -368,7 +380,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         var validation_res = this.editing_form.validate();
 
-        if (true === validation_res.success)
+        if (true == validation_res.success)
         {
             var item = this.editing_form.val();
 

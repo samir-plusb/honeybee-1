@@ -49,19 +49,19 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend(
             };
         }.bind(this));
 
-        this.container.delegate('li a', 'click', function(event)
+        this.container.find('li a').click(function(event)
         {
-            event.preventDefault();
+            event.originalEvent._preventDefault = true;
 
-            if ($(event.target).parent('li').hasClass('inactive'))
+            if (! $(event.target).parent('li').hasClass('inactive'))
             {
-                return;
+                this.dispatchCommand(
+                    this.parseCommandName(event.target),
+                    event.target
+                );
             }
 
-            this.dispatchCommand(
-                this.parseCommandName(event.target),
-                event.target
-            );
+            return false;
         }.bind(this));
 
         if (this.options.commands)

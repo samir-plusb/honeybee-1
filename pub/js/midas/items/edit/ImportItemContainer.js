@@ -41,7 +41,6 @@ midas.items.edit.ImportItemContainer = midas.core.BaseObject.extend(
 
         this.content_panel = this.element.find(this.options.tabs_container);
         this.content_panel.find('.legend').css('display', 'none');
-        this.content_panel.tabs();
 
         this.content_text_input = new midas.items.edit.AssistiveTextInput(
             this.content_panel.find('textarea').first()
@@ -50,6 +49,8 @@ midas.items.edit.ImportItemContainer = midas.core.BaseObject.extend(
         {
             this.fire('contextMenuSelect', [field, item]);
         }.bind(this));
+
+        this.content_panel.tabs();
     }
 });
 

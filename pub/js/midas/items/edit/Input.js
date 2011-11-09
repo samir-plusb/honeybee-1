@@ -34,7 +34,7 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         this.element.change(function(event)
         {
             this.revalidate();
-            this.fire('changed', event);
+            this.fire('changed', [event]);
         }.bind(this));
 
         this.element.focus(function(event)
@@ -88,7 +88,7 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         };
         var value = this.val();
         // empty values are not validated but may throw a mandatory error.
-        if (true === this.options.mandatory && 0 == value.length)
+        if (true === this.options.mandatory && (!value || 0 == value.length))
         {
             result.success = false;
             result.messages.mandatory = "Mandatory err";
@@ -126,6 +126,7 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
             this.element[0].selectionStart,
             this.element[0].selectionEnd
         );
+
         return text.replace(/[\<\>&]/g, ' ');
     },
 

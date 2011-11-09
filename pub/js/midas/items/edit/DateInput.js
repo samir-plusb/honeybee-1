@@ -25,7 +25,7 @@ midas.items.edit.DateInput = midas.items.edit.Input.extend(
                 if (this.prev_val != date_string)
                 {
                     this.revalidate();
-                    this.fire('changed', { prev: this.prev_val, cur: date_string });
+                    this.fire('changed', [{ prev: this.prev_val, cur: date_string }]);
                 }
             }.bind(this)
         });
