@@ -25,7 +25,7 @@
  *
  * @since      0.9.0
  *
- * @version    $Id: AgaviConsoleRequest.class.php 4669 2011-05-25 20:53:42Z david $
+ * @version    $Id: AgaviConsoleRequest.class.php 4841 2011-11-09 12:33:36Z david $
  */
 class AgaviConsoleRequest extends AgaviRequest
 {
@@ -83,18 +83,19 @@ class AgaviConsoleRequest extends AgaviRequest
 		
 		$_FILES = array();
 		if($this->getParameter('read_stdin', false)) {
-			$stdinFile = tempnam(AgaviConfig::get('core.cache_dir'), 'stdin_');
 			$stdin = fopen('php://stdin', 'rb');
+			// set to non-blocking so the stream_get_contents() call won't hang forever if there is no STDIN input
 			stream_set_blocking($stdin, false);
-			$size = stream_copy_to_stream($stdin, $handle = fopen($stdinFile, 'wb'));
+			$stdinContents = stream_get_contents($stdin);
 			fclose($handle);
+			$stdinName = $this->getParameter('stdin_file_name', 'stdin_file');
 			
 			$_FILES = array(
-				$this->getParameter('stdin_file_name', 'stdin_file') => array(
-					'name' => $stdinFile,
+				$stdinName => array(
+					'name' => $stdinName,
 					'type' => 'application/octet-stream',
-					'size' => $size,
-					'tmp_name' => $stdinFile,
+					'size' => strlen($stdinContents),
+					'contents' => $stdinContents,
 					'error' => UPLOAD_ERR_OK,
 					'is_uploaded_file' => false,
 				)

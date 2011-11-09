@@ -26,7 +26,7 @@
  *
  * @since      0.11.0
  *
- * @version    $Id: AgaviUploadedFile.class.php 4812 2011-08-19 15:10:46Z david $
+ * @version    $Id: AgaviUploadedFile.class.php 4842 2011-11-09 13:28:02Z david $
  */
 class AgaviUploadedFile implements ArrayAccess
 {
@@ -87,7 +87,7 @@ class AgaviUploadedFile implements ArrayAccess
 	/**
 	 * Constructor.
 	 *
-	 * @param      $flags int Flags, overridden to be ArrayObject::ARRAY_AS_PROPS.
+	 * @param      array The fields for this file.
 	 *
 	 * @see        ArrayObject::__construct()
 	 *
