@@ -161,7 +161,7 @@ class ExtendedCouchDbClient
      *
      * @param       string $uri URL to couchdb server
      * @param       string $database default database name to use
-     * @param       array $options optional options for curl
+     * @param       array $options optional options for curl, keys must be the names of curl setopt constants
      */
     public function __construct($uri, $database = NULL, array $options = NULL)
     {
