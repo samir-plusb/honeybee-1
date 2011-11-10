@@ -27,7 +27,10 @@ class CouchDatabase extends AgaviDatabase
         $couchUri = $this->getParameter('url', ExtendedCouchDbClient::DEFAULT_URL);
         try
         {
-            $this->connection = new ExtendedCouchDbClient($couchUri, $this->getParameter('database', NULL));
+            $this->connection = new ExtendedCouchDbClient(
+                $couchUri,
+                $this->getParameter('database', NULL),
+                $this->getParameter('options', NULL));
         }
         catch (CouchdbClientException $e)
         {

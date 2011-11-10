@@ -6,6 +6,7 @@
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @author          Tom Anheyer <tanheyer@gmail.com>
  * @package         Database
  */
 class ExtendedCouchDbClient
@@ -144,6 +145,12 @@ class ExtendedCouchDbClient
      */
     private $lastResponse;
 
+    /**
+     *
+     * @var array of curl options to feed curl_setopt_array
+     */
+    protected $curlOptions;
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
 
 
@@ -152,9 +159,11 @@ class ExtendedCouchDbClient
     /**
      * Create a new ExtendedCouchDbClient instance passing in the couchdb base uri.
      *
-     * @param       string $uri
+     * @param       string $uri URL to couchdb server
+     * @param       string $database default database name to use
+     * @param       array $options optional options for curl
      */
-    public function __construct($uri, $database = NULL)
+    public function __construct($uri, $database = NULL, array $options = NULL)
     {
         if ('/' != substr($uri, -1, 1))
         {
@@ -162,7 +171,38 @@ class ExtendedCouchDbClient
         }
         $this->baseUri = $uri;
         $this->defaultDatabase = $database;
-        $this->cookieFile = tempnam(AgaviConfig::get('core.cache_dir'), get_class($this).'_');
+
+        $headers = array(
+            'Content-Type: application/json; charset=utf-8',
+            'Accept: application/json',
+            'Connection: keep-alive',
+            'Expect:'
+        );
+
+        $this->curlOptions = array(
+            CURLOPT_VERBOSE => 0,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_HEADER => 0,
+            CURLOPT_FORBID_REUSE => 0,
+            CURLOPT_FRESH_CONNECT => 0,
+            CURLOPT_FOLLOWLOCATION => 0,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_ENCODING => 'gzip,deflate',
+            CURLOPT_PROXY => '',
+            CURLOPT_FAILONERROR => 0,
+            CURLOPT_HTTPHEADER => $headers,
+        );
+
+        if (is_array($options))
+        {
+            foreach ($options as $key => $val)
+            {
+                if (defined($key))
+                {
+                    $this->curlOptions[constant($key)] = $val;
+                }
+            }
+        }
     }
 
 
@@ -175,8 +215,12 @@ class ExtendedCouchDbClient
         {
             curl_close($this->curlHandle);
             $this->curlHandle = NULL;
+        }
+        if ($this->cookieFile)
+        {
             unlink($this->cookieFile);
         }
+
     }
 
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
@@ -208,6 +252,12 @@ class ExtendedCouchDbClient
     public function login($user, $password)
     {
         $uri = $this->baseUri.'_session';
+
+        // cookie management only necessary for session auth
+        $this->cookieFile = tempnam(AgaviConfig::get('core.cache_dir'), get_class($this).'_');
+        $this->curlOptions[CURLOPT_COOKIEFILE] = $this->cookieFile;
+        $this->curlOptions[CURLOPT_COOKIEJAR] = $this->cookieFile;
+
         $curlHandle = $this->getCurlHandle($uri);
         curl_setopt($curlHandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         curl_setopt($curlHandle, CURLOPT_USERPWD, $user.':'.$password);
@@ -602,24 +652,12 @@ class ExtendedCouchDbClient
      */
     protected function getCurlHandle($uri, $method = self::METHOD_GET)
     {
-        $curlHandle = $this->curlHandle = ProjectCurl::create();
-        curl_setopt($curlHandle, CURLOPT_URL, $uri);
-        curl_setopt($curlHandle, CURLOPT_PROXY, '');
-        curl_setopt($curlHandle, CURLOPT_FAILONERROR, 0);
-        curl_setopt($curlHandle, CURLOPT_COOKIEFILE, $this->cookieFile);
-        curl_setopt($curlHandle, CURLOPT_COOKIEJAR, $this->cookieFile);
-
-        $headers = array(
-            'Content-Type: application/json; charset=utf-8',
-            'Accept: application/json',
-            'Connection: keep-alive',
-            'Expect:'
-        );
-        curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $headers);
-
         $this->lastUri = $uri;
         $this->lastMethod = $method;
         $this->lastResponse = NULL;
+
+        $curlHandle = curl_init($uri);
+        curl_setopt_array($curlHandle, $this->curlOptions);
 
         switch ($method)
         {
