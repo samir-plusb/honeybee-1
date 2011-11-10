@@ -20,7 +20,7 @@ class EnvironmentConfigurator
 
     const CFG_DB_PORT = 'database.port';
 
-    const CFG_DB_PORT = 'base_href';
+    const BASE_HREF = 'base_href';
 
     /**
      * Holds the char that we consider as a positve response from a user on the cli.
