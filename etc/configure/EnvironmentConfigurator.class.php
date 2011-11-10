@@ -20,6 +20,8 @@ class EnvironmentConfigurator
 
     const CFG_DB_PORT = 'database.port';
 
+    const CFG_DB_PORT = 'base_href';
+
     /**
      * Holds the char that we consider as a positve response from a user on the cli.
      */
@@ -191,8 +193,8 @@ class EnvironmentConfigurator
  * may break or badly influence the operability of the apps relying on the contents of this file.
  *
  * !DO NOT EDIT!
- * Unless there is someone standing behind you with a loaded shotgun ready to create a mess and still you have to know what or doing or
- * !DO NOT EDIT!
+ * Unless there is someone standing behind you with a loaded shotgun ready to create a mess and still you have to know what your doing or...
+ * -> !DO NOT EDIT!
  */
 
 return %s;
@@ -208,7 +210,7 @@ export PHP_COMMAND=%s
 # Project base path
 cw_path="`dirname $0`/.."
 cw_path="`readlink -f \${cw_path}`"
-                       
+
 # Nodejs libraries:
 export PATH="\${cw_path}/libs/node_modules/vows/bin:\$PATH"
 # - less-compile devtool
