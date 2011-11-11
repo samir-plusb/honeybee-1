@@ -325,14 +325,14 @@ vows.describe('EditView').addBatch({
                     browser.fire('click', item, function() {that.callback(browser, range);});
                 });
             },
-            'the textarea selection should be searched for date information and the resutl formatted and set as date[till].': function(browser, range)
+            'the textarea selection should be searched for date information and the result formatted and set as date[till].': function(browser, range)
             {
                 assert.equal(
                     browser.querySelector('input[name="date[till]"]').value,
                     '12.01.2011'
                 );
             }
-        }/*,
+        },
         '"list" button is clicked': {
             topic: function(err, browser)
             {
@@ -340,16 +340,15 @@ vows.describe('EditView').addBatch({
                 loadPage(test_url, function(err, browser, status)
                 {
                     var content_items_container = browser.querySelector('.slide-panel');
-                    util.log(util.inspect(content_items_container.style));
                     browser.fire("click", browser.querySelector('.action-list'), that.callback);
                 });
             },
             'the content-item list should slide into sight.': function(browser)
             {
                 var content_items_container = browser.querySelector('.slide-panel');
-                util.log(util.inspect(content_items_container.style));
+                //util.log(util.inspect(content_items_container.style));
             }
-        }*/
+        }
     }
 }).export(module);
 

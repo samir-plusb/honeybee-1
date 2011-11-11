@@ -1,21 +1,37 @@
 /**
  * @class
- * @augments midas.items.edit.ContentItemsList
- * @description The ContentItemsList ...
+ * @augments midas.core.BaseObject
+ * @description The ContentItemsList provides rendering of and access to a collection of content items.
  * @author <a href="mailto:tschmittrink@gmail.com">Thorsten Schmit-Rink</a>
  * @version $Id:$
  */
 midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
 /** @lends midas.items.edit.ContentItemsList.prototype */
 {
+    /**
+     * The prefix to use when logging messages from this class.
+     * @type String
+     */
     log_prefix: 'ContentItemsList',
 
+    /**
+     * The html list element that is used to render the content items collection.
+     * @type HTMLUlElement
+     */
     element: null,
-
-    content_item_list: null,
-
+    
+    /**
+     * An object holding the content item collection inside an { [id]: [item] } structure,
+     * thereby holding an additional key 'length' that holds the total number of content items.
+     * @type {Object}
+     */
     content_items: null,
-
+    
+    /**
+     * @description 'Magic' method called during our prototype's constructor execution.
+     * @param {HTMLElement} element The HTMLUlElement that serves as the ui base for our list.
+     * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
+     */
     init: function(element, options)
     {
         this.parent(options);
@@ -41,9 +57,13 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
                 this.add(this.options.items[i]);
             }
         }
-        this.updateGui();
+        this.updateStatusDisplay();
     },
-
+    
+    /**
+     * @description Add a content item to the list.
+     * @param {Objet} item The content item to add.
+     */
     add: function(item)
     {
         if (! item.cid)
@@ -73,10 +93,14 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
             };
             this.content_items.length++;
             this.element.append(rendered_item);
-            this.updateGui();
+            this.updateStatusDisplay();
         }
     },
-
+    
+    /**
+     * @description Remove a content item from the list.
+     * @param {Number} cid The cid of the content item to remove.
+     */
     remove: function(cid)
     {
         if (this.content_items[cid])
@@ -84,16 +108,23 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
             this.content_items.length--;
             this.content_items[cid].element.remove();
             delete this.content_items[cid];
-            this.updateGui();
+            this.updateStatusDisplay();
         }
     },
-
+    
+    /**
+     * @description Get a content item by cid.
+     * @param {Number} cid The cid of the content item to get.
+     */
     getItem: function(cid)
     {
         return this.content_items[cid] || null;
     },
-
-    updateGui: function()
+    
+    /**
+     * @description Update the status display.
+     */
+    updateStatusDisplay: function()
     {
         if (this.options.state_display)
         {

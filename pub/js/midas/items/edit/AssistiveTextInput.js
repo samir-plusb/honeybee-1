@@ -1,6 +1,6 @@
 /**
  * @class
- * @augments midas.items.edit.AssistiveTextInput
+ * @augments midas.items.edit.Input
  * @description The AssistiveTextInput ...
  * @author <a href="mailto:tschmittrink@gmail.com">Thorsten Schmit-Rink</a>
  * @version $Id:$
@@ -8,14 +8,26 @@
 midas.items.edit.AssistiveTextInput = midas.items.edit.Input.extend(
 /** @lends midas.items.edit.AssistiveTextInput.prototype */
 {
-    log_prefix: '',
-
+    /**
+     * The prefix to use when logging messages from this class.
+     * @type String
+     */
+    log_prefix: 'AssistiveTextInput',
+    
+    /**
+     * @description 'Magic' method called during our prototype's constructor execution.
+     * @param {HTMLElement} element The HTMLForm input, select...
+     * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
+     */
     init: function(element, options)
     {
         this.parent(element, options);
         this.createContextMenu();
     },
-
+    
+    /**
+     * @description Creates a contextmenu that is bound to the input's element. 
+     */
     createContextMenu: function()
     {
         var items = this.getMenuItems();
@@ -44,7 +56,12 @@ midas.items.edit.AssistiveTextInput = midas.items.edit.Input.extend(
             { disable_native_context_menu: false, leftClick: false }
         );
     },
-
+    
+    /**
+     * @description Returns an object defining the menu items to use
+     * inside the context menu that is created for the input.
+     * @return {Object}
+     */
     getMenuItems: function()
     {
         return [

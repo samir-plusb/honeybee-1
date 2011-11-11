@@ -41,6 +41,7 @@ midas.core.BaseObject = midas.core.Module.create(
      * @description Add a listener for the given event.
      * @param {String} event The name of the event to listen for.
      * @param {Function} callback A callback function that is invoked when the event is fired.
+     * @returns {midas.core.BaseObejct} Returns the same instance for fluent api support.
      */
     on: function(event, callback)
     {
@@ -48,8 +49,8 @@ midas.core.BaseObject = midas.core.Module.create(
         {
             this.listeners[event] = [];
         }
-
         this.listeners[event].push(callback);
+        return this;
     },
 
     /**
@@ -57,23 +58,25 @@ midas.core.BaseObject = midas.core.Module.create(
      * thereby passing in the given state.
      * @param {String} event The name of the event to listen for.
      * @param {Object} state Holds the state that goes along with the event.
+     * @returns {midas.core.BaseObejct} Returns the same instance for fluent api support.
      */
     fire: function(event, state)
     {
         if (! this.listeners[event])
         {
-            return;
+            return this;
         }
-
         for (var i = 0; i < this.listeners[event].length; i++)
         {
             this.listeners[event][i].apply(null, state);
         }
+        return this;
     },
 
     /**
      * @description Logs a debug message to our debug logging destination.
      * @param {String} msg The message to log.
+     * @returns {midas.core.BaseObejct} Returns the same instance for fluent api support.
      */
     logDebug: function(msg)
     {
@@ -82,13 +85,14 @@ midas.core.BaseObject = midas.core.Module.create(
         {
             args.push(arguments[i]);
         }
-
         this.log(msg, 'debug', args);
+        return this;
     },
 
     /**
      * @description Logs a info message to our info logging destination.
      * @param {String} msg The message to log.
+     * @returns {midas.core.BaseObejct} Returns the same instance for fluent api support.
      */
     logInfo: function(msg)
     {
@@ -97,13 +101,14 @@ midas.core.BaseObject = midas.core.Module.create(
         {
             args.push(arguments[i]);
         }
-
         this.log(msg, 'info', args);
+        return this;
     },
 
     /**
      * @description Logs a error message to our error logging destination.
      * @param {String} msg The message to log.
+     * @returns {midas.core.BaseObejct} Returns the same instance for fluent api support.
      */
     logWarning: function(msg)
     {
@@ -112,8 +117,8 @@ midas.core.BaseObject = midas.core.Module.create(
         {
             args.push(arguments[i]);
         }
-
         this.log(msg, 'warn', args);
+        return this;
     },
 
     /**

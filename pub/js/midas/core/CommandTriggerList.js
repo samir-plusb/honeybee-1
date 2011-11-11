@@ -136,24 +136,30 @@ midas.core.CommandTriggerList = midas.core.BaseObject.extend(
 
         return name_string.substr(1);
     },
-
+    
+    /**
+     * @description Enable the ui trigger element for the given command name.
+     * @param {String} command The name of the command trigger to enable.
+     */
     enable: function(command)
     {
         if (! this.command_items[command])
         {
             throw "There is no command item that maps to the given command name: " + command;
         }
-
         this.command_items[command].item.parent('li').removeClass('inactive');
     },
-
+    
+    /**
+     * @description Disable the ui trigger element for the given command name.
+     * @param {String} command The name of the command trigger to disable.
+     */
     disable: function(command)
     {
         if (! this.command_items[command])
         {
             throw "There is no command item that maps to the given command name: " + command;
         }
-
         this.command_items[command].item.parent('li').addClass('inactive');
     }
 });

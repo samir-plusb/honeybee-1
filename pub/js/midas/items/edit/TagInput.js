@@ -13,18 +13,34 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
      * @type String
      */
     log_prefix: 'TagInput',
-
+    
+    /**
+     * Holds a list of tags that are currently selected.
+     * @type Array
+     */
     selected_tags: null,
-
+    
+    /**
+     * The html list element holding the tag list items.
+     * @type HTMLUlElement
+     */
     tag_container: null,
-
+    
+    /**
+     * @description 'Magic' method called during our prototype's constructor execution.
+     * @param {HTMLElement} element The input element to enhance.
+     * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
+     */
     init: function(element, options)
     {
         this.parent(element, options);
         this.tag_container = this.element.parents('ul');
         this.createTagHandler(this.options.assigned_tags);
     },
-
+    
+    /**
+     * @description Creates an instance of the jQuery tagHandler plugin we are using.
+     */
     createTagHandler: function(assigned_tags)
     {
         var new_container = $(document.createElement('ul'));
@@ -33,7 +49,7 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
         this.selected_tags = $.isArray(assigned_tags) ? assigned_tags : [];
 
         this.tag_container.tagHandler({
-            availableTags: this.getTags(),
+            availableTags: this.getAvailableTags(),
             allowAdd: false,
             autocomplete: true,
             assignedTags: this.selected_tags,
@@ -61,12 +77,26 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
             }.bind(this)
         });
     },
-
-    getTags: function()
+    
+    /**
+     * @description Returns an array of tags that are allowd for input.
+     * @returns {Array}
+     */
+    getAvailableTags: function()
     {
         return this.options.tags || [];
     },
-
+    
+    // -----------
+    // --------------- midas.items.edit.Input overrides
+    // -----------
+    
+    /**
+     * @description Getter and setter for our input's value.
+     * When a parameter is supplied the method will behave as getter else as setter.
+     * @param {Array} value [Optional] When given the method will act as a setter.
+     * @returns {Array} When no parameter is passed the method will return the currently selected tags.
+     */
     val: function()
     {
         if (1 === arguments.length)
@@ -80,7 +110,11 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
 
         return this.selected_tags;
     },
-
+    
+    /**
+     * @description Marks the input to be in a given state.
+     * @param {String} state The state we are marking.
+     */
     markAs: function(state)
     {
         var css_class = this.options.ui_states[state]
@@ -88,7 +122,11 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
 
         this.tag_container.addClass(css_class);
     },
-
+    
+    /**
+     * @description Unmarks the input from being in the given state.
+     * @param {String} state The state we are unmarking.
+     */
     unmarkAs: function(state)
     {
         var css_class = this.options.ui_states[state]
@@ -96,7 +134,11 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
 
         this.tag_container.removeClass(css_class);
     },
-
+    
+    /**
+     * @description Tells if the input is currently marked for the given state.
+     * @param {String} state The state to check for.
+     */
     isMarkedAs: function(state)
     {
         var css_class = this.options.ui_states[state]
@@ -104,7 +146,10 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
 
         return this.tag_container.hasClass(css_class);
     },
-
+    
+    /**
+     * @description Reset the input's value and recover from 'invalid' state.
+     */
     reset: function()
     {
         this.val([]);

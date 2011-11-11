@@ -1,21 +1,35 @@
+/**
+ * @class
+ * @description The Module object helps to maintain code based on the module pattern thereby supporting simple inheritance.
+ * @author <a href="mailto:tschmittrink@gmail.com">Thorsten Schmit-Rink</a>
+ * @version $Id:$
+ */
 midas.core.Module = (function()
 {
-    // Used to verify that our module_def constructor
-    // is being called from inside this scope.
+    /**
+     * Used to verify that our module_def constructor
+     * is being called from inside this scope.
+     * @ignore
+     */
     var SECRET_TOKEN = function() {};
-
     /**
      * Return if the passed argument is a function or not.
+     * @ignore
      */
     var is_func = function(fn)
     {
         return (typeof fn == "function");
     };
-
-    var module = function() {};
-
     /**
-     *
+     * Create an empty object as the first ancestor of the inheritance tree.
+     * @ignore
+     */
+    var module = function() {};
+    /**
+     * @name create
+     * @memberOf midas.core.Module
+     * @description Creates a new module.
+     * @param {Object} The implmentation of the module to create.
      */
     module.create = function(module_def)
     {
@@ -23,8 +37,7 @@ midas.core.Module = (function()
          * The constructor called upon new instances of our class.
          * As we do not wnat to invoke the '_initialize' (sugar) method,
          * when running inside an extend call.
-         *
-         * @param init_token
+         * @ignore
          */
         var new_module = function(init_token)
         {
@@ -32,7 +45,6 @@ midas.core.Module = (function()
             {
                 return;
             }
-
             if (is_func(this.init))
             {
                 // When invoked without a matching init_token,
@@ -40,11 +52,9 @@ midas.core.Module = (function()
                 this.init.apply(this, arguments);
             }
         };
-
         // Create a new instance of our base definition
         // and pass in our 'init_token' to prevent funky stuff from happening.
         new_module.prototype = new this(SECRET_TOKEN);
-
         // Then copy our new attributes to our fresh class instance.
         for (attribute_name in module_def) (function(attribute_value, parent_attribute_value)
         {
@@ -63,13 +73,10 @@ midas.core.Module = (function()
                 };
             }
         })(module_def[attribute_name], new_module.prototype[attribute_name]);
-
         // Then setup our constructor and add the extend method for further inheritance.
         new_module.prototype.constructor = new_module;
         new_module.extend = this.extend || this.create;
-
         return new_module;
     };
-
     return module;
 })();

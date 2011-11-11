@@ -25,9 +25,16 @@
 
     <target name="phpdoc" description="Generate API documentation using PHPDocumentor." depends="cc">
         <echo message="Generating the API documentation using PHPDocumentor."/>
-        <run command="/bin/rm -rf etc/integration/build/api" dir="${project.directory}"/>
-        <run command="/bin/mkdir -p etc/integration/build/api" dir="${project.directory}"/>
-        <run command="libs/PhpDocumentor/phpdoc --directory app/ --target ${project.directory}/etc/integration/build/api -i /.svn/,/cache/ -ti 'Midas API' -dn 'Midas' -o HTML:frames:DOM/earthli" dir="${project.directory}" />
+        <run command="/bin/rm -rf etc/integration/build/api/serverside" dir="${project.directory}"/>
+        <run command="/bin/mkdir -p etc/integration/build/api/serverside" dir="${project.directory}"/>
+        <run command="libs/PhpDocumentor/phpdoc --directory app/ --target ${project.directory}/etc/integration/build/api/serverside -i /.svn/,/cache/ -ti 'Midas API' -dn 'Midas' -o HTML:frames:DOM/earthli" dir="${project.directory}" />
+    </target>
+    
+    <target name="jsdoc" description="Generate Clientside API documentation using jsdoc-toolkit." depends="cc">
+        <echo message="Generating the clientside API documentation."/>
+        <run command="/bin/rm -rf etc/integration/build/api/clientside" dir="${project.directory}"/>
+        <run command="/bin/mkdir -p etc/integration/build/api/clientside" dir="${project.directory}"/>
+        <run command="bin/jsdoc.sh pub/js/midas/* pub/js/midas/items/edit/*" dir="${project.directory}"/>
     </target>
 
     <target name="compile-css" description="Compile our less code into real css.">

@@ -1,21 +1,42 @@
 /**
  * @class
- * @augments midas.items.edit.Input
- * @description <p>The Input module...</p>
+ * @augments midas.core.Behaviour
+ * @description <p>The Input module provides behaviour, such as validation, for HTMLForm input element.</p>
  * @author <a href="mailto:tschmittrink@gmail.com">Thorsten Schmit-Rink</a>
  * @version $Id:$
  */
 midas.items.edit.Input = midas.core.Behaviour.extend(
 /** @lends midas.items.edit.Input.prototype */
 {
-    prefix: 'jsb-input',
-
+    /**
+     * The prefix to use when logging messages from this class.
+     * @type String
+     */
     log_prefix: 'Input',
-
+    
+    /**
+     * The prefix to use when resolving our type-id from our element's class attribute.
+     * @type String
+     */
+    prefix: 'jsb-input',
+    
+    /**
+     * The prefix to use when resolving our type-id from our element's class attribute.
+     * @type String
+     */
     name: null,
-
+    
+    /**
+     * The previous value of the element.
+     * @type String
+     */
     prev_val: null,
-
+    
+    /**
+     * @description 'Magic' method called during our prototype's constructor execution.
+     * @param {HTMLElement} element The HTMLForm input, select...
+     * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
+     */
     init: function(element, options)
     {
         this.parent(element, options);
@@ -42,12 +63,22 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
             this.prev_val = this.element.val();
         }.bind(this));
     },
-
+    
+    /**
+     * @description Return the name of the input we are reflecting.
+     * @returns {String}
+     */
     getName: function()
     {
         return this.name;
     },
-
+    
+    /**
+     * @description Getter and setter for our input's value.
+     * When a parameter is supplied the method will behave as getter else as setter.
+     * @param {String} value [Optional] When given the method will act as a setter.
+     * @returns {String} When no parameter is passed the method will return the input's current value.
+     */
     val: function()
     {
         var ret = this.element.val.apply(
@@ -62,7 +93,11 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
 
         return ret;
     },
-
+    
+    /**
+     * @description Revalidates our input and removes the invalid marker if the input is valid.
+     * @return {Object} Same kind of validation result as returned from {midas.items.edit.Input.validate}.
+     */
     revalidate: function()
     {
         var result = null;
@@ -79,7 +114,16 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
 
         return result;
     },
-
+    
+    /**
+     * @description Validates the given input.
+     * @returns {Object} An object reflecting the validation result.
+     * The structure looks like this: {
+           "success": true, // Tells whether the input is valid or not.
+           "messages": {} // Holds an object with error messages, 
+                          // with error-type as key and the related msg as value.
+       } 
+     */
     validate: function()
     {
         var result = {
@@ -119,7 +163,11 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         }
         return result;
     },
-
+    
+    /**
+     * @description Returns the current text selection of the input.
+     * @returns {String} The selected text.
+     */
     getSelection: function()
     {
         var text = this.val().substring(
@@ -129,7 +177,11 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
 
         return text.replace(/[\<\>&]/g, ' ');
     },
-
+    
+    /**
+     * @description Marks the input to be in a given state.
+     * @param {String} state The state we are marking.
+     */
     markAs: function(state)
     {
         var css_class = this.options.ui_states[state]
@@ -137,7 +189,11 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
 
         this.element.addClass(css_class);
     },
-
+    
+    /**
+     * @description Unmarks the input from being in the given state.
+     * @param {String} state The state we are unmarking.
+     */
     unmarkAs: function(state)
     {
         var css_class = this.options.ui_states[state]
@@ -145,7 +201,11 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
 
         this.element.removeClass(css_class);
     },
-
+    
+    /**
+     * @description Tells if the input is currently marked for the given state.
+     * @param {String} state The state to check for.
+     */
     isMarkedAs: function(state)
     {
         var css_class = this.options.ui_states[state]
@@ -153,7 +213,10 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
 
         return this.element.hasClass(css_class);
     },
-
+    
+    /**
+     * @description Reset the input's value and recover from 'invalid' state.
+     */
     reset: function()
     {
         this.element.val('')

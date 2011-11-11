@@ -22,7 +22,10 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
     {
         this.parent(options);
     },
-
+    
+    /**
+     * @description Return an object describing the filters we provide for capturing intents.
+     */
     getIntentFilters: function()
     {
         return {

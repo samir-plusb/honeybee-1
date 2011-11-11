@@ -13,8 +13,8 @@ else
 fi
 
 JSDOC_DIR="${BASEDIR}/dev/jsdoc-toolkit"
+OUT_DIR="${BASEDIR}/etc/integration/build/api/clientside"
 TPL_DIR="${JSDOC_DIR}/templates/codeview"
 JSSRC_DIR="${BASEDIR}/pub/js/midas"
-JSDOC_CMD="java -jar ${JSDOC_DIR}/jsrun.jar ${JSDOC_DIR}/app/run.js -a -t=${TPL_DIR} ${@}"
-echo "Executing: ${JSDOC_CMD}"
+JSDOC_CMD="java -jar ${JSDOC_DIR}/jsrun.jar ${JSDOC_DIR}/app/run.js -a -d=${OUT_DIR} -t=${TPL_DIR} ${@}"
 $JSDOC_CMD
