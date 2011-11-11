@@ -159,6 +159,7 @@
             <antcall target="phpcs"/>
             <antcall target="phpdoc"/>
             <antcall target="phploc"/>
+            <antcall target="jsdoc"/>
         </parallel>
     </target>
 
