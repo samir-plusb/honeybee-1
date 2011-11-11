@@ -66,6 +66,12 @@
             <arg value="phpdoc" />
         </exec>
     </target>
+    
+    <target name="jsdoc" description="Generate clientside API documentation using jsdoc-toolkit.">
+        <exec executable="${project_bin}" failonerror="true">
+            <arg value="jsdoc" />
+        </exec>
+    </target>
 
     <!--
         These are tasks that require certain libraries
