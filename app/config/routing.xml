@@ -52,6 +52,7 @@
             <route pattern="^/items" module="Items">
                 <route pattern="^/list" action="List" />
                 <route pattern="^/edit" action="Edit" />
+                <route pattern="^/extract_date" action="Api_ExtractDate" />
             </route>
 
             <!-- The last route in case the input URL is just "/". -->
