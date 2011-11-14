@@ -20,8 +20,6 @@ class EnvironmentConfigurator
 
     const CFG_DB_PORT = 'database.port';
 
-    const BASE_HREF = 'base_href';
-
     /**
      * Holds the char that we consider as a positve response from a user on the cli.
      */
@@ -47,12 +45,13 @@ class EnvironmentConfigurator
     {
         print("- Section: Common Settings" . PHP_EOL);
         $php_path = $this->promptPhpPath();
-
+        $base_href = $this->promptBaseHref();
         while (!($environment = $this->promptEnvironment()));
 
         $config = array(
             ProjectEnvironmentConfig::CFG_PHP         => $php_path,
             ProjectEnvironmentConfig::CFG_ENVIRONMENT => $environment,
+            ProjectEnvironmentConfig::CFG_BASE_HREF   => $base_href
         );
 
         $config_filepath = $this->getConfigFilePath();
@@ -79,6 +78,18 @@ class EnvironmentConfigurator
         }
 
         return $php_command;
+    }
+    
+    protected function promptBaseHref()
+    {
+        $base_href = null;
+
+        while (!trim($base_href))
+        {
+            $base_href = $this->readline('Enter the project\'s base url');
+        }
+
+        return trim($base_href);
     }
 
     protected function promptEnvironment()
@@ -172,7 +183,8 @@ class EnvironmentConfigurator
         {
             $config_code = sprintf(
                 $this->getLocalShConfigCode(),
-                $config[ProjectEnvironmentConfig::CFG_PHP]
+                $config[ProjectEnvironmentConfig::CFG_PHP],
+                $config[ProjectEnvironmentConfig::CFG_BASE_HREF]
             );
 
             if (false === file_put_contents($sh_config_filepath, $config_code))
@@ -206,6 +218,7 @@ PHP_CODE;
         return <<<SH_CODE
 #!/bin/bash
 export PHP_COMMAND=%s
+export BASE_HREF="%s"
 
 # Project base path
 cw_path="`dirname $0`/.."

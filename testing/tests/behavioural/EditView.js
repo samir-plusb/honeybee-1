@@ -7,7 +7,7 @@ var assert = require("assert");
 var util = require("util");
 
 // The url we are testing.
-var test_url = "http://localhost/contentworker/index.php/items/edit";
+var test_url = process.env.BASE_HREF + "index.php/items/edit";
 
 // Test helper for loading page markup.
 var loadPage = function(url, callback, debug)

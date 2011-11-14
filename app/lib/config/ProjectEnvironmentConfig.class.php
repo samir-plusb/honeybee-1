@@ -47,6 +47,11 @@ class ProjectEnvironmentConfig
     const CFG_DB_PORT = 'port';
     
     /**
+     * The name of our base-href setting.
+     */
+    const CFG_BASE_HREF = 'base_href';
+    
+    /**
      * The name (wihtout prefix) of the local config file that holds our env-settings.
      */
     const CONFIG_FILE_NAME = 'environment.php';
@@ -208,6 +213,16 @@ class ProjectEnvironmentConfig
         $db_settings = self::getDatabaseSettings();
 
         return $db_settings[self::CFG_DB_HOST];
+    }
+    
+    /**
+     * Return our current env's base url.
+     * 
+     * @return      string 
+     */
+    public static function getBaseHref()
+    {
+        return self::$instance->config[self::CFG_BASE_HREF];
     }
     
     /**
