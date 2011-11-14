@@ -32,7 +32,7 @@
             <autoload name="ProjectUserMayDoNothingAssertion">%core.app_dir%/lib/user/assertions/ProjectUserMayDoNothingAssertion.class.php</autoload>
 
 
-            <xi:include href="%core.app_dir%/models/Database/autoload.xml"
+            <xi:include href="%core.app_dir%/models/CouchdbClient/autoload.xml"
                 xpointer="xmlns(a=http://agavi.org/agavi/config/parts/autoload/1.1) xpointer(//a:autoload)">
             </xi:include>
 
