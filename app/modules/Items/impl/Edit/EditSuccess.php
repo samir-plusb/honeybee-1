@@ -189,7 +189,7 @@
             </div>
             <!-- Template for rendering form validation error hints. -->
             <script id="input-error-tpl" type="text/html">
-                <div class="error-hint ui-corner-all">
+                <div class="error-hint ui-corner-all bubble-content">
                     <div class="error-hint-body">
                         <ul>
                             {{#messages}}
@@ -199,6 +199,7 @@
                             </li>
                             {{/messages}}
                         </ul>
+                        <div class="bubble-hook"></div>
                     </div>
                 </div>
             </script>
