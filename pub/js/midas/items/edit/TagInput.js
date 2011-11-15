@@ -115,10 +115,19 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
      * @description Marks the input to be in a given state.
      * @param {String} state The state we are marking.
      */
-    markAs: function(state)
+    markAs: function(state, data)
     {
+        if (this.isMarkedAs(state))
+        {
+            return;
+        }
         var css_class = this.options.ui_states[state]
          || 'input-' + state;
+     
+        if ('invalid' == state)
+        {
+            this.displayErrorHint(data.messages);
+        }
 
         this.tag_container.addClass(css_class);
     },
@@ -131,7 +140,12 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
     {
         var css_class = this.options.ui_states[state]
          || 'input-' + state;
-
+        
+        if ('invalid' === state && this.error_hint)
+        {
+            this.error_hint.remove();
+        }
+        
         this.tag_container.removeClass(css_class);
     },
     
@@ -154,5 +168,30 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
     {
         this.val([]);
         this.unmarkAs('invalid');
+    },
+    
+    displayErrorHint: function(messages)
+    {
+        var hint_element = this.renderErrorHint(messages);
+        var el_pos = this.tag_container.parent().offset();
+        var rel_pos = $('.document-editing').offset();
+        
+        var pos = {
+            left: (el_pos.left - rel_pos.left),
+            display: 'none'
+        };
+        hint_element.css(pos);
+        $('.document-editing').append(hint_element);
+        hint_element.css('top', el_pos.top - rel_pos.top - hint_element.height() - 4);
+        
+        this.tag_container.parent().mouseenter(function()
+        {
+            hint_element.css('display', 'block');
+        });
+        this.tag_container.parent().mouseleave(function()
+        {
+            hint_element.css('display', 'none');
+        });
+        this.error_hint = hint_element;
     }
 });

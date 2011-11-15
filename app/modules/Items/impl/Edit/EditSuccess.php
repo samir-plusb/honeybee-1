@@ -16,12 +16,12 @@
         <h2>Document editing form</h2>
         <menu id="content-item-menu" class="action-button-list">
             <li>
-                <a href="#list">Liste</a>
+                <a class="action-list" href="#list">Liste</a>
                 <span class="info-small items-loading">&nbsp;&nbsp;</span>
             </li>
-            <li><a href="#store">Speichern</a></li>
-            <li><a href="#new">Neues Item</a></li>
-            <li><a href="#delete">L&ouml;schen</a></li>
+            <li><a class="action-store" href="#store">Speichern</a></li>
+            <li><a class="action-new" href="#new">Neues Item</a></li>
+            <li><a class="action-delete" href="#delete">L&ouml;schen</a></li>
         </menu>
 
         <section class="content-items">
@@ -29,6 +29,7 @@
                 <h3 class="legend">Items</h3>
                 <ul></ul>
             </div>
+            <!-- Template for rendering content-item list items -->
             <script id="content-item-tpl" type="text/html">
                 <li class="content-item">
                     <article>
@@ -107,7 +108,8 @@
                 </div>
                 <div class="input-full">
                     <label for="url">URL (Verknüpfte Internetadresse)</label>
-                    <input name="url" type="text" />
+                    <input class="jsb-input-url" name="url" type="text" />
+                    <input type="hidden" value='{ "mandatory": false }' class="jsb-input-url-options" />
                 </div>
             </div> <!-- </fieldset> as soon as the firefox render bug is fixed -->
 
@@ -185,12 +187,26 @@
                     </ul>
                 </section>
             </div>
+            <!-- Template for rendering form validation error hints. -->
+            <script id="input-error-tpl" type="text/html">
+                <div class="error-hint ui-corner-all">
+                    <div class="error-hint-body">
+                        <ul>
+                            {{#messages}}
+                            <li>
+                                <h4>{{ topic }}:</h4>
+                                <p>{{ message }}</p>
+                            </li>
+                            {{/messages}}
+                        </ul>
+                    </div>
+                </div>
+            </script>
         </form>
+        <!-- Template for rendering confirm and warn dialogs. -->
         <script id="dialog-tpl" type="text/html">
             <div title="{{ title }}">
-                <p>
-                    {{ message }}
-                </p>
+                <p>{{ message }}</p>
             </div>
         </script>
     </section>
@@ -232,6 +248,7 @@ libero t-incidunt luctus id:
 http://www.google.de
 quis nulla. Praesent molestie porttitor ultricies.
 Etiam viverra tempor magna, eget rutru
+12 jan 1987
 m erat volutpat non. Aliquam vitae eros urna. Etiam viverra porttitor urna, in blandit purus tincidunt non.
 Donec a adipiscing magna. Etiam consectetur blandit diam, et pretium tellus congue ut.</textarea>
                 </div>

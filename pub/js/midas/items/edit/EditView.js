@@ -79,7 +79,13 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     init: function(element, options)
     {
         this.parent(element, options);
-        this.edit_service = new midas.items.edit.EditService();
+        this.edit_service = new midas.items.edit.EditService({
+            api: {
+                extract_date: 'http://localhost/contentworker/index.php/items/api/extract_date',
+                validate_url: 'http://localhost/contentworker/index.php/items/api/validate_url',
+                extract_location: 'http://localhost/contentworker/index.php/items/api/api/extract_location'
+            }
+        });
     },
 
     /**
@@ -239,6 +245,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      */
     getContextMenuBindings: function()
     {
+        var that = this
         // Helper function for setting input values.
         var setInputValue = function(target_fieldname, append, src_field)
         {
@@ -253,14 +260,12 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         // Helper function for setting dates [from or till].
         var setDate = function(target_fieldname, src_field)
         {
-            var selection = src_field.getSelection();
-            var that = this;
-            // @todo Configure per option. Might wanna make the view a behaviour.
-            $.getJSON('http://localhost/contentworker/index.php/items/extract_date', {date_text: selection}, function(data)
+            this.edit_service.extractDate(src_field.getSelection(), function(date)
             {
-                that.editing_form.val(target_fieldname, data.date);
+                that.editing_form.val(target_fieldname, date);
             });
-        }
+        };
+        
         return {
             'set_title': setInputValue.bind(this, 'title', false),
             'append_title': setInputValue.bind(this, 'title', true),
@@ -274,35 +279,34 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 src_field.val(
                     src_field.val().replace(
                         selection,
-                        this.edit_service.removeHyphens(selection)
+                        that.edit_service.removeHyphens(selection)
                     )
                 );
-            }.bind(this),
+            },
             'remove_linefeeds': function(src_field)
             {
                 var selection = src_field.getSelection();
                 src_field.val(
                     src_field.val().replace(
                         selection,
-                        this.edit_service.removeLineFeeds(selection)
+                        that.edit_service.removeLineFeeds(selection)
                     )
                 );
-            }.bind(this),
+            },
             'set_url': function(src_field)
             {
-                var selection = src_field.getSelection();
-                var urls = this.edit_service.extractUrls(selection);
+                var urls = that.edit_service.extractUrls(
+                    src_field.getSelection()
+                );
                 if (0 < urls.length)
                 {
-                    var url = urls[0].trim();
-
-                    if (-1 === url.indexOf('http'))
-                    {
-                        url = 'http://' + url;
-                    }
-                    this.editing_form.val('url', url);
+                    that.editing_form.val('url', urls[0].trim());
                 }
-            }.bind(this)
+            },
+            'localize': function()
+            {
+                that.logDebug("on::contentMenu::localize::clicked");
+            }
         };
     },
 
@@ -409,7 +413,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             // and decide if and how we want to reflect the state changes in the gui.
             return true;
         }
-
+       
         return false;
     },
     

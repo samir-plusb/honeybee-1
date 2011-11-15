@@ -181,7 +181,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
             {
                 result.success = false;
                 result.messages[name] = validation_res.messages;
-                field.markAs('invalid');
+                field.markAs('invalid', { messages: validation_res.messages });
             }
             else
             {

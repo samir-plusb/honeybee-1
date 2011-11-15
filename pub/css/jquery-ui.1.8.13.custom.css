@@ -602,3 +602,46 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
     font-weight: normal;
     text-decoration: none;
 }
+
+.error-hint
+{
+    display: block;
+    z-index: 10;
+    position: absolute;
+    overflow: hidden;
+    background: url("../images/ui-bg_gloss-wave_45_e14f1c_500x100.png") repeat-x scroll 50% top #E14F1C;
+    border: 1px solid #CD0A0A;
+    color: #FFFFFF;
+}
+.error-hint-body
+{
+    min-width: 15em;
+}
+
+.error-hint-body li
+{
+    padding: 0.3em 0.5em;
+    border-bottom: 1px solid #ffffff;
+    height: auto;
+    width: auto;
+    overflow: hidden;
+}
+
+.error-hint-body ul li:last-child
+{
+    border-bottom: none;
+}
+
+.error-hint-body h4
+{
+    font-weight: bold;
+    font-size: 11pt;
+    float: left;
+    margin-right: 0.5em;
+}
+
+.error-hint-body p
+{
+    font-size: 10pt;
+    float: left;
+}

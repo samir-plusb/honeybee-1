@@ -70,7 +70,12 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
      */
     extractLocation: function(text, callback)
     {
-
+        /*
+        $.getJSON(this.options.api.extract_location, {geo_text: text}, function(data)
+        {
+            callback(data.date);
+        });
+        */
     },
     
     /**
@@ -80,7 +85,10 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
      */
     extractDate: function(text, callback)
     {
-
+        $.getJSON(this.options.api.extract_date, {date_text: text}, function(data)
+        {
+            callback(data.date);
+        });
     },
     
     /**
@@ -88,8 +96,11 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
      * @param {String} text
      * @param {Function} callback Invoked when the validation has completed.
      */
-    testUrl: function(url, callback)
+    validateUrl: function(url, callback)
     {
-
+        $.getJSON(this.options.api.validate_url, {url: url}, function(result)
+        {
+            callback(result);
+        });
     }
 })
