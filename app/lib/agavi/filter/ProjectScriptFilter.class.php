@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The ProjectScriptFilter is responseable for detecting required scripts and deploying them for your view.
+ *
+ * @version         $Id: ProjectScriptFilter.class.php 412 2011-10-20 11:06:22Z tschmitt $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Project
+ * @subpackage      Filter
+ */
 class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 {
     /**
@@ -153,7 +162,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $this->doc->formatOutput = TRUE;
         $this->doc->preserveWhitespace = TRUE;
 
-        if (!$this->doc->loadXML(html_entity_decode($content, null, self::ENCODING_UTF_8)))
+        if (!$this->doc->loadXML(html_entity_decode($content, NULL, self::ENCODING_UTF_8)))
         {
             // maybe just log the error and return silently?
             throw new Exception("Unable to parse content.");
@@ -191,6 +200,13 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         return implode('.', array($module, $action, $view));
     }
 
+    /**
+     * Load all scripts to be deployed for the given viewpath.
+     *
+     * @param string $viewpath
+     *
+     * @return array Where the first index is a js-script collection and the second a css collection.
+     */
     protected function loadScripts($viewpath)
     {
         $deployData = $this->loadDeployData($viewpath);
@@ -221,6 +237,13 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         return array($javascripts, $stylesheets);
     }
 
+    /**
+     * Load the deploy data (packages, css- and js-script-files) for the given viewpath.
+     *
+     * @param string $viewpath
+     *
+     * @return array
+     */
     protected function loadDeployData($viewpath)
     {
         $affectedPackages = array();
@@ -279,6 +302,13 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         return $deploy_data;
     }
 
+    /**
+     * Load the given package by name.
+     * The package is added to the passed list of $loadedPackages.
+     *
+     * @param string $packageName
+     * @param array $loadedPackages
+     */
     protected function loadPackage($packageName, array & $loadedPackages)
     {
         if (!in_array($packageName, $loadedPackages))
@@ -293,6 +323,13 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         }
     }
 
+    /**
+     * Takes a list of javascripts and packs them into one file.
+     *
+     * @param array $scripts
+     *
+     * @return array
+     */
     protected function packJavascripts(array $scripts)
     {
         $deployHash = $this->calculateDeployHash($scripts);
@@ -312,6 +349,13 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         return array($pubPath);
     }
 
+    /**
+     * Takes a list of stylesheets and packs them into one file.
+     *
+     * @param array $scripts
+     *
+     * @return array
+     */
     protected function packStylesheets(array $scripts)
     {
         $deployHash = $this->calculateDeployHash($scripts);
@@ -333,61 +377,68 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         return array($pubPath);
     }
 
+    /**
+     * Takes a list of stylesheets and adjusts all relative filesystem paths
+     * to still work when the affected style defionitions are moved to another fs-location.
+     *
+     * @param array $scripts
+     *
+     * @return array
+     */
     protected function adjustRelativeCssPaths(array $cssFiles)
     {
         $pubDir = $this->config->get(ProjectScriptFilterConfig::CFG_PUB_DIR);
         $cacheDir = realpath($this->config->getCssCacheDir()) . DIRECTORY_SEPARATOR;
         $cacheRelPath = substr(str_replace($pubDir, '', $cacheDir), 1);
-
         $stylesheets = array();
         foreach ($cssFiles as $cssFile)
         {
             $replaceCallback = function (array $matches) use ($pubDir, $cssFile, $cacheRelPath)
+            {
+                $filename = basename($cssFile);
+                $dirName = dirname($cssFile) . DIRECTORY_SEPARATOR;
+                $srcRelpath = str_replace($pubDir, '', $dirName);
+                $pubPath = $srcRelpath . $filename;
+                $srcDepth = count(explode(DIRECTORY_SEPARATOR, $srcRelpath)) - 1;
+                $cacheDepth = count(explode(DIRECTORY_SEPARATOR, $cacheRelPath)) - 1;
+                $newPath = '';
+
+                if ($srcDepth < $cacheDepth)
                 {
-                    $filename = basename($cssFile);
-                    $dirName = dirname($cssFile) . DIRECTORY_SEPARATOR;
-                    $srcRelpath = str_replace($pubDir, '', $dirName);
-
-                    $pubPath = $srcRelpath . $filename;
-                    $srcDepth = count(explode(DIRECTORY_SEPARATOR, $srcRelpath)) - 1;
-                    $cacheDepth = count(explode(DIRECTORY_SEPARATOR, $cacheRelPath)) - 1;
-                    $newPath = '';
-
-                    if ($srcDepth < $cacheDepth)
+                    for ($i = $cacheDepth - $srcDepth; $i > 0; $i--)
                     {
-                        for ($i = $cacheDepth - $srcDepth; $i > 0; $i--)
-                        {
-                            $newPath .= '../';
-                        }
+                        $newPath .= '../';
                     }
+                }
 
-                    $newPath .= $matches[1];
-
-                    if ($srcDepth > $cacheDepth)
+                $newPath .= $matches[1];
+                if ($srcDepth > $cacheDepth)
+                {
+                    for ($i = $srcDepth - $cacheDepth; $i > 0; $i--)
                     {
-                        for ($i = $srcDepth - $cacheDepth; $i > 0; $i--)
-                        {
-                            $newPath = substr($newPath, strpos($newPath, '../'));
-                        }
+                        $newPath = substr($newPath, strpos($newPath, '../'));
                     }
-
-                    return sprintf("url('%s')", $newPath);
-                };
-
+                }
+                return sprintf("url('%s')", $newPath);
+            };
             // @todo replace all possible @import and possible urls.
             $adjustedCss = preg_replace_callback(
                 '#url\([\'"](?!http|/|data)(.*?)[\'"]\)#i', $replaceCallback, file_get_contents($cssFile)
             );
-
-            $tmpPath = tempnam(sys_get_temp_dir(), 'midas.adjust.css_');
             file_put_contents($tmpPath, $adjustedCss);
-
             $stylesheets[] = $tmpPath;
         }
 
         return $stylesheets;
     }
 
+    /**
+     * Calculate the deploy hash for the given script collection.
+     *
+     * @param array $scripts
+     *
+     * @return string
+     */
     protected function calculateDeployHash(array $scripts)
     {
         $lastModified = 0;
@@ -407,7 +458,13 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         return sha1($hashBase . $lastModified);
     }
 
-    protected function addStylesheets($stylesheets)
+    /**
+     * Add the given stylesheet file collection to our markup,
+     * one new DOMElement per given script.
+     *
+     * @param array $stylesheets
+     */
+    protected function addStylesheets(array $stylesheets)
     {
         $query_result = $this->xpath->query(
             sprintf('//%shead', $this->xmlnsPrefix)
@@ -425,7 +482,13 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         }
     }
 
-    protected function addJavascripts($javascripts)
+    /**
+     * Add the given javascripts file collection to our markup,
+     * one new DOMElement per given script.
+     *
+     * @param array $javascripts
+     */
+    protected function addJavascripts(array $javascripts)
     {
         $query_result = $this->xpath->query(
             sprintf('//%sbody', $this->xmlnsPrefix)
