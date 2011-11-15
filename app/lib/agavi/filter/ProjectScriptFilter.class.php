@@ -2,12 +2,29 @@
 
 class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 {
+    /**
+     * Holds a string that respresents the utf8 encoding.
+     */
     const ENCODING_UTF_8 = 'utf-8';
 
+    /**
+     * Holds a string that respresents the iso 8859-1 encoding.
+     */
     const ENCODING_ISO_8859_1 = 'iso-8859-1';
 
+    /**
+     * Holds an array of chars that have a special meaning when defining 'viewpaths'.
+     * This chars will be mutated before creating a regex from their surrounding string.
+     *
+     * @var array
+     */
     protected static $viewPathSearch = array('.', '*');
 
+    /**
+     * Holds the 'mutated' versions of our special 'viewpath' chars.
+     *
+     * @var array
+     */
     protected static $viewPathReplace = array('\.', '.*');
 
     /**
@@ -16,19 +33,47 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
     protected $doc;
 
     /**
-     * @var DOMXPath Our XPath instance for the document.
+     * Our XPath instance for the document.
+     *
+     * @var DOMXPath
      */
     protected $xpath;
 
     /**
-     * @var string The XML NS prefix we're working on with XPath, including
+     * The XML NS prefix we're working on with XPath, including
      * a colon (or empty string if document has no NS).
+     *
+     * @var string
      */
     protected $xmlnsPrefix = '';
+
+    /**
+     * An array holding all scripts that have been loaded so far.
+     *
+     * @var array
+     */
     protected $loadedScripts = array();
+
+    /**
+     * An array holding all packages that have been loaded so far.
+     *
+     * @var array
+     */
     protected $loadedPackages = array();
+
+    /**
+     * Holds our config object.
+     *
+     * @var ProjectScriptFilterConfig
+     */
     protected $config;
 
+    /**
+     * Initialize the model, hence setup our config.
+     *
+     * @param AgaviContext $context
+     * @param array $parameters
+     */
     public function initialize(AgaviContext $context, array $parameters = array())
     {
         parent::initialize($context, $parameters);
@@ -36,6 +81,12 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $this->config = new ProjectScriptFilterConfig($parameters);
     }
 
+    /**
+	 * Add the scripts for all executed html views.
+	 *
+	 * @param AgaviFilterChain A FilterChain instance.
+	 * @param AgaviExecutionContainer The current execution container.
+	 */
     public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
     {
         $filterChain->execute($container);
@@ -81,11 +132,21 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         );
     }
 
+    /**
+     * Returns our config object.
+     *
+     * @return ProjectScriptFilterConfig
+     */
     public function getConfig()
     {
         return $this->config;
     }
 
+    /**
+     * Load the given string (xml) content into a dom document.
+     *
+     * @param string $content
+     */
     protected function loadDom($content)
     {
         $this->doc = new DOMDocument();
@@ -111,6 +172,13 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         }
     }
 
+    /**
+     * Build the viewpath for the global action.
+     *
+     * @param AgaviExecutionContainer $container
+     *
+     * @return string
+     */
     protected function buildViewPath(AgaviExecutionContainer $container)
     {
         $module = strtolower($container->getModuleName());
