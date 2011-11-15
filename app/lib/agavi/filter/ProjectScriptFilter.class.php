@@ -2,34 +2,31 @@
 
 class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 {
-	const ENCODING_UTF_8 = 'utf-8';
+    const ENCODING_UTF_8 = 'utf-8';
 
-	const ENCODING_ISO_8859_1 = 'iso-8859-1';
+    const ENCODING_ISO_8859_1 = 'iso-8859-1';
 
     protected static $viewPathSearch = array('.', '*');
 
     protected static $viewPathReplace = array('\.', '.*');
 
-	/**
-	 * @var        DOMDocument Our (X)HTML document.
-	 */
-	protected $doc;
+    /**
+     * @var DOMDocument Our (X)HTML document.
+     */
+    protected $doc;
 
-	/**
-	 * @var        DOMXPath Our XPath instance for the document.
-	 */
-	protected $xpath;
+    /**
+     * @var DOMXPath Our XPath instance for the document.
+     */
+    protected $xpath;
 
-	/**
-	 * @var        string The XML NS prefix we're working on with XPath, including
-	 *                    a colon (or empty string if document has no NS).
-	 */
-	protected $xmlnsPrefix = '';
-
+    /**
+     * @var string The XML NS prefix we're working on with XPath, including
+     * a colon (or empty string if document has no NS).
+     */
+    protected $xmlnsPrefix = '';
     protected $loadedScripts = array();
-
     protected $loadedPackages = array();
-
     protected $config;
 
     public function initialize(AgaviContext $context, array $parameters = array())
@@ -39,20 +36,20 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $this->config = new ProjectScriptFilterConfig($parameters);
     }
 
-	public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
-	{
+    public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
+    {
         $filterChain->execute($container);
-		$response = $container->getResponse();
+        $response = $container->getResponse();
         $output = NULL;
 
-		if(! $response->isContentMutable() || ! ($output = $response->getContent()))
+        if (!$response->isContentMutable() || !($output = $response->getContent()))
         {
             // throw exception? we cant really live without our scripts...
-			return FALSE;
-		}
+            return FALSE;
+        }
 
         $curOutputType = $response->getOutputType()->getName();
-        if (! $this->config->isOutputTypeSupported($curOutputType))
+        if (!$this->config->isOutputTypeSupported($curOutputType))
         {
             // ot not supported, log to info or debug?
             return FALSE;
@@ -95,7 +92,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $this->doc->formatOutput = TRUE;
         $this->doc->preserveWhitespace = TRUE;
 
-        if (! $this->doc->loadXML(html_entity_decode($content, null, self::ENCODING_UTF_8)))
+        if (!$this->doc->loadXML(html_entity_decode($content, null, self::ENCODING_UTF_8)))
         {
             // maybe just log the error and return silently?
             throw new Exception("Unable to parse content.");
@@ -103,7 +100,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 
         $this->xpath = new DOMXPath($this->doc);
 
-        if($this->doc->documentElement && $this->doc->documentElement->namespaceURI)
+        if ($this->doc->documentElement && $this->doc->documentElement->namespaceURI)
         {
             $this->xpath->registerNamespace('html', $this->doc->documentElement->namespaceURI);
             $this->xmlnsPrefix = 'html:';
@@ -137,14 +134,14 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             $package = $this->config->getPackageData($packageName);
             foreach ($package['javascripts'] as $javascript)
             {
-                if (! in_array($javascript, $javascripts))
+                if (!in_array($javascript, $javascripts))
                 {
                     $javascripts[] = $javascript;
                 }
             }
             foreach ($package['stylesheets'] as $stylesheet)
             {
-                if (! in_array($stylesheet, $stylesheets))
+                if (!in_array($stylesheet, $stylesheets))
                 {
                     $stylesheets[] = $stylesheet;
                 }
@@ -165,9 +162,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         foreach ($this->config->getDeployments() as $curViewpath => $deploymentInfo)
         {
             $escapedPath = str_replace(
-                self::$viewPathSearch,
-                self::$viewPathReplace,
-                $curViewpath
+                self::$viewPathSearch, self::$viewPathReplace, $curViewpath
             );
             $pattern = sprintf('#^%s$#is', $escapedPath);
 
@@ -180,7 +175,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 
                 foreach ($deploymentInfo['javascripts'] as $javascript)
                 {
-                    if (! in_array($javascript, $affectedJavascripts))
+                    if (!in_array($javascript, $affectedJavascripts))
                     {
                         $affectedJavascripts[] = $javascript;
                     }
@@ -188,7 +183,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 
                 foreach ($deploymentInfo['stylesheets'] as $stylesheet)
                 {
-                    if (! in_array($stylesheet, $affectedStylesheets))
+                    if (!in_array($stylesheet, $affectedStylesheets))
                     {
                         $affectedStylesheets[] = $stylesheet;
                     }
@@ -218,7 +213,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 
     protected function loadPackage($packageName, array & $loadedPackages)
     {
-        if (! in_array($packageName, $loadedPackages))
+        if (!in_array($packageName, $loadedPackages))
         {
             $package = $this->config->getPackageData($packageName);
             $loadedPackages[] = $packageName;
@@ -237,12 +232,12 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $deployPath = $this->config->getJsCacheDir() . DIRECTORY_SEPARATOR . $deployHash . '.js';
         $pubPath = substr(str_replace($pubDir, '', $deployPath), 1);
 
-        if (! file_exists($deployPath))
+        if (!file_exists($deployPath))
         {
             $script_packer = new ProjectScriptPacker();
             $packedJs = $script_packer->pack($scripts, 'js');
 
-            array_map( "unlink", glob($this->config->getJsCacheDir().'/*.js')); // remove all prev caches
+            array_map("unlink", glob($this->config->getJsCacheDir() . '/*.js')); // remove all prev caches
             file_put_contents($deployPath, $packedJs);
         }
 
@@ -256,15 +251,14 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $deployPath = $this->config->getCssCacheDir() . DIRECTORY_SEPARATOR . $deployHash . '.css';
         $pubPath = substr(str_replace($pubDir, '', $deployPath), 1);
 
-        if (! file_exists($deployPath))
+        if (!file_exists($deployPath))
         {
             $script_packer = new ProjectScriptPacker();
             $packedCss = $script_packer->pack(
-                $this->adjustRelativeCssPaths($scripts),
-                'css'
+                $this->adjustRelativeCssPaths($scripts), 'css'
             );
 
-            array_map( "unlink", glob($this->config->getCssCacheDir().'/*.css')); // remove all prev caches
+            array_map("unlink", glob($this->config->getCssCacheDir() . '/*.css')); // remove all prev caches
             file_put_contents($deployPath, $packedCss);
         }
 
@@ -281,42 +275,40 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         foreach ($cssFiles as $cssFile)
         {
             $replaceCallback = function (array $matches) use ($pubDir, $cssFile, $cacheRelPath)
-            {
-                $filename = basename($cssFile);
-                $dirName = dirname($cssFile) . DIRECTORY_SEPARATOR;
-                $srcRelpath = str_replace($pubDir, '', $dirName);
-
-                $pubPath = $srcRelpath . $filename;
-                $srcDepth = count(explode(DIRECTORY_SEPARATOR, $srcRelpath)) - 1;
-                $cacheDepth = count(explode(DIRECTORY_SEPARATOR, $cacheRelPath)) - 1;
-                $newPath = '';
-
-                if ($srcDepth < $cacheDepth)
                 {
-                    for ($i = $cacheDepth - $srcDepth; $i > 0; $i--)
+                    $filename = basename($cssFile);
+                    $dirName = dirname($cssFile) . DIRECTORY_SEPARATOR;
+                    $srcRelpath = str_replace($pubDir, '', $dirName);
+
+                    $pubPath = $srcRelpath . $filename;
+                    $srcDepth = count(explode(DIRECTORY_SEPARATOR, $srcRelpath)) - 1;
+                    $cacheDepth = count(explode(DIRECTORY_SEPARATOR, $cacheRelPath)) - 1;
+                    $newPath = '';
+
+                    if ($srcDepth < $cacheDepth)
                     {
-                        $newPath .= '../';
+                        for ($i = $cacheDepth - $srcDepth; $i > 0; $i--)
+                        {
+                            $newPath .= '../';
+                        }
                     }
-                }
 
-                $newPath .= $matches[1];
+                    $newPath .= $matches[1];
 
-                if ($srcDepth > $cacheDepth)
-                {
-                    for ($i = $srcDepth - $cacheDepth; $i > 0; $i--)
+                    if ($srcDepth > $cacheDepth)
                     {
-                        $newPath = substr($newPath, strpos($newPath, '../'));
+                        for ($i = $srcDepth - $cacheDepth; $i > 0; $i--)
+                        {
+                            $newPath = substr($newPath, strpos($newPath, '../'));
+                        }
                     }
-                }
 
-                return sprintf("url('%s')", $newPath);
-            };
+                    return sprintf("url('%s')", $newPath);
+                };
 
             // @todo replace all possible @import and possible urls.
             $adjustedCss = preg_replace_callback(
-                '#url\([\'"](?!http|/|data)(.*?)[\'"]\)#i',
-                $replaceCallback,
-                file_get_contents($cssFile)
+                '#url\([\'"](?!http|/|data)(.*?)[\'"]\)#i', $replaceCallback, file_get_contents($cssFile)
             );
 
             $tmpPath = tempnam(sys_get_temp_dir(), 'midas.adjust.css_');
