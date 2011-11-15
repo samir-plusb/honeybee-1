@@ -251,7 +251,7 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
 
         this.element.mouseenter(function()
         {
-            hint_element.css('display', 'block');
+            hint_element.fadeIn(300);
         });
         this.element.mouseleave(function()
         {

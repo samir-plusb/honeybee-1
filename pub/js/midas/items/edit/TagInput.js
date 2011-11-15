@@ -186,7 +186,7 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
 
         this.tag_container.parent().mouseenter(function()
         {
-            hint_element.css('display', 'block');
+            hint_element.fadeIn(250);
         });
         this.tag_container.parent().mouseleave(function()
         {
