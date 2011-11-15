@@ -170,7 +170,7 @@ midas.core.BaseView = midas.core.BaseObject.extend(
                         if (ok) ok();
                     }
                 }
-            }).prev().addClass('ui-state-error'); ;
+            }).prev().addClass('ui-state-error');
         }
         else
         {

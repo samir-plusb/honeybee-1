@@ -4,7 +4,6 @@ PROJECT=`readlink -f $( dirname $0 )/..`
 LOCAL_CONFIG_SH=$PROJECT/etc/local/local.config.sh
 
 if [ -f $LOCAL_CONFIG_SH ] ; then
-  echo "[INFO] Found and sourcing the local.config.sh"
   . $LOCAL_CONFIG_SH
 else
   echo "[ERROR] Could not source $LOCAL_CONFIG_SH!"
@@ -17,6 +16,4 @@ if (test -z "$VOWS_COMMAND") ; then
   exit 0
 fi
 
-cmd="$VOWS_COMMAND $@ $PROJECT/testing/tests/behavioural/*"
-echo [Executing] $cmd
-$cmd
+${VOWS_COMMAND} ${@} ${PROJECT}/testing/tests/behavioural/*
