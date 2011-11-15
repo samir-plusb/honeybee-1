@@ -602,22 +602,24 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
     font-weight: normal;
     text-decoration: none;
 }
-
+/*
+    -------> ERROR BUBBLES FOR FORM VALDATION HINTS
+*/
 .error-hint
 {
     display: block;
     z-index: 10;
     position: absolute;
-    overflow: hidden;
     background: url("../images/ui-bg_gloss-wave_45_e14f1c_500x100.png") repeat-x scroll 50% top #E14F1C;
     border: 1px solid #CD0A0A;
     color: #FFFFFF;
+    box-shadow:0.3em 0.3em 0.5em 0.4em rgba(0,0,0,0.2);
 }
 .error-hint-body
 {
     min-width: 15em;
+    position: relative;
 }
-
 .error-hint-body li
 {
     padding: 0.3em 0.5em;
@@ -626,12 +628,10 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
     width: auto;
     overflow: hidden;
 }
-
 .error-hint-body ul li:last-child
 {
     border-bottom: none;
 }
-
 .error-hint-body h4
 {
     font-weight: bold;
@@ -639,9 +639,23 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
     float: left;
     margin-right: 0.5em;
 }
-
 .error-hint-body p
 {
     font-size: 10pt;
     float: left;
+}
+.bubble-hook
+{
+    -moz-transform: rotate(45deg);
+    border-left: medium none;
+    border-top: medium none;
+    bottom: -0.35em;
+    box-shadow: 0.5em 0.3em 0.5em rgba(0, 0, 0, 0.2);
+    height: 0.6em;
+    left: 0.6em;
+    position: absolute;
+    width: 0.6em;
+    z-index: 1;
+    background: url("../images/ui-bg_gloss-wave_45_e14f1c_500x100.png") repeat-x scroll 50% top #E14F1C;
+    border: none;
 }

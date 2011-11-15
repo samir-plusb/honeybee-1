@@ -13,19 +13,19 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
      * @type String
      */
     log_prefix: 'TagInput',
-    
+
     /**
      * Holds a list of tags that are currently selected.
      * @type Array
      */
     selected_tags: null,
-    
+
     /**
      * The html list element holding the tag list items.
      * @type HTMLUlElement
      */
     tag_container: null,
-    
+
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
      * @param {HTMLElement} element The input element to enhance.
@@ -37,7 +37,7 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
         this.tag_container = this.element.parents('ul');
         this.createTagHandler(this.options.assigned_tags);
     },
-    
+
     /**
      * @description Creates an instance of the jQuery tagHandler plugin we are using.
      */
@@ -77,7 +77,7 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
             }.bind(this)
         });
     },
-    
+
     /**
      * @description Returns an array of tags that are allowd for input.
      * @returns {Array}
@@ -86,11 +86,11 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
     {
         return this.options.tags || [];
     },
-    
+
     // -----------
     // --------------- midas.items.edit.Input overrides
     // -----------
-    
+
     /**
      * @description Getter and setter for our input's value.
      * When a parameter is supplied the method will behave as getter else as setter.
@@ -110,7 +110,7 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
 
         return this.selected_tags;
     },
-    
+
     /**
      * @description Marks the input to be in a given state.
      * @param {String} state The state we are marking.
@@ -123,7 +123,7 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
         }
         var css_class = this.options.ui_states[state]
          || 'input-' + state;
-     
+
         if ('invalid' == state)
         {
             this.displayErrorHint(data.messages);
@@ -131,7 +131,7 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
 
         this.tag_container.addClass(css_class);
     },
-    
+
     /**
      * @description Unmarks the input from being in the given state.
      * @param {String} state The state we are unmarking.
@@ -140,15 +140,15 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
     {
         var css_class = this.options.ui_states[state]
          || 'input-' + state;
-        
+
         if ('invalid' === state && this.error_hint)
         {
             this.error_hint.remove();
         }
-        
+
         this.tag_container.removeClass(css_class);
     },
-    
+
     /**
      * @description Tells if the input is currently marked for the given state.
      * @param {String} state The state to check for.
@@ -160,7 +160,7 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
 
         return this.tag_container.hasClass(css_class);
     },
-    
+
     /**
      * @description Reset the input's value and recover from 'invalid' state.
      */
@@ -169,28 +169,28 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
         this.val([]);
         this.unmarkAs('invalid');
     },
-    
+
     displayErrorHint: function(messages)
     {
         var hint_element = this.renderErrorHint(messages);
         var el_pos = this.tag_container.parent().offset();
         var rel_pos = $('.document-editing').offset();
-        
+
         var pos = {
             left: (el_pos.left - rel_pos.left),
             display: 'none'
         };
         hint_element.css(pos);
         $('.document-editing').append(hint_element);
-        hint_element.css('top', el_pos.top - rel_pos.top - hint_element.height() - 4);
-        
+        hint_element.css('top', el_pos.top - rel_pos.top - hint_element.height() - 6);
+
         this.tag_container.parent().mouseenter(function()
         {
             hint_element.css('display', 'block');
         });
         this.tag_container.parent().mouseleave(function()
         {
-            hint_element.css('display', 'none');
+            hint_element.fadeOut(500);
         });
         this.error_hint = hint_element;
     }
