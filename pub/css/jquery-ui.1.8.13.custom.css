@@ -646,7 +646,11 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 }
 .bubble-hook
 {
-    -moz-transform: rotate(45deg);
+    -webkit-transform:rotate(45deg);
+    -moz-transform:rotate(45deg);
+    -o-transform:rotate(45deg);
+    -ms-transform:rotate(45deg);
+    transform:rotate(45deg);
     border-left: medium none;
     border-top: medium none;
     bottom: -0.35em;
