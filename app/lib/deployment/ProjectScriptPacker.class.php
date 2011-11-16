@@ -41,7 +41,7 @@ class ProjectScriptPacker
             escapeshellarg($outfile)
         );
 
-        if (false === ($handle = popen($cmd, 'w')))
+        if (FALSE === ($handle = popen($cmd, 'w')))
         {
             throw new Exception(sprintf('Unable to process file %s.', $outfile));
         }

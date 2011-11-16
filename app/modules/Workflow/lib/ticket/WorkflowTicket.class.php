@@ -5,7 +5,10 @@
  * @package Workflow
  * @author tay
  * @version $Id$
- *
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  */
 class WorkflowTicket extends AgaviParameterHolder implements Serializable
 {
@@ -13,7 +16,6 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     /**
      *
      * @var string document id in database
-     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     private $id;
 

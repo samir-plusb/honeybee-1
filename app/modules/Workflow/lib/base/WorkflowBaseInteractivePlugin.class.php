@@ -69,7 +69,7 @@ abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
         {
             $moduleName = $container->getModuleName();
         }
-        if ($arguments !== null)
+        if ($arguments !== NULL)
         {
             if (!($arguments instanceof AgaviRequestDataHolder))
             {

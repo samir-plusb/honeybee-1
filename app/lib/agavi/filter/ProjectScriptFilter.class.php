@@ -397,7 +397,6 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         {
             $replaceCallback = function (array $matches) use ($pubDir, $cssFile, $cacheRelPath)
             {
-                $filename = basename($cssFile);
                 $dirName = dirname($cssFile) . DIRECTORY_SEPARATOR;
                 $srcRelpath = str_replace($pubDir, '', $dirName);
                 $srcDepth = count(explode(DIRECTORY_SEPARATOR, $srcRelpath)) - 1;

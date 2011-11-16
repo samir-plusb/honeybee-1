@@ -29,12 +29,12 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      *
      * @author tay
      * @since 08.10.2011
-     * @param AgaviRequestDataHolder $rd
+     * @param AgaviRequestDataHolder $parameters
      * @return AgaviExecutionContainer
      */
-    public function executePng(AgaviRequestDataHolder $rd)
+    public function executePng(AgaviRequestDataHolder $parameters)
     {
-        return $this->executeAny($rd);
+        return $this->executeAny($parameters);
     }
 
     /**
@@ -42,12 +42,12 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      *
      * @author tay
      * @since 08.10.2011
-     * @param AgaviRequestDataHolder $rd
+     * @param AgaviRequestDataHolder $parameters
      * @return AgaviExecutionContainer
      */
-    public function executeSvg(AgaviRequestDataHolder $rd)
+    public function executeSvg(AgaviRequestDataHolder $parameters)
     {
-        return $this->executeAny($rd);
+        return $this->executeAny($parameters);
     }
 
     /**
@@ -55,12 +55,12 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      *
      * @author tay
      * @since 08.10.2011
-     * @param AgaviRequestDataHolder $rd
+     * @param AgaviRequestDataHolder $parameters
      * @return AgaviExecutionContainer
      */
-    public function executeRss(AgaviRequestDataHolder $rd)
+    public function executeRss(AgaviRequestDataHolder $parameters)
     {
-        return $this->executeAny($rd);
+        return $this->executeAny($parameters);
     }
 
     /**
@@ -68,12 +68,12 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      *
      * @author tay
      * @since 08.10.2011
-     * @param AgaviRequestDataHolder $rd
+     * @param AgaviRequestDataHolder $parameters
      * @return AgaviExecutionContainer
      */
-    public function executeKml(AgaviRequestDataHolder $rd)
+    public function executeKml(AgaviRequestDataHolder $parameters)
     {
-        return $this->executeAny($rd);
+        return $this->executeAny($parameters);
     }
 
     /**
@@ -82,13 +82,14 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      * @author tay
      * @since 08.10.2011
      *
-     * @param AgaviRequestDataHolder $rd
+     * @param AgaviRequestDataHolder $parameters
      *
      * @return AgaviExecutionContainer
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeAny(AgaviRequestDataHolder $rd)
+    public function executeAny(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreStart
     {
         return $this->createForwardContainer(
             $this->getContainer()->getModuleName(),
@@ -103,13 +104,14 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      * @author tay
      * @since 08.10.2011
      *
-     * @param AgaviRequestDataHolder $rd
+     * @param AgaviRequestDataHolder $parameters
      *
      * @return AgaviExecutionContainer
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeXml(AgaviRequestDataHolder $rd)
+    public function executeXml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $response = $this->getContainer()->getResponse();
         /* @var $response AgaviWebResponse */

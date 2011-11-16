@@ -12,8 +12,9 @@ class Workflow_RunAction extends ProjectBaseAction
      * @see AgaviAction::getDefaultViewName()
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function execute(AgaviParameterHolder $parameters)
+    public function execute(AgaviParameterHolder $parameters) // @codingStandardsIgnoreEnd
     {
         return 'Input';
     }

@@ -35,7 +35,9 @@ class ProjectScriptFilterConfig
         {
             throw new Exception(
                 sprintf(
-                    "The given setting: %s is not supported. Supported settings are:\n- %s", $settingName, implode("\n- ", self::$supportedSettings)
+                    "The given setting: %s is not supported. Supported settings are:\n- %s",
+                    $settingName,
+                    implode("\n- ", self::$supportedSettings)
                 )
             );
         }
@@ -99,7 +101,8 @@ class ProjectScriptFilterConfig
         {
             throw new Exception(
                 sprintf(
-                    "Encountered undefined script package: '%s'", $packageName
+                    "Encountered undefined script package: '%s'",
+                    $packageName
                 )
             );
         }
@@ -126,20 +129,26 @@ class ProjectScriptFilterConfig
         {
             if (!isset($parameters[$req]))
             {
-                throw new AgaviConfigurationException("Missing required setting for '$req'!");
+                throw new AgaviConfigurationException(
+                    "Missing required setting for '$req'!"
+                );
             }
         }
 
         $cssCacheDir = realpath($parameters[self::CFG_CSS_CACHE_DIR]);
         if (!is_writable($cssCacheDir))
         {
-            throw new AgaviConfigurationException("The given css cache directory '$cssCacheDir' is not writeable!");
+            throw new AgaviConfigurationException(
+                "The given css cache directory '$cssCacheDir' is not writeable!"
+            );
         }
 
         $jsCacheDir = realpath($parameters[self::CFG_JS_CACHE_DIR]);
         if (!is_writable($jsCacheDir))
         {
-            throw new AgaviConfigurationException("The given js cache directory '$jsCacheDir' is not writeable!");
+            throw new AgaviConfigurationException(
+                "The given js cache directory '$jsCacheDir' is not writeable!"
+            );
         }
 
         $outputTypes = $parameters[self::CFG_OUTPUT_TYPES];

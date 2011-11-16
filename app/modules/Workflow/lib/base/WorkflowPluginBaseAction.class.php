@@ -26,8 +26,9 @@ class WorkflowPluginBaseAction extends ProjectBaseAction
      *                   </ul>^
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeRead(AgaviRequestDataHolder $parameters)
+    public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         return 'Success';
     }
@@ -46,8 +47,9 @@ class WorkflowPluginBaseAction extends ProjectBaseAction
      *                   </ul>^
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeWrite(AgaviRequestDataHolder $parameters)
+    public function executeWrite(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         return 'Success';
     }

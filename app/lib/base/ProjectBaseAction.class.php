@@ -37,8 +37,9 @@ class ProjectBaseAction extends AgaviAction
      * @return array (modulename, viewname)
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function handleError(AgaviRequestDataHolder $parameters)
+    public function handleError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $container = $this->getContainer();
         $validation_manager = $container->getValidationManager();

@@ -32,8 +32,9 @@ class Items_Api_ExtractDateAction extends ItemsBaseAction
 
     function getDateFromString($date_string)
     {
+        // @codingStandardsIgnoreStart
         $months = 'Jan(uar)?|Feb(ruar)?|März|Mar|Apr(il)?|Mai|Jun(i)?|Jul(i|y)?|Aug(ust)?|Sep(t)?(ember)?|Okt(ober)?|Nov(ember)?|Dez(ember)?';
-
+        // @codingStandardsIgnoreEnd
         $name2number = array(
             'jan' => 1,
             'januar' => 1,
