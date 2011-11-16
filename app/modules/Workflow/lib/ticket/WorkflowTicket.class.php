@@ -14,20 +14,24 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
 {
 
     /**
-     *
-     * @var string document id in database
+     * document id in database
+     * 
+     * @var string
+     * @PMD:REVIEWED:ShortVariable: by tschmitt on 4/13/06 7:25 AM
      */
     private $id;
 
     /**
+     * document release in database
      *
-     * @var string document release in database
+     * @var string
      */
     private $rev;
 
     /**
+     * result of last processed plugin
      *
-     * @var WorkflowPluginResult result of last processed plugin
+     * @var WorkflowPluginResult
      */
     protected $result;
 
@@ -40,7 +44,9 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
 
 
     /**
-     * @var string identifier of current workflow step
+     * identifier of current workflow step
+     *
+     * @var string
      */
     protected $currentStep;
 
