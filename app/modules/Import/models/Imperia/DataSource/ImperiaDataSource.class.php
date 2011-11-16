@@ -92,7 +92,7 @@ class ImperiaDataSource extends ImportBaseDataSource
     protected function init()
     {
         $this->cursorPos = -1;
-        $this->documentIds = $documentIds = $this->config->getSetting(
+        $this->documentIds = $this->config->getSetting(
             ImperiaDataSourceConfig::CFG_DOCIDS,
             array()
         );

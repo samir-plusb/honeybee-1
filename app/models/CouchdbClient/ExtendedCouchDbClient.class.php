@@ -286,6 +286,8 @@ class ExtendedCouchDbClient
      * @param       boolean $allOrNothing
      *
      * @return      array
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function storeDocs($database, array $documentData, $allOrNothing = FALSE)
     {

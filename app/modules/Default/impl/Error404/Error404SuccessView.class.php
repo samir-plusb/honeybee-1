@@ -21,6 +21,7 @@
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Default
  * @subpackage      Mvc
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  */
 class Default_Error404_Error404SuccessView extends DefaultBaseView
 {

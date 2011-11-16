@@ -112,7 +112,6 @@ class ImapDataSource extends ImportBaseDataSource
         if (! $rawMimeMail)
         {
             $textHeader = imap_fetchheader($this->mailBoxConnection, $this->cursorPos, FT_PREFETCHTEXT);
-            $header = imap_headerinfo($this->mailBoxConnection, $this->cursorPos);
             $rawBody = imap_body($this->mailBoxConnection, $this->cursorPos, FT_PEEK);
             $rawMimeMail = $textHeader . $rawBody;
         }

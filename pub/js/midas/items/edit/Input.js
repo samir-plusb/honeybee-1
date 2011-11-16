@@ -249,11 +249,10 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         $('.document-editing').append(hint_element);
         hint_element.css('top', el_pos.top - rel_pos.top - hint_element.height() - 6);
 
-        this.element.mouseenter(function()
+        this.element.hover(function()
         {
             hint_element.fadeIn(300);
-        });
-        this.element.mouseleave(function()
+        }, function()
         {
             hint_element.fadeOut(500);
         });
