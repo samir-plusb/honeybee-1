@@ -289,11 +289,11 @@ class ExtendedCouchDbClient
      */
     public function storeDocs($database, array $documentData, $allOrNothing = FALSE)
     {
-        foreach ($documentData as $key => $doc)
+        foreach ($documentData as $key => & $doc)
         {
             if (array_key_exists('_id', $doc))
             {
-                $documentData[$key]['_id'] = (string)$doc['_id'];
+                $doc['_id'] = (string)$doc['_id'];
             }
         }
 
@@ -701,10 +701,19 @@ class ExtendedCouchDbClient
         $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
         if ((self::STATUS_OK > $respCode || $respCode >= self::STATUS_BAD_REQUEST) && $validReturnCode != $respCode)
         {
-            $error = curl_error($curlHandle);
+            $data = json_decode($this->lastResponse, TRUE);
+            if (empty($data['error']))
+            {
+                $error = curl_error($curlHandle);
+            }
+            else
+            {
+                $error = $data['error'] .
+                    (empty($data['reason']) ? '' : ' :: '.$data['reason']);
+            }
             $errorNum = curl_errno($curlHandle);
             throw new CouchdbClientException(
-                $this->lastUri." ($respCode): error: '$error'", $errorNum);
+                $this->lastUri." ($respCode): $error", $errorNum);
         }
     }
 

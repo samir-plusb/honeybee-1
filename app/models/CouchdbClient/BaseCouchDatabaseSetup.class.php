@@ -131,6 +131,10 @@ abstract class BaseCouchDatabaseSetup implements ICouchDatabaseSetup
     {
         $views = array();
         $glob = glob($this->getSourceDirectory().'/*.{map,reduce}.js',GLOB_BRACE);
+        if (! is_array($glob))
+        {
+            return;
+        }
         foreach ($glob as $fname)
         {
             // match all documents like:
