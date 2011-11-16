@@ -24,6 +24,7 @@
         <whitelist>
             <directory suffix=".php">../../app/models</directory>
             <directory suffix=".php">../../app/modules/Import/</directory>
+            <directory suffix=".php">../../app/modules/Workflow/</directory>
             <directory suffix=".php">../../testing/</directory>
             <exclude>
                 <directory suffix="Success.php">../../app/</directory>
