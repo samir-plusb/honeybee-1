@@ -235,6 +235,10 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         this.unmarkAs('invalid');
     },
 
+    /**
+     * @description Display an error hint that reveals some detail
+     * on why validation for our input failed.
+     */
     displayErrorHint: function(messages)
     {
         var hint_element = this.renderErrorHint(messages);
@@ -265,6 +269,10 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         this.error_hint = hint_element;
     },
 
+    /**
+     * @description Renders an error hint for the given message.
+     * @returns HTMLElement
+     */
     renderErrorHint: function(messages)
     {
         var message_list = [];

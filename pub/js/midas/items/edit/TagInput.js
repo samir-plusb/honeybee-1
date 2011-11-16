@@ -170,6 +170,10 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
         this.unmarkAs('invalid');
     },
 
+    /**
+     * @description Display an error hint that reveals some detail
+     * on why validation for our input failed.
+     */
     displayErrorHint: function(messages)
     {
         var hint_element = this.renderErrorHint(messages);
