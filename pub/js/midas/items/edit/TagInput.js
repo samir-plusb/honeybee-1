@@ -184,7 +184,7 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
         $('.document-editing').append(hint_element);
         hint_element.css('top', el_pos.top - rel_pos.top - hint_element.height() - 6);
 
-        this.element.hover(function()
+        this.tag_container.parent().hover(function()
         {
             if (!hint_element.hasClass('fading'))
             {
