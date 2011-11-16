@@ -27,7 +27,7 @@ class WorkflowPluginBaseAction extends ProjectBaseAction
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function executeRead(AgaviRequestDataHolder $rd)
+    public function executeRead(AgaviRequestDataHolder $parameters)
     {
         return 'Success';
     }
@@ -47,7 +47,7 @@ class WorkflowPluginBaseAction extends ProjectBaseAction
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function executeWrite(AgaviRequestDataHolder $rd)
+    public function executeWrite(AgaviRequestDataHolder $parameters)
     {
         return 'Success';
     }
@@ -58,7 +58,7 @@ class WorkflowPluginBaseAction extends ProjectBaseAction
      * (non-PHPdoc)
      * @see ProjectBaseAction::handleError()
      */
-    public function handleError(AgaviRequestDataHolder $rd)
+    public function handleError(AgaviRequestDataHolder $parameters)
     {
         $container = $this->getContainer();
 
@@ -78,7 +78,7 @@ class WorkflowPluginBaseAction extends ProjectBaseAction
             WorkflowInteractivePluginResult::GATE_NONE,
             $message);
 
-        return parent::handleError($rd);
+        return parent::handleError($parameters);
     }
 
 }

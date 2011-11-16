@@ -2,7 +2,7 @@
 
 class ProjectScriptsConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/config/scripts/1.0';
+    const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/config/scripts/1.0';
 
     const XMLNS_PREFIX = 'scripts';
 
@@ -10,15 +10,14 @@ class ProjectScriptsConfigHandler extends AgaviXmlConfigHandler
 
     const PACKAGE_CSS = 'stylesheets';
 
-	public function execute(AgaviXmlConfigDomDocument $document)
-	{
-		$document->setDefaultNamespace(self::XML_NAMESPACE, self::XMLNS_PREFIX);
-        $xpath = $document->getXpath();
+    public function execute(AgaviXmlConfigDomDocument $document)
+    {
+        $document->setDefaultNamespace(self::XML_NAMESPACE, self::XMLNS_PREFIX);
         $script_packages = array();
         $deployments = array();
 
         /* @var $cfg AgaviXmlConfigDomElement */
-		foreach($document->getConfigurationElements() as $cfg)
+        foreach ($document->getConfigurationElements() as $cfg)
         {
             if ($cfg->hasChild('packages'))
             {
@@ -42,7 +41,6 @@ class ProjectScriptsConfigHandler extends AgaviXmlConfigHandler
             var_export($data, TRUE)
         );
     }
-
     /* ------------------------------ PACKAGE TYPE RELATED PROCESSING ---------------------------- */
 
     protected function parsePackages(AgaviXmlConfigDomElement $package_container)
@@ -57,8 +55,7 @@ class ProjectScriptsConfigHandler extends AgaviXmlConfigHandler
             {
                 throw new AgaviConfigurationException(
                     sprintf(
-                        "The package '%s' has allready been defined.",
-                        $package_name
+                        "The package '%s' has allready been defined.", $package_name
                     )
                 );
             }
@@ -97,7 +94,6 @@ class ProjectScriptsConfigHandler extends AgaviXmlConfigHandler
 
         return $package_data;
     }
-
     /* ------------------------------ DEPLOYMENT TYPE RELATED PROCESSING ---------------------------- */
 
     protected function parseDeployments(AgaviXmlConfigDomElement $deployment_container)
@@ -150,7 +146,6 @@ class ProjectScriptsConfigHandler extends AgaviXmlConfigHandler
 
         return $deployment_data;
     }
-
     /* ------------------------------ SCRIPT TYPE RELATED PROCESSING ---------------------------- */
 
     protected function parseScriptCollection(AgaviXmlConfigDomElement $script_collection)
@@ -164,7 +159,7 @@ class ProjectScriptsConfigHandler extends AgaviXmlConfigHandler
             $script_path = $script->getValue();
             $full_path = $pub_dir . $script_path;
 
-            if ('local' === $src_type && ! file_exists($full_path))
+            if ('local' === $src_type && !file_exists($full_path))
             {
                 throw new AgaviConfigurationException(
                     sprintf(

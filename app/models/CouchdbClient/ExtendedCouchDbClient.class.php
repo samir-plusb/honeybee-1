@@ -8,6 +8,9 @@
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @author          Tom Anheyer <tanheyer@gmail.com>
  * @package         Database
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  */
 class ExtendedCouchDbClient
 {
@@ -443,7 +446,6 @@ class ExtendedCouchDbClient
         $resp = curl_exec($curlHandle);
         $this->processCurlErrors($curlHandle, self::STATUS_NOT_FOUND);
 
-        $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
         if (404 == curl_getinfo($curlHandle, CURLINFO_HTTP_CODE))
         {
             return 0;

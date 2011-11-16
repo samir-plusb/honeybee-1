@@ -62,6 +62,12 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
         return $this->getParameter('default_acl_role', 'user');
     }
 
+    /**
+     *
+     * @param mixed $credential
+     * @return boolean
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function hasCredential($credential)
     {
         try

@@ -19,16 +19,16 @@ class Workflow_Plugin_Choose_Plugin_ChooseSuccessView extends WorkflowPluginBase
      *                     <li>Any other type will be set as the response content.</li>
      *                   </ul>
      */
-    public function executeText(AgaviRequestDataHolder $rd)
+    public function executeText(AgaviRequestDataHolder $parameters)
     {
-        if ($rd->hasParameter('gate'))
+        if ($parameters->hasParameter('gate'))
         {
-            $response = sprintf("Gate choosen: %d\n", $rd->getParameter('gate'));
+            $response = sprintf("Gate choosen: %d\n", $parameters->getParameter('gate'));
 
             WorkflowBaseInteractivePlugin::setPluginResultAttributes(
                 $this->getContainer(),
                 WorkflowInteractivePluginResult::STATE_OK,
-                $rd->getParameter('gate'));
+                $parameters->getParameter('gate'));
         }
         else
         {
@@ -39,7 +39,7 @@ class Workflow_Plugin_Choose_Plugin_ChooseSuccessView extends WorkflowPluginBase
             }
             $routes = $this->getContext()->getRouting()->gen(NULL);
             $response .= sprintf("\nExecute %s --ticket %s --gate [NUMBER]\n",
-                $routes[0], $rd->getParameter('ticket')->getIdentifier());
+                $routes[0], $parameters->getParameter('ticket')->getIdentifier());
 
             WorkflowBaseInteractivePlugin::setPluginResultAttributes(
                 $this->getContainer(),

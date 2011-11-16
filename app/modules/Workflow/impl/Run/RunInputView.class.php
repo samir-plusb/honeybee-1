@@ -19,10 +19,10 @@ class Workflow_Run_RunInputView extends ProjectBaseView
      *                     <li>Any other type will be set as the response content.</li>
      *                   </ul>
      */
-    public function executeHtml(AgaviRequestDataHolder $rd)
+    public function executeHtml(AgaviRequestDataHolder $parameters)
     {
-        $this->setupHtml($rd);
-        $result = $this->processTicket($rd);
+        $this->setupHtml($parameters);
+        $result = $this->processTicket($parameters);
         return $result;
     }
 
@@ -30,9 +30,9 @@ class Workflow_Run_RunInputView extends ProjectBaseView
      * (non-PHPdoc)
      * @see ProjectBaseView::executeText()
      */
-    public function executeText(AgaviRequestDataHolder $rd)
+    public function executeText(AgaviRequestDataHolder $parameters)
     {
-        $result = $this->processTicket($rd);
+        $result = $this->processTicket($parameters);
         return $result;
     }
 
@@ -40,9 +40,9 @@ class Workflow_Run_RunInputView extends ProjectBaseView
      * (non-PHPdoc)
      * @see ProjectBaseView::executeJson()
      */
-    public function executeJson(AgaviRequestDataHolder $rd)
+    public function executeJson(AgaviRequestDataHolder $parameters)
     {
-        $result = $this->processTicket($rd);
+        $result = $this->processTicket($parameters);
         return $result;
     }
 
@@ -51,9 +51,9 @@ class Workflow_Run_RunInputView extends ProjectBaseView
      *
      * @return AgaviExecutionContainer
      */
-    protected function processTicket(AgaviRequestDataHolder $rd)
+    protected function processTicket(AgaviRequestDataHolder $parameters)
     {
-        $ticket = $rd->getParameter('ticket');
+        $ticket = $parameters->getParameter('ticket');
 
         $supervisor = Workflow_SupervisorModel::getInstance();
         $result = $supervisor->processTicket($ticket, $this->getContainer());

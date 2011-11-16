@@ -8,6 +8,8 @@
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Project
  * @subpackage      Filter
+ *
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  */
 class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 {
@@ -398,7 +400,6 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
                 $filename = basename($cssFile);
                 $dirName = dirname($cssFile) . DIRECTORY_SEPARATOR;
                 $srcRelpath = str_replace($pubDir, '', $dirName);
-                $pubPath = $srcRelpath . $filename;
                 $srcDepth = count(explode(DIRECTORY_SEPARATOR, $srcRelpath)) - 1;
                 $cacheDepth = count(explode(DIRECTORY_SEPARATOR, $cacheRelPath)) - 1;
                 $newPath = '';

@@ -13,7 +13,7 @@ class Workflow_RunAction extends ProjectBaseAction
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(AgaviParameterHolder $rd)
+    public function execute(AgaviParameterHolder $parameters)
     {
         return 'Input';
     }
