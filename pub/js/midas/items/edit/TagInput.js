@@ -36,6 +36,7 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
         this.parent(element, options);
         this.tag_container = this.element.parents('ul');
         this.createTagHandler(this.options.assigned_tags);
+        this.element = this.tag_container.find('input:first');
     },
 
     /**
@@ -181,26 +182,13 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
         var rel_pos = $('.document-editing').offset();
 
         var pos = {
-            left: (el_pos.left - rel_pos.left),
-            display: 'none'
+            left: (el_pos.left - rel_pos.left)
         };
         hint_element.css(pos);
         $('.document-editing').append(hint_element);
         hint_element.css('top', el_pos.top - rel_pos.top - hint_element.height() - 6);
 
-        this.tag_container.parent().hover(function()
-        {
-            if (!hint_element.hasClass('fading'))
-            {
-                hint_element.dequeue().stop().fadeIn(200);
-            }
-        }, function()
-        {
-            hint_element.addClass('fading').fadeOut(350, function()
-            {
-                hint_element.removeClass('fading').dequeue();
-            });
-        });
+        this.registerHintEvents(this.tag_container, hint_element);
         this.error_hint = hint_element;
     }
 });

@@ -246,29 +246,16 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         var rel_pos = $('.document-editing').offset();
 
         var pos = {
-            left: (el_pos.left - rel_pos.left),
-            display: 'none'
+            left: (el_pos.left - rel_pos.left)
         };
         hint_element.css(pos);
         $('.document-editing').append(hint_element);
         hint_element.css('top', el_pos.top - rel_pos.top - hint_element.height() - 6);
-
-        this.element.hover(function()
-        {
-            if (!hint_element.hasClass('fading'))
-            {
-                hint_element.dequeue().stop().fadeIn(200);
-            }
-        }, function()
-        {
-            hint_element.addClass('fading').fadeOut(350, function()
-            {
-                hint_element.removeClass('fading').dequeue();
-            });
-        });
+        this.registerHintEvents(this.element, hint_element);
+        
         this.error_hint = hint_element;
     },
-
+    
     /**
      * @description Renders an error hint for the given message.
      * @returns HTMLElement
@@ -284,7 +271,63 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         // workaround for mustache not working with jsdom (our testing env)
         var tmp_item = $('<div></div>').html(rendered_html.replace('&gt;', '>').replace('&lt;', '<'));
         var validation_hint = tmp_item.find('div.error-hint');
-
+        validation_hint.css({ 'display': 'none', 'z-index': 1 });
+        
         return validation_hint;
+    },
+    
+    /**
+     * @description Registers the event callbacks that take care of showing and hiding
+     * input validation error hints.
+     */
+    registerHintEvents: function(trigger_element, hint_element)
+    {
+        var that = this;
+        trigger_element.hover(
+            function() { that.showHint(hint_element); },
+            function() 
+            { 
+                if (!that.element.is(':focus'))
+                {
+                    that.hideHint(hint_element);
+                }
+            }
+        );
+        this.element.focus(function() 
+        { 
+            hint_element.css('z-index', 5);
+            that.showHint(hint_element);
+        })
+        .blur(function() 
+        { 
+            hint_element.css('z-index', 1);
+            that.hideHint(hint_element); 
+        });
+    },
+    
+    /**
+     * @description Shows the given validation hint.
+     */
+    showHint: function(hint_element)
+    {
+        hint_element.stop(true, false).animate(
+            { opacity: 1 },
+            150,
+            'swing',
+            function() { hint_element.css('display', 'block'); }
+        );
+    },
+    
+    /**
+     * @description Hides the given validation hint.
+     */
+    hideHint: function(hint_element)
+    {
+        hint_element.stop(true, false).animate(
+            { opacity: 0 },
+            300,
+            'swing',
+            function() { hint_element.css('display', 'none'); }
+        );
     }
 });
