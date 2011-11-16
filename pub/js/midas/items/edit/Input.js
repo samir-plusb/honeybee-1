@@ -251,10 +251,16 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
 
         this.element.hover(function()
         {
-            hint_element.fadeIn(300);
+            if (!hint_element.hasClass('fading'))
+            {
+                hint_element.dequeue().stop().fadeIn(300);
+            }
         }, function()
         {
-            hint_element.fadeOut(500);
+            hint_element.addClass('fading').fadeOut(500, function()
+            {
+                hint_element.removeClass('fading').dequeue();
+            });
         });
         this.error_hint = hint_element;
     },

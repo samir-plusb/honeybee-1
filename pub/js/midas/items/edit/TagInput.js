@@ -184,13 +184,18 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
         $('.document-editing').append(hint_element);
         hint_element.css('top', el_pos.top - rel_pos.top - hint_element.height() - 6);
 
-        this.tag_container.parent().mouseenter(function()
+        this.element.hover(function()
         {
-            hint_element.fadeIn(250);
-        });
-        this.tag_container.parent().mouseleave(function()
+            if (!hint_element.hasClass('fading'))
+            {
+                hint_element.dequeue().stop().fadeIn(300);
+            }
+        }, function()
         {
-            hint_element.fadeOut(500);
+            hint_element.addClass('fading').fadeOut(500, function()
+            {
+                hint_element.removeClass('fading').dequeue();
+            });
         });
         this.error_hint = hint_element;
     }
