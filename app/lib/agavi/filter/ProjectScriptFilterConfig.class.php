@@ -22,7 +22,6 @@ class ProjectScriptFilterConfig
         self::CFG_OUTPUT_TYPES,
         self::CFG_PUB_DIR
     );
-
     protected $settings = array();
 
     public function __construct(array $parameters = array())
@@ -32,20 +31,16 @@ class ProjectScriptFilterConfig
 
     public function get($settingName, $default = NULL)
     {
-        if (! in_array($settingName, self::$supportedSettings))
+        if (!in_array($settingName, self::$supportedSettings))
         {
             throw new Exception(
                 sprintf(
-                    "The given setting: %s is not supported. Supported settings are:\n- %s",
-                    $settingName,
-                    implode("\n- ", self::$supportedSettings)
+                    "The given setting: %s is not supported. Supported settings are:\n- %s", $settingName, implode("\n- ", self::$supportedSettings)
                 )
             );
         }
 
-        return isset($this->settings[$settingName])
-            ? $this->settings[$settingName]
-            : $default;
+        return isset($this->settings[$settingName]) ? $this->settings[$settingName] : $default;
     }
 
     public function getJsCacheDir()
@@ -72,7 +67,7 @@ class ProjectScriptFilterConfig
             return TRUE;
         }
 
-		return in_array($outputType, $supportedOutputTypes);
+        return in_array($outputType, $supportedOutputTypes);
     }
 
     public function isPackingEnabled()
@@ -100,12 +95,11 @@ class ProjectScriptFilterConfig
 
     public function getPackageData($packageName)
     {
-        if (! $this->packageExists($packageName))
+        if (!$this->packageExists($packageName))
         {
             throw new Exception(
                 sprintf(
-                    "Encountered undefined script package: '%s'",
-                    $packageName
+                    "Encountered undefined script package: '%s'", $packageName
                 )
             );
         }
@@ -130,20 +124,20 @@ class ProjectScriptFilterConfig
 
         foreach ($required as $req)
         {
-            if (! isset($parameters[$req]))
+            if (!isset($parameters[$req]))
             {
                 throw new AgaviConfigurationException("Missing required setting for '$req'!");
             }
         }
 
         $cssCacheDir = realpath($parameters[self::CFG_CSS_CACHE_DIR]);
-        if (! is_writable($cssCacheDir))
+        if (!is_writable($cssCacheDir))
         {
             throw new AgaviConfigurationException("The given css cache directory '$cssCacheDir' is not writeable!");
         }
 
         $jsCacheDir = realpath($parameters[self::CFG_JS_CACHE_DIR]);
-        if (! is_writable($jsCacheDir))
+        if (!is_writable($jsCacheDir))
         {
             throw new AgaviConfigurationException("The given js cache directory '$jsCacheDir' is not writeable!");
         }
@@ -165,7 +159,7 @@ class ProjectScriptFilterConfig
             isset($parameters[self::CFG_ENABLE_PACKING])
             &&
             TRUE === $parameters[self::CFG_ENABLE_PACKING]
-        );
+            );
 
         $this->settings[self::CFG_PUB_DIR] = realpath(
             dirname(AgaviConfig::get('core.app_dir')) . '/pub'

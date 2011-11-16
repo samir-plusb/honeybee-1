@@ -20,16 +20,17 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
             ->addRole('cvd', 'editor')
             ->addRole('admin', 'cvd');
 
-        $zendAcl->addResource('content-item')->addResource('content-news', 'content-item')->addResource('content-article');
-        $zendAcl->addResource('import-item');
+        $zendAcl->addResource('workflow-item');
 
         // lets deny all
-        $zendAcl->allow('user', 'content-item', 'read', new ProjectAclContentItemIsPublishedAssertion()); // assertion does $resource->isPublished();
+        // assertion does $resource->isPublished();
+        $zendAcl->allow('user', 'content-item', 'read', new ProjectAclContentItemIsPublishedAssertion());
         $zendAcl->allow('editor', 'content-item', 'read');
         $zendAcl->allow('editor', 'content-item', 'edit');
         $zendAcl->deny('editor', 'content-news', 'edit');
         $zendAcl->deny('editor', 'content-item', 'edit', new ProjectAclContentItemIsPublishedAssertion());
-        $zendAcl->allow('editor', 'content-item', 'delete', new ProjectAclUserOwnsContentItemAssertion()); // assertion does $role->getId() == $resource->getOwnerId()
+        // assertion does $role->getId() == $resource->getOwnerId()
+        $zendAcl->allow('editor', 'content-item', 'delete', new ProjectAclUserOwnsContentItemAssertion());
         $zendAcl->allow('cvd', 'content-item', 'edit');
 
         return $zendAcl;
@@ -40,7 +41,7 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
         return $this->zendAcl;
     }
 
-    public function isAllowed($resource, $operation = null)
+    public function isAllowed($resource, $operation = NULL)
     {
         return $this->getZendAcl()->isAllowed($this, $resource, $operation);
     }
@@ -74,7 +75,7 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
             if (!is_scalar($credential))
             {
                 // can't do much with this...
-                return false;
+                return FALSE;
             }
 
             $credential = explode('.', $credential, 2);
@@ -91,7 +92,7 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
         }
         catch (Zend_Acl_Exception $e)
         {
-            return false;
+            return FALSE;
         }
     }
 }
