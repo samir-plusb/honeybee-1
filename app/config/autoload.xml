@@ -29,7 +29,6 @@
             <autoload name="ProjectCurl">%core.app_dir%/models/Curl/ProjectCurl.class.php</autoload>
 
             <autoload name="ProjectZendAclSecurityUser">%core.app_dir%/lib/user/ProjectZendAclSecurityUser.class.php</autoload>
-            <autoload name="ProjectUserMayDoNothingAssertion">%core.app_dir%/lib/user/assertions/ProjectUserMayDoNothingAssertion.class.php</autoload>
 
 
             <xi:include href="%core.app_dir%/models/CouchdbClient/autoload.xml"
