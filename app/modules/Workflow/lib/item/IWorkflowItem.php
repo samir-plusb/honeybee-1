@@ -29,93 +29,74 @@
 interface IWorkflowItem
 {
     /**
-     * Return our related import item.
+     * Returns the system wide unique identifier of the IWorkflowItem.
+     *
+     * @return string
+     */
+    public function getIdentifier();
+
+    /**
+     * Returns the IWorkflowItem's current revision.
+     *
+     * @return string
+     */
+    public function getRevision();
+
+    /**
+     * Returns the IContentItem's created date as an array,
+     * containing data about by whom and when the item was created.
+     * The provided date data is a ISO8601 UTC formatted string.
+     * The provided user information is a string holding the username.
+     *
+     * <pre>
+     * Value structure example:
+     * array(
+     *     'date' => '05-23-1985T15:23:78.123+01:00',
+     *     'user' => 'shrink0r'
+     * )
+     * </pre>
      *
      * @return array
+     */
+    public function getCreated();
+
+    /**
+     * Returns the IContentItem's created date as an array,
+     * containing data about by whom and when the item modified the last time.
+     * The provided date data is a ISO8601 UTC formatted string.
+     * The provided user information is a string holding the username.
      *
-     * The returned structure looks as follows:
-        array(
-            'identifier' => 'foobar',
-            'created'    => '05-23-1985T15:23:78.123+01:00',
-            'modified'   => '05-23-1985T15:23:78.123+01:00',
-            'source'     => 'dpa-regio',
-            'origin'     => 'tmp/dpa/regio/bla.fasel',
-            'timestamp'  => 1234567876543210,
-            'title'      => '42 for is the answer',
-            'content'    => 'and 23 is the question to answer the content...',
-            'category'   => '/for/category/path/u/know',
-            'media'      => array(1, 2, 3), // An array of id's that can be used against the ProjectAssetService.
-            'geo_data'   => array(
-                'long' => 12.19281,
-                'lat'  => 13.2716
-            )
-        );
+     * <pre>
+     * Value structure example:
+     * array(
+     *     'date' => '05-25-1985T15:23:78.123+01:00',
+     *     'user' => 'shrink0r'
+     * )
+     * </pre>
+     *
+     * @return array
+     */
+    public function getLastModified();
+
+    /**
+     * Return our related import item.
+     *
+     * @return IImportItem
      */
     public function getImportItem();
 
     /**
      * Return a list of content items that belong to this workflow item.
      *
-     * @return array
-     *
-     * The returned structure looks as follows:
-        array(
-            0 => array(
-                // Meta Data
-                'parent'     => 'foobar',
-                'created'    => array(
-                    'time' => '05-23-1985T15:23:78.123+01:00',
-                    'user' => 'shrink0r'
-                ),
-                'modified'    => array(
-                    'time' => '06-25-1985T15:23:78.123+01:00',
-                    'user' => 'shrink0r'
-                ),
-                'state'      => 'live',
-                // Content Data
-                'source'     => 'Bezirksamt Pankow',
-                'priority'   => 2,
-                'title'      => 'Neue Termine: 42 for is the answer',
-                'text'       => 'Der Verein ist ein Verein',
-                'teaser'     => 'and the teaser will get u to read the text',
-                'category'   => 'Kiezleben',
-                'url'        => 'http://www.lookmomicanhazurls.com',
-                'date'       => array(
-                    'from'    => '05-23-1985T15:23:78.123+01:00',
-                    'untill'  => '05-25-1985T15:23:78.123+01:00',
-                    'isevent' => FALSE
-                ),
-                'location'   => array(
-                    'coords' => array(
-                        'long' => '12.19281',
-                        'lat'  => '13.2716',
-                    ),
-                    'adress' => array(
-                        'city'        => 'Berlin',
-                        'postal_code' => 13187,
-                        'street'      => 'Shrinkstreet',
-                        'house_num'   => 23
-                    ),
-                    'city_allocation' => array(
-                        'administrative_district' => 'Pankow',
-                        'district'                => 'Prenzlauer Berg',
-                        'neighborhood'            => 'Niederschönhausen'
-                    ),
-                    'name'              => 'Vereinsheim Pankow - Niederschönhausen',
-                    'affects_wholecity' => FALSE,
-                    'relevance'         => 0
-                )
-            ),
-            1 => array(...),
-            ...
-        );
+     * @return array An list of of IContentItems
      */
     public function getContentItems();
 
     /**
      * Return a generic assoc array of attributes.
+     * @todo Implement an AttributeHolder for this?
      *
-     * @return array Plain key=>value collection.
+     * @return array A plain key=>value collection.
      */
     public function getAttributes();
 }
