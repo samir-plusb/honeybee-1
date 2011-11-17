@@ -96,9 +96,12 @@ interface IWorkflowItem
                         'street'      => 'Shrinkstreet',
                         'house_num'   => 23
                     ),
+                    'city_allocation' => array(
+                        'administrative_district' => 'Pankow',
+                        'district'                => 'Prenzlauer Berg',
+                        'neighborhood'            => 'Niederschönhausen'
+                    ),
                     'name'              => 'Vereinsheim Pankow - Niederschönhausen',
-                    'neighborhood'      => 'Pankow',
-                    'subneighborhood'   => 'Niederschönhausen',
                     'affects_wholecity' => FALSE,
                     'relevance'         => 0
                 )
