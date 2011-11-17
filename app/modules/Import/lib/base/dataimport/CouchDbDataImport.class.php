@@ -6,11 +6,11 @@
  * In order to be able to tweak the couchdb load, this class supports buffering calls to importData
  * and sends batch-creates to the couch everytime the buffer limit is reached.
  *
- * @version         $Id:$
- * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
- * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Import
- * @subpackage      Base
+ * @version $Id:$
+ * @copyright BerlinOnline Stadtportal GmbH & Co. KG
+ * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package Import
+ * @subpackage Base
  */
 class CouchDbDataImport extends BaseDataImport
 {
@@ -49,7 +49,7 @@ class CouchDbDataImport extends BaseDataImport
     /**
      * Holds the client, that we use in order to talk to our couch.
      *
-     * @var         ExtendedCouchDbClient $couchClient
+     * @var ExtendedCouchDbClient $couchClient
      */
     protected $couchClient;
 
@@ -57,14 +57,14 @@ class CouchDbDataImport extends BaseDataImport
      * Holds the import (record)data currently being buffered, before it is batch-pushed to couch.
      * The buffer is an assoc array whereas a data's record-identifier serves as the key.
      *
-     * @var         array $importBuffer
+     * @var array $importBuffer
      */
     protected $importBuffer;
 
     /**
      * Holds the size of the import-buffer for this instance.
      *
-     * @var         int
+     * @var int
      */
     protected $importBufferSize;
 
@@ -76,11 +76,11 @@ class CouchDbDataImport extends BaseDataImport
     /**
      * Creates a new CouchDbDataImport instance.
      *
-     * @param       CouchDbDataImportConfig $config
+     * @param CouchDbDataImportConfig $config
      *
-     * @throws      DataImportException If the given $config is no CouchDbDataImportConfig.
+     * @throws DataImportException If the given $config is no CouchDbDataImportConfig.
      *
-     * @see         BaseDataImport::__construct()
+     * @see BaseDataImport::__construct()
      */
     public function __construct(IImportConfig $config)
     {
@@ -98,11 +98,9 @@ class CouchDbDataImport extends BaseDataImport
      * Let our parent do it's work and then get our
      * couchDbClient and importBuffer setup for import execution.
      *
-     * @param       IDataSource $dataSource
+     * @param IDataSource $dataSource
      *
-     * @see         BaseDataImport::init()
-     *
-     * @uses        CouchDbDataImport::buildCouchDbUri()
+     * @see BaseDataImport::init()
      */
     protected function init(IDataSource $dataSource)
     {
@@ -121,30 +119,15 @@ class CouchDbDataImport extends BaseDataImport
      * Cleanup our state after running the import.
      * This method flushes the importBuffer in order to make sure there are no leftovers.
      *
-     * @see         BaseDataImport::cleanup()
+     * @see BaseDataImport::cleanup()
      *
-     * @uses        CouchDbDataImport::flushImportBuffer()
+     * @uses CouchDbDataImport::flushImportBuffer()
      */
     protected function cleanup()
     {
         $this->flushImportBuffer();
 
         parent::cleanup();
-    }
-
-    /**
-     * This method is responseable for converting data records
-     * to a final array structure, suitable for data distribution to couchdb.
-     *
-     * @return      array
-     */
-    protected function convertRecord(IDataRecord $record)
-    {
-        $data = $record->toArray();
-
-        $data[self::COUDB_ID_FIELD] = $record->getIdentifier();
-
-        return $data;
     }
 
     // ---------------------------------- </BaseDataImport OVERRIDES> ----------------------------
@@ -156,11 +139,11 @@ class CouchDbDataImport extends BaseDataImport
      * Implementation of the BaseDataImport's importData strategy hook.
      * In this case we add the data to our buffer and then flush if necessary.
      *
-     * @param       array $data
+     * @param array $data
      *
-     * @return      boolean
+     * @return boolean
      *
-     * @uses        CouchDbDataImport::flushImportBuffer()
+     * @uses CouchDbDataImport::flushImportBuffer()
      */
     protected function processRecord()
     {
@@ -182,7 +165,8 @@ class CouchDbDataImport extends BaseDataImport
     /**
      * Sends our buffered import data to the couch.
      *
-     * @uses        CouchDbDataImport::resolveConflicts()
+     * @uses CouchDbDataImport::convertRecord()
+     * @uses CouchDbDataImport::handleCouchDbResponse()
      */
     protected function flushImportBuffer()
     {
@@ -209,12 +193,31 @@ class CouchDbDataImport extends BaseDataImport
     }
 
     /**
+     * This method is responseable for converting data records
+     * to a final array structure, suitable for data distribution to couchdb.
+     *
+     * @return array
+     */
+    protected function convertRecord(IDataRecord $record)
+    {
+        $data = $record->toArray();
+
+        $data[self::COUDB_ID_FIELD] = $record->getIdentifier();
+
+        return $data;
+    }
+
+    /**
      * Checks the given reponse to our batch create request,
      * checks for conflicts and returns an array that can used to resolve them.
      *
-     * @param       array $response
+     * @param array $response
      *
-     * @return      array
+     * @return array
+     *
+     * @uses CouchDbDataImport::isCouchDbCreateConflict()
+     * @uses CouchDbDataImport::createUpdateData()
+     * @uses CouchDbDataImport::onRecordSuccess()
      */
     protected function handleCouchDbResponse(array $response)
     {
@@ -245,9 +248,9 @@ class CouchDbDataImport extends BaseDataImport
     /**
      * Helper method for querying a couchdb result for a potential create conflict.
      *
-     * @param       array $response
+     * @param array $response
      *
-     * @return      boolean
+     * @return boolean
      */
     protected function isCouchDbCreateConflict(array $response)
     {
@@ -263,9 +266,11 @@ class CouchDbDataImport extends BaseDataImport
      * and that contains a valid revision
      * in order to update it's corresponding document.
      *
-     * @param       string $docId
+     * @param string $docId
      *
-     * @return      array or NULL if no update necessary
+     * @return array or NULL if no update necessary
+     *
+     * @uses CouchDbDataImport::convertRecord()
      */
     protected function createUpdateData($docId)
     {
@@ -288,20 +293,6 @@ class CouchDbDataImport extends BaseDataImport
         }
 
         return NULL;
-    }
-
-    /**
-     * Build the uri to use in order to connect to couchdb.
-     *
-     * @return string
-     */
-    protected function buildCouchDbUri()
-    {
-        return sprintf(
-            "http://%s:%d/",
-            $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_HOST),
-            $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_PORT)
-        );
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------
