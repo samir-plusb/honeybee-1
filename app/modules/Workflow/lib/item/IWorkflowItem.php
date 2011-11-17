@@ -23,8 +23,8 @@
  * @version $Id:$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package Import
- * @subpackage Base
+ * @package Workflow
+ * @subpackage Item
  */
 interface IWorkflowItem
 {
