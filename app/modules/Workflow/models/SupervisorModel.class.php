@@ -10,7 +10,7 @@
  *
  */
 
-class Workflow_SupervisorModel extends ProjectBaseModel
+class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISingletonModel
 {
     /**
      * database config name
@@ -48,15 +48,7 @@ class Workflow_SupervisorModel extends ProjectBaseModel
      */
     static function getInstance()
     {
-        $context = AgaviContext::getInstance();
-
-        $model = $context->getRequest()->getAttribute(__CLASS__);
-        if (! $model instanceof Workflow_SupervisorModel)
-        {
-            $model = $context->getModel('Supervisor', 'Workflow');
-            $context->getRequest()->setAttribute(__CLASS__, $model);
-        }
-        return $model;
+        return AgaviContext::getInstance()->getModel('Supervisor', 'Workflow');
     }
 
 
