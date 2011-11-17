@@ -149,7 +149,7 @@ interface IContentItem
      *      'user' => 'shrink0r'
      *    ),
      *    // Content Data
-     *    'source'     => 'Bezirksamt Pankow',
+     *    'type'       => 'Bezirksamt Pankow',
      *    'priority'   => 2,
      *    'title'      => 'Neue Termine: 42 for is the answer',
      *    'text'       => 'Der Verein ist ein Verein',

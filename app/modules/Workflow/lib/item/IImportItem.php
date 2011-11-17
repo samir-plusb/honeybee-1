@@ -86,14 +86,26 @@ interface IImportItem
      * Returns a list of id's that can be used together with ProjectAssetService
      * to resolve assets.
      *
-     * @return array Example: array(23, 5, 42);
+     * <pre>
+     * Example value structure:
+     * array(23, 5, 42)
+     * </pre>
+     * @return array
      */
     public function getMedia();
 
     /**
      * Returns array holding the geo data associated with the ImportItem.
      *
-     * @return array Example: array('long' => 12.345, 'lat' => 67.890)
+     * <pre>
+     * Example value structure:
+     * array(
+     *     'long' => 12.345,
+     *     'lat' => 67.890
+     * )
+     * </pre>
+     *
+     * @return array
      */
     public function getGeoData();
 }
