@@ -11,8 +11,15 @@ var App = {};
 App.run = function()
 {
     var args = App.readArgs();
-
-    lessc.compileDirectory(args.src, args.deploy);
+    
+    if (!args.isfile)
+    {
+        lessc.compileDirectory(args.src, args.deploy);
+    }
+    else
+    {
+        lessc.compileFile(args.src, args.deploy);
+    }
 
     if (args.watch)
     {
@@ -31,26 +38,33 @@ App.readArgs = function()
         throw "Invalid number of parameters.\nUsage: node less_compile.js less_directory deploy_directory [-watch]";
     }
 
-    var less_dir = path.normalize(process.cwd() + '/' + process.argv[2]);
-    var css_dir = path.normalize(process.cwd() + '/' + process.argv[3]);
+    var less_path = path.normalize(process.cwd() + '/' + process.argv[2]);
+    var css_path = path.normalize(process.cwd() + '/' + process.argv[3]);
     var watch_files = false;
-
+    var is_file = true;
+    
     try
     {
-        fs.statSync(less_dir);
+        fs.statSync(less_path);
     }
     catch(e)
     {
-        throw new Error("The given less src directory '" + less_dir + "' does not exist.");
+        throw new Error("The given less src path '" + less_path + "' does not exist.");
     }
 
     try
     {
-        fs.statSync(css_dir);
+        var stat = fs.statSync(less_path);
+        
+        if (stat.isDirectory())
+        {
+            is_file = false;
+            fs.statSync(css_path);
+        }
     }
     catch(e)
     {
-        throw new Error("The given css src directory '" + css_dir + "' does not exist.");
+        throw new Error("The given css target path '" + css_path + "' does not exist.");
     }
 
     if (process.argv.length === 5)
@@ -64,9 +78,10 @@ App.readArgs = function()
     }
 
     return {
-        'src': less_dir,
-        'deploy': css_dir,
-        'watch': watch_files
+        'src': less_path,
+        'deploy': css_path,
+        'watch': watch_files,
+        'isfile': is_file
     };
 };
 

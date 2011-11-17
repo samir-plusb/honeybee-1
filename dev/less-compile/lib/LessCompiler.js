@@ -25,7 +25,10 @@ LessCompiler.compileFile = function(less_file, target_path)
 {
     filesystem.readFile(less_file, function(err, less_code)
     {
-        less.render(less_code.toString(), function(err, compiled_css)
+        util.log(util.inspect(less_file));
+        less.render(less_code.toString(), {
+            paths: [path.dirname(less_file)]
+        }, function(err, compiled_css)
         {
             if (err)
             {
