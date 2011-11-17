@@ -6,23 +6,6 @@
     <ae:configuration>
 
         <packages>
-            <package name="jquery-ui">
-                <javascripts>
-                    <script>js/libs/jquery-1.6.4.js</script>
-                    <script>js/libs/jquery-ui-1.8.13.js</script>
-                    <script>js/libs/jquery-easing-1.3.js</script>
-                    <script>js/libs/jquery-caretrange.js</script>
-                    <script>js/libs/jquery-contextmenu-1.3.js</script>
-                    <script>js/libs/jquery-taghandler.js</script>
-                    <script>js/libs/ICanHaz.js</script>
-                </javascripts>
-
-                <stylesheets>
-                    <script>css/jquery-ui.1.8.13.custom.css</script>
-                    <script>css/jquery-taghandler.css</script>
-                </stylesheets>
-            </package>
-            
             <package name="twitter-bootstrap">
                 <javascripts>
                     <script>js/libs/bootstrap/bootstrap-alerts.js</script>
@@ -34,8 +17,27 @@
                     <script>js/libs/bootstrap/bootstrap-tabs.js</script>
                     <script>js/libs/bootstrap/bootstrap-twipsy.js</script>
                 </javascripts>
+                <stylesheets>
+                    <script>css/bootstrap.css</script>
+                </stylesheets>
             </package>
-
+            
+            <package name="jquery-ui">
+                <javascripts>
+                    <script>js/libs/jquery-1.6.4.js</script>
+                    <script>js/libs/jquery-ui-1.8.13.js</script>
+                    <script>js/libs/jquery-easing-1.3.js</script>
+                    <script>js/libs/jquery-caretrange.js</script>
+                    <script>js/libs/jquery-contextmenu-1.3.js</script>
+                    <script>js/libs/jquery-taghandler.js</script>
+                    <script>js/libs/ICanHaz.js</script>
+                </javascripts>
+                <stylesheets>
+                    <script>css/jquery-ui.1.8.13.custom.css</script>
+                    <script>css/jquery-taghandler.css</script>
+                </stylesheets>
+            </package>
+            
             <package name="midas.core" depends="jquery-ui">
                 <javascripts>
                     <script>js/midas/core/core.js</script>
@@ -47,14 +49,12 @@
                     <script>js/midas/core/BaseView.js</script>
                     <script>js/midas/core/CommandTriggerList.js</script>
                 </javascripts>
-
                 <stylesheets>
-                    <script>css/reset.css</script>
                     <script>css/fonts.css</script>
                 </stylesheets>
             </package>
 
-            <package name="midas.items" depends="midas.core">
+            <package name="midas.items.edit" depends="midas.core">
                 <javascripts>
                     <script>js/midas/items/items.js</script>
                     <script>js/midas/items/edit/SlidePanel.js</script>
@@ -70,8 +70,8 @@
                     <script>js/midas/items/edit/EditView.js</script>
                     <script>js/midas/items/edit/EditController.js</script>
                 </javascripts>
-
                 <stylesheets>
+                    <script>css/reset.css</script>
                     <script>css/screen.css</script>
                 </stylesheets>
             </package>
@@ -79,12 +79,16 @@
         </packages>
 
         <deployments>
-            <deployment viewpath="items.*">
-                <package ref="midas.items" />
+            <deployment viewpath="items.edit*">
+                <package ref="midas.items.edit" />
 
                 <javascripts>
                     <script>js/midas/items/edit/init.js</script>
                 </javascripts>
+            </deployment>
+            
+            <deployment viewpath="items.list*">
+                <package ref="twitter-bootstrap" />
             </deployment>
         </deployments>
 
