@@ -81,6 +81,15 @@
                     <ae:parameter>barfoo</ae:parameter>
                 </ae:parameters>
             </setting>
+            <setting name="categories">
+                <ae:parameters>
+                    <ae:parameter>Polizeimeldungen</ae:parameter>
+                    <ae:parameter>Kiezleben</ae:parameter>
+                    <ae:parameter>Kiezkultur</ae:parameter>
+                    <ae:parameter>Bekanntmachungen</ae:parameter>
+                    <ae:parameter>Stadtentwicklung</ae:parameter>
+                </ae:parameters>
+            </setting>
         </settings>
 
         <exception_templates>

@@ -29,17 +29,6 @@
                 <h3 class="legend">Items</h3>
                 <ul></ul>
             </div>
-            <!-- Template for rendering content-item list items -->
-            <script id="content-item-tpl" type="text/html">
-                <li class="content-item">
-                    <article>
-                        <hgroup>
-                            <h3>{{ title }}<span class="date">{{ date[from] }}</span></h3>
-                        </hgroup>
-                        <p>{{ text }}</p>
-                    </article>
-                </li>
-            </script>
         </section>
 
         <form accept-charset="utf-8" action="#postdata" method="post">
@@ -52,11 +41,14 @@
                     <label for="Kategorie">Kategorie</label>
                     <select class="jsb-input" name="category">
                         <option value=""></option>
-                        <option value="Polizeimeldungen">Polizeimeldungen</option>
-                        <option value="Kiezleben">Kiezleben</option>
-                        <option value="Kiezkultur">Kiezkultur</option>
-                        <option value="Stadtteilentwicklung">Stadtteilentwicklung</option>
-                        <option value="Bekanntmachung">Bekanntmachung</option>
+<?php
+    foreach ($t['category_options'] as $category)
+    {
+?>
+                        <option value="<?php echo strtolower($category); ?>"><?php echo $category; ?></option>
+<?php
+    }
+?>
                     </select>
                     <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
                 </div>
@@ -116,10 +108,10 @@
             <div class="extra-data-left">
                 <div class="geo-data content-panel"> <!-- <fieldset> -->
                     <h3 class="legend">Geo</h3>
-                    <input type="hidden" name="location[longitude]" id="location[longitude" />
-                    <input type="hidden" name="location[latitude]" id="location[latitude" />
+                    <input type="hidden" name="location[longitude]" />
+                    <input type="hidden" name="location[latitude]" />
                     <div class="input-full">
-                        <select class="jsb-input" name="location[relevance]" id="location[relevance">
+                        <select class="jsb-input" name="location[relevance]">
                             <option value=""></option>
                             <option value="0">Betrifft den Bezirk (z.B. Wilmersdorf)</option>
                             <option value="1">Betrifft den Verwaltungsbezirk (z.B. Charlottenburg-Wilmersdorf)</option>
@@ -131,8 +123,8 @@
                         <label for="location[name">Name des Orts (z.B: KaDeWe)</label>
                         <input name="location[name]" type="text" />
                     </div>
-                    <div class="input-full"
-                         ><label for="location[locationdetail">Zusätzliche Ortsangabe (z.B.: Haus 3)</label>
+                    <div class="input-full">
+                        <label for="location[locationdetail">Zusätzliche Ortsangabe (z.B.: Haus 3)</label>
                         <input name="location[locationdetail]" type="text" />
                     </div>
                     <div class="input-full">
@@ -179,37 +171,15 @@
                 <section class="nearby-items content-panel">
                     <h3 class="legend">Items in der Nähe</h3>
                     <ul>
-                        <li data-template="">
-                            <a href="/items/edit/{{Item.parent}}">
+                        <li>
+                            <!-- <a href="/items/edit/{{Item.parent}}">
                                 ({{Item.location.neighborhood|truncate 100}}) {{Item.title|truncate 80}}
-                            </a>
+                            </a> -->
                         </li>
                     </ul>
                 </section>
             </div>
-            <!-- Template for rendering form validation error hints. -->
-            <script id="input-error-tpl" type="text/html">
-                <div class="error-hint ui-corner-all bubble-content">
-                    <div class="error-hint-body">
-                        <ul>
-                            {{#messages}}
-                            <li>
-                                <h4>{{ topic }}:</h4>
-                                <p>{{ message }}</p>
-                            </li>
-                            {{/messages}}
-                        </ul>
-                        <div class="bubble-hook"></div>
-                    </div>
-                </div>
-            </script>
         </form>
-        <!-- Template for rendering confirm and warn dialogs. -->
-        <script id="dialog-tpl" type="text/html">
-            <div title="{{ title }}">
-                <p>{{ message }}</p>
-            </div>
-        </script>
     </section>
 
     <section class="document-data">
@@ -257,3 +227,36 @@ Donec a adipiscing magna. Etiam consectetur blandit diam, et pretium tellus cong
         </div>
     </section>
 </div>
+<!-- Template for rendering form validation error hints. -->
+<script id="input-error-tpl" type="text/html">
+    <div class="error-hint ui-corner-all bubble-content">
+        <div class="error-hint-body">
+            <ul>
+                {{#messages}}
+                <li>
+                    <h4>{{ topic }}:</h4>
+                    <p>{{ message }}</p>
+                </li>
+                {{/messages}}
+            </ul>
+            <div class="bubble-hook"></div>
+        </div>
+    </div>
+</script>
+<!-- Template for rendering confirm and warn dialogs. -->
+<script id="dialog-tpl" type="text/html">
+    <div title="{{ title }}">
+        <p>{{ message }}</p>
+    </div>
+</script>
+<!-- Template for rendering content-item list items -->
+<script id="content-item-tpl" type="text/html">
+    <li class="content-item">
+        <article>
+            <hgroup>
+                <h3>{{ title }}<span class="date">{{ date[from] }}</span></h3>
+            </hgroup>
+            <p>{{ text }}</p>
+        </article>
+    </li>
+</script>

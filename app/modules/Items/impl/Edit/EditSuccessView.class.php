@@ -27,6 +27,10 @@ class Items_Edit_EditSuccessView extends ItemsBaseView
             'mandatory' => TRUE,
             'tags' => AgaviConfig::get('items.tags', array())
         ));
+        $this->setAttribute(
+            'category_options', 
+            AgaviConfig::get('items.categories', array())
+        );
     }
 
     /**
