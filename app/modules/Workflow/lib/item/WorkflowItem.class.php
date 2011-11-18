@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * The WorkflowItem serves as the main implementation of the IWorkflowItem interface.
+ * It serves as the aggregate root of all objects (DTO's) that are involved in the process of content refinement.
+ *
+ * @version $Id$
+ * @copyright BerlinOnline Stadtportal GmbH & Co. KG
+ * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package Workflow
+ * @subpackage Item
+ */
 class WorkflowItem implements IWorkflowItem
 {
     /**
