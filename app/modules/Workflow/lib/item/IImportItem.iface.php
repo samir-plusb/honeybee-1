@@ -16,11 +16,13 @@
 interface IImportItem
 {
     /**
-     * Returns the ImportItem's unique identifier.
+     * Returns the unique identifier of our aggregate root (IWorkflowItem).
      *
      * @return string
+     *
+     * @see IWorkflowItem::getIdentifier()
      */
-    public function getIdentifier();
+    public function getParentIdentifier();
 
     /**
      * Returns a ISO8601 UTC date string that holds the creation date.
@@ -44,7 +46,7 @@ interface IImportItem
      */
     public function getSource();
 
-     /**
+    /**
      * Returns an uri pointing to the resource that we originate from.
      * Always is a uri, but may hold a custom scheme.
      *

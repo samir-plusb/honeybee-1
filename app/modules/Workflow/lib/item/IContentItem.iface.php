@@ -109,6 +109,16 @@ interface IContentItem
     public function getText();
 
     /**
+     * Returns content-items source.
+     * Holds data akin to the type attribute,
+     * with the difference that the type attribute is set by the system
+     * whereas the source may be set by an editor.
+     *
+     * @return string
+     */
+    public function getSource();
+
+    /**
      * Returns a valid url using the http or https scheme
      * and that shall be linked with the content.
      *
@@ -139,47 +149,44 @@ interface IContentItem
      * Example value structure:
      * array(
      *  // Meta Data
-     *  'parent'     => 'foobar',
-     *  'created'    => array(
+     *  'parentIdentifier'    => 'foobar',
+     *  'created'             => array(
      *      'date' => '05-23-1985T15:23:78.123+01:00',
      *      'user' => 'shrink0r'
      *   ),
-     *   'modified'    => array(
+     *   'lastModified'       => array(
      *      'date' => '06-25-1985T15:23:78.123+01:00',
      *      'user' => 'shrink0r'
      *    ),
      *    // Content Data
-     *    'type'       => 'Bezirksamt Pankow',
-     *    'priority'   => 2,
-     *    'title'      => 'Neue Termine: 42 for is the answer',
-     *    'text'       => 'Der Verein ist ein Verein',
-     *    'teaser'     => 'and the teaser will get u to read the text',
-     *    'category'   => 'Kiezleben',
-     *    'url'        => 'http://www.lookmomicanhazurls.com',
-     *    'isevent'    => FALSE,
-     *    'date'       => array(
-     *        'from'    => '05-23-1985T15:23:78.123+01:00',
-     *        'untill'  => '05-25-1985T15:23:78.123+01:00'
+     *    'type'              => 'mail',
+     *    'priority'          => 2,
+     *    'title'             => 'Neue Termine: 42 for is the answer',
+     *    'text'              => 'Der Verein ist ein Verein',
+     *    'teaser'            => 'and the teaser will get u to read the text',
+     *    'category'          => 'Kiezleben',
+     *    'source'            => 'Bezirksamt Pankow',
+     *    'url'               => 'http://www.lookmomicanhazurls.com',
+     *    'isevent'           => FALSE,
+     *    'affects_wholecity' => FALSE,
+     *    'relevance'         => 0,
+     *    'date'              => array(
+     *        'from'   => '05-23-1985T15:23:78.123+01:00',
+     *        'untill' => '05-25-1985T15:23:78.123+01:00'
      *     ),
-     *     'location'   => array(
-     *         'coords' => array(
+     *     'location'         => array(
+     *         'coords'                   => array(
      *             'long' => '12.19281',
      *             'lat'  => '13.2716'
      *          ),
-     *          'address' => array(
-     *              'city'        => 'Berlin',
-     *              'postal_code' => 13187,
-     *              'street'      => 'Shrinkstreet',
-     *             'house_num'   => 23
-     *          ),
-     *          'city_allocation' => array(
-     *              'administrative_district' => 'Pankow',
-     *              'district'                => 'Prenzlauer Berg',
-     *              'neighborhood'            => 'Niederschönhausen'
-     *          ),
-     *          'name'              => 'Vereinsheim Pankow - Niederschönhausen',
-     *          'affects_wholecity' => FALSE,
-     *          'relevance'         => 0
+     *          'city'                    => 'Berlin',
+     *          'postal_code'             => '13187',
+     *          'administrative_district' => 'Pankow',
+     *          'district'                => 'Prenzlauer Berg',
+     *          'neighborhood'            => 'Niederschönhausen',
+     *          'street'                  => 'Shrinkstreet',
+     *          'house_num'               => '23',
+     *          'name'                    => 'Vereinsheim Pankow - Niederschönhausen'
      *     )
      * )
      * </pre>

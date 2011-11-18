@@ -7,15 +7,16 @@
  * @author tay
  * @version $Id$
  * @since 25.10.2011
- *
  */
 class WorkflowItemPeer
 {
     /**
+     * Holds the couchdb client that we use to persist
+     * and retrieve
+     *
      * @var ExtendedCouchDbClient
      */
     protected $client;
-
 
     /**
      * constuct a handler instance
@@ -26,9 +27,10 @@ class WorkflowItemPeer
      */
     public function __construct()
     {
-        $this->client = AgaviContext::getInstance()->getDatabaseConnection(ItemsModuleSetup::COUCHDB_DATABASE);
+        $this->client = AgaviContext::getInstance()->getDatabaseConnection(
+            ItemsModuleSetup::COUCHDB_DATABASE
+        );
     }
-
 
     /**
      * get the database handler for the import items database
@@ -41,17 +43,29 @@ class WorkflowItemPeer
     }
 
     /**
-     * get a import item by its document id
+     * Get a workflow item by its document id (identifier).
      *
-     * @param string $documentId
+     * @param string $identifier
      *
-     * @return WorkflowItem
+     * @return IWorkflowItem
      *
      * @throws CouchdbClientException
      */
-    public function getItemByIdentifier($documentId)
+    public function getItemByIdentifier($identifier)
     {
-        $data = $this->client->getDoc(NULL, $documentId);
+        $data = $this->client->getDoc(NULL, $identifier);
         return new WorkflowItem($data);
+    }
+
+    /**
+     * Store the given workflow item to the database.
+     *
+     * @param IWorkflowItem $item
+     *
+     * @throws CouchdbClientException
+     */
+    public function storeItem(IWorkflowItem $item)
+    {
+
     }
 }

@@ -1,162 +1,140 @@
 <?php
 
-/**
- * Hold the import item data
- *
- * @package Workflow
- * @author tay
- * @version $Id$
- * @since 24.10.2011
- *
- */
-class WorkflowItem implements IDataRecord
+class WorkflowItem implements IWorkflowItem
 {
     /**
-     * holds our data
+     * Holds the WorkflowItem's identifier.
+     *
+     * @var string
+     */
+    protected $identifier;
+
+    /**
+     * Holds the WorkflowItem's revision.
+     *
+     * @var string
+     */
+    protected $revision;
+
+    /**
+     * Holds information on who created this item and when.
      *
      * @var array
      */
-    protected $data;
+    protected $created;
+
+     /**
+     * Holds information on who was the last to modify this item and when.
+     *
+     * @var array
+     */
+    protected $lastModified;
 
     /**
-     * initialize item from assoziative array
      *
-     * @param array $data
+     *
+     * @var IImportItem
      */
-    public function __construct(array $data)
+    protected $importItem;
+
+    /**
+     * Returns the list of our IContentItems.
+     *
+     * @var array
+     */
+    protected $contentItems;
+
+    /**
+     * Holds our generic attributes collection.
+     *
+     * @var array
+     */
+    protected $attributes;
+
+    /**
+     * Creates a new WorkflowItem instance.
+     */
+    public function __construct(array $data = array())
     {
-        $this->data = $data;
+        // hydrate the data.
     }
 
     /**
-     * implement universal member variable access
-     *
-     * @param string $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        return array_key_exists($name, $this->data) ? $this->data[$name] : NULL;
-    }
-
-
-    /**
-     * Return an unique string that identifies this record.
+     * Returns the system wide unique identifier of the IWorkflowItem.
      *
      * @return string
      */
     public function getIdentifier()
     {
-        return $this->__get(self::PROP_IDENT);
+        return $this->identifier;
     }
 
     /**
-     * Return this IDataRecord's source.
-     * Will usually be a name or term related to the datasource
-     * that created this record instance.
+     * Returns the IWorkflowItem's current revision.
      *
-     * @return      string
+     * @return string
      */
-    public function getSource()
+    public function getRevision()
     {
-        return $this->__get(self::PROP_SOURCE);
+        return $this->revision;
     }
 
     /**
-     * Return this IDataRecord's timestamp.
+     * Returns the IContentItem's created date as an array,
+     * containing data about by whom and when the item was created.
+     * The provided date data is a ISO8601 UTC formatted string.
+     * The provided user information is a string holding the username.
      *
-     * can be record last change time, message issue date, mail date, ...
+     * @return array
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Returns the IContentItem's created date as an array,
+     * containing data about by whom and when the item modified the last time.
+     * The provided date data is a ISO8601 UTC formatted string.
+     * The provided user information is a string holding the username.
      *
-     * @return      string
+     * @return array
      */
-    public function getTimestamp()
+    public function getLastModified()
     {
-        return $this->__get(self::PROP_TIMESTAMP);
+        return $this->lastModified;
     }
 
     /**
-     * Return this IDataRecord's data origin (url, filepath eg).
+     * Return our related import item.
      *
-     * @return      string
+     * @return IImportItem
      */
-    public function getOrigin()
+    public function getImportItem()
     {
-        return $this->__get(self::PROP_ORIGIN);
+        return $this->importItem;
     }
 
     /**
-     * Returns our title.
+     * Return a list of content items that belong to this workflow item.
      *
-     * @return      string
+     * @return array An list of of IContentItems
      */
-    public function getTitle()
+    public function getContentItems()
     {
-        return $this->__get(self::PROP_TITLE);
+        return $this->contentItems;
     }
 
     /**
-     * Returns our content.
+     * Return a generic assoc array of attributes.
+     * @todo Implement an AttributeHolder for this?
      *
-     * @return      string
+     * @return array A plain key=>value collection.
      */
-    public function getContent()
+    public function getAttributes()
     {
-        return $this->__get(self::PROP_CONTENT);
-    }
-
-    /**
-     * Returns our category.
-     *
-     * @return      string
-     */
-    public function getCategory()
-    {
-        return $this->__get(self::PROP_CATEGORY);
-    }
-
-    /**
-     * Returns our media (image, video and file assets for example).
-     * The returned value is an array holding id's that can be used together with our ProjectAssetService
-     * implementations.
-     * Example return value structure:
-     * -> return array(23, 24, 512, 13);
-     *
-     * @return      array
-     */
-    public function getMedia()
-    {
-        return $this->__get(self::PROP_MEDIA);
-    }
-
-    /**
-     * Returns our geo data in the following structure:
-     * -> return array(
-     *        'long' => $longValue,
-     *        'lat'  => $latValue
-     *    );
-     *
-     * @return      array
-     */
-    public function getGeoData()
-    {
-        return $this->__get(self::PROP_GEO);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see IDataRecord::toArray()
-     */
-    public function toArray()
-    {
-        return $this->data;
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see IDataRecord::validate()
-     */
-    public function validate()
-    {
-        return array('ok' => TRUE);
+        return $this->attributes;
     }
 }
+
+?>
