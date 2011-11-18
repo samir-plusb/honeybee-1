@@ -50,11 +50,11 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     protected $currentStep;
 
     /**
-     * The administrated content item
+     * The administrated workflow item
      *
-     * @var IDataRecord
+     * @var IWorkflowItem
      */
-    protected $importItem;
+    protected $workflowItem;
 
     /**
      * the tickets lock status
@@ -243,19 +243,19 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
      *
      * @return       void
      */
-    public function setImportItem(IDataRecord $importItem)
+    public function setWorkflowItem(IDataRecord $importItem)
     {
-        $this->importItem = $importItem;
+        $this->workflowItem = $importItem;
     }
 
     /**
-     * Retrieves the importItem attribute.
+     * Retrieves the workflow item attribute.
      *
-     * @return       IDataRecord the value for importItem
+     * @return       IWorkflowItem
      */
-    public function getImportItem()
+    public function getWorkflowItem()
     {
-        return $this->importItem;
+        return $this->workflowItem;
     }
 
     /**
@@ -373,7 +373,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
             '_rev' => $this->rev,
             'type' => get_class($this),
             'ts' => $this->timestamp->format(DATE_ISO8601),
-            'item' => $this->getImportItem()->getIdentifier(),
+            'item' => $this->getWorkflowItem()->getIdentifier(),
             'workflow' => $this->getWorkflow(),
             'step' => $this->getCurrentStep(),
             'blocked' => $this->isBlocked(),
@@ -403,12 +403,12 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
         {
             if ($data['item'] instanceof IDataRecord)
             {
-                $this->setImportItem($data['item']);
+                $this->setWorkflowItem($data['item']);
             }
             else
             {
                 $itemPeer = Workflow_SupervisorModel::getInstance()->getItemPeer();
-                $this->setImportItem($itemPeer->getItemByIdentifier($data['item']));
+                $this->setWorkflowItem($itemPeer->getItemByIdentifier($data['item']));
             }
         }
 
@@ -504,7 +504,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     {
         return sprintf('%s(Item "%s", Workflow %s/%s, %s)',
             get_class($this),
-            ($this->importItem ? $this->importItem->getIdentifier() : ''),
+            ($this->workflowItem ? $this->workflowItem->getIdentifier() : ''),
             $this->workflow, $this->currentStep, $this->result);
     }
 }

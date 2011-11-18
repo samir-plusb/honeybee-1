@@ -145,6 +145,46 @@ class WorkflowItem implements IWorkflowItem
     {
         return $this->attributes;
     }
+
+    /**
+     * Returns an array representation of the IWorkflowItem.
+     *
+     * @return string
+     */
+    public function toArray()
+    {
+        $props = array(
+            'identifier', 'created', 'lastModified',
+            'importItem', 'atttributes'
+        );
+        $data = array();
+        foreach ($props as $prop)
+        {
+            $getter = 'get' . ucfirst($prop);
+            $val = $this->$getter();
+            if (is_object($val) && is_callable(array($val, 'toArray')))
+            {
+                $data[$prop] = $val->toArray();
+            }
+            elseif (is_scalar($val))
+            {
+                $data[$prop] = $val;
+            }
+            else
+            {
+                throw new InvalidArgumentException(
+                    "Can only process scalar values when exporting object to array."
+                );
+            }
+        }
+        $contentItems = array();
+        foreach ($this->getContentItems() as $contentItem)
+        {
+            $contentItems[] = $contentItem->toArray();
+        }
+        $data['contentItems'] = $contentItems;
+        return $data;
+    }
 }
 
 ?>

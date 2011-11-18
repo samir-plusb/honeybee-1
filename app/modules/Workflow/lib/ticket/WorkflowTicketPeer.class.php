@@ -49,7 +49,7 @@ class WorkflowTicketPeer
     public function createNewTicketFromImportItem(IDataRecord $record)
     {
         $ticket = new WorkflowTicket();
-        $ticket->setImportItem($record);
+        $ticket->setWorkflowItem($record);
         $ticket->setWorkflow('_init');
         $this->saveTicket($ticket);
         return $ticket;

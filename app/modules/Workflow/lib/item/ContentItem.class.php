@@ -274,12 +274,9 @@ class ContentItem implements IContentItem
         {
             $getter = 'get' . ucfirst($prop);
             $val = $this->$getter();
-            if (is_object($val))
+            if (is_object($val) && is_callable(array($val, 'toArray')))
             {
-                if (is_callable(array($val, 'toArray')))
-                {
-                    $data[$prop] = $val->toArray();
-                }
+                $data[$prop] = $val->toArray();
             }
             elseif (is_scalar($val))
             {

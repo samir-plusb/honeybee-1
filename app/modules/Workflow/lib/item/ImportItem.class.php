@@ -196,11 +196,6 @@ class ImportItem implements IImportItem
      * Returns a list of id's that can be used together with ProjectAssetService
      * to resolve assets.
      *
-     * <pre>
-     * Value structure example:
-     * array(23, 5)
-     * </pre>
-     *
      * @return array
      */
     public function getMedia()
@@ -211,19 +206,32 @@ class ImportItem implements IImportItem
     /**
      * Returns array holding the geo data associated with the ImportItem.
      *
-     * <pre>
-     * Value structure example:
-     * array(
-     *     'long' => 12.345,
-     *     'lat'  => 34.567
-     * )
-     * </pre>
-     *
      * @return array
      */
     public function getGeoData()
     {
         return $this->geoData;
+    }
+
+    /**
+     * Returns an array representation of the IImportItem.
+     *
+     * @return string
+     */
+    public function toArray()
+    {
+        $props = array(
+            'parentIdentifier', 'created', 'lastModified',
+            'source', 'origin', 'timestamp', 'title', 'content', 'category',
+            'media', 'geoData'
+        );
+        $data = array();
+        foreach ($props as $prop)
+        {
+            $getter = 'get' . ucfirst($prop);
+            $data[$prop] = $this->$getter();
+        }
+        return $data;
     }
 }
 

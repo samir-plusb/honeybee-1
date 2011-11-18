@@ -99,6 +99,40 @@ interface IWorkflowItem
      * @return array A plain key=>value collection.
      */
     public function getAttributes();
+
+    /**
+     * Returns an array representation of the IWorkflowItem.
+     *
+     * <pre>
+     * Example value structure:
+     * array(
+     *     // Meta Data
+     *     'identifier'   => 'foobar',
+     *     'revision'     => '1-15394a6853828769ee1be885909548b3',
+     *     'created'             => array(
+     *         'date' => '05-23-1985T15:23:78.123+01:00',
+     *         'user' => 'shrink0r'
+     *     ),
+     *     'lastModified' => array(
+     *         'date' => '06-25-1985T15:23:78.123+01:00',
+     *         'user' => 'shrink0r'
+     *     ),
+     *     'importItem'   => @see IImportItem::toArray(),
+     *     'contentItems' => array(
+     *         1 => @see IContentItem::toArray(),
+     *         2 => ...,
+     *         ...
+     *     ),
+     *     'attributes' => array(
+     *         'someKey' => 'over the value',
+     *         ...
+     *     )
+     * )
+     * </pre>
+     *
+     * @return array
+     */
+    public function toArray();
 }
 
 ?>

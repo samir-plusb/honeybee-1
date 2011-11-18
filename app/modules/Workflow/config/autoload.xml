@@ -5,7 +5,6 @@
         <!-- Base -->
         <autoload name="WorkflowPluginBaseAction">%core.module_dir%/Workflow/lib/base/WorkflowPluginBaseAction.class.php</autoload>
         <autoload name="WorkflowPluginBaseView">%core.module_dir%/Workflow/lib/base/WorkflowPluginBaseView.class.php</autoload>
-        <autoload name="IWorkflowImportItem">%core.module_dir%/Workflow/lib/base/IWorkflowImportItem.iface.php</autoload>
         <autoload name="IWorkflowPlugin">%core.module_dir%/Workflow/lib/base/IWorkflowPlugin.iface.php</autoload>
         <autoload name="WorkflowBasePlugin">%core.module_dir%/Workflow/lib/base/WorkflowBasePlugin.class.php</autoload>
         <autoload name="WorkflowBaseInteractivePlugin">%core.module_dir%/Workflow/lib/base/WorkflowBaseInteractivePlugin.class.php</autoload>
@@ -14,10 +13,17 @@
         <autoload name="WorkflowInteractivePluginResult">%core.module_dir%/Workflow/lib/WorkflowInteractivePluginResult.class.php</autoload>
         <autoload name="WorkflowException">%core.module_dir%/Workflow/lib/WorkflowException.class.php</autoload>
         <autoload name="WorkflowHandler">%core.module_dir%/Workflow/lib/WorkflowHandler.class.php</autoload>
-        <!--  -->
+        <!-- Items -->
+        <autoload name="IWorkflowItem">%core.module_dir%/Workflow/lib/item/IWorkflowItem.iface.php</autoload>
         <autoload name="WorkflowItem">%core.module_dir%/Workflow/lib/item/WorkflowItem.class.php</autoload>
         <autoload name="WorkflowItemPeer">%core.module_dir%/Workflow/lib/item/WorkflowItemPeer.class.php</autoload>
-        <!--  -->
+        <autoload name="IContentItem">%core.module_dir%/Workflow/lib/item/IContentItem.iface.php</autoload>
+        <autoload name="ContentItem">%core.module_dir%/Workflow/lib/item/ContentItem.class.php</autoload>
+        <autoload name="IImportItem">%core.module_dir%/Workflow/lib/item/IImportItem.iface.php</autoload>
+        <autoload name="ImportItem">%core.module_dir%/Workflow/lib/item/ImportItem.class.php</autoload>
+        <autoload name="IItemLocation">%core.module_dir%/Workflow/lib/item/IItemLocation.iface.php</autoload>
+        <autoload name="ItemLocation">%core.module_dir%/Workflow/lib/item/ItemLocation.class.php</autoload>
+        <!-- Ticket -->
         <autoload name="WorkflowTicket">%core.module_dir%/Workflow/lib/ticket/WorkflowTicket.class.php</autoload>
         <autoload name="WorkflowTicketPeer">%core.module_dir%/Workflow/lib/ticket/WorkflowTicketPeer.class.php</autoload>
         <!-- Models -->

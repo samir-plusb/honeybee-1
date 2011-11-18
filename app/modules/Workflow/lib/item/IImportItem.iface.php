@@ -110,6 +110,40 @@ interface IImportItem
      * @return array
      */
     public function getGeoData();
+
+    /**
+     * Returns an array representation of the import item.
+     *
+     * <pre>
+     * Example value structure:
+     * array(
+     *  // Meta Data
+     *  'parentIdentifier'    => 'foobar',
+     *  'created'             => array(
+     *      'date' => '05-23-1985T15:23:78.123+01:00',
+     *      'user' => 'shrink0r'
+     *   ),
+     *   'lastModified'       => array(
+     *      'date' => '06-25-1985T15:23:78.123+01:00',
+     *      'user' => 'shrink0r'
+     *    ),
+     *    // Content Data
+     *    'source'    => 'rss'
+     *    'origin'    => 'http://spiegel.de/latest/',
+     *    'timestamp' => '2009-28-12T13:25:12.000+1:00'
+     *    'title'     => 'This is import item title',
+     *    'content'   => 'I am the imported content.',
+     *    'category'  => '/some/category/path',
+     *    'media'     => array(23, 5, 17, 13),
+     *    'geoData'   => array(
+     *         'long' => 12.345,
+     *         'lat'  => 23.456
+     *     )
+     * </pre>
+     *
+     * @return string
+     */
+    public function toArray();
 }
 
 ?>
