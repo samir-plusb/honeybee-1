@@ -321,31 +321,28 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      */
     loadContentItem: function(item)
     {
+        if (item.data.cid == this.editing_form.val('cid'))
+        {
+            return;
+        }
+        
+        var that = this;
         var load = function()
         {
-            this.editing_form.val(item.data);
-            this.editing_form.markClean();
-            this.slide_panel.toggle();
-        }.bind(this);
-        
+            that.editing_form.val(item.data);
+            that.editing_form.markClean();
+            that.slide_panel.toggle();
+        };
         var store_and_load = function()
         {
-            if (! this.storeContentItem())
+            that.storeContentItem(load, function(err)
             {
-                this.warn("Fehler", "Item konnte aufgrund unvollständiger Daten nicht gespeichert werden.");
-            }
-            else
-            {
-                load();
-            }
-        }.bind(this);
-        
+                this.logDebug("loadCOntentItem::store_and_load.error", err);
+            });
+        };
         if (this.editing_form.isDirty())
         {
-            this.confirm("Item wurde noch nicht gespeichert!", "Jetzt speichern?", store_and_load, function()
-            {
-                load();
-            });
+            this.confirm("Item wurde noch nicht gespeichert!", "Jetzt speichern?", store_and_load, load);
         }
         else
         {
@@ -365,10 +362,9 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             var that = this;
             var store_and_reset = function()
             {
-                if (that.storeContentItem())
-                {
-                    that.editing_form.reset();
-                }
+                that.storeContentItem(
+                    that.editing_form.reset.bind(that.editing_form)
+                );
             };
             this.confirm(
                 "Drohender Datenverlust",
@@ -386,35 +382,62 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     /**
      * @description Propagtes a save intent to all attached controllers,
      * which call either our success or error callback when they have completed.
+     * @param {Function} callback Invoked when an store intent has succesfully been dispatched.
+     * @param {Function} err_callback Invoked when preparing the store intent failed due to validation or other incidents.
      */
-    storeContentItem: function()
+    storeContentItem: function(callback, err_callback)
     {
+        err_callback = 'Function' == typeof err_callback ? err_callback : function() {};
+        callback = 'Function' == typeof callback ? callback : function() {};
         var validation_res = this.editing_form.validate();
-
-        if (true == validation_res.success)
+        var that = this;
+        var store_data = function()
         {
-            var item = this.editing_form.val();
+            var item = that.editing_form.val();
 
             if (! item.cid)
             {
                 item.cid = midas.core.CidSequence.nextCid('content_item');
+                that.editing_form.val('cid', item.cid);
             }
 
             var intent = {
                 'name': '/midas/intents/contentItem/store',
                 'data': item
             };
-
-            this.propagateIntent(intent);
-            this.items_list.add(item);
-            this.editing_form.highlight();
-            this.editing_form.markClean();
             // @todo Pass a success callback that updates the content item state from the list
             // and decide if and how we want to reflect the state changes in the gui.
-            return true;
+            that.propagateIntent(intent);
+            that.items_list.add(item);
+            that.editing_form.highlight();
+            that.editing_form.markClean();
+            callback();
+        };
+        if (true == validation_res.success)
+        {
+            var latitude = this.editing_form.val('location[latitude]');
+            var longitude = this.editing_form.val('location[longitude]');
+            if (0 < latitude.length && 0 < longitude.length)
+            {
+               store_data();
+            }
+            else
+            {
+                this.confirm(
+                    "Lokalisierung fehlt!", 
+                    "Dieses Item wurde noch nicht lokalisiert. Bist Du sicher, dass Du das Item ohne Lokalisierung speichern willst?", 
+                    store_data, 
+                    function()
+                    {
+                        err_callback({type: 'location', data: null, msg: "Location not provided, save aborted by user."});
+                    }
+                );
+            }
         }
-       
-        return false;
+        else
+        {
+            err_callback({type: 'validation', data: validation_res, msg: "EditForm validation failed."});
+        }
     },
     
     /**
@@ -426,13 +449,12 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         if (this.items_list.remove(this.editing_form.val('cid')))
         {
             this.editing_form.reset();
+            // @todo Pass a success callback that purges the content item from the list
+            // and decide if and how we want to express the pending delete operation in the gui.
             this.propagateIntent({
                 'name': '/midas/intents/contentItem/delete',
                 'data': {}
             });
-            
-            // @todo Pass a success callback that purges the content item from the list
-            // and decide if and how we want to express the pending delete operation in the gui.
         }
     },
     

@@ -149,7 +149,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
             {
                 return this.fields[field].val();
             }
-            return this.element.find('input[name='+field+']').val();
+            return this.element.find('input[name="'+field+'"]').val();
         }
         else // input-field setter
         {
@@ -157,7 +157,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
             {
                 return this.fields[field].val(value);
             }
-            return this.element.find('input[name='+field+']').val(value);
+            return this.element.find('input[name="'+field+'"]').val(value);
         }
         return this;
     },

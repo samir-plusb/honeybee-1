@@ -116,36 +116,27 @@ midas.core.BaseView = midas.core.BaseObject.extend(
      */
     confirm: function(title, message, confirm, abort)
     {
-        if (! this.layout_root.confirm_dialog)
-        {
-            this.layout_root.confirm_dialog = ich['dialog-tpl']({ title: title, message: message });
-            this.layout_root.append(this.layout_root.confirm_dialog);
-            this.layout_root.confirm_dialog.dialog({
-                resizable: false,
-                modal: true,
-                width: '20em',
-                buttons: {
-                    "Ja": function() {
-                        $(this).dialog("close");
-                        if (confirm)
-                        {
-                            confirm();
-                        }
-                    },
-                    "Nein": function() {
-                        $(this).dialog("close");
-                        if (abort)
-                        {
-                            abort();
-                        }
-                    }
+        confirm = confirm || function() {};
+        abort = abort || function() {};
+        var dialog = ich['dialog-tpl']({ title: title, message: message });
+        this.layout_root.append(dialog);
+        dialog.dialog({
+            resizable: false,
+            modal: true,
+            width: '20em',
+            buttons: {
+                "Ja": function() {
+                    $(this).dialog("close");
+                    confirm();
+                    $(this).remove();
+                },
+                "Nein": function() {
+                    $(this).dialog("close");
+                    abort();
+                    $(this).remove();
                 }
-            });
-        }
-        else
-        {
-            this.layout_root.confirm_dialog.dialog("open");
-        }
+            }
+        });
     },
     
     /**
@@ -156,25 +147,21 @@ midas.core.BaseView = midas.core.BaseObject.extend(
      */
     warn: function(title, message, ok)
     {
-        if (! this.layout_root.warn_dialog)
-        {
-            this.layout_root.warn_dialog = ich['dialog-tpl']({ title: title, message: message });
-            this.layout_root.append(this.layout_root.warn_dialog);
-            this.layout_root.warn_dialog.dialog({
-                resizable: false,
-                modal: true,
-                width: '20em',
-                buttons: {
-                    "Ok": function() {
-                        $( this ).dialog( "close" );
-                        if (ok) ok();
-                    }
+        ok = ok || function() {};
+        var dialog = ich['dialog-tpl']({ title: title, message: message });
+        this.layout_root.append(dialog);
+        dialog.dialog({
+            resizable: false,
+            modal: true,
+            width: '20em',
+            buttons: {
+                "Ok": function() 
+                {
+                    $(this).dialog( "close" );
+                    ok();
+                    $(this).remove();
                 }
-            }).prev().addClass('ui-state-error');
-        }
-        else
-        {
-            this.layout_root.warn_dialog.dialog("open");
-        }
+            }
+        }).prev().addClass('ui-state-error');
     }
 });

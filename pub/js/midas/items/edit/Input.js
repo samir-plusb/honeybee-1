@@ -92,7 +92,7 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
 
     /**
      * @description Revalidates our input and removes the invalid marker if the input is valid.
-     * @return {Object} Same kind of validation result as returned from {midas.items.edit.Input.validate}.
+     * @returns {Object} Same kind of validation result as returned from {midas.items.edit.Input.validate}.
      */
     revalidate: function()
     {
@@ -114,6 +114,7 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
     /**
      * @description Validates the given input.
      * @returns {Object} An object reflecting the validation result.
+     * @todo Add i18n support for all error messages.
      * The structure looks like this: {
            "success": true, // Tells whether the input is valid or not.
            "messages": {} // Holds an object with error messages,
