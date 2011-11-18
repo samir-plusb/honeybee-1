@@ -45,5 +45,9 @@ class WorkflowException extends Exception
      * Gate has no action (next step, next workflow, workflow end)
      */
     const GATE_WITHOUT_ACTION = 9;
+    /**
+     * The WorkflowTicket constructor was passed corrupt or no data.
+     */
+    const INVALID_TICKET_DATA = 10;
 
 }

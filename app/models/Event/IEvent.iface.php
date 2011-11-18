@@ -13,15 +13,22 @@
 interface IEvent
 {
     /**
+     * Return the event's sender.
+     *
+     * @return mixed Will be an object in most cases.
+     */
+    public function getSender();
+
+    /**
      * Return our event name.
-     * 
+     *
      * @return      string
      */
     public function getName();
-    
+
     /**
      *  Return our event data.
-     * 
+     *
      * @return      array
      */
     public function getData();

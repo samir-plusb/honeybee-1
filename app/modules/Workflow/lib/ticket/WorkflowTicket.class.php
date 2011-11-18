@@ -239,11 +239,11 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     /**
      * Sets the importItem attribute.
      *
-     * @param        IDataRecord the new value for importItem
+     * @param        IWorkflowItem the new value for importItem
      *
      * @return       void
      */
-    public function setWorkflowItem(IDataRecord $importItem)
+    public function setWorkflowItem(IWorkflowItem $importItem)
     {
         $this->workflowItem = $importItem;
     }
@@ -346,21 +346,27 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     /**
      * initialize instance
      *
-     * @param array $data from deserializing or database loading
+     * @param mixed $recordData from deserializing or database loading
      */
-    public function __construct(array $data = NULL, IDataRecord $record = NULL)
+    public function __construct($recordData = NULL)
     {
-        if ($record)
+        if ($recordData instanceof IWorkflowItem)
         {
-            $data['importItem'] = $record;
+            $this->setWorkflowItem($recordData);
         }
-
+        elseif (is_array($recordData))
+        {
+            $this->fromArray($recordData);
+        }
+        elseif ($recordData)
+        {
+            throw new WorkflowException(
+                "Unable to create workflow ticket without valid data.",
+                WorkflowException::INVALID_TICKET_DATA
+            );
+        }
         $this->setBlocked(TRUE);
         $this->touch();
-        if (is_array($data))
-        {
-            $this->fromArray($data);
-        }
     }
 
     /**
@@ -387,7 +393,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
 
 
     /**
-     * initialize object menber variables from data array
+     * initialize object member variables from data array
      *
      * @param array $data member variable values from unserilizing or json decode result
      * @return
@@ -401,7 +407,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
 
         if (array_key_exists('item', $data))
         {
-            if ($data['item'] instanceof IDataRecord)
+            if ($data['item'] instanceof IWorkflowItem)
             {
                 $this->setWorkflowItem($data['item']);
             }
@@ -488,7 +494,10 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
         $data = unserialize($serialized);
         if (! is_array($data))
         {
-            throw new WorkflowException('General Gaddafi while unserializing', WorkflowException::ERROR_UNSERIALIZE);
+            throw new WorkflowException(
+                'General Gaddafi while unserializing',
+                WorkflowException::ERROR_UNSERIALIZE
+            );
         }
         $this->fromArray($data);
         return $data;

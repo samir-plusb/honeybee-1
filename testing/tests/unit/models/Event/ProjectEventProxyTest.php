@@ -35,11 +35,11 @@ class ProjectEventProxyTest extends AgaviPhpUnitTestCase
         );
 
         $this->eventProxy->publish(
-            new ProjectEvent(self::EVENT_TEST_PROXY)
+            new ProjectEvent($this, self::EVENT_TEST_PROXY)
         );
 
         $this->eventProxy->publish(
-            new ProjectEvent(self::EVENT_TEST_PROXY)
+            new ProjectEvent($this, self::EVENT_TEST_PROXY)
         );
 
         $this->assertEquals(TRUE, $this->eventReceived);
@@ -54,7 +54,7 @@ class ProjectEventProxyTest extends AgaviPhpUnitTestCase
         );
 
         $this->eventProxy->publish(
-            new ProjectEvent(self::EVENT_TEST_PROXY)
+            new ProjectEvent($this, self::EVENT_TEST_PROXY)
         );
 
         $this->eventProxy->unsubscribe(
@@ -63,7 +63,7 @@ class ProjectEventProxyTest extends AgaviPhpUnitTestCase
         );
 
         $this->eventProxy->publish(
-            new ProjectEvent(self::EVENT_TEST_PROXY)
+            new ProjectEvent($this, self::EVENT_TEST_PROXY)
         );
 
         $this->assertEquals(TRUE, $this->eventReceived);

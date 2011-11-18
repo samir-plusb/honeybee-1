@@ -113,7 +113,9 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
      */
     public function importRecordImportedCallback(IEvent $event)
     {
-        if ($event->getName() !== BaseDataImport::EVENT_RECORD_SUCCESS)
+        $sender = $event->getSender();
+        $name = $event->getName();
+        if ($name !== BaseDataImport::EVENT_RECORD_SUCCESS || !($sender instanceof WorkflowItemDataImport))
         {
             return;
         }
@@ -124,7 +126,7 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
             return;
         }
 
-        $ticket = $this->getTicketPeer()->getTicketByImportitem($data['record']);
+        $ticket = $this->getTicketPeer()->getTicketByWorkflowItem($data['record']);
         $this->processTicket($ticket);
     }
 

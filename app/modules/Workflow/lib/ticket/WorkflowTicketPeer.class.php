@@ -43,13 +43,13 @@ class WorkflowTicketPeer
     /**
      * create a ticket for a newly imported item
      *
-     * @param IDataRecord $record
+     * @param IWorkflowItem $item
      * @return WorkflowTicket
      */
-    public function createNewTicketFromImportItem(IDataRecord $record)
+    public function createTicketByWorkflowItem(IWorkflowItem $item)
     {
         $ticket = new WorkflowTicket();
-        $ticket->setWorkflowItem($record);
+        $ticket->setWorkflowItem($item);
         $ticket->setWorkflow('_init');
         $this->saveTicket($ticket);
         return $ticket;
@@ -94,27 +94,28 @@ class WorkflowTicketPeer
     /**
      * find a workflow ticket using its correpondenting import item
      *
-     * This method gets registered in {@see ImportBaseAction::initialize()}
-     *
-     * @param IDataRecord $record
+     * @param IWorkflowItem $item
      * @return WorkflowTicket
      */
-    public function getTicketByImportitem(IDataRecord $record)
+    public function getTicketByWorkflowItem(IWorkflowItem $item)
     {
         $result = $this->client->getView(
             NULL, self::DESIGNDOC, "ticketByImportitem",
-            $record->getIdentifier(),
+            json_encode($item->getIdentifier()),
             0,
             array('include_docs' => 'true')
         );
 
         if (empty($result['rows']))
         {
-            return $this->createNewTicketFromImportItem($record);
+            return $this->createTicketByWorkflowItem($item);
         }
 
+        /**
+         * @todo Just pass the item to the new WorkflowTicket intance.
+         */
         $data = $result['rows'][0]['doc'];
-        return new WorkflowTicket($data, $record);
+        return new WorkflowTicket($data, $item);
     }
 
 }

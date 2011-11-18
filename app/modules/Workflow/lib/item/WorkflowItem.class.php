@@ -185,6 +185,14 @@ class WorkflowItem implements IWorkflowItem
         $data['contentItems'] = $contentItems;
         return $data;
     }
+
+    protected function hydrate(array $data)
+    {
+        $props = array(
+            'identifier', 'created', 'lastModified',
+            'importItem', 'atttributes'
+        );
+    }
 }
 
 ?>

@@ -17,6 +17,20 @@ class CouchDbDataImport extends BaseDataImport
     // ---------------------------------- <CONSTANTS> --------------------------------------------
 
     /**
+     * Holds the name of the event that reflects successful records imports.
+     *
+     * <pre>
+     * Example:     Register to this event the following way:
+     *
+     *              ProjectEventProxy::getInstance()->subscribe(
+     *                  BaseDataImport::EVENT_RECORD_SUCCESS,
+     *                  $yourCallback
+     *              );
+     * </pre>
+     */
+    const EVENT_RECORD_SUCCESS = 'midas.events.import.record_success';
+    
+    /**
      * The CouchDb standard doc-id fieldname.
      */
     const COUDB_ID_FIELD = '_id';
@@ -293,6 +307,33 @@ class CouchDbDataImport extends BaseDataImport
         }
 
         return NULL;
+    }
+
+    protected function onRecordSuccess(IDataRecord $record, $message)
+    {
+        $this->fireRecordImportedEvent($record);
+        $this->report->addRecordSuccess($record, $message);
+    }
+
+    protected function onRecordError(IDataRecord $record, $message)
+    {
+        $this->report->addRecordError($record, $message);
+    }
+
+    /**
+     * Fire an event that indicates, that we have successfully imported the given record.
+     *
+     * @param       IDataRecord $dataRecord
+     */
+    protected function fireRecordImportedEvent(IDataRecord $dataRecord)
+    {
+        $this->eventProxy->publish(
+            new ProjectEvent(
+                $this,
+                self::EVENT_RECORD_SUCCESS,
+                array('record' => $dataRecord)
+            )
+        );
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------

@@ -13,23 +13,6 @@
  */
 abstract class BaseDataImport implements IDataImport
 {
-    // ---------------------------------- <CONSTANTS> --------------------------------------------
-
-    /**
-     * Holds the name of the event that reflects successful records imports.
-     *
-     * Example:     Register to this event the following way:
-     *
-     *              ProjectEventProxy::getInstance()->subscribe(
-     *                  BaseDataImport::EVENT_RECORD_SUCCESS,
-     *                  $yourCallback
-     *              );
-     */
-    const EVENT_RECORD_SUCCESS = 'midas.events.import.record_success';
-
-    // ---------------------------------- </CONSTANTS> -------------------------------------------
-
-
     // ---------------------------------- <MEMBERS> ----------------------------------------------
 
     /**
@@ -61,10 +44,10 @@ abstract class BaseDataImport implements IDataImport
      * @var         IDataRecord $currentRecord
      */
     private $currentRecord;
-    
+
     /**
      * Holds our import report.
-     * 
+     *
      * @var         DataImportReport
      */
     protected $report;
@@ -118,7 +101,7 @@ abstract class BaseDataImport implements IDataImport
     public function run(IDataSource $dataSource)
     {
         $this->report = new DataImportReport();
-        
+
         $this->init($dataSource);
 
         $doImport = TRUE;
@@ -137,12 +120,12 @@ abstract class BaseDataImport implements IDataImport
             catch(Exception $e)
             {
                 $doImport = FALSE;
-                
+
                 // @todo Handle error (log the stuff or something like that.
                 throw $e;
             }
         }
-        
+
         $this->cleanup();
     }
 
@@ -177,7 +160,6 @@ abstract class BaseDataImport implements IDataImport
                 "The currentRecord member is only available inside the run method's execution scope."
             );
         }
-
         return $this->currentRecord;
     }
 
@@ -196,7 +178,6 @@ abstract class BaseDataImport implements IDataImport
                 "The dataSource member is only available inside the run method's execution scope."
             );
         }
-
         return $this->dataSource;
     }
 
@@ -207,30 +188,6 @@ abstract class BaseDataImport implements IDataImport
     {
         $this->dataSource = NULL;
         $this->currentRecord = NULL;
-    }
-    
-    protected function onRecordSuccess(IDataRecord $record, $message)
-    {
-        $this->fireRecordImportedEvent($record);
-        
-        $this->report->addRecordSuccess($record, $message);
-    }    
-
-    protected function onRecordError(IDataRecord $record, $message)
-    {
-        $this->report->addRecordError($record, $message);
-    }
-    
-    /**
-     * Fire an event that indicates, that we have successfully imported the given record.
-     *
-     * @param       IDataRecord $dataRecord
-     */
-    protected function fireRecordImportedEvent(IDataRecord $dataRecord)
-    {
-        $this->eventProxy->publish(
-            new ProjectEvent(self::EVENT_RECORD_SUCCESS, array('record' => $dataRecord))
-        );
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------
