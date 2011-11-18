@@ -392,7 +392,7 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
          $this->client->createDatabase($database);
          $this->client->createDesignDocument($database, 'designTest', $this->designDoc);
          $this->client->storeDoc($database, $this->document);
-         $result = $this->client->getView($database, 'designTest', 'ticketByImportitem', json_encode("boom"));
+         $result = $this->client->getView($database, 'designTest', 'ticketByImportitem', "boom");
          self::assertArrayHasKey('total_rows', $result);
          self::assertArrayHasKey('rows', $result);
          self::assertEquals($result['total_rows'], count($result['rows']));
@@ -408,7 +408,7 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
          $this->client->createDesignDocument(NULL, 'designTest', $this->designDoc);
          $this->client->storeDoc(NULL, $this->document);
          $result = $this->client->getView(NULL, 'designTest', 'ticketByImportitem',
-             json_encode("boom"), 0, array('include_docs' => 'true'));
+             "boom", 0, array('include_docs' => TRUE));
          self::assertArrayHasKey('doc', $result['rows'][0]);
          self::assertEquals($this->document['_id'], $result['rows'][0]['doc']['_id']);
      }

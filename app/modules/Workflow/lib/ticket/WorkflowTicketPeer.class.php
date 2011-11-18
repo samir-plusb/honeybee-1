@@ -103,7 +103,7 @@ class WorkflowTicketPeer
     {
         $result = $this->client->getView(
             NULL, self::DESIGNDOC, "ticketByImportitem",
-            json_encode($record->getIdentifier()),
+            $record->getIdentifier(),
             0,
             array('include_docs' => 'true')
         );

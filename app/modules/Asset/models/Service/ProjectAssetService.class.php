@@ -153,7 +153,7 @@ class ProjectAssetService implements IAssetService
      */
     public function findByOrigin($origin)
     {
-        $assetData = $this->couchDbClient->getView(self::COUCHDB_DATABASE, 'lists', 'origins', json_encode($origin));
+        $assetData = $this->couchDbClient->getView(self::COUCHDB_DATABASE, 'lists', 'origins', $origin);
         $assetInfo = NULL;
 
         if (count($assetData['rows']) > 0)
