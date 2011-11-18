@@ -484,7 +484,7 @@ class ExtendedCouchDbClient
      * @param       string $database name of database to use
      * @param       string $designDocId design document identifier
      * @param       string $viewname
-     * @param       string $key json expression for key search or NULL
+     * @param       string $key expression for key search or NULL
      * @param       integer $limit optional maxmimum number of results to return
      * @param       array $parameters addition view query parameters as described in the couchdb api documentation
      *
