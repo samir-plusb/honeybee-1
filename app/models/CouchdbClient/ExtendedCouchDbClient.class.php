@@ -347,11 +347,7 @@ class ExtendedCouchDbClient
      */
     public function getAllDocs($database, array $parameters = NULL, array $keys = NULL)
     {
-        $uri = $this->getDatabaseUrl($database).'_all_docs';
-        if (NULL !== $parameters)
-        {
-            $uri .= '?'.http_build_query($parameters);
-        }
+        $uri = $this->addUrlParameters($this->getDatabaseUrl($database).'_all_docs', $parameters);
         if (NULL === $keys)
         {
             $curlHandle = $this->getCurlHandle($uri, self::METHOD_GET);
@@ -506,10 +502,11 @@ class ExtendedCouchDbClient
             $query['limit'] = intval($limit);
         }
 
-        $uri = $this->getDatabaseUrl($database) .
-            '_design/' . urlencode($designDocId) .
-            '/_view/' . urlencode($viewname) .
-            '?' . http_build_query(array_merge($query, $parameters));
+        $uri = $this->addUrlParameters(
+                $this->getDatabaseUrl($database) .
+                '_design/' . urlencode($designDocId) .
+                '/_view/' . urlencode($viewname),
+                array_merge($query, $parameters));
 
         $curlHandle = $this->getCurlHandle($uri);
         $data = $this->getJsonData($curlHandle);
@@ -792,6 +789,34 @@ class ExtendedCouchDbClient
     protected function getDatabaseUrl($database = NULL)
     {
         return $this->baseUri.urlencode(empty($database) ? $this->defaultDatabase : $database).'/';
+    }
+
+    /**
+     * fix and add parameters to (view) URL
+     *
+     * @param string $url
+     * @param array $parameters
+     *
+     * @return string extended url
+     */
+    protected function addUrlParameters($url, array $parameters)
+    {
+        foreach ($parameters as $key => & $value)
+        {
+            if ('key' == $key || 'startkey' == $key || 'endkey' == $key)
+            {
+                $value = json_encode($value);
+            }
+            else if (is_bool($value))
+            {
+                $value = $value ? 'true' : 'false';
+            }
+            else if (is_array($value))
+            {
+                $value = json_encode($value);
+            }
+        }
+        return $url.'?'.http_build_query($parameters);
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------
