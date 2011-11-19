@@ -19,6 +19,21 @@ return array(
                 'couchdb_port' => '5984',
                 'couchdb_database' => 'midas_import_testing'
             )
+        ),
+        'workflow' =>
+        array(
+            'class' => 'WorkflowItemDataImport',
+            'description' => 'Imports data in form of IWorkflowItems.',
+            'datasources' =>
+            array(
+                0 => 'imperia',
+                1 => 'dpa',
+                2 => 'rss'
+            ),
+            'settings' =>
+            array(
+                'notify' => false,
+            )
         )
     ),
     'datasources' =>

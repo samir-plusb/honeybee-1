@@ -19,6 +19,19 @@
                     <setting name="couchdb_database">%couchdb.import.database%</setting>
                 </settings>
             </dataimport>
+            
+            <dataimport name="workflow" class="WorkflowItemDataImport">
+                <description>Imports data in form of IWorkflowItems.</description>
+                <datasources>
+                    <datasource>imperia</datasource>
+                    <datasource>rss</datasource>
+                    <datasource>dpa</datasource>
+                    <datasource>imap</datasource>
+                </datasources>
+                <settings>
+                    <setting name="notify">false</setting>
+                </settings>
+            </dataimport>
 
         </dataimports>
     </ae:configuration>

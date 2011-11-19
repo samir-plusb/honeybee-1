@@ -21,6 +21,19 @@
                 </settings>
             </dataimport>
             
+            <dataimport name="workflow" class="WorkflowItemDataImport">
+                <description>Imports data in form of IWorkflowItems.</description>
+                <datasources>
+                    <datasource>imperia</datasource>
+                    <datasource>rss</datasource>
+                    <datasource>dpa</datasource>
+                    <datasource>imap</datasource>
+                </datasources>
+                <settings>
+                    <setting name="notify">true</setting>
+                </settings>
+            </dataimport>
+            
         </dataimports>
     </ae:configuration>
 </ae:configurations>

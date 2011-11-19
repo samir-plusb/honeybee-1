@@ -15,10 +15,10 @@ class WorkflowItemDataImport extends BaseDataImport
      */
     public function __construct(IImportConfig $config)
     {
-        if (!$config instanceof CouchDbDataImportConfig)
+        if (!$config instanceof WorkflowItemDataImportConfig)
         {
             throw new DataImportException(
-                "Invalid config object given. Instance of CouchDbDataImportConfig expected, got: " . get_class($config)
+                "Invalid config object given. Instance of WorkflowItemDataImportConfig expected, got: " . get_class($config)
             );
         }
         parent::__construct($config);
@@ -45,15 +45,23 @@ class WorkflowItemDataImport extends BaseDataImport
         $importData = $record->toArray();
         unset ($importData[ImportBaseDataRecord::PROP_IDENT]);
         /* @var $supervisor Workflow_SupervisorModel */
-        $supervisor = $this->getContext()->getModel('Supervisor', 'Workflow');
+        $supervisor = AgaviContext::getInstance()->getModel('Supervisor', 'Workflow');
         $workflowItem = $supervisor->getItemPeer()->getItemByIdentifier($record->getIdentifier());
-        if (! $workflowItem)
+        try
         {
-            $this->createWorkflowItem($importData);
+            if (! $workflowItem)
+            {
+                $this->createWorkflowItem($record->getIdentifier(), $importData);
+            }
+            else
+            {
+                $this->updateWorkflowItem($workflowItem, $importData);
+            }
         }
-        else
+        catch(Exception $e)
         {
-            $this->updateWorkflowItem($workflowItem, $importData);
+             // @TODO log exception and/or bubble to parent
+            return FALSE;
         }
         return TRUE;
     }
@@ -63,11 +71,11 @@ class WorkflowItemDataImport extends BaseDataImport
      * 
      * @param array $importData 
      */
-    protected function createWorkflowItem(array $importData)
+    protected function createWorkflowItem($identifier, array $importData)
     {
-        $supervisor = $this->getContext()->getModel('Supervisor', 'Workflow');
+        $supervisor = AgaviContext::getInstance()->getModel('Supervisor', 'Workflow');
         $workflowItem = new WorkflowItem(array(
-            'identifier' => $record->getIdentifier()
+            'identifier' => $identifier
         ));
         $workflowItem->createImportItem($importData);
         $supervisor->getItemPeer()->storeItem($workflowItem);
@@ -84,7 +92,7 @@ class WorkflowItemDataImport extends BaseDataImport
      */
     protected function updateWorkflowItem(IWorkflowItem $workflowItem, array $importData)
     {
-        $supervisor = $this->getContext()->getModel('Supervisor', 'Workflow');
+        $supervisor = AgaviContext::getInstance()->getModel('Supervisor', 'Workflow');
         $workflowItem->updateImportItem($importData);
         $supervisor->getItemPeer()->storeItem($workflowItem);
         if ($this->notifyEnabled())

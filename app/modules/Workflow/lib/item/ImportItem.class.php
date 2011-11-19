@@ -257,12 +257,12 @@ class ImportItem implements IImportItem
         );
         foreach ($writeableProps as $prop)
         {
-            if (array_key_exists($prop, $data))
+            if (array_key_exists($prop, $values))
             {
                 $setter = 'set'.ucfirst($prop);
                 if (is_callable(array($this, $setter)))
                 {
-                    $this->$setter($data[$prop]);
+                    $this->$setter($values[$prop]);
                 }
             }
         }

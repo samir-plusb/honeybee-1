@@ -53,8 +53,24 @@ class WorkflowItemPeer
      */
     public function getItemByIdentifier($identifier)
     {
-        $data = $this->client->getDoc(NULL, $identifier);
-        return new WorkflowItem($data);
+        $item = NULL;
+        try
+        {
+            $data = $this->client->getDoc(NULL, $identifier);
+            $item = new WorkflowItem($data);
+        }
+        catch(CouchdbClientException $e)
+        {
+            if (preg_match('~(\(404\))~', $e->getMessage()))
+            {
+                $item = NULL;
+            }
+            else
+            {
+                throw $e;
+            }
+        }
+        return $item;
     }
 
     /**

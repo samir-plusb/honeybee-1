@@ -16,6 +16,15 @@ class RunActionTest extends AgaviActionTestCase
         $this->moduleName = 'Import';
         $this->actionName = 'Run';
     }
+    
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+        
+        $setup = new ItemsModuleSetup();
+        $setup->setup();
+    }
+
 
     // @codeCoverageIgnoreEnd
 
@@ -71,20 +80,20 @@ class RunActionTest extends AgaviActionTestCase
 
     public function provideTestRunImportArgs()
     {
-        return array(
-            array( // Test the Import/Imperia Package
-                'importName'      => 'couchdb',
-                'dataSourceNames' => 'imperia'
-            ),
-            array( // Test the Import/Newsiwire Package
-                'importName'      => 'couchdb',
-                'dataSourceNames' => 'dpa'
-            ),
-            array( // Test the Import/Newsiwire Package
-                'importName'      => 'couchdb',
-                'dataSourceNames' => 'rss'
-            )
-        );
+        $imports = array('couchdb', 'workflow');
+        $datasources = array('dpa', 'rss');
+        $data = array();
+        foreach ($imports as $import)
+        {
+            foreach ($datasources as $datasource)
+            {
+                $data[] =  array(
+                    'importName'      => $import,
+                    'dataSourceNames' => $datasource
+                );
+            }
+        }
+        return $data;
     }
 
     // @codeCoverageIgnoreEnd
