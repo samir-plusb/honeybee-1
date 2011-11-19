@@ -65,7 +65,6 @@ class WorkflowItemPeerTest extends AgaviUnitTestCase
      */
     public function testGetItemByIdentifierFail()
     {
-        $this->setExpectedException('CouchdbClientException');
-        $item = $this->peer->getItemByIdentifier('0815');
+        $this->assertEquals(NULL, $this->peer->getItemByIdentifier('0815'));
     }
 }
