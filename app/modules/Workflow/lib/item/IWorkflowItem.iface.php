@@ -41,6 +41,13 @@ interface IWorkflowItem
      * @return string
      */
     public function getRevision();
+    
+    /**
+     * Bump the item's revision.
+     * 
+     * @param string $revision
+     */
+    public function bumpRevision($revision);
 
     /**
      * Returns the IContentItem's created date as an array,
@@ -59,6 +66,14 @@ interface IWorkflowItem
      * @return array
      */
     public function getCreated();
+    
+    /**
+     * Update the item's modified timestamp.
+     * If the created timestamp has not yet been set it also assigned.
+     * 
+     * @param AgaviUser $user An optional user to use instead of resolving the current session user.
+     */
+    public function touch(AgaviUser $user = NULL);
 
     /**
      * Returns the IContentItem's created date as an array,

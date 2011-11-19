@@ -108,6 +108,14 @@ class ContentItem implements IContentItem
     protected $location;
 
     /**
+     * Creates a new ContentItem instance.
+     */
+    public function __construct(array $data = array())
+    {
+        $this->hydrate($data);
+    }
+    
+    /**
      * Returns the unique identifier of our aggregate root (IWorkflowItem).
      *
      * @return string
@@ -256,6 +264,31 @@ class ContentItem implements IContentItem
     {
         return $this->location;
     }
+    
+    /**
+     * Sets the item's location.
+     * When an array is passed a new location instance is created and passed
+     * in the given data.
+     * 
+     * @param mixed $location Either an array or an IITemLocation instance.
+     */
+    public function setLocation($location)
+    {
+        if (is_array($location))
+        {
+            $this->location = new ItemLocation($location);
+        }
+        elseif ($location instanceof IItemLocation)
+        {
+            $this->location = $location;
+        }
+        else
+        {
+            throw new Exception(
+                "Invalid argument type passed to setLocation method. Only array and IItemLocation are supported."
+            );
+        }
+    }
 
     /**
      * Returns an array representation of the IContentItem.
@@ -290,6 +323,64 @@ class ContentItem implements IContentItem
             }
         }
         return $data;
+    }
+    
+    /**
+     * Convenience method for setting multiple values at once.
+     * 
+     * @param array $values 
+     * 
+     * @see IContentItem::applyValues()
+     */
+    public function applyValues(array $values)
+    {
+        $writeableProps = array(
+            'type', 'title', 'priority', 'category', 'teaser', 'text',
+            'url', 'date', 'location', 'source'
+        );
+        foreach ($writeableProps as $prop)
+        {
+            if (array_key_exists($prop, $data))
+            {
+                $setter = 'set'.ucfirst($prop);
+                if (is_callable(array($this, $setter)))
+                {
+                    $this->$setter($data[$prop]);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Hydrates the given data into the item.
+     * This method is used to internally setup our state
+     * and has privleged write access to all properties.
+     * Properties that are set during hydrate dont mark the item as modified.
+     * 
+     * @param array $data 
+     */
+    protected function hydrate(array $data)
+    {
+        $simpleProps = array(
+            'parentIdentifier', 'created', 'lastModified',
+            'type', 'title', 'priority', 'category', 'teaser', 'text',
+            'url', 'date', 'location', 'source'
+        );
+        foreach ($simpleProps as $prop)
+        {
+            if (array_key_exists($prop, $data))
+            {
+                $setter = 'set'.ucfirst($prop);
+                if (is_callable(array($this, $setter)))
+                {
+                    $this->$setter($data[$prop]);
+                }
+                else
+                {
+                    $this->$prop = $data[$prop];
+                }
+            }
+        }
     }
 }
 

@@ -348,23 +348,9 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
      *
      * @param mixed $recordData from deserializing or database loading
      */
-    public function __construct($recordData = NULL)
+    public function __construct(array $data = array())
     {
-        if ($recordData instanceof IWorkflowItem)
-        {
-            $this->setWorkflowItem($recordData);
-        }
-        elseif (is_array($recordData))
-        {
-            $this->fromArray($recordData);
-        }
-        elseif ($recordData)
-        {
-            throw new WorkflowException(
-                "Unable to create workflow ticket without valid data.",
-                WorkflowException::INVALID_TICKET_DATA
-            );
-        }
+        $this->fromArray($data);
         $this->setBlocked(TRUE);
         $this->touch();
     }

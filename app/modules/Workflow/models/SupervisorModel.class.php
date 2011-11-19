@@ -105,28 +105,39 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
     }
 
     /**
-     * callback method is called after a successfully import an item
-     *
-     * @param IEvent $event expected is a BaseDataImport::EVENT_RECORD_SUCCESS event
-     *                      with a data member named 'record' of type IDataRecord
-     * @return void
+     * Notifies the supervisor that a workflow item has been created from outside the workflow.
+     * At the moment this only happens during import.
+     * 
+     * @param IWorkflowItem $item 
+     * 
+     * @throws WorkflowException When a ticket for the workflow item allready exists.
      */
-    public function importRecordImportedCallback(IEvent $event)
+    public function onWorkflowItemCreated(IWorkflowItem $item)
     {
-        $sender = $event->getSender();
-        $name = $event->getName();
-        if ($name !== BaseDataImport::EVENT_RECORD_SUCCESS || !($sender instanceof WorkflowItemDataImport))
+        $ticket = $this->getTicketPeer()->getTicketByWorkflowItem($item);
+        if ($ticket)
         {
-            return;
+            throw new WorkflowException("Received create notification for an existing ticket");
         }
-
-        $data = $event->getData();
-        if (! isset($data['record']) || ! $data['record'] instanceof IDataRecord)
+        $ticket = $this->getTicketPeer()->createTicketByWorkflowItem($item);
+        $this->processTicket($ticket);
+    }
+    
+    /**
+     * Notifies the supervisor that a workflow item has been updated from outside the workflow.
+     * At the moment this only happens during import.
+     * 
+     * @param IWorkflowItem $item
+     * 
+     * @throws WorkflowException When a ticket for the workflow item does not exist.
+     */
+    public function onWorkflowItemUpdated(IWorkflowItem $item)
+    {
+        $ticket = $this->getTicketPeer()->getTicketByWorkflowItem($item);
+        if (! $ticket)
         {
-            return;
+            throw new WorkflowException("Received update notification for a non-existing ticket");
         }
-
-        $ticket = $this->getTicketPeer()->getTicketByWorkflowItem($data['record']);
         $this->processTicket($ticket);
     }
 

@@ -24,19 +24,6 @@ class WorkflowItemDataImport extends BaseDataImport
         parent::__construct($config);
     }
 
-    /**
-     * This method is responseable for converting data records
-     * to a final array structure, suitable for data distribution to couchdb.
-     *
-     * @return      array
-     */
-    protected function convertRecord(IDataRecord $record)
-    {
-        $data = $record->toArray();
-        $data[self::COUDB_ID_FIELD] = $record->getIdentifier();
-        return $data;
-    }
-
     // ---------------------------------- </BaseDataImport OVERRIDES> ----------------------------
 
 
@@ -54,8 +41,63 @@ class WorkflowItemDataImport extends BaseDataImport
      */
     protected function processRecord()
     {
-        $this->getCurrentRecord();
+        $record = $this->getCurrentRecord();
+        $importData = $record->toArray();
+        unset ($importData[ImportBaseDataRecord::PROP_IDENT]);
+        /* @var $supervisor Workflow_SupervisorModel */
+        $supervisor = $this->getContext()->getModel('Supervisor', 'Workflow');
+        $workflowItem = $supervisor->getItemPeer()->getItemByIdentifier($record->getIdentifier());
+        if (! $workflowItem)
+        {
+            $this->createWorkflowItem($importData);
+        }
+        else
+        {
+            $this->updateWorkflowItem($workflowItem, $importData);
+        }
         return TRUE;
+    }
+    
+    /**
+     * Create a new workflow item.
+     * 
+     * @param array $importData 
+     */
+    protected function createWorkflowItem(array $importData)
+    {
+        $supervisor = $this->getContext()->getModel('Supervisor', 'Workflow');
+        $workflowItem = new WorkflowItem(array(
+            'identifier' => $record->getIdentifier()
+        ));
+        $workflowItem->createImportItem($importData);
+        $supervisor->getItemPeer()->storeItem($workflowItem);
+        if ($this->notifyEnabled())
+        {
+            $supervisor->onWorkflowItemCreated($workflowItem);
+        }
+    }
+    
+    /**
+     * Update an existing workflow item.
+     * 
+     * @param array $importData 
+     */
+    protected function updateWorkflowItem(IWorkflowItem $workflowItem, array $importData)
+    {
+        $supervisor = $this->getContext()->getModel('Supervisor', 'Workflow');
+        $workflowItem->updateImportItem($importData);
+        $supervisor->getItemPeer()->storeItem($workflowItem);
+        if ($this->notifyEnabled())
+        {
+            $supervisor->onWorkflowItemUpdated($workflowItem);
+        }
+    }
+    
+    protected function notifyEnabled()
+    {
+        return $this->config->getSetting(
+            WorkflowItemDataImportConfig::CFG_NOTIFY_SUPERVISOR
+        );
     }
 
     // ---------------------------------- </BaseDataImport IMPL> ---------------------------------

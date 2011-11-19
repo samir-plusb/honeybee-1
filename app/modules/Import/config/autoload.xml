@@ -83,6 +83,11 @@
             <autoload name="ImapDataSource">%core.module_dir%/Import/lib/mail/datasource/ImapDataSource.class.php</autoload>
             <autoload name="ImapDataRecord">%core.module_dir%/Import/lib/mail/datarecord/ImapDataRecord.class.php</autoload>
             <!-- /Mail -->
+            
+            <!-- Workflow -->
+            <autoload name="WorkflowItemDataImport">%core.module_dir%/Import/lib/workflow/WorkflowItemDataImport.class.php</autoload>
+            <autoload name="WorkflowItemDataImportConfig">%core.module_dir%/Import/lib/workflow/WorkflowItemDataImportConfig.class.php</autoload>
+            <!-- /Workflow -->
 
 
             <!-- CONCRETE IMPLEMENTATION (Domain Level) -->

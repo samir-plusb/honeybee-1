@@ -66,6 +66,21 @@ class WorkflowItemPeer
      */
     public function storeItem(IWorkflowItem $item)
     {
-
+        $item->touch();
+        $document = $item->toArray();
+        unset($document['identifier']);
+        $document['_id'] = $item->getIdentifier();
+        if (isset($document['revision']))
+        {
+            $document['_rev'] = $document['revision'];
+        }
+        unset($document['revision']);
+        $result = $this->client->storeDoc(NULL, $document);
+        if (isset($result['ok']))
+        {
+            $item->bumpRevision($result['rev']);
+            return TRUE;
+        }
+        return FALSE;
     }
 }

@@ -12,7 +12,6 @@
  */
 class WorkflowTicketPeer
 {
-
     /**
      *
      * name of couchdb design document to use
@@ -26,7 +25,6 @@ class WorkflowTicketPeer
      */
     protected $client;
 
-
     /**
      * construct new instance.
      *
@@ -39,7 +37,6 @@ class WorkflowTicketPeer
         $this->client = $client;
     }
 
-
     /**
      * create a ticket for a newly imported item
      *
@@ -51,6 +48,7 @@ class WorkflowTicketPeer
         $ticket = new WorkflowTicket();
         $ticket->setWorkflowItem($item);
         $ticket->setWorkflow('_init');
+        // @todo What to do if saving fails (saveTicket returns false)
         $this->saveTicket($ticket);
         return $ticket;
     }
@@ -66,6 +64,7 @@ class WorkflowTicketPeer
         $ticket->touch();
         $document = $ticket->toArray();
         $result = $this->client->storeDoc(NULL, $document);
+        
         if (isset($result['ok']))
         {
             $ticket->setIdentifier($result['id']);
@@ -89,8 +88,7 @@ class WorkflowTicketPeer
         $ticket = new WorkflowTicket($data);
         return $ticket;
     }
-
-
+    
     /**
      * find a workflow ticket using its correpondenting import item
      *
@@ -105,17 +103,23 @@ class WorkflowTicketPeer
             0,
             array('include_docs' => 'true')
         );
-
+        
         if (empty($result['rows']))
         {
-            return $this->createTicketByWorkflowItem($item);
+            return NULL;
         }
-
+        $data = $result['rows'][0]['doc'];
         /**
          * @todo Just pass the item to the new WorkflowTicket intance.
+         * 2011-18-11 7PM Thorsten Schmitt-Rink:
+         * Hardsetting the workflow item directly into the couch data before hydrating
+         * the workflow ticket prevents the ticket's lazy load on it's IWorkflowItem from being triggered.
+         * The lack of api usage (WorkflowTicket::setWorkflowItem) is a tradeoff
+         * to not complicating the ticket's hydrate for trying to be smart on the lazy load.
          */
-        $data = $result['rows'][0]['doc'];
-        return new WorkflowTicket($data, $item);
+        $data['rows'][0]['doc']['item'] = $item;
+        return new WorkflowTicket($data);
     }
-
 }
+
+?>

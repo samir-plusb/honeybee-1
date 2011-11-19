@@ -89,6 +89,14 @@ class ImportItem implements IImportItem
      * @var array
      */
     protected $geoData;
+    
+    /**
+     * Creates a new ImportItem instance.
+     */
+    public function __construct(array $data = array())
+    {
+        $this->hydrate($data);
+    }
 
    /**
      * Returns the unique identifier of our aggregate root (IWorkflowItem).
@@ -232,6 +240,65 @@ class ImportItem implements IImportItem
             $data[$prop] = $this->$getter();
         }
         return $data;
+    }
+    
+    /**
+     * Convenience method for setting multiple values at once.
+     * 
+     * @param array $values 
+     * 
+     * @see IImportItem::applyValues()
+     */
+    public function applyValues(array $values)
+    {
+        $writeableProps = array(
+            'source', 'origin', 'timestamp', 'title', 'content', 'category',
+            'media', 'geoData'
+        );
+        foreach ($writeableProps as $prop)
+        {
+            if (array_key_exists($prop, $data))
+            {
+                $setter = 'set'.ucfirst($prop);
+                if (is_callable(array($this, $setter)))
+                {
+                    $this->$setter($data[$prop]);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Hydrates the given data into the item.
+     * This method is used to internally setup our state
+     * and has privleged write access to all properties.
+     * Properties that are set during hydrate dont mark the item as modified.
+     * 
+     * @param array $data 
+     */
+    protected function hydrate(array $data)
+    {
+        $simpleProps = array(
+            'parentIdentifier', 'created', 'lastModified',
+            'source', 'origin', 'timestamp', 'title', 'content', 'category',
+            'media', 'geoData'
+        );
+        foreach ($simpleProps as $prop)
+        {
+            if (array_key_exists($prop, $data))
+            {
+                $setter = 'set'.ucfirst($prop);
+                
+                if (is_callable(array($this, $setter)))
+                {
+                    $this->$setter($data[$prop]);
+                }
+                else
+                {
+                    $this->$prop = $data[$prop];
+                }
+            }
+        }
     }
 }
 
