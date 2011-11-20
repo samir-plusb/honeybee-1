@@ -32,25 +32,19 @@ class WorkflowTicketTest extends AgaviUnitTestCase
      */
     protected $peer;
 
-
     /**
      * (non-PHPdoc)
      * @see PHPUnit_Framework_TestCase::setUp()
      */
     public function setUp()
     {
-        $this->supervisor = Workflow_SupervisorModel::getInstance();
-        
-        $this->item = new WorkflowItem(json_decode(self::ITEM,TRUE));
-        $itemsDb = $this->supervisor->getItemPeer()->storeItem($this->item);
-        $this->peer = $this->supervisor->getTicketPeer();
-        
         $setup = new WorkflowModuleSetup();
         $setup->setup(TRUE);
         
-        $setupItems = new ItemsModuleSetup();
-        $setupItems->setup(TRUE);
-        
+        $this->supervisor = Workflow_SupervisorModel::getInstance();
+        $this->item = new WorkflowItem(json_decode(self::ITEM,TRUE));
+        $itemsDb = $this->supervisor->getItemPeer()->storeItem($this->item);
+        $this->peer = $this->supervisor->getTicketPeer();
         $this->supervisor->getItemPeer()->storeItem($this->item);
     }
 
@@ -75,7 +69,6 @@ class WorkflowTicketTest extends AgaviUnitTestCase
         self::assertEquals($this->item->getIdentifier(), $ticket->getWorkflowItem()->getIdentifier());
     }
 
-
     /**
      *
      */
@@ -83,9 +76,6 @@ class WorkflowTicketTest extends AgaviUnitTestCase
     {
         $ticket = $this->peer->createTicketByWorkflowItem($this->item);
         $ticket2 = $this->peer->getTicketById($ticket->getIdentifier());
-
-        $ticket->toArray();
-
         self::assertEquals($ticket->toArray(), $ticket2->toArray());
     }
 
@@ -117,7 +107,9 @@ class WorkflowTicketTest extends AgaviUnitTestCase
      */
     public function testGetTicketByImportitem()
     {
-        self::assertInstanceOf('WorkflowTicket', $this->peer->getTicketByWorkflowItem($this->item));
+        $orgTicket = $this->peer->createTicketByWorkflowItem($this->item);
+        $ticket = $this->peer->getTicketByWorkflowItem($this->item);
+        self::assertInstanceOf('WorkflowTicket', $ticket);
+        self::assertEquals($orgTicket->getIdentifier(), $ticket->getIdentifier());
     }
-
 }

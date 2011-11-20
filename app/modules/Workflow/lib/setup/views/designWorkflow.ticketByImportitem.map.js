@@ -6,5 +6,8 @@
  */
 function(doc)
 {
-    emit(doc.importItem, null);
+    if (doc.item)
+    {
+        emit(doc.item, null);
+    }
 }

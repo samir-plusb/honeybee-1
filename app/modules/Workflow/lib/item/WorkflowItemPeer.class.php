@@ -25,11 +25,9 @@ class WorkflowItemPeer
      *
      * @see Workflow_SupervisorModel::getItemPeer()
      */
-    public function __construct()
+    public function __construct(ExtendedCouchDbClient $client)
     {
-        $this->client = AgaviContext::getInstance()->getDatabaseConnection(
-            ItemsModuleSetup::COUCHDB_DATABASE
-        );
+        $this->client = $client;
     }
 
     /**

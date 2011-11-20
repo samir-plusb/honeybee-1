@@ -84,7 +84,7 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
     {
         if (! $this->itemPeer)
         {
-            $this->itemPeer = new WorkflowItemPeer();
+            $this->itemPeer = new WorkflowItemPeer($this->getDatabase());
         }
         return $this->itemPeer;
     }

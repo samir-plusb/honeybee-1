@@ -47,18 +47,13 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
      */
     public function setUp()
     {
-        $this->supervisor = Workflow_SupervisorModel::getInstance();
-        $this->item = new WorkflowItem(json_decode(self::ITEM,TRUE));
-
-        $setupItems = new ItemsModuleSetup();
-        $setupItems->setup(TRUE);
-
-        $peer = $this->supervisor->getItemPeer();
-        $itemsDb = $peer->getDatabase();
-        $itemsDb->storeDoc(NULL, json_decode(self::ITEM,TRUE));
-
         $workflowSetup = new WorkflowModuleSetup();
         $workflowSetup->setup(TRUE);
+        
+        $this->supervisor = Workflow_SupervisorModel::getInstance();
+        $this->item = new WorkflowItem(json_decode(self::ITEM,TRUE));
+        $peer = $this->supervisor->getItemPeer();
+        $peer->storeItem($this->item);
 
         $ticket = new WorkflowTicket();
         $ticket->setWorkflowItem($this->item);
