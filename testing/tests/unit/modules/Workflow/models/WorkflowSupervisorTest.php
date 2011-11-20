@@ -25,13 +25,9 @@ class WorkflowSupervisorTest extends AgaviUnitTestCase
      */
     public function setUp()
     {
+        $workflowSetup = new WorkflowModuleSetup();
+        $workflowSetup->setup(TRUE);
         $this->supervisor = Workflow_SupervisorModel::getInstance();
-
-        $setup = new WorkflowModuleSetup();
-        $setup->setup(TRUE);
-
-        $setupItems = new ItemsModuleSetup();
-        $setupItems->setup(TRUE);
     }
 
 
