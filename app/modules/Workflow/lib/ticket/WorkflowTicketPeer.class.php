@@ -64,7 +64,7 @@ class WorkflowTicketPeer
         $ticket->touch();
         $document = $ticket->toArray();
         $result = $this->client->storeDoc(NULL, $document);
-        
+
         if (isset($result['ok']))
         {
             $ticket->setIdentifier($result['id']);
@@ -88,7 +88,7 @@ class WorkflowTicketPeer
         $ticket = new WorkflowTicket($data);
         return $ticket;
     }
-    
+
     /**
      * find a workflow ticket using its correpondenting import item
      *
@@ -97,13 +97,11 @@ class WorkflowTicketPeer
      */
     public function getTicketByWorkflowItem(IWorkflowItem $item)
     {
-        $result = $this->client->getView(
-            NULL, self::DESIGNDOC, "ticketByImportitem",
-            $item->getIdentifier(),
-            0,
-            array('include_docs' => 'true')
+        $result = $this->client->getView(NULL, self::DESIGNDOC, "ticketByImportitem", array(
+                'include_docs' => 'true',
+                'key' => $item->getIdentifier())
         );
-        
+
         if (empty($result['rows']))
         {
             return NULL;

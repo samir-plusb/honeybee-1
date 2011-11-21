@@ -26,7 +26,9 @@ class Items_ListAction extends ItemsBaseAction
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $couchClient = $this->getContext()->getDatabaseConnection('midas_import');
-        $documents = $couchClient->getView(self::COUCHDB_DATABASE, 'items', 'list', NULL, 100);
+        $documents = $couchClient->getView(self::COUCHDB_DATABASE, 'items', 'list', array(
+                'limit' => 100,
+                'descending' => true));
 
         $items = array();
 
