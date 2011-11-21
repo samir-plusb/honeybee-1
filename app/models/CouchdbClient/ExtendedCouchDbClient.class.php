@@ -336,6 +336,7 @@ class ExtendedCouchDbClient
      * Fetch all documents from the given database.
      *
      * @see http://wiki.apache.org/couchdb/HTTP_Bulk_Document_API#Fetch_Multiple_Documents_With_a_Single_Request
+     * @uses _getView()
      *
      * @param       string $database
      * @param       array $parameters parameters for the _all_docs api call (include_docs, start_key, end_key, …)
@@ -347,19 +348,8 @@ class ExtendedCouchDbClient
      */
     public function getAllDocs($database, array $parameters = NULL, array $keys = NULL)
     {
-        $uri = $this->addUrlParameters($this->getDatabaseUrl($database).'_all_docs', $parameters);
-        if (NULL === $keys)
-        {
-            $curlHandle = $this->getCurlHandle($uri, self::METHOD_GET);
-        }
-        else
-        {
-            $kreq = array('keys' => $keys);
-            $curlHandle = $this->getCurlHandle($uri, self::METHOD_POST);
-            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($kreq));
-        }
-        $data = $this->getJsonData($curlHandle, self::STATUS_OK);
-        return $data;
+        $url = $this->getDatabaseUrl($database).'_all_docs';
+        return $this->_getView($url, $parameters, $keys);
     }
 
     /**
@@ -480,49 +470,25 @@ class ExtendedCouchDbClient
      *   )
      * </pre>
      *
+     * @uses _getView()
+     *
      *
      * @param       string $database name of database to use
      * @param       string $designDocId design document identifier
      * @param       string $viewname
-     * @param       string $key expression for key search or NULL
-     * @param       integer $limit optional maxmimum number of results to return
      * @param       array $parameters addition view query parameters as described in the couchdb api documentation
      * @param       array $keys optional list of document ids to lookup
-     * @return      array
+     *
+     * @throws      CouchdbClientException
+     *
+     * @return      array result from view
      */
-    public function getView($database, $designDocId, $viewname, $key = NULL, $limit = 0, array $parameters = array(),
-        array $keys = NULL)
+    public function getView($database, $designDocId, $viewname, array $parameters = array(), array $keys = NULL)
     {
-        $query = array('descending' => 'true');
-        if ($key)
-        {
-            $query['key'] = $key;
-        }
-        if ($limit > 0)
-        {
-            $query['limit'] = intval($limit);
-        }
-
-        $uri = $this->addUrlParameters(
-                $this->getDatabaseUrl($database) .
-                '_design/' . urlencode($designDocId) .
-                '/_view/' . urlencode($viewname),
-                array_merge($query, $parameters));
-
-        if (NULL === $keys)
-        {
-            $curlHandle = $this->getCurlHandle($uri, self::METHOD_GET);
-        }
-        else
-        {
-            $kreq = array('keys' => $keys);
-            $curlHandle = $this->getCurlHandle($uri, self::METHOD_POST);
-            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($kreq));
-        }
-
-        $data = $this->getJsonData($curlHandle);
-
-        return $data;
+        $url = $this->getDatabaseUrl($database) .
+            '_design/' . urlencode($designDocId) .
+            '/_view/' . urlencode($viewname);
+        return $this->_getView($url, $parameters, $keys);
     }
 
     /**
@@ -828,6 +794,60 @@ class ExtendedCouchDbClient
             }
         }
         return $url.'?'.http_build_query($parameters);
+    }
+
+    /**
+     * internal function for accessing views
+     *
+     * @see http://wiki.apache.org/couchdb/HTTP_view_API#Access.2BAC8-Query
+     *
+     * Resulting array looks like
+     * <pre>
+     * Array
+     *   (
+     *       [total_rows] => 1
+     *       [offset] => 0
+     *       [rows] => Array
+     *           (
+     *               [0] => Array
+     *                   (
+     *                      …
+     *                      [id] => …
+     *                      [[doc] => …]
+     *                   )
+     *           )
+     *   )
+     * </pre>
+     *
+     * @see getView()
+     * @see getAllDocs()
+     *
+     * @param string $url
+     * @param array $parameters parameters for the _all_docs api call (include_docs, start_key, end_key, …)
+     * @param array $keys list of document ids to lookup
+     *
+     * @return array result from view
+     *
+     * @throws CouchdbClientException
+     */
+    private function _getView($url, array $parameters = array(), array $keys = NULL)
+    {
+        $uri = $this->addUrlParameters($url, $parameters);
+
+        if (NULL === $keys)
+        {
+            $curlHandle = $this->getCurlHandle($uri, self::METHOD_GET);
+        }
+        else
+        {
+            $kreq = array('keys' => $keys);
+            $curlHandle = $this->getCurlHandle($uri, self::METHOD_POST);
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($kreq));
+        }
+
+        $data = $this->getJsonData($curlHandle);
+
+        return $data;
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------
