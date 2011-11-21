@@ -487,10 +487,11 @@ class ExtendedCouchDbClient
      * @param       string $key expression for key search or NULL
      * @param       integer $limit optional maxmimum number of results to return
      * @param       array $parameters addition view query parameters as described in the couchdb api documentation
-     *
+     * @param       array $keys optional list of document ids to lookup
      * @return      array
      */
-    public function getView($database, $designDocId, $viewname, $key = NULL, $limit = 0, array $parameters = array())
+    public function getView($database, $designDocId, $viewname, $key = NULL, $limit = 0, array $parameters = array(),
+        array $keys = NULL)
     {
         $query = array('descending' => 'true');
         if ($key)
@@ -508,7 +509,17 @@ class ExtendedCouchDbClient
                 '/_view/' . urlencode($viewname),
                 array_merge($query, $parameters));
 
-        $curlHandle = $this->getCurlHandle($uri);
+        if (NULL === $keys)
+        {
+            $curlHandle = $this->getCurlHandle($uri, self::METHOD_GET);
+        }
+        else
+        {
+            $kreq = array('keys' => $keys);
+            $curlHandle = $this->getCurlHandle($uri, self::METHOD_POST);
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($kreq));
+        }
+
         $data = $this->getJsonData($curlHandle);
 
         return $data;
