@@ -84,6 +84,7 @@ class WorkflowItemPeer
         $document = $item->toArray();
         unset($document['identifier']);
         $document['_id'] = $item->getIdentifier();
+        $document['type'] = get_class($item);
         if (isset($document['revision']))
         {
             $document['_rev'] = $document['revision'];

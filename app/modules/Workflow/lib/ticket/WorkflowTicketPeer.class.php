@@ -52,6 +52,11 @@ class WorkflowTicketPeer
         $this->saveTicket($ticket);
         return $ticket;
     }
+    
+    public function getTickets($limit = 0, $offset = 0)
+    {
+        
+    }
 
     /**
      * store ticket in the database
@@ -97,7 +102,7 @@ class WorkflowTicketPeer
      */
     public function getTicketByWorkflowItem(IWorkflowItem $item)
     {
-        $result = $this->client->getView(NULL, self::DESIGNDOC, "ticketByImportitem", array(
+        $result = $this->client->getView(NULL, self::DESIGNDOC, "ticketByWorkflowItem", array(
                 'include_docs' => 'true',
                 'key' => $item->getIdentifier())
         );

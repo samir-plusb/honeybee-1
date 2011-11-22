@@ -1,12 +1,12 @@
 /**
- * Access tickets by import item identifier
+ * Access tickets by workflow item identifier
  *
  * @author tay
  * @version $Id:$
  */
 function(doc)
 {
-    if (doc.item)
+    if (doc.type && 'WorkflowTicket' === doc.type)
     {
         emit(doc.item, null);
     }
