@@ -6,22 +6,7 @@
     <ae:configuration>
 
         <packages>
-            <package name="twitter-bootstrap">
-                <javascripts>
-                    <script>js/libs/bootstrap/bootstrap-alerts.js</script>
-                    <script>js/libs/bootstrap/bootstrap-buttons.js</script>
-                    <script>js/libs/bootstrap/bootstrap-dropdown.js</script>
-                    <script>js/libs/bootstrap/bootstrap-modal.js</script>
-                    <script>js/libs/bootstrap/bootstrap-popover.js</script>
-                    <script>js/libs/bootstrap/bootstrap-scrollspy.js</script>
-                    <script>js/libs/bootstrap/bootstrap-tabs.js</script>
-                    <script>js/libs/bootstrap/bootstrap-twipsy.js</script>
-                </javascripts>
-                <stylesheets>
-                    <script>css/bootstrap.css</script>
-                </stylesheets>
-            </package>
-            
+            <!-- Will probally be deprecated in favor for twitter-bootstrap. -->
             <package name="jquery-ui">
                 <javascripts>
                     <script>js/libs/jquery-1.6.4.js</script>
@@ -38,7 +23,27 @@
                 </stylesheets>
             </package>
             
-            <package name="midas.core" depends="jquery-ui">
+            <package name="twitter-bootstrap">
+                <javascripts>
+                    <script>js/libs/jquery-1.6.4.js</script>
+                    <script>js/libs/jquery-ui-1.8.13.js</script>
+                    <script>js/libs/jquery-1.6.4.js</script>
+                    <script>js/libs/bootstrap/bootstrap-twipsy.js</script>
+                    <script>js/libs/bootstrap/bootstrap-alerts.js</script>
+                    <script>js/libs/bootstrap/bootstrap-buttons.js</script>
+                    <script>js/libs/bootstrap/bootstrap-dropdown.js</script>
+                    <script>js/libs/bootstrap/bootstrap-modal.js</script>
+                    <script>js/libs/bootstrap/bootstrap-popover.js</script>
+                    <script>js/libs/bootstrap/bootstrap-scrollspy.js</script>
+                    <script>js/libs/bootstrap/bootstrap-tabs.js</script>
+                </javascripts>
+                <stylesheets>
+                    <script>css/bootstrap.css</script>
+                    <script>css/jquery-ui.1.8.13.custom.css</script>
+                </stylesheets>
+            </package>
+            
+            <package name="midas.core">
                 <javascripts>
                     <script>js/midas/core/core.js</script>
                     <script>js/midas/core/Module.js</script>
@@ -54,7 +59,7 @@
                 </stylesheets>
             </package>
 
-            <package name="midas.items.edit" depends="midas.core">
+            <package name="midas.items.edit" depends="midas.core jquery-ui">
                 <javascripts>
                     <script>js/midas/items/items.js</script>
                     <script>js/midas/items/edit/SlidePanel.js</script>
