@@ -25,22 +25,16 @@ class Items_ListAction extends ItemsBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $couchClient = $this->getContext()->getDatabaseConnection('midas_import');
-        $documents = $couchClient->getView(self::COUCHDB_DATABASE, 'items', 'list', array(
-                'limit' => 100,
-                'descending' => true));
+        $couchClient = $this->getContext()->getDatabaseConnection('CouchWorkflow');
+        $documents = $couchClient->getView(NULL, 'designWorkflow', 'ticketList',
+            array(
+                'limit' => 500,
+                'descending' => TRUE,
+                'include_docs' => TRUE
+            )
+        );
 
-        $items = array();
-
-        if (isset($documents['rows']) && is_array($documents['rows']))
-        {
-            foreach ($documents['rows'] as $row)
-            {
-                $items[] = $couchClient->getDoc(self::COUCHDB_DATABASE, $row['id']);
-            }
-        }
-
-        $this->setAttribute('items', $items);
+        $this->setAttribute('items', $documents['rows']);
 
         return 'Success';
     }

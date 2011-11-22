@@ -16,12 +16,12 @@
         <h2>Document editing form</h2>
         <menu id="content-item-menu" class="action-button-list">
             <li>
-                <a class="action-list" href="#list">Liste</a>
+                <a class="action-list btn small primary" href="#list">Liste</a>
                 <span class="info-small items-loading">&nbsp;&nbsp;</span>
             </li>
-            <li><a class="action-store" href="#store">Speichern</a></li>
-            <li><a class="action-new" href="#new">Neues Item</a></li>
-            <li><a class="action-delete" href="#delete">L&ouml;schen</a></li>
+            <li><a class="action-store btn small primary" href="#store">Speichern</a></li>
+            <li><a class="action-new btn small primary" href="#new">Neues Item</a></li>
+            <li><a class="action-delete btn small danger" href="#delete">L&ouml;schen</a></li>
         </menu>
 
         <section class="content-items">
@@ -185,10 +185,10 @@
     <section class="document-data">
         <h2>Current Import Item Data</h2>
         <menu id="import-item-menu" class="action-button-list">
-            <li><a href="#prev">Zur&uuml;ck</a></li>
-            <li><a href="#mark">Abhaken</a></li>
-            <li><a href="#delete">L&ouml;schen</a></li>
-            <li><a href="#next">Vor</a></li>
+            <li><a href="#prev" class="btn small primary">&larr; Zur&uuml;ck</a></li>
+            <li><a href="#mark" class="btn small success">Abhaken</a></li>
+            <li><a href="#delete" class="btn small danger">L&ouml;schen</a></li>
+            <li><a href="#next" class="btn small primary">Vor &rarr;</a></li>
         </menu>
 
         <div class="item-meta-data content-panel">

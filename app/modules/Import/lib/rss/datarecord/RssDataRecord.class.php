@@ -112,11 +112,18 @@ class RssDataRecord extends ImportBaseDataRecord
             $media[] = $asset->getId();
         }
 
+        $html = trim($data->getHtml());
+        $content = $html;
+        if (empty($html))
+        {
+            $content = htmlspecialchars($data->getText());
+        }
+
         return array(
             self::PROP_IDENT => $data->getId(),
             self::PROP_TITLE => $data->getTitle(),
             self::PROP_TIMESTAMP => $data->getTime(),
-            self::PROP_CONTENT => $data->getHtml() ? htmlspecialchars($data->getText()) : $data->getHtml(),
+            self::PROP_CONTENT => $content,
             self::PROP_MEDIA => $media,
             self::PROP_GEO => array()
         );

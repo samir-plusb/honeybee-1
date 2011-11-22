@@ -54,15 +54,10 @@ select {
   padding: 1em;
 }
 .action-button-list li {
-  background: rgba(0, 0, 0, 0.05);
-  border: 0.1em solid rgba(0, 0, 0, 0.3);
-  border-radius: 5px 5px 5px 5px;
-  box-shadow: 0 0.07em 0 rgba(255, 255, 255, 0.7) inset;
   float: left;
   list-style: none outside none;
   margin-right: 1em;
   position: relative;
-  text-shadow: 0 0.05em 0 rgba(255, 255, 255, 0.7);
 }
 .action-button-list li a {
   color: #000000;
@@ -74,18 +69,11 @@ select {
 .action-button-list li a:active {
   outline: none;
 }
-.action-button-list li:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
 .action-button-list li:hover a {
   color: #ffffff;
-  text-shadow: 0 0 4px #ffffff;
 }
 .action-button-list li.inactive {
   opacity: 0.3;
-}
-.action-button-list li.inactive:hover {
-  background: rgba(0, 0, 0, 0.05);
 }
 .action-button-list li.inactive:hover a {
   color: #000000;
@@ -103,7 +91,7 @@ select {
 }
 /* General styling for content panels. */
 .content-panel {
-  background: none repeat scroll 0 0 #F6F6F6;
+  background: none repeat scroll 0 0 #F9F9F9;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px 5px 5px 5px;
   box-shadow: 0 5px 3px rgba(0, 0, 0, 0.2);
@@ -170,8 +158,13 @@ header .personal-info h2 {
 .document-editing h2 {
   display: none;
 }
+.document-editing .action-button-list .action-store {
+  font-weight: bolder;
+  font-size: 13px;
+  padding: 0.45em 1em;
+}
 .document-editing .action-button-list .info-small {
-  left: 53px;
+  left: 35px;
   padding: 0 4px;
   position: absolute;
   text-align: center;

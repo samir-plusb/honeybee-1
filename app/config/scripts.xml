@@ -22,12 +22,12 @@
                     <script>css/jquery-taghandler.css</script>
                 </stylesheets>
             </package>
-            
+
             <package name="twitter-bootstrap">
                 <javascripts>
                     <script>js/libs/jquery-1.6.4.js</script>
                     <script>js/libs/jquery-ui-1.8.13.js</script>
-                    <script>js/libs/jquery-1.6.4.js</script>
+                    <script>js/libs/jquery-tablesorter-2.0.5.js</script>
                     <script>js/libs/bootstrap/bootstrap-twipsy.js</script>
                     <script>js/libs/bootstrap/bootstrap-alerts.js</script>
                     <script>js/libs/bootstrap/bootstrap-buttons.js</script>
@@ -42,7 +42,7 @@
                     <script>css/jquery-ui.1.8.13.custom.css</script>
                 </stylesheets>
             </package>
-            
+
             <package name="midas.core">
                 <javascripts>
                     <script>js/midas/core/core.js</script>
@@ -78,6 +78,7 @@
                 <stylesheets>
                     <script>css/reset.css</script>
                     <script>css/screen.css</script>
+                    <script>css/edit_buttons.css</script>
                 </stylesheets>
             </package>
 
@@ -91,9 +92,16 @@
                     <script>js/midas/items/edit/init.js</script>
                 </javascripts>
             </deployment>
-            
+
             <deployment viewpath="items.list*">
                 <package ref="twitter-bootstrap" />
+
+                <javascripts>
+                    <script>js/midas/items/list/init.js</script>
+                </javascripts>
+                <stylesheets>
+                    <script>css/list.css</script>
+                </stylesheets>
             </deployment>
         </deployments>
 
