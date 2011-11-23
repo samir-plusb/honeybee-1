@@ -23,7 +23,7 @@ class Items_List_ListSuccessView extends ItemsBaseView
     {
         $this->setupHtml($parameters);
 
-        $this->setAttribute('_title', 'Items/List/Success@Html');
+        $this->setAttribute('_title', 'Midas - News Stream');
     }
 
     /**

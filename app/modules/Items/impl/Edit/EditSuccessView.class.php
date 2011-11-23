@@ -22,13 +22,13 @@ class Items_Edit_EditSuccessView extends ItemsBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
-        $this->setAttribute('_title', 'BerlinOnline Newsdata Prototype');
+        $this->setAttribute('_title', 'Midas - News Refinement');
         $this->setAttribute('tag_options', array(
             'mandatory' => TRUE,
             'tags' => AgaviConfig::get('items.tags', array())
         ));
         $this->setAttribute(
-            'category_options', 
+            'category_options',
             AgaviConfig::get('items.categories', array())
         );
     }
