@@ -29,4 +29,4 @@ else
 fi
 #If you are having problems with installing plugins due to proxy,
 # hard set it by using the following java options: -Dhttp.proxyHost=proxy2 -Dhttp.proxyPort=3128
-exec $JAVA -Delasticsearch -Des.path.home="$ES_HOME" -cp "$ES_HOME/lib/*" org.elasticsearch.plugins.PluginManager $*
+exec $JAVA -Dhttp.proxyHost=proxy2 -Dhttp.proxyPort=3128 -Delasticsearch -Des.path.home="$ES_HOME" -cp "$ES_HOME/lib/*" org.elasticsearch.plugins.PluginManager $*
