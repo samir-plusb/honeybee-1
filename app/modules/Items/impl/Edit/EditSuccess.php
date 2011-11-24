@@ -14,7 +14,7 @@
 <div class="topmenu-container content-menu">
     <menu id="content-item-menu" class="action-button-list">
         <li>
-            <a class="action-list btn small primary" href="#list">Liste</a>
+            <a class="action-list btn small primary" href="#list">Liste &#9660;</a>
             <span class="info-small items-loading">&nbsp;&nbsp;</span>
         </li>
         <li><a class="action-store btn small primary important" href="#store">Speichern</a></li>
