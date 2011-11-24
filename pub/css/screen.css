@@ -267,17 +267,40 @@ header .personal-info h2 {
 }
 /* Styles that go with the import item data. */
 .document-data {
-  float: left;
   width: 40%;
+  position: fixed;
+  right: 0;
+  top: 100px;
+  bottom: 1em;
 }
 .document-data h2 {
   display: none;
 }
+.document-data .import-data-layoutbox {
+  position: relative;
+  height: 100%;
+}
 .document-data .content-panel {
   margin-right: 1em;
 }
+.document-data .item-content {
+  position: absolute;
+  right: 0;
+  left: 0;
+  margin-bottom: 0;
+  bottom: 0;
+  top: 130px;
+}
+.document-data .item-content .ui-tabs-panel {
+  bottom: 10px;
+  left: 5px;
+  position: absolute;
+  right: 5px;
+  top: 80px;
+}
 .document-data .item-content .input-full {
-  height: 10em;
+  height: 100%;
+  min-height: 20px;
   margin: 0;
 }
 .document-data .item-content .input-full textarea {

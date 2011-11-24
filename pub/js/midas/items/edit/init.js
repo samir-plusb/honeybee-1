@@ -9,10 +9,10 @@ view.attach(controller);
 {
     if (16 < $(this).scrollTop())
     {
-        $('.topmenu-container').addClass('decent');
+        $('.topmenu-container').first().addClass('decent');
     }
     else
     {
-        $('.topmenu-container').removeClass('decent');
+        $('.topmenu-container').first().removeClass('decent');
     }
 });

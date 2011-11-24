@@ -194,29 +194,29 @@
 
     <section class="document-data">
         <h2>Current Import Item Data</h2>
+        <div class="import-data-layoutbox">
+            <div class="item-meta-data content-panel">
+                <h3 class="legend">Daten</h3>
+                <dl>
+                    <dt>Betreff</dt>
+                    <dd></dd>
+                    <dt>Von</dt>
+                    <dd></dd>
+                    <dt>Versanddatum</dt>
+                    <dd>01:00 - 01.01.1970</dd>
+                </dl>
+            </div>
 
-        <div class="item-meta-data content-panel">
-            <h3 class="legend">Daten</h3>
-            <dl>
-                <dt>Betreff</dt>
-                <dd></dd>
-                <dt>Von</dt>
-                <dd></dd>
-                <dt>Versanddatum</dt>
-                <dd>01:00 - 01.01.1970</dd>
-            </dl>
-        </div>
-
-        <div class="item-content content-panel">
-            <h3 class="legend">Verf&uuml;gbare Daten</h3>
-            <ul>
-                <li>
-                    <a href="#content-tabs-1">Inhalt</a>
-                </li>
-            </ul>
-            <div id="content-tabs-1">
-                <div class="input-full">
-                    <textarea readonly="readonly">Lorem ipsum -dolor sit amet-,
+            <div class="item-content content-panel">
+                <h3 class="legend">Verf&uuml;gbare Daten</h3>
+                <ul>
+                    <li>
+                        <a href="#content-tabs-1">Inhalt</a>
+                    </li>
+                </ul>
+                <div id="content-tabs-1">
+                    <div class="input-full">
+                        <textarea readonly="readonly">Lorem ipsum -dolor sit amet-,
 consectetur adipisc--ing elit.
 Aliquam -id elit at - www.heise.de
 libero t-incidunt luctus id:
@@ -226,6 +226,7 @@ Etiam viverra tempor magna, eget rutru
 12 jan 1987
 m erat volutpat non. Aliquam vitae eros urna. Etiam viverra porttitor urna, in blandit purus tincidunt non.
 Donec a adipiscing magna. Etiam consectetur blandit diam, et pretium tellus congue ut.</textarea>
+                    </div>
                 </div>
             </div>
         </div>
