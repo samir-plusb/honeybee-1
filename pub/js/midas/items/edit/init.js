@@ -4,3 +4,15 @@ var view = new midas.items.edit.EditView(
     { 'tabs_container': '.item-content' }
 );
 view.attach(controller);
+
+ $(document).scroll(function()
+{
+    if (16 < $(this).scrollTop())
+    {
+        $('.topmenu-container').addClass('decent');
+    }
+    else
+    {
+        $('.topmenu-container').removeClass('decent');
+    }
+});

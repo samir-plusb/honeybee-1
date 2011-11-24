@@ -11,18 +11,28 @@
     </aside>
 </header>
 
+<div class="topmenu-container content-menu">
+    <menu id="content-item-menu" class="action-button-list">
+        <li>
+            <a class="action-list btn small primary" href="#list">Liste</a>
+            <span class="info-small items-loading">&nbsp;&nbsp;</span>
+        </li>
+        <li><a class="action-store btn small primary important" href="#store">Speichern</a></li>
+        <li><a class="action-new btn small primary" href="#new">Neues Item</a></li>
+        <li><a class="action-delete btn small danger" href="#delete">L&ouml;schen</a></li>
+    </menu>
+</div>
+<div class="topmenu-container import-menu">
+    <menu id="import-item-menu" class="action-button-list">
+        <li><a href="#prev" class="btn small primary">&larr; Zur&uuml;ck</a></li>
+        <li><a href="#mark" class="btn small primary important">Abhaken</a></li>
+        <li><a href="#next" class="btn small primary">Vor &rarr;</a></li>
+        <li><a href="#delete" class="btn small danger">L&ouml;schen</a></li>
+    </menu>
+</div>
 <div class="slide-panel">
     <section class="document-editing">
         <h2>Document editing form</h2>
-        <menu id="content-item-menu" class="action-button-list">
-            <li>
-                <a class="action-list btn small primary" href="#list">Liste</a>
-                <span class="info-small items-loading">&nbsp;&nbsp;</span>
-            </li>
-            <li><a class="action-store btn small primary" href="#store">Speichern</a></li>
-            <li><a class="action-new btn small primary" href="#new">Neues Item</a></li>
-            <li><a class="action-delete btn small danger" href="#delete">L&ouml;schen</a></li>
-        </menu>
 
         <section class="content-items">
             <div class="content-panel">
@@ -184,12 +194,6 @@
 
     <section class="document-data">
         <h2>Current Import Item Data</h2>
-        <menu id="import-item-menu" class="action-button-list">
-            <li><a href="#prev" class="btn small primary">&larr; Zur&uuml;ck</a></li>
-            <li><a href="#mark" class="btn small success">Abhaken</a></li>
-            <li><a href="#delete" class="btn small danger">L&ouml;schen</a></li>
-            <li><a href="#next" class="btn small primary">Vor &rarr;</a></li>
-        </menu>
 
         <div class="item-meta-data content-panel">
             <h3 class="legend">Daten</h3>

@@ -88,6 +88,7 @@ select
 {
     overflow: hidden;
     padding: @layout_spacing;
+    position: relative;
 
     li
     {
@@ -117,6 +118,25 @@ select
                 color: #ffffff;
             }
         }
+
+        &:last-child
+        {
+            margin-right: 0;
+        }
+
+        .info-small
+        {
+            background-color: #FF0000;
+            border: 0.05em solid rgba(0, 0, 0, 0.3);
+            border-radius: 2px 2px 2px 2px;
+            color: #FFFFFF;
+            font-family: arial;
+            font-size: 0.8em;
+            position: absolute;
+            padding: 0.1em;
+            top: -5px;
+            right: -5px;
+        }
     }
 
     li.inactive
@@ -135,15 +155,34 @@ select
     }
 }
 
-/* Common styles for small info boxes. */
-.info-small
+.topmenu-container
 {
-    background-color: #FF0000;
-    border: 0.05em solid rgba(0, 0, 0, 0.3);
-    border-radius: 2px 2px 2px 2px;
-    color: #FFFFFF;
-    font-family: arial;
-    font-size: 0.8em;
+    position: fixed;
+    top: 40px;
+    z-index: 1000;
+    width: 60%;
+    transition: top 0.2s;
+    -moz-transition: top 0.2s; /* Firefox 4 */
+    -webkit-transition: top 0.2s; /* Safari and Chrome */
+    -o-transition: top 0.2s; /* Opera */
+}
+
+.decent
+{
+    opacity: 0.4;
+    top: 3px;
+
+    &:hover
+    {
+        opacity: 1;
+        top: 40px;
+    }
+}
+
+.import-menu
+{
+    right: 0;
+    width: 40%;
 }
 
 /* General styling for content panels. */
@@ -191,19 +230,40 @@ body
 /* Header styles, hence page-title and individual, user dedicated data. */
 header
 {
-    background: url(@header_background);
+    background-color: #222222;
+    background-image: -moz-linear-gradient(center top , #333333, #222222);
+    background-repeat: repeat-x;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
     color: #ffffff;
-    position: relative;
+    height: 40px;
+    left: 0;
+    overflow: visible;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 10000;
+    padding-left: @layout_spacing;
+    margin-bottom: 40px;
 
     h1
     {
-        padding: @layout_spacing;
+        font-size: 24px;
+        line-height: 36px;
+        font-weight: bold;
 
         a
         {
             color: #FFFFFF;
-            font-weight: bold;
+            display: block;
+            float: left;
+            font-size: 20px;
+            font-weight: 200;
+            line-height: 1;
+            margin-left: -20px;
+            padding: 8px 20px 12px;
             text-decoration: none;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
         }
     }
 
@@ -211,6 +271,7 @@ header
     {
         padding: @layout_spacing;
         position: absolute;
+        font-size: 10pt;
         right: 0;
         top: 0;
 
@@ -219,6 +280,11 @@ header
             display: none;
         }
     }
+}
+
+.slide-panel
+{
+    padding-top: 100px;
 }
 
 /* The main form section of the edit success markup. */
@@ -231,26 +297,6 @@ header
     h2
     {
         display: none;
-    }
-
-    /* content item command menu */
-    .action-button-list
-    {
-        .action-store
-        {
-            font-weight: bolder;
-            font-size: 13px;
-            padding: 0.45em 1em;
-        }
-
-        .info-small
-        {
-            left: 35px;
-            padding: 0 4px;
-            position: absolute;
-            text-align: center;
-            top: -7px;
-        }
     }
 
     /* content item editing form */

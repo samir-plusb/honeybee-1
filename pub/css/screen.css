@@ -52,6 +52,7 @@ select {
 .action-button-list {
   overflow: hidden;
   padding: 1em;
+  position: relative;
 }
 .action-button-list li {
   float: left;
@@ -72,6 +73,21 @@ select {
 .action-button-list li:hover a {
   color: #ffffff;
 }
+.action-button-list li:last-child {
+  margin-right: 0;
+}
+.action-button-list li .info-small {
+  background-color: #FF0000;
+  border: 0.05em solid rgba(0, 0, 0, 0.3);
+  border-radius: 2px 2px 2px 2px;
+  color: #FFFFFF;
+  font-family: arial;
+  font-size: 0.8em;
+  position: absolute;
+  padding: 0.1em;
+  top: -5px;
+  right: -5px;
+}
 .action-button-list li.inactive {
   opacity: 0.3;
 }
@@ -80,14 +96,33 @@ select {
   cursor: default;
   text-shadow: 0 0.05em 0 rgba(255, 255, 255, 0.7);
 }
-/* Common styles for small info boxes. */
-.info-small {
-  background-color: #FF0000;
-  border: 0.05em solid rgba(0, 0, 0, 0.3);
-  border-radius: 2px 2px 2px 2px;
-  color: #FFFFFF;
-  font-family: arial;
-  font-size: 0.8em;
+.topmenu-container {
+  position: fixed;
+  top: 40px;
+  z-index: 1000;
+  width: 60%;
+  transition: top 0.2s;
+  -moz-transition: top 0.2s;
+  /* Firefox 4 */
+
+  -webkit-transition: top 0.2s;
+  /* Safari and Chrome */
+
+  -o-transition: top 0.2s;
+  /* Opera */
+
+}
+.decent {
+  opacity: 0.4;
+  top: 3px;
+}
+.decent:hover {
+  opacity: 1;
+  top: 40px;
+}
+.import-menu {
+  right: 0;
+  width: 40%;
 }
 /* General styling for content panels. */
 .content-panel {
@@ -124,51 +159,62 @@ body {
 }
 /* Header styles, hence page-title and individual, user dedicated data. */
 header {
-  background: url("../images/bg-dark-repeatable.png");
+  background-color: #222222;
+  background-image: -moz-linear-gradient(center top, #333333, #222222);
+  background-repeat: repeat-x;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
   color: #ffffff;
-  position: relative;
+  height: 40px;
+  left: 0;
+  overflow: visible;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 10000;
+  padding-left: 1em;
+  margin-bottom: 40px;
 }
 header h1 {
-  padding: 1em;
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: bold;
 }
 header h1 a {
   color: #FFFFFF;
-  font-weight: bold;
+  display: block;
+  float: left;
+  font-size: 20px;
+  font-weight: 200;
+  line-height: 1;
+  margin-left: -20px;
+  padding: 8px 20px 12px;
   text-decoration: none;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 header .personal-info {
   padding: 1em;
   position: absolute;
+  font-size: 10pt;
   right: 0;
   top: 0;
 }
 header .personal-info h2 {
   display: none;
 }
+.slide-panel {
+  padding-top: 100px;
+}
 /* The main form section of the edit success markup. */
 .document-editing {
   float: left;
   position: relative;
   width: 60%;
-  /* content item command menu */
-
   /* content item editing form */
 
 }
 .document-editing h2 {
   display: none;
-}
-.document-editing .action-button-list .action-store {
-  font-weight: bolder;
-  font-size: 13px;
-  padding: 0.45em 1em;
-}
-.document-editing .action-button-list .info-small {
-  left: 35px;
-  padding: 0 4px;
-  position: absolute;
-  text-align: center;
-  top: -7px;
 }
 .document-editing form .editor {
   margin-bottom: 1em;

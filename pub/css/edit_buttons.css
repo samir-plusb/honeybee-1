@@ -164,3 +164,9 @@
   padding: 7px 9px 7px;
   font-size: 11px;
 }
+.btn.important
+{
+    font-weight: bolder;
+    font-size: 13px;
+    padding: 0.45em 1em;
+}
