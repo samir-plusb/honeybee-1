@@ -439,7 +439,7 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
      */
     private function setIdentifier($identifier)
     {
-        $this->identifier = $identifier;
+        $this->identifier = sha1($identifier);
     }
 
     /**
