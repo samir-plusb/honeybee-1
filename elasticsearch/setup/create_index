@@ -1,0 +1,3 @@
+#/bin/bash
+
+curl -XPUT 'localhost:9200/midas/' -d @./index.json

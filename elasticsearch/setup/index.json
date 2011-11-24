@@ -1,0 +1,89 @@
+{
+    "settings": {
+        "number_of_shards": 5,
+        "number_of_replicas": 1
+    },
+    "mappings" : {
+        "ticket" : {
+            "_source": {
+                "enabled": true
+            },
+            "_timestamp" : {
+                "enabled" : true,
+                "path" : "ts",
+                "store": true
+            },
+            "dynamic" : false,
+            "properties": {
+                "blocked": {
+                    "type": "boolean",
+                    "store": true
+                },
+                "ts": {
+                    "type": "date",
+                    "format": "basic_date_time_no_millis",
+                    "store": true
+                },
+                "workflow": {
+                    "type": "string",
+                    "store": true
+                },
+                "result": {
+                    "type": "object",
+                    "dynamic": false,
+                    "properties": {
+                        "state": {
+                            "type": "short",
+                            "store": true
+                        }
+                    }
+                }
+            }
+        },
+        "item" : {
+            "_parent": {
+                "type": "ticket"
+            },
+            "_source": {
+                "enabled": true
+            },
+            "dynamic" : false,
+            "properties" : {
+                "ImportItem" : {
+                    "type": "object",
+                    "dynamic" : false,
+                    "properties": {
+                        "title": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "source" : {
+                            "type": "string",
+                            "store": true
+                        },
+                        "origin" : {
+                            "type": "string",
+                            "store": true
+                        },
+                        "category" : {
+                            "type": "string",
+                            "store": true
+                        },
+                        "content" : {
+                            "type": "string",
+                            "store": true
+                        }
+                    }
+                },
+                "ContentItems": {
+                    "properties": {
+                        "title": {
+                            "type": "string",
+                            "store": true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

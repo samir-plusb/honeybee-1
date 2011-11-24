@@ -1,0 +1,15 @@
+{
+    "type" : "couchdb",
+    "couchdb" : {
+        "host" : "localhost",
+        "port" : 5984,
+        "db" : "workflow",
+        "filter" : null,
+        "script" : "ctx._type = ('WorkflowItem' === ctx.doc.type) ? 'item' : 'ticket';"
+    },
+    "index" : {
+        "index" : "midas",
+        "bulk_size" : "100",
+        "bulk_timeout" : "10ms"
+    }
+}
