@@ -53,15 +53,15 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      * @type Object
      */
     context_menu_actions: null,
-    
+
     /**
      * Holds the service we use to have things like localization and data extraction done.
      * @type midas.items.edit.EditService
      */
     edit_service: null,
-    
+
     /**
-     * Holds a list component that contains and renders all content-items, 
+     * Holds a list component that contains and renders all content-items,
      * providing methods to access and modify the latter collection.
      * @type midas.items.edit.ContentItemsList
      */
@@ -70,7 +70,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     // -----------
     // --------------- CONSTRUCTION / GUI INITIALIZING
     // -----------
-    
+
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
      * @param {HTMLElement} element The view's layout root.
@@ -100,7 +100,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             .createMenus()
             .createEditForm();
     },
-    
+
     /**
      * @description Creates the view's slide panel,
      * a component that is used to slide in/out the content item list.
@@ -134,7 +134,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         $('.import-data-layoutbox').append($('<div class="overlay"></div>').css('opacity', 0).css('display', 'none'));
         return this;
     },
-    
+
     /**
      * @description Creates the content item list,
      * a component that reflects a list of content items,
@@ -149,7 +149,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         items_container.css('left', -items_container.outerWidth());
         var that = this;
         this.items_list = new midas.items.edit.ContentItemsList(
-            items_container.find('ul').first(), { 
+            items_container.find('ul').first(), {
                 items: this.loadItems(),
                 state_display: this.layout_root.find('.info-small')
             }
@@ -165,7 +165,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         .on('itemEnter', function(item)
         {
             clearTimeout(that.items_list.timer);
-            var delay = that.items_list.org_item ? 100 : 750;
+            var delay = that.items_list.org_item ? 100 : 500;
             that.items_list.timer = setTimeout(function()
             {
                 if (! that.items_list.org_item)
@@ -175,11 +175,15 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                         dirty: that.editing_form.isDirty()
                     };
                 }
-                if (item.data.cid == that.editing_form.val('cid'))
+                if (item.data.cid == that.items_list.org_item.data.cid)
                 {
+                    $('.document-editing').removeClass('preview');
                     // @todo Sugar: apply diff if the item is the same as loaded.
                     // Overwrite item.data for this, before passing it to the form.
-                    return;
+                }
+                else
+                {
+                    $('.document-editing').addClass('preview');
                 }
                 that.editing_form.val(item.data);
             }, delay);
@@ -190,6 +194,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             that.items_list.timer = setTimeout(function()
             {
                 that.items_list.timer = null;
+                $('.document-editing').removeClass('preview');
                 if (! that.items_list.org_item)
                 {
                     return;
@@ -200,11 +205,11 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     that.editing_form.markClean();
                 }
                 that.items_list.org_item = null;
-            }, 30);
+            }, 50);
         });
         return this;
     },
-    
+
     /**
      * @description Creates the import item container,
      * a component that wraps up the part of the gui dedicated to presenting
@@ -219,7 +224,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         ).on('contextMenuSelect', this.onContextMenuClicked.bind(this));
         return this;
     },
-    
+
     /**
      * @description Creates the edit form,
      * a component that reflects the content item editing form
@@ -242,10 +247,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         }.bind(this));
         return this;
     },
-    
+
     /**
      * @description Creates the top level menus of the view.
-     * One for triggering actions related to the import item container 
+     * One for triggering actions related to the import item container
      * and one for controlling the content item related components (slide panel and form).
      * @returns {midas.items.edit.EditView} Returns the same instance for fluent api support.
      */
@@ -262,7 +267,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         );
         return this;
     },
-    
+
     /**
      * @description Load a list of content items.
      * @returns {Array} An array containing content-item objects.
@@ -305,7 +310,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             'next': function() {this.logDebug('onImportItemNext');}.bind(this)
         };
     },
-    
+
     /**
      * @description Returns a set of functions that are bound to the contextmenu
      * commands of the content item form and import container components.
@@ -333,7 +338,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 that.editing_form.val(target_fieldname, date);
             });
         };
-        
+
         return {
             'set_title': setInputValue.bind(this, 'title', false),
             'append_title': setInputValue.bind(this, 'title', true),
@@ -381,7 +386,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     // -----------
     // --------------- HANDLING CONTENT ITEM DATA
     // -----------
-    
+
     /**
      * @description Loads the given content item into the form.
      * If the form is currently marked as dirty (modified and not saved),
@@ -412,7 +417,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             load();
         }
     },
-    
+
     /**
      * @description Creates a new content item.
      * If the form is currently marked as dirty the user will be prompted
@@ -441,7 +446,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             this.editing_form.reset();
         }
     },
-    
+
     /**
      * @description Propagtes a save intent to all attached controllers,
      * which call either our success or error callback when they have completed.
@@ -487,9 +492,9 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             else
             {
                 this.confirm(
-                    "Lokalisierung fehlt!", 
-                    "Dieses Item wurde noch nicht lokalisiert. Bist Du sicher, dass Du das Item ohne Lokalisierung speichern willst?", 
-                    store_data, 
+                    "Lokalisierung fehlt!",
+                    "Dieses Item wurde noch nicht lokalisiert. Bist Du sicher, dass Du das Item ohne Lokalisierung speichern willst?",
+                    store_data,
                     function()
                     {
                         err_callback({type: 'location', data: null, msg: "Location not provided, save aborted by user."});
@@ -503,7 +508,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             err_callback({type: 'validation', data: validation_res, msg: "EditForm validation failed."});
         }
     },
-    
+
     displayValidationNotification: function()
     {
         var lower_bound = $(document).scrollTop() + $(window).height();
@@ -545,12 +550,12 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             this.renderValidationHint('top');
         }
     },
-    
+
     renderValidationHint: function(pos)
     {
         var hint;
         var main_data = $('.main-data');
-        
+
         if (pos == 'top')
         {
             hint = $('<div class="validation-hint top"><h4>&uarr;</h4><p>Bitte hoch scrollen</p></div>');
@@ -565,7 +570,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             opacity: 0
         }, 3000, function() { hint.remove(); });
     },
-    
+
     /**
      * @description Propagtes a delete intent to all attached controllers,
      * which call either our success or error callback when they have completed.
@@ -583,11 +588,11 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             });
         }
     },
-    
+
     // -----------
     // --------------- EVENT HANDLERS
     // -----------
-    
+
     /**
      * @description Event handler that maps contextmenu events
      * to the corresponding bound contextmenu callback, see this.getContextMenuBindings()
@@ -599,7 +604,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             this.context_menu_actions[menu_item.key].apply(this, [content_field]);
         }
     },
-    
+
     /**
      * @description Event callback that is invoked when a content-item
      * has been persisted to the backend.
@@ -608,7 +613,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         this.logInfo("Content item with cid: " + cid + " has successfully been stored.");
     },
-    
+
     /**
      * @description Event callback that is invoked when a content-item
      * has been deleted from the backend.
