@@ -109,7 +109,7 @@ midas.items.edit.TagInput = midas.items.edit.Input.extend(
             return this;
         }
 
-        return this.selected_tags;
+        return this.selected_tags.slice();
     },
 
     /**

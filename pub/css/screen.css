@@ -99,7 +99,8 @@ select {
 .topmenu-container {
   position: fixed;
   top: 40px;
-  z-index: 1000;
+  z-index: 150;
+  height: 61px;
   width: 60%;
   transition: top 0.2s;
   -moz-transition: top 0.2s;
@@ -111,6 +112,7 @@ select {
   -o-transition: top 0.2s;
   /* Opera */
 
+  background: url("../images/bg-grey-slightlydarker.png") repeat scroll 0 0 transparent;
 }
 .decent {
   opacity: 0.4;
@@ -170,7 +172,7 @@ header {
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 10000;
+  z-index: 200;
   padding-left: 1em;
   margin-bottom: 40px;
 }
@@ -210,6 +212,7 @@ header .personal-info h2 {
   float: left;
   position: relative;
   width: 60%;
+  z-index: 100;
   /* content item editing form */
 
 }
@@ -272,6 +275,7 @@ header .personal-info h2 {
   right: 0;
   top: 100px;
   bottom: 1em;
+  z-index: 1;
 }
 .document-data h2 {
   display: none;
@@ -279,6 +283,15 @@ header .personal-info h2 {
 .document-data .import-data-layoutbox {
   position: relative;
   height: 100%;
+}
+.document-data .import-data-layoutbox .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #bbbbbb;
+  opacity: 0.5;
 }
 .document-data .content-panel {
   margin-right: 1em;
@@ -358,4 +371,49 @@ header .personal-info h2 {
 .content-items .content-panel .content-item:hover {
   background: url("../images/ui-bg_gloss-wave_50_6eac2c_500x100.png") repeat-x scroll 50% 50% #6eac2c;
   color: #ffffff;
+}
+.validation-hint {
+  position: fixed;
+  left: 25%;
+  width: 8em;
+  z-index: 500;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0.3em 0.3em 0.5em 0.4em rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.7);
+}
+.validation-hint h4 {
+  height: 100%;
+  width: 100%;
+  font-size: 100pt;
+  color: red;
+  opacity: 0.8;
+  text-align: center;
+  opacity: 0.8;
+}
+.validation-hint p {
+  text-align: center;
+  font-weight: bold;
+  font-size: 15pt;
+  position: absolute;
+}
+.validation-hint.top {
+  top: 118px;
+  padding-bottom: 50px;
+}
+.validation-hint.top h4 {
+  margin-top: -15px;
+}
+.validation-hint.top p {
+  bottom: 0;
+}
+.validation-hint.bottom {
+  bottom: 1em;
+  padding-top: 15px;
+}
+.validation-hint.bottom h4 {
+  margin-bottom: 15px;
+}
+.validation-hint.bottom p {
+  top: 0;
 }

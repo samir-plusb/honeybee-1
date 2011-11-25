@@ -159,12 +159,14 @@ select
 {
     position: fixed;
     top: 40px;
-    z-index: 1000;
+    z-index: 150;
+    height: 61px;
     width: 60%;
     transition: top 0.2s;
     -moz-transition: top 0.2s; /* Firefox 4 */
     -webkit-transition: top 0.2s; /* Safari and Chrome */
     -o-transition: top 0.2s; /* Opera */
+    background: url("../images/bg-grey-slightlydarker.png") repeat scroll 0 0 transparent;
 }
 
 .decent
@@ -241,7 +243,7 @@ header
     position: fixed;
     right: 0;
     top: 0;
-    z-index: 10000;
+    z-index: 200;
     padding-left: @layout_spacing;
     margin-bottom: 40px;
 
@@ -293,6 +295,7 @@ header
     float: left;
     position: relative;
     width: @editing_section_width;
+    z-index: 100;
 
     h2
     {
@@ -381,6 +384,7 @@ header
     right: 0;
     top: 100px;
     bottom: 1em;
+    z-index: 1;
 
     h2
     {
@@ -391,6 +395,17 @@ header
     {
         position: relative;
         height: 100%;
+
+        .overlay
+        {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: #bbbbbb;
+            opacity: 0.5;
+        }
     }
 
     .content-panel
@@ -497,6 +512,69 @@ header
                 background: url(@item_hover_background) repeat-x scroll 50% 50% #6EAC2C;
                 color: #ffffff;
             }
+        }
+    }
+}
+
+.validation-hint
+{
+    position: fixed;
+    left: 25%;
+    width: 8em;
+    z-index: 500;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    border-radius: 5px 5px 5px 5px;
+    box-shadow:0.3em 0.3em 0.5em 0.4em rgba(0,0,0,0.4);
+    background: rgba(255, 255, 255, 0.7);
+    
+    h4
+    {
+        height: 100%;
+        width: 100%;
+        font-size: 100pt;    
+        color: red;
+        opacity: 0.8;
+        text-align: center;
+        opacity: 0.8;
+    }
+
+    p
+    {
+        text-align: center;
+        font-weight: bold;
+        font-size: 15pt;
+        position: absolute;
+    }
+
+    &.top
+    {
+        top: 118px;
+        padding-bottom: 50px;
+
+        h4
+        {
+            margin-top: -15px;
+        }
+
+        p
+        {
+            bottom: 0;
+        }
+    }
+
+    &.bottom
+    {
+        bottom: 1em;
+        padding-top: 15px;
+
+        h4
+        {
+            margin-bottom: 15px;
+        }
+
+        p
+        {
+            top: 0;
         }
     }
 }

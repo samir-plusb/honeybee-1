@@ -5,14 +5,29 @@ var view = new midas.items.edit.EditView(
 );
 view.attach(controller);
 
- $(document).scroll(function()
+(function()
 {
-    if (16 < $(this).scrollTop())
+    var items_panel = $('.content-items');
+    var timer;
+    
+    $(document).scroll(function()
     {
-        $('.topmenu-container').first().addClass('decent');
-    }
-    else
-    {
-        $('.topmenu-container').first().removeClass('decent');
-    }
-});
+        clearTimeout(timer);
+        timer = setTimeout(function()
+        {
+            items_panel.animate({
+                'top': $(document).scrollTop()
+            }, 300, 'easeOutSine');
+            /*
+            items_panel.animate({ 
+                'top': $(document).scrollTop(),
+                'opacity': 0,
+            }, 300, 'easeOutSine', function()
+            {
+                items_panel.animate({ 
+                    'opacity': 1,
+                }, 300, 'easeOutSine');
+            });*/
+        }, 100);
+    });
+})();

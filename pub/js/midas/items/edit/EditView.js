@@ -112,7 +112,26 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             this.layout_root.find('.slide-panel').first()
             .css({'position': 'absolute', 'width': '100%'}),
             {range: '20em'}
-        );
+        ).on('slideinstart', function()
+        {
+            var list_button = $('.action-list');
+            list_button.html(list_button[0].orgText + " &#9664;");
+            $('.import-data-layoutbox').animate({'opacity': 0.4}, 500);
+            $('.import-data-layoutbox .overlay').css('display', 'block').animate({'opacity': 0.5}, 500);
+        }).on("slideoutstart", function()
+        {
+            var list_button = $('.action-list');
+            list_button.html(list_button[0].orgText + " &#9654;");
+            $('.import-data-layoutbox').animate({'opacity': 1}, 500);
+            $('.import-data-layoutbox .overlay').animate({'opacity': 0}, 500, function()
+            {
+                 $('.import-data-layoutbox .overlay').css('display', 'none');
+            });
+        });
+        var list_button = $('.action-list');
+        list_button[0].orgText = list_button.text();
+        list_button.html(list_button[0].orgText + " &#9654;");
+        $('.import-data-layoutbox').append($('<div class="overlay"></div>').css('opacity', 0).css('display', 'none'));
         return this;
     },
     
@@ -128,12 +147,61 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         // so it will slide in to view when our slide_panel's slideIn method is executed.
         var items_container = this.layout_root.find('.content-items').first();
         items_container.css('left', -items_container.outerWidth());
+        var that = this;
         this.items_list = new midas.items.edit.ContentItemsList(
             items_container.find('ul').first(), { 
                 items: this.loadItems(),
                 state_display: this.layout_root.find('.info-small')
             }
-        ).on('itemClicked', this.loadContentItem.bind(this));
+        )
+        .on('itemClicked', function(item)
+        {
+            if (that.items_list.org_item)
+            {
+                that.items_list.org_item = null;
+            }
+            that.loadContentItem(item);
+        })
+        .on('itemEnter', function(item)
+        {
+            clearTimeout(that.items_list.timer);
+            var delay = that.items_list.org_item ? 100 : 750;
+            that.items_list.timer = setTimeout(function()
+            {
+                if (! that.items_list.org_item)
+                {
+                    that.items_list.org_item = {
+                        data: that.editing_form.val(),
+                        dirty: that.editing_form.isDirty()
+                    };
+                }
+                if (item.data.cid == that.editing_form.val('cid'))
+                {
+                    // @todo Sugar: apply diff if the item is the same as loaded.
+                    // Overwrite item.data for this, before passing it to the form.
+                    return;
+                }
+                that.editing_form.val(item.data);
+            }, delay);
+        })
+        .on('itemLeave', function(item)
+        {
+            clearTimeout(that.items_list.timer);
+            that.items_list.timer = setTimeout(function()
+            {
+                that.items_list.timer = null;
+                if (! that.items_list.org_item)
+                {
+                    return;
+                }
+                that.editing_form.val(that.items_list.org_item.data);
+                if (! that.items_list.org_item.dirty)
+                {
+                    that.editing_form.markClean();
+                }
+                that.items_list.org_item = null;
+            }, 30);
+        });
         return this;
     },
     
@@ -321,11 +389,6 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      */
     loadContentItem: function(item)
     {
-        if (item.data.cid == this.editing_form.val('cid'))
-        {
-            return;
-        }
-        
         var that = this;
         var load = function()
         {
@@ -436,8 +499,71 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         }
         else
         {
+            this.displayValidationNotification();
             err_callback({type: 'validation', data: validation_res, msg: "EditForm validation failed."});
         }
+    },
+    
+    displayValidationNotification: function()
+    {
+        var lower_bound = $(document).scrollTop() + $(window).height();
+        var upper_bound = $('.document-editing').offset().top;
+        var input_visible = false;
+        var isVisible = function(item)
+        {
+            item = $(item);
+            var bottom_pos = (item.offset().top + item.height()) - $(document).scrollTop();
+            if (item.offset().top < lower_bound && bottom_pos > upper_bound)
+            {
+                return true;
+            }
+        };
+        $('.ui-state-error').each(function(idx, item)
+        {
+            if (isVisible(item))
+            {
+                input_visible = true;
+            }
+        });
+        if (input_visible)
+        {
+            // one of the invalid inputs is inside the viewport.
+            // no need to show a hint.
+            return;
+        }
+        // none of the invalid inputs are inside the viewport.
+        // show a hint to the user indicating in which direction he has to scroll to find the first invalid input.
+        // if he clicks it we'll take him there
+        var first_invalid = $('.ui-state-error').first();
+        var bottom_pos = (first_invalid.offset().top + first_invalid.height()) - $(document).scrollTop();
+        if (first_invalid.offset().top > lower_bound)
+        {
+            this.renderValidationHint('bottom');
+        }
+        else if (bottom_pos < upper_bound)
+        {
+            this.renderValidationHint('top');
+        }
+    },
+    
+    renderValidationHint: function(pos)
+    {
+        var hint;
+        var main_data = $('.main-data');
+        
+        if (pos == 'top')
+        {
+            hint = $('<div class="validation-hint top"><h4>&uarr;</h4><p>Bitte hoch scrollen</p></div>');
+        }
+        else
+        {
+            hint = $('<div class="validation-hint bottom"><p>Bitte runter scrollen</p><h4>&darr;</h4>');
+        }
+        $(document.body).append(hint);
+        hint.css('left', main_data.offset().left + (main_data.width() / 2) - (hint.width() / 2));
+        hint.animate({
+            opacity: 0
+        }, 3000, function() { hint.remove(); });
     },
     
     /**

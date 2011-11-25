@@ -72,9 +72,10 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
         {
             return;
         }
-
+        this.fire('slideinstart');
         this.slide("+=" + this.options.range, function()
         {
+            this.fire('slideincomplete');
         }.bind(this));
     },
 
@@ -87,9 +88,10 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
         {
             return;
         }
-
+        this.fire('slideoutstart');
         this.slide("-=" + this.options.range, function()
         {
+            this.fire('slideoutcomplete');
         }.bind(this));
     },
 

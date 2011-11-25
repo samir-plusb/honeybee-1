@@ -41,6 +41,16 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
             var item = this.content_items[event.currentTarget.cid];
             this.fire('itemClicked', [item]);
         }.bind(this));
+        this.element.delegate('li', 'mouseenter', function(event)
+        {
+            var item = this.content_items[event.currentTarget.cid];
+            this.fire('itemEnter', [item]);
+        }.bind(this));
+        this.element.delegate('li', 'mouseleave', function(event)
+        {
+            var item = this.content_items[event.currentTarget.cid];
+            this.fire('itemLeave', [item]);
+        }.bind(this));
         this.content_items = {
             length: 0
         };
