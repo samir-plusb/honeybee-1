@@ -1,17 +1,12 @@
 {
     "settings": {
-        "number_of_shards": 5,
+        "number_of_shards": 1,
         "number_of_replicas": 1
     },
     "mappings" : {
         "ticket" : {
             "_source": {
                 "enabled": true
-            },
-            "_timestamp" : {
-                "enabled" : true,
-                "path" : "ts",
-                "store": true
             },
             "dynamic" : false,
             "properties": {
@@ -21,7 +16,7 @@
                 },
                 "ts": {
                     "type": "date",
-                    "format": "basic_date_time_no_millis",
+                    "format": "date_time_no_millis",
                     "store": true
                 },
                 "workflow": {
@@ -49,6 +44,10 @@
             },
             "dynamic" : false,
             "properties" : {
+                "ticketId": {
+                    "type": "string",
+                    "store": true
+                },
                 "ImportItem" : {
                     "type": "object",
                     "dynamic" : false,

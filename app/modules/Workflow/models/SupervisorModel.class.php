@@ -107,9 +107,9 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
     /**
      * Notifies the supervisor that a workflow item has been created from outside the workflow.
      * At the moment this only happens during import.
-     * 
-     * @param IWorkflowItem $item 
-     * 
+     *
+     * @param IWorkflowItem $item
+     *
      * @throws WorkflowException When a ticket for the workflow item allready exists.
      */
     public function onWorkflowItemCreated(IWorkflowItem $item)
@@ -120,15 +120,18 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
             throw new WorkflowException("Received create notification for an existing ticket");
         }
         $ticket = $this->getTicketPeer()->createTicketByWorkflowItem($item);
+        $item->setTicket($ticket);
+        $this->getItemPeer()->storeItem($item);
+
         $this->processTicket($ticket);
     }
-    
+
     /**
      * Notifies the supervisor that a workflow item has been updated from outside the workflow.
      * At the moment this only happens during import.
-     * 
+     *
      * @param IWorkflowItem $item
-     * 
+     *
      * @throws WorkflowException When a ticket for the workflow item does not exist.
      */
     public function onWorkflowItemUpdated(IWorkflowItem $item)

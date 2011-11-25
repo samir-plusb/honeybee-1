@@ -1,0 +1,10 @@
+{
+    "filter": {
+        "has_child": {
+            "type": "item",
+            "query": {
+                "term": "Elefanten"
+            }
+        }
+    }
+}

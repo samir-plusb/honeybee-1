@@ -243,9 +243,9 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
      *
      * @return       void
      */
-    public function setWorkflowItem(IWorkflowItem $importItem)
+    public function setWorkflowItem(IWorkflowItem $workflowItem)
     {
-        $this->workflowItem = $importItem;
+        $this->workflowItem = $workflowItem;
     }
 
     /**

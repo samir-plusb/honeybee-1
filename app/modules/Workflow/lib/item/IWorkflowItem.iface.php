@@ -41,13 +41,27 @@ interface IWorkflowItem
      * @return string
      */
     public function getRevision();
-    
+
     /**
      * Bump the item's revision.
-     * 
+     *
      * @param string $revision
      */
     public function bumpRevision($revision);
+
+    /**
+     * Return the identifier of our ticket, if we have one.
+     *
+     * @return string
+     */
+    public function getTicketId();
+
+    /**
+     * Set the item's parent ticket.
+     *
+     * @param WorkflowTicket $ticket
+     */
+    public function setTicket(WorkflowTicket $ticket);
 
     /**
      * Returns the IContentItem's created date as an array,
@@ -66,11 +80,11 @@ interface IWorkflowItem
      * @return array
      */
     public function getCreated();
-    
+
     /**
      * Update the item's modified timestamp.
      * If the created timestamp has not yet been set it also assigned.
-     * 
+     *
      * @param AgaviUser $user An optional user to use instead of resolving the current session user.
      */
     public function touch(AgaviUser $user = NULL);
@@ -124,6 +138,7 @@ interface IWorkflowItem
      *     // Meta Data
      *     'identifier'   => 'foobar',
      *     'revision'     => '1-15394a6853828769ee1be885909548b3',
+     *     'ticketId'     => '12jk1hjh132jbasdl2',
      *     'created'             => array(
      *         'date' => '05-23-1985T15:23:78.123+01:00',
      *         'user' => 'shrink0r'

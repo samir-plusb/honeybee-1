@@ -1,0 +1,3 @@
+#/bin/bash
+
+curl -XGET 'localhost:9200/midas/ticket/_search' -d @./item.json

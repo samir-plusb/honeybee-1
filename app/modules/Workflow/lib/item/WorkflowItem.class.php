@@ -27,6 +27,13 @@ class WorkflowItem implements IWorkflowItem
     protected $revision;
 
     /**
+     * Holds the WorkflowItem's WorkflowTicket id.
+     *
+     * @var string
+     */
+    protected $ticketId;
+
+    /**
      * Holds information on who created this item and when.
      *
      * @var array
@@ -88,15 +95,35 @@ class WorkflowItem implements IWorkflowItem
     {
         return $this->revision;
     }
-    
+
     /**
      * Bump the item's revision.
-     * 
+     *
      * @param string $revision
      */
     public function bumpRevision($revision)
     {
         $this->revision = $revision;
+    }
+
+    /**
+     * Return the identifier of our ticket, if we have one.
+     *
+     * @return string
+     */
+    public function getTicketId()
+    {
+        return $this->ticketId;
+    }
+
+    /**
+     * Set the WorklflowTicket that is responseable for this item.
+     *
+     * @param WorkflowTicket $ticket
+     */
+    public function setTicket(WorkflowTicket $ticket)
+    {
+        $this->ticketId = $ticket->getIdentifier();
     }
 
     /**
@@ -111,11 +138,11 @@ class WorkflowItem implements IWorkflowItem
     {
         return $this->created;
     }
-    
+
     /**
      * Update the item's modified timestamp.
      * If the created timestamp has not yet been set it also assigned.
-     * 
+     *
      * @param AgaviUser $user An optional user to use instead of resolving the current session user.
      */
     public function touch(AgaviUser $user = NULL)
@@ -154,12 +181,12 @@ class WorkflowItem implements IWorkflowItem
     {
         return $this->importItem;
     }
-    
+
     /**
      * Set an import-item for this workflow-item instance.
-     * 
+     *
      * @param mixed $importData Either an array or IImportItem instance.
-     * 
+     *
      * @throws Exception If the workflow-item allready has an import-item or an invalid data-type is passed.
      */
     public function createImportItem($importData)
@@ -168,7 +195,7 @@ class WorkflowItem implements IWorkflowItem
         {
             throw new Exception("Import item allready exists!");
         }
-        
+
         if (is_array($importData))
         {
             $importData['parentIdentifier'] = $this->getIdentifier();
@@ -185,12 +212,12 @@ class WorkflowItem implements IWorkflowItem
             );
         }
     }
-    
+
     /**
      * Update the workflow-item's import item with the given values.
-     * 
-     * @param array $importData 
-     * 
+     *
+     * @param array $importData
+     *
      * @throws Exception If we dont have an import-item.
      */
     public function updateImportItem(array $importData)
@@ -211,7 +238,7 @@ class WorkflowItem implements IWorkflowItem
     {
         return $this->contentItems;
     }
-    
+
     //@todo addContentItem
     //@todo removeContentItem
 
@@ -235,7 +262,7 @@ class WorkflowItem implements IWorkflowItem
     {
         $props = array(
             'identifier', 'revision', 'created', 'lastModified',
-            'importItem', 'attributes'
+            'importItem', 'attributes', 'ticketId'
         );
         $data = array();
         foreach ($props as $prop)
@@ -266,15 +293,15 @@ class WorkflowItem implements IWorkflowItem
         $data['contentItems'] = $contentItems;
         return $data;
     }
-    
+
     /**
      * Hydrates the given data into the item.
-     * 
-     * @param array $data 
+     *
+     * @param array $data
      */
     protected function hydrate(array $data)
     {
-        $simpleProps = array('identifier', 'revision', 'created', 'lastModified', 'attributes');
+        $simpleProps = array('identifier', 'revision', 'created', 'lastModified', 'attributes', 'ticketId');
         $couchMappings = array('identifier' => '_id', 'revision' => '_rev');
         foreach ($simpleProps as $prop)
         {
