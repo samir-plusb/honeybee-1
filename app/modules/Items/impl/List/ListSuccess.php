@@ -5,12 +5,16 @@
             <h2 class="left">
                 <a href="<?php echo $ro->gen(NULL); ?>" class="brand"><?php echo $t['_title']; ?></a>
             </h2>
-            <form class="pull-right">
-                <input type="text" placeholder="Suche" />
+            <form class="pull-right" action="<?php echo $ro->gen(NULL); ?>" method="GET">
+                <input type="text" name="search_phrase" placeholder="Suche" />
             </form>
         </div>
     </div>
 </div>
+
+<section class="filter container-fluid">
+    <h3>Filter</h3>
+</section>
 
 <div class="container-fluid">
     <!-- Pagination -->

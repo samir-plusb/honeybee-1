@@ -25,15 +25,17 @@ class Items_ListAction extends ItemsBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $couchClient = $this->getContext()->getDatabaseConnection('CouchWorkflow');
-        $documents = $couchClient->getView(NULL, 'designWorkflow', 'ticketList',
-            array(
-                'limit' => 500,
-                'descending' => TRUE,
-                'include_docs' => TRUE
-            )
-        );
+        $items = array();
+        $itemFinder = $this->getContext()->getModel('ItemFinder');
 
+        if ($parameters->hasParameter('search_phrase'))
+        {
+            $items = $itemFinder->findItemsByText(
+                $parameters->getParameter('search_phrase')
+            );
+        }
+
+        $itemFinder->findItemsById(array('f5c9aad648e7f904c5870ea5cc27ba0c', 'f5c9aad648e7f904c5870ea5cc27c5f2'));
         $this->setAttribute('items', $documents['rows']);
 
         return 'Success';

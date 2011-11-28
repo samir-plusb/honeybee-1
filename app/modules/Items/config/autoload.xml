@@ -7,6 +7,9 @@
         <autoload name="ItemsBaseView">%core.module_dir%/Items/lib/mvc/ItemsBaseView.class.php</autoload>
         <!-- Lib/Mvc -->
 
+        <autoload name="ItemFinderModel">%core.module_dir%/Items/lib/ItemFinderModel.class.php</autoload>
+        <autoload name="TicketFinderModel">%core.module_dir%/Items/lib/TicketFinderModel.class.php</autoload>
+
         <!-- Models/Setup -->
         <autoload name="ItemsModuleSetup">%core.module_dir%/Items/models/Setup/ItemsModuleSetup.class.php</autoload>
         <!-- /Models/Setup -->

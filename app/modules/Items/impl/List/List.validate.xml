@@ -4,12 +4,25 @@
 	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
 	parent="%core.module_dir%/Items/config/validators.xml"
 >
-	
+
 	<ae:configuration>
-		
+
 		<validators>
+            <validator class="string" required="false" >
+                <arguments>
+                    <argument>search_phrase</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="min">3</ae:parameter>
+                    <ae:parameter name="max">50</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error for="min">The search_phrase must be at least 3 chars long.</error>
+                    <error for="max">The search_phrase may not exceed a length of 50 chars.</error>
+                </errors>
+            </validator>
 		</validators>
-		
+
 	</ae:configuration>
-	
+
 </ae:configurations>
