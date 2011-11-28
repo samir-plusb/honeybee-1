@@ -70,9 +70,6 @@ select {
 .action-button-list li a:active {
   outline: none;
 }
-.action-button-list li:hover a {
-  color: #ffffff;
-}
 .action-button-list li:last-child {
   margin-right: 0;
 }

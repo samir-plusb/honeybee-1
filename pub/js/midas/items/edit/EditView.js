@@ -115,13 +115,13 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         ).on('slideinstart', function()
         {
             var list_button = $('.action-list');
-            list_button.html(list_button[0].orgText + " &#9664;");
+            list_button.html(list_button[0].orgText + " &#9667;");
             $('.import-data-layoutbox').animate({'opacity': 0.4}, 500);
             $('.import-data-layoutbox .overlay').css('display', 'block').animate({'opacity': 0.5}, 500);
         }).on("slideoutstart", function()
         {
             var list_button = $('.action-list');
-            list_button.html(list_button[0].orgText + " &#9654;");
+            list_button.html(list_button[0].orgText + " &#9657;");
             $('.import-data-layoutbox').animate({'opacity': 1}, 500);
             $('.import-data-layoutbox .overlay').animate({'opacity': 0}, 500, function()
             {
@@ -130,7 +130,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         });
         var list_button = $('.action-list');
         list_button[0].orgText = list_button.text();
-        list_button.html(list_button[0].orgText + " &#9654;");
+        list_button.html(list_button[0].orgText + " &#9657;");
         $('.import-data-layoutbox').append($('<div class="overlay"></div>').css('opacity', 0).css('display', 'none'));
         return this;
     },

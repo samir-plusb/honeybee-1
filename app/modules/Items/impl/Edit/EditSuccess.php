@@ -14,19 +14,19 @@
 <div class="topmenu-container content-menu">
     <menu id="content-item-menu" class="action-button-list">
         <li>
-            <a class="action-list btn small primary" href="#list">Liste</a>
+            <a class="action-list btn small" href="#list">Liste</a>
             <span class="info-small items-loading">&nbsp;&nbsp;</span>
         </li>
-        <li><a class="action-store btn small primary important" href="#store">Speichern</a></li>
-        <li><a class="action-new btn small primary" href="#new">Neues Item</a></li>
+        <li><a class="action-store btn small important" href="#store">Speichern</a></li>
+        <li><a class="action-new btn small" href="#new">Neues Item</a></li>
         <li><a class="action-delete btn small danger" href="#delete">L&ouml;schen</a></li>
     </menu>
 </div>
 <div class="topmenu-container import-menu">
     <menu id="import-item-menu" class="action-button-list">
-        <li><a href="#prev" class="btn small primary">&larr; Zur&uuml;ck</a></li>
-        <li><a href="#mark" class="btn small primary important">Abhaken</a></li>
-        <li><a href="#next" class="btn small primary">Vor &rarr;</a></li>
+        <li><a href="#prev" class="btn small">&larr; Zur&uuml;ck</a></li>
+        <li><a href="#mark" class="btn small important">Abhaken</a></li>
+        <li><a href="#next" class="btn small">Vor &rarr;</a></li>
         <li><a href="#delete" class="btn small danger">L&ouml;schen</a></li>
     </menu>
 </div>
