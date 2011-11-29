@@ -31,3 +31,42 @@ tfoot tr td
 {
     font-weight: bold;
 }
+
+.search-form
+{
+    position: relative;
+}
+
+.reset-search
+{
+    position: absolute;
+    position: absolute;
+    right: 5px;
+    color: #404040;
+    opacity:0.4;
+    font-size: 23px;
+    font-weight: bold;
+    background: none;
+}
+
+.reset-search:hover
+{
+    text-decoration: none;
+    color: #000000;
+}
+
+.hidden
+{
+    display: none;
+}
+
+.search-message p
+{
+    float: left;
+    margin-right: 1em;
+}
+
+.search-message a
+{
+    text-shadow: none;
+}

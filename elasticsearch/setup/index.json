@@ -48,9 +48,8 @@
                     "type": "string",
                     "store": true
                 },
-                "ImportItem" : {
-                    "type": "object",
-                    "dynamic" : false,
+                "importItem" : {
+                    "type": "nested",
                     "properties": {
                         "title": {
                             "type": "string",
@@ -74,7 +73,7 @@
                         }
                     }
                 },
-                "ContentItems": {
+                "contentItems": {
                     "properties": {
                         "title": {
                             "type": "string",

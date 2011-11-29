@@ -3,7 +3,9 @@
         "has_child": {
             "type": "item",
             "query": {
-                "term": "Elefanten"
+                "term": {
+                    "_all": "mittelfeld"
+                }
             }
         }
     }

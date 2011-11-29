@@ -25,18 +25,27 @@ class Items_ListAction extends ItemsBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $items = array();
-        $itemFinder = $this->getContext()->getModel('ItemFinder');
-
-        if ($parameters->hasParameter('search_phrase'))
+        $tickets = array();
+        $ticketFinder = $this->getContext()->getModel('TicketFinder');
+        $limit = $parameters->getParameter('limit', 30);
+        $offset = $parameters->getParameter('offset', 0);
+        $searchPhrase = $parameters->getParameter('search_phrase', NULL);
+        
+        if (! empty($searchPhrase))
         {
-            $items = $itemFinder->findItemsByText(
-                $parameters->getParameter('search_phrase')
+            $this->setAttribute('search_phrase', $searchPhrase);
+            $tickets = $ticketFinder->search(
+            strtolower($searchPhrase),
+                $offset,
+                $limit
             );
         }
-
-        $itemFinder->findItemsById(array('f5c9aad648e7f904c5870ea5cc27ba0c', 'f5c9aad648e7f904c5870ea5cc27c5f2'));
-        $this->setAttribute('items', $documents['rows']);
+        else
+        {
+            $tickets = $ticketFinder->fetchAll($offset, $limit);
+        }
+        
+        $this->setAttribute('tickets', $tickets);
 
         return 'Success';
     }

@@ -49,9 +49,9 @@
                         xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
             </route>
 
-            <route pattern="^/items" module="Items">
-                <route pattern="^/list" action="List" />
-                <route pattern="^/edit" action="Edit" />
+            <route name="items" pattern="^/items" module="Items">
+                <route name=".list" pattern="^/list" action="List" />
+                <route name=".edit" pattern="^/edit" action="Edit" />
                 <route pattern="^/api">
                     <route pattern="^/localize" action="Api_Localize" />
                     <route pattern="^/extract_date" action="Api_ExtractDate" />

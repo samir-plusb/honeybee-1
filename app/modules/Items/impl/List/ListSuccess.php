@@ -5,18 +5,34 @@
             <h2 class="left">
                 <a href="<?php echo $ro->gen(NULL); ?>" class="brand"><?php echo $t['_title']; ?></a>
             </h2>
-            <form class="pull-right" action="<?php echo $ro->gen(NULL); ?>" method="GET">
-                <input type="text" name="search_phrase" placeholder="Suche" />
+            <form class="pull-right search-form" action="<?php echo $ro->gen(NULL); ?>" method="GET">
+                <input type="text" name="search_phrase" value="<?php echo isset($t['search_phrase']) ? htmlspecialchars($t['search_phrase']) : '' ?>" placeholder="Suche" />
+                <a href="#" class="<?php echo isset($t['search_phrase']) ? '' : 'hidden' ?> reset-search">×</a>
             </form>
         </div>
     </div>
 </div>
 
 <section class="filter container-fluid">
-    <h3>Filter</h3>
+<!--    <h3>Filter</h3> -->
 </section>
 
+
 <div class="container-fluid">
+<?php
+    if (isset($t['search_phrase']))
+    {
+?>
+    <div class="alert-message search-message info">
+        <p>
+            Du hast nach <strong>&quot;<?php echo $t['search_phrase']; ?>&quot;</strong> gesucht.
+            Deine Suche ergab <strong><?php echo count($t['listData']); ?> Treffer</strong>.
+        </p>
+        <a href="<?php echo $ro->gen('items.list'); ?>">Suche zur&uuml;cksetzen</a>
+    </div>
+<?php
+    }  
+?>
     <!-- Pagination -->
     <div class="pagination pagination-top">
         <ul>
@@ -29,7 +45,7 @@
             <li class="next"><a href="#">Next &rarr;</a></li>
         </ul>
     </div>
-
+    
     <!-- Table section with heading and table. -->
     <table class="bordered-table zebra-striped" id="sortTableExample">
         <thead>
@@ -46,16 +62,17 @@
         </thead>
         <tbody>
 <?php
-    foreach ($t['items'] as $row)
+    foreach ($t['listData'] as $ticketData)
     {
-            $item = $row['doc']['importItem'];
-            $ticket = $row['value'];
-            $date = new DateTime($item['timestamp']);
-            $state = isset($ticket['step']) ? $ticket['step'] : 'Neu';
+            $workflowItem = $ticketData['item'];
+            $importItem = $workflowItem['importItem'];
+            
+            $date = new DateTime($ticketData['ts']);
+            $state = isset($ticketData['step']) ? $ticketData['step'] : 'Neu';
 ?>
             <tr>
-                <td class="title"><a href="#edit"><?php echo $item['title']; ?></a></td>
-                <td class="source"><?php echo $item['source']; ?></td>
+                <td class="title"><a href="#edit"><?php echo $importItem['title']; ?></a></td>
+                <td class="source"><?php echo $importItem['source']; ?></td>
                 <td class="date"><?php echo $date->format('Y-m-d H:i:s'); ?></td>
 <?php
         if (!isset($ticket['step']))
@@ -71,9 +88,9 @@
 <?php
         }
 ?>
-                <td class="category">Kultur</td>
-                <td class="district">Berlin</td>
-                <td class="priority">wichtig</td>
+                <td class="category"><?php echo $importItem['category']; ?></td>
+                <td class="district"><!-- Take the district of the first content-item? --></td>
+                <td class="priority"><!-- Find out priority based on content-items? --></td>
                 <td class="avail-actions">
                     <a class="btn small danger">L&ouml;schen</a>
                 </td>
@@ -82,6 +99,10 @@
     }
 ?>
         </tbody>
+<?php 
+    if (20 <= count($t['listData']))
+    {
+?>
         <tfoot>
             <tr>
                 <td>Titel</td>
@@ -94,8 +115,14 @@
                 <td>Actions</td>
             </tr>
         </tfoot>
+<?php 
+    }
+?>
     </table>
-
+<?php 
+    if (20 <= count($t['listData']))
+    {
+?>
     <!-- Pagination -->
     <div class="pagination">
         <ul>
@@ -108,4 +135,7 @@
             <li class="next"><a href="#">Next &rarr;</a></li>
         </ul>
     </div>
+<?php 
+    }
+?>
 </div>
