@@ -1,6 +1,8 @@
 $(function() {
-    $("table#sortTableExample").tablesorter({
-        headers: { 7: { sorter: false } },
-        sortList: [[2,1]]
+    $('.reset-search').click(function(event)
+    {
+        event.preventDefault();
+        $('input[name="search_phrase"]').val('');
+        $(this).hide();
     });
 });
