@@ -8,7 +8,7 @@
 	<ae:configuration>
 
 		<validators>
-            <validator class="string" required="false" >
+            <validator class="string" name="invalid_search_phrase" required="false" >
                 <arguments>
                     <argument>search_phrase</argument>
                 </arguments>
@@ -19,6 +19,30 @@
                 <errors>
                     <error for="min">The search_phrase must be at least 3 chars long.</error>
                     <error for="max">The search_phrase may not exceed a length of 50 chars.</error>
+                </errors>
+            </validator>
+            
+            <validator class="number" name="invalid_offset" required="false" >
+                <arguments>
+                    <argument>offset</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="min">0</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error for="min">The offset must be at least 0.</error>
+                </errors>
+            </validator>
+            
+            <validator class="number" name="invalid_limit" required="false" >
+                <arguments>
+                    <argument>limit</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="min">0</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error for="min">The limit must be at least 0.</error>
                 </errors>
             </validator>
 		</validators>

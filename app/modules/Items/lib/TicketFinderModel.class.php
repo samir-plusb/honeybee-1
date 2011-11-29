@@ -26,7 +26,6 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
             new Elastica_Query_MatchAll()
         );
         $query->setLimit($limit)->setFrom($offset);
-
         $index = $this->elasticClient->getIndex('midas');
         $type = $index->getType('ticket');
         
@@ -69,7 +68,10 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
             unset($data['item']);
             $tickets[$itemId] = new WorkflowTicket($data);
         }
-        return $this->loadItemsIntoTickets($tickets, $itemIds);
+        return array(
+            'tickets'    => $this->loadItemsIntoTickets($tickets, $itemIds),
+            'totalCount' => $result->getTotalHits()
+        );
     }
     
     protected function loadItemsIntoTickets(array $tickets, array $itemIds)

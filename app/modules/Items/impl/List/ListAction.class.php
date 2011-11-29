@@ -25,7 +25,10 @@ class Items_ListAction extends ItemsBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $tickets = array();
+        $result = array(
+            'tickets' => array(),
+            'totalCount' => 0
+        );
         $ticketFinder = $this->getContext()->getModel('TicketFinder');
         $limit = $parameters->getParameter('limit', 30);
         $offset = $parameters->getParameter('offset', 0);
@@ -34,7 +37,7 @@ class Items_ListAction extends ItemsBaseAction
         if (! empty($searchPhrase))
         {
             $this->setAttribute('search_phrase', $searchPhrase);
-            $tickets = $ticketFinder->search(
+            $result = $ticketFinder->search(
             strtolower($searchPhrase),
                 $offset,
                 $limit
@@ -42,24 +45,22 @@ class Items_ListAction extends ItemsBaseAction
         }
         else
         {
-            $tickets = $ticketFinder->fetchAll($offset, $limit);
+            $result = $ticketFinder->fetchAll($offset, $limit);
         }
         
-        $this->setAttribute('tickets', $tickets);
+        $this->setAttribute('offset', $offset);
+        $this->setAttribute('limit', $limit);
+        $this->setAttribute('tickets', $result['tickets']);
+        $this->setAttribute('totalCount', $result['totalCount']);
 
         return 'Success';
     }
 
-    /**
-     * Build the uri to use in order to connect to couchdb.
-     *
-     * @return string
-     */
-    protected function buildCouchDbUri()
+    public function handleError(AgaviRequestDataHolder $parameters)
     {
-        return sprintf(
-                "http://%s:%d/", AgaviConfig::get('couchdb.import.host'), AgaviConfig::get('couchdb.import.port')
-        );
+        parent::handleError($parameters);
+        
+        var_dump($this->getContainer()->getValidationManager()->getErrorMessages());exit;
     }
 
 }

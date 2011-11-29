@@ -3,9 +3,9 @@
     <div class="topbar-inner">
         <div class="container-fluid">
             <h2 class="left">
-                <a href="<?php echo $ro->gen(NULL); ?>" class="brand"><?php echo $t['_title']; ?></a>
+                <a href="<?php echo htmlspecialchars($ro->gen(NULL)); ?>" class="brand"><?php echo $t['_title']; ?></a>
             </h2>
-            <form class="pull-right search-form" action="<?php echo $ro->gen(NULL); ?>" method="GET">
+            <form class="pull-right search-form" action="<?php echo htmlspecialchars($ro->gen(NULL)); ?>" method="GET">
                 <input type="text" name="search_phrase" value="<?php echo isset($t['search_phrase']) ? htmlspecialchars($t['search_phrase']) : '' ?>" placeholder="Suche" />
                 <a href="#" class="<?php echo isset($t['search_phrase']) ? '' : 'hidden' ?> reset-search">×</a>
             </form>
@@ -32,17 +32,56 @@
     </div>
 <?php
     }  
+    
+    $hasPrev = $t['offset'] > 0;
+    $hasNext = $t['offset'] + $t['limit'] < $t['totalCount'];
+    $nextLink = $ro->gen(
+        'items.list', 
+        array(
+            'limit'  => $t['limit'],
+            'offset' => $t['offset'] + $t['limit']
+        )
+    );
+    $prevLink = $ro->gen(
+        'items.list', 
+        array(
+            'limit'  => $t['limit'],
+            'offset' => $t['offset'] - $t['limit']
+        )
+    );
 ?>
     <!-- Pagination -->
     <div class="pagination pagination-top">
         <ul>
-            <li class="prev disabled"><a href="#">&larr; Previous</a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li class="next"><a href="#">Next &rarr;</a></li>
+            <li class="prev <?php echo $hasPrev ? '' : 'disabled'; ?>">
+                <a href="<?php echo $hasPrev ? htmlspecialchars($prevLink) : htmlspecialchars($ro->gen(NULL)); ?>">&larr; Previous</a>
+            </li>
+<?php
+    for ($i = 0; $i < 5; $i++)
+    {
+        $offset = $t['limit'] * $i;
+        if ($t['totalCount'] < $offset)
+        {
+            continue;
+        }
+        $link = $ro->gen(
+            'items.list',
+            array(
+                'limit'  => $t['limit'],
+                'offset' => $offset
+            )
+        );
+        $active = $t['offset'] == $offset;
+?> 
+            <li class="<?php echo $active ? 'active' : ''; ?>">
+                <a href="<?php echo htmlspecialchars($link); ?>"><?php echo ($i + 1); ?></a>
+            </li>
+<?php
+    }
+?>
+            <li class="next <?php echo $hasNext ? '' : 'disabled'; ?>">
+                <a href="<?php echo $hasNext ? htmlspecialchars($nextLink) : htmlspecialchars($ro->gen(NULL)); ?>">Next &rarr;</a>
+            </li>
         </ul>
     </div>
     
