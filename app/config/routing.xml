@@ -26,6 +26,9 @@
                 Execution will not stop if this route matches. This is nice for making XMLHTTPRequest calls.
             -->
             <route pattern="application/json" source="_SERVER[HTTP_ACCEPT]" output_type="json" stop="false" />
+            <route pattern="application/xml" source="_SERVER[HTTP_ACCEPT]" output_type="xml" stop="false" />
+            <route pattern="text/html" source="_SERVER[HTTP_ACCEPT]" output_type="html" stop="false" />
+            <route pattern="application/xhtml+xml" source="_SERVER[HTTP_ACCEPT]" output_type="html" stop="false" />
 
             <route name="disabled" pattern="^/disabled$" module="Disabled" action="Index" />
             <route pattern="^/asset" module="Asset">
