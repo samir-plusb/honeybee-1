@@ -33,7 +33,7 @@ class Items_ListAction extends ItemsBaseAction
         $limit = $parameters->getParameter('limit', 30);
         $offset = $parameters->getParameter('offset', 0);
         $searchPhrase = $parameters->getParameter('search_phrase', NULL);
-        
+
         if (! empty($searchPhrase))
         {
             $this->setAttribute('search_phrase', $searchPhrase);
@@ -47,7 +47,7 @@ class Items_ListAction extends ItemsBaseAction
         {
             $result = $ticketFinder->fetchAll($offset, $limit);
         }
-        
+
         $this->setAttribute('offset', $offset);
         $this->setAttribute('limit', $limit);
         $this->setAttribute('tickets', $result['tickets']);
@@ -59,8 +59,18 @@ class Items_ListAction extends ItemsBaseAction
     public function handleError(AgaviRequestDataHolder $parameters)
     {
         parent::handleError($parameters);
-        
+
         var_dump($this->getContainer()->getValidationManager()->getErrorMessages());exit;
+    }
+
+
+    /**
+     * (non-PHPdoc)
+     * @see AgaviAction::isSecure()
+     */
+    public function isSecure()
+    {
+        return TRUE;
     }
 
 }

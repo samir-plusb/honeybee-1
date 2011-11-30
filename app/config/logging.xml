@@ -15,8 +15,14 @@
                     <appender>StdErrorAppender</appender>
                 </appenders>
             </logger>
+            <logger name="login" class="AgaviLogger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG">
+                <appenders>
+                    <appender>LoginLogAppender</appender>
+                    <appender>StdErrorAppender</appender>
+                </appenders>
+            </logger>
         </loggers>
-        
+
         <appenders>
             <!--
                     Debug logs are rotated in a 7 day (AgaviRotatingFileLoggerAppender default) cycle
@@ -34,11 +40,17 @@
                     <ae:parameter name="prefix">error-</ae:parameter>
                 </ae:parameters>
             </appender>
-            <appender name="StdErrorAppender" class="AgaviStderrLoggerAppender" layout="DateTimeLayout" />
+            <appender name="LoginLogAppender" class="AgaviRotatingFileLoggerAppender" layout="DateTimeLayout">
+                <ae:parameters>
+                    <ae:parameter name="dir">%core.app_dir%/log/</ae:parameter>
+                    <ae:parameter name="prefix">login-</ae:parameter>
+                </ae:parameters>
+            </appender>
+            <appender name="StdErrorAppender" class="AgaviStderrLoggerAppender" layout="DateTimeLayout"/>
         </appenders>
 
         <layouts>
-            <layout name="DateTimeLayout" class="AgaviTimestampLoggerLayout" />
+            <layout name="DateTimeLayout" class="AgaviTimestampLoggerLayout"/>
         </layouts>
 
     </ae:configuration>

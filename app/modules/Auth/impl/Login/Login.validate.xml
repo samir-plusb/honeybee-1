@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.1" 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    parent="%core.app_dir%/config/validators.xml">
+
+    <ae:configuration>
+
+        <validators>
+            <validator class="string">
+                <argument>username</argument>
+                <ae:parameter name="min">3</ae:parameter>
+                <ae:parameter name="max">50</ae:parameter>
+                <error>A valid username must be given</error>
+            </validator>
+
+            <validator class="string">
+                <argument>password</argument>
+                <ae:parameter name="min">8</ae:parameter>
+                <ae:parameter name="max">50</ae:parameter>
+                <error>A valid password must be given</error>
+            </validator>
+
+        </validators>
+
+    </ae:configuration>
+
+</ae:configurations>

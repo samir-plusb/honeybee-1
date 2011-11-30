@@ -10,28 +10,26 @@
  * @package         Auth
  * @subpackage      Mvc
  */
-class Auth_LoginLogin_ErrorView extends AuthBaseView
+class Auth_Login_LoginErrorView extends AuthBaseView
 {
     /**
      * Execute any html related presentation logic and sets up our template attributes.
-     * 
+     *
      * @param       AgaviRequestDataHolder $parameters
      */
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
-        parent::executeHtml($parameters);
-        
         $translationManager = $this->getContext()->getTranslationManager();
-        
+
         $this->setAttribute('_title', $translationManager->_('Login Error', 'auth.errors'));
         $this->setAttribute('error_messages', $this->getContainer()->getValidationManager()->getErrorMessages());
     }
-    
+
     /**
      * Prepares and sets our json data on our webresponse.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
@@ -46,19 +44,19 @@ class Auth_LoginLogin_ErrorView extends AuthBaseView
             )
         );
     }
-    
+
     /**
      * Prepares and sets our json data on our console response.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $translationManager = $this->getContext()->getTranslationManager();
-        
+
         $this->getContainer()->getResponse()->setContent(
             $translationManager->_(
                 'Wrong user name or password!',

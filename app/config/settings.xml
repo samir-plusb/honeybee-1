@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/settings/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/settings/1.0"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
     <ae:configuration>
 
         <system_actions>
@@ -44,8 +45,24 @@
 
             <setting name="use_database">true</setting>
             <setting name="use_logging">true</setting>
-            <setting name="use_security">false</setting>
+            <setting name="use_security">true</setting>
             <setting name="use_translation">true</setting>
+        </settings>
+
+        <settings prefix="ldap.">
+            <setting name="host">ldap://localhost</setting>
+            <setting name="base">dc=bo,dc=intern</setting>
+            <setting name="base_user">ou=People,dc=bo,dc=intern</setting>
+            <setting name="base_group">ou=Groups,dc=bo,dc=intern</setting>
+            <setting name="user_search">uid</setting>
+            <setting name="user_name_attr">cn</setting>
+            <setting name="user_email_attr">mail</setting>
+            <setting name="group_search">cn</setting>
+            <setting name="group_object_class">posixGroup</setting>
+            <setting name="group_member_attr">member</setting>
+            <setting name="group_member_attr_is_dn">true</setting>
+            <setting name="group_name_attr">cn</setting>
+            <setting name="group_required">files</setting>
         </settings>
 
         <settings prefix="couchdb.import.">
@@ -106,25 +123,34 @@
     </ae:configuration>
 
     <ae:configuration environment=".*cw-tay.*">
-    	<settings prefix="curl.">
-    		<setting name="proxy">proxy:3128</setting>
+        <settings>
+            <setting name="debug">true</setting>
+        </settings>
+        <settings prefix="ldap.">
+            <setting name="host">ldap://bohome3</setting>
+        </settings>
+        <settings prefix="curl.">
+            <setting name="proxy">proxy:3128</setting>
 <!--             <setting name="verbose">TRUE</setting> -->
-    	</settings>
-    	<settings prefix="php.">
-    		<setting name="default-stream">
-    			<ae:parameter name="http">
-    				<ae:parameter name="user_agent">Midas/0.1</ae:parameter>
-    				<ae:parameter name="proxy">tcp://proxy2:3128</ae:parameter>
-    				<ae:parameter name="request_fulluri">true</ae:parameter>
-    			</ae:parameter>
-    		</setting>
-    	</settings>
+        </settings>
+        <settings prefix="php.">
+            <setting name="default-stream">
+                <ae:parameter name="http">
+                    <ae:parameter name="user_agent">Midas/0.1</ae:parameter>
+                    <ae:parameter name="proxy">tcp://proxy2:3128</ae:parameter>
+                    <ae:parameter name="request_fulluri">true</ae:parameter>
+                </ae:parameter>
+            </setting>
+        </settings>
     </ae:configuration>
 
     <ae:configuration environment=".*bo-devel.*">
-    	<settings prefix="curl.">
-    		<setting name="proxy">proxy:3128</setting>
-    	</settings>
+        <settings prefix="ldap.">
+            <setting name="host">ldap://bohome3</setting>
+        </settings>
+        <settings prefix="curl.">
+            <setting name="proxy">proxy:3128</setting>
+        </settings>
     </ae:configuration>
 
     <ae:configuration environment="testing.*">
@@ -146,18 +172,18 @@
 
     <!--        <SHRINK ENVIRONMENTS>         -->
     <ae:configuration environment=".*development-shrink-work">
-    	<settings prefix="curl.">
-    		<setting name="proxy">proxy2:3128</setting>
-    	</settings>
-    	<settings prefix="php.">
-    		<setting name="default-stream">
-    			<ae:parameter name="http">
-    				<ae:parameter name="user_agent">Midas/0.1</ae:parameter>
-    				<ae:parameter name="proxy">tcp://proxy2:3128</ae:parameter>
-    				<ae:parameter name="request_fulluri">true</ae:parameter>
-    			</ae:parameter>
-    		</setting>
-    	</settings>
+        <settings prefix="curl.">
+            <setting name="proxy">proxy2:3128</setting>
+        </settings>
+        <settings prefix="php.">
+            <setting name="default-stream">
+                <ae:parameter name="http">
+                    <ae:parameter name="user_agent">Midas/0.1</ae:parameter>
+                    <ae:parameter name="proxy">tcp://proxy2:3128</ae:parameter>
+                    <ae:parameter name="request_fulluri">true</ae:parameter>
+                </ae:parameter>
+            </setting>
+        </settings>
     </ae:configuration>
     <!--        </SHRINK ENVIRONMENTS>         -->
 

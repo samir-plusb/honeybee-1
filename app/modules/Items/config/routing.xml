@@ -3,9 +3,11 @@
 
     <ae:configuration context="web">
         <routes>
-            <route pattern="^/items" module="Items">
-                <route pattern="^/list" action="List" />
-                <route pattern="^/edit" action="Edit" />
+            <route pattern="^/list" action="List"/>
+            <route pattern="^/edit" action="Edit"/>
+            <route pattern="^/api">
+                <route pattern="^/localize" action="Api_Localize"/>
+                <route pattern="^/extract_date" action="Api_ExtractDate"/>
             </route>
         </routes>
     </ae:configuration>
@@ -13,7 +15,7 @@
     <ae:configuration context="console">
         <routes>
             <route pattern="items." module="Items">
-                <route pattern="setup" action="Setup" method="write" />
+                <route pattern="setup" action="Setup" method="write"/>
             </route>
         </routes>
     </ae:configuration>

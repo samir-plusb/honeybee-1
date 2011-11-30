@@ -14,33 +14,22 @@ class Auth_Logout_LogoutSuccessView extends AuthBaseView
 {
     /**
      * Execute any html related presentation logic and sets up our template attributes.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        /* @var $context AgaviContext */
-        $context = $this->getContext();
-        /* @var $user AgaviSecurityUser */
-        $user = $context->getUser();
-        /* @var $routing AgaviWebRouting */
-        $routing = $context->getRouting();
-        /* @var $translationManager AgaviTranslationManager */
-        $translationManager = $context->getTranslationManager();
-        
-        $user->addIncident($translationManager->_("You have been logged out"), AgaviLogger::INFO);
-        
-        $this->getResponse()->setRedirect($routing->gen('login'));
+        $this->setupHtml($parameters);
     }
-    
+
     /**
      * Prepares and sets our json data on our webresponse.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
@@ -55,12 +44,12 @@ class Auth_Logout_LogoutSuccessView extends AuthBaseView
             )
         );
     }
-    
+
     /**
      * Prepares and sets our json data on our console response.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
