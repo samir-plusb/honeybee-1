@@ -14,8 +14,8 @@ class Auth_Login_LoginInputView extends AuthBaseView
 {
     /**
      * Execute any html related presentation logic and sets up our template attributes.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
+     *
+     * @param       AgaviRequestDataHolder $parameters
      */
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
@@ -39,18 +39,18 @@ class Auth_Login_LoginInputView extends AuthBaseView
         }
         else
         {
-            // clear the redirect URL just to be sure 
+            // clear the redirect URL just to be sure
             $this->getContext()->getUser()->removeAttribute('redirect', 'de.berlinonline.contentworker.login');
         }
 
         // set the title
-        $this->setAttribute('_title', $translationManager->_('Login', 'auth.messages'));
+        $this->setAttribute('_title', $translationManager->_('Login', 'auth.ui'));
     }
-    
+
     /**
      * Prepares and sets our json data on our webresponse.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
+     *
+     * @param       AgaviRequestDataHolder $parameters
      */
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
@@ -63,25 +63,25 @@ class Auth_Login_LoginInputView extends AuthBaseView
             json_encode(
                 array(
                     'result'  => 'success',
-                    'message' => 'You may post a username and a password' . 
+                    'message' => 'You may post a username and a password' .
                                  'to this uri in order to login to the application.'
                 )
             )
         );
     }
-    
+
     /**
      * Prepares and sets our json data on our console response.
-     * 
-     * @param       AgaviRequestDataHolder $parameters 
-     * 
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $translationManager = $this->getContext()->getTranslationManager();
-        
+
         $this->getContainer()->getResponse()->setContent(
             $translationManager->_(
                 'Please provide username and password as commandline arguments when calling secure actions.' .

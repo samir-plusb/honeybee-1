@@ -21,7 +21,7 @@ class Auth_Login_LoginErrorView extends AuthBaseView
     {
         $translationManager = $this->getContext()->getTranslationManager();
 
-        $this->setAttribute('_title', $translationManager->_('Login Error', 'auth.errors'));
+        $this->setAttribute('_title', $translationManager->_('Login Error', 'auth.messages'));
         $this->setAttribute('error_messages', $this->getContainer()->getValidationManager()->getErrorMessages());
     }
 
@@ -60,7 +60,7 @@ class Auth_Login_LoginErrorView extends AuthBaseView
         $this->getContainer()->getResponse()->setContent(
             $translationManager->_(
                 'Wrong user name or password!',
-                'auth.errors'
+                'auth'
             )
         );
     }

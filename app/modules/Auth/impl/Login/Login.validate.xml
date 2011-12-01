@@ -6,14 +6,14 @@
     <ae:configuration>
 
         <validators>
-            <validator class="string">
+            <validator class="string" translation_domain='auth.messages'>
                 <argument>username</argument>
                 <ae:parameter name="min">3</ae:parameter>
                 <ae:parameter name="max">50</ae:parameter>
                 <error>A valid username must be given</error>
             </validator>
 
-            <validator class="string">
+            <validator class="string" translation_domain='auth.messages'>
                 <argument>password</argument>
                 <ae:parameter name="min">8</ae:parameter>
                 <ae:parameter name="max">50</ae:parameter>

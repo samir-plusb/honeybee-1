@@ -88,7 +88,7 @@ class Auth_LoginAction extends AuthBaseAction
                     ->setError('username_password_mismatch',
                         $this->getContext()
                             ->getTranslationManager()
-                            ->_('This combination of username and password is invalid.', 'core.auth'));
+                            ->_('This combination of username and password is invalid.', 'auth.messages'));
 
                 $logger->log(
                         new AgaviLoggerMessage(
@@ -141,7 +141,7 @@ class Auth_LoginAction extends AuthBaseAction
                     ->setError('username_password_mismatch',
                         $this->getContext()
                             ->getTranslationManager()
-                            ->_('This combination of username and password is invalid.', 'auth.errors'));
+                            ->_('This combination of username and password is invalid.', 'auth.messages'));
 
                 $logger->log(
                         new AgaviLoggerMessage(
@@ -180,7 +180,7 @@ class Auth_LoginAction extends AuthBaseAction
                     sprintf('Failed authentication attempt for username %1$s, validation failed',
                         $rd->getParameter('username')), AgaviILogger::INFO));
 
-        return 'Error';
+        return 'Input';
     }
 
     /**

@@ -11,12 +11,12 @@
 <div class="container" style="margin-top:40px">
 	<div class="content">
 		<div class="page-header">
-			<h1>Anmeldung</h1>
+			<h1><?php echo $tm->_('Login','auth.ui') ?></h1>
 		</div>
 		<form action="<?php echo $ro->gen(NULL) ?>" method="post">
 			<div class="row">
 				<div class="span4 offset4">
-					<label for="input_username" id="input_password">Username</label>
+					<label for="input_username" id="input_password"><?php echo $tm->_('User','auth.ui') ?></label>
 				</div>
 				<div class="span4">
 					<input type="text" name="username" />
@@ -24,7 +24,7 @@
 			</div>
 			<div class="row">
 				<div class="span4 offset4">
-					<label for="input_password">Password</label>
+					<label for="input_password"><?php echo $tm->_('Password','auth.ui') ?></label>
 				</div>
 				<div class="span4">
 					<input type="password" name="password" id="input_password" />
@@ -32,13 +32,9 @@
 			</div>
 			<div class="row">
 				<div class="span4 offset8">
-					<button class="btn primary" type="submit">Anmelden</button>
+					<button class="btn primary" type="submit"><?php echo $tm->_('Sign in','auth.ui') ?></button>
 				</div>
 			</div>
 		</form>
 	</div>
-
-	<footer>
-		<p>© BerlinOnline 2011</p>
-	</footer>
 </div>
