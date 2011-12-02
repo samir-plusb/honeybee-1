@@ -1,13 +1,34 @@
 <!-- BEGIN <?php echo htmlspecialchars(__FILE__) ?> -->
-<div class="error">
+<div class="topbar" data-scrollspy="scrollspy">
+	<div class="topbar-inner">
+		<div class="container-fluid">
+			<h2 class="left">
+				<a class="brand" href="<?php echo $ro->getBaseHref() ?>">Midas - News Stream</a>
+			</h2>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="margin-top: 40px">
+	<div class="content">
+		<div class="page-header">
+			<h1><?php echo htmlspecialchars($t['_title']); ?></h1>
+		</div>
+		<div class="row error">
 <?php if (! empty($t['url'])) : ?>
-	<p class="url">URL: <?php echo htmlspecialchars($t['url'])?></p>
+			<p class="url">
+				URL: <?php echo htmlspecialchars($t['url'])?>
+			</p>
 <?php endif ?>
 <?php if (! empty($t['_module'])) : ?>
-	<div class="module"><?php echo htmlspecialchars($tm->_('Module').": ".$t['_module'])?></div>
-	<div class="action"><?php echo htmlspecialchars($tm->_('Action').": ".$t['_action'])?></div>
+			<div class="module">
+				<?php echo htmlspecialchars($tm->_('Module').": ".$t['_module'])?>
+			</div>
+			<div class="action">
+				<?php echo htmlspecialchars($tm->_('Action').": ".$t['_action'])?>
+			</div>
 <?php endif ?>
-	<div class="messages">
+			<div class="messages">
 <?php
 	if (! empty($t['errors']) && is_array($t['errors']))
 	{
@@ -23,6 +44,8 @@
 		echo '</dl>';
 	}
 ?>
+			</div>
+		</div>
 	</div>
 </div>
 <!-- END <?php echo htmlspecialchars(__FILE__) ?> -->
