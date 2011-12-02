@@ -14,24 +14,31 @@
 			<h1><?php echo $tm->_('Login','auth.ui') ?></h1>
 		</div>
 		<form action="<?php echo $ro->gen(NULL) ?>" method="post">
+<?php if (! empty($t['error'])) : ?>
 			<div class="row">
-				<div class="span4 offset4">
-					<label for="input_username" id="input_password"><?php echo $tm->_('User','auth.ui') ?></label>
+			    <div class=" error span4 offset4">
+			        <?php echo htmlspecialchars($t['error'])?>
+		        </div>
+			</div>
+<?php endif ?>
+			<div class="row">
+				<div class="span4">
+					<label for="username"><?php echo $tm->_('User','auth.ui') ?></label>
 				</div>
 				<div class="span4">
-					<input type="text" name="username" />
+					<input type="text" name="username"/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span4">
+					<label for="password"><?php echo $tm->_('Password','auth.ui') ?></label>
+				</div>
+				<div class="span4">
+					<input type="password" name="password" />
 				</div>
 			</div>
 			<div class="row">
 				<div class="span4 offset4">
-					<label for="input_password"><?php echo $tm->_('Password','auth.ui') ?></label>
-				</div>
-				<div class="span4">
-					<input type="password" name="password" id="input_password" />
-				</div>
-			</div>
-			<div class="row">
-				<div class="span4 offset8">
 					<button class="btn primary" type="submit"><?php echo $tm->_('Sign in','auth.ui') ?></button>
 				</div>
 			</div>

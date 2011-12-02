@@ -18,6 +18,7 @@
                     <ae:parameter name="messages">
                         <ae:parameter name="de">
                             <ae:parameter name="This combination of username and password is invalid.">Die Kombination von Benutzername und Kennwort ist ungültig.</ae:parameter>
+                            <ae:parameter name="Failed authentication attempt for username %1$s, require group membership of '%2$s'">Fehlende Gruppe '%2$s' für Benutzer '%1$s'.</ae:parameter>
                             <ae:parameter name="Login Error">Fehler in der Anmeldung</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>

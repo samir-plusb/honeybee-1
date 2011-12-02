@@ -93,7 +93,7 @@
                 </javascripts>
             </deployment>
 
-            <deployment viewpath="items.list*">
+            <deployment viewpath="*">
                 <package ref="twitter-bootstrap" />
 
                 <javascripts>

@@ -11,5 +11,10 @@ $dir = (($locale->getCharacterOrientation() == 'right-to-left') ? 'rtl' : 'ltr')
     </head>
     <body>
         <?php echo $inner; // print the content layer output ?>
+        <div class="footer">
+<?php if ($us instanceof AgaviISecurityUser && $us->isAuthenticated()) : ?>
+            <a class="logout" href="auth/logout">Logout</a>
+<?php endif ?>
+        </div>
     </body>
 </html>

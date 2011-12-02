@@ -63,8 +63,10 @@ class Auth_LoginAction extends AuthBaseAction
 
         if (!$this->ldap)
         {
-            $logger->log(new AgaviLoggerMessage("Can not connect to LDAP Server: " . AgaviConfig::get("ldap.host")));
             //todo introduce a fallback action from config to allow other logins for dev environments.
+            $errorMessage = "Can not connect to LDAP Server: " . AgaviConfig::get("ldap.host");
+            $logger->log(new AgaviLoggerMessage($errorMessage));
+            $this->setAttribute('error', $errorMessage);
             return 'Error';
         }
 
@@ -83,12 +85,14 @@ class Auth_LoginAction extends AuthBaseAction
                     ->getUser()
                     ->setAuthenticated(FALSE);
 
+                $errorMessage =
+                    $this->getContext()
+                        ->getTranslationManager()
+                        ->_('This combination of username and password is invalid.', 'auth.messages');
+                $this->setAttribute('error', $errorMessage);
                 $this->getContainer()
                     ->getValidationManager()
-                    ->setError('username_password_mismatch',
-                        $this->getContext()
-                            ->getTranslationManager()
-                            ->_('This combination of username and password is invalid.', 'auth.messages'));
+                    ->setError('username_password_mismatch', $errorMessage);
 
                 $logger->log(
                         new AgaviLoggerMessage(
@@ -98,12 +102,12 @@ class Auth_LoginAction extends AuthBaseAction
             }
             else
             {
+                $this->setAttribute('error', 'LDAP error: ' . ldap_error($this->ldap));
                 $logger->log(
                         new AgaviLoggerMessage(
                             AgaviConfig::get("ldap.host") . ': LDAP error: ' . ldap_error($this->ldap)));
             }
 
-            //todo introduce a fallback action from config to allow other logins for dev environments.
             return 'Input';
         }
 
@@ -136,18 +140,18 @@ class Auth_LoginAction extends AuthBaseAction
                     ->getUser()
                     ->setAuthenticated(FALSE);
 
+                $tm = $this->getContext()
+                        ->getTranslationManager();
+                $errorMessage =
+                    sprintf(
+                        $tm->_('Failed authentication attempt for username %1$s, require group membership of "%2$s"'),
+                        $username, AgaviConfig::get("ldap.group_required"));
+                $this->setAttribute('error', $errorMessage);
                 $this->getContainer()
                     ->getValidationManager()
-                    ->setError('username_password_mismatch',
-                        $this->getContext()
-                            ->getTranslationManager()
-                            ->_('This combination of username and password is invalid.', 'auth.messages'));
+                    ->setError('username_password_mismatch', $errorMessage);
 
-                $logger->log(
-                        new AgaviLoggerMessage(
-                            sprintf(
-                                'Failed authentication attempt for username %1$s, require group membership of "%2$s"',
-                                $username, AgaviConfig::get("ldap.group_required")), AgaviILogger::INFO));
+                $logger->log(new AgaviLoggerMessage($errorMessage, AgaviILogger::INFO));
 
                 return 'Input';
             }
@@ -331,7 +335,7 @@ class Auth_LoginAction extends AuthBaseAction
                 AgaviConfig::get("ldap.group_member_attr", "memberUid"), $this->getLdapEscapedString($dn));
 
         $entry =
-            ldap_search($this->ldap, AgaviConfig::get("ldap.base"), $filter,
+            ldap_search($this->ldap, AgaviConfig::get("ldap.base_group"), $filter,
                 array(
                     AgaviConfig::get("ldap.group_name_attr")
                 ));
@@ -347,7 +351,7 @@ class Auth_LoginAction extends AuthBaseAction
         }
         foreach ($info as $key => $val)
         {
-            if (! empty($val[AgaviConfig::get("ldap.group_name_attr")][0]))
+            if (!empty($val[AgaviConfig::get("ldap.group_name_attr")][0]))
             {
                 $user->addCredential($val[AgaviConfig::get("ldap.group_name_attr")][0]);
             }
