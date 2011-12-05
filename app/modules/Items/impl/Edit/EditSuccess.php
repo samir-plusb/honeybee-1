@@ -5,7 +5,7 @@
     <aside class="personal-info">
         <h2>Userinfo Box</h2>
         <p>
-            Diese Nachricht wird von <a href="#profile?"></a> bearbeitet.
+            Diese Nachricht wird von <a href="#profile?">Shrink0r</a> bearbeitet.
             Du hast bisher 0 Mails abgehakt.
         </p>
     </aside>
@@ -15,19 +15,19 @@
     <menu id="content-item-menu" class="action-button-list">
         <li>
             <a class="action-list btn small" href="#list">Liste</a>
-            <span class="info-small items-loading">&nbsp;&nbsp;</span>
+            <span class="info-small">&#160;</span>
         </li>
         <li><a class="action-store btn small important" href="#store">Speichern</a></li>
         <li><a class="action-new btn small" href="#new">Neues Item</a></li>
-        <li><a class="action-delete btn small danger" href="#delete">L&ouml;schen</a></li>
+        <li><a class="action-delete btn small danger" href="#delete">L&#246;schen</a></li>
     </menu>
 </div>
 <div class="topmenu-container import-menu">
     <menu id="import-item-menu" class="action-button-list">
-        <li><a href="#prev" class="btn small">&larr; Zur&uuml;ck</a></li>
+        <li><a href="#prev" class="btn small">&#8592; Zur&#252;ck</a></li>
         <li><a href="#mark" class="btn small important">Abhaken</a></li>
-        <li><a href="#next" class="btn small">Vor &rarr;</a></li>
-        <li><a href="#delete" class="btn small danger">L&ouml;schen</a></li>
+        <li><a href="#next" class="btn small">Vor &#8594;</a></li>
+        <li><a href="#delete" class="btn small danger">L&#246;schen</a></li>
     </menu>
 </div>
 <div class="slide-panel">
@@ -94,13 +94,13 @@
                     <label for="teaser">
                         Teaser. Die ersten drei Sätze Deines Texts, die Du selber schreiben kannst.
                     </label>
-                    <textarea name="teaser" cols="2" rows="6"></textarea>
+                    <textarea name="teaser" cols="2" rows="6">&#160;</textarea>
                 </div>
                 <div class="input-full">
                     <label for="text">
                         <strong>Text</strong>. Der Rest des Texts. Hier sollst Du vor allem kürzen.
                     </label>
-                    <textarea class="jsb-input-assistive-text" name="text" rows="10" cols="30"></textarea>
+                    <textarea class="jsb-input-assistive-text" name="text" rows="10" cols="30">&#160;</textarea>
                     <input type="hidden" value='{ "mandatory": true }' class="jsb-input-assistive-text-options" />
                 </div>
                 <div class="input-full">
@@ -208,7 +208,7 @@
             </div>
 
             <div class="item-content content-panel">
-                <h3 class="legend">Verf&uuml;gbare Daten</h3>
+                <h3 class="legend">Verf&#252;gbare Daten</h3>
                 <ul>
                     <li>
                         <a href="#content-tabs-1">Inhalt</a>

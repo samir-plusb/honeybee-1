@@ -1,7 +1,6 @@
-.filter
+.top
 {
-    padding-top: 40px;
-    cursor: pointer;
+    padding-top: 15px;
 }
 
 .pagination a:hover,
@@ -69,4 +68,10 @@ tfoot tr td
 .search-message a
 {
     text-shadow: none;
+}
+
+.search-message-box
+{
+    top: 22px;
+    height: 40px;
 }

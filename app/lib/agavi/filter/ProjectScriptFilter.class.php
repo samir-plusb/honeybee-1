@@ -139,7 +139,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         }
 
         $container->getResponse()->setContent(
-            $this->doc->saveHTML()
+            $this->doc->saveXML()
         );
     }
 
@@ -164,7 +164,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $this->doc->formatOutput = TRUE;
         $this->doc->preserveWhitespace = TRUE;
 
-        if (!$this->doc->loadXML(html_entity_decode($content, NULL, self::ENCODING_UTF_8)))
+        if (!$this->doc->loadXML($content, LIBXML_NOENT))
         {
             // maybe just log the error and return silently?
             throw new Exception("Unable to parse content.");
@@ -473,7 +473,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 
         foreach ($stylesheets as $stylesheet)
         {
-            $link = $this->doc->createElement('link');
+            $link = $this->doc->createElement('link', '&#160;');
             $link->setAttribute('rel', 'stylesheet');
             $link->setAttribute('type', 'text/css');
             $link->setAttribute('href', $stylesheet);
@@ -497,7 +497,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 
         foreach ($javascripts as $javascript)
         {
-            $script = $this->doc->createElement('script');
+            $script = $this->doc->createElement('script', '&#160;');
             $script->setAttribute('type', 'text/javascript');
             $script->setAttribute('src', $javascript);
 

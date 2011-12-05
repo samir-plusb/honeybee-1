@@ -175,6 +175,9 @@
         <settings prefix="curl.">
             <setting name="proxy">proxy2:3128</setting>
         </settings>
+        <settings prefix="ldap.">
+            <setting name="host">ldap://bohome3</setting>
+        </settings>
         <settings prefix="php.">
             <setting name="default-stream">
                 <ae:parameter name="http">

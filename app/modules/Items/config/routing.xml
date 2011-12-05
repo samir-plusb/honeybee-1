@@ -3,11 +3,11 @@
 
     <ae:configuration context="web">
         <routes>
-            <route pattern="^/list" action="List"/>
-            <route pattern="^/edit" action="Edit"/>
-            <route pattern="^/api">
-                <route pattern="^/localize" action="Api_Localize"/>
-                <route pattern="^/extract_date" action="Api_ExtractDate"/>
+            <route name=".list" pattern="^/list" action="List"/>
+            <route name=".edit" pattern="^/edit" action="Edit"/>
+            <route name=".api" pattern="^/api">
+                <route name=".localize" pattern="^/localize" action="Api_Localize"/>
+                <route name=".extract_date" pattern="^/extract_date" action="Api_ExtractDate"/>
             </route>
         </routes>
     </ae:configuration>

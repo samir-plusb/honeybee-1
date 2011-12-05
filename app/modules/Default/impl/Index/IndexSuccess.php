@@ -16,7 +16,9 @@
 		<div class="row">
 			<div class="span8">
 			    <ul>
-			        <li><a href="items/list/"><?php echo $tm->_('News item list','default.ui')?></a></li>
+			        <li>
+                        <a href="<?php echo $ro->gen('items.list'); ?>"><?php echo $tm->_('News item list','default.ui')?></a>
+                    </li>
 			    </ul>
 			</div>
 		</div>

@@ -52,7 +52,7 @@
                         xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
             </route>
 
-            <route pattern="^/items" module="Items">
+            <route name="items" pattern="^/items" module="Items">
                 <xi:include
                     href="%core.app_dir%/modules/Items/config/routing.xml"
                     xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)

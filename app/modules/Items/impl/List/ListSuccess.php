@@ -3,47 +3,46 @@
     <div class="topbar-inner">
         <div class="container-fluid">
             <h2 class="left">
-                <a href="<?php echo htmlspecialchars($ro->gen(NULL)); ?>" class="brand"><?php echo $t['_title']; ?></a>
+                <a href="<?php echo $ro->gen(NULL); ?>" class="brand"><?php echo $t['_title']; ?></a>
             </h2>
-            <form class="pull-right search-form" action="<?php echo htmlspecialchars($ro->gen(NULL)); ?>" method="GET">
-                <input type="text" name="search_phrase" value="<?php echo isset($t['search_phrase']) ? htmlspecialchars($t['search_phrase']) : '' ?>" placeholder="Suche" />
+            <form class="pull-right search-form" action="<?php echo $ro->gen(NULL); ?>" method="GET">
+                <input type="text" name="search_phrase" value="<?php echo isset($t['search_phrase']) ? $t['search_phrase'] : '' ?>" placeholder="Suche" />
                 <a href="#" class="<?php echo isset($t['search_phrase']) ? '' : 'hidden' ?> reset-search">×</a>
             </form>
         </div>
     </div>
 </div>
 
-<section class="filter container-fluid">
-<!--    <h3>Filter</h3> -->
-</section>
-
-
-<div class="container-fluid">
+<section class="container-fluid search-message-box">
 <?php
     if (isset($t['search_phrase']))
     {
 ?>
     <div class="alert-message search-message info">
         <p>
-            Du hast nach <strong>&quot;<?php echo $t['search_phrase']; ?>&quot;</strong> gesucht.
+            Du hast nach <strong>&#34;<?php echo $t['search_phrase']; ?>&#34;</strong> gesucht.
             Deine Suche ergab <strong><?php echo count($t['listData']); ?> Treffer</strong>.
         </p>
-        <a href="<?php echo $ro->gen('items.list'); ?>">Suche zur&uuml;cksetzen</a>
+        <a href="<?php echo $ro->gen('items.list'); ?>">Suche zur&#252;cksetzen</a>
     </div>
 <?php
-    }  
-    
+    }
+?>
+</section>
+
+<div class="container-fluid top">
+<?php
     $hasPrev = $t['offset'] > 0;
     $hasNext = $t['offset'] + $t['limit'] < $t['totalCount'];
     $nextLink = $ro->gen(
-        'items.list', 
+        'items.list',
         array(
             'limit'  => $t['limit'],
             'offset' => $t['offset'] + $t['limit']
         )
     );
     $prevLink = $ro->gen(
-        'items.list', 
+        'items.list',
         array(
             'limit'  => $t['limit'],
             'offset' => $t['offset'] - $t['limit']
@@ -54,13 +53,13 @@
     <div class="pagination pagination-top">
         <ul>
             <li class="prev <?php echo $hasPrev ? '' : 'disabled'; ?>">
-                <a href="<?php echo $hasPrev ? htmlspecialchars($prevLink) : htmlspecialchars($ro->gen(NULL)); ?>">&larr; Previous</a>
+                <a href="<?php echo $hasPrev ? $prevLink : $ro->gen(NULL); ?>">&#8592; Previous</a>
             </li>
 <?php
     for ($i = 0; $i < 5; $i++)
     {
         $offset = $t['limit'] * $i;
-        if ($t['totalCount'] < $offset)
+        if ($t['totalCount'] <= $offset)
         {
             continue;
         }
@@ -72,19 +71,19 @@
             )
         );
         $active = $t['offset'] == $offset;
-?> 
+?>
             <li class="<?php echo $active ? 'active' : ''; ?>">
-                <a href="<?php echo htmlspecialchars($link); ?>"><?php echo ($i + 1); ?></a>
+                <a href="<?php echo $link; ?>"><?php echo ($i + 1); ?></a>
             </li>
 <?php
     }
 ?>
             <li class="next <?php echo $hasNext ? '' : 'disabled'; ?>">
-                <a href="<?php echo $hasNext ? htmlspecialchars($nextLink) : htmlspecialchars($ro->gen(NULL)); ?>">Next &rarr;</a>
+                <a href="<?php echo $hasNext ? $nextLink : $ro->gen(NULL); ?>">Next &#8594;</a>
             </li>
         </ul>
     </div>
-    
+
     <!-- Table section with heading and table. -->
     <table class="bordered-table zebra-striped" id="sortTableExample">
         <thead>
@@ -105,7 +104,7 @@
     {
             $workflowItem = $ticketData['item'];
             $importItem = $workflowItem['importItem'];
-            
+
             $date = new DateTime($ticketData['ts']);
             $state = isset($ticketData['step']) ? $ticketData['step'] : 'Neu';
 ?>
@@ -127,18 +126,18 @@
 <?php
         }
 ?>
-                <td class="category"><?php echo $importItem['category']; ?></td>
-                <td class="district"><!-- Take the district of the first content-item? --></td>
-                <td class="priority"><!-- Find out priority based on content-items? --></td>
+                <td class="category"><?php echo empty($importItem['category']) ? '&#160;' : $importItem['category']; ?></td>
+                <td class="district">&#160;<!-- Take the district of the first content-item? --></td>
+                <td class="priority">&#160;<!-- Find out priority based on content-items? --></td>
                 <td class="avail-actions">
-                    <a class="btn small danger">L&ouml;schen</a>
+                    <a class="btn small danger">L&#246;schen</a>
                 </td>
             </tr>
 <?php
     }
 ?>
         </tbody>
-<?php 
+<?php
     if (20 <= count($t['listData']))
     {
 ?>
@@ -154,27 +153,65 @@
                 <td>Actions</td>
             </tr>
         </tfoot>
-<?php 
+<?php
     }
 ?>
     </table>
-<?php 
+<?php
     if (20 <= count($t['listData']))
     {
+        $hasPrev = $t['offset'] > 0;
+        $hasNext = $t['offset'] + $t['limit'] < $t['totalCount'];
+        $nextLink = $ro->gen(
+            'items.list',
+            array(
+                'limit'  => $t['limit'],
+                'offset' => $t['offset'] + $t['limit']
+            )
+        );
+        $prevLink = $ro->gen(
+            'items.list',
+            array(
+                'limit'  => $t['limit'],
+                'offset' => $t['offset'] - $t['limit']
+            )
+        );
 ?>
     <!-- Pagination -->
-    <div class="pagination">
+    <div class="pagination pagination-top">
         <ul>
-            <li class="prev disabled"><a href="#">&larr; Previous</a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li class="next"><a href="#">Next &rarr;</a></li>
+            <li class="prev <?php echo $hasPrev ? '' : 'disabled'; ?>">
+                <a href="<?php echo $hasPrev ? $prevLink : $ro->gen(NULL); ?>">&#8592; Previous</a>
+            </li>
+<?php
+    for ($i = 0; $i < 5; $i++)
+    {
+        $offset = $t['limit'] * $i;
+        if ($t['totalCount'] <= $offset)
+        {
+            continue;
+        }
+        $link = $ro->gen(
+            'items.list',
+            array(
+                'limit'  => $t['limit'],
+                'offset' => $offset
+            )
+        );
+        $active = $t['offset'] == $offset;
+?>
+            <li class="<?php echo $active ? 'active' : ''; ?>">
+                <a href="<?php echo $link; ?>"><?php echo ($i + 1); ?></a>
+            </li>
+<?php
+    }
+?>
+            <li class="next <?php echo $hasNext ? '' : 'disabled'; ?>">
+                <a href="<?php echo $hasNext ? $nextLink : $ro->gen(NULL); ?>">Next &#8594;</a>
+            </li>
         </ul>
     </div>
-<?php 
+<?php
     }
 ?>
 </div>
