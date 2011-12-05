@@ -19,7 +19,7 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
             'transport' => AgaviConfig::get('elasticsearch.transport', 'Http')
         ));
     }
-    
+
     public function fetchAll($offset = 0, $limit = self::DEFAULT_LIMIT)
     {
         $query = new Elastica_Query(
@@ -28,33 +28,33 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
         $query->setLimit($limit)->setFrom($offset);
         $index = $this->elasticClient->getIndex('midas');
         $type = $index->getType('ticket');
-        
+
         return $this->hydrateResult(
             $type->search($query)
         );
     }
-    
+
     public function search($searchPhrase, $offset = 0, $limit = self::DEFAULT_LIMIT)
     {
         $textQuery = new Elastica_Query_Text();
         $textQuery->setField('_all', $searchPhrase);
-        
+
         $boolQuery = new Elastica_Query_Bool();
         $boolQuery->addMust($textQuery);
-        
+
         $childQuery = new Elastica_Query_HasChild($boolQuery, 'item');
-        
+
         $query = new Elastica_Query($childQuery);
         $query->setLimit($limit)->setFrom($offset);
-        
+
         $index = $this->elasticClient->getIndex('midas');
         $type = $index->getType('ticket');
-        
+
         return $this->hydrateResult(
             $type->search($query)
         );
     }
-    
+
     protected function hydrateResult(Elastica_ResultSet $result)
     {
         $itemIds = array();
@@ -73,7 +73,7 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
             'totalCount' => $result->getTotalHits()
         );
     }
-    
+
     protected function loadItemsIntoTickets(array $tickets, array $itemIds)
     {
         if (empty($tickets))
@@ -81,6 +81,7 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
             return array();
         }
         $itemFinder = $this->getContext()->getModel('ItemFinder');
+        $itemCount = 0;
         foreach ($itemFinder->findByIds($itemIds) as $item)
         {
             $identifier = $item->getIdentifier();
@@ -91,6 +92,13 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
                 );
             }
             $tickets[$identifier]->setWorkflowItem($item);
+            $itemCount++;
+        }
+        if ($itemCount !== count($tickets))
+        {
+            throw new WorkflowException(
+                "Number of tickets does not match number of items. Your dataset state is invalid. Gratz!"
+            );
         }
         return array_values($tickets);
     }
