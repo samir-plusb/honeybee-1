@@ -26,7 +26,7 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
             'midas',
             'item'
         );
-        
+
         $curl = ProjectCurl::create();
         curl_setopt($curl, CURLOPT_URL, $uri);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET') ;
@@ -37,7 +37,7 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
             'Accept: application/json',
             'Content-Type: application/json; charset=utf-8',
         ));
-        
+
         $resp = curl_exec($curl);
         if (curl_error($curl))
         {
@@ -46,7 +46,14 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
         $data = json_decode($resp, TRUE);
         foreach ($data['docs'] as $doc)
         {
-            $items[] = new WorkflowItem($doc['_source']);
+            if (is_array($doc['_source']))
+            {
+                $items[] = new WorkflowItem($doc['_source']);
+            }
+            else
+            {
+                // log corrupt data, this should not happen.
+            }
         }
         return $items;
     }
