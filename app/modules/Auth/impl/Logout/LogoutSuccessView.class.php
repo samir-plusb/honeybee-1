@@ -23,6 +23,7 @@ class Auth_Logout_LogoutSuccessView extends AuthBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
+        $this->setAttribute('_title', 'Successfully logged out.');
     }
 
     /**
