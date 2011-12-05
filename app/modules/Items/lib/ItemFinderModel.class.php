@@ -46,7 +46,7 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
         $data = json_decode($resp, TRUE);
         foreach ($data['docs'] as $doc)
         {
-            if (is_array($doc['_source']))
+            if (isset($doc['_source']))
             {
                 $items[] = new WorkflowItem($doc['_source']);
             }
