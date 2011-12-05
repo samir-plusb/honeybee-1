@@ -93,7 +93,7 @@
                 </javascripts>
             </deployment>
 
-            <deployment viewpath="*">
+            <deployment viewpath="^(?:(?!items.edit))*$">
                 <package ref="twitter-bootstrap" />
 
                 <javascripts>
