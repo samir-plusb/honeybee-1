@@ -17,6 +17,11 @@ class ImportBaseAction extends ProjectBaseAction
     const DATAIMPORT_COUCHDB = 'couchdb';
 
     /**
+     * Name of our workflow import definition.
+     */
+    const DATAIMPORT_WORKFLOW = 'workflow';
+
+    /**
      * Name of our imperia data source definition.
      */
     const DATASOURCE_IMPERIA = 'imperia';

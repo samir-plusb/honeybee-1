@@ -26,7 +26,7 @@ class Import_TriggerMailAction extends ImportBaseAction
         );
 
         $importFactory = $this->createImportFactory();
-        $dataImport = $importFactory->createDataImport(self::DATAIMPORT_COUCHDB);
+        $dataImport = $importFactory->createDataImport(self::DATAIMPORT_WORKFLOW);
         $dataSources = array(
             $importFactory->createDataSource(
                 self::DATASOURCE_PROCMAIL,
