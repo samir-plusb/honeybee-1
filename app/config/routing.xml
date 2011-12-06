@@ -44,9 +44,9 @@
                         xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
             </route>
 
-            <route pattern="^/workflow" module="Workflow">
+            <route name="workflow" pattern="^/workflow" module="Workflow">
                 <xi:include
-                    href="%core.app_dir%/modules/Import/config/routing.xml"
+                    href="%core.app_dir%/modules/Workflow/config/routing.xml"
                     xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
                         xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
                         xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>

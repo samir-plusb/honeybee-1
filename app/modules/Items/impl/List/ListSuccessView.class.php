@@ -23,12 +23,13 @@ class Items_List_ListSuccessView extends ItemsBaseView
     {
         $this->setupHtml($parameters);
         $this->setAttribute('_title', 'Midas - News Stream');
-        
+
         $listData = array();
         foreach ($this->getAttribute('tickets', array()) as $ticket)
         {
             $item = $ticket->getWorkflowItem();
             $ticketData = $ticket->toArray();
+
             $ticketData['item'] = $item->toArray();
             $listData[] = $ticketData;
         }

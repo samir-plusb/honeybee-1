@@ -109,7 +109,7 @@
             $state = isset($ticketData['step']) ? $ticketData['step'] : 'Neu';
 ?>
             <tr>
-                <td class="title"><a href="#edit"><?php echo $importItem['title']; ?></a></td>
+                <td class="title"><a href="<?php echo $ro->gen('workflow.run', array('ticket' => $ticketData['_id'])); ?>"><?php echo htmlspecialchars($importItem['title']); ?></a></td>
                 <td class="source"><?php echo $importItem['source']; ?></td>
                 <td class="date"><?php echo $date->format('Y-m-d H:i:s'); ?></td>
 <?php

@@ -157,7 +157,7 @@ class ProjectBaseView extends AgaviView
         else
         {
             // set a default title just to avoid warnings
-            $this->setAttribute('_title', '');
+            $this->setAttribute('_title', 'No Title');
         }
 
         $this->loadLayout($layoutName);
