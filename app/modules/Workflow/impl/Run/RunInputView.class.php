@@ -7,8 +7,6 @@
  */
 class Workflow_Run_RunInputView extends ProjectBaseView
 {
-
-
     /**
      * Handles the Html output type.
      *
@@ -21,9 +19,10 @@ class Workflow_Run_RunInputView extends ProjectBaseView
      */
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
+        $this->setAttribute('_title', 'Run Workflow');
         $this->setupHtml($parameters);
         $result = $this->processTicket($parameters);
-        return $result;
+        $this->setAttribute('_content', $result);
     }
 
     /**

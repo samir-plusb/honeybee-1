@@ -352,7 +352,6 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     {
         $this->fromArray($data);
         $this->setBlocked(TRUE);
-        $this->touch();
     }
 
     /**
@@ -388,6 +387,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     {
         $this->id = empty($data['_id']) ? NULL : $data['_id'];
         $this->rev = empty($data['_rev']) ? NULL : $data['_rev'];
+
         $this->timestamp = new DateTime(empty($data['ts']) ? NULL : $data['ts']);
         $this->parameters = isset($data['p']) && is_array($data['p']) ? $data['p'] : array();
 
@@ -503,5 +503,3 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
             $this->workflow, $this->currentStep, $this->result);
     }
 }
-
-?>

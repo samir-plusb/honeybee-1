@@ -33,5 +33,6 @@
         <!-- Plugins -->
         <autoload name="WorkflowNullPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowNullPlugin.class.php</autoload>
         <autoload name="WorkflowChoosePlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowChoosePlugin.class.php</autoload>
+        <autoload name="WorkflowRefineNewsPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowRefineNewsPlugin.class.php</autoload>
     </ae:configuration>
 </ae:configurations>

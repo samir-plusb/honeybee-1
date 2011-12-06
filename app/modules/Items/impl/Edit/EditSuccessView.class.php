@@ -21,16 +21,28 @@ class Items_Edit_EditSuccessView extends ItemsBaseView
      */
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $this->setupHtml($parameters);
+        error_log(__FILE__ . __METHOD__ . error_log(__FILE__ . __METHOD__));
+
+        $this->setupHtml($parameters, 'slot');
         $this->setAttribute('_title', 'Midas - News Refinement');
         $this->setAttribute('tag_options', array(
             'mandatory' => TRUE,
             'tags' => AgaviConfig::get('items.tags', array())
         ));
+
         $this->setAttribute(
             'category_options',
             AgaviConfig::get('items.categories', array())
         );
+
+        WorkflowBaseInteractivePlugin::setPluginResultAttributes(
+            $this->getContainer(),
+            WorkflowInteractivePluginResult::STATE_EXPECT_INPUT,
+            WorkflowPluginResult::GATE_DEFAULT,
+            'Yay I can haz workflow message!'
+        );
+
+        error_log(__FILE__ . __METHOD__ . __LINE__);
     }
 
     /**

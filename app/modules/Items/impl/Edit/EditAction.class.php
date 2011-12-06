@@ -23,6 +23,8 @@ class Items_EditAction extends ItemsBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
+        error_log(__FILE__ . __METHOD__);
+
         return 'Success';
     }
 }

@@ -3,9 +3,7 @@
 
     <ae:configuration context="web">
         <routes>
-            <route pattern="^/workflow" module="Workflow">
-                <route pattern="^/run" action="Run"/>
-            </route>
+            <route name=".run" pattern="^/run" action="Run"/>
         </routes>
     </ae:configuration>
 

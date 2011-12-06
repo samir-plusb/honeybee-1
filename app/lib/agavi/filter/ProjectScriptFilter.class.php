@@ -164,7 +164,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $this->doc->formatOutput = TRUE;
         $this->doc->preserveWhitespace = TRUE;
 
-        if (!$this->doc->loadXML($content, LIBXML_NOENT))
+        if (!@$this->doc->loadXML($content, LIBXML_NOENT))
         {
             // maybe just log the error and return silently?
             throw new Exception("Unable to parse content.");

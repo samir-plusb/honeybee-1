@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <workflow name="news">
+            <description>The default workflow for refinining news.</description>
+            <steps start="refine">
+                <step id="refine" name="Initial refinement of imported news data.">
+                    <plugin>RefineNews</plugin>
+                    <ae:parameter></ae:parameter>
+                    <gates>
+                        <gate end="true">Hurray, I can haz news</gate>
+                    </gates>
+                </step>
+            </steps>
+        </workflow>
+    </ae:configuration>
+</ae:configurations>
