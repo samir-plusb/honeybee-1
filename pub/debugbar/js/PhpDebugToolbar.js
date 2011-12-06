@@ -12,7 +12,7 @@ PhpDebugToolbar = function(container, options)
     this.sections = options.sections;
     var sections = this.sections;
 
-    this.ui_css_location = options.ui_css_location;
+    this.ui_css_location = 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/start/jquery-ui.css';
     this.cookie_name = options.cookie;
 
     this.initializeLogsCountAndLevel();

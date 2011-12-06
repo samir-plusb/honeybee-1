@@ -117,30 +117,41 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             return FALSE;
         }
 
-        $this->loadDom($output);
-
         list($javascripts, $stylesheets) = $this->loadScripts(
             $this->buildViewPath($container)
         );
 
+        $jsString = '';
+        $cssString = '';
         if ($this->config->isPackingEnabled())
         {
-            $this->addJavascripts(
+            $jsString = $this->renderJavascripts(
                 $this->packJavascripts($javascripts)
             );
-            $this->addStylesheets(
+            $cssString = $this->renderStylesheets(
                 $this->packStylesheets($stylesheets)
             );
         }
         else
         {
-            $this->addStylesheets($stylesheets);
-            $this->addJavascripts($javascripts);
+            $cssString = $this->renderStylesheets($stylesheets);
+            $jsString = $this->renderJavascripts($javascripts);
         }
 
-        $container->getResponse()->setContent(
-            $this->doc->saveXML()
-        );
+        // Find inline stuff and append to end.
+        $inlineJs = array();
+        if (preg_match('~<script type="text/javascript" (?:src=".+\.js")?>.*</script>~is', $output, $inlineJs))
+        {
+            foreach ($inlineJs as $inline)
+            {
+                $output = str_replace($inline, '', $output);
+                $jsString .= PHP_EOL . $inline;
+            }
+        }
+
+        $output = preg_replace('~</body>~', $jsString . '</body>', $output);
+        $output = preg_replace('~</head>~', $cssString . '</head>', $output);
+        $response->setContent($output);
     }
 
     /**
@@ -151,36 +162,6 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
     public function getConfig()
     {
         return $this->config;
-    }
-
-    /**
-     * Load the given string (xml) content into a dom document.
-     *
-     * @param string $content
-     */
-    protected function loadDom($content)
-    {
-        $this->doc = new DOMDocument();
-        $this->doc->formatOutput = TRUE;
-        $this->doc->preserveWhitespace = TRUE;
-
-        if (!@$this->doc->loadXML($content, LIBXML_NOENT))
-        {
-            // maybe just log the error and return silently?
-            throw new Exception("Unable to parse content.");
-        }
-
-        $this->xpath = new DOMXPath($this->doc);
-
-        if ($this->doc->documentElement && $this->doc->documentElement->namespaceURI)
-        {
-            $this->xpath->registerNamespace('html', $this->doc->documentElement->namespaceURI);
-            $this->xmlnsPrefix = 'html:';
-        }
-        else
-        {
-            $this->xmlnsPrefix = '';
-        }
     }
 
     /**
@@ -347,7 +328,6 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             array_map("unlink", glob($this->config->getJsCacheDir() . '/*.js')); // remove all prev caches
             file_put_contents($deployPath, $packedJs);
         }
-
         return array($pubPath);
     }
 
@@ -375,7 +355,6 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             array_map("unlink", glob($this->config->getCssCacheDir() . '/*.css')); // remove all prev caches
             file_put_contents($deployPath, $packedCss);
         }
-
         return array($pubPath);
     }
 
@@ -428,7 +407,6 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             file_put_contents($tmpPath, $adjustedCss);
             $stylesheets[] = $tmpPath;
         }
-
         return $stylesheets;
     }
 
@@ -454,7 +432,6 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
                 $lastModified = $mTime;
             }
         }
-
         return sha1($hashBase . $lastModified);
     }
 
@@ -464,22 +441,15 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
      *
      * @param array $stylesheets
      */
-    protected function addStylesheets(array $stylesheets)
+    protected function renderStylesheets(array $stylesheets)
     {
-        $query_result = $this->xpath->query(
-            sprintf('//%shead', $this->xmlnsPrefix)
-        );
-        $head = $query_result->item(0);
-
+        $script_tpl = "        <link rel='stylesheet' type='text/css' href='%1\$s' />\n";
+        $scripts_string = PHP_EOL;
         foreach ($stylesheets as $stylesheet)
         {
-            $link = $this->doc->createElement('link', '&#160;');
-            $link->setAttribute('rel', 'stylesheet');
-            $link->setAttribute('type', 'text/css');
-            $link->setAttribute('href', $stylesheet);
-
-            $head->appendChild($link);
+            $scripts_string .= sprintf($script_tpl, $stylesheet);
         }
+        return $scripts_string;
     }
 
     /**
@@ -488,21 +458,15 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
      *
      * @param array $javascripts
      */
-    protected function addJavascripts(array $javascripts)
+    protected function renderJavascripts(array $javascripts)
     {
-        $query_result = $this->xpath->query(
-            sprintf('//%sbody', $this->xmlnsPrefix)
-        );
-        $body = $query_result->item(0);
-
+        $script_tpl = "    <script type='text/javascript' src='%1\$s'></script>\n";
+        $scripts_string = PHP_EOL;
         foreach ($javascripts as $javascript)
         {
-            $script = $this->doc->createElement('script', '&#160;');
-            $script->setAttribute('type', 'text/javascript');
-            $script->setAttribute('src', $javascript);
-
-            $body->appendChild($script);
+            $scripts_string .= sprintf($script_tpl, $javascript);
         }
+        return $scripts_string;
     }
 }
 
