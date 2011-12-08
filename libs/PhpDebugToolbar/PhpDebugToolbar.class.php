@@ -226,7 +226,7 @@ abstract class PhpDebugToolbar
 
         if (isset(self::$options['js_location']))
         {
-            $content[] = '<script src="' . self::$options['js_location'] . '" type="text/javascript" charset="utf-8"> </script>';
+            $content[] = '<script type="text/javascript" src="' . self::$options['js_location'] . '"> </script>';
             $content[] = '<script type="text/javascript">';
             $content[] = '// <!--';
         }

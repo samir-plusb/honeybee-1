@@ -13,6 +13,22 @@
  */
 class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
 {
+    protected static $views2Deploy = array();
+
+    public static function addView($moduleName, $actionName, $viewName, $outputType)
+    {
+        $viewHash = sha1($moduleName.$actionName.$viewName);
+        if (!isset(self::$views2Deploy[$viewHash]))
+        {
+            self::$views2Deploy[$viewHash] = array(
+                'module'     => $moduleName,
+                'action'     => $actionName,
+                'view'       => $viewName,
+                'outputType' => $outputType
+            );
+        }
+    }
+
     /**
      * Holds a string that respresents the utf8 encoding.
      */
@@ -103,7 +119,8 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $filterChain->execute($container);
         $response = $container->getResponse();
         $output = NULL;
-
+/*list($usec3, $sec3) = explode(" ",microtime());
+$r1 = ($usec3/1000 + $sec3*1000);*/
         if (!$response->isContentMutable() || !($output = $response->getContent()))
         {
             // throw exception? we cant really live without our scripts...
@@ -117,9 +134,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             return FALSE;
         }
 
-        list($javascripts, $stylesheets) = $this->loadScripts(
-            $this->buildViewPath($container)
-        );
+        list($javascripts, $stylesheets) = $this->loadScripts();
 
         $jsString = '';
         $cssString = '';
@@ -137,7 +152,6 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             $cssString = $this->renderStylesheets($stylesheets);
             $jsString = $this->renderJavascripts($javascripts);
         }
-
         // Find inline stuff and append to end.
         $inlineJs = array();
         if (preg_match('~<script type="text/javascript" (?:src=".+\.js")?>.*</script>~is', $output, $inlineJs))
@@ -152,6 +166,9 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $output = preg_replace('~</body>~', $jsString . '</body>', $output);
         $output = preg_replace('~</head>~', $cssString . '</head>', $output);
         $response->setContent($output);
+/*list($usec4, $sec4) = explode(" ",microtime());
+$r2 = ($usec4/1000 + $sec4*1000);
+error_log("<ProjectScriptFilter>" . ($r2 - $r1) . "</ProjectScriptFilter>");*/
     }
 
     /**
@@ -171,15 +188,14 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
      *
      * @return string
      */
-    protected function buildViewPath(AgaviExecutionContainer $container)
+    protected function buildViewPath(array $executionData)
     {
-        $module = strtolower($container->getModuleName());
-        $action = strtolower($container->getActionName());
-        $viewParts = explode('/', $container->getViewName());
+        $module = strtolower($executionData['module']);
+        $action = strtolower($executionData['action']);
+        $viewParts = explode('/', $executionData['view']);
         $view = strtolower(
             str_replace($viewParts[0], '', array_pop($viewParts))
         );
-
         return implode('.', array($module, $action, $view));
     }
 
@@ -190,33 +206,40 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
      *
      * @return array Where the first index is a js-script collection and the second a css collection.
      */
-    protected function loadScripts($viewpath)
+    protected function loadScripts()
     {
-        $deployData = $this->loadDeployData($viewpath);
-
+        $deployments = array();
         $javascripts = array();
         $stylesheets = array();
-        foreach ($deployData['packages'] as $packageName)
+        foreach(self::$views2Deploy as $executionData)
         {
-            $package = $this->config->getPackageData($packageName);
-            foreach ($package['javascripts'] as $javascript)
-            {
-                if (!in_array($javascript, $javascripts))
-                {
-                    $javascripts[] = $javascript;
-                }
-            }
-            foreach ($package['stylesheets'] as $stylesheet)
-            {
-                if (!in_array($stylesheet, $stylesheets))
-                {
-                    $stylesheets[] = $stylesheet;
-                }
-            }
+            $viewPath = $this->buildViewPath($executionData);
+            $deployments[] = $this->loadDeployData($viewPath);
         }
-        $javascripts = array_merge($javascripts, $deployData['javascripts']);
-        $stylesheets = array_merge($stylesheets, $deployData['stylesheets']);
 
+        foreach ($deployments as $deployment)
+        {
+            foreach ($deployment['packages'] as $packageName)
+            {
+                $package = $this->config->getPackageData($packageName);
+                foreach ($package['javascripts'] as $javascript)
+                {
+                    if (!in_array($javascript, $javascripts))
+                    {
+                        $javascripts[] = $javascript;
+                    }
+                }
+                foreach ($package['stylesheets'] as $stylesheet)
+                {
+                    if (!in_array($stylesheet, $stylesheets))
+                    {
+                        $stylesheets[] = $stylesheet;
+                    }
+                }
+            }
+            $javascripts = array_merge($javascripts, $deployment['javascripts']);
+            $stylesheets = array_merge($stylesheets, $deployment['stylesheets']);
+        }
         return array($javascripts, $stylesheets);
     }
 
@@ -265,10 +288,10 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             }
         }
 
-        $deploy_data = array(
-            'packages' => array(),
+        $deployData = array(
             'javascripts' => $affectedJavascripts,
-            'stylesheets' => $affectedStylesheets
+            'stylesheets' => $affectedStylesheets,
+            'packages'    => array()
         );
         /**
          * Make sure we have our loaded packages in the exact same order
@@ -278,11 +301,10 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         {
             if (in_array($packageName, $affectedPackages))
             {
-                $deploy_data['packages'][] = $packageName;
+                $deployData['packages'][] = $packageName;
             }
         }
-
-        return $deploy_data;
+        return $deployData;
     }
 
     /**
@@ -315,6 +337,8 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
      */
     protected function packJavascripts(array $scripts)
     {
+/* list($usec3, $sec3) = explode(" ",microtime());
+$r1 = ($usec3/1000 + $sec3*1000);*/
         $deployHash = $this->calculateDeployHash($scripts);
         $pubDir = $this->config->get(ProjectScriptFilterConfig::CFG_PUB_DIR);
         $deployPath = $this->config->getJsCacheDir() . DIRECTORY_SEPARATOR . $deployHash . '.js';
@@ -324,10 +348,12 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         {
             $script_packer = new ProjectScriptPacker();
             $packedJs = $script_packer->pack($scripts, 'js');
-
-            array_map("unlink", glob($this->config->getJsCacheDir() . '/*.js')); // remove all prev caches
+            //array_map("unlink", glob($this->config->getJsCacheDir() . '/*.js')); // remove all prev caches
             file_put_contents($deployPath, $packedJs);
         }
+/*list($usec4, $sec4) = explode(" ",microtime());
+$r2 = ($usec4/1000 + $sec4*1000);
+error_log("<JAVASCRIPT PACKING>" . ($r2 - $r1) . "</JAVASCRIPT PACKING>"); */
         return array($pubPath);
     }
 
@@ -340,6 +366,8 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
      */
     protected function packStylesheets(array $scripts)
     {
+/*list($usec3, $sec3) = explode(" ",microtime());
+$r1 = ($usec3/1000 + $sec3*1000);*/
         $deployHash = $this->calculateDeployHash($scripts);
         $pubDir = $this->config->get(ProjectScriptFilterConfig::CFG_PUB_DIR);
         $deployPath = $this->config->getCssCacheDir() . DIRECTORY_SEPARATOR . $deployHash . '.css';
@@ -351,10 +379,12 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             $packedCss = $script_packer->pack(
                 $this->adjustRelativeCssPaths($scripts), 'css'
             );
-
-            array_map("unlink", glob($this->config->getCssCacheDir() . '/*.css')); // remove all prev caches
+            //array_map("unlink", glob($this->config->getCssCacheDir() . '/*.css')); // remove all prev caches
             file_put_contents($deployPath, $packedCss);
         }
+/*list($usec4, $sec4) = explode(" ",microtime());
+$r2 = ($usec4/1000 + $sec4*1000);
+error_log("<CSS PACKING>" . ($r2 - $r1) . "</CSS PACKING>");*/
         return array($pubPath);
     }
 
@@ -404,6 +434,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
             $adjustedCss = preg_replace_callback(
                 '#url\([\'"](?!http|/|data)(.*?)[\'"]\)#i', $replaceCallback, file_get_contents($cssFile)
             );
+            $tmpPath = tempnam(sys_get_temp_dir(), 'css_');
             file_put_contents($tmpPath, $adjustedCss);
             $stylesheets[] = $tmpPath;
         }
@@ -421,7 +452,8 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
     {
         $lastModified = 0;
         $hashBase = '';
-
+/*list($usec, $sec) = explode(" ",microtime());
+$now = ($usec/1000 + $sec*1000);*/
         foreach ($scripts as $javascript)
         {
             $mTime = filemtime($javascript);
@@ -432,6 +464,9 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
                 $lastModified = $mTime;
             }
         }
+/*list($usec, $sec) = explode(" ",microtime());
+$then = ($usec/1000 + $sec*1000);
+error_log("<HashCalculation Hash='".sha1($hashBase . $lastModified)."'>" . ($then - $now) . "</HASH Calculation>");*/
         return sha1($hashBase . $lastModified);
     }
 

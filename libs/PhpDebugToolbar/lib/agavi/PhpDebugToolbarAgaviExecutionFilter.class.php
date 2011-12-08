@@ -30,7 +30,7 @@
  *
  * @version    $Id: AgaviExecutionFilter.class.php 4669 2011-05-25 20:53:42Z david $
  */
-class PhpDebugToolbarAgaviExecutionFilter extends AgaviExecutionFilter implements AgaviIActionFilter
+class PhpDebugToolbarAgaviExecutionFilter extends ProjectExecutionFilter
 {
     protected $php_debug_toolbar_section_id = 0;
 
@@ -448,7 +448,6 @@ class PhpDebugToolbarAgaviExecutionFilter extends AgaviExecutionFilter implement
             $response->setContent($output);
         } // PhpDebugToolbar
 	}
-
 }
 
 ?>

@@ -11,7 +11,7 @@
 
         <execution_container class="AgaviExecutionContainer" />
 
-        <execution_filter class="AgaviExecutionFilter" />
+        <execution_filter class="ProjectExecutionFilter" />
 
         <filter_chain class="AgaviFilterChain" />
 
@@ -35,7 +35,7 @@
 
     </ae:configuration>
 
-    <ae:configuration context="web" environment="development.*">
+    <ae:configuration context="web" environment="st.development.*">
         <execution_filter class="PhpDebugToolbarAgaviExecutionFilter" />
     </ae:configuration>
 

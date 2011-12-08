@@ -6,7 +6,9 @@
     <ae:configuration>
 
         <packages>
-            <!-- Will probally be deprecated in favor for twitter-bootstrap. -->
+            <!--
+                Will probally be deprecated in favor for twitter-bootstrap.
+            -->
             <package name="jquery-ui">
                 <javascripts>
                     <script>js/libs/jquery-1.6.4.js</script>
@@ -23,6 +25,9 @@
                 </stylesheets>
             </package>
 
+            <!--
+                This package defines our gui foundation and is included to all deployments.
+            -->
             <package name="twitter-bootstrap">
                 <javascripts>
                     <script>js/libs/jquery-1.6.4.js</script>
@@ -54,9 +59,6 @@
                     <script>js/midas/core/BaseView.js</script>
                     <script>js/midas/core/CommandTriggerList.js</script>
                 </javascripts>
-                <stylesheets>
-                    <script>css/fonts.css</script>
-                </stylesheets>
             </package>
 
             <package name="midas.items.edit" depends="midas.core jquery-ui">
@@ -85,15 +87,15 @@
         </packages>
 
         <deployments>
-            <deployment viewpath="items.edit*">
-                <package ref="midas.items.edit" />
-
-                <javascripts>
-                    <script>js/midas/items/edit/init.js</script>
-                </javascripts>
-            </deployment>
-
-            <deployment viewpath="^(?:(?!items.edit))*$">
+            <!--
+                This is the default deployment of our core stuff,
+                that we want available on all views, except two special cases:
+                1. As the workflow is not allowed to define any layout/gui specific stuff,
+                it is always excluded from the default deployment.
+                2. The items edit-view has not yet been switched to be compatible with twitter-bootstrap,
+                so it's excluded until this has been fixed.
+            -->
+            <deployment viewpath="^(?:(?!items.edit*|workflow.*))*$">
                 <package ref="twitter-bootstrap" />
 
                 <javascripts>
@@ -102,6 +104,14 @@
                 <stylesheets>
                     <script>css/list.css</script>
                 </stylesheets>
+            </deployment>
+
+            <deployment viewpath="items.edit*">
+                <package ref="midas.items.edit" />
+
+                <javascripts>
+                    <script>js/midas/items/edit/init.js</script>
+                </javascripts>
             </deployment>
         </deployments>
 
