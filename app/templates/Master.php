@@ -11,11 +11,6 @@ $dir = (($locale->getCharacterOrientation() == 'right-to-left') ? 'rtl' : 'ltr')
         <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
     </head>
     <body>
-        <?php echo $inner; // print the content layer output ?>
-        <div class="footer">
-<?php if ($us instanceof AgaviISecurityUser && $us->isAuthenticated()) : ?>
-            <a class="logout btn small" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
-<?php endif ?>
-        </div>
+        <?php echo $inner; ?>
     </body>
 </html>

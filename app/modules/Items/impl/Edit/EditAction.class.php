@@ -23,9 +23,9 @@ class Items_EditAction extends ItemsBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        error_log(__FILE__ . __METHOD__);
+        $this->setAttribute('ticket', $parameters->getParameter('ticket'));
 
-        return 'Success';
+        return 'Input';
     }
 }
 

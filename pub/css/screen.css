@@ -22,7 +22,7 @@ textarea, input, select {
 }
 input, select, textarea {
   box-shadow: 0 0.05em 0 #FFFFFF;
-  font-family: "EB Garamond", Garamond, serif;
+  font-family: Georgia, Garamond, serif;
   font-size: 1.2em;
   padding: 0.1em;
 }
@@ -201,8 +201,29 @@ header .personal-info {
 header .personal-info h2 {
   display: none;
 }
+header .personal-info p {
+  float: left;
+  margin-right: 2em;
+}
+header .personal-info a {
+  color: #FFFFFF;
+  font-weight: bold;
+}
+header .personal-info a.logout {
+  text-decoration: none;
+  font-weight: normal;
+  font-size: 12pt;
+  margin: -2px 7px;
+  float: right;
+  display: block;
+  color: #BFBFBF;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+header .personal-info a.logout:hover {
+  text-decoration: underline;
+}
 .slide-panel {
-  padding-top: 85px;
+  padding-top: 100px;
 }
 /* The main form section of the edit success markup. */
 .document-editing {
@@ -298,6 +319,24 @@ header .personal-info h2 {
   background: #bbbbbb;
   opacity: 0.5;
 }
+.document-data .import-data-layoutbox .item-meta-data {
+  height: 118px;
+}
+.document-data .import-data-layoutbox .item-meta-data dl {
+  font-size: 11pt;
+}
+.document-data .import-data-layoutbox .item-meta-data dl dt {
+  font-weight: bold;
+  padding: 5px 0;
+}
+.document-data .import-data-layoutbox .item-meta-data dl dt:first-child {
+  margin-top: 10px;
+}
+.document-data .import-data-layoutbox .item-meta-data dl dd {
+  float: left;
+  margin: -20px 0 20px 120px;
+  width: 80%;
+}
 .document-data .content-panel {
   margin-right: 1em;
 }
@@ -307,7 +346,7 @@ header .personal-info h2 {
   left: 0;
   margin-bottom: 0;
   bottom: 0;
-  top: 130px;
+  top: 185px;
 }
 .document-data .item-content .ui-tabs-panel {
   bottom: 10px;

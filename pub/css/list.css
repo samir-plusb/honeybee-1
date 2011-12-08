@@ -1,9 +1,13 @@
-.top
+body
 {
-    padding-top: 15px;
+    padding-top: 40px;
 }
 
-.pagination a:hover,
+.topbar .topbar-inner
+{
+    position: relative;
+}
+
 .pagination .active a,
 .zebra-striped tbody tr:hover td,
 .zebra-striped tbody tr:hover th
@@ -31,9 +35,10 @@ tfoot tr td
     font-weight: bold;
 }
 
-.search-form
+.topbar .search-form
 {
     position: relative;
+    margin-right: 16px;
 }
 
 .reset-search
@@ -59,19 +64,30 @@ tfoot tr td
     display: none;
 }
 
-.search-message p
-{
-    float: left;
-    margin-right: 1em;
-}
-
-.search-message a
-{
-    text-shadow: none;
-}
-
 .search-message-box
 {
-    top: 22px;
-    height: 40px;
+    margin: 16px 0 0 0;
+    position: static;
+}
+
+.search-message
+{
+    margin: 0;
+}
+
+.logout
+{
+    margin-top: 10px;
+    font-size: 12pt;
+}
+
+.top
+{
+    position: static;
+    margin-top: 16px;
+}
+
+.pagination-top
+{
+    margin: 0 0 16px 0;
 }

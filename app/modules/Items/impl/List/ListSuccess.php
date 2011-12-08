@@ -5,30 +5,29 @@
             <h2 class="left">
                 <a href="<?php echo $ro->gen(NULL); ?>" class="brand"><?php echo $t['_title']; ?></a>
             </h2>
-            <form class="pull-right search-form" action="<?php echo $ro->gen(NULL); ?>" method="GET">
+            <a class="pull-right logout" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
+            <form class="search-form pull-right" action="<?php echo $ro->gen(NULL); ?>" method="GET">
                 <input type="text" name="search_phrase" value="<?php echo isset($t['search_phrase']) ? $t['search_phrase'] : '' ?>" placeholder="Suche" />
                 <a href="#" class="<?php echo isset($t['search_phrase']) ? '' : 'hidden' ?> reset-search">×</a>
             </form>
         </div>
     </div>
 </div>
-
-<section class="container-fluid search-message-box">
 <?php
     if (isset($t['search_phrase']))
     {
 ?>
+<section class="container-fluid search-message-box">
     <div class="alert-message search-message info">
         <p>
             Du hast nach <strong>&#34;<?php echo $t['search_phrase']; ?>&#34;</strong> gesucht.
             Deine Suche ergab <strong><?php echo count($t['listData']); ?> Treffer</strong>.
         </p>
-        <a href="<?php echo $ro->gen('items.list'); ?>">Suche zur&#252;cksetzen</a>
     </div>
+</section>
 <?php
     }
 ?>
-</section>
 
 <div class="container-fluid top">
 <?php

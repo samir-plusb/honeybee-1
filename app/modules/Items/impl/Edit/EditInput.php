@@ -1,3 +1,9 @@
+<?php
+    $ticketData = $t['ticket'];
+    $workflowItem = $ticketData['item'];
+    $importItem = $workflowItem['importItem'];
+    $contentItems = $workflowItem['contentItems'];
+?>
 <header>
     <h1>
         <a href="#home"><?php echo $t['_title']; ?></a>
@@ -8,9 +14,9 @@
             Diese Nachricht wird von <a href="#profile?">Shrink0r</a> bearbeitet.
             Du hast bisher 0 Mails abgehakt.
         </p>
+        <a class="pull-right logout" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
     </aside>
 </header>
-
 <div class="topmenu-container content-menu">
     <menu id="content-item-menu" class="action-button-list">
         <li>
@@ -94,13 +100,13 @@
                     <label for="teaser">
                         Teaser. Die ersten drei Sätze Deines Texts, die Du selber schreiben kannst.
                     </label>
-                    <textarea name="teaser" cols="2" rows="6">&#160;</textarea>
+                    <textarea name="teaser" cols="2" rows="6"></textarea>
                 </div>
                 <div class="input-full">
                     <label for="text">
                         <strong>Text</strong>. Der Rest des Texts. Hier sollst Du vor allem kürzen.
                     </label>
-                    <textarea class="jsb-input-assistive-text" name="text" rows="10" cols="30">&#160;</textarea>
+                    <textarea class="jsb-input-assistive-text" name="text" rows="10" cols="30"></textarea>
                     <input type="hidden" value='{ "mandatory": true }' class="jsb-input-assistive-text-options" />
                 </div>
                 <div class="input-full">
@@ -199,11 +205,11 @@
                 <h3 class="legend">Daten</h3>
                 <dl>
                     <dt>Betreff</dt>
-                    <dd></dd>
+                    <dd><?php echo $importItem['title']; ?></dd>
                     <dt>Von</dt>
-                    <dd></dd>
+                    <dd><?php echo $importItem['source']; ?></dd>
                     <dt>Versanddatum</dt>
-                    <dd>01:00 - 01.01.1970</dd>
+                    <dd><?php echo $importItem['timestamp']; ?></dd>
                 </dl>
             </div>
 
@@ -216,16 +222,7 @@
                 </ul>
                 <div id="content-tabs-1">
                     <div class="input-full">
-                        <textarea readonly="readonly">Lorem ipsum -dolor sit amet-,
-consectetur adipisc--ing elit.
-Aliquam -id elit at - www.heise.de
-libero t-incidunt luctus id:
-http://www.google.de
-quis nulla. Praesent molestie porttitor ultricies.
-Etiam viverra tempor magna, eget rutru
-12 jan 1987
-m erat volutpat non. Aliquam vitae eros urna. Etiam viverra porttitor urna, in blandit purus tincidunt non.
-Donec a adipiscing magna. Etiam consectetur blandit diam, et pretium tellus congue ut.</textarea>
+                        <textarea readonly="readonly"><?php echo strip_tags($importItem['content']); ?></textarea>
                     </div>
                 </div>
             </div>

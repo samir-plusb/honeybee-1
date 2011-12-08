@@ -43,7 +43,7 @@ select,
 textarea
 {
     box-shadow: 0 0.05em 0 #FFFFFF;
-    font-family: "EB Garamond", Garamond, serif;
+    font-family: Georgia, Garamond, serif;
     font-size: 1.2em;
     padding: 0.1em;
 }
@@ -273,12 +273,41 @@ header
         {
             display: none;
         }
+
+        p
+        {
+            float: left;
+            margin-right: 2em;
+        }
+
+        a
+        {
+            color: #FFFFFF;
+            font-weight: bold;
+
+            &.logout
+            {
+                text-decoration: none;
+                font-weight: normal;
+                font-size: 12pt;
+                margin: -2px 7px;
+                float: right;
+                display: block;
+                color: #BFBFBF;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+
+                &:hover
+                {
+                    text-decoration: underline;
+                }
+            }
+        }
     }
 }
 
 .slide-panel
 {
-    padding-top: 85px;
+    padding-top: 100px;
 }
 
 /* The main form section of the edit success markup. */
@@ -412,6 +441,34 @@ header
             background: #bbbbbb;
             opacity: 0.5;
         }
+
+        .item-meta-data
+        {
+            height: 118px;
+
+            dl
+            {
+                font-size: 11pt;
+
+                dt
+                {
+                    font-weight: bold;
+                    padding: 5px 0;
+
+                    &:first-child
+                    {
+                        margin-top: 10px;
+                    }
+                }
+
+                dd
+                {
+                    float: left;
+                    margin: -20px 0 20px 120px;
+                    width: 80%;
+                }
+            }
+        }
     }
 
     .content-panel
@@ -426,7 +483,7 @@ header
         left: 0;
         margin-bottom: 0;
         bottom: 0;
-        top: 130px;
+        top: 185px;
 
         .ui-tabs-panel
         {

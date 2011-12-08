@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations
-	xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
-	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
-	parent="%core.module_dir%/Items/config/validators.xml"
->
-	
-	<ae:configuration>
-		
-		<validators>
-		</validators>
-		
-	</ae:configuration>
-	
+    xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    parent="%core.module_dir%/Workflow/config/validators.xml">
+
+    <ae:configuration>
+        <validators>
+            <validator class="WorkflowTicketValidator" required="true">
+                <arguments>
+                    <argument>ticket</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid data given.</error>
+                </errors>
+            </validator>
+        </validators>
+    </ae:configuration>
 </ae:configurations>

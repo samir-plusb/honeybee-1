@@ -11,7 +11,11 @@
  */
 class Items_ListAction extends ItemsBaseAction
 {
-    const COUCHDB_DATABASE = 'midas_import';
+    const NEWS_WORKFLOW_NAME = 'news';
+
+    const DEFAULT_LIMIT = 30;
+
+    const DEFAULT_OFFSET = 0;
 
     /**
      * Execute the read logic for this action, hence prompt for an asset.
@@ -25,27 +29,31 @@ class Items_ListAction extends ItemsBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
+        $workflowTicketFinder = $this->getContext()->getModel('TicketFinder');
+        $limit = $parameters->getParameter('limit', self::DEFAULT_LIMIT);
+        $offset = $parameters->getParameter('offset', self::DEFAULT_OFFSET);
+        $searchPhrase = $parameters->getParameter('search_phrase', NULL);
         $result = array(
-            'tickets' => array(),
+            'tickets'    => array(),
             'totalCount' => 0
         );
-        $ticketFinder = $this->getContext()->getModel('TicketFinder');
-        $limit = $parameters->getParameter('limit', 30);
-        $offset = $parameters->getParameter('offset', 0);
-        $searchPhrase = $parameters->getParameter('search_phrase', NULL);
 
         if (! empty($searchPhrase))
         {
             $this->setAttribute('search_phrase', $searchPhrase);
-            $result = $ticketFinder->search(
-            strtolower($searchPhrase),
+            $result = $workflowTicketFinder->search(
+                strtolower($searchPhrase),
                 $offset,
                 $limit
             );
         }
         else
         {
-            $result = $ticketFinder->fetchAll($offset, $limit);
+            $result = $workflowTicketFinder->fetchAll(
+                self::NEWS_WORKFLOW_NAME,
+                $offset,
+                $limit
+            );
         }
 
         $this->setAttribute('offset', $offset);
@@ -60,9 +68,8 @@ class Items_ListAction extends ItemsBaseAction
     {
         parent::handleError($parameters);
 
-        var_dump($this->getContainer()->getValidationManager()->getErrorMessages());exit;
+        return 'Error';
     }
-
 
     /**
      * (non-PHPdoc)
@@ -72,7 +79,6 @@ class Items_ListAction extends ItemsBaseAction
     {
         return TRUE;
     }
-
 }
 
 ?>
