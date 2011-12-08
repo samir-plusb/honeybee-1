@@ -20,10 +20,10 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
         ));
     }
 
-    public function fetchAll($offset = 0, $limit = self::DEFAULT_LIMIT)
+    public function fetchAll($workflowName, $offset = 0, $limit = self::DEFAULT_LIMIT)
     {
         $query = new Elastica_Query(
-            new Elastica_Query_MatchAll()
+            new Elastica_Query_Term(array('workflow' => $workflowName))
         );
         $query->setLimit($limit)->setFrom($offset);
         $index = $this->elasticClient->getIndex('midas');
@@ -103,3 +103,5 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
         return array_values($tickets);
     }
 }
+
+?>

@@ -297,7 +297,7 @@ class WorkflowHandler
     {
         if ($ticket->isNew())
         {
-            $ticket->setWorkflow($this);
+            $ticket->setWorkflow($this->getName());
             $ticket->setCurrentStep($this->firstStep);
         }
         $this->ticket = $ticket;
