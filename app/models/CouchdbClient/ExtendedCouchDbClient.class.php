@@ -190,7 +190,6 @@ class ExtendedCouchDbClient
             CURLOPT_FRESH_CONNECT => 0,
             CURLOPT_FOLLOWLOCATION => 0,
             CURLOPT_TIMEOUT => 30,
-            CURLOPT_ENCODING => 'gzip,deflate',
             CURLOPT_PROXY => '',
             CURLOPT_FAILONERROR => 0,
             CURLOPT_HTTPHEADER => $headers,
@@ -634,7 +633,20 @@ class ExtendedCouchDbClient
         $this->lastMethod = $method;
         $this->lastResponse = NULL;
 
-        $curlHandle = curl_init($uri);
+        if (! is_resource($this->curlHandle))
+        {
+            $curlHandle = $this->curlHandle = curl_init($uri);
+        }
+        else
+        {
+            $curlHandle = $this->curlHandle;
+            // reset existing handle
+            curl_setopt_array($curlHandle, array(
+                CURLOPT_URL => $uri,
+                CURLOPT_HEADER => 0,
+                CURLOPT_HTTPGET => 1,
+            ));
+        }
         curl_setopt_array($curlHandle, $this->curlOptions);
 
         switch ($method)
@@ -840,7 +852,7 @@ class ExtendedCouchDbClient
         }
         else
         {
-            $kreq = array('keys' => $keys);
+            $kreq = array('keys' => array_values($keys));
             $curlHandle = $this->getCurlHandle($uri, self::METHOD_POST);
             curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($kreq));
         }
