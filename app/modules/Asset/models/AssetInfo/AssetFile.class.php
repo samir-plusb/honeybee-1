@@ -237,6 +237,7 @@ class AssetFile implements IAssetFile
         curl_setopt($curlHandle, CURLOPT_URL, $assetUri);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 0);
         curl_setopt($curlHandle, CURLOPT_FILE, $filePtr);
+        curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, 1);
         curl_exec($curlHandle);
 
         $error = curl_error($curlHandle);
@@ -247,7 +248,7 @@ class AssetFile implements IAssetFile
         if (200 > $respCode || 300 <= $respCode || $errorNum || $error)
         {
             throw new Exception(
-                "Failed to download asset binary from uri: " . $assetUri
+                "Failed to download asset binary from uri: " . $assetUri . " resp code " . $respCode
             );
         }
 
