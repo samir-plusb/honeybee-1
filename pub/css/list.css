@@ -51,6 +51,7 @@ tfoot tr td
     font-size: 23px;
     font-weight: bold;
     background: none;
+    top: 0;
 }
 
 .reset-search:hover
@@ -87,7 +88,19 @@ tfoot tr td
     margin-top: 16px;
 }
 
-.pagination-top
+.pagination:first-child
 {
-    margin: 0 0 16px 0;
+    margin-top: 0;
 }
+.pagination .disabled span
+{
+    background-color: transparent;
+    color: #BFBFBF;
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    float: left;
+    line-height: 34px;
+    padding: 0 14px;
+    text-decoration: none;
+    display: block;
+}
+    
