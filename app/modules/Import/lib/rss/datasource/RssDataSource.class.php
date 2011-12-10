@@ -60,7 +60,7 @@ class RssDataSource extends ImportBaseDataSource
      */
     protected function forwardCursor()
     {
-        $this->cursorPos ++;
+        $this->cursorPos++;
         $items = $this->feedData->getItems();
         return isset($items[$this->cursorPos]);
     }
