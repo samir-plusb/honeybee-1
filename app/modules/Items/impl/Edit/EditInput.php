@@ -222,7 +222,7 @@
                 </ul>
                 <div id="content-tabs-1">
                     <div class="input-full">
-                        <textarea readonly="readonly"><?php echo strip_tags($importItem['content']); ?></textarea>
+                        <textarea readonly="readonly"><?php echo strip_tags(htmlspecialchars_decode($importItem['content'])); ?></textarea>
                     </div>
                 </div>
             </div>
