@@ -66,10 +66,12 @@ class ImapDataSource extends ImportBaseDataSource
     {
         if ($this->config->getSetting(ImapDataSourceConfig::PARAM_MAILITEM, FALSE))
         {
+            $this->logInfo("Initializing with mail data given from config...");
             $this->maxCount = 1;
         }
         else
         {
+            $this->logInfo("Initializing with mailbox connection for pulling data ...");
             $this->connectMailbox();
 
             if (($header = imap_check($this->mailBoxConnection)))

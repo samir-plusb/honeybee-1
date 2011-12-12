@@ -129,8 +129,7 @@ class NewswireDataSource extends ImportBaseDataSource
     protected function fetchData()
     {
         $file = $this->iterator->current();
-        $__logger=AgaviContext::getInstance()->getLoggerManager();
-        $__logger->log(__CLASS__.' import: '.$file, AgaviILogger::INFO);
+        $this->logInfo('Importing file: ' . $file);
         $content = file_get_contents($file);
         $this->lastItemModifiedTime = $this->iterator->getMTime();
 
@@ -179,8 +178,7 @@ class NewswireDataSource extends ImportBaseDataSource
         $record = $data['record'];
         if ($record instanceof NewswireDataRecord)
         {
-            $__logger=AgaviContext::getInstance()->getLoggerManager();
-            $__logger->log(__CLASS__.' … new ID: '.$record->getIdentifier());
+            $this->logInfo("… new ID: " . $record->getIdentifier());
             $this->updateTimestamp($this->lastItemModifiedTime);
         }
     }

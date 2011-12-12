@@ -42,27 +42,14 @@ abstract class ImportBaseDataSource implements IDataSource
      */
     private $description;
 
+    /**
+     * Holds the logger we use to propagte our log messages.
+     *
+     * @var array
+     */
+    private $loggers;
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-
-    /**
-     * Return our name.
-     *
-     * @return      string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Return our description.
-     *
-     * @return      string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
 
     // ---------------------------------- <ABSTRACT METHODS> -------------------------------------
 
@@ -105,6 +92,13 @@ abstract class ImportBaseDataSource implements IDataSource
         $this->description = $description;
         $this->config = $config;
         $this->name = $name;
+
+        $loggerManager = AgaviContext::getInstance()->getLoggerManager();
+        $this->loggers = array(
+            'debug' => $loggerManager->getLogger('debug'),
+            'info'  => $loggerManager->getLogger('app'),
+            'error' => $loggerManager->getLogger('error')
+        );
     }
 
     /**
@@ -131,19 +125,39 @@ abstract class ImportBaseDataSource implements IDataSource
         {
             return FALSE;
         }
-        
+
         $record = $this->createRecord(
             $this->fetchData()
         );
-        
+
         $validationResult = $record->validate();
 
         if (!$validationResult->hasError())
         {
             return $record;
         }
-        
+
         return NULL;
+    }
+
+    /**
+     * Return our name.
+     *
+     * @return      string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Return our description.
+     *
+     * @return      string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     // ---------------------------------- </IDataSource IMPL> ------------------------------------
@@ -185,13 +199,13 @@ abstract class ImportBaseDataSource implements IDataSource
                 )
             );
         }
-        
+
         return $this->verifyRecordImplementation($record);
     }
-    
+
     /**
      * Returns the IDataRecord implementation to use for creating new record instances.
-     * 
+     *
      * @return      string
      */
     protected function getRecordImplementor()
@@ -207,16 +221,16 @@ abstract class ImportBaseDataSource implements IDataSource
                 )
             );
         }
-        
+
         return $recordClass;
     }
-    
+
     /**
      * Verify that the given object is an implementation of the IDataRecord interface.
-     * 
+     *
      * @param       object $record
-     * 
-     * @return      IDataRecord 
+     *
+     * @return      IDataRecord
      */
     protected function verifyRecordImplementation($record)
     {
@@ -230,18 +244,39 @@ abstract class ImportBaseDataSource implements IDataSource
                 )
             );
         }
-        
+
         return $record;
     }
-    
+
     /**
      * Return the origin of our current data record.
-     * 
+     *
      * @return      string
      */
     protected function getCurrentOrigin()
     {
         return '';
+    }
+
+    protected function logDebug($message)
+    {
+        $this->loggers['debug']->log(
+            new AgaviLoggerMessage("[".get_class($this)."] $message", AgaviLogger::DEBUG)
+        );
+    }
+
+    protected function logInfo($message)
+    {
+        $this->loggers['info']->log(
+            new AgaviLoggerMessage("[".get_class($this)."] $message", AgaviLogger::INFO)
+        );
+    }
+
+    protected function logError($message)
+    {
+        $this->loggers['error']->log(
+            new AgaviLoggerMessage("[".get_class($this)."] $message", AgaviLogger::ERROR)
+        );
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------

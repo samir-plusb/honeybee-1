@@ -157,18 +157,24 @@ abstract class BaseCouchDatabaseSetup implements ICouchDatabaseSetup
             }
 
             $stat = $this->getDatabase()->createDesignDocument(NULL, $docid, $doc);
+            $loggerManager = AgaviContext::getInstance()->getLoggerManager();
             if (isset($stat['ok']))
             {
-                $__logger=AgaviContext::getInstance()->getLoggerManager();
-                $__logger->log(
-                    'Successfully saved '.$this->getDatabase()->getDatabaseName().'_design/'.$docid,
-                    AgaviILogger::INFO);
+                $loggerManager->getLogger('app')->log(
+                    new AgaviLoggerMessage(
+                        '[BaseCouchDatabaseSetup] Successfully saved '.$this->getDatabase()->getDatabaseName().'_design/'.$docid,
+                        AgaviLogger::INFO
+                    )
+                );
             }
             else
             {
-                $__logger=AgaviContext::getInstance()->getLoggerManager();
-                $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__, AgaviILogger::ERROR);
-                $__logger->log(print_r($stat,1), AgaviILogger::ERROR);
+                $loggerManager->getLogger('error')->log(
+                    new AgaviLoggerMessage(
+                        '[BaseCouchDatabaseSetup]' . __METHOD__.":".__LINE__." : ".__FILE__ . PHP_EOL . print_r($stat, TRUE),
+                        AgaviLogger::ERROR
+                    )
+                );
             }
         }
     }
