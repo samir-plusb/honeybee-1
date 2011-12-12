@@ -633,7 +633,7 @@ class ExtendedCouchDbClient
         $this->lastMethod = $method;
         $this->lastResponse = NULL;
 
-        if (! is_resource($this->curlHandle))
+        if (TRUE || ! is_resource($this->curlHandle))
         {
             $curlHandle = $this->curlHandle = curl_init($uri);
         }
