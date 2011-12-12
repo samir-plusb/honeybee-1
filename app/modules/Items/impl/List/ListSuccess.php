@@ -2,7 +2,7 @@
     $searchPhrase = isset($t['search_phrase']) ? $t['search_phrase'] : FALSE;
     $limit = $t['limit'];
 ?>
-<!-- 
+<!--
     Midas Header:
         Presents common information for the current session
         and holds the list's search box.
@@ -15,7 +15,12 @@
             </h2>
             <a class="pull-right logout" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
             <form class="search-form pull-right" action="<?php echo $ro->gen(NULL); ?>" method="GET">
-                <input type="text" name="limit" value="<?php echo $limit; ?>" />
+                <!-- <select name="limit">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select> -->
                 <input type="text" name="search_phrase" value="<?php echo $searchPhrase ? $searchPhrase : '' ?>" placeholder="Suche" />
                 <input type="hidden" name="offset" value="0" />
                 <a href="#" class="<?php echo $searchPhrase ? '' : 'hidden' ?> reset-search">×</a>
@@ -24,7 +29,7 @@
     </div>
 </header>
 
-<!-- 
+<!--
     Searchinfo-Box Section:
         Displays information on the current search result.
 -->
@@ -46,7 +51,7 @@
     }
 ?>
 
-<!-- 
+<!--
     News-Table Section:
         Presents the list data and provides buttons and links
         that run per item based operations, such as entering an item's workflow,
@@ -54,7 +59,7 @@
         It also wraps the upper pagination.
 -->
 <section class="container-fluid top">
-    
+
 <?php
     echo $slots['pagination'];
 ?>
@@ -72,7 +77,7 @@
             </tr>
         </thead>
         <tbody>
-            
+
 <?php
     foreach ($t['listData'] as $ticketData)
     {
@@ -83,7 +88,7 @@
             $date = new DateTime($ticketData['ts']);
             $state = isset($ticketData['step']) ? $ticketData['step'] : 'Neu';
 ?>
-            
+
             <tr>
                 <td class="title">
                     <a href="<?php echo $ro->gen('workflow.run', array('ticket' => $ticketData['_id'])); ?>">
@@ -96,32 +101,32 @@
                 <td class="date">
                     <?php echo $date->format('Y-m-d H:i:s'); ?>
                 </td>
-                
+
 <?php
         if (!isset($ticket['step']))
         {
 // @todo A ticket's step should always be consistently available.
 // Ensure the latter and remove isset hack.
 ?>
-                
+
                 <td class="state">
                     <span class="label success">Neu</span>
                 </td>
-                
+
 <?php
         }
         else
         {
 ?>
-                
+
                 <td class="state">
                     <?php echo $state; ?>
                 </td>
-                
+
 <?php
         }
 ?>
-                
+
                 <td class="category"><?php echo empty($importItem['category']) ? '&#160;' : $importItem['category']; ?></td>
                 <td class="district">&#160;<!-- Take the district of the first content-item? --></td>
                 <td class="priority">&#160;<!-- Find out priority based on content-items? --></td>
@@ -129,20 +134,20 @@
                     <a class="btn small danger">L&#246;schen</a>
                 </td>
             </tr>
-            
+
 <?php
     }
 ?>
-            
+
         </tbody>
-        
+
 <?php
     if (10 <= count($t['listData']))
     {
 // If we have more rows than we assume fit on to the viewport without scrolling,
 // display a table footer with the column names and a pagination below the table too.
 ?>
-        
+
         <tfoot>
             <tr>
                 <td>Titel</td>
@@ -155,17 +160,17 @@
                 <td>Actions</td>
             </tr>
         </tfoot>
-        
+
 <?php
     }
 ?>
-        
+
     </table>
-    
+
 <?php
     if (10 <= count($t['listData']))
     {
         echo $slots['pagination'];
-    } 
+    }
 ?>
 </section>

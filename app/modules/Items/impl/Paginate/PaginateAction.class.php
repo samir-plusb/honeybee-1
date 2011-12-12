@@ -39,7 +39,7 @@ class Items_PaginateAction extends ItemsBaseAction
      */
     public function isSecure()
     {
-        return TRUE;
+        return FALSE;
     }
 }
 
