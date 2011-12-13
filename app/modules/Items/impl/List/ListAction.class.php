@@ -17,6 +17,10 @@ class Items_ListAction extends ItemsBaseAction
 
     const DEFAULT_OFFSET = 0;
 
+    const DEFAULT_SORT_FIELD = 'timestamp';
+
+    const DEFAULT_SORT_DIRECTION = 'desc';
+
     /**
      * Execute the read logic for this action, hence prompt for an asset.
      *
@@ -29,28 +33,35 @@ class Items_ListAction extends ItemsBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $workflowTicketFinder = $this->getContext()->getModel('TicketFinder');
+        $itemFinder = $this->getContext()->getModel('ItemFinder');
         $limit = $parameters->getParameter('limit', self::DEFAULT_LIMIT);
         $offset = $parameters->getParameter('offset', self::DEFAULT_OFFSET);
-        $searchPhrase = $parameters->getParameter('search_phrase', NULL);
+        $searchPhrase = $parameters->getParameter('search_phrase');
+        $sorting = array(
+            'direction' => $parameters->getParameter('sort[direction]', self::DEFAULT_SORT_DIRECTION),
+            'field'     => $parameters->getParameter('sort[field]', self::DEFAULT_SORT_FIELD),
+        );
+
         $result = array(
             'tickets'    => array(),
             'totalCount' => 0
         );
-
         if (! empty($searchPhrase))
         {
             $this->setAttribute('search_phrase', $searchPhrase);
-            $result = $workflowTicketFinder->search(
+            $result = $itemFinder->search(
                 strtolower($searchPhrase),
+                $sorting['field'],
+                $sorting['direction'],
                 $offset,
                 $limit
             );
         }
         else
         {
-            $result = $workflowTicketFinder->fetchAll(
-                self::NEWS_WORKFLOW_NAME,
+            $result = $itemFinder->fetchAll(
+                $sorting['field'],
+                $sorting['direction'],
                 $offset,
                 $limit
             );
@@ -58,8 +69,9 @@ class Items_ListAction extends ItemsBaseAction
 
         $this->setAttribute('offset', $offset);
         $this->setAttribute('limit', $limit);
-        $this->setAttribute('tickets', $result['tickets']);
+        $this->setAttribute('items', $result['items']);
         $this->setAttribute('totalCount', $result['totalCount']);
+        $this->setAttribute('sorting', $sorting);
 
         return 'Success';
     }
@@ -67,7 +79,13 @@ class Items_ListAction extends ItemsBaseAction
     public function handleError(AgaviRequestDataHolder $parameters)
     {
         parent::handleError($parameters);
+        $errors = array();
 
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
+        {
+            $errors[implode(', ', array_values($errMsg['errors']))] = $errMsg['message'];
+        }
+        $this->setAttribute('error_messages', $errors);
         return 'Error';
     }
 

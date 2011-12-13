@@ -12,7 +12,6 @@
  */
 class WorkflowTicket extends AgaviParameterHolder implements Serializable
 {
-
     /**
      * document id in database
      *

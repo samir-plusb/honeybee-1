@@ -5,9 +5,9 @@
 	parent="%core.module_dir%/Items/config/validators.xml"
 >
 
-	<ae:configuration>
+    <ae:configuration>
 
-		<validators>
+        <validators>
             <validator class="string" name="invalid_search_phrase" required="false" >
                 <arguments>
                     <argument>search_phrase</argument>
@@ -21,7 +21,7 @@
                     <error for="max">The search_phrase may not exceed a length of 50 chars.</error>
                 </errors>
             </validator>
-            
+
             <validator class="number" name="invalid_offset" required="false" >
                 <arguments>
                     <argument>offset</argument>
@@ -33,7 +33,7 @@
                     <error for="min">The offset must be at least 0.</error>
                 </errors>
             </validator>
-            
+
             <validator class="number" name="invalid_limit" required="false" >
                 <arguments>
                     <argument>limit</argument>
@@ -45,8 +45,26 @@
                     <error for="min">The limit must be at least 0.</error>
                 </errors>
             </validator>
-		</validators>
+        </validators>
 
-	</ae:configuration>
+        <validator class="inarray" name="invalid_sort_direction" required="false" >
+            <arguments base="sort">
+                <argument>direction</argument>
+            </arguments>
+            <ae:parameters>
+                <ae:parameter name="values">asc,desc</ae:parameter>
+            </ae:parameters>
+        </validator>
+
+        <validator class="inarray" name="invalid_sort_field" required="false" >
+            <arguments base="sort">
+                <argument>field</argument>
+            </arguments>
+            <ae:parameters>
+                <ae:parameter name="values">title,source,timestamp,state,rubric,priority,district</ae:parameter>
+            </ae:parameters>
+        </validator>
+
+    </ae:configuration>
 
 </ae:configurations>

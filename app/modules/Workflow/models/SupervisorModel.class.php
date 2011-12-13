@@ -8,6 +8,10 @@
  * @author tay
  * @version $Id$
  *
+ * Basic workflow constraints are as follow:
+ * There may be IWorkflowItems without tickets (new item) but no WorkflowTicke without an IWorkflowItem.
+ * When a ticket without an item is encountered the supervisor raises an exception to propagate the inconsistence
+ * and prevent the domain from corrupting our data's integrity.
  */
 
 class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISingletonModel
@@ -51,7 +55,6 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
         return AgaviContext::getInstance()->getModel('Supervisor', 'Workflow');
     }
 
-
     /**
      * (non-PHPdoc)
      * @see AgaviModel::initialize()
@@ -63,7 +66,6 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
         $this->couchClient = $database->getConnection();
     }
 
-
     /**
      * get couchdb client handle instance from agavi database manager
      *
@@ -73,7 +75,6 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
     {
         return $this->couchClient;
     }
-
 
     /**
      * get item peer handler instance to access import items in the database
@@ -88,7 +89,6 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
         }
         return $this->itemPeer;
     }
-
 
     /**
      * get ticket peer handler instance to access tickets in the database
@@ -119,10 +119,9 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
         {
             throw new WorkflowException("Received create notification for an existing ticket");
         }
+
         $ticket = $this->getTicketPeer()->createTicketByWorkflowItem($item);
         $item->setTicket($ticket);
-        $this->getItemPeer()->storeItem($item);
-
         $this->processTicket($ticket);
     }
 
@@ -164,7 +163,7 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
             $code = $workflow->run($ticket);
         }
 
-        if (WorkflowHandler::STATE_ERROR == $code)
+        if (WorkflowHandler::STATE_ERROR === $code)
         {
             $message = $ticket->getPluginResult()->getMessage()
                 ? $ticket->getPluginResult()->getMessage()
@@ -172,13 +171,26 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
             throw new WorkflowException($message, WorkflowException::UNEXPECTED_EXIT_CODE);
         }
 
+        $result = NULL;
         if ($ticket->getPluginResult() instanceof WorkflowInteractivePluginResult)
         {
-            return $ticket->getPluginResult()->getResponse();
+            $result = $ticket->getPluginResult()->getResponse();
         }
-        return NULL;
-    }
 
+        /**
+         * Sync our item's state with the ticket for search/data convenience,
+         * as we can now ask an item about it's (eventuell)state without needing to refer to it's tickets.
+         */
+        $this->getItemPeer()->storeItem(
+            $ticket->getWorkflowItem()->updateCurrentState(array(
+                'workflow' => $ticket->getWorkflow(),
+                'step'     => $ticket->getCurrentStep(),
+                'owner'    => $ticket->getCurrentOwner()
+            ))
+        );
+
+        return $result;
+    }
 
     /**
      * get a new WorkflowHandler instance for a named workflow
@@ -226,7 +238,6 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
         // return only fresh instances
         return clone $workflow;
     }
-
 }
 
 ?>

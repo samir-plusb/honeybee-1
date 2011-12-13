@@ -52,10 +52,10 @@ class WorkflowTicketPeer
         $this->saveTicket($ticket);
         return $ticket;
     }
-    
+
     public function getTickets($limit = 0, $offset = 0)
     {
-        
+
     }
 
     /**

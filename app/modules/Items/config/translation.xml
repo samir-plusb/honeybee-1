@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/translation/1.0">
+    <ae:configuration>
+
+        <translators default_domain="items.errors">
+            <translator domain="items">
+                <message_translator class="AgaviSimpleTranslator">
+
+                    <ae:parameter name="structure">
+                        <ae:parameter name="de">
+                            <ae:parameter name="title">Titel</ae:parameter>
+                            <ae:parameter name="source">Quelle</ae:parameter>
+                            <ae:parameter name="timestamp">Eingangsdatum</ae:parameter>
+                            <ae:parameter name="state">Status</ae:parameter>
+                            <ae:parameter name="category">Rubrik</ae:parameter>
+                            <ae:parameter name="district">District</ae:parameter>
+                            <ae:parameter name="priority">Priority</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+
+                    <ae:parameter name="workflow">
+                        <ae:parameter name="de">
+                            <ae:parameter name="refine">Neu</ae:parameter>
+                        </ae:parameter>
+                    <ae:parameter>
+
+                    <ae:parameter name="ui">
+                        <ae:parameter name="de">
+                            <ae:parameter name="Login">Anmeldung</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+
+                    <ae:parameter name="errors">
+                        <ae:parameter name="de">
+                            <ae:parameter name="This combination of username and password is invalid.">Die Kombination von Benutzername und Kennwort ist ungültig.</ae:parameter>
+                            <ae:parameter name="Failed authentication attempt for username %1$s, require group membership of '%2$s'">Fehlende Gruppe '%2$s' für Benutzer '%1$s'.</ae:parameter>
+                            <ae:parameter name="Login Error">Fehler in der Anmeldung</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+
+                </message_translator>
+
+            </translator>
+        </translators>
+
+    </ae:configuration>
+
+</ae:configurations>

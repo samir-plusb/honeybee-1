@@ -44,11 +44,13 @@ class WorkflowItemDataImport extends BaseDataImport
         $record = $this->getCurrentRecord();
         $importData = $record->toArray();
         unset ($importData[ImportBaseDataRecord::PROP_IDENT]);
-        /* @var $supervisor Workflow_SupervisorModel */
-        $supervisor = AgaviContext::getInstance()->getModel('Supervisor', 'Workflow');
-        $workflowItem = $supervisor->getItemPeer()->getItemByIdentifier($record->getIdentifier());
+        
         try
         {
+            /* @var $supervisor Workflow_SupervisorModel */
+            $supervisor = AgaviContext::getInstance()->getModel('Supervisor', 'Workflow');
+            $workflowItem = $supervisor->getItemPeer()->getItemByIdentifier($record->getIdentifier());
+
             if (! $workflowItem)
             {
                 $this->createWorkflowItem($record->getIdentifier(), $importData);
@@ -65,11 +67,11 @@ class WorkflowItemDataImport extends BaseDataImport
         }
         return TRUE;
     }
-    
+
     /**
      * Create a new workflow item.
-     * 
-     * @param array $importData 
+     *
+     * @param array $importData
      */
     protected function createWorkflowItem($identifier, array $importData)
     {
@@ -84,11 +86,11 @@ class WorkflowItemDataImport extends BaseDataImport
             $supervisor->onWorkflowItemCreated($workflowItem);
         }
     }
-    
+
     /**
      * Update an existing workflow item.
-     * 
-     * @param array $importData 
+     *
+     * @param array $importData
      */
     protected function updateWorkflowItem(IWorkflowItem $workflowItem, array $importData)
     {
@@ -100,7 +102,7 @@ class WorkflowItemDataImport extends BaseDataImport
             $supervisor->onWorkflowItemUpdated($workflowItem);
         }
     }
-    
+
     protected function notifyEnabled()
     {
         return $this->config->getSetting(

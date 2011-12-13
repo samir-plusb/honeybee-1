@@ -89,7 +89,7 @@ class ImportItem implements IImportItem
      * @var array
      */
     protected $geoData;
-    
+
     /**
      * Creates a new ImportItem instance.
      */
@@ -222,6 +222,29 @@ class ImportItem implements IImportItem
     }
 
     /**
+     * Update the item's modified timestamp.
+     * If the created timestamp has not yet been set it also assigned.
+     *
+     * @param AgaviUser $user An optional user to use instead of resolving the current session user.
+     *
+     * @return IWorkflowItem This instance for fluent api support.
+     */
+    public function touch(AgaviUser $user = NULL)
+    {
+        $user = $user ? $user : AgaviContext::getInstance()->getUser();
+        $value = array(
+            'date' => date(DATE_ISO8601),
+            'user' => $user->getParameter('username', 'system')
+        );
+        if (! $this->created)
+        {
+            $this->created = $value;
+        }
+        $this->lastModified = $value;
+        return $this;
+    }
+
+    /**
      * Returns an array representation of the IImportItem.
      *
      * @return string
@@ -241,12 +264,12 @@ class ImportItem implements IImportItem
         }
         return $data;
     }
-    
+
     /**
      * Convenience method for setting multiple values at once.
-     * 
-     * @param array $values 
-     * 
+     *
+     * @param array $values
+     *
      * @see IImportItem::applyValues()
      */
     public function applyValues(array $values)
@@ -267,14 +290,14 @@ class ImportItem implements IImportItem
             }
         }
     }
-    
+
     /**
      * Hydrates the given data into the item.
      * This method is used to internally setup our state
      * and has privleged write access to all properties.
      * Properties that are set during hydrate dont mark the item as modified.
-     * 
-     * @param array $data 
+     *
+     * @param array $data
      */
     protected function hydrate(array $data)
     {
@@ -288,7 +311,7 @@ class ImportItem implements IImportItem
             if (array_key_exists($prop, $data))
             {
                 $setter = 'set'.ucfirst($prop);
-                
+
                 if (is_callable(array($this, $setter)))
                 {
                     $this->$setter($data[$prop]);

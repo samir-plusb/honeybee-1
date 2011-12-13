@@ -6,7 +6,7 @@
 
     <ae:configuration>
         <validators>
-            <validator class="WorkflowTicketValidator" required="true">
+            <validator class="WorkflowTicketValidator" required="true" translation_domain="items.errors">
                 <arguments>
                     <argument>ticket</argument>
                 </arguments>

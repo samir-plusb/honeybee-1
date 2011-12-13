@@ -69,6 +69,18 @@ class WorkflowItem implements IWorkflowItem
     protected $attributes = array();
 
     /**
+     * Holds the current state of the workflow item,
+     * meaning, workflow step and owner.
+     *
+     * @var array
+     */
+    protected $currentState = array(
+        'workflow' => NULL,
+        'step'     => NULL,
+        'owner'    => NULL
+    );
+
+    /**
      * Creates a new WorkflowItem instance.
      */
     public function __construct(array $data = array())
@@ -100,10 +112,13 @@ class WorkflowItem implements IWorkflowItem
      * Bump the item's revision.
      *
      * @param string $revision
+     *
+     * @return IWorkflowItem This instance for fluent api support.
      */
     public function bumpRevision($revision)
     {
         $this->revision = $revision;
+        return $this;
     }
 
     /**
@@ -120,10 +135,37 @@ class WorkflowItem implements IWorkflowItem
      * Set the WorklflowTicket that is responseable for this item.
      *
      * @param WorkflowTicket $ticket
+     *
+     * @return IWorkflowItem This instance for fluent api support.
      */
     public function setTicket(WorkflowTicket $ticket)
     {
         $this->ticketId = $ticket->getIdentifier();
+        return $this;
+    }
+
+    /**
+     * Return the item's current state in the workflow,
+     * meaning the workflow step it's in and who owns it at the moment.
+     *
+     * @return array
+     */
+    public function getCurrentState()
+    {
+        return $this->currentState;
+    }
+
+    /**
+     * Updates the item's current workflow state (step and owner).
+     *
+     * @param string $state
+     *
+     * @return IWorkflowItem This instance for fluent api support.
+     */
+    public function updateCurrentState(array $state)
+    {
+        $this->currentState = $state;
+        return $this;
     }
 
     /**
@@ -144,6 +186,8 @@ class WorkflowItem implements IWorkflowItem
      * If the created timestamp has not yet been set it also assigned.
      *
      * @param AgaviUser $user An optional user to use instead of resolving the current session user.
+     *
+     * @return IWorkflowItem This instance for fluent api support.
      */
     public function touch(AgaviUser $user = NULL)
     {
@@ -157,6 +201,7 @@ class WorkflowItem implements IWorkflowItem
             $this->created = $value;
         }
         $this->lastModified = $value;
+        return $this;
     }
 
     /**
@@ -188,6 +233,8 @@ class WorkflowItem implements IWorkflowItem
      * @param mixed $importData Either an array or IImportItem instance.
      *
      * @throws Exception If the workflow-item allready has an import-item or an invalid data-type is passed.
+     *
+     * @todo Rename this methosd to set or whatever, but create* is not a good name.
      */
     public function createImportItem($importData)
     {
@@ -200,6 +247,7 @@ class WorkflowItem implements IWorkflowItem
         {
             $importData['parentIdentifier'] = $this->getIdentifier();
             $this->importItem = new ImportItem($importData);
+            $this->importItem->touch();
         }
         elseif ($importData instanceof IImportItem)
         {
@@ -227,6 +275,7 @@ class WorkflowItem implements IWorkflowItem
             throw new Exception("No import-item to update.");
         }
         $this->importItem->applyValues($importData);
+        $this->importItem->touch();
     }
 
     /**
@@ -262,7 +311,7 @@ class WorkflowItem implements IWorkflowItem
     {
         $props = array(
             'identifier', 'revision', 'created', 'lastModified',
-            'importItem', 'attributes', 'ticketId'
+            'importItem', 'attributes', 'ticketId', 'currentState'
         );
         $data = array();
         foreach ($props as $prop)
@@ -301,7 +350,9 @@ class WorkflowItem implements IWorkflowItem
      */
     protected function hydrate(array $data)
     {
-        $simpleProps = array('identifier', 'revision', 'created', 'lastModified', 'attributes', 'ticketId');
+        $simpleProps = array(
+            'identifier', 'revision', 'created',
+            'lastModified', 'attributes', 'ticketId', 'currentState');
         $couchMappings = array('identifier' => '_id', 'revision' => '_rev');
         foreach ($simpleProps as $prop)
         {
@@ -309,7 +360,8 @@ class WorkflowItem implements IWorkflowItem
                 && array_key_exists($couchMappings[$prop], $data)
                 || array_key_exists($prop, $data))
             {
-                $value = isset($couchMappings[$prop]) && array_key_exists($couchMappings[$prop], $data)
+                $value = (isset($couchMappings[$prop])
+                    && array_key_exists($couchMappings[$prop], $data))
                     ? $data[$couchMappings[$prop]]
                     : $data[$prop];
                 $setter = 'set'.ucfirst($prop);

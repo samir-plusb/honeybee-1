@@ -46,6 +46,8 @@ interface IWorkflowItem
      * Bump the item's revision.
      *
      * @param string $revision
+     *
+     * @return IWorkflowItem This instance for fluent api support.
      */
     public function bumpRevision($revision);
 
@@ -60,6 +62,8 @@ interface IWorkflowItem
      * Set the item's parent ticket.
      *
      * @param WorkflowTicket $ticket
+     *
+     * @return IWorkflowItem This instance for fluent api support.
      */
     public function setTicket(WorkflowTicket $ticket);
 
@@ -86,6 +90,8 @@ interface IWorkflowItem
      * If the created timestamp has not yet been set it also assigned.
      *
      * @param AgaviUser $user An optional user to use instead of resolving the current session user.
+     *
+     * @return IWorkflowItem This instance for fluent api support.
      */
     public function touch(AgaviUser $user = NULL);
 
@@ -106,6 +112,23 @@ interface IWorkflowItem
      * @return array
      */
     public function getLastModified();
+
+    /**
+     * Return the item's current state in the workflow,
+     * meaning the workflow step it's in and who owns it at the moment.
+     *
+     * @return array
+     */
+    public function getCurrentState();
+
+    /**
+     * Updates the item's current workflow state (step and owner).
+     *
+     * @param string $state
+     *
+     * @return IWorkflowItem This instance for fluent api support.
+     */
+    public function updateCurrentState(array $state);
 
     /**
      * Return our related import item.

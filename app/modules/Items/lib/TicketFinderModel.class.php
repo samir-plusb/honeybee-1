@@ -1,6 +1,6 @@
 <?php
 
-class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
+class TicketFinderModel extends AgaviModel implements AgaviISingletonModel, IFinder
 {
     const DEFAULT_LIMIT = 50;
 
@@ -20,14 +20,15 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
         ));
     }
 
-    public function fetchAll($workflowName, $offset = 0, $limit = self::DEFAULT_LIMIT)
+    public function fetchAll($sortField, $sortDirection, $offset = 0, $limit = self::DEFAULT_LIMIT)
     {
         $query = new Elastica_Query(
             new Elastica_Query_Term(
-                array('workflow' => $workflowName)
+                array('workflow' => 'news')
             )
         );
         $query->setLimit($limit)->setFrom($offset);
+
         $index = $this->elasticClient->getIndex('midas');
         $type = $index->getType('ticket');
 
@@ -39,7 +40,6 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
     public function search($searchPhrase, $offset = 0, $limit = self::DEFAULT_LIMIT)
     {
         $textQuery = new Elastica_Query_Wildcard('_all', $searchPhrase);
-
         $boolQuery = new Elastica_Query_Bool();
         $boolQuery->addMust($textQuery);
 
@@ -69,7 +69,7 @@ class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
             unset($data['item']);
             $tickets[$itemId] = new WorkflowTicket($data);
         }
-        
+
         return array(
             'tickets'    => $this->loadItemsIntoTickets($tickets, $itemIds),
             'totalCount' => $result->getTotalHits()
