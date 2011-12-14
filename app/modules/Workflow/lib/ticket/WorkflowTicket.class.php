@@ -287,21 +287,21 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     }
 
     /**
-     * Sets the currentOwner attribute.
+     * Sets the name of the user currently owning this ticket.
      *
-     * @param        AgaviUser the new value for currentOwner
+     * @param        string
      *
      * @return       void
      */
-    public function setCurrentOwner(AgaviUser $currentOwner)
+    public function setCurrentOwner($currentOwner)
     {
         $this->currentOwner = $currentOwner;
     }
 
     /**
-     * Retrieves the currentOwner attribute.
+     * Returns the name of the user currently owning this ticket.
      *
-     * @return       AgaviUser the value for currentOwner
+     * @return       string
      */
     public function getCurrentOwner()
     {
@@ -372,6 +372,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
             'ts' => $this->timestamp->format(DATE_ISO8601),
             'item' => $this->getWorkflowItem()->getIdentifier(),
             'workflow' => $this->getWorkflow(),
+            'currentOwner' => $this->getCurrentOwner(),
             'step' => $this->getCurrentStep(),
             'blocked' => $this->isBlocked(),
             'wait' => $this->waitUntil instanceof DateTime ? $this->waitUntil->format(DATE_ISO8601) : NULL,

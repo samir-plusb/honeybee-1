@@ -12,6 +12,8 @@
  */
 class WorkflowTicketPeer
 {
+    const DEFAULT_USER_NULL = 'nobody';
+
     /**
      *
      * name of couchdb design document to use
@@ -48,6 +50,14 @@ class WorkflowTicketPeer
         $ticket = new WorkflowTicket();
         $ticket->setWorkflowItem($item);
         $ticket->setWorkflow('_init');
+
+        $ticket->setCurrentOwner(
+            AgaviConfig::get(
+                'items.default_owner',
+                self::DEFAULT_USER_NULL
+            )
+        );
+
         // @todo What to do if saving fails (saveTicket returns false)
         $this->saveTicket($ticket);
         return $ticket;
