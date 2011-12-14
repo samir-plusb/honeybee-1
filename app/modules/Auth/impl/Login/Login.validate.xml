@@ -15,7 +15,7 @@
 
             <validator class="string" translation_domain='auth.messages'>
                 <argument>password</argument>
-                <ae:parameter name="min">8</ae:parameter>
+                <ae:parameter name="min">7</ae:parameter>
                 <ae:parameter name="max">50</ae:parameter>
                 <error>A valid password must be given</error>
             </validator>
