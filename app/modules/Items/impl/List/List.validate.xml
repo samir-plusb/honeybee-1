@@ -5,7 +5,7 @@
 	parent="%core.module_dir%/Items/config/validators.xml">
     <ae:configuration>
         <validators>
-            
+
             <validator class="string" name="invalid_search_phrase" required="false" >
                 <arguments>
                     <argument>search_phrase</argument>
@@ -53,7 +53,7 @@
                 </ae:parameters>
             </validator>
 
-            <validator class="inarray" name="invalid_sorting_field" required="true" >
+            <validator class="inarray" name="invalid_sorting_field" required="false" >
                 <arguments base="sorting">
                     <argument>field</argument>
                 </arguments>
