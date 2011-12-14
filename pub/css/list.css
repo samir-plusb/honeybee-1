@@ -105,7 +105,52 @@ body
 
 
 /**
- * Table header
+ * Table - Columns definition
+ */
+table
+{
+    margin-bottom: 0;
+}
+
+table caption
+{
+    text-indent: -30000px;
+}
+
+.col-title
+{
+    min-width: 17em;
+}
+
+.col-source,
+.col-category
+{
+    width: 23em;
+}
+
+.col-created,
+.col-state
+{
+    width: 9em;
+}
+
+.col-district
+{
+    width: 13em;
+}
+
+.col-priority
+{
+    width: 5em;
+}
+
+.col-actions
+{
+    width: 7em;
+}
+
+/**
+ * Table - Header definition
  */
 .data-header
 {
@@ -123,7 +168,7 @@ body
 {
     background-repeat: no-repeat;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAKCAYAAABi8KSDAAAABHNCSVQICAgIfAhkiAAAAERJREFUGJVj/P//PwOxgIlolaQqZmFgYGBIT08n6JaZM2cyMsEYhBSiOAOXBmRxJlwSWA34//8/Bk5LS/uPTZyRZuEMAJxMNOg7UzKkAAAAAElFTkSuQmCC);
-    background-position: 95% center;
+    background-position: right center;
 }
 
 .asc,
@@ -131,7 +176,7 @@ body
 {
     background-repeat: no-repeat;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAKCAMAAABVLlSxAAAABGdBTUEAANbY1E9YMgAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAGUExURWZmZv///3NLWagAAAACdFJOU/8A5bcwSgAAAClJREFUeNpiYEQABgw2EsnAwABjMzBAOAxQJojDAGMCOQx4zYQAgAADABS+AFbcZZc4AAAAAElFTkSuQmCC);
-    background-position: 95% center;
+    background-position: right center;
 }
 
 .sorted
@@ -143,21 +188,16 @@ body
 {
     display: block;
     color: #404040;
-    padding: 9px 10px 9px 20px;
+    padding: 9px 20px 9px 10px;
 }
 
 /**
- * Table content
+ * Table - Content defintion
  */
 .zebra-striped tbody tr:hover td,
 .zebra-striped tbody tr:hover th
 {
     background-color: #C7EEFE;
-}
-
-table
-{
-    margin-bottom: 0;
 }
 
 table td

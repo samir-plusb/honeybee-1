@@ -63,7 +63,18 @@
     echo $slots['pagination'];
 ?>
 
-    <table class="bordered-table zebra-striped" id="sortTableExample">
+    <table class="bordered-table zebra-striped">
+        <caption>Newsitems Table</caption>
+        <colgroup>
+            <col class="col-title" />
+            <col class="col-source" />
+            <col class="col-created" />
+            <col class="col-state" />
+            <col class="col-category" />
+            <col class="col-district" />
+            <col class="col-priority" />
+            <col class="col-actions" />
+        </colgroup>
         <thead>
             <tr>
 
