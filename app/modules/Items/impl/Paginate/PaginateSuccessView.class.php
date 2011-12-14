@@ -23,7 +23,7 @@ class Items_Paginate_PaginateSuccessView extends ItemsBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
-        
+
         $limit = $parameters->getParameter('limit');
         $currentOffset = $parameters->getParameter('offset');
         $totalCount = $parameters->getParameter('total_count');
@@ -39,7 +39,7 @@ class Items_Paginate_PaginateSuccessView extends ItemsBaseView
         {
             $pagingRange = $totalPages - 4;
         }
-        
+
         $attributes = array(
             'last_page' => $lastPage,
             'current_page' => $currentPage,
@@ -53,19 +53,23 @@ class Items_Paginate_PaginateSuccessView extends ItemsBaseView
             'total_count' => $totalCount,
             'total_pages' => $totalPages
         );
-        
+
         if ($parameters->hasParameter('search_phrase'))
         {
             $attributes['search_phrase'] = $parameters->getParameter('search_phrase');
         }
-        
+        if ($parameters->hasParameter('sorting'))
+        {
+            $attributes['sorting'] = $parameters->getParameter('sorting');
+        }
+
         foreach ($attributes as $attr => $val)
         {
             $this->setAttribute($attr, $val);
         }
         $this->setAttribute('links', $this->generatePagingLinks());
     }
-    
+
     protected function generatePagingLinks()
     {
         $routing = $this->getContext()->getRouting();
@@ -75,6 +79,7 @@ class Items_Paginate_PaginateSuccessView extends ItemsBaseView
         $currentPage = (int) floor($currentOffset / $limit);
         $lastPage = $this->getAttribute('last_page');
         $searchPhrase = $this->getAttribute('search_phrase', FALSE);
+        $sorting = $this->getAttribute('sorting', FALSE);
         $pageLinksData = array(
             'first_page' => array(
                 'limit' => $limit,
@@ -101,7 +106,7 @@ class Items_Paginate_PaginateSuccessView extends ItemsBaseView
                 'offset' => ($currentPage + 1) * $limit
             )
         );
-        
+
         $urls = array();
         foreach ($pageLinksData as $name => $pageLinkData)
         {
@@ -109,10 +114,14 @@ class Items_Paginate_PaginateSuccessView extends ItemsBaseView
             {
                 $pageLinkData['search_phrase'] = $searchPhrase;
             }
+            if ($sorting)
+            {
+                $pageLinkData['sorting'] = $sorting;
+            }
             $urls[$name] = $routing->gen('items.list', $pageLinkData);
         }
         return $urls;
     }
 }
-    
+
 ?>

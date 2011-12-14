@@ -46,6 +46,7 @@
                 },
                 "currentState": {
                     "include_in_all": false,
+                    "type": "object",
                     "properties": {
                         "workflow": {
                             "type": "string"
@@ -59,10 +60,12 @@
                     }
                 },
                 "importItem" : {
-                    "type": "nested",
+                    "type": "object",
+                    "include_in_all": true,
                     "properties": {
                         "created": {
                             "include_in_all": false,
+                            "type": "object",
                             "properties": {
                                 "user": {
                                     "type": "string",
@@ -76,6 +79,8 @@
                             }
                         },
                         "lastModified": {
+                            "type": "object",
+                            "include_in_all": false,
                             "properties": {
                                 "user": {
                                     "type": "string",

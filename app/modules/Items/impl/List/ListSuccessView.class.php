@@ -12,7 +12,7 @@
 class Items_List_ListSuccessView extends ItemsBaseView
 {
     /**
-     * Handle presentation logic for the web  (html).
+     * Handle presentation logic for the web (html).
      *
      * @param       AgaviRequestDataHolder $parameters
      *
@@ -65,15 +65,17 @@ class Items_List_ListSuccessView extends ItemsBaseView
 
         $paginationData = array(
             'paging_range' => AgaviConfig::get('items.pagination.range', 9),
-            'total_count' => $this->getAttribute('totalCount'),
-            'offset' => $parameters->getParameter('offset', 0),
-            'limit' => $parameters->getParameter('limit', AgaviConfig::get('pagination.default_limit', 15)),
+            'total_count'  => $this->getAttribute('totalCount'),
+            'offset'       => $parameters->getParameter('offset', 0),
+            'limit'        => $parameters->getParameter('limit', AgaviConfig::get('pagination.default_limit', 15)),
+            'sorting'      => $this->getAttribute('sorting')
         );
 
         if ($this->hasAttribute('search_phrase'))
         {
             $paginationData['search_phrase'] = $this->getAttribute('search_phrase');
         }
+
         $this->getLayer('content')->setSlot(
             'pagination',
             $this->createSlotContainer('Items', 'Paginate', $paginationData)

@@ -38,8 +38,8 @@ class Items_ListAction extends ItemsBaseAction
         $offset = $parameters->getParameter('offset', self::DEFAULT_OFFSET);
         $searchPhrase = $parameters->getParameter('search_phrase');
         $sorting = array(
-            'direction' => $parameters->getParameter('sort[direction]', self::DEFAULT_SORT_DIRECTION),
-            'field'     => $parameters->getParameter('sort[field]', self::DEFAULT_SORT_FIELD),
+            'direction' => $parameters->getParameter('sorting[direction]', self::DEFAULT_SORT_DIRECTION),
+            'field'     => $parameters->getParameter('sorting[field]', self::DEFAULT_SORT_FIELD),
         );
 
         $result = array(

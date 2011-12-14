@@ -1,38 +1,30 @@
+/**
+ * Layout common
+ */
 body
 {
     padding-top: 40px;
 }
 
+.list-data
+{
+    position: static;
+    margin-top: 16px;
+    margin-bottom: 32px;
+}
+
+
+.hidden
+{
+    display: none;
+}
+
+/**
+ * Topbar: searchfield and logout
+ */
 .topbar .topbar-inner
 {
     position: relative;
-}
-
-.pagination .active a,
-.zebra-striped tbody tr:hover td,
-.zebra-striped tbody tr:hover th
-{
-    background-color: rgba(141, 192, 219, 0.25);
-}
-
-table
-{
-    margin-bottom: 0;
-}
-
-table td
-{
-    vertical-align: middle;
-}
-
-table .title a
-{
-    font-size: 14px;
-}
-
-tfoot tr td
-{
-    font-weight: bold;
 }
 
 .topbar .search-form
@@ -60,11 +52,15 @@ tfoot tr td
     color: #000000;
 }
 
-.hidden
+.logout
 {
-    display: none;
+    margin-top: 10px;
+    font-size: 12pt;
 }
 
+/**
+ * Search info-box
+ */
 .search-message-box
 {
     margin: 16px 0 0 0;
@@ -76,62 +72,105 @@ tfoot tr td
     margin: 0;
 }
 
-.logout
-{
-    margin-top: 10px;
-    font-size: 12pt;
-}
-
-.top
-{
-    position: static;
-    margin-top: 16px;
-}
+/**
+ * Pagination
+ */
+ .pagination .active a,
+ .pagination .active span
+ {
+     background-color: rgba(141, 192, 219, 0.25);
+ }
 
 .pagination:first-child
 {
     margin-top: 0;
 }
-.pagination .disabled span
+
+.pagination span
 {
     background-color: transparent;
-    color: #BFBFBF;
     border-right: 1px solid rgba(0, 0, 0, 0.15);
     float: left;
     line-height: 34px;
+    color: #0069D6;
+    font-weight: inherit;
     padding: 0 14px;
-    text-decoration: none;
     display: block;
 }
 
-.data-header th,
-.data-header td
+.pagination .disabled span
+{
+    color: #BFBFBF;
+}
+
+
+/**
+ * Table header
+ */
+.data-header
 {
     padding: 0;
+}
+
+.data-header:hover
+{
+    background-color: #C7EEFE;
+}
+
+.desc,
+.sorted.asc:hover,
+.data-header:hover
+{
+    background-repeat: no-repeat;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAKCAYAAABi8KSDAAAABHNCSVQICAgIfAhkiAAAAERJREFUGJVj/P//PwOxgIlolaQqZmFgYGBIT08n6JaZM2cyMsEYhBSiOAOXBmRxJlwSWA34//8/Bk5LS/uPTZyRZuEMAJxMNOg7UzKkAAAAAElFTkSuQmCC);
+    background-position: 95% center;
+}
+
+.asc,
+.sorted.desc:hover
+{
+    background-repeat: no-repeat;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAKCAMAAABVLlSxAAAABGdBTUEAANbY1E9YMgAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAGUExURWZmZv///3NLWagAAAACdFJOU/8A5bcwSgAAAClJREFUeNpiYEQABgw2EsnAwABjMzBAOAxQJojDAGMCOQx4zYQAgAADABS+AFbcZZc4AAAAAElFTkSuQmCC);
+    background-position: 95% center;
+}
+
+.sorted
+{
+    background-color: rgba(141, 192, 219, 0.25);
 }
 
 .data-header a
 {
     display: block;
     color: #404040;
-    padding: 9px 10px;
+    padding: 9px 10px 9px 20px;
 }
 
-.data-header .sorted
+/**
+ * Table content
+ */
+.zebra-striped tbody tr:hover td,
+.zebra-striped tbody tr:hover th
 {
-    background-color: rgba(23, 127, 255, 0.2);
+    background-color: #C7EEFE;
 }
 
-.data-header .desc
+table
 {
-    background-repeat: no-repeat;
-    background-image: url(data:image/gif;base64,R0lGODlhLQALAIQfANTU1EVFRfb29mZmZtHR0XR0dP39/fr6+np6euHh4dzc3KWlpcnJydra2iYmJubm5tjY2FNTU/Hx8erq6uPj4z4+Pqmpqaampt/f36urqzExMS4uLqenp6OjoyUlJf///yH5BAEAAB8ALAAAAAAtAAsAAAWQ4CeOJHWQqEhEzua+cLxpyJOOzUUYN9kEnqBwSPQgBL1PrnMBnJIfBbBYdBQmScWiw10woKIflVh43jDcdMcC4EEhlbHHgUhkL2o1AfyBTIsDEkkYHHlqHARmPQB/QXRYPRhbhnkAfARxQoGDeJR5GW1gAJkFdpGFnpQQfKMRNj0UGQsctLW2txegijcMpj0hADs=);
-    background-position: 95% center;
+    margin-bottom: 0;
 }
 
-.data-header .asc
+table td
 {
-    background-repeat: no-repeat;
-    background-image: url(data:image/gif;base64,R0lGODlhLQALAIQfANTU1EVFRfb29mZmZtHR0XR0dP39/fr6+np6euHh4dzc3KWlpcnJydra2iYmJubm5tjY2FNTU/Hx8erq6uPj4z4+Pqmpqaampt/f36urqzExMS4uLqenp6OjoyUlJf///yH5BAEAAB8ALAAAAAAtAAsAAAWQ4CeOZMKQqHgA2cW9cCwvGZWOT1QBNwp1wKBw2OFgep9EwePZIUUGFnF6OfYkAyazQniKANPhwnqbIBxaZoD3PBA44SI5hU2nAxDvhxC+KJAJZ3ZpFXlPURZEcygHS4N2AQ16DAtBC389EwVoj5CYSCsXHReSPQIInZ2RXgYEpEgPCBobtLW2txsOEV1tNkghADs=);
-    background-position: 95% center;
+    vertical-align: middle;
+}
+
+table .title a
+{
+    font-size: 14px;
+}
+
+tfoot tr td
+{
+    font-weight: bold;
 }

@@ -14,7 +14,7 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
         'title'        => 'importItem.title.title_sortable',
         'source'       => 'importItem.source.source_sortable',
         'timestamp'    => 'importItem.created.date',
-        'step'         => 'currentState.step',
+        'state'        => 'currentState.step',
         'category'     => 'importItem.category.category_sortable',
         'district'     => 'contentItems.administrative_district',
         'priority'     => 'contentItems.priority'
@@ -49,7 +49,7 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
                 array('currentState.workflow' => 'news')
             )
         );
-        $query->setSort(
+        $query->setLimit($limit)->setFrom($offset)->setSort(
             array(self::$sortMapping[$sortField] => $sortDirection)
         );
 
@@ -90,7 +90,6 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
 
     protected function hydrateResult(Elastica_ResultSet $result)
     {
-        print_r($result);exit;
         $items = array();
         /* @var $items Elastica_Result */
         foreach($result->getResults() as $doc)

@@ -57,14 +57,14 @@
         viewing or deleting an item.
         It also wraps the upper&lower pagination.
     ############################################################################################### -->
-<section class="container-fluid top">
+<section class="container-fluid list-data">
 
 <?php
     echo $slots['pagination'];
 ?>
 
     <table class="bordered-table zebra-striped" id="sortTableExample">
-        <thead class="data-header">
+        <thead>
             <tr>
 
 <?php
@@ -74,16 +74,16 @@
     {
         $sortingActive = ($sortField === $headerField);
         $routingData = array(
-            'limit'  => $limit,
-            'offset' => $offset,
-            'sort'   => array(
+            'limit'   => $limit,
+            'offset'  => 0, // always start a new sorting from page 1
+            'sorting' => array(
                 'field'     => $headerField,
                 'direction' => ($sortingActive && 'asc' === $sortDirection) ? 'desc' : 'asc'
             )
         );
 ?>
 
-                <th class="<?php echo ($sortingActive) ? ('sorted ' . $sortDirection) : ''; ?>">
+                <th class="data-header <?php echo ($sortingActive) ? ('sorted ' . $sortDirection) : ''; ?>">
                     <a href="<?php echo $ro->gen('items.list', $routingData); ?>">
                         <?php echo $tm->_($headerField, 'items.structure'); ?>
                     </a>
@@ -146,7 +146,7 @@
         </tbody>
 
 <?php
-    if (10 <= count($t['listData']))
+    if (20 <= count($t['listData']))
     {
 // If we have more rows than we assume fit on to the viewport without scrolling,
 // display a table footer with the column names and a pagination below the table too.
@@ -162,9 +162,9 @@
     {
         $sortingActive = ($sortField === $headerField);
         $routingData = array(
-            'limit'  => $limit,
-            'offset' => $offset,
-            'sort'   => array(
+            'limit'   => $limit,
+            'offset'  => $offset,
+            'sorting' => array(
                 'field'     => $headerField,
                 'direction' => ($sortingActive && 'asc' === $sortDirection) ? 'desc' : 'asc'
             )
@@ -192,7 +192,7 @@
     </table>
 
 <?php
-    if (10 <= count($t['listData']))
+    if (20 <= count($t['listData']))
     {
         echo $slots['pagination'];
     }

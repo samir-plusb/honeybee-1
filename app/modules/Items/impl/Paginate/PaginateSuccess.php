@@ -1,5 +1,4 @@
 <?php
-    // common vars
     $currentOffset = $t['offset'];
     $pagingRange = $t['paging_range'];
     $totalCount = $t['total_count'];
@@ -11,20 +10,21 @@
     $hasNext = $t['has_next'];
     $onFirstPage = $t['first_page_reached'];
     $onLastPage = $t['last_page_reached'];
-    $centerOffset = (int)floor($pagingRange / 2);
-    
-    // links
+
     $firstLink = $t['links']['first_page'];
     $secondLink = $t['links']['second_page'];
     $lastLink = $t['links']['last_page'];
     $secondLastLink = $t['links']['second_last_page'];
     $prevLink = $t['links']['previous_page'];
     $nextLink = $t['links']['next_page'];
-    // search related
+
     $searchPhrase = isset($t['search_phrase']) ? $t['search_phrase'] : FALSE;
-    
+    $sorting = isset($t['sorting']) ? $t['sorting'] : FALSE;
+
+// Calculate the range of pages to place in the middle.
     $startAt = 0;
     $endAt = 0;
+    $centerOffset = (int)floor($pagingRange / 2);
     if (0 < $pagingRange)
     {
         $startAt = $currentPage - $centerOffset;
@@ -41,8 +41,7 @@
         $endAt = $startAt + $pagingRange;
     }
 ?>
-
-<div class="pagination">
+<nav class="pagination">
     <ul>
 <?php
     if ($hasPrev)
@@ -63,40 +62,63 @@
         </li>
 <?php
     }
-    
     if (1 < $totalPages)
     {
 // always render a "first page" link if there is more than one page.
 ?>
         <li class="<?php echo $onFirstPage ? 'active' : ''; ?>">
+<?php
+        if ($onFirstPage)
+        {
+?>
+            <span>1</span>
+<?php
+        }
+        else
+        {
+?>
             <a href="<?php echo $firstLink; ?>">1</a>
+<?php
+        }
+?>
         </li>
-        
 <?php
     }
+
     if (2 === $startAt && 2 < $totalPages || (2 < $totalPages && 6 > $totalPages))
     {
 // if we have at leat 3 pages we can display a "second page" link,
 // when the current page is within the first pagination segment.
 ?>
-        
+
         <li class="<?php echo (1 === $currentPage) ? 'active' : ''; ?>">
+<?php
+        if (1 === $currentPage)
+        {
+?>
+            <span>2</span>
+<?php
+        }
+        else
+        {
+?>
             <a href="<?php echo $secondLink; ?>">2</a>
+<?php
+        }
+?>
         </li>
-        
 <?php
     }
     elseif (5 < $totalPages)
     {
 // with at least 6 pages we also check for the "..." placeholder.
 ?>
-        
         <li class="disabled">
             <span>...</span>
         </li>
 <?php
     }
-    
+
     for ($curPage = $startAt; $curPage < $endAt; $curPage++)
     {
         $routeData = array(
@@ -107,47 +129,84 @@
         {
             $routeData['searchPhrase'] = $searchPhrase;
         }
+        if ($sorting)
+        {
+            $routeData['sorting'] = $sorting;
+        }
         $link = $ro->gen('items.list', $routeData);
         $active = ($curPage === $currentPage);
 ?>
-        
         <li class="<?php echo $active ? 'active' : ''; ?>">
+<?php
+        if ($active)
+        {
+?>
+            <span><?php echo ($curPage + 1); ?></span>
+<?php
+        }
+        else
+        {
+?>
             <a href="<?php echo $link; ?>"><?php echo ($curPage + 1); ?></a>
+<?php
+        }
+?>
         </li>
-        
 <?php
     }
-    
-    if ($lastPage -1 === $endAt && 3 < $totalPages || (3 < $totalPages && 6 > $totalPages))
+
+    if ($lastPage - 1 === $endAt && 3 < $totalPages || (3 < $totalPages && 6 > $totalPages))
     {
 // if we have at least 4 pages we can display a "second-last page" link,
 // when the current page is within the last pagination segment.
 ?>
         <li class="<?php echo ($lastPage - 1) === $currentPage ? 'active' : ''; ?>">
+<?php
+        if ($lastPage - 1 === $currentPage)
+        {
+?>
+            <span><?php echo $lastPage; ?></span>
+<?php
+        }
+        else
+        {
+?>
             <a href="<?php echo $secondLastLink; ?>"><?php echo $lastPage; ?></a>
+<?php
+        }
+?>
         </li>
-        
 <?php
     }
     elseif (5 < $totalPages)
     {
 // with at least 6 pages we also check for the "..." placeholder.
 ?>
-        
         <li class="disabled">
             <span>...</span>
         </li>
-        
 <?php
     }
-    
+
     if (1 < $totalPages)
     {
 // always render a "last page" link if there are at least two pages.
 ?>
-        
         <li class="<?php echo $onLastPage ? 'active' : ''; ?>">
+<?php
+        if ($onLastPage)
+        {
+?>
+            <span><?php echo $lastPage + 1; ?></span>
+<?php
+        }
+        else
+        {
+?>
             <a href="<?php echo $lastLink; ?>"><?php echo $lastPage + 1; ?></a>
+<?php
+        }
+?>
         </li>
 <?php
     }
@@ -171,4 +230,4 @@
     }
 ?>
     </ul>
-</div>
+</nav>
