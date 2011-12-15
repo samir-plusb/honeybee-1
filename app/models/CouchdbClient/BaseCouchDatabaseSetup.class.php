@@ -73,7 +73,7 @@ abstract class BaseCouchDatabaseSetup implements ICouchDatabaseSetup
         // strip /* … */ comments
         $funcString = preg_replace('#/\*.*?\*/#s', ' ', $funcString);
         // strip // … comments
-        $funcString = preg_replace('#//.*#', ' ', $funcString);
+        $funcString = preg_replace('#\s//\s.*#', ' ', $funcString);
         // strip multiple white spaces
         $funcString = preg_replace('/\s+/s', ' ', $funcString);
 
@@ -129,27 +129,35 @@ abstract class BaseCouchDatabaseSetup implements ICouchDatabaseSetup
      */
     protected function initViews()
     {
-        $views = array();
-        $glob = glob($this->getSourceDirectory().'/*.{map,reduce}.js',GLOB_BRACE);
+        $glob = glob($this->getSourceDirectory().'/*.{map,reduce,filters}.js',GLOB_BRACE);
         if (! is_array($glob))
         {
             return;
         }
+
+        $docs = array();
         foreach ($glob as $fname)
         {
             // match all documents like:
             // * DesignDoc.Method.map.js
             // * DesignDoc.Method.reduce.js
-            if (preg_match('#/([^/]+)\.([^/]+)\.(map|reduce)\.js$#', $fname, $m))
+            // * DesignDoc.Method.filters.js
+            if (preg_match('#/([^/]+)\.([^/]+)\.(map|reduce|filters)\.js$#', $fname, $m))
             {
                 $funcString = file_get_contents($fname);
-                $views[$m[1]][$m[2]][$m[3]] = $this->reformatJavascript($funcString);
+                if ('filters' == $m[3])
+                {
+                    $docs[$m[1]]['filters'][$m[2]] = $this->reformatJavascript($funcString);
+                }
+                else
+                {
+                    $docs[$m[1]]['views'][$m[2]][$m[3]] = $this->reformatJavascript($funcString);
+                }
             }
         }
 
-        foreach ($views as $docid => $methods)
+        foreach ($docs as $docid => $doc)
         {
-            $doc = array('views' => $methods);
             $stat = $this->getDatabase()->getDesignDocument(NULL, $docid);
             if (isset($stat['_rev']))
             {
@@ -162,7 +170,7 @@ abstract class BaseCouchDatabaseSetup implements ICouchDatabaseSetup
             {
                 $loggerManager->getLogger('app')->log(
                     new AgaviLoggerMessage(
-                        '[BaseCouchDatabaseSetup] Successfully saved '.$this->getDatabase()->getDatabaseName().'_design/'.$docid,
+                        '['.get_class($this).'] Successfully saved '.$this->getDatabase()->getDatabaseName().'_design/'.$docid,
                         AgaviLogger::INFO
                     )
                 );
@@ -171,7 +179,7 @@ abstract class BaseCouchDatabaseSetup implements ICouchDatabaseSetup
             {
                 $loggerManager->getLogger('error')->log(
                     new AgaviLoggerMessage(
-                        '[BaseCouchDatabaseSetup]' . __METHOD__.":".__LINE__." : ".__FILE__ . PHP_EOL . print_r($stat, TRUE),
+                        '['.get_class($this).']' . __METHOD__.":".__LINE__." : ".__FILE__ . PHP_EOL . print_r($stat, TRUE),
                         AgaviLogger::ERROR
                     )
                 );
