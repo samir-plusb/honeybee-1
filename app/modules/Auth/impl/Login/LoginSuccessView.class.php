@@ -19,11 +19,6 @@ class Auth_Login_LoginSuccessView extends AuthBaseView
      */
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
-        if (NULL != ($container = $this->attemptForward($parameters)))
-        {
-            return $container;
-        }
-
         $user = $this->getContext()->getUser();
 
         if ($user->hasAttribute('redirect', 'de.berlinonline.contentworker.login'))
