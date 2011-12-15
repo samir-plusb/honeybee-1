@@ -12,7 +12,7 @@
  */
 class WorkflowTicketPeer
 {
-    const DEFAULT_USER_NULL = 'nobody';
+    const DEFAULT_NULL_USER = 'nobody';
 
     /**
      *
@@ -53,8 +53,8 @@ class WorkflowTicketPeer
 
         $ticket->setCurrentOwner(
             AgaviConfig::get(
-                'items.default_owner',
-                self::DEFAULT_USER_NULL
+                'midas.null_user',
+                self::DEFAULT_NULL_USER
             )
         );
 
