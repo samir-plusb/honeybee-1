@@ -21,6 +21,8 @@
             <a class="pull-right logout" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
             <form class="search-form pull-right" action="<?php echo $ro->gen(NULL); ?>" method="GET">
                 <input type="text" name="search_phrase" value="<?php echo $searchPhrase ? $searchPhrase : '' ?>" placeholder="Suche" />
+                <input type="hidden" name="sorting[field]" value="<?php echo $sortField; ?>" />
+                <input type="hidden" name="sorting[direction]" value="<?php echo $sortDirection; ?>" />
                 <input type="hidden" name="offset" value="0" />
                 <a href="<?php echo $ro->gen(NULL); ?>" class="<?php echo $searchPhrase ? '' : 'hidden' ?> reset-search">×</a>
             </form>
@@ -92,6 +94,10 @@
                 'direction' => ($sortingActive && 'asc' === $sortDirection) ? 'desc' : 'asc'
             )
         );
+        if ($searchPhrase)
+        {
+            $routingData['search_phrase'] = $searchPhrase;
+        }
 ?>
 
                 <th class="data-header <?php echo ($sortingActive) ? ('sorted ' . $sortDirection) : ''; ?>">
@@ -180,6 +186,10 @@
                 'direction' => ($sortingActive && 'asc' === $sortDirection) ? 'desc' : 'asc'
             )
         );
+        if ($searchPhrase)
+        {
+            $routingData['search_phrase'] = $searchPhrase;
+        }
 ?>
 
                 <td class="<?php echo ($sortingActive) ? ('sorted ' . $sortDirection) : ''; ?>">

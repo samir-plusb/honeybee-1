@@ -115,6 +115,7 @@ table
 table caption
 {
     text-indent: -30000px;
+    height: 0;
 }
 
 .col-title
@@ -162,24 +163,24 @@ table caption
     background-color: #C7EEFE;
 }
 
-.desc,
-.sorted.asc:hover,
-.data-header:hover
+.desc a,
+.sorted.asc a:hover,
+.data-header a:hover
 {
     background-repeat: no-repeat;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAKCAYAAABi8KSDAAAABHNCSVQICAgIfAhkiAAAAERJREFUGJVj/P//PwOxgIlolaQqZmFgYGBIT08n6JaZM2cyMsEYhBSiOAOXBmRxJlwSWA34//8/Bk5LS/uPTZyRZuEMAJxMNOg7UzKkAAAAAElFTkSuQmCC);
     background-position: right center;
 }
 
-.asc,
-.sorted.desc:hover
+.asc a,
+.sorted.desc a:hover
 {
     background-repeat: no-repeat;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAKCAMAAABVLlSxAAAABGdBTUEAANbY1E9YMgAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAGUExURWZmZv///3NLWagAAAACdFJOU/8A5bcwSgAAAClJREFUeNpiYEQABgw2EsnAwABjMzBAOAxQJojDAGMCOQx4zYQAgAADABS+AFbcZZc4AAAAAElFTkSuQmCC);
     background-position: right center;
 }
 
-.sorted
+.sorted a
 {
     background-color: rgba(141, 192, 219, 0.25);
 }
@@ -194,10 +195,14 @@ table caption
 /**
  * Table - Content defintion
  */
-.zebra-striped tbody tr:hover td,
-.zebra-striped tbody tr:hover th
+.zebra-striped tbody tr:nth-child(2n+1):hover td
 {
-    background-color: #C7EEFE;
+    background: #F9F9F9;
+}
+
+.zebra-striped tbody tr:nth-child(2n):hover td
+{
+    background: none;
 }
 
 table td
