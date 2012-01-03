@@ -39,7 +39,7 @@ class Items_ListAction extends ItemsBaseAction
         $searchPhrase = $parameters->getParameter('search_phrase');
         $sorting = array(
             'direction' => $parameters->getParameter('sorting[direction]', self::DEFAULT_SORT_DIRECTION),
-            'field'     => $parameters->getParameter('sorting[field]', self::DEFAULT_SORT_FIELD),
+            'field'     => $parameters->getParameter('sorting[field]', self::DEFAULT_SORT_FIELD)
         );
 
         $result = array(

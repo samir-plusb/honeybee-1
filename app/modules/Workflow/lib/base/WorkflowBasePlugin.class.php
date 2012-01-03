@@ -52,10 +52,12 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
             return $this->doProcess();
         }
 
-        return new WorkflowPluginResult(
-            WorkflowPluginResult::STATE_NOT_ALLOWED,
-            WorkflowPluginResult::GATE_NONE
-        );
+        $result = new WorkflowPluginResult();
+        $result->setGate(WorkflowPluginResult::GATE_NONE);
+        $result->setState(WorkflowPluginResult::STATE_NOT_ALLOWED);
+        $result->freeze();
+
+        return $result;
     }
 
     /**
@@ -90,3 +92,5 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
         return $this->gates;
     }
 }
+
+?>

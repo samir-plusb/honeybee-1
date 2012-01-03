@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This interface defines the requirements of an import item in the workflow context
  *
@@ -33,3 +34,5 @@ interface IWorkflowPlugin
      */
     public function isInteractive();
 }
+
+?>

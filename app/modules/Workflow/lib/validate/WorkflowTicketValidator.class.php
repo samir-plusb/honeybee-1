@@ -29,3 +29,5 @@ class WorkflowTicketValidator extends AgaviValidator
         return TRUE;
     }
 }
+
+?>

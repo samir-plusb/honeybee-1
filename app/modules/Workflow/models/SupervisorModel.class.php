@@ -163,18 +163,13 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
             $code = $workflow->run($ticket);
         }
 
+        $pluginResult = $ticket->getPluginResult();
         if (WorkflowHandler::STATE_ERROR === $code)
         {
-            $message = $ticket->getPluginResult()->getMessage()
-                ? $ticket->getPluginResult()->getMessage()
-                : 'Workflow halted with error';
+            $message = $pluginResult->getMessage()
+                ? $pluginResult->getMessage()
+                : 'Workflow halted with error'; // Default err-message in case someone messy forgot to provide one.
             throw new WorkflowException($message, WorkflowException::UNEXPECTED_EXIT_CODE);
-        }
-
-        $result = NULL;
-        if ($ticket->getPluginResult() instanceof WorkflowInteractivePluginResult)
-        {
-            $result = $ticket->getPluginResult()->getResponse();
         }
 
         /**
@@ -188,8 +183,7 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
                 'owner'    => $ticket->getCurrentOwner()
             ))
         );
-
-        return $result;
+        return $pluginResult;
     }
 
     /**

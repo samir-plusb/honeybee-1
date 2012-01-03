@@ -16,6 +16,27 @@ class Workflow_RunAction extends ProjectBaseAction
      */
     public function execute(AgaviParameterHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        return 'Input';
+        $result = $this->processTicket($parameters);
+        $viewName = 'Input';
+        if ($result instanceof WorkflowInteractivePluginResult)
+        {
+            $this->setAttribute('response', $result->getResponse());
+        }
+        return $viewName;
+    }
+
+    /**
+     * process the ticket
+     *
+     * @return AgaviExecutionContainer
+     */
+    protected function processTicket(AgaviRequestDataHolder $parameters)
+    {
+        $ticket = $parameters->getParameter('ticket');
+        $supervisor = Workflow_SupervisorModel::getInstance();
+        $result = $supervisor->processTicket($ticket, $this->getContainer());
+        return $result;
     }
 }
+
+?>

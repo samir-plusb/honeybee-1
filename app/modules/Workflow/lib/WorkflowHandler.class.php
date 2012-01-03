@@ -166,6 +166,7 @@ class WorkflowHandler
         $__logger->log($this,AgaviILogger::DEBUG);
 
         $this->setTicket($ticket);
+        $this->ticket->setBlocked(TRUE);
 
         $code = self::STATE_NEXT_STEP;
         while (self::STATE_NEXT_STEP === $code)

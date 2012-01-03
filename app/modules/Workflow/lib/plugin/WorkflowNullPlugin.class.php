@@ -10,13 +10,17 @@
  */
 class WorkflowNullPlugin extends WorkflowBasePlugin
 {
-
     /**
      * (non-PHPdoc)
-     * @see IWorkflowPlugin::process()
+     * @see WorkflowBasePlugin::process()
      */
     protected function doProcess()
     {
-        return new WorkflowPluginResult(WorkflowPluginResult::STATE_OK, WorkflowPluginResult::GATE_DEFAULT);
+        return new WorkflowPluginResult(
+            WorkflowPluginResult::STATE_OK,
+            WorkflowPluginResult::GATE_DEFAULT
+        );
     }
 }
+
+?>

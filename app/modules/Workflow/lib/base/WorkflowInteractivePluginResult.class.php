@@ -19,22 +19,6 @@ class WorkflowInteractivePluginResult extends WorkflowPluginResult
     private $response;
 
     /**
-     *
-     * @see WorrkflowPluginResult::__construct
-     *
-     * @param AgaviExecutionContainer $container
-     * @param int $state
-     * @param int $gate
-     * @param string $message
-     */
-    public function __construct(AgaviResponse $response, $state, $gate = self::GATE_NONE, $message = NULL)
-    {
-        parent::__construct($state, $gate, $message);
-        $this->response = $response;
-    }
-
-
-    /**
      * return response for interacting with user
      *
      * @return AgaviResponse
@@ -43,4 +27,12 @@ class WorkflowInteractivePluginResult extends WorkflowPluginResult
     {
         return $this->response;
     }
+
+    public function setResponse(AgaviResponse $response)
+    {
+        $this->verifyMutability();
+        $this->response = $response;
+    }
 }
+
+?>

@@ -14,7 +14,12 @@ abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
      *
      * Namespace for returning plugin result values from plugin sub execution container
      */
-    const NS_RESULT_ATTRIBUTES = 'Workflow.Plugin.Result';
+    const NS_PLUGIN_ATTRIBUTES = 'Workflow.Plugin.Result';
+
+    /**
+     * Attribute key for accessing the plugin's result object.
+     */
+    const ATTR_RESULT = 'plugin_result';
 
     /**
      * Attribute key for returning the plugin result state
@@ -31,6 +36,13 @@ abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
      */
     const ATTR_RESULT_MESSAGE = 'message';
 
+    /**
+     * Return an array that holds data on what action of which module to call
+     * when processing this plugin.
+     *
+     * @return array An array with a key for 'module' and a key for 'action'.
+     */
+    protected abstract function getPluginAction();
 
     /**
      * return false to signalize a non interactive plugin by default
@@ -45,77 +57,43 @@ abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
     }
 
     /**
-     * Creates a new container with the same output type and request method as
-     * this view's container.
-     *
-     * This container will have a parameter called 'is_forward' set to TRUE.
-     *
-     * @param string $actionName The name of the action.
-     * @param string $moduleName The name of the module. Defaults to current Module
-     * @param mixed $arguments An AgaviRequestDataHolder instance with additional
-     *                    request arguments or an array of request parameters.
-     * @param string $outputType Optional name of an initial output type to set.
-     * @param string $requestMethod Optional name of the request method to be used in this container.
-     *
-     * @return AgaviExecutionContainer A new execution container instance, fully initialized.
-     *
-     * @see AgaviView::createForwardContainer
+     * Execute this plugin, hence run our nested action.
      */
-    protected function executePluginAction($actionName, $moduleName = NULL,
-        $arguments = NULL, $outputType = NULL, $requestMethod = NULL)
+    protected function doProcess()
     {
-        $container = $this->ticket->getExecutionContainer();
-        if (NULL === $moduleName)
-        {
-            $moduleName = $container->getModuleName();
-        }
-        if ($arguments !== NULL)
-        {
-            if (!($arguments instanceof AgaviRequestDataHolder))
-            {
-                $rdhc = $this->context->getRequest()->getParameter('request_data_holder_class');
-                $arguments = new $rdhc(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
-            }
-        }
-        else
-        {
-            $arguments = $container->getArguments();
-        }
-
-        $pluginContainer = $container->createExecutionContainer(
-            $moduleName, $actionName, $arguments, $outputType, $requestMethod);
-        $pluginContainer->setParameter('is_forward', TRUE);
-
-        // put the gate labels as parameter to the plugin container
-        $pluginContainer->setParameter('gates', $this->getGates());
-
-        $response = $pluginContainer->execute();
-
-        $rdata = $pluginContainer->getAttributes(self::NS_RESULT_ATTRIBUTES);
-        return new WorkflowInteractivePluginResult(
-            $response,
-            $rdata[self::ATTR_RESULT_STATE], $rdata[self::ATTR_RESULT_GATE], $rdata[self::ATTR_RESULT_MESSAGE]);
+        return $this->executeWorklfowPluginAction();
     }
-
 
     /**
-     * store the values needed for generating WorkflowPluginResults in the given attribute holder
+     * Runs the action that associated to the current plugin instance and returns it's response.
+     * This container running the plugin action, will have a parameter called 'is_forward' set to TRUE.
      *
-     * call this method at end of plugin action
-     *
-     * @param AgaviAttributeHolder $store container to store the attributes (eg. current execution container)
-     * @param integer $state plugin result state
-     * @param integer $gate plugin result gate
-     * @param string $message plugin result message
+     * @return AgaviResponse The response of our executed plugin action.
      */
-    public static function setPluginResultAttributes(AgaviAttributeHolder $store,
-        $state, $gate = WorkflowPluginResult::GATE_NONE, $message = NULL)
+    protected function executeWorklfowPluginAction()
     {
-        $result = array(
-            self::ATTR_RESULT_STATE => $state,
-            self::ATTR_RESULT_GATE => $gate,
-            self::ATTR_RESULT_MESSAGE => $message
+        $actionData = $this->getPluginAction();
+        $moduleName = $actionData['module'];
+        $actionName = $actionData['action'];
+        $arguments = isset($actionData['arguments']) ? $actionData['arguments'] : NULL;
+        $outputType = isset($actionData['output']) ? $actionData['output'] : NULL;
+        $requestMethod = isset($actionData['method']) ? $actionData['method'] : NULL;
+
+        $pluginContainer = $this->ticket->createWorkflowExecutionContainer(
+            $moduleName,
+            $actionName,
+            $arguments,
+            $outputType,
+            $requestMethod
         );
-        $store->setAttributes($result, self::NS_RESULT_ATTRIBUTES);
+
+        $result = new WorkflowInteractivePluginResult();
+        $pluginContainer->setAttribute('plugin_result', $result, self::NS_PLUGIN_ATTRIBUTES);
+        $result->setResponse($pluginContainer->execute());
+        $result->freeze();
+
+        return $result;
     }
 }
+
+?>

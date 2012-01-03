@@ -39,13 +39,6 @@ class Items_Edit_EditInputView extends ItemsBaseView
         $ticketData['item'] = $item->toArray();
 
         $this->setAttribute('ticket', $ticketData);
-
-        WorkflowBaseInteractivePlugin::setPluginResultAttributes(
-            $this->getContainer(),
-            WorkflowInteractivePluginResult::STATE_EXPECT_INPUT,
-            WorkflowPluginResult::GATE_DEFAULT,
-            'Yay I can haz workflow message!'
-        );
     }
 
     /**

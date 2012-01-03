@@ -357,7 +357,6 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     public function __construct(array $data = array())
     {
         $this->fromArray($data);
-        $this->setBlocked(TRUE);
     }
 
     /**
@@ -451,6 +450,18 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
         return $this->container;
     }
 
+    public function createWorkflowExecutionContainer($moduleName, $actionName, AgaviRequestDataHolder $arguments = NULL, $outputType = NULL, $requestMethod = NULL)
+    {
+        $workflowExecutionContainer = $this->container->createExecutionContainer(
+            $moduleName,
+            $actionName,
+            $arguments ? $arguments : $this->container->getArguments(),
+            $outputType,
+            $requestMethod
+        );
+        $workflowExecutionContainer->setParameter('is_workflow_container', TRUE);
+        return $workflowExecutionContainer;
+    }
 
     /**
      * check if in interactive mode
@@ -510,3 +521,5 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
             $this->workflow, $this->currentStep, $this->result);
     }
 }
+
+?>

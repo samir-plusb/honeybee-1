@@ -9,8 +9,11 @@
         <autoload name="WorkflowBasePlugin">%core.module_dir%/Workflow/lib/base/WorkflowBasePlugin.class.php</autoload>
         <autoload name="WorkflowBaseInteractivePlugin">%core.module_dir%/Workflow/lib/base/WorkflowBaseInteractivePlugin.class.php</autoload>
         <autoload name="WorkflowModuleSetup">%core.module_dir%/Workflow/lib/setup/WorkflowModuleSetup.class.php</autoload>
-        <autoload name="WorkflowPluginResult">%core.module_dir%/Workflow/lib/WorkflowPluginResult.class.php</autoload>
-        <autoload name="WorkflowInteractivePluginResult">%core.module_dir%/Workflow/lib/WorkflowInteractivePluginResult.class.php</autoload>
+
+        <autoload name="IWorkflowPluginResult">%core.module_dir%/Workflow/lib/base/IWorkflowPluginResult.iface.php</autoload>
+        <autoload name="WorkflowPluginResult">%core.module_dir%/Workflow/lib/base/WorkflowPluginResult.class.php</autoload>
+        <autoload name="WorkflowInteractivePluginResult">%core.module_dir%/Workflow/lib/base/WorkflowInteractivePluginResult.class.php</autoload>
+        
         <autoload name="WorkflowException">%core.module_dir%/Workflow/lib/WorkflowException.class.php</autoload>
         <autoload name="WorkflowHandler">%core.module_dir%/Workflow/lib/WorkflowHandler.class.php</autoload>
         <!-- Items -->

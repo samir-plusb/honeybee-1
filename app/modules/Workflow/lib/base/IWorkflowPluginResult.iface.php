@@ -1,0 +1,41 @@
+<?php
+
+interface IWorkflowPluginResult
+{
+    /**
+     * plugin has an internal error. A message is available.
+     */
+    const STATE_ERROR = 0;
+
+    /**
+     * plugin has successfully processed
+     */
+    const STATE_OK = 1;
+
+    /**
+     * The ticket should be suspended until time
+     */
+    const STATE_WAIT_UNTIL = 2;
+
+    /**
+     * The ticket should be suspended until interactive request
+     */
+    const STATE_EXPECT_INPUT = 3;
+
+    /**
+     * The requested plugin execution has been denied, due to insufficient privleges.
+     */
+    const STATE_NOT_ALLOWED = 4;
+
+    /**
+     * default gate number when to stop the workflow
+     */
+    const GATE_NONE = -1;
+
+    /**
+     * default gate number for simple plugins (first gate, gate 0)
+     */
+    const GATE_DEFAULT = 0;
+}
+
+?>

@@ -2,8 +2,13 @@
 
 class WorkflowRefineNewsPlugin extends WorkflowBaseInteractivePlugin
 {
-    protected function doProcess()
+    protected function getPluginAction()
     {
-        return $this->executePluginAction('Edit', 'Items');
+        return array(
+            'module' => 'Items',
+            'action' => 'Edit'
+        );
     }
 }
+
+?>

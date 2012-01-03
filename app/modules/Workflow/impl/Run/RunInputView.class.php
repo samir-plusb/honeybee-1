@@ -19,7 +19,7 @@ class Workflow_Run_RunInputView extends ProjectBaseView
      */
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
-        return $this->processTicket($parameters)->getContent();
+        return $this->getAttribute('response')->getContent();
     }
 
     /**
@@ -39,17 +39,6 @@ class Workflow_Run_RunInputView extends ProjectBaseView
     {
         return $this->processTicket($parameters)->getContent();
     }
-
-    /**
-     * process the ticket
-     *
-     * @return AgaviExecutionContainer
-     */
-    protected function processTicket(AgaviRequestDataHolder $parameters)
-    {
-        $ticket = $parameters->getParameter('ticket');
-        $supervisor = Workflow_SupervisorModel::getInstance();
-        $result = $supervisor->processTicket($ticket, $this->getContainer());
-        return $result;
-    }
 }
+
+?>

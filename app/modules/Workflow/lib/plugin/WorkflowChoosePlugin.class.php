@@ -8,14 +8,19 @@
  * @version $Id$
  *
  */
-class WorkflowChoosePlugin extends WorkflowBaseInteractivePlugin implements IWorkflowPlugin
+class WorkflowChoosePlugin extends WorkflowBaseInteractivePlugin
 {
     /**
      * (non-PHPdoc)
-     * @see WorkflowBasePlugin::doProcess()
+     * @see WorkflowBaseInteractivePlugin::doProcess()
      */
-    protected function doProcess()
+    protected function getPluginAction()
     {
-        return $this->executePluginAction('Plugin_Choose');
+        return array(
+            'module' => 'Workflow',
+            'action' => 'Plugin_Choose'
+        );
     }
 }
+
+?>

@@ -1,0 +1,147 @@
+<?php
+
+/**
+ * holds the result of a plugin process method call
+ *
+ * @package Workflow
+ * @author tay
+ * @version $Id$
+ * @since 21.10.2011
+ *
+ */
+class WorkflowPluginResult implements IWorkflowPluginResult
+{
+    /**
+     * @var integer plugin result state; use our STATE_ constants
+     */
+    private $state;
+
+    /**
+     * @var integer gate number to the next workflow step
+     */
+    private $gate;
+
+    /**
+     *
+     * @var string message for the user
+     */
+    private $message;
+
+    private $frozen = FALSE;
+
+    public function freeze()
+    {
+        $this->frozen = TRUE;
+    }
+
+    protected function verifyMutability()
+    {
+        if (TRUE === $this->frozen)
+        {
+            throw new WorkflowException("Trying to modify a non-mutable (frozen) workflow-plugin result!");
+        }
+    }
+
+    /**
+     * provide our member data as array as base for json export
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array_filter(get_object_vars($this));
+    }
+
+    public static function fromArray(array $data)
+    {
+        if (! isset($data['state']) || ! isset($data['gate']))
+        {
+            throw new WorkflowException(
+                "When creating new plugin results from given data, the gate and state information is considered mandatory." .
+                "The given data is missing one of the latter values."
+            );
+        }
+
+        $result = new self();
+        $result->setGate($data['gate']);
+        $result->setState($data['state']);
+        $result->setMessage(isset($data['message']) ? $data['message'] : NULL);
+        $result->freeze();
+
+        return $result;
+    }
+
+    /**
+     * gets plugin result state
+     *
+     * @return integer
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    public function setState($state)
+    {
+        $this->verifyMutability();
+        $this->state = intval($state);
+    }
+
+    /**
+     * gets the gate number to the next workflow step
+     *
+     * @return integer
+     */
+    public function getGate()
+    {
+        return $this->gate;
+    }
+
+    public function setGate($gate)
+    {
+        $this->verifyMutability();
+        $this->gate = intval($gate);
+    }
+
+    /**
+     * gets the message
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    public function setMessage($message)
+    {
+        $this->verifyMutability();
+        $this->message = $message;
+    }
+
+    /**
+     * check if ticket can step forward in workflow
+     *
+     * @return boolean
+     */
+    public function canProceedToNextStep()
+    {
+        return self::STATE_OK == $this->state && self::GATE_DEFAULT <= $this->gate;
+    }
+
+
+    /**
+     * convert instance to string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            '%s(State %d, Gate %d, Message: "%s")',
+            get_class($this), $this->state, $this->gate, $this->message
+        );
+    }
+}
+
+?>
