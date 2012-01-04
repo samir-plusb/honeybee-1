@@ -168,7 +168,7 @@ abstract class BaseCouchDatabaseSetup implements ICouchDatabaseSetup
             $loggerManager = AgaviContext::getInstance()->getLoggerManager();
             if (isset($stat['ok']))
             {
-                $loggerManager->getLogger('app')->log(
+                $loggerManager->getLogger()->log(
                     new AgaviLoggerMessage(
                         '['.get_class($this).'] Successfully saved '.$this->getDatabase()->getDatabaseName().'_design/'.$docid,
                         AgaviLogger::INFO
