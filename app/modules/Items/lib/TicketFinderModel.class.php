@@ -1,6 +1,6 @@
 <?php
 
-class TicketFinderModel extends AgaviModel implements AgaviISingletonModel, IFinder
+class TicketFinderModel extends AgaviModel implements AgaviISingletonModel
 {
     const DEFAULT_LIMIT = 50;
 

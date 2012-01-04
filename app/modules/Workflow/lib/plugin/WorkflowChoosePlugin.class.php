@@ -17,8 +17,11 @@ class WorkflowChoosePlugin extends WorkflowBaseInteractivePlugin
     protected function getPluginAction()
     {
         return array(
-            'module' => 'Workflow',
-            'action' => 'Plugin_Choose'
+            'module'     => 'Workflow',
+            'action'     => 'Plugin_Choose',
+            'parameters' => array(
+                'gates' => $this->getGates()
+            )
         );
     }
 }

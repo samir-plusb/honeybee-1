@@ -87,6 +87,14 @@ abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
             $requestMethod
         );
 
+        if (isset($actionData['parameters']) && is_array($actionData['parameters']))
+        {
+            foreach ($actionData['parameters'] as $name => $value)
+            {
+                $pluginContainer->setParameter($name, $value);
+            }
+        }
+
         $result = new WorkflowInteractivePluginResult();
         $pluginContainer->setAttribute('plugin_result', $result, self::NS_PLUGIN_ATTRIBUTES);
         $result->setResponse($pluginContainer->execute());

@@ -21,31 +21,38 @@ class Workflow_Plugin_Choose_Plugin_ChooseSuccessView extends WorkflowPluginBase
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {
+        $gate = $parameters->getParameter('gate', WorkflowPluginResult::GATE_NONE);
+        $state = WorkflowPluginResult::STATE_EXPECT_INPUT;
+        $message = '';
+
         if ($parameters->hasParameter('gate'))
         {
-            $response = sprintf("Gate choosen: %d\n", $parameters->getParameter('gate'));
-
-            WorkflowBaseInteractivePlugin::setPluginResultAttributes(
-                $this->getContainer(),
-                WorkflowInteractivePluginResult::STATE_OK,
-                $parameters->getParameter('gate'));
+            $message = sprintf("Gate choosen: %d\n", $parameters->getParameter('gate'));
+            $state = WorkflowPluginResult::STATE_OK;
         }
         else
         {
-            $response = "Choose a gate\n\n";
+            $message = "Choose a gate\n\n";
             foreach ($this->getContainer()->getParameter('gates') as $idx => $label)
             {
-                $response .= sprintf("%d := %s\n", $idx, $label);
+                $message .= sprintf("%d := %s\n", $idx, $label);
             }
             $routes = $this->getContext()->getRouting()->gen(NULL);
-            $response .= sprintf("\nExecute %s --ticket %s --gate [NUMBER]\n",
-                $routes[0], $parameters->getParameter('ticket')->getIdentifier());
-
-            WorkflowBaseInteractivePlugin::setPluginResultAttributes(
-                $this->getContainer(),
-                WorkflowInteractivePluginResult::STATE_EXPECT_INPUT);
+            $message .= sprintf(
+                "\nExecute %s --ticket %s --gate [NUMBER]\n",
+                $routes[0],
+                $parameters->getParameter('ticket')->getIdentifier()
+            );
         }
 
-        return $response;
+        $pluginResult = $this->getContainer()->getAttribute(
+            WorkflowBaseInteractivePlugin::ATTR_RESULT,
+            WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
+        );
+        $pluginResult->setGate($gate);
+        $pluginResult->setState($state);
+        $pluginResult->setMessage($message);
+
+        return $message;
     }
 }

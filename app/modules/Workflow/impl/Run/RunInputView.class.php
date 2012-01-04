@@ -28,7 +28,7 @@ class Workflow_Run_RunInputView extends ProjectBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {
-        return $this->processTicket($parameters)->getContent();
+        return $this->getAttribute('response')->getContent();
     }
 
     /**
@@ -37,7 +37,9 @@ class Workflow_Run_RunInputView extends ProjectBaseView
      */
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
-        return $this->processTicket($parameters)->getContent();
+        return json_encode(
+            array('resp' => $this->getAttribute('response')->getContent())
+        );
     }
 }
 

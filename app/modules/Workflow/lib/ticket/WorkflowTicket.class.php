@@ -379,6 +379,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
             'counts' => $this->stepCounts,
             'p' => $this->getParameters()
         );
+
         return array_filter($data);
     }
 
@@ -414,7 +415,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
         $this->setWaitUntilFromIso8601( empty($data['wait']) ? NULL : $data['wait']);
         $this->setWorkflow( empty($data['workflow']) ? NULL : $data['workflow']);
         $this->setCurrentStep( empty($data['step']) ? NULL : $data['step']);
-
+        $this->setCurrentOwner(empty($data['currentOwner']) ? NULL : $data['currentOwner']);
         if (isset($data['result']))
         {
             $this->setPluginResult(WorkflowPluginResult::fromArray($data['result']));
@@ -515,10 +516,12 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
      */
     public function __toString()
     {
-        return sprintf('%s(Item "%s", Workflow %s/%s, %s)',
+        return sprintf(
+            '%s(Item "%s", Workflow %s/%s, %s)',
             get_class($this),
             ($this->workflowItem ? $this->workflowItem->getIdentifier() : ''),
-            $this->workflow, $this->currentStep, $this->result);
+            $this->workflow, $this->currentStep, $this->result
+        );
     }
 }
 
