@@ -2,14 +2,20 @@
 <ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
     <ae:configuration>
         <workflow name="news">
-            <description>The default workflow for refinining news.</description>
-            <steps start="refine">
-                <step id="refine" name="Initial refinement of imported news data.">
-                    <plugin>RefineNews</plugin>
-                    <ae:parameter></ae:parameter>
-                    <gates>
-                        <gate end="true">Hurray, I can haz news</gate>
-                    </gates>
+            <description>This workflow is for testing interactive workflows.</description>
+            <start_at>news_refinement</start_at>
+            <steps>
+                <step name="news_refinement">
+                    <description>Manually refine incoming import-items and create content-items from them.</description>
+                    <plugin type="RefineNews">
+                        <ae:parameters>
+                            <ae:parameter name="foo">1</ae:parameter>
+                        </ae:parameters>
+                        <gates>
+                            <gate name="delete">delete item</gate>
+                            <gate name="promote">approval</gate>
+                        </gates>
+                    </plugin>
                 </step>
             </steps>
         </workflow>

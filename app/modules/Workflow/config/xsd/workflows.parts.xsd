@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema 
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
     xmlns:envelope_1_1="http://agavi.org/agavi/config/global/envelope/1.1"
-    xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" 
+    xmlns="http://berlinonline.de/schemas/midas/workflow/1.0"
     targetNamespace="http://berlinonline.de/schemas/midas/workflow/1.0"
     elementFormDefault="qualified" version="$Id:$">
 
-    <xs:import namespace="http://agavi.org/agavi/config/global/types/1.0" 
+    <xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
         schemaLocation="../../../../../libs/agavi/config/xsd/_types.xsd"/>
-        
+
     <xs:import namespace="http://agavi.org/agavi/config/global/envelope/1.1"
         schemaLocation="../../../../../libs/agavi/config/xsd/_envelope.xsd" />
 
@@ -22,27 +22,32 @@
     <xs:complexType name="workflowType">
         <xs:sequence>
             <xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="start_at" type="xs:string" minOccurs="1" maxOccurs="1"/>
             <xs:element name="steps" type="stepsType" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
-        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="required" />
     </xs:complexType>
 
     <xs:complexType name="stepsType">
         <xs:sequence>
             <xs:element name="step" type="stepType" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute name="start" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="stepType">
         <xs:sequence>
-            <xs:element name="plugin" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="plugin" type="pluginType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="pluginType">
+        <xs:sequence>
             <xs:group ref="envelope_1_1:parameters"/>
-            <xs:element name="roles" type="rolesType" minOccurs="0" maxOccurs="1"/>
             <xs:element name="gates" type="gatesType" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
-        <xs:attribute name="id" type="xs:ID" use="required"/>
-        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="gatesType">
@@ -50,18 +55,9 @@
             <xs:element name="gate" type="gateType" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
-    
-    <xs:complexType name="gateType" mixed="true">
-        <xs:attribute name="end" type="types_1_0:boolean" default="FALSE"/>
-        <xs:attribute name="ref" type="xs:IDREF"/>
-        <xs:attribute name="workflow" type="xs:string" />
-    </xs:complexType>
 
-    <xs:complexType name="rolesType">
-        <xs:choice minOccurs="1" maxOccurs="unbounded">
-            <xs:element name="read" type="xs:string"/>
-            <xs:element name="write" type="xs:string"/>
-        </xs:choice>
+    <xs:complexType name="gateType" mixed="true">
+        <xs:attribute name="name" type="xs:string" />
     </xs:complexType>
 
 </xs:schema>

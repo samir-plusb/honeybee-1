@@ -13,7 +13,7 @@
         <autoload name="IWorkflowPluginResult">%core.module_dir%/Workflow/lib/base/IWorkflowPluginResult.iface.php</autoload>
         <autoload name="WorkflowPluginResult">%core.module_dir%/Workflow/lib/base/WorkflowPluginResult.class.php</autoload>
         <autoload name="WorkflowInteractivePluginResult">%core.module_dir%/Workflow/lib/base/WorkflowInteractivePluginResult.class.php</autoload>
-        
+
         <autoload name="WorkflowException">%core.module_dir%/Workflow/lib/WorkflowException.class.php</autoload>
         <autoload name="WorkflowHandler">%core.module_dir%/Workflow/lib/WorkflowHandler.class.php</autoload>
         <!-- Items -->
@@ -37,5 +37,7 @@
         <autoload name="WorkflowNullPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowNullPlugin.class.php</autoload>
         <autoload name="WorkflowChoosePlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowChoosePlugin.class.php</autoload>
         <autoload name="WorkflowRefineNewsPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowRefineNewsPlugin.class.php</autoload>
+
+        <autoload name="WorkflowConfigHandler">%core.module_dir%/Workflow/lib/base/WorkflowConfigHandler.class.php</autoload>
     </ae:configuration>
 </ae:configurations>
