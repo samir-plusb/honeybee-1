@@ -715,9 +715,9 @@ class ExtendedCouchDbClient
      */
     protected function getJsonData($curlHandle, $validReturnCode = self::STATUS_OK)
     {
-        $response = $this->lastResponse = curl_exec($curlHandle);
+        $this->lastResponse = curl_exec($curlHandle);
         $this->processCurlErrors($curlHandle, $validReturnCode);
-        $data = json_decode($response, TRUE);
+        $data = json_decode($this->lastResponse, TRUE);
         if (NULL === $data)
         {
             throw new CouchdbClientException(
