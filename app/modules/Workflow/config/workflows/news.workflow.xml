@@ -3,20 +3,28 @@
     <ae:configuration>
         <workflow name="news">
             <description>This workflow is for testing interactive workflows.</description>
-            <start_at>news_refinement</start_at>
+            <start_at>refine_item</start_at>
             <steps>
-                <step name="news_refinement">
+
+                <step name="refine_item">
                     <description>Manually refine incoming import-items and create content-items from them.</description>
                     <plugin type="RefineNews">
-                        <ae:parameters>
-                            <ae:parameter name="foo">1</ae:parameter>
-                        </ae:parameters>
                         <gates>
                             <gate name="delete">delete item</gate>
                             <gate name="promote">approval</gate>
                         </gates>
                     </plugin>
                 </step>
+
+                <step name="delete_item">
+                    <description>Manually refine incoming import-items and create content-items from them.</description>
+                    <plugin type="DeleteNews">
+                        <gates>
+                            <gate name="terminate" />
+                        </gates>
+                    </plugin>
+                </step>
+
             </steps>
         </workflow>
     </ae:configuration>

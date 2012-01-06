@@ -83,32 +83,28 @@ class WorkflowHandler
      * The array for $config parameter has the form:
      *
      * <pre>
-     * array(
-     *     [name] => …
-     *     [description] => …
-     *     [steps] => Array
-     *     (
-     *         [start] => {ID OF FIRST WORKFLOW STEP}
-     *         [ID STEP 1] => Array
-     *         (
-     *              [name] => {WORKFLOW STEP NAME}
-     *              [plugin] => {PLUGIN NAME}
-     *              [gates] => Array
-     *              (
-     *                  [0] => Array
-     *                  (
-     *                      // one of the following:
-     *                      [workflow] => {NAME OF NEXT WORKFLOW}
-     *                      [ref] => {ID OF NEXT STEP}
-     *                      [end] => {WORKFLOW END}
-     *                      [value] => {GATE DESCRIPTION}
+     *  array (
+     *      'workflow' => array (
+     *          'name' => 'news',
+     *          'description' => {WORKFLOW DESCRIPTION},
+     *          'start' => {NAME OF THE STEP TO START THE WORKFLOW WITH},
+     *          'steps' => array (
+     *              {STEP NAME} => array (
+     *                  'description' => {WORKFLOW DESCRIPTION},
+     *                  'plugin' => array (
+     *                      'type' => {WORKFLOW PLUGIN ALIAS},
+     *                      'gates' => array (
+     *                          {GATE NAME} => {VALID WORKFLOW STEP NAME},
+     *                          ...
+     *                      ),
+     *                      'parameters' => array (
+     *                          {PARAMETER NAME} => {PARAMETER VALUE},
+     *                          ...
+     *                      ),
      *                  )
-     *                  [1] => Arrray(…)
-     *                  …
-     *               )
+     *              ),
+     *              ...
      *          )
-     *          [ID STEP 2] => Array(…)
-     *          …
      *      )
      *  )
      *  </pre>
@@ -121,24 +117,9 @@ class WorkflowHandler
     public function __construct(array $config)
     {
         $this->name = $config['name'];
-        $this->description = empty($config['description']) ? '' : $config['description'];
-
-        if (empty($config['steps']['start']))
-        {
-            $steps = array_keys($config['steps']);
-            $this->firstStep = $steps[0];
-        }
-        else
-        {
-            /* @todo check for workflow steps named 'start' */
-            $this->firstStep = $config['steps']['start'];
-            unset($config['steps']['start']);
-        }
+        $this->description = $config['description'];
+        $this->firstStep = $config['start_at'];
         $this->steps = $config['steps'];
-        if (empty($this->steps))
-        {
-            throw new WorkflowException('Workflow is empty', WorkflowException::INVALID_WORKFLOW);
-        }
     }
 
     /**
@@ -150,7 +131,6 @@ class WorkflowHandler
     {
         return $this->name;
     }
-
 
     /**
      * pull the ticket through the workflow
@@ -248,7 +228,6 @@ class WorkflowHandler
         }
     }
 
-
     /**
      * execute the plugin for current workflow step
      *
@@ -285,9 +264,11 @@ class WorkflowHandler
      */
     protected function getGate(WorkflowPluginResult $result)
     {
+        /**
+         * @todo Switch to gate name instead of gate number.
+         */
         return $this->steps[$this->getCurrentStep()]['gates'][$result->getGate()];
     }
-
 
     /**
      * assoziate the ticket to the workflow
@@ -332,6 +313,11 @@ class WorkflowHandler
 
         if (! array_key_exists($step, $this->steps))
         {
+            // The ticket's current step is not present inside the workflow.
+            // This can happen when:
+            // 1. The ticket was modifed from outside the workflow. In this case find and kill the person who did this.
+            // 2. The ticket is coming from another workflow and was not reset before,
+            // thereby still containing a step-name from it's previous surrounding workflow.
             throw new WorkflowException('Workflow step does not exists: '.$step, WorkflowException::STEP_MISSING);
         }
 
@@ -348,7 +334,6 @@ class WorkflowHandler
         return $this->ticket;
     }
 
-
     /**
      * get the plugin parameters of current workflow step
      *
@@ -356,13 +341,15 @@ class WorkflowHandler
      */
     protected function getStepParameters()
     {
+        /**
+         * @todo Rename to getPluginParameters nad move to createPlugin or something like that.
+         */
         if (array_key_exists('parameters', $this->steps[$this->getCurrentStep()]))
         {
             return $this->steps[$this->getCurrentStep()]['parameters'];
         }
         return array();
     }
-
 
     /**
      * get the labes of defined gates in the current step
@@ -371,6 +358,9 @@ class WorkflowHandler
      */
     protected function getCurrentGates()
     {
+        /**
+         * @todo Get the gates of the current step. Why is there no step object?
+         */
         $gates = $this->steps[$this->getCurrentStep()]['gates'];
         $ginfo = array();
         foreach ($gates as $idx => $gate)
@@ -379,7 +369,6 @@ class WorkflowHandler
         }
         return $ginfo;
     }
-
 
     /**
      * find plugin for the current workflow step
@@ -392,6 +381,9 @@ class WorkflowHandler
      */
     protected function getPluginFor($currentStep)
     {
+        /**
+         * @todo Get the plugin of the current step. Why is there no step object?
+         */
         if (! isset($this->steps[$currentStep]['plugin']))
         {
             throw new WorkflowException(
@@ -407,13 +399,14 @@ class WorkflowHandler
         return $plugin;
     }
 
-
     /**
      * find and initialize a plugin by its name
      *
      * @param string $pluginName name of plugin
      * @return IWorkflowPlugin
      * @throws WorkflowException on class not found errors or initialize problems
+     *
+     * @todo If there was a step object then this method would go there.
      */
     public function getPluginByName($pluginName)
     {
@@ -437,7 +430,7 @@ class WorkflowHandler
     }
 
     /**
-     *
+     * @todo Rename to getTicketPeer
      * @return WorkflowTicketPeer
      */
     public function getPeer()
