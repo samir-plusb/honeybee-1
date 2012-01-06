@@ -188,6 +188,7 @@ class WorkflowHandler
      */
     protected function prepareNextAction(WorkflowPluginResult $result)
     {
+        // @todo Adjust to the new config structure (empty node === {exist workflow} etc...)
         $ticket = $this->getTicket();
         switch ($result->getState())
         {
@@ -267,7 +268,7 @@ class WorkflowHandler
         /**
          * @todo Switch to gate name instead of gate number.
          */
-        return $this->steps[$this->getCurrentStep()]['gates'][$result->getGate()];
+        return $this->steps[$this->getCurrentStep()]['plugin']['gates'][$result->getGate()];
     }
 
     /**
@@ -344,11 +345,7 @@ class WorkflowHandler
         /**
          * @todo Rename to getPluginParameters nad move to createPlugin or something like that.
          */
-        if (array_key_exists('parameters', $this->steps[$this->getCurrentStep()]))
-        {
-            return $this->steps[$this->getCurrentStep()]['parameters'];
-        }
-        return array();
+        return $this->steps[$this->getCurrentStep()]['plugin']['parameters'];
     }
 
     /**
@@ -361,7 +358,7 @@ class WorkflowHandler
         /**
          * @todo Get the gates of the current step. Why is there no step object?
          */
-        $gates = $this->steps[$this->getCurrentStep()]['gates'];
+        $gates = $this->steps[$this->getCurrentStep()]['plugin']['gates'];
         $ginfo = array();
         foreach ($gates as $idx => $gate)
         {
@@ -392,7 +389,7 @@ class WorkflowHandler
         }
         $step = $this->steps[$currentStep];
 
-        $pluginName = $step['plugin'];
+        $pluginName = $step['plugin']['type'];
         $plugin = $this->getPluginByName($pluginName);
         $plugin->initialize($this->getTicket(), $this->getStepParameters(), $this->getCurrentGates());
 
