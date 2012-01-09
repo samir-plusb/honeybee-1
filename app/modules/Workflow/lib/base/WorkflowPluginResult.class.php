@@ -17,7 +17,7 @@ class WorkflowPluginResult implements IWorkflowPluginResult
     private $state;
 
     /**
-     * @var integer gate number to the next workflow step
+     * @var string Name of the gate to use when existing this step.
      */
     private $gate;
 
@@ -88,19 +88,31 @@ class WorkflowPluginResult implements IWorkflowPluginResult
     }
 
     /**
-     * gets the gate number to the next workflow step
+     * Returns the name of the gate to use to navigate on to the next workflow destination.
      *
-     * @return integer
+     * @return string
      */
     public function getGate()
     {
         return $this->gate;
     }
 
+    /**
+     * Set the name of the result's gate.
+     *
+     * @param string $gate
+     */
     public function setGate($gate)
     {
+        if (! is_string($gate))
+        {
+            throw new InvalidArgumentException(
+                "Only strings may be provided when referring to workflow gates (e.g. gate-names)." . PHP_EOL .
+                "Lookup the name of the desired gate in your workflow's definition. Given value -> " . print_r($gate, TRUE)
+            );
+        }
         $this->verifyMutability();
-        $this->gate = intval($gate);
+        $this->gate = $gate;
     }
 
     /**
@@ -126,7 +138,7 @@ class WorkflowPluginResult implements IWorkflowPluginResult
      */
     public function canProceedToNextStep()
     {
-        return self::STATE_OK == $this->state && self::GATE_DEFAULT <= $this->gate;
+        return self::STATE_OK == $this->state && NULL !== $this->gate;
     }
 
 

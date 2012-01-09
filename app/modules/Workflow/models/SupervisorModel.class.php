@@ -168,7 +168,7 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
         {
             $message = $pluginResult->getMessage()
                 ? $pluginResult->getMessage()
-                : 'Workflow halted with error'; // Default err-message in case someone messy forgot to provide one.
+                : 'Workflow halted with error'; // Default err-message in case whoever forgot to provide one.
             throw new WorkflowException($message, WorkflowException::UNEXPECTED_EXIT_CODE);
         }
 

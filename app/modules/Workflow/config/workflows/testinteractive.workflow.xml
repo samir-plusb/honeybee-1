@@ -7,21 +7,25 @@
             <steps>
                 <step name="choose">
                     <description>Choose a gate.</description>
-                    <plugin>
+                    <plugin type="choose">
+                        <ae:parameters>
+                            <ae:parameter name="message">yay, i can haz choose termination</ae:parameter>
+                        </ae:parameters>
                         <gates>
-                            <gate name="promote">timewarp</gate>
-                            <gate name="terminate" />
+                            <gate_step name="promote" label="scotty, beam me up!">beamstation</gate_step>
+                            <gate_end name="terminate" label="eow - end of workflow" />
                         </gates>
                     </plugin>
 
                 </step>
-                
-                <step name="timewarp">
+
+                <step name="beamstation">
                     <description>Back to the future!</description>
-                    <plugin>null</plugin>
-                    <gates>
-                        <gate name="wormhole">choose</gate>
-                    </gates>
+                    <plugin type="null">
+                        <gates>
+                            <gate_step name="promote" label="back to the roots">choose</gate_step>
+                        </gates>
+                    </plugin>
                 </step>
             </steps>
         </workflow>

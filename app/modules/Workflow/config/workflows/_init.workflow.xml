@@ -2,14 +2,19 @@
 <ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
     <ae:configuration>
         <workflow name="_init">
-            <description>This workflow will decide which workflow to run through one input element. The associated
-                content element must not be changed in this workflow.</description>
-            <steps start="is_news">
-                <step id="is_news" name="Check for news item">
-                    <plugin>Null</plugin>
-                    <gates>
-                        <gate workflow="news"></gate>
-                    </gates>
+            <description>
+                This workflow will decide which workflow to run through one input element. The associated
+                content element must not be changed in this workflow.
+            </description>
+            <start_at>is_news</start_at>
+            <steps>
+                <step name="is_news">
+                    <description>Check for news item</description>
+                    <plugin type="null">
+                        <gates>
+                            <gate_workflow name="promote" label="switch to the news workflow">news</gate_workflow>
+                        </gates>
+                    </plugin>
                 </step>
             </steps>
         </workflow>

@@ -10,16 +10,21 @@
  */
 class WorkflowNullPlugin extends WorkflowBasePlugin
 {
+    const GATE_PROMOTE = 'promote';
+
+    const PARAM_MESSAGE = 'message';
+
     /**
      * (non-PHPdoc)
      * @see WorkflowBasePlugin::process()
      */
     protected function doProcess()
     {
-        return new WorkflowPluginResult(
-            WorkflowPluginResult::STATE_OK,
-            WorkflowPluginResult::GATE_DEFAULT
-        );
+        $result = new WorkflowPluginResult();
+        $result->setState(WorkflowPluginResult::STATE_OK);
+        $result->setGate(self::GATE_PROMOTE);
+        $result->freeze();
+        return $result;
     }
 }
 

@@ -50,14 +50,37 @@
         <xs:attribute name="type" type="xs:string" use="required"/>
     </xs:complexType>
 
+    <!-- PLUGIN GATE DEFINITIONS -->
+
     <xs:complexType name="gatesType">
-        <xs:sequence>
-            <xs:element name="gate" type="gateType" minOccurs="1" maxOccurs="unbounded"/>
-        </xs:sequence>
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="gate_step" type="stepGateType" />
+            <xs:element name="gate_workflow" type="workflowGateType" />
+            <xs:element name="gate_end" type="endGateType" />
+        </xs:choice>
     </xs:complexType>
 
-    <xs:complexType name="gateType" mixed="true">
-        <xs:attribute name="name" type="xs:string" />
+    <xs:complexType name="baseGateType" abstract="true">
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="label" type="xs:string" />
+    </xs:complexType>
+
+    <xs:complexType name="stepGateType">
+        <xs:complexContent mixed="true">
+            <xs:extension base="baseGateType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="workflowGateType">
+        <xs:complexContent mixed="true">
+            <xs:extension base="baseGateType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="endGateType">
+        <xs:complexContent>
+            <xs:extension base="baseGateType" />
+        </xs:complexContent>
     </xs:complexType>
 
 </xs:schema>

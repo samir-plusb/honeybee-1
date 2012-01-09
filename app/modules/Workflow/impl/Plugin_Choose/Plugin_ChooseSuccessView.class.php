@@ -21,11 +21,11 @@ class Workflow_Plugin_Choose_Plugin_ChooseSuccessView extends WorkflowPluginBase
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {
-        $gate = $parameters->getParameter('gate', WorkflowPluginResult::GATE_NONE);
+        $gate = $parameters->getParameter('gate', FALSE);
         $state = WorkflowPluginResult::STATE_EXPECT_INPUT;
         $message = '';
 
-        if ($parameters->hasParameter('gate'))
+        if ($gate)
         {
             $message = sprintf("Gate choosen: %d\n", $parameters->getParameter('gate'));
             $state = WorkflowPluginResult::STATE_OK;
@@ -49,7 +49,10 @@ class Workflow_Plugin_Choose_Plugin_ChooseSuccessView extends WorkflowPluginBase
             WorkflowBaseInteractivePlugin::ATTR_RESULT,
             WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
         );
-        $pluginResult->setGate($gate);
+        if ($gate)
+        {
+            $pluginResult->setGate($gate);
+        }
         $pluginResult->setState($state);
         $pluginResult->setMessage($message);
 

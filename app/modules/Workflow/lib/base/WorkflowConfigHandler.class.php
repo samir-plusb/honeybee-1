@@ -42,13 +42,7 @@ class WorkflowConfigHandler extends AgaviXmlConfigHandler
             foreach ($workflow->getChild('steps')->get('step') as $stepNode)
             {
                 $pluginNode = $stepNode->getChild('plugin');
-                $parsedGates = array();
-                /* @var $gateNode AgaviXmlConfigDomElement */
-                foreach ($pluginNode->getChild('gates')->get('gate') as $gateNode)
-                {
-                    $gateTarget = trim($gateNode->nodeValue);
-                    $parsedGates[$gateNode->getAttribute('name')] = empty($gateTarget) ? NULL : $gateTarget;
-                }
+                $parsedGates = $this->parseGates($pluginNode->getChild('gates'));
                 $parsedSteps[$stepNode->getAttribute('name')] = array(
                     'description' => $stepNode->getChild('description')->nodeValue,
                     'plugin' => array(
@@ -65,17 +59,44 @@ class WorkflowConfigHandler extends AgaviXmlConfigHandler
                 'steps' => $parsedSteps
             );
 		}
-        $this->verifyWorkflowLogic();
+        $this->verifyWorkflowLogic($data);
         $configCode = sprintf('return %s;', var_export($data, true));
 		return $this->generate($configCode, $config);
 	}
 
     /**
+     * Grab the gate definitions from the given gates container
+     * and return a common structure for representing gate data towards the code using the config (WorkflowHandler).
+     *
+     * @param AgaviXmlConfigDomElement $gatesNode
+     * @return array
+     */
+    protected function parseGates(AgaviXmlConfigDomElement $gatesNode)
+    {
+        $parsedGates = array();
+        foreach (array('step', 'workflow', 'end') as $gateType)
+        {
+            /* @var $gateNode AgaviXmlConfigDomElement */
+            foreach ($gatesNode->get('gate_' . $gateType) as $gateNode)
+            {
+                $gateTarget = trim($gateNode->nodeValue);
+                $gateData = array('type' => $gateType);
+                if ('end' !== $gateType)
+                {
+                    $gateData['target'] = empty($gateTarget) ? NULL : $gateTarget;
+                }
+                $parsedGates[$gateNode->getAttribute('name')] = $gateData;
+            }
+        }
+        return $parsedGates;
+    }
+
+    /**
      * Verify that the given the workflow definition
      */
-    protected function verifyWorkflowLogic()
+    protected function verifyWorkflowLogic(array $data)
     {
-        // @todo Check if all gates refer to existing steps etc. Throw an AgaviParseException if not.
+        // @todo Check if all gates refer to existing targets (steps, workflows, etc) and throw an AgaviParseException if not.
     }
 }
 

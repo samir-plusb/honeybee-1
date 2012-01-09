@@ -194,26 +194,22 @@ class WorkflowHandler
         {
             case WorkflowPluginResult::STATE_OK:
                 $gate = $this->getGate($result);
-                if (! empty($gate['workflow']))
+                if ('workflow' === $gate['type'])
                 {
                     $ticket->reset();
-                    $ticket->setWorkflow($gate['workflow']);
+                    $ticket->setWorkflow($gate['target']);
                     return self::STATE_NEXT_WORKFLOW;
                 }
-                else if (! empty($gate['ref']))
+                else if ('step' === $gate['type'])
                 {
-                    $this->setCurrentStep($gate['ref']);
+                    $this->setCurrentStep($gate['target']);
                     return self::STATE_NEXT_STEP;
                 }
-                else if (array_key_exists('end', $gate) && $gate['end'])
+                else if ('end' === $gate['type'])
                 {
                     $ticket->reset();
                     $ticket->setBlocked(FALSE);
                     return self::STATE_END;
-                }
-                else
-                {
-                    throw new WorkflowException('Gate has no action', WorkflowException::GATE_WITHOUT_ACTION);
                 }
                 break;
 

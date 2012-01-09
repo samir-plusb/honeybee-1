@@ -17,12 +17,15 @@ class Workflow_RunAction extends ProjectBaseAction
     public function execute(AgaviParameterHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $result = $this->processTicket($parameters);
-        $viewName = 'Input';
         if ($result instanceof WorkflowInteractivePluginResult)
         {
-            $this->setAttribute('response', $result->getResponse());
+            $this->setAttribute('content', $result->getResponse()->getContent());
         }
-        return $viewName;
+        else
+        {
+            $this->setAttribute('content', $result->getMessage());
+        }
+        return 'Success';
     }
 
     /**

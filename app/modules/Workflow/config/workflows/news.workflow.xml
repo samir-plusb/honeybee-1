@@ -2,25 +2,29 @@
 <ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
     <ae:configuration>
         <workflow name="news">
-            <description>This workflow is for testing interactive workflows.</description>
+            <description>
+                This workflow defines the process structure for editing/refining imported news-content and turning into usable news.
+                All content related data is composed by an entity named workflow which holds the impor-item and all related content-items.
+                Each step of this workflow acts on the workflow-item that is aggregated by the ticket, which is passed in.
+            </description>
             <start_at>refine_item</start_at>
             <steps>
 
                 <step name="refine_item">
-                    <description>Manually refine incoming import-items and create content-items from them.</description>
+                    <description>Manually refine an incoming import-item and create content-item(s) from it.</description>
                     <plugin type="RefineNews">
                         <gates>
-                            <gate name="delete">delete item</gate>
-                            <gate name="promote">approval</gate>
+                            <gate_step label="schedule workflow-item for approval" name="promote">approval</gate_step>
+                            <gate_step label="delete worklfow-item" name="delete">delete</gate_step>
                         </gates>
                     </plugin>
                 </step>
 
                 <step name="delete_item">
-                    <description>Manually refine incoming import-items and create content-items from them.</description>
+                    <description>Delete a given import-item.</description>
                     <plugin type="DeleteNews">
                         <gates>
-                            <gate name="terminate" />
+                            <gate_end name="terminate" />
                         </gates>
                     </plugin>
                 </step>

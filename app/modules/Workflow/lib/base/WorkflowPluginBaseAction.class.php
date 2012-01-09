@@ -74,11 +74,12 @@ class WorkflowPluginBaseAction extends ProjectBaseAction
             $message = sprintf('%s (%s :: %s)', $message, implode(', ',$error->getFields()), $error->getMessage());
         }
 
-        WorkflowBaseInteractivePlugin::setPluginResultAttributes(
-            $container,
-            WorkflowInteractivePluginResult::STATE_ERROR,
-            WorkflowInteractivePluginResult::GATE_NONE,
-            $message);
+        $pluginResult = $this->getContainer()->getAttribute(
+            WorkflowBaseInteractivePlugin::ATTR_RESULT,
+            WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
+        );
+        $pluginResult->setState(WorkflowPluginResult::STATE_ERROR);
+        $pluginResult->setMessage($message);
 
         return parent::handleError($parameters);
     }

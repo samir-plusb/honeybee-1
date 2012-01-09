@@ -5,7 +5,7 @@
  * @version $Id$
  * @package Workflow
  */
-class Workflow_Run_RunInputView extends ProjectBaseView
+class Workflow_Run_RunSuccessView extends ProjectBaseView
 {
     /**
      * Handles the Html output type.
@@ -19,7 +19,7 @@ class Workflow_Run_RunInputView extends ProjectBaseView
      */
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
-        return $this->getAttribute('response')->getContent();
+        return $this->getAttribute('content');
     }
 
     /**
@@ -28,7 +28,7 @@ class Workflow_Run_RunInputView extends ProjectBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {
-        return $this->getAttribute('response')->getContent();
+        return $this->getAttribute('content');
     }
 
     /**
@@ -38,7 +38,7 @@ class Workflow_Run_RunInputView extends ProjectBaseView
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
         return json_encode(
-            array('resp' => $this->getAttribute('response')->getContent())
+            array('resp' => $this->getAttribute('content'))
         );
     }
 }
