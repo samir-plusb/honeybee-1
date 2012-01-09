@@ -49,7 +49,7 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
     {
         $workflowSetup = new WorkflowModuleSetup();
         $workflowSetup->setup(TRUE);
-        
+
         $this->supervisor = Workflow_SupervisorModel::getInstance();
         $this->item = new WorkflowItem(json_decode(self::ITEM,TRUE));
         $peer = $this->supervisor->getItemPeer();
@@ -60,7 +60,7 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
         $ticket->setWorkflow('TestInteractive');
         $this->supervisor->getTicketPeer()->saveTicket($ticket);
         $this->ticket = $ticket;
-
+        // :INFO: Required so AgaviRouting does not bail out, when matching (web) routes etc.
         $_SERVER['SERVER_SOFTWARE'] = 'Apache/2';
     }
 
@@ -81,10 +81,12 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
     {
         $args = array(
             'ticket' => $this->ticket->getIdentifier(),
-            'gate' => 1
+            'gate' => 'promote'
         );
         $this->dispatch($args);
-        self::assertStringStartsWith('Gate choosen', $this->response->getContent());
+        self::assertStringStartsWith('yay, i can haz choose termination', $this->response->getContent());
     }
 
 }
+
+?>
