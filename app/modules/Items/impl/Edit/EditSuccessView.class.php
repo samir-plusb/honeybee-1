@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Items_Edit_EditInputView class handles Items/Edit read success data presentation.
+ * The Items_Edit_EditInputView class handles Items/Edit write success data presentation.
  *
  * @version         $Id: $
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -9,7 +9,7 @@
  * @package         Items
  * @subpackage      Mvc
  */
-class Items_Edit_EditInputView extends ItemsBaseView
+class Items_Edit_EditSuccessView extends ItemsBaseView
 {
     /**
      * Handle presentation logic for the web  (html).
@@ -21,24 +21,8 @@ class Items_Edit_EditInputView extends ItemsBaseView
      */
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $this->setupHtml($parameters);
-        $this->setAttribute('_title', 'Midas - News Refinement');
-
-        $this->setAttribute('tag_options', array(
-            'mandatory' => TRUE,
-            'tags' => AgaviConfig::get('items.tags', array())
-        ));
-        $this->setAttribute(
-            'category_options',
-            AgaviConfig::get('items.categories', array())
-        );
-
-        $ticket = $this->getAttribute('ticket');
-        $item = $ticket->getWorkflowItem();
-        $ticketData = $ticket->toArray();
-        $ticketData['item'] = $item->toArray();
-
-        $this->setAttribute('ticket', $ticketData);
+        $msg = "Items/Edit/Success@Text" . PHP_EOL;
+        $this->getResponse()->setContent("<h1>I haz saved ur data</h1>");
     }
 
     /**
@@ -65,9 +49,10 @@ class Items_Edit_EditInputView extends ItemsBaseView
      */
     public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $this->getResponse()->setContent(json_encode($this->getAttribute('items')));
+        $this->getResponse()->setContent(json_encode(array(
+            'status' => 'Data successfully processed.'
+        )));
     }
-
 }
 
 ?>

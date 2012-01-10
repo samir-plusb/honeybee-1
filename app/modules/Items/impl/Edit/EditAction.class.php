@@ -35,10 +35,42 @@ class Items_EditAction extends ItemsBaseAction
             WorkflowBaseInteractivePlugin::ATTR_RESULT,
             WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
         );
-        $pluginResult->setGate(WorkflowPluginResult::GATE_NONE);
         $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
 
         return 'Input';
+    }
+
+    public function executeWrite(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        // @todo Persist the model data.
+
+        $this->setAttribute('ticket', $parameters->getParameter('ticket'));
+        $pluginResult = $this->getContainer()->getAttribute(
+            WorkflowBaseInteractivePlugin::ATTR_RESULT,
+            WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
+        );
+        $pluginResult->setState(WorkflowPluginResult::STATE_OK);
+
+        return 'Success';
+    }
+
+    public function handleWriteError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        $errors = $this->getContainer()->getValidationManager()->getErrorMessages();
+
+        foreach ($errors as $error)
+        {
+            error_log(print_r($error, TRUE));
+        }
+
+        $this->setAttribute('ticket', $parameters->getParameter('ticket'));
+        $pluginResult = $this->getContainer()->getAttribute(
+            WorkflowBaseInteractivePlugin::ATTR_RESULT,
+            WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
+        );
+        $pluginResult->setState(WorkflowPluginResult::STATE_ERROR);
+
+        return 'Success';
     }
 }
 
