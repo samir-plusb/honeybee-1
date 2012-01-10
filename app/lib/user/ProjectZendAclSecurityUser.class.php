@@ -8,30 +8,29 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
     {
         parent::initialize($context, $parameters);
 
-        $this->zendAcl = new Zend_Acl();
+        $this->zendAcl = $this->createZendAcl();
     }
 
     protected function createZendAcl()
     {
         $zendAcl = new Zend_Acl();
 
+        // add the roles we'll be using to act on our resources
         $zendAcl->addRole('user')
-            ->addRole('editor', 'user')
-            ->addRole('cvd', 'editor')
-            ->addRole('admin', 'cvd');
+                ->addRole('editor', 'user')
+                ->addRole('cvd', 'editor')
+                ->addRole('admin', 'cvd');
 
+        // add the resources we will be acting on
         $zendAcl->addResource('workflow-item');
 
-        // lets deny all
-        // assertion does $resource->isPublished();
-        $zendAcl->allow('user', 'content-item', 'read', new ProjectAclContentItemIsPublishedAssertion());
-        $zendAcl->allow('editor', 'content-item', 'read');
-        $zendAcl->allow('editor', 'content-item', 'edit');
-        $zendAcl->deny('editor', 'content-news', 'edit');
-        $zendAcl->deny('editor', 'content-item', 'edit', new ProjectAclContentItemIsPublishedAssertion());
-        // assertion does $role->getId() == $resource->getOwnerId()
-        $zendAcl->allow('editor', 'content-item', 'delete', new ProjectAclUserOwnsContentItemAssertion());
-        $zendAcl->allow('cvd', 'content-item', 'edit');
+        // lets deny everything to have a nice secure basic setup
+        $zendAcl->deny(null, 'workflow-item', 'read')
+                ->deny(null, 'workflow-item', 'write');
+
+        // then start giving the specific credentials to designated roles
+        $zendAcl->allow('user', 'workflow-item', 'read')
+                ->allow('editor', 'workflow-item', 'write', new ProjectIsWorkflowItemOwnerAssertion());
 
         return $zendAcl;
     }
