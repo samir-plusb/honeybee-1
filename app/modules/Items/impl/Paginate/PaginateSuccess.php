@@ -87,7 +87,7 @@
 
     if (2 === $startAt && 2 < $totalPages || (2 < $totalPages && 6 > $totalPages))
     {
-// if we have at leat 3 pages we can display a "second page" link,
+// if we have at least 3 pages we can display a "second page" link,
 // when the current page is within the first pagination segment.
 ?>
 

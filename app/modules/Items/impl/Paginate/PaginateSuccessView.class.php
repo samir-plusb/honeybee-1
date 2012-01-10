@@ -11,7 +11,6 @@
  */
 class Items_Paginate_PaginateSuccessView extends ItemsBaseView
 {
-
     /**
      * Handle presentation logic for the web  (html).
      *

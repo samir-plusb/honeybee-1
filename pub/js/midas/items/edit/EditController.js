@@ -22,7 +22,7 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
     {
         this.parent(options);
     },
-    
+
     /**
      * @description Return an object describing the filters we provide for capturing intents.
      */
@@ -51,14 +51,7 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
      */
     onStoreContentItemIntent: function(intent)
     {
-        if (intent.data.title === 'foo')
-        {
-            this.logDebug("Skipping: onStoreContentItemIntent");
-
-            return false;
-        }
-
-        this.logDebug("Executing: onStoreContentItemIntent");
+        this.logDebug("Executing: onStoreContentItemIntent", intent);
 
         return true;
     },
