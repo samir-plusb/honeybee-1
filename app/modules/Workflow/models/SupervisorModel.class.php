@@ -114,8 +114,7 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
      */
     public function onWorkflowItemCreated(IWorkflowItem $item)
     {
-        $ticket = $this->getTicketPeer()->getTicketByWorkflowItem($item);
-        if ($ticket)
+        if ($this->getTicketPeer()->getTicketByWorkflowItem($item))
         {
             throw new WorkflowException("Received create notification for an existing ticket");
         }

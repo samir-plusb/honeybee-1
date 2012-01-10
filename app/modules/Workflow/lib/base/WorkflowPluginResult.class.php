@@ -54,7 +54,7 @@ class WorkflowPluginResult implements IWorkflowPluginResult
 
     public static function fromArray(array $data)
     {
-        if (! isset($data['state']) || ! isset($data['gate']))
+        if (! isset($data['state']))
         {
             throw new WorkflowException(
                 "When creating new plugin results from given data, the gate and state information is considered mandatory." .
@@ -63,7 +63,10 @@ class WorkflowPluginResult implements IWorkflowPluginResult
         }
 
         $result = new self();
-        $result->setGate($data['gate']);
+        if (isset($data['gate']))
+        {
+            $result->setGate($data['gate']);
+        }
         $result->setState($data['state']);
         $result->setMessage(isset($data['message']) ? $data['message'] : NULL);
         $result->freeze();

@@ -44,7 +44,7 @@ class WorkflowItemDataImport extends BaseDataImport
         $record = $this->getCurrentRecord();
         $importData = $record->toArray();
         unset ($importData[ImportBaseDataRecord::PROP_IDENT]);
-        
+
         try
         {
             /* @var $supervisor Workflow_SupervisorModel */
@@ -62,6 +62,7 @@ class WorkflowItemDataImport extends BaseDataImport
         }
         catch(Exception $e)
         {
+            echo $e->getMessage() . PHP_EOL;
              // @TODO log exception and/or bubble to parent
             return FALSE;
         }
@@ -83,7 +84,15 @@ class WorkflowItemDataImport extends BaseDataImport
         $supervisor->getItemPeer()->storeItem($workflowItem);
         if ($this->notifyEnabled())
         {
-            $supervisor->onWorkflowItemCreated($workflowItem);
+            try
+            {
+                $supervisor->onWorkflowItemCreated($workflowItem);
+            }
+            catch (Exception $e)
+            {
+                $supervisor->getItemPeer()->deleteItem($workflowItem);
+                throw $e;
+            }
         }
     }
 

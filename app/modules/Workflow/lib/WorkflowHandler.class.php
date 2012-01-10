@@ -194,7 +194,12 @@ class WorkflowHandler
         {
             case WorkflowPluginResult::STATE_OK:
                 $gate = $this->getGate($result);
-                if ('workflow' === $gate['type'])
+
+                if (NULL === $gate)
+                {
+                    return self::STATE_WAITING;
+                }
+                else if ('workflow' === $gate['type'])
                 {
                     $ticket->reset();
                     $ticket->setWorkflow($gate['target']);
@@ -244,7 +249,9 @@ class WorkflowHandler
             else
             {
                 $this->getTicket()->setBlocked(FALSE);
-                $result = new WorkflowPluginResult(WorkflowPluginResult::STATE_EXPECT_INPUT);
+                $result = new WorkflowPluginResult();
+                $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
+                $result->setMessage("waiting for input ...");
             }
         }
         else
@@ -261,9 +268,11 @@ class WorkflowHandler
      */
     protected function getGate(WorkflowPluginResult $result)
     {
-        /**
-         * @todo Switch to gate name instead of gate number.
-         */
+        $gate = $result->getGate();
+        if (NULL === $gate)
+        {
+            return $gate;
+        }
         return $this->steps[$this->getCurrentStep()]['plugin']['gates'][$result->getGate()];
     }
 

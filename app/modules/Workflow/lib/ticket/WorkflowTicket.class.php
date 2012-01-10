@@ -146,11 +146,11 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
      * @see WorkflowHandler::run()
      * @see IWorkflowPlugin::process()
      *
-     * @param WorkflowPluginResult $result from plugin process
+     * @param IWorkflowPluginResult $result from plugin process
      *
      * @return void
      */
-    public function setPluginResult(WorkflowPluginResult $result)
+    public function setPluginResult(IWorkflowPluginResult $result)
     {
         $this->result = $result;
     }

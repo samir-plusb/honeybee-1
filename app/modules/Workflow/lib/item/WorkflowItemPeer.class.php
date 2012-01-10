@@ -98,4 +98,15 @@ class WorkflowItemPeer
         }
         return FALSE;
     }
+
+    public function deleteItem(IWorkflowItem $item)
+    {
+        $document = $item->toArray();
+        $result = $this->client->deleteDoc(NULL, $item->getIdentifier(), $document['revision']);
+        if (isset($result['ok']))
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
 }
