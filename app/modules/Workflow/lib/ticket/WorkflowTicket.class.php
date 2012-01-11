@@ -471,7 +471,26 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
      */
     public function hasUserSession()
     {
-        return NULL != $this->container;
+        $user = AgaviContext::getInstance()->getUser();
+        if (! $this->container || ! $user)
+        {
+            return FALSE;
+        }
+        return $user instanceof ProjectZendAclSecurityUser && $user->isAuthenticated();
+    }
+
+    /**
+     * Returns the user for the current (web) session.
+     * 
+     * @return ProjectZendAclSecurityUser
+     */
+    public function getSessionUser()
+    {
+        if ($this->hasUserSession())
+        {
+            return AgaviContext::getInstance()->getUser();
+        }
+        return NULL;
     }
 
     /*

@@ -12,8 +12,6 @@ class WorkflowNullPlugin extends WorkflowBasePlugin
 {
     const GATE_PROMOTE = 'promote';
 
-    const PARAM_MESSAGE = 'message';
-
     /**
      * (non-PHPdoc)
      * @see WorkflowBasePlugin::process()
@@ -25,6 +23,16 @@ class WorkflowNullPlugin extends WorkflowBasePlugin
         $result->setGate(self::GATE_PROMOTE);
         $result->freeze();
         return $result;
+    }
+
+    /**
+     * Returns whether the plugin is executable at the current app/session state.
+     *
+     * @return boolean
+     */
+    protected function mayProcess()
+    {
+        return TRUE;
     }
 }
 

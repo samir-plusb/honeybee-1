@@ -53,8 +53,8 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
         }
 
         $result = new WorkflowPluginResult();
-        $result->setGate(WorkflowPluginResult::GATE_NONE);
         $result->setState(WorkflowPluginResult::STATE_NOT_ALLOWED);
+        $result->setMessage("You do not own the required credentials to execute this plugin (" . get_class($this)  . ")!");
         $result->freeze();
 
         return $result;
@@ -79,7 +79,7 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
      */
     protected function mayProcess()
     {
-        return TRUE;
+        return FALSE;
     }
 
     /**

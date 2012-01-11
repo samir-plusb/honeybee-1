@@ -102,6 +102,26 @@ abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
 
         return $result;
     }
+
+    /**
+     * Returns whether the plugin is executable at the current app/session state.
+     *
+     * @return boolean
+     */
+    protected function mayProcess()
+    {
+        return FALSE;
+    }
+
+    /**
+     * Return the user for the session we are running in.
+     *
+     * @return AgaviSecurityUser
+     */
+    protected function getUser()
+    {
+        return AgaviContext::getInstance()->getUser();
+    }
 }
 
 ?>

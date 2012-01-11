@@ -48,6 +48,16 @@ class WorkflowChoosePlugin extends WorkflowBaseInteractivePlugin
             )
         );
     }
+
+    /**
+     * Returns whether the plugin is executable at the current app/session state.
+     *
+     * @return boolean
+     */
+    protected function mayProcess()
+    {
+        return TRUE;
+    }
 }
 
 ?>
