@@ -140,11 +140,6 @@ class WorkflowHandler
      */
     public function run(WorkflowTicket $ticket)
     {
-        /* @todo Remove debug code WorkflowHandler.class.php from 24.10.2011 */
-        $__logger=AgaviContext::getInstance()->getLoggerManager();
-        $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
-        $__logger->log($this,AgaviILogger::DEBUG);
-
         $this->setTicket($ticket);
         $this->ticket->setBlocked(TRUE);
 
@@ -152,82 +147,22 @@ class WorkflowHandler
         while (self::STATE_NEXT_STEP === $code)
         {
             $currentStep = $this->getCurrentStep();
-            /* @todo Remove debug code WorkflowHandler.class.php from 27.10.2011 */
-            $__logger=AgaviContext::getInstance()->getLoggerManager();
-            $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
-            $__logger->log(sprintf('start "%s" step: %s', $this->name, $currentStep),AgaviILogger::DEBUG);
-
-            if ($ticket->countStep() > self::MAX_STEP_EXECUTIONS)
+            if ($this->ticket->countStep() > self::MAX_STEP_EXECUTIONS)
             {
                 throw new WorkflowException(
                     sprintf('To many workflow executions for "%s/%s"', $this->getName(), $currentStep),
-                    WorkflowException::MAX_STEP_EXECUTIONS_EXCEEDED);
+                    WorkflowException::MAX_STEP_EXECUTIONS_EXCEEDED
+                );
             }
 
             $result = $this->executePlugin();
-            /* @todo Remove debug code WorkflowHandler.class.php from 31.10.2011 */
-            $__logger=AgaviContext::getInstance()->getLoggerManager();
-            $__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
-            $__logger->log($result,AgaviILogger::DEBUG);
-
             $ticket->setPluginResult($result);
-            $code = $this->prepareNextAction($result);
-
+            $code = $this->processPluginResult($result);
             $this->getPeer()->saveTicket($this->getTicket());
         }
-
+        // @todo Unset ticket afterwards?
+        // Not that it would matter as this instance is thrown away after run...
         return $code;
-    }
-
-    /**
-     * prepare next workflow action by evaluating the plugin result
-     *
-     * @return integer workflow state code
-     *
-     * @throws WorkflowException
-     */
-    protected function prepareNextAction(WorkflowPluginResult $result)
-    {
-        // @todo Adjust to the new config structure (empty node === {exist workflow} etc...)
-        $ticket = $this->getTicket();
-        switch ($result->getState())
-        {
-            case WorkflowPluginResult::STATE_OK:
-                $gate = $this->getGate($result);
-
-                if (NULL === $gate)
-                {
-                    return self::STATE_WAITING;
-                }
-                else if ('workflow' === $gate['type'])
-                {
-                    $ticket->reset();
-                    $ticket->setWorkflow($gate['target']);
-                    return self::STATE_NEXT_WORKFLOW;
-                }
-                else if ('step' === $gate['type'])
-                {
-                    $this->setCurrentStep($gate['target']);
-                    return self::STATE_NEXT_STEP;
-                }
-                else if ('end' === $gate['type'])
-                {
-                    $ticket->reset();
-                    $ticket->setBlocked(FALSE);
-                    return self::STATE_END;
-                }
-                break;
-
-            case WorkflowPluginResult::STATE_EXPECT_INPUT:
-                return self::STATE_WAITING;
-
-            case WorkflowPluginResult::STATE_WAIT_UNTIL:
-                $ticket->setBlocked(FALSE);
-                return self::STATE_WAITING;
-
-            default:
-                return self::STATE_ERROR;
-        }
     }
 
     /**
@@ -259,6 +194,59 @@ class WorkflowHandler
             $result = $plugin->process();
         }
         return $result;
+    }
+
+    /**
+     * prepare next workflow action by evaluating the plugin result
+     *
+     * @return integer workflow state code
+     *
+     * @throws WorkflowException
+     */
+    protected function processPluginResult(WorkflowPluginResult $result)
+    {
+        $ticket = $this->getTicket();
+        switch ($result->getState())
+        {
+            case WorkflowPluginResult::STATE_OK:
+            {
+                $gate = $this->getGate($result);
+                // If no gate has been set, we will stay where we are.
+                if (NULL === $gate)
+                {
+                    return self::STATE_WAITING;
+                }
+                // Else we interpretate the given gate as a state transition
+                // and do whatever is necassary to translate depending on the gate's type.
+                switch ($gate['type'])
+                {
+                    case 'step':
+                        $this->setCurrentStep($gate['target']);
+                        return self::STATE_NEXT_STEP;
+                    case 'workflow':
+                        $ticket->reset();
+                        $ticket->setWorkflow($gate['target']);
+                        return self::STATE_NEXT_WORKFLOW;
+                    case 'end':
+                        $ticket->reset();
+                        $ticket->setBlocked(FALSE);
+                        return self::STATE_END;
+                    default:
+                        throw new WorkflowException(
+                            "The given workflow plugin gate-type '" . $gate['type'] . "' is not supported."
+                        );
+                }
+
+                break;
+            }
+            case WorkflowPluginResult::STATE_EXPECT_INPUT:
+                return self::STATE_WAITING;
+            case WorkflowPluginResult::STATE_WAIT_UNTIL:
+                $ticket->setBlocked(FALSE);
+                return self::STATE_WAITING;
+            default:
+                return self::STATE_ERROR;
+        }
     }
 
     /**
