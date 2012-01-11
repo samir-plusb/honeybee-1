@@ -92,10 +92,11 @@
         <settings prefix="items.">
             <setting name="tags">
                 <ae:parameters>
-                    <ae:parameter>foo</ae:parameter>
-                    <ae:parameter>bar</ae:parameter>
-                    <ae:parameter>foobar</ae:parameter>
-                    <ae:parameter>barfoo</ae:parameter>
+                    <ae:parameter>mitmachen</ae:parameter>
+                    <ae:parameter>neu eröffnet</ae:parameter>
+                    <ae:parameter>geschlossen</ae:parameter>
+                    <ae:parameter>umgezogen</ae:parameter>
+                    <ae:parameter>verlegt</ae:parameter>
                 </ae:parameters>
             </setting>
             <setting name="categories">
@@ -104,7 +105,7 @@
                     <ae:parameter>Kiezleben</ae:parameter>
                     <ae:parameter>Kiezkultur</ae:parameter>
                     <ae:parameter>Bekanntmachungen</ae:parameter>
-                    <ae:parameter>Stadtentwicklung</ae:parameter>
+                    <ae:parameter>Stadtteilentwicklung</ae:parameter>
                 </ae:parameters>
             </setting>
         </settings>
