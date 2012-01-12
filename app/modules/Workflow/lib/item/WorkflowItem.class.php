@@ -10,7 +10,7 @@
  * @package Workflow
  * @subpackage Item
  */
-class WorkflowItem implements IWorkflowItem
+class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
 {
     /**
      * Holds the WorkflowItem's identifier.
@@ -96,6 +96,27 @@ class WorkflowItem implements IWorkflowItem
     public function getIdentifier()
     {
         return $this->identifier;
+    }
+
+    public function getResourceId()
+    {
+        return 'workflow-item';
+    }
+
+    public function getOwner()
+    {
+        $ticket = NULL;
+        try
+        {
+            $supervisor = Workflow_SupervisorModel::getInstance();
+            $ticket = $supervisor->getTicketPeer()->getTicketById($this->ticketId);
+        }
+        catch (CouchdbClientException $e)
+        {
+            return FALSE;
+        }
+
+        return $ticket->getCurrentOwner();
     }
 
     /**

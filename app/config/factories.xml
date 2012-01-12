@@ -27,7 +27,7 @@
 
         <storage class="AgaviSessionStorage" />
 
-        <user class="AgaviSecurityUser" />
+        <user class="ProjectZendAclSecurityUser" />
 
         <translation_manager class="AgaviTranslationManager" />
 
@@ -50,7 +50,7 @@
 
         <routing class="AgaviConsoleRouting" />
 
-        <user class="AgaviSecurityUser" />
+        <user class="ProjectZendAclSecurityUser" />
 
     </ae:configuration>
 

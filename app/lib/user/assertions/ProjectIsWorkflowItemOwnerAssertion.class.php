@@ -18,7 +18,7 @@ class ProjectIsWorkflowItemOwnerAssertion implements Zend_Acl_Assert_Interface
 			return FALSE;
 		}
 
-		return $resource->getOwner() == $role->getAttribute('username');
+		return $resource->getOwner() == $role->getAttribute('role');
 	}
 }
 

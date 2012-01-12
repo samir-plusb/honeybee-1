@@ -55,10 +55,10 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
     {
         if ($this->isAuthenticated() && $this->hasAttribute('acl_role'))
         {
-            return $this->getAttribute('acl_role');
+            $role = $this->getAttribute('acl_role');
         }
-
-        return $this->getParameter('default_acl_role', 'user');
+        $role = $this->getParameter('default_acl_role', 'user');
+        return $role;
     }
 
     /**

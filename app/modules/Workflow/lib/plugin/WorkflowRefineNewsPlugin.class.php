@@ -2,6 +2,15 @@
 
 class WorkflowRefineNewsPlugin extends WorkflowBaseInteractivePlugin
 {
+    const GATE_ITEM_PUBLISH = 'publish_item';
+
+    const GATE_ITEM_DELETE = 'delete_item';
+
+    protected static $operationsMap = array(
+        'read'  => 'view_edit_form',
+        'write' => 'edit_item'
+    );
+
     protected function getPluginAction()
     {
         return array(
@@ -18,15 +27,16 @@ class WorkflowRefineNewsPlugin extends WorkflowBaseInteractivePlugin
     protected function mayProcess()
     {
         $user = $this->ticket->getSessionUser();
+
         if (! $user)
         {
             return FALSE;
         }
-        $user->isAllowed(
+
+        return $user->isAllowed(
             $this->ticket->getWorkflowItem(),
-            'write'
+            $this->ticket->getExecutionContainer()->getRequestMethod()
         );
-        return TRUE;
     }
 }
 
