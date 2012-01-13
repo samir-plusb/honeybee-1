@@ -13,8 +13,8 @@
                             <ae:parameter name="timestamp">Eingangsdatum</ae:parameter>
                             <ae:parameter name="state">Status</ae:parameter>
                             <ae:parameter name="category">Rubrik</ae:parameter>
-                            <ae:parameter name="district">District</ae:parameter>
-                            <ae:parameter name="priority">Priority</ae:parameter>
+                            <ae:parameter name="district">Bezirk</ae:parameter>
+                            <ae:parameter name="owner">Besitzer</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
 

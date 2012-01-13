@@ -38,7 +38,6 @@
     if ($searchPhrase)
     {
 ?>
-
 <section class="container-fluid search-message-box">
     <div class="alert-message search-message info">
         <p>
@@ -47,7 +46,6 @@
         </p>
     </div>
 </section>
-
 <?php
     }
 ?>
@@ -60,11 +58,9 @@
         It also wraps the upper&lower pagination.
     ############################################################################################### -->
 <section class="container-fluid list-data">
-
 <?php
     echo $slots['pagination'];
 ?>
-
     <table class="bordered-table zebra-striped">
         <caption>Newsitems Table</caption>
         <colgroup>
@@ -79,7 +75,6 @@
         </colgroup>
         <thead>
             <tr>
-
 <?php
 // Render the data(table) header by traversing a list of supported header fields,
 // thereby creating a order link and translating each one.
@@ -99,22 +94,18 @@
             $routingData['search_phrase'] = $searchPhrase;
         }
 ?>
-
                 <th class="data-header <?php echo ($sortingActive) ? ('sorted ' . $sortDirection) : ''; ?>">
                     <a href="<?php echo $ro->gen('items.list', $routingData); ?>">
                         <?php echo $tm->_($headerField, 'items.structure'); ?>
                     </a>
                 </th>
-
 <?php
     }
 ?>
-
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-
 <?php
     foreach ($t['listData'] as $workflowItem)
     {
@@ -172,23 +163,18 @@
                     <a class="btn small danger">L&#246;schen</a>
                 </td>
             </tr>
-
 <?php
     }
 ?>
-
         </tbody>
-
 <?php
     if (20 <= count($t['listData']))
     {
 // If we have more rows than we assume fit on to the viewport without scrolling,
 // display a table footer with the column names and a pagination below the table too.
 ?>
-
         <tfoot class="data-header">
             <tr>
-
 <?php
 // Render the data(table) header by traversing a list of supported header fields,
 // thereby creating a order link and translating each one.
@@ -208,34 +194,27 @@
             $routingData['search_phrase'] = $searchPhrase;
         }
 ?>
-
                 <td class="<?php echo ($sortingActive) ? ('sorted ' . $sortDirection) : ''; ?>">
                     <a href="<?php echo $ro->gen('items.list', $routingData); ?>">
                         <?php echo $tm->_($headerField, 'items.structure'); ?>
                     </a>
                 </td>
-
 <?php
     }
 ?>
-
                 <td>Actions</td>
             </tr>
         </tfoot>
-
 <?php
     }
 ?>
-
     </table>
-
 <?php
     if (20 <= count($t['listData']))
     {
         echo $slots['pagination'];
     }
 ?>
-
 </section>
 <div id="ajax-error" class="modal fade">
     <div class="modal-header">
@@ -246,6 +225,6 @@
         <p class="error-text" />
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn primary">Ok</a>
+        <button href="#" class="btn primary">Ok</button>
     </div>
 </div>
