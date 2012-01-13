@@ -68,9 +68,20 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
             throw new Exception("Invalid sort field given. The field " . $sortField . " is not supported.");
         }
 
-        $query = new Elastica_Query(
-            new Elastica_Query_Wildcard('_all', $searchPhrase)
-        );
+        $terms = explode(' ', $searchPhrase);
+        $query = new Elastica_Query();
+        if (1 === count($terms))
+        {
+            $query->setQuery(
+                new Elastica_Query_Wildcard('_all', $searchPhrase)
+            );
+        }
+        else
+        {
+            $termQuery = new Elastica_Query_Terms('_all', $terms);
+            $termQuery->setMinimumMatch(count($terms));
+            $query->setQuery($termQuery);
+        }
         $query->setLimit($limit)->setFrom($offset)->setSort(
             array(self::$sortMapping[$sortField] => $sortDirection)
         );
