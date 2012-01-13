@@ -163,7 +163,7 @@
         else
         {
 ?>
-                    <span class="label <?php echo (WorkflowTicket::NULL_USER !== $t['user']) ? 'error' : ''; ?>"><?php echo $workflowItem['owner']; ?></span>
+                    <span class="label <?php echo (WorkflowTicket::NULL_USER !== $t['user']) ? 'important' : ''; ?>"><?php echo $workflowItem['owner']; ?></span>
 <?php
         }
 ?>
