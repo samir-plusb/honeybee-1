@@ -155,7 +155,7 @@
         if ($workflowItem['owner'] === $t['user'])
         {
 ?>
-                    <a class="label info" href="<?php echo $releaseLink; ?>">
+                    <a class="label notice" href="<?php echo $releaseLink; ?>">
                         <?php echo $workflowItem['owner']; ?>
                     </a>
 <?php
