@@ -5,7 +5,7 @@
  * @version $Id: GrabTicketErrorView.class.php -1   $
  * @package Workflow
  */
-class Workflow_GrabTicket_GrabTicketErrorView extends ProjectBaseView
+class Workflow_ReleaseTicket_ReleaseTicketErrorView extends ProjectBaseView
 {
     /**
      * (non-PHPdoc)

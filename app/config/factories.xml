@@ -19,7 +19,11 @@
 
         <request class="AgaviWebRequest" />
 
-        <response class="AgaviWebResponse" />
+        <response class="AgaviWebResponse">
+            <ae:parameters>
+                <ae:parameter name="send_content_length">false</ae:parameter>
+            </ae:parameters>
+        </response>
 
         <routing class="AgaviWebRouting" />
 

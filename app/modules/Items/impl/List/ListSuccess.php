@@ -74,7 +74,7 @@
             <col class="col-state" />
             <col class="col-category" />
             <col class="col-district" />
-            <col class="col-priority" />
+            <col class="col-owner" />
             <col class="col-actions" />
         </colgroup>
         <thead>
@@ -83,7 +83,7 @@
 <?php
 // Render the data(table) header by traversing a list of supported header fields,
 // thereby creating a order link and translating each one.
-    foreach (array('title', 'source', 'timestamp', 'state', 'category', 'district', 'priority') as $headerField)
+    foreach (array('title', 'source', 'timestamp', 'state', 'category', 'district', 'owner') as $headerField)
     {
         $sortingActive = ($sortField === $headerField);
         $routingData = array(
@@ -122,11 +122,13 @@
             $importItem = $workflowItem['importItem'];
             $date = new DateTime($importItem['created']['date']);
             $step = $workflowItem['currentState']['step'];
+            $grabTicketLink = $ro->gen('workflow.grab', array('ticket' => $workflowItem['ticket']));
+            $processTicketLink = $ro->gen('workflow.run', array('ticket' => $workflowItem['ticket']['id']));
+            $releaseLink = $ro->gen('workflow.release', array('ticket' => $workflowItem['ticket']['id']));
 ?>
-
             <tr>
                 <td class="title">
-                    <a href="<?php echo $ro->gen('workflow.grab', array('ticket' => $workflowItem['ticket'])); ?>">
+                    <a href="<?php echo $processTicketLink; ?>" data-checkout-url="<?php echo $grabTicketLink; ?>">
                         <?php echo htmlspecialchars($importItem['title']); ?>
                     </a>
                 </td>
@@ -141,16 +143,6 @@
                     <span class="label success">
                         <?php echo $tm->_($step, 'items.workflow'); ?>
                     </span>
-<?php
-        if (WorkflowTicket::NULL_USER !== $workflowItem['owner'])
-        {
-
-            $img = $workflowItem['owner'] === $t['user'] ? 'edit.png' : 'user_edit.png';
-?>
-                    <img src="<?php echo 'images/'.$img; ?>" title="<?php echo $workflowItem['owner']; ?>" class="item-owner"/>
-<?php
-        }
-?>
                 </td>
                 <td class="category">
                     <?php echo empty($importItem['category']) ? '&#160;' : $importItem['category']; ?>
@@ -158,8 +150,23 @@
                 <td class="district">
                     &#160;<!-- Take the district of the first content-item? -->
                 </td>
-                <td class="priority">
-                    &#160;<!-- Find out priority based on content-items? -->
+                <td class="owner">
+<?php
+        if ($workflowItem['owner'] === $t['user'])
+        {
+?>
+                    <a href="<?php echo $releaseLink; ?>">
+                        <?php echo $workflowItem['owner']; ?>
+                    </a>
+<?php
+        }
+        else
+        {
+?>
+                    <span class="label <?php echo (WorkflowTicket::NULL_USER !== $t['user']) ? 'error' : ''; ?>"><?php echo $workflowItem['owner']; ?></span>
+<?php
+        }
+?>
                 </td>
                 <td class="avail-actions">
                     <a class="btn small danger">L&#246;schen</a>
@@ -185,7 +192,7 @@
 <?php
 // Render the data(table) header by traversing a list of supported header fields,
 // thereby creating a order link and translating each one.
-    foreach (array('title', 'source', 'timestamp', 'state', 'category', 'district', 'priority') as $headerField)
+    foreach (array('title', 'source', 'timestamp', 'state', 'category', 'district', 'owner') as $headerField)
     {
         $sortingActive = ($sortField === $headerField);
         $routingData = array(
@@ -230,3 +237,15 @@
 ?>
 
 </section>
+<div id="ajax-error" class="modal fade">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h3>Taking ticket ownership failed!</h3>
+    </div>
+    <div class="modal-body">
+        <p class="error-text" />
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn primary">Ok</a>
+    </div>
+</div>

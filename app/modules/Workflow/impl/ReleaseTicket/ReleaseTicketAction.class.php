@@ -5,7 +5,7 @@
  * @version $Id: Workflow_GrabTicketAction.class.php -1   $
  * @package Workflow
  */
-class Workflow_GrabTicketAction extends ProjectBaseAction
+class Workflow_ReleaseTicketAction extends ProjectBaseAction
 {
     /**
      * (non-PHPdoc)
@@ -22,10 +22,9 @@ class Workflow_GrabTicketAction extends ProjectBaseAction
         $user = $this->getContext()->getUser();
         $error = '';
         $reason = '';
-        if (WorkflowTicket::NULL_USER === $ticket->getCurrentOwner() || $ticket->getCurrentOwner() === $user->getAttribute('login'))
+        if ($ticket->getCurrentOwner() === $user->getAttribute('login'))
         {
-            $ticket->setCurrentOwner($user->getAttribute('login'));
-
+            $ticket->setCurrentOwner(WorkflowTicket::NULL_USER);
             try
             {
                 $supervisor = Workflow_SupervisorModel::getInstance();
@@ -33,18 +32,18 @@ class Workflow_GrabTicketAction extends ProjectBaseAction
                 {
                     return 'Success';
                 }
-                $error = 'Failed to grab ticket. Revision is not up to date.';
-                $reason = 'invalid_rev';
+                $error = 'Failed to release ticket. Ticket persistance unexpectedly failed.';
+                $reason = 'storage_err';
             }
             catch(CouchdbClientException $e)
             {
-                $error = 'Unexpected db-error while trying to grab ticket: ' . $e->getMessage();
+                $error = 'Unexpected db-error while trying to release ticket: ' . $e->getMessage();
                 $reason = 'unexpected_err';
             }
         }
         else
         {
-            $error = "The ticket is allready owned by " . $ticket->getCurrentOwner();
+            $error = "The ticket is currently owned by " . $ticket->getCurrentOwner() . ", you may not release ownership of other's tickets.";
             $reason = 'ticket_not_avail';
         }
         $this->setAttribute('reason', $reason);

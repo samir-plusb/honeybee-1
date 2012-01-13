@@ -5,7 +5,7 @@
  * @version $Id: RunSuccessView.class.php -1   $
  * @package Workflow
  */
-class Workflow_GrabTicket_GrabTicketSuccessView extends ProjectBaseView
+class Workflow_ReleaseTicket_ReleaseTicketSuccessView extends ProjectBaseView
 {
     /**
      * (non-PHPdoc)

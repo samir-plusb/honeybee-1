@@ -104,6 +104,7 @@
                     <script>js/midas/items/list/init.js</script>
                 </javascripts>
                 <stylesheets>
+                    <script>css/iconic_fill.css</script>
                     <script>css/list.css</script>
                 </stylesheets>
             </deployment>

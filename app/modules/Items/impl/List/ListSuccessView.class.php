@@ -35,7 +35,7 @@ class Items_List_ListSuccessView extends ItemsBaseView
             $itemData['owner'] = $ticket->getCurrentOwner();
             $listData[] = $itemData;
         }
-        $this->setAttribute('user', $this->getContext()->getUser()->getAttribute('name'));
+        $this->setAttribute('user', $this->getContext()->getUser()->getAttribute('login'));
         $this->setAttribute('listData', $listData);
     }
 
