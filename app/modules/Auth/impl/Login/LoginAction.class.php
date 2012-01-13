@@ -53,17 +53,6 @@ class Auth_LoginAction extends AuthBaseAction
      */
     public function executeWrite(AgaviParameterHolder $rd)
     {
-        $user = $this->getContext()->getUser();
-        $user->setAuthenticated(TRUE);
-        $attr = array(
-            'login' => 'tschmitt',
-            'name' => 'Thorsten Schmitt-Rink',
-            'email' => false,
-            'acl_role' => $user->mapExternalRoleToDomain('ldap_group', 'files')
-        );
-        $user->setAttributes($attr);
-        return 'Success';
-/*
         $this->checkLdapConfig();
 
         $username = $rd->getParameter("username");
@@ -177,7 +166,6 @@ class Auth_LoginAction extends AuthBaseAction
                     AgaviILogger::INFO));
 
         return 'Success';
- */
     }
 
     /**
@@ -325,7 +313,8 @@ class Auth_LoginAction extends AuthBaseAction
             array(
                 'login' => $username,
                 'name' => $this->getLdapAttribute($username, AgaviConfig::get("ldap.user_name_attr", "cn")),
-                'email' => $this->getLdapAttribute($username, AgaviConfig::get("ldap.user_email_attr", "mail"))
+                'email' => $this->getLdapAttribute($username, AgaviConfig::get("ldap.user_email_attr", "mail")),
+                'acl_role' => $user->mapExternalRoleToDomain('ldap_group', 'files') // @todo Define how multiple hits are mapped.
             );
         $user->setAttributes($attr);
 
