@@ -219,12 +219,12 @@
 <div id="ajax-error" class="modal fade">
     <div class="modal-header">
         <a href="#" class="close">×</a>
-        <h3>Taking ticket ownership failed!</h3>
+        <h3 class="error-title">Taking ticket ownership failed!</h3>
     </div>
     <div class="modal-body">
         <p class="error-text" />
     </div>
     <div class="modal-footer">
-        <button href="#" class="btn primary">Ok</button>
+        <button class="btn primary">Ok</button>
     </div>
 </div>

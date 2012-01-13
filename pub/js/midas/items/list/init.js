@@ -12,6 +12,12 @@
         $(this).select();
     });
 
+    var error_dialog = $('#ajax-error');
+    error_dialog.find('.modal-footer button').click(function()
+    {
+        error_dialog.modal('hide');
+    });
+
     $("table").delegate(".title a", "click", function(event)
     {
         event.preventDefault();
@@ -26,27 +32,29 @@
             }
             else
             {
-                $('#ajax-error .error-title').text("Taking ticket ownership failed! ");
-                $('#ajax-error .error-text').text(resp.msg);
-                $('#ajax-error').modal('show');
+                error_dialog.find('.error-title').text(
+                    "Taking ticket ownership failed!"
+                );
+                error_dialog.find('.error-text').text(resp.msg);
+                error_dialog.modal('show');
             }
         });
     });
-
 
     $("table").delegate(".owner a", "click", function(event)
     {
         event.preventDefault();
         var link = $(this);
         var release_url = $(this).attr('href');
-
         $.getJSON(release_url, function(resp)
         {
             if ('ok' !== resp.state)
             {
-                $('#ajax-error .error-title').text("Releasing ticket ownership failed! ");
-                $('#ajax-error .error-text').text(resp.msg);
-                $('#ajax-error').modal('show');
+                error_dialog.find('.error-title').text(
+                    "Releasing ticket ownership failed!"
+                );
+                error_dialog.find('.error-text').text(resp.msg);
+                error_dialog.modal('show');
             }
             else
             {
