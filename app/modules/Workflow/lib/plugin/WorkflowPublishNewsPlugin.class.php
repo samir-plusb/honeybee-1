@@ -1,18 +1,18 @@
 <?php
 
 /**
- * This is the simplest plugin which does nothing
+ * This plugin takes care of publishing news to the various subscribers.
  *
  * @package Workflow
  * @author tay
  * @version $Id$
  *
  */
-class WorkflowNullPlugin extends WorkflowBasePlugin
+class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
 {
-    const PLUGIN_ID = 'null_plugin';
+    const PLUGIN_ID = 'publish_news';
 
-    const GATE_PROMOTE = 'promote';
+    const GATE_ARCHIV = 'archiv';
 
     public function getPluginId()
     {
@@ -27,7 +27,8 @@ class WorkflowNullPlugin extends WorkflowBasePlugin
     {
         $result = new WorkflowPluginResult();
         $result->setState(WorkflowPluginResult::STATE_OK);
-        $result->setGate(self::GATE_PROMOTE);
+        $result->setGate(self::GATE_ARCHIV);
+        $result->setMessage('Ready to get the disposition to whereever rockin!');
         $result->freeze();
         return $result;
     }

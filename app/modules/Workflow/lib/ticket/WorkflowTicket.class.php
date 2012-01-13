@@ -13,6 +13,13 @@
 class WorkflowTicket extends AgaviParameterHolder implements Serializable
 {
     /**
+     * name of the null user, that indicates no one is currently owning the ticket
+     *
+     * @var string
+     */
+    const NULL_USER = 'nobody';
+
+    /**
      * document id in database
      *
      * @var string
@@ -359,6 +366,11 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
         $this->fromArray($data);
     }
 
+    public function getNullUser()
+    {
+        return self::DEFAULT_NULL_USER;
+    }
+
     /**
      * prepare member data for serializing
      */
@@ -415,7 +427,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
         $this->setWaitUntilFromIso8601( empty($data['wait']) ? NULL : $data['wait']);
         $this->setWorkflow( empty($data['workflow']) ? NULL : $data['workflow']);
         $this->setCurrentStep( empty($data['step']) ? NULL : $data['step']);
-        $this->setCurrentOwner(empty($data['currentOwner']) ? NULL : $data['currentOwner']);
+        $this->setCurrentOwner(empty($data['currentOwner']) ? self::NULL_USER : $data['currentOwner']);
         if (isset($data['result']))
         {
             $this->setPluginResult(WorkflowPluginResult::fromArray($data['result']));

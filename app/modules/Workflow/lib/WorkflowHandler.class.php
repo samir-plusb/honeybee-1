@@ -318,6 +318,15 @@ class WorkflowHandler
         return $step;
     }
 
+    public function getStep($name)
+    {
+        if (isset($this->steps[$name]))
+        {
+            return $this->steps[$name];
+        }
+        return NULL;
+    }
+
     /**
      * Retrieves the ticket attribute.
      *
@@ -363,24 +372,24 @@ class WorkflowHandler
     /**
      * find plugin for the current workflow step
      *
-     * @param string $currentStep id of workflow step
+     * @param string $step id of workflow step
      *
      * @return IWorkflowPlugin
      *
      * @throws WorkflowException
      */
-    protected function getPluginFor($currentStep)
+    public function getPluginFor($step)
     {
         /**
          * @todo Get the plugin of the current step. Why is there no step object?
          */
-        if (! isset($this->steps[$currentStep]['plugin']))
+        if (! isset($this->steps[$step]['plugin']))
         {
             throw new WorkflowException(
-                'Workflow step does not define plugin: '.$currentStep,
+                'Workflow step does not define plugin: '.$step,
                 WorkflowException::STEP_MISSING);
         }
-        $step = $this->steps[$currentStep];
+        $step = $this->steps[$step];
 
         $pluginName = $step['plugin']['type'];
         $plugin = $this->getPluginByName($pluginName);

@@ -1,4 +1,4 @@
-$(function() {
+(function() {
     var search_input = $('input[name="search_phrase"]');
     $('.reset-search').click(function(event)
     {
@@ -11,4 +11,16 @@ $(function() {
     {
         $(this).select();
     });
-});
+
+    $("table").delegate(".title a", "click", function(event)
+    {
+        event.preventDefault();
+
+        $.getJSON($(this).attr('href'), function()
+        {
+            // @todo check response state and redirect to edit if we gained ownership.
+            console.log(arguments);
+        });
+    });
+
+})();

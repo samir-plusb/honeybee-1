@@ -12,8 +12,6 @@
  */
 class WorkflowTicketPeer
 {
-    const DEFAULT_NULL_USER = 'nobody';
-
     /**
      *
      * name of couchdb design document to use
@@ -50,13 +48,6 @@ class WorkflowTicketPeer
         $ticket = new WorkflowTicket();
         $ticket->setWorkflowItem($item);
         $ticket->setWorkflow('_init');
-
-        $ticket->setCurrentOwner(
-            AgaviConfig::get(
-                'midas.null_user',
-                self::DEFAULT_NULL_USER
-            )
-        );
 
         // @todo What to do if saving fails (saveTicket returns false)
         $this->saveTicket($ticket);
@@ -97,9 +88,9 @@ class WorkflowTicketPeer
      * @param string $identifier
      * @return WorkflowTicket
      */
-    public function getTicketById($identifier)
+    public function getTicketById($identifier, $revision = NULL)
     {
-        $data = $this->client->getDoc(NULL, $identifier);
+        $data = $this->client->getDoc(NULL, $identifier, $revision);
         $ticket = new WorkflowTicket($data);
         return $ticket;
     }

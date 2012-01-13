@@ -57,20 +57,32 @@ abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
     }
 
     /**
-     * Execute this plugin, hence run our nested action.
+     * Returns whether the plugin is executable at the current app/session state.
+     *
+     * @return boolean
      */
-    protected function doProcess()
+    protected function mayProcess()
     {
-        return $this->executeWorklfowPluginAction();
+        $user = $this->ticket->getSessionUser();
+        if (! $user)
+        {
+            return FALSE;
+        }
+        $operation = sprintf(
+            '%s::%s',
+            $this->getPluginId(),
+            $this->ticket->getExecutionContainer()->getRequestMethod()
+        );
+        return $user->isAllowed(
+            $this->ticket->getWorkflowItem(),
+            $operation
+        );
     }
 
     /**
-     * Runs the action that associated to the current plugin instance and returns it's response.
-     * This container running the plugin action, will have a parameter called 'is_forward' set to TRUE.
-     *
-     * @return AgaviResponse The response of our executed plugin action.
+     * Execute this plugin, hence run our nested action.
      */
-    protected function executeWorklfowPluginAction()
+    protected function doProcess()
     {
         $actionData = $this->getPluginAction();
         $moduleName = $actionData['module'];
@@ -101,16 +113,6 @@ abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
         $result->freeze();
 
         return $result;
-    }
-
-    /**
-     * Returns whether the plugin is executable at the current app/session state.
-     *
-     * @return boolean
-     */
-    protected function mayProcess()
-    {
-        return FALSE;
     }
 
     /**

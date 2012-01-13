@@ -23,10 +23,19 @@ class Items_List_ListSuccessView extends ItemsBaseView
     {
         $this->setupHtml($parameters);
         $listData = array();
+        $ticketPeer = Workflow_SupervisorModel::getInstance()->getTicketPeer();
         foreach ($this->getAttribute('items', array()) as $item)
         {
-            $listData[] = $item->toArray();
+            $itemData = $item->toArray();
+            $ticket = $ticketPeer->getTicketById($itemData['ticketId']);
+            $itemData['ticket'] = array(
+                'id' => $ticket->getIdentifier(),
+                'rev' => $ticket->getRevision()
+            );
+            $itemData['owner'] = $ticket->getCurrentOwner();
+            $listData[] = $itemData;
         }
+        $this->setAttribute('user', $this->getContext()->getUser()->getAttribute('name'));
         $this->setAttribute('listData', $listData);
     }
 

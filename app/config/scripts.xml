@@ -97,7 +97,9 @@
             -->
             <deployment viewpath="^(?:(?!items.edit*|workflow.*))*$">
                 <package ref="twitter-bootstrap" />
+            </deployment>
 
+            <deployment viewpath="items.list*">
                 <javascripts>
                     <script>js/midas/items/list/init.js</script>
                 </javascripts>

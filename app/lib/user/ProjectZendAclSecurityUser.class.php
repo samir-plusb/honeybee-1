@@ -4,35 +4,64 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
 {
     protected $zendAcl;
 
+    protected $accessConfig;
+
     public function initialize(AgaviContext $context, array $parameters = array())
     {
         parent::initialize($context, $parameters);
 
+        $this->accessConfig = include AgaviConfigCache::checkConfig(
+            AgaviConfig::get('core.config_dir') . '/access_control.xml'
+        );
         $this->zendAcl = $this->createZendAcl();
     }
 
     protected function createZendAcl()
     {
         $zendAcl = new Zend_Acl();
+        // setup our resources
+        foreach ($this->accessConfig['resources'] as $resource => $def)
+        {
+            $zendAcl->addResource($resource, $def['parent']);
+            // deny all actions to all users per default to require explicit grants.
+            foreach ($def['actions'] as $action)
+            {
+                $zendAcl->deny(NULL, $resource, $action);
+            }
+        }
 
-        // add the roles we'll be using to act on our resources
-        $zendAcl->addRole('user')
-                ->addRole('editor', 'user')
-                ->addRole('cvd', 'editor')
-                ->addRole('admin', 'cvd');
-
-        // add the resources we will be acting on
-        $zendAcl->addResource('workflow-item');
-
-        // lets deny everything to have a nice secure basic setup
-        $zendAcl->deny(null, 'workflow-item', 'read')
-                ->deny(null, 'workflow-item', 'write');
-
-        // then start giving the specific credentials to designated roles
-        $zendAcl->allow('user', 'workflow-item', 'read')
-                ->allow('editor', 'workflow-item', 'write', new ProjectIsWorkflowItemOwnerAssertion());
-
+        // setup our roles
+        foreach ($this->accessConfig['roles'] as $role => $def)
+        {
+            $zendAcl->addRole($role, $def['parent']);
+            // apply all grants for the current role.
+            foreach ($def['acl']['grant'] as $grant)
+            {
+                $operation = $grant['action'];
+                $assertionTypeKey = $grant['constraint'];
+                $resource = $this->accessConfig['resource_actions'][$operation];
+                $zendAcl->allow($role, $resource, $operation, $this->createAssertion($assertionTypeKey));
+            }
+            // apply all denies for the current role.
+            foreach ($def['acl']['deny'] as $deny)
+            {
+                $operation = $deny['action'];
+                $assertionTypeKey = $deny['constraint'];
+                $resource = $this->accessConfig['resource_actions'][$operation];
+                $zendAcl->deny($role, $resource, $operation, $this->createAssertion($assertionTypeKey));
+            }
+        }
         return $zendAcl;
+    }
+
+    public function mapExternalRoleToDomain($origin, $role)
+    {
+        $roleKey = $origin . '::' . $role;
+        if (! isset($this->accessConfig['external_roles'][$roleKey]))
+        {
+            return NULL;
+        }
+        return $this->accessConfig['external_roles'][$roleKey];
     }
 
     public function getZendAcl()
@@ -42,6 +71,7 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
 
     public function isAllowed($resource, $operation = NULL)
     {
+
         return $this->getZendAcl()->isAllowed($this, $resource, $operation);
     }
 
@@ -55,10 +85,9 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
     {
         if ($this->isAuthenticated() && $this->hasAttribute('acl_role'))
         {
-            $role = $this->getAttribute('acl_role');
+            return $this->getAttribute('acl_role');
         }
-        $role = $this->getParameter('default_acl_role', 'user');
-        return $role;
+        return $this->getParameter('default_acl_role', 'user');
     }
 
     /**
@@ -99,6 +128,22 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
         {
             return FALSE;
         }
+    }
+
+    protected function createAssertion($typeKey = NULL)
+    {
+        if (! $typeKey)
+        {
+            return NULL;
+        }
+        $assertionClass = implode('', array_map('ucfirst', explode('_', $typeKey))) . 'Assertion';
+        if (! class_exists($assertionClass))
+        {
+            throw new InvalidArgumentException(
+                "Invalid assertion type given in acl configuration. Can not resolve to class."
+            );
+        }
+        return new $assertionClass;
     }
 }
 

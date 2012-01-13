@@ -54,7 +54,9 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
 
         $result = new WorkflowPluginResult();
         $result->setState(WorkflowPluginResult::STATE_NOT_ALLOWED);
-        $result->setMessage("You do not own the required credentials to execute this plugin (" . get_class($this)  . ")!");
+        $result->setMessage(
+            "You do not own the required credentials to execute this plugin (" . get_class($this)  . ")!"
+        );
         $result->freeze();
 
         return $result;
@@ -74,6 +76,7 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
 
     /**
      * Returns whether the plugin is executable at the current app/session state.
+     * We provide the most restrictive base in order to prevent insecure plugins from being created 'by mistake'.
      *
      * @return boolean
      */

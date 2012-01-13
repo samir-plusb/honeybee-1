@@ -48,9 +48,22 @@ class Auth_LoginAction extends AuthBaseAction
      * @uses        Auth_LoginAction::checkLdapConfig()
      * @uses        Auth_LoginAction::getLdapEscapedString()
      * @uses        Auth_LoginAction::getLdapAttribute()
+     *
+     * @todo Map a given ldap group to the corresponding domain role
      */
     public function executeWrite(AgaviParameterHolder $rd)
     {
+        $user = $this->getContext()->getUser();
+        $user->setAuthenticated(TRUE);
+        $attr = array(
+            'login' => 'tschmitt',
+            'name' => 'Thorsten Schmitt-Rink',
+            'email' => false,
+            'acl_role' => $user->mapExternalRoleToDomain('ldap_group', 'files')
+        );
+        $user->setAttributes($attr);
+        return 'Success';
+/*
         $this->checkLdapConfig();
 
         $username = $rd->getParameter("username");
@@ -164,6 +177,7 @@ class Auth_LoginAction extends AuthBaseAction
                     AgaviILogger::INFO));
 
         return 'Success';
+ */
     }
 
     /**

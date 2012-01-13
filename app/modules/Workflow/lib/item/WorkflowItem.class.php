@@ -98,12 +98,28 @@ class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
         return $this->identifier;
     }
 
+    /**
+     * Return the resource identifier for this model.
+     *
+     * @todo This is too concrete to be inside the workflow package.
+     * The goal is to have WorkflowItem as an abstract base for the data models
+     * of other packages such as news, shofi or events etc.
+     * This would result in a NewsItem -> WorkflowItem, EventItem -> WorkflowItem ...
+     * relationship, allowing these package specific data models to be processed as workflow resources,
+     * just as the workflow item at the moment.
+     * For this change to work we would use a data model's resource-id as the couchdb type attribute,
+     * when persisting and would have to map the data back to the different WorkflowItem subtypes
+     * instead of always instantiating plain WorkflowItems. As the WorkflowItem class will then be abstract,
+     * this would not be possible any way.
+     *
+     * @return string
+     */
     public function getResourceId()
     {
-        return 'workflow-item';
+        return 'news';
     }
 
-    public function getOwner()
+    public function getOwnerName()
     {
         $ticket = NULL;
         try
@@ -408,6 +424,17 @@ class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
         {
             $this->importItem = new ImportItem($data['importItem']);
         }
+    }
+
+    public function delete($remove = FALSE)
+    {
+        if ($remove)
+        {
+            return Workflow_SupervisorModel::getInstance()->getItemPeer()->deleteItem($this);
+        }
+        $this->attributes['marked_deleted'] = TRUE;
+        return Workflow_SupervisorModel::getInstance()->getItemPeer()->storeItem($this);
+
     }
 }
 

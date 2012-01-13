@@ -37,6 +37,8 @@
         <autoload name="WorkflowNullPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowNullPlugin.class.php</autoload>
         <autoload name="WorkflowChoosePlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowChoosePlugin.class.php</autoload>
         <autoload name="WorkflowRefineNewsPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowRefineNewsPlugin.class.php</autoload>
+        <autoload name="WorkflowPublishNewsPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowPublishNewsPlugin.class.php</autoload>
+        <autoload name="WorkflowDeleteNewsPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowDeleteNewsPlugin.class.php</autoload>
 
         <autoload name="WorkflowConfigHandler">%core.module_dir%/Workflow/lib/base/WorkflowConfigHandler.class.php</autoload>
     </ae:configuration>

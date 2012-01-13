@@ -2,14 +2,11 @@
 
 class WorkflowRefineNewsPlugin extends WorkflowBaseInteractivePlugin
 {
-    const GATE_ITEM_PUBLISH = 'publish_item';
+    const PLUGIN_ID = 'refine_news';
 
-    const GATE_ITEM_DELETE = 'delete_item';
+    const GATE_ITEM_PUBLISH = 'publish_news';
 
-    protected static $operationsMap = array(
-        'read'  => 'view_edit_form',
-        'write' => 'edit_item'
-    );
+    const GATE_ITEM_DELETE = 'delete_news';
 
     protected function getPluginAction()
     {
@@ -19,24 +16,9 @@ class WorkflowRefineNewsPlugin extends WorkflowBaseInteractivePlugin
         );
     }
 
-    /**
-     * Returns whether the plugin is executable at the current app/session state.
-     *
-     * @return boolean
-     */
-    protected function mayProcess()
+    public function getPluginId()
     {
-        $user = $this->ticket->getSessionUser();
-
-        if (! $user)
-        {
-            return FALSE;
-        }
-
-        return $user->isAllowed(
-            $this->ticket->getWorkflowItem(),
-            $this->ticket->getExecutionContainer()->getRequestMethod()
-        );
+        return self::PLUGIN_ID;
     }
 }
 

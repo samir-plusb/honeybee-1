@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    parent="%core.module_dir%/Workflow/config/validators.xml">
+
+    <ae:configuration>
+        <validators>
+            <validator class="WorkflowTicketValidator" required="true" translation_domain="workflow.errors">
+                <arguments base="ticket" />
+                <ae:parameters>
+                    <ae:parameter name="validate_revision">true</ae:parameter>
+                    <ae:parameter name="export">ticket</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error>Invalid ticket data given.</error>
+                </errors>
+            </validator>
+        </validators>
+    </ae:configuration>
+</ae:configurations>

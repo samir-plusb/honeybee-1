@@ -12,6 +12,7 @@
             <autoload name="ProjectExecutionFilter">%core.lib_dir%/agavi/filter/ProjectExecutionFilter.class.php</autoload>
             <autoload name="ProjectScriptFilterConfig">%core.lib_dir%/agavi/filter/ProjectScriptFilterConfig.class.php</autoload>
             <autoload name="ProjectScriptsConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectScriptsConfigHandler.class.php</autoload>
+            <autoload name="ProjectAclConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectAclConfigHandler.class.php</autoload>
             <autoload name="ProjectScriptPacker">%core.lib_dir%/deployment/ProjectScriptPacker.class.php</autoload>
 
             <!-- Zend (can be removed when agavi delivers integration) -->
@@ -30,7 +31,7 @@
             <autoload name="ProjectCurl">%core.app_dir%/models/Curl/ProjectCurl.class.php</autoload>
 
             <autoload name="ProjectZendAclSecurityUser">%core.app_dir%/lib/user/ProjectZendAclSecurityUser.class.php</autoload>
-            <autoload name="ProjectIsWorkflowItemOwnerAssertion">%core.app_dir%/lib/user/assertions/ProjectIsWorkflowItemOwnerAssertion.class.php</autoload>
+            <autoload name="UserIsItemOwnerAssertion">%core.app_dir%/lib/user/assertions/UserIsItemOwnerAssertion.class.php</autoload>
 
 
             <xi:include href="%core.app_dir%/models/CouchdbClient/autoload.xml"

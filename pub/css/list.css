@@ -219,3 +219,8 @@ tfoot tr td
 {
     font-weight: bold;
 }
+
+.item-owner
+{
+    float: right;
+}

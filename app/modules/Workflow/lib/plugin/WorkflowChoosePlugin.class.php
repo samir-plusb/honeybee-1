@@ -10,7 +10,14 @@
  */
 class WorkflowChoosePlugin extends WorkflowBaseInteractivePlugin
 {
+    const PLUGIN_ID = 'choose_something';
+
     const PARAM_MESSAGE = 'message';
+
+    public function getPluginId()
+    {
+        return self::PLUGIN_ID;
+    }
 
     protected function doProcess()
     {

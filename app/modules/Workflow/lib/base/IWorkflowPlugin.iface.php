@@ -22,6 +22,14 @@ interface IWorkflowPlugin
     public function initialize(WorkflowTicket $ticket, array $parameters, array $gates);
 
     /**
+     * Return the plugin's unique identifier.
+     * Should be human readable and use underscore notation like for example: delete_newsitem
+     *
+     * @return string
+     */
+    public function getPluginId();
+
+    /**
      * process the ticket
      *
      * @return WorkflowPluginResult

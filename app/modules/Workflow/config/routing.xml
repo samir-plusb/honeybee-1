@@ -4,6 +4,7 @@
     <ae:configuration context="web">
         <routes>
             <route name=".run" pattern="^/run" action="Run"/>
+            <route name=".grab" pattern="^/grabticket" action="GrabTicket" />
         </routes>
     </ae:configuration>
 
@@ -11,6 +12,7 @@
         <routes>
             <route pattern="workflow." module="Workflow">
                 <route pattern="^run" action="Run" />
+                <route pattern="^grabticket" action="GrabTicket" />
             </route>
         </routes>
     </ae:configuration>

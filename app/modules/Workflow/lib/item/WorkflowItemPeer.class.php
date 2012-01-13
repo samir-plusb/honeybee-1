@@ -110,3 +110,5 @@ class WorkflowItemPeer
         return FALSE;
     }
 }
+
+?>

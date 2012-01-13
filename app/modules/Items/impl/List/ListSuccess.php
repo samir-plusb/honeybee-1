@@ -126,7 +126,7 @@
 
             <tr>
                 <td class="title">
-                    <a href="<?php echo $ro->gen('workflow.run', array('ticket' => $workflowItem['ticketId'])); ?>">
+                    <a href="<?php echo $ro->gen('workflow.grab', array('ticket' => $workflowItem['ticket'])); ?>">
                         <?php echo htmlspecialchars($importItem['title']); ?>
                     </a>
                 </td>
@@ -141,6 +141,16 @@
                     <span class="label success">
                         <?php echo $tm->_($step, 'items.workflow'); ?>
                     </span>
+<?php
+        if (WorkflowTicket::NULL_USER !== $workflowItem['owner'])
+        {
+
+            $img = $workflowItem['owner'] === $t['user'] ? 'edit.png' : 'user_edit.png';
+?>
+                    <img src="<?php echo 'images/'.$img; ?>" title="<?php echo $workflowItem['owner']; ?>" class="item-owner"/>
+<?php
+        }
+?>
                 </td>
                 <td class="category">
                     <?php echo empty($importItem['category']) ? '&#160;' : $importItem['category']; ?>
