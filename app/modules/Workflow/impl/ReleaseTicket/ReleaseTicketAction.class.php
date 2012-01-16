@@ -32,19 +32,18 @@ class Workflow_ReleaseTicketAction extends ProjectBaseAction
                 {
                     return 'Success';
                 }
-                $error = 'Failed to release ticket. Ticket persistance unexpectedly failed.';
-                $reason = 'storage_err';
+                $error = $tm->_('release_ticket_error_text', 'workflow.errors');
+                $reason = $tm->_('release_ticket_unex_error', 'workflow.errors');
             }
             catch(CouchdbClientException $e)
             {
-                $error = 'Unexpected db-error while trying to release ticket: ' . $e->getMessage();
-                $reason = 'unexpected_err';
+                $reason = $tm->_('release_ticket_db_error', 'workflow.errors');
             }
         }
         else
         {
             $error = "The ticket is currently owned by " . $ticket->getCurrentOwner() . ", you may not release ownership of other's tickets.";
-            $reason = 'ticket_not_avail';
+            $reason = $tm->_('ticket_not_avail', 'workflow.errors');
         }
         $this->setAttribute('reason', $reason);
         $this->setAttribute('error_msg', $error);

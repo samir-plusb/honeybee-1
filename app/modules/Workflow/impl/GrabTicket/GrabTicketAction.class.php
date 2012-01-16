@@ -22,6 +22,7 @@ class Workflow_GrabTicketAction extends ProjectBaseAction
         $user = $this->getContext()->getUser();
         $error = '';
         $reason = '';
+        $tm = $this->getContext()->getTranslationManager();
         if (WorkflowTicket::NULL_USER === $ticket->getCurrentOwner() || $ticket->getCurrentOwner() === $user->getAttribute('login'))
         {
             $ticket->setCurrentOwner($user->getAttribute('login'));
@@ -33,8 +34,8 @@ class Workflow_GrabTicketAction extends ProjectBaseAction
                 {
                     return 'Success';
                 }
-                $error = 'Failed to grab ticket. Revision is not up to date.';
-                $reason = 'invalid_rev';
+                $error = $tm->_('invalid_rev_text', 'workflow.errors');
+                $reason = $tm->_('invalid_rev_title', 'workflow.errors');
             }
             catch(CouchdbClientException $e)
             {
@@ -44,8 +45,7 @@ class Workflow_GrabTicketAction extends ProjectBaseAction
         }
         else
         {
-            $error = "The ticket is allready owned by " . $ticket->getCurrentOwner();
-            $reason = 'ticket_not_avail';
+            $reason = $tm->_('ticket_not_avail', 'workflow.errors');
         }
         $this->setAttribute('reason', $reason);
         $this->setAttribute('error_msg', $error);

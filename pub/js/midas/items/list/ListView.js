@@ -123,7 +123,7 @@ midas.items.list.ListView = midas.core.BaseView.extend(
                 if (! err)
                 {
                     that.deactivateRow(delete_form.parents('tr'));
-                    
+
                     $.post(delete_form.attr('action'), delete_form.serialize(),function(data)
                     {
                         delete_form.parents('tr').remove();
@@ -145,9 +145,7 @@ midas.items.list.ListView = midas.core.BaseView.extend(
             }
             else
             {
-                that.error_dialog.find('.error-title').text(
-                    "Taking ticket ownership failed!"
-                );
+                that.error_dialog.find('.error-title').text(resp.reason);
                 that.error_dialog.find('.error-text').text(resp.msg);
                 that.error_dialog.modal('show');
                 callback(resp, null);
@@ -163,9 +161,7 @@ midas.items.list.ListView = midas.core.BaseView.extend(
         {
             if ('ok' !== resp.state)
             {
-                that.error_dialog.find('.error-title').text(
-                    "Releasing ticket ownership failed!"
-                );
+                that.error_dialog.find('.error-title').text(resp.reason);
                 that.error_dialog.find('.error-text').text(resp.msg);
                 that.error_dialog.modal('show');
             }
