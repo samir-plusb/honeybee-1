@@ -237,6 +237,11 @@ tfoot tr td
     z-index: 20000;
 }
 
+form.delete-item
+{
+    margin: 0;
+}
+
 #confirm-delete-dialog
 {
     z-index: 20001;
