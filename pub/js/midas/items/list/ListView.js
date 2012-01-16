@@ -176,7 +176,6 @@ midas.items.list.ListView = midas.core.BaseView.extend(
 
     deactivateRow: function(row)
     {
-        console.log(row);
         var edit_link = row.find('.title a');
         edit_link.replaceWith(
             $('<span>'+edit_link.text()+"</span>")
