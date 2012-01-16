@@ -4,6 +4,7 @@
     <ae:configuration context="web">
         <routes>
             <route name=".run" pattern="^/run" action="Run"/>
+            <route name=".proceed" pattern="^/proceed" action="Proceed"/>
             <route name=".grab" pattern="^/ticket/grab" action="GrabTicket" />
             <route name=".release" pattern="^/ticket/release" action="ReleaseTicket" />
         </routes>

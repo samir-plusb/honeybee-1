@@ -132,13 +132,15 @@ class WorkflowHandler
         return $this->name;
     }
 
+    // ---------------------------------- <MAIN WORKFLOW ALGO> -----------------------------------
+
     /**
      * pull the ticket through the workflow
      *
      * @throws WorkflowException
      * @param WorkflowTicket $ticket
      */
-    public function run(WorkflowTicket $ticket)
+    public function run(WorkflowTicket $ticket, $initalGate = NULL)
     {
         $this->setTicket($ticket);
         $this->ticket->setBlocked(TRUE);
@@ -155,9 +157,18 @@ class WorkflowHandler
                 );
             }
 
-            $result = $this->executePlugin();
-            $ticket->setPluginResult($result);
-            $code = $this->processPluginResult($result);
+            if (NULL !== $initalGate)
+            {
+                $code = $this->useGate($initalGate);
+                $initalGate = NULL;
+            }
+            else
+            {
+                $result = $this->executePlugin();
+                $ticket->setPluginResult($result);
+                $code = $this->processPluginResult($result);
+            }
+
             $this->getPeer()->saveTicket($this->getTicket());
         }
         // @todo Unset ticket afterwards?
@@ -210,34 +221,11 @@ class WorkflowHandler
         {
             case WorkflowPluginResult::STATE_OK:
             {
-                $gate = $this->getGate($result);
-                // If no gate has been set, we will stay where we are.
-                if (NULL === $gate)
+                if (($gate = $result->getGate()))
                 {
-                    return self::STATE_WAITING;
+                    return $this->useGate($gate);
                 }
-                // Else we interpretate the given gate as a state transition
-                // and do whatever is necassary to translate depending on the gate's type.
-                switch ($gate['type'])
-                {
-                    case 'step':
-                        $this->setCurrentStep($gate['target']);
-                        return self::STATE_NEXT_STEP;
-                    case 'workflow':
-                        $ticket->reset();
-                        $ticket->setWorkflow($gate['target']);
-                        return self::STATE_NEXT_WORKFLOW;
-                    case 'end':
-                        $ticket->reset();
-                        $ticket->setBlocked(FALSE);
-                        return self::STATE_END;
-                    default:
-                        throw new WorkflowException(
-                            "The given workflow plugin gate-type '" . $gate['type'] . "' is not supported."
-                        );
-                }
-
-                break;
+                return self::STATE_WAITING;
             }
             case WorkflowPluginResult::STATE_EXPECT_INPUT:
                 return self::STATE_WAITING;
@@ -249,19 +237,52 @@ class WorkflowHandler
         }
     }
 
+    protected function useGate($gate)
+    {
+        $gateDef = $this->getGateByName($gate);
+
+        if (NULL === $gateDef)
+        {
+            throw new WorkflowException(
+                "The given workflow gate '" . $gate . "' does not exist."
+            );
+        }
+
+        switch ($gateDef['type'])
+        {
+            case 'step':
+                $this->setCurrentStep($gateDef['target']);
+                return self::STATE_NEXT_STEP;
+            case 'workflow':
+                $ticket->reset();
+                $ticket->setWorkflow($gateDef['target']);
+                return self::STATE_NEXT_WORKFLOW;
+            case 'end':
+                $this->ticket->reset();
+                $this->ticket->setBlocked(FALSE);
+                return self::STATE_END;
+            default:
+                throw new WorkflowException(
+                    "The given workflow plugin gate-type '" . $gateDef['type'] . "' is not supported."
+                );
+        }
+    }
+
+    // ---------------------------------- </MAIN WORKFLOW ALGO> ----------------------------------
+
     /**
      *
      *
      * @param WorkflowPluginResult $result
      */
-    protected function getGate(WorkflowPluginResult $result)
+    protected function getGateByName($gate)
     {
-        $gate = $result->getGate();
-        if (NULL === $gate)
+        $pluginGates = $this->steps[$this->getCurrentStep()]['plugin']['gates'];
+        if (! isset($pluginGates[$gate]))
         {
-            return $gate;
+            return NULL;
         }
-        return $this->steps[$this->getCurrentStep()]['plugin']['gates'][$result->getGate()];
+        return $pluginGates[$gate];
     }
 
     /**

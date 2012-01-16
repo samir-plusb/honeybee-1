@@ -2,10 +2,10 @@
 /**
  *
  * @copyright BerlinOnline
- * @version $Id$
+ * @version $Id: ProceedAction.class.php 679 2012-01-09 17:23:50Z tschmitt $
  * @package Workflow
  */
-class Workflow_RunAction extends ProjectBaseAction
+class Workflow_ProceedAction extends ProjectBaseAction
 {
     /**
      * (non-PHPdoc)
@@ -14,13 +14,15 @@ class Workflow_RunAction extends ProjectBaseAction
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function execute(AgaviParameterHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeWrite(AgaviParameterHolder $parameters) // @codingStandardsIgnoreEnd
     {
         try
         {
             $ticket = $parameters->getParameter('ticket');
+            $gate = $parameters->getParameter('gate');
             $supervisor = Workflow_SupervisorModel::getInstance();
-            $result = $supervisor->processTicket($ticket, $this->getContainer());
+            $result = $supervisor->proceed($ticket, $gate, $this->getContainer());
+
             if ($result instanceof WorkflowInteractivePluginResult)
             {
                 $this->setAttribute('content', $result->getResponse()->getContent());
@@ -41,6 +43,12 @@ class Workflow_RunAction extends ProjectBaseAction
         }
 
         return 'Success';
+    }
+
+    public function executeRead(AgaviParameterHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        return $this->executeWrite($parameters);
+        throw new Exception("Executing this action per read(GET) is not supported!");
     }
 }
 

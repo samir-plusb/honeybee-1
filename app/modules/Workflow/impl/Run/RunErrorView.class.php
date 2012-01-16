@@ -5,7 +5,7 @@
  * @version $Id$
  * @package Workflow
  */
-class Workflow_Run_RunSuccessView extends ProjectBaseView
+class Workflow_Run_RunErrorView extends ProjectBaseView
 {
     /**
      * Handles the Html output type.
@@ -39,7 +39,8 @@ class Workflow_Run_RunSuccessView extends ProjectBaseView
     {
         return json_encode(
             array(
-                'state' => 'ok',
+                'state' => 'error',
+                'reason' => $this->getAttribute('reason'),
                 'msg' => $this->getAttribute('content')
             )
         );

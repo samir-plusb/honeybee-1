@@ -14,8 +14,8 @@
                     <description>Manually refine an incoming import-item and create content-item(s) from it.</description>
                     <plugin type="RefineNews">
                         <gates>
-                            <gate_step label="publish this newsitem" name="publish_news">publish_news</gate_step>
-                            <gate_step label="delete this newsitem" name="delete_news">delete_news</gate_step>
+                            <gate_step label="publish this newsitem" name="publish">publish_news</gate_step>
+                            <gate_step label="delete this newsitem" name="delete">delete_news</gate_step>
                         </gates>
                     </plugin>
                 </step>

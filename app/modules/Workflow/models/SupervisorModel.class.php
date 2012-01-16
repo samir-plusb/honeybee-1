@@ -185,6 +185,39 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
         return $pluginResult;
     }
 
+    public function proceed(WorkflowTicket $ticket, $startGate, AgaviExecutionContainer $container = NULL)
+    {
+        $code = WorkflowHandler::STATE_NEXT_WORKFLOW;
+        while (WorkflowHandler::STATE_NEXT_WORKFLOW === $code)
+        {
+            $workflow = $this->getWorkflowByName($ticket->getWorkflow());
+            $ticket->setExecutionContainer($container);
+            $code = $workflow->run($ticket, $startGate);
+        }
+
+        $pluginResult = $ticket->getPluginResult();
+        if (WorkflowHandler::STATE_ERROR === $code)
+        {
+            $message = $pluginResult->getMessage()
+                ? $pluginResult->getMessage()
+                : 'Workflow halted with error'; // Default err-message in case whoever forgot to provide one.
+            throw new WorkflowException($message, WorkflowException::UNEXPECTED_EXIT_CODE);
+        }
+
+        /**
+         * Sync our item's state with the ticket for search/data convenience,
+         * as we can now ask an item about it's (eventuell)state without needing to refer to it's tickets.
+         */
+        $this->getItemPeer()->storeItem(
+            $ticket->getWorkflowItem()->updateCurrentState(array(
+                'workflow' => $ticket->getWorkflow(),
+                'step'     => $ticket->getCurrentStep(),
+                'owner'    => $ticket->getCurrentOwner()
+            ))
+        );
+        return $pluginResult;
+    }
+
     /**
      * get a new WorkflowHandler instance for a named workflow
      *

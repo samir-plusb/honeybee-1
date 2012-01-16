@@ -102,7 +102,7 @@
 <?php
     }
 ?>
-                <th>Actions</th>
+                <th><?php echo $tm->_('actions', 'items.structure'); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -116,10 +116,12 @@
             $grabTicketLink = $ro->gen('workflow.grab', array('ticket' => $workflowItem['ticket']));
             $processTicketLink = $ro->gen('workflow.run', array('ticket' => $workflowItem['ticket']['id']));
             $releaseLink = $ro->gen('workflow.release', array('ticket' => $workflowItem['ticket']['id']));
+            $deleteLink = $ro->gen('workflow.proceed', array('ticket' => $workflowItem['ticket']['id'], 'gate' => 'delete'));
+            $ticketCheckoutRel = sprintf('data-checkout-url="%s"', $grabTicketLink);
 ?>
             <tr>
                 <td class="title">
-                    <a href="<?php echo $processTicketLink; ?>" data-checkout-url="<?php echo $grabTicketLink; ?>">
+                    <a href="<?php echo $processTicketLink; ?>" <?php echo $ticketCheckoutRel; ?>>
                         <?php echo htmlspecialchars($importItem['title']); ?>
                     </a>
                 </td>
@@ -139,9 +141,19 @@
                     <?php echo empty($importItem['category']) ? '&#160;' : $importItem['category']; ?>
                 </td>
                 <td class="district">
-                    &#160;<!-- Take the district of the first content-item? -->
+<!-- Take the district of the first content-item? -->
+                    &#160;
                 </td>
                 <td class="owner">
+<!--
+    The owner label is rendered differently for three possible states:
+    1.) The current user is also the owner.
+    - We highlight and add a 'release ticket on click' behaviour.
+    2.) Someone else currently owns the item.
+    - We just highlight the field differently.
+    3.) Nobody owns the item.
+    - Just highlight with the 'nobody' color.
+-->
 <?php
         if ($workflowItem['owner'] === $t['user'])
         {
@@ -154,13 +166,20 @@
         else
         {
 ?>
-                    <span class="label <?php echo (WorkflowTicket::NULL_USER !== $workflowItem['owner']) ? 'important' : ''; ?>"><?php echo $workflowItem['owner']; ?></span>
+                    <span class="label <?php echo (WorkflowTicket::NULL_USER !== $workflowItem['owner']) ? 'important' : ''; ?>">
+                        <?php echo $workflowItem['owner']; ?>
+                    </span>
 <?php
         }
 ?>
                 </td>
                 <td class="avail-actions">
-                    <a class="btn small danger">L&#246;schen</a>
+                    <form action="<?php echo $deleteLink; ?>" method="POST" <?php echo ($workflowItem['owner'] !== $t['user']) ? $ticketCheckoutRel : ''; ?>>
+                        <input type="hidden" name="ticket" value="<?php echo $workflowItem['ticket']['id']; ?>" />
+                        <button type="submit" class="btn small danger">
+                            L&#246;schen
+                        </button>
+                    </form>
                 </td>
             </tr>
 <?php
@@ -202,7 +221,7 @@
 <?php
     }
 ?>
-                <td>Actions</td>
+                <td><?php echo $tm->_('actions', 'items.structure'); ?></td>
             </tr>
         </tfoot>
 <?php
