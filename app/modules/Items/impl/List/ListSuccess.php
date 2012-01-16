@@ -19,7 +19,8 @@
                 <a href="<?php echo $ro->gen(NULL); ?>" class="brand"><?php echo $t['_title']; ?></a>
             </h2>
             <a class="pull-right logout" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
-            <form class="search-form pull-right" action="<?php echo $ro->gen(NULL); ?>" method="GET">
+            <form class="jsb-searchbox search-form pull-right" action="<?php echo $ro->gen(NULL); ?>" method="GET">
+                <input type="hidden" value="<?php echo htmlspecialchars(json_encode(array('foo' => 'bar'))); ?>" class="jsb-searchbox-config" />
                 <input type="text" name="search_phrase" value="<?php echo $searchPhrase ? $searchPhrase : '' ?>" placeholder="Suche" />
                 <input type="hidden" name="sorting[field]" value="<?php echo $sortField; ?>" />
                 <input type="hidden" name="sorting[direction]" value="<?php echo $sortDirection; ?>" />
@@ -174,7 +175,7 @@
 ?>
                 </td>
                 <td class="avail-actions">
-                    <form action="<?php echo $deleteLink; ?>" method="POST" <?php echo ($workflowItem['owner'] !== $t['user']) ? $ticketCheckoutRel : ''; ?>>
+                    <form action="<?php echo $deleteLink; ?>" class="delete-item" method="POST" <?php echo $ticketCheckoutRel; ?>>
                         <input type="hidden" name="ticket" value="<?php echo $workflowItem['ticket']['id']; ?>" />
                         <button type="submit" class="btn small danger">
                             L&#246;schen
@@ -245,5 +246,18 @@
     </div>
     <div class="modal-footer">
         <button class="btn primary">Ok</button>
+    </div>
+</div>
+<div id="confirm-dialog" class="modal fade">
+    <div class="modal-header">
+        <a href="#" class="close">×</a>
+        <h3 class="error-title">Are you sure?</h3>
+    </div>
+    <div class="modal-body">
+        <p class="error-text" />
+    </div>
+    <div class="modal-footer">
+        <button class="btn danger deny">No</button>
+        <button class="btn primary confirm">Yes</button>
     </div>
 </div>

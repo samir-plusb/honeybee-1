@@ -13,18 +13,18 @@ midas.core.Behaviour = midas.core.BaseObject.extend(
      * @type String
      */
     log_prefix: 'Behaviour',
-    
+
     /**
      * The prefix to use when resolving our type-id from our element's class attribute.
      * @type String
      */
     prefix: 'jsb-',
-    
+
     /**
      * Holds our behaviour's root element.
      */
     element: null,
-    
+
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
      * @param {HTMLElement} element Our root element.
@@ -36,7 +36,7 @@ midas.core.Behaviour = midas.core.BaseObject.extend(
         this.element = $(element);
         this.apply();
     },
-    
+
     /**
      * Applies our behaviour to the root element.
      * Hence loookup and initialze our configuration.
@@ -51,11 +51,15 @@ midas.core.Behaviour = midas.core.BaseObject.extend(
             {
                 if (cur_class.match(this.prefix))
                 {
+                    // first search for a nested config and if there is none,
+                    // then check for a config sibling.
                     var options_selector = '.' + cur_class + '-options';
-                    var config_input = this.element.next(options_selector);
+                    var config_input = this.element.children(options_selector);
+                    config_input = (0 < config_input.length)? config_input : this.element.next(options_selector);
 
                     if (0 < config_input.length)
                     {
+                        // if we found a config parse and set our options.
                         var parsed_conf = $.parseJSON(config_input.val());
                         config_input.remove();
                         this.element.removeClass(cur_class);

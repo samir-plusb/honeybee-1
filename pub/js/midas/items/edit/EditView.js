@@ -81,9 +81,9 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         this.parent(element, options);
         this.edit_service = new midas.items.edit.EditService({
             api: {
-                extract_date: 'http://localhost/contentworker/index.php/items/api/extract_date',
-                validate_url: 'http://localhost/contentworker/index.php/items/api/validate_url',
-                extract_location: 'http://localhost/contentworker/index.php/items/api/api/extract_location'
+                extract_date: 'items/api/extract_date',
+                validate_url: 'items/api/validate_url',
+                extract_location: 'items/api/api/extract_location'
             }
         });
     },

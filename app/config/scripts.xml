@@ -83,7 +83,6 @@
                     <script>css/edit_buttons.css</script>
                 </stylesheets>
             </package>
-
         </packages>
 
         <deployments>
@@ -100,7 +99,12 @@
             </deployment>
 
             <deployment viewpath="items.list*">
+                <package ref="midas.core" />
+
                 <javascripts>
+                    <script>js/midas/items/items.js</script>
+                    <script>js/midas/items/list/SearchBox.js</script>
+                    <script>js/midas/items/list/ListView.js</script>
                     <script>js/midas/items/list/init.js</script>
                 </javascripts>
                 <stylesheets>
