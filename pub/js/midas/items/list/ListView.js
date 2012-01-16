@@ -24,6 +24,8 @@ midas.items.list.ListView = midas.core.BaseView.extend(
 
     confirm_dialog: null,
 
+    overlay: null,
+
     // -----------
     // --------------- CONSTRUCTION / GUI INITIALIZING
     // -----------
@@ -38,17 +40,28 @@ midas.items.list.ListView = midas.core.BaseView.extend(
         this.parent(element, options);
 
         this.search_box = new midas.items.list.SearchBox('.search-form');
+        this.overlay = $('.dialog-modal-overlay');
         this.error_dialog = $('#ajax-error');
-        this.confirm_dialog = $('#confirm-dialog');
+        this.confirm_dialog = $('#confirm-delete-dialog');
         this.registerEvents();
     },
 
     registerEvents: function()
     {
         var that = this;
+
         this.error_dialog.find('.modal-footer button').click(function()
         {
             that.error_dialog.modal('hide');
+        });
+
+        this.confirm_dialog.bind('hide', function()
+        {
+            that.overlay.fadeOut();
+        });
+        this.confirm_dialog.bind('show', function()
+        {
+            that.overlay.fadeIn();
         });
         this.confirm_dialog.find('.modal-footer .confirm').click(function()
         {
@@ -101,22 +114,16 @@ midas.items.list.ListView = midas.core.BaseView.extend(
 
     deleteItem: function(delete_form)
     {
-        this.confirm_dialog.find('.error-title').text(
-            'Command Confirmation'
-        );
-        this.confirm_dialog.find('.error-text').text(
-            "Are you sure you want to delete this item?"
-        );
-        this.confirm_dialog.find('.confirm').focus();
         this.confirm_dialog.modal('show');
         var that = this;
         this.confirm_dialog._callback = function()
         {
-            that.deactivateRow(delete_form.parents('tr'));
             that.grabTicket(delete_form, function(err, resp)
             {
                 if (! err)
                 {
+                    that.deactivateRow(delete_form.parents('tr'));
+                    
                     $.post(delete_form.attr('action'), delete_form.serialize(),function(data)
                     {
                         delete_form.parents('tr').remove();

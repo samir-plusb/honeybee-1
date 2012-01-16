@@ -178,7 +178,7 @@
                     <form action="<?php echo $deleteLink; ?>" class="delete-item" method="POST" <?php echo $ticketCheckoutRel; ?>>
                         <input type="hidden" name="ticket" value="<?php echo $workflowItem['ticket']['id']; ?>" />
                         <button type="submit" class="btn small danger">
-                            L&#246;schen
+                            l&#246;schen
                         </button>
                     </form>
                 </td>
@@ -193,7 +193,7 @@
 // If we have more rows than we assume fit on to the viewport without scrolling,
 // display a table footer with the column names and a pagination below the table too.
 ?>
-        <tfoot class="data-header">
+        <tfoot>
             <tr>
 <?php
 // Render the data(table) header by traversing a list of supported header fields,
@@ -214,7 +214,7 @@
             $routingData['search_phrase'] = $searchPhrase;
         }
 ?>
-                <td class="<?php echo ($sortingActive) ? ('sorted ' . $sortDirection) : ''; ?>">
+                <td class="data-header <?php echo ($sortingActive) ? ('sorted ' . $sortDirection) : ''; ?>">
                     <a href="<?php echo $ro->gen('items.list', $routingData); ?>">
                         <?php echo $tm->_($headerField, 'items.structure'); ?>
                     </a>
@@ -236,6 +236,10 @@
     }
 ?>
 </section>
+<!--
+    Markup for the popups used to display user notifications.
+-->
+<div class="dialog-modal-overlay" />
 <div id="ajax-error" class="modal fade">
     <div class="modal-header">
         <a href="#" class="close">×</a>
@@ -248,16 +252,16 @@
         <button class="btn primary">Ok</button>
     </div>
 </div>
-<div id="confirm-dialog" class="modal fade">
+<div id="confirm-delete-dialog" class="modal fade">
     <div class="modal-header">
         <a href="#" class="close">×</a>
-        <h3 class="error-title">Are you sure?</h3>
+        <h3 class="error-title"><?php echo $tm->_('confirm_delete_title', 'items.dialogs'); ?></h3>
     </div>
     <div class="modal-body">
-        <p class="error-text" />
+        <p class="error-text"><?php echo $tm->_('confirm_delete_text', 'items.dialogs'); ?></p>
     </div>
     <div class="modal-footer">
-        <button class="btn danger deny">No</button>
-        <button class="btn primary confirm">Yes</button>
+        <button class="btn deny"><?php echo $tm->_('deny_delete', 'items.dialogs'); ?></button>
+        <button class="btn primary confirm"><?php echo $tm->_('confirm_delete', 'items.dialogs'); ?></button>
     </div>
 </div>

@@ -254,8 +254,8 @@ class WorkflowHandler
                 $this->setCurrentStep($gateDef['target']);
                 return self::STATE_NEXT_STEP;
             case 'workflow':
-                $ticket->reset();
-                $ticket->setWorkflow($gateDef['target']);
+                $this->ticket->reset();
+                $this->ticket->setWorkflow($gateDef['target']);
                 return self::STATE_NEXT_WORKFLOW;
             case 'end':
                 $this->ticket->reset();

@@ -31,6 +31,15 @@
                         </ae:parameter>
                     </ae:parameter>
 
+                    <ae:parameter name="dialogs">
+                        <ae:parameter name="de">
+                            <ae:parameter name="confirm_delete_title">Bitte bestätigen</ae:parameter>
+                            <ae:parameter name="confirm_delete_text">dass der Eintrag wirklich gelöscht werden soll.</ae:parameter>
+                            <ae:parameter name="confirm_delete">löschen</ae:parameter>
+                            <ae:parameter name="deny_delete">abbrechen</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+
                     <ae:parameter name="errors">
                         <ae:parameter name="de">
                             <ae:parameter name="This combination of username and password is invalid.">Die Kombination von Benutzername und Kennwort ist ungültig.</ae:parameter>
