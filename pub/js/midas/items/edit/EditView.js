@@ -323,7 +323,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         return {
             'prev': this.loadPrevImportItem.bind(this),
-            'delete': function() {this.logDebug("onImportItemDelete");}.bind(this),
+            'delete': this.deleteImportItem.bind(this),
             'mark': this.markImportItem.bind(this),
             'next': this.loadNextImportItem.bind(this)
         };
@@ -405,6 +405,28 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     // --------------- HANDLING CONTENT ITEM DATA
     // -----------
 
+    deleteImportItem: function()
+    {
+        var ticket = this.editing_form.val('ticket');
+        if (ticket)
+        {
+            // create intent to pass to our attached controllers.
+            var intent = {
+                'name': '/midas/intents/importItem/delete',
+                'data': {
+                    ticket: ticket,
+                    gate: 'delete'
+                },
+                'target_uri': 'index.php/de/workflow/proceed'
+            };
+            var that = this;
+            this.propagateIntent(intent, function()
+            {
+                that.loadNextImportItem();
+            });
+        }
+    },
+
     markImportItem: function()
     {
         var ticket = this.editing_form.val('ticket');
@@ -419,7 +441,11 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 },
                 'target_uri': 'index.php/de/workflow/proceed'
             };
-            this.propagateIntent(intent);
+            var that = this;
+            this.propagateIntent(intent, function()
+            {
+                that.loadNextImportItem();
+            });
         }
     },
 
@@ -480,6 +506,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     }
                     that.items_list.setItems(content_items);
                 });
+            }
+            else
+            {
+                // @todo display message and return to list view or something like that.
             }
         });
     },

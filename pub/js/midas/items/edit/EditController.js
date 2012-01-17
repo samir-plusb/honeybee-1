@@ -31,7 +31,8 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
         return {
             '/midas/intents/contentItem/store': this.onStoreContentItemIntent.bind(this),
             '/midas/intents/contentItem/delete': 'onDeleteContentItemIntent',
-            '/midas/intents/importItem/mark': 'onMarkImportItemIntent'
+            '/midas/intents/importItem/mark': 'onMarkImportItemIntent',
+            '/midas/intents/importItem/delete': 'onDeleteImportItemIntent'
         };
     },
 
@@ -75,8 +76,6 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
      */
     onMarkImportItemIntent: function(intent, callback)
     {
-        this.logDebug("onMarkImportItemIntent");
-        
         $.post(intent.target_uri, intent.data, function()
         {
             if (callback)
@@ -95,6 +94,14 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
      */
     onDeleteImportItemIntent: function(intent, callback)
     {
-        this.logDebug("onDeleteImportItemIntent");
+        $.post(intent.target_uri, intent.data, function()
+        {
+            if (callback)
+            {
+                callback();
+            }
+        }, 'json');
+
+        return true;
     }
 });

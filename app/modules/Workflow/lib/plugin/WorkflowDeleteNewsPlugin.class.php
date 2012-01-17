@@ -29,7 +29,7 @@ class WorkflowDeleteNewsPlugin extends WorkflowBasePlugin
         try
         {
             $this->ticket->getWorkflowItem()->delete();
-            $result->setState(WorkflowPluginResult::STATE_OK);
+            $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
             $result->setGate(self::GATE_TRASH);
         }
         catch(CouchdbClientException $e)

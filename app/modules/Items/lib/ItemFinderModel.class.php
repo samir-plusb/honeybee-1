@@ -43,7 +43,6 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
         {
             throw new Exception("Invalid sort field given. The field " . $sortField . " is not supported.");
         }
-
         $query = new Elastica_Query(
             new Elastica_Query_Term(
                 array('currentState.workflow' => 'news')
@@ -52,7 +51,9 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
         $query->setLimit($limit)->setFrom($offset)->setSort(
             array(self::$sortMapping[$sortField] => $sortDirection)
         );
-
+        $query->setFilter(new Elastica_Filter_Not(new Elastica_Filter_Term(
+            array('currentState.step' => 'delete_news')
+        )));
         $index = $this->elasticClient->getIndex('midas');
         $type = $index->getType('item');
 
@@ -85,7 +86,9 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
         $query->setLimit($limit)->setFrom($offset)->setSort(
             array(self::$sortMapping[$sortField] => $sortDirection)
         );
-
+        $query->setFilter(new Elastica_Filter_Not(new Elastica_Filter_Term(
+            array('currentState.step' => 'delete_news')
+        )));
         $index = $this->elasticClient->getIndex('midas');
         $type = $index->getType('item');
 
