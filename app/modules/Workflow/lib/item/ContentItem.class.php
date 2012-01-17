@@ -13,6 +13,13 @@
 class ContentItem implements IContentItem
 {
     /**
+     * Holds our identifier.
+     *
+     * @var string
+     */
+    protected $identifier;
+
+    /**
      * Holds our parent's (IWorkflowItem) identifier.
      *
      * @var string
@@ -79,6 +86,13 @@ class ContentItem implements IContentItem
     protected $text;
 
     /**
+     * Holds the item's tags.
+     *
+     * @var array
+     */
+    protected $tags = array();
+
+    /**
      * Holds the item's source (editor set).
      *
      * @var string
@@ -114,7 +128,19 @@ class ContentItem implements IContentItem
     {
         $this->hydrate($data);
     }
-    
+
+    /**
+     * Returns the unique identifier of this item.
+     *
+     * @return string
+     *
+     * @see IContentItem::getIdentifier()
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
     /**
      * Returns the unique identifier of our aggregate root (IWorkflowItem).
      *
@@ -191,6 +217,16 @@ class ContentItem implements IContentItem
     }
 
     /**
+     * Returns the IContentItem's tags.
+     *
+     * @return array
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
      * Holds the content's title.
      *
      * @return string
@@ -264,12 +300,12 @@ class ContentItem implements IContentItem
     {
         return $this->location;
     }
-    
+
     /**
      * Sets the item's location.
      * When an array is passed a new location instance is created and passed
      * in the given data.
-     * 
+     *
      * @param mixed $location Either an array or an IITemLocation instance.
      */
     public function setLocation($location)
@@ -298,8 +334,8 @@ class ContentItem implements IContentItem
     public function toArray()
     {
         $props = array(
-            'parentIdentifier', 'created', 'lastModified',
-            'type', 'title', 'priority', 'category', 'teaser', 'text',
+            'identifier', 'parentIdentifier', 'created', 'lastModified',
+            'type', 'title', 'priority', 'category', 'tags', 'teaser', 'text',
             'url', 'date', 'location', 'source'
         );
         $data = array();
@@ -307,63 +343,71 @@ class ContentItem implements IContentItem
         {
             $getter = 'get' . ucfirst($prop);
             $val = $this->$getter();
+            if (NULL === $val)
+            {
+                continue;
+            }
             if (is_object($val) && is_callable(array($val, 'toArray')))
             {
                 $data[$prop] = $val->toArray();
             }
-            elseif (is_scalar($val))
+            elseif (is_scalar($val) || is_array($val))
             {
                 $data[$prop] = $val;
             }
             else
             {
                 throw new InvalidArgumentException(
-                    "Can only process scalar values when exporting object to array."
+                    "Can only process scalar values when exporting object to array. Invalid data type: '" . gettype($val) ."' given for: " . $prop
                 );
             }
         }
         return $data;
     }
-    
+
     /**
      * Convenience method for setting multiple values at once.
-     * 
-     * @param array $values 
-     * 
+     *
+     * @param array $values
+     *
      * @see IContentItem::applyValues()
      */
     public function applyValues(array $values)
     {
         $writeableProps = array(
-            'type', 'title', 'priority', 'category', 'teaser', 'text',
+            'type', 'title', 'priority', 'category', 'tags', 'teaser', 'text',
             'url', 'date', 'location', 'source'
         );
         foreach ($writeableProps as $prop)
         {
-            if (array_key_exists($prop, $data))
+            if (array_key_exists($prop, $values))
             {
                 $setter = 'set'.ucfirst($prop);
                 if (is_callable(array($this, $setter)))
                 {
-                    $this->$setter($data[$prop]);
+                    $this->$setter($values[$prop]);
+                }
+                else
+                {
+                    $this->$prop = $values[$prop];
                 }
             }
         }
     }
-    
+
     /**
      * Hydrates the given data into the item.
      * This method is used to internally setup our state
      * and has privleged write access to all properties.
      * Properties that are set during hydrate dont mark the item as modified.
-     * 
-     * @param array $data 
+     *
+     * @param array $data
      */
     protected function hydrate(array $data)
     {
         $simpleProps = array(
-            'parentIdentifier', 'created', 'lastModified',
-            'type', 'title', 'priority', 'category', 'teaser', 'text',
+            'identifier', 'parentIdentifier', 'created', 'lastModified',
+            'type', 'title', 'priority', 'category', 'tags', 'teaser', 'text',
             'url', 'date', 'location', 'source'
         );
         foreach ($simpleProps as $prop)

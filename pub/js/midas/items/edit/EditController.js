@@ -49,10 +49,13 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
      * <p>Mostly this method will be invoked from a view,
      * thereby reflecting an users intent to have his editing progress saved.</p>
      */
-    onStoreContentItemIntent: function(intent)
+    onStoreContentItemIntent: function(intent, callback)
     {
-        this.logDebug("Executing: onStoreContentItemIntent", intent);
-
+        $.post(intent.target_uri, intent.data, function()
+        {
+            callback();
+        }, 'json');
+        
         return true;
     },
 

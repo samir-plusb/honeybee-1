@@ -14,13 +14,13 @@ midas.core.BaseController = midas.core.BaseObject.extend(
      * @type String
      */
     log_prefix: 'BaseController',
-    
+
     /**
      * An object holding the (regexp) filters we use to capture intents.
      * @type Object
      */
     intent_filters: null,
-    
+
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
      * @param {midas.items.edit.EditController} controller The view's (parent) controller.
@@ -32,7 +32,7 @@ midas.core.BaseController = midas.core.BaseObject.extend(
         this.intent_filters = {};
         this.intent_filters = this.getIntentFilters();
     },
-    
+
     /**
      * @description Return an object describing the filters we provide for capturing intents.
      * The returned object is a flat key-value structure whereas the key is a regular expression
@@ -47,29 +47,26 @@ midas.core.BaseController = midas.core.BaseObject.extend(
     {
         throw "A BaseController implementation must override the getIntentFilters method.";
     },
-    
+
     /**
      * @description Apply our filters on the given intent and capture it
      * if any match.
      * @param {Object} intent
      */
-    apply: function(intent)
+    apply: function(intent, callback)
     {
-        this.logDebug("Incoming intent:", intent);
         var intent_handled = false;
 
         $.each(this.intent_filters, function(pattern, func)
         {
             if (! intent_handled && intent.name.match(pattern))
             {
-                this.logDebug("Matched intent:", pattern, "against", intent.name);
-
                 if ('string' == typeof func && 'function' == typeof this[func])
                 {
-                    this[func].apply(this, [intent]);
+                    this[func].apply(this, [intent, callback]);
                     intent_handled = true;
                 }
-                else if ('function' == typeof func && true === func(intent))
+                else if ('function' == typeof func && true === func(intent, callback))
                 {
                    intent_handled = true;
                 }

@@ -12,34 +12,6 @@
 class Items_Edit_EditSuccessView extends ItemsBaseView
 {
     /**
-     * Handle presentation logic for the web  (html).
-     *
-     * @param       AgaviRequestDataHolder $parameters
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @codingStandardsIgnoreStart
-     */
-    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-    {
-        $msg = "Items/Edit/Success@Text" . PHP_EOL;
-        $this->getResponse()->setContent("<h1>I haz saved ur data</h1>");
-    }
-
-    /**
-     * Handle presentation logic for commandline interfaces.
-     *
-     * @param       AgaviRequestDataHolder $parameters
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @codingStandardsIgnoreStart
-     */
-    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-    {
-        $msg = "Items/Edit/Success@Text" . PHP_EOL;
-        $this->getResponse()->setContent($msg);
-    }
-
-    /**
      * Handle presentation logic for commandline interfaces.
      *
      * @param       AgaviRequestDataHolder $parameters

@@ -77,16 +77,18 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
      */
     val: function()
     {
+        if (1 <= arguments.length && this.element.hasClass('static-value'))
+        {
+            return;
+        }
         var ret = this.element.val.apply(
             this.element,
             arguments
         );
-
         if (1 === arguments.length && this.prev_val != arguments[0])
         {
             this.revalidate();
         }
-
         return ret;
     },
 
@@ -230,6 +232,10 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
      */
     reset: function()
     {
+        if (this.element.hasClass('static-value'))
+        {
+            return;
+        }
         this.element.val('')
          .removeAttr('checked')
          .removeAttr('selected');
@@ -253,10 +259,10 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         $('.document-editing').append(hint_element);
         hint_element.css('top', el_pos.top - rel_pos.top - hint_element.height() - 6);
         this.registerHintEvents(this.element, hint_element);
-        
+
         this.error_hint = hint_element;
     },
-    
+
     /**
      * @description Renders an error hint for the given message.
      * @returns HTMLElement
@@ -273,10 +279,10 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         var tmp_item = $('<div></div>').html(rendered_html.replace('&gt;', '>').replace('&lt;', '<'));
         var validation_hint = tmp_item.find('div.error-hint');
         validation_hint.css({ 'display': 'none', 'z-index': 1 });
-        
+
         return validation_hint;
     },
-    
+
     /**
      * @description Registers the event callbacks that take care of showing and hiding
      * input validation error hints.
@@ -286,26 +292,26 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         var that = this;
         trigger_element.hover(
             function() { that.showHint(hint_element); },
-            function() 
-            { 
+            function()
+            {
                 if (!that.element.is(':focus'))
                 {
                     that.hideHint(hint_element);
                 }
             }
         );
-        this.element.focus(function() 
-        { 
+        this.element.focus(function()
+        {
             hint_element.css('z-index', 5);
             that.showHint(hint_element);
         })
-        .blur(function() 
-        { 
+        .blur(function()
+        {
             hint_element.css('z-index', 1);
-            that.hideHint(hint_element); 
+            that.hideHint(hint_element);
         });
     },
-    
+
     /**
      * @description Shows the given validation hint.
      */
@@ -318,7 +324,7 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
             function() { hint_element.css('display', 'block'); }
         );
     },
-    
+
     /**
      * @description Hides the given validation hint.
      */

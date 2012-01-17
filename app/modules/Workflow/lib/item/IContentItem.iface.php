@@ -17,6 +17,13 @@
 interface IContentItem
 {
     /**
+     * Returns the unique identifier of this item.
+     *
+     * @return string
+     */
+    public function getIdentifier();
+
+    /**
      * Returns the unique identifier of our aggregate root (IWorkflowItem).
      *
      * @return string
@@ -194,21 +201,21 @@ interface IContentItem
      * @return array
      */
     public function toArray();
-    
+
     /**
      * Convenience method for setting multiple values at once.
      * Maps the given value array to the item's property setters
      * by building a setter name from the key and invoking it with the value,
      * if the resulting setter method exists.
-     * 
+     *
      * <pre>
      * Example: array(
      *     'title' => 'This is a title'
      * )
      * would translate to call of the ContentItem::setTitle method.
      * </pre>
-     * 
-     * @param array $values 
+     *
+     * @param array $values
      */
     public function applyValues(array $values);
 }

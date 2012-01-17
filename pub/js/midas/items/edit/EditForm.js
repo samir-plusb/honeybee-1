@@ -34,7 +34,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
      * @type midas.items.edit.DateRangeInput
      */
     publish_period: null,
-    
+
     /**
      * Flag revealing wether the form is in a dirty state
      * (has been modified and not saved) or not.
@@ -87,14 +87,14 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
             this.fire("createTagDenied", [this, field, msg]);
         }.bind(this));
     },
-    
+
     /**
      * @description Serves as a getter or setter for field values,
      * depending on how many arguments are supplied.
      * @param {String|Object} field When field is a string and no value param has been supplied,
      * the value for the given field is returned. (field-getter)
      * When field is an object the method will take that object and hydrate it into the form fields.
-     * @param {String} value When the field param is provided as a string, 
+     * @param {String} value When the field param is provided as a string,
      * value will be set on the corresponding field.
      * @returns {String|Object} When field is a string and value is provided the corresponding field value is returned.
      * When no parameters are passed at all an object holding all the values of all fields is returned.
@@ -105,19 +105,52 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         if (! field) // toObject
         {
             var data = {};
+
             for (var input_name in this.fields)
             {
-                data[input_name] = this.val(input_name);
+                var path_parts = input_name.replace(/\[(.*)\]/, function()
+                {
+                    return arguments[3].replace(arguments[3], '.'+arguments[1]);
+                }).split('.');
+                var cur_data = data;
+                var data_key = path_parts.pop();
+                for (var i = 0; i < path_parts.length; i++)
+                {
+                    var cur_part = path_parts[i];
+                    if (! cur_data[cur_part])
+                    {
+                        cur_data[cur_part] = {};
+                    }
+                    cur_data = cur_data[cur_part];
+                }
+                cur_data[data_key] = this.val(input_name)
                 processed_inputs.push(input_name);
             }
             this.element.find(':input')
              .not(':button, :submit, :reset')
              .each(function(idx, input_field)
             {
-                var name = $(input_field).attr('name');
-                if (-1 === processed_inputs.indexOf(name))
+                input_field = $(input_field);
+                var name = input_field.attr('name');
+
+                if (name && -1 === processed_inputs.indexOf(name))
                 {
-                    data[name] = $(input_field).val();
+                    var path_parts = name.replace(/\[(.*)\]/, function()
+                    {
+                        return arguments[3].replace(arguments[3], '.'+arguments[1]);
+                    }).split('.');
+                    var cur_data = data;
+                    var data_key = path_parts.pop();
+                    for (var i = 0; i < path_parts.length; i++)
+                    {
+                        var cur_part = path_parts[i];
+                        if (! cur_data[cur_part])
+                        {
+                            cur_data[cur_part] = {};
+                        }
+                        cur_data = cur_data[cur_part];
+                    }
+                    cur_data[data_key] = input_field.val();
                     processed_inputs.push(name);
                 }
             }.bind(this));
@@ -127,18 +160,52 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         {
             for (var name in this.fields)
             {
-                this.fields[name].val(field[name] || '');
+                var path_parts = name.replace(/\[([\w_\-\d]*)\]/ig, function()
+                {
+                    return arguments[3].replace(arguments[3], '.'+arguments[1]);
+                }).split('.');
+                var cur_data = field;
+                var data_key = path_parts.pop();
+                for (var i = 0; i < path_parts.length; i++)
+                {
+                    var cur_part = path_parts[i];
+                    if (! cur_data)
+                    {
+                        break;
+                    }
+                    cur_data = cur_data[cur_part];
+                }
+                var value = cur_data || '';
+                this.fields[name].val(undefined === value[data_key] ? '' : value[data_key]);
                 processed_inputs.push(name);
             }
+
             this.element.find(':input')
              .not(':button, :submit, :reset')
              .each(function(idx, input_field)
             {
-                var name = $(input_field).attr('name');
-
-                if (-1 === processed_inputs.indexOf(name))
+                var input_field = $(input_field);
+                var name = input_field.attr('name');
+                if (name && -1 === processed_inputs.indexOf(name) && !input_field.hasClass('static-value'))
                 {
-                    $(input_field).val(field[name] || '');
+                    var value = field[name];
+                    var path_parts = name.replace(/\[([\w_\-\d]*)\]/ig, function()
+                    {
+                        return arguments[3].replace(arguments[3], '.'+arguments[1]);
+                    }).split('.');
+                    var cur_data = field;
+                    var data_key = path_parts.pop();
+                    for (var i = 0; i < path_parts.length; i++)
+                    {
+                        var cur_part = path_parts[i];
+                        if (! cur_data)
+                        {
+                            break;
+                        }
+                        cur_data = cur_data[cur_part];
+                    }
+                    var value = cur_data || '';
+                    input_field.val(undefined === value[data_key] ? '' : value[data_key]);
                     processed_inputs.push(name);
                 }
             }.bind(this));
@@ -161,7 +228,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         }
         return this;
     },
-    
+
     /**
      * @description Validate all fields and return an aggregated result.
      * @returns {Object}
@@ -191,13 +258,13 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
 
         return result;
     },
-    
+
     /**
      * @description Resolve the input behaviour type
      * that is associated with the given input field.
      * For example the given input field has a class 'jsb-input-date',
      * then DateInput is returned as the behaviour to use.
-     * @param {HTMLInput} 
+     * @param {HTMLInput}
      * @returns {String}
      */
     resolveInputFieldClass: function(input_field)
@@ -226,7 +293,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         resolved_class += 'Input';
         return resolved_class;
     },
-    
+
     /**
      * @description Get the current text selection for the given field.
      * @returns {String} If the field does not exist, an empty string is returned.
@@ -240,7 +307,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
 
         return '';
     },
-    
+
     /**
      * @description Marks the form as clean (no unsaved modifications).
      */
@@ -248,7 +315,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
     {
         this.is_dirty = false;
     },
-    
+
     /**
      * @description Marks the form as dirty (unsaved modifications).
      */
@@ -256,7 +323,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
     {
         this.is_dirty = true;
     },
-    
+
     /**
      * @description Tells whether the form is currently marked as dirty.
      * @returns {Boolean}
@@ -265,7 +332,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
     {
         return this.is_dirty;
     },
-    
+
     /**
      * @description Reset the form, meaning all input values are reset
      * to their defaults (mostly empty) and all state markers removed (invalid e.g.).
@@ -284,18 +351,20 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
          .not(':button, :submit, :reset').each(
             function(idx, input)
             {
-                if (-1 === processed_inputs.indexOf($(input).attr('name')))
+                input = $(input);
+                if (-1 === processed_inputs.indexOf(input.attr('name')) && !input.hasClass('static-value'))
                 {
                     $(input).val('')
                      .removeAttr('checked')
                      .removeAttr('selected');
+                    processed_inputs.push(input.attr('name'))
                 }
             }
         );
 
         this.markClean();
     },
-    
+
     /**
      * @description Triggers an ui effect letting all inputs flash for a short moment.
      */

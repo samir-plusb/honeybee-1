@@ -48,14 +48,17 @@
         </section>
 
         <form accept-charset="utf-8" action="#postdata" method="post">
-            <input type="hidden" name="status" id="status" />
             <input type="hidden" name="cid" value="0" />
+            <input type="hidden" name="identifier" value="0" />
+            <input type="hidden" class="content-list-src" value="<?php echo htmlspecialchars(json_encode($contentItems)); ?>" />
+            <input type="hidden" class="static-value" name="ticket" value="<?php echo $ticketData['_id']; ?>" />
+            <input type="hidden" class="static-value" name="parentIdentifier" value="<?php echo $workflowItem['identifier']; ?>" />
 
             <div class="main-data content-panel"> <!-- <fieldset> as soon as the firefox (legend position render) bug is fixed -->
                 <h3 class="legend">Redaktionelle Einstellungen</h3>
                 <div class="input-left category">
-                    <label for="Kategorie">Kategorie</label>
-                    <select class="jsb-input" name="category">
+                    <label for="input_category">Kategorie</label>
+                    <select id="input_category" class="jsb-input" name="category">
                         <option value=""></option>
 <?php
     foreach ($t['category_options'] as $category)
@@ -69,8 +72,8 @@
                     <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
                 </div>
                 <div class="input-left priority">
-                    <label for="Priorität">Priorität</label>
-                    <select class="jsb-input" name="priority">
+                    <label for="input_priority" for="Priorität">Priorität</label>
+                    <select id="input_priority" class="jsb-input" name="priority">
                         <option value=""></option>
                         <option value="1">niedrig</option>
                         <option value="2">mittel</option>
@@ -79,44 +82,44 @@
                     <input type="hidden" value='{ "min": 1, "max": 3, "mandatory": true }' class="jsb-input-options" />
                 </div>
                 <div class="input-left editor">
-                    <label for="username">Bearbeiter:</label>
-                    <input name="username" type="text" readonly="readonly" />
+                    <label label="input_publisher" for="publisher">Bearbeiter:</label>
+                    <input id="input_publisher" name="publisher" type="text" readonly="readonly" />
                 </div>
                 <div class="input-full tags">
-                    <label for="input_tags">Tags</label>
+                    <label for="input_tags" for="input_tags">Tags</label>
                     <ul class="tagHandlerContainer">
                         <li class="tagInput">
-                            <input class="jsb-input-tag tagInputField ui-autocomplete-input" name="tags" type="text" id="input_tags" />
+                            <input id="input_tags" class="jsb-input-tag tagInputField ui-autocomplete-input" name="tags" type="text" id="input_tags" />
                             <input type="hidden" value="<?php echo htmlspecialchars(json_encode($t['tag_options'])); ?>" class="jsb-input-tag-options" />
                         </li>
                     </ul>
                 </div>
                 <div class="input-full title">
-                    <label for="title">Titel</label>
-                    <input class="jsb-input" name="title" type="text" />
+                    <label for="input_title" for="title">Titel</label>
+                    <input id="input_title" class="jsb-input" name="title" type="text" />
                     <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
                 </div>
                 <div class="input-full">
-                    <label for="teaser">
+                    <label for="input_teaser">
                         Teaser. Die ersten drei Sätze Deines Texts, die Du selber schreiben kannst.
                     </label>
-                    <textarea name="teaser" cols="2" rows="6"></textarea>
+                    <textarea id="input_teaser" name="teaser" cols="2" rows="6"></textarea>
                 </div>
                 <div class="input-full">
-                    <label for="text">
+                    <label for="input_text">
                         <strong>Text</strong>. Der Rest des Texts. Hier sollst Du vor allem kürzen.
                     </label>
-                    <textarea class="jsb-input-assistive-text" name="text" rows="10" cols="30"></textarea>
+                    <textarea id="input_text" class="jsb-input-assistive-text" name="text" rows="10" cols="30"></textarea>
                     <input type="hidden" value='{ "mandatory": true }' class="jsb-input-assistive-text-options" />
                 </div>
                 <div class="input-full">
-                    <label for="source">Quelle (Wer hat das geschickt. Z.B.: Bezirksamt Marzahn-Hellersdorf. Unbedingt ausfüllen.)</label>
-                    <input class="jsb-input" name="source" type="text" />
+                    <label for="input_source">Quelle (Wer hat das geschickt. Z.B.: Bezirksamt Marzahn-Hellersdorf. Unbedingt ausfüllen.)</label>
+                    <input id="input_source" class="jsb-input" name="source" type="text" />
                     <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
                 </div>
                 <div class="input-full">
-                    <label for="url">URL (Verknüpfte Internetadresse)</label>
-                    <input class="jsb-input-url" name="url" type="text" />
+                    <label for="input_url">URL (Verknüpfte Internetadresse)</label>
+                    <input id="input_url" class="jsb-input-url" name="url" type="text" />
                     <input type="hidden" value='{ "mandatory": false }' class="jsb-input-url-options" />
                 </div>
             </div> <!-- </fieldset> as soon as the firefox render bug is fixed -->
@@ -124,8 +127,6 @@
             <div class="extra-data-left">
                 <div class="geo-data content-panel"> <!-- <fieldset> -->
                     <h3 class="legend">Geo</h3>
-                    <input type="hidden" name="location[longitude]" />
-                    <input type="hidden" name="location[latitude]" />
                     <div class="input-full">
                         <select class="jsb-input" name="location[relevance]">
                             <option value=""></option>
@@ -136,29 +137,31 @@
                         <input type="hidden" value='{ "mandatory": true }' class="jsb-input-options" />
                     </div>
                     <div class="input-full">
-                        <label for="location[name">Name des Orts (z.B: KaDeWe)</label>
-                        <input name="location[name]" type="text" />
+                        <label for="input_location_name">Name des Orts (z.B: KaDeWe)</label>
+                        <input id="input_location_name" name="location[name]" type="text" />
                     </div>
                     <div class="input-full">
-                        <label for="location[locationdetail">Zusätzliche Ortsangabe (z.B.: Haus 3)</label>
-                        <input name="location[locationdetail]" type="text" />
+                        <label for="input_location_locationdetail">Zusätzliche Ortsangabe (z.B.: Haus 3)</label>
+                        <input id="input_location_locationdetail" name="location[locationdetail]" type="text" />
                     </div>
                     <div class="input-full">
-                        <label for="location[street]">Straße, Hausnummer</label>
-                        <input name="location[street]]" type="text" />
+                        <label for="input_location_street">Straße, Hausnummer</label>
+                        <input id="input_location_street" name="location[street]" type="text" />
                     </div>
                     <div class="input-full">
-                        <label for="location[uzip]">PLZ</label>
-                        <input name="location[uzip]" type="text" />
+                        <label for="input_location_uzip">PLZ</label>
+                        <input id="input_location_uzip" name="location[uzip]" type="text" />
                     </div>
                     <div class="input-full">
-                        <label for="location[neighborhood]">Bezirk</label>
-                        <input name="location[neighborhood]" type="text" readonly="readonly" />
+                        <label for="input_location_neighborhood">Bezirk</label>
+                        <input id="input_location_neighborhood" name="location[neighborhood]" type="text" readonly="readonly" />
                     </div>
                     <div class="input-full">
-                        <label for="location[subneighborhood]">Alter Bezirksname</label>
-                        <input name="location[subneighborhood]" type="text" readonly="readonly" />
+                        <label for="input_location_subneighborhood">Alter Bezirksname</label>
+                        <input id="input_location_subneighborhood" name="location[subneighborhood]" type="text" readonly="readonly" />
                     </div>
+                    <input type="hidden" name="location[coordinates][longitude]" value="23.12" />
+                    <input type="hidden" name="location[coordinates][latitude]" value="96.345" />
                 </div> <!-- </fieldset> -->
             </div>
 
@@ -166,20 +169,20 @@
                 <div class="datetime-data content-panel"> <!-- <fieldset> -->
                     <h3 class="legend">Zeiten</h3>
                     <div class="input-full">
-                        <label for="date[isevent]">Ist Teilnahme des Nutzers durch den Veranstalter erwünscht?</label>
-                        <input type="hidden" name="date[isevent" value="0" />
-                        <input type="checkbox" name="date[isevent" value="1" />
+                        <label for="input_date_isevent">Ist Teilnahme des Nutzers durch den Veranstalter erwünscht?</label>
+                        <input type="hidden" name="date[isevent]" value="0" />
+                        <input id="input_date_isevent" type="checkbox" name="date[isevent]" value="1" />
                     </div>
                     <div class="input-full">
-                        <label for="date[from]">
+                        <label for="input_date_from">
                             Wann findet das statt? <span>Bei Ausstellungen: Startdatum = Enddatum</span>. von
                         </label>
-                        <input name="date[from]" class="jsb-input-date" type="text" />
+                        <input id="input_date_from" name="date[from]" class="jsb-input-date" type="text" />
                         <input type="hidden" value='{ "regex": "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{4,4}$", "date_format": "dd.mm.yy" }' class="jsb-input-date-options" />
                     </div>
                     <div class="input-full">
-                        <label for="date[till]">bis</label>
-                        <input name="date[till]" class="jsb-input-date" type="text" />
+                        <label for="input_date_till">bis</label>
+                        <input id="input_date_till" name="date[till]" class="jsb-input-date" type="text" />
                         <input type="hidden" value='{  "regex": "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{4,4}$", "date_format": "dd.mm.yy" }' class="jsb-input-date-options" />
                     </div>
                 </div> <!-- </fieldset> -->

@@ -325,6 +325,64 @@ class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
         return $this->contentItems;
     }
 
+    /**
+     * Add the given content-item to the WorkflowItem's content-item list.
+     *
+     * @param IContentItem|array $contentItem
+     *
+     * @return bool True when the item was added and false if the item allready has been added.
+     */
+    public function addContentItem($contentItem)
+    {
+        $item = $contentItem;
+        if (is_array($item))
+        {
+            if (! isset($item['identifier']))
+            {
+                throw new InvalidArgumentException(
+                    "Missing identifier for addContentItem call." . PHP_EOL .
+                    "Make sure to pass an identifier either inside the passed data array or as method param."
+                );
+            }
+            $item = new ContentItem($contentItem);
+        }
+        else if(! ($contentItem instanceof IContentItem))
+        {
+            throw new InvalidArgumentException(
+                "Invalid argument type given for the contentItem argument." . PHP_EOL .
+                "Make sure to pass either an array or IContentItem instance."
+            );
+        }
+        if (isset($this->contentItems[$item->getIdentifier()]))
+        {
+            return FALSE;
+        }
+        $this->contentItems[$item->getIdentifier()] = $item;
+        return TRUE;
+    }
+
+    public function updateContentItem(array $data, $identifier = NULL)
+    {
+        $contentItemId = $identifier;
+        if (! $contentItemId)
+        {
+            if (! isset($data['identifier']))
+            {
+                throw new InvalidArgumentException(
+                    "Missing identifier for updateContentItem call." . PHP_EOL .
+                    "Make sure to pass an identifier either inside the passed data array or as method param."
+                );
+            }
+            $contentItemId = $data['identifier'];
+        }
+        if (! isset($this->contentItems[$contentItemId]))
+        {
+            return FALSE;
+        }
+        $this->contentItems[$contentItemId]->applyValues($data);
+        return TRUE;
+    }
+
     //@todo addContentItem
     //@todo removeContentItem
 
@@ -417,7 +475,7 @@ class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
             $this->contentItems = array();
             foreach ($data['contentItems'] as $contentItemData)
             {
-                $this->contentItems[] = new ContentItem($contentItemData);
+                $this->addContentItem(new ContentItem($contentItemData));
             }
         }
         if (isset($data['importItem']))

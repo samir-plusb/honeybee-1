@@ -81,9 +81,9 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         this.parent(element, options);
         this.edit_service = new midas.items.edit.EditService({
             api: {
-                extract_date: 'items/api/extract_date',
-                validate_url: 'items/api/validate_url',
-                extract_location: 'items/api/api/extract_location'
+                extract_date: 'index.php/de/items/api/extract_date',
+                validate_url: 'index.php/de/items/api/validate_url',
+                extract_location: 'index.php/de/items/api/api/extract_location'
             }
         });
     },
@@ -274,6 +274,17 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      */
     loadItems: function()
     {
+        var data_input = $('.content-list-src');
+        if (data_input)
+        {
+            var items = $.parseJSON(data_input.val());
+            for (var i = 0; i < items.length; i++)
+            {
+                items[i].cid = midas.core.CidSequence.nextCid('content_item');
+            }
+            data_input.remove();
+            return items;
+        }
         return [];
     },
 
@@ -459,33 +470,45 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         callback = 'Function' == typeof callback ? callback : function() {};
         var validation_res = this.editing_form.validate();
         var that = this;
+        // does the actual storing and is called if the data validation complies.
         var store_data = function()
         {
             var item = that.editing_form.val();
 
-            if (! item.cid)
+            if (0 == +item.cid)
             {
+                // for new items set an identifier and cid
                 item.cid = midas.core.CidSequence.nextCid('content_item');
+                var item_pos = that.items_list.size() + 1;
+                item.identifier = item.parentIdentifier + '-' + item_pos;
                 that.editing_form.val('cid', item.cid);
+                that.editing_form.val('identifier', item.identifier);
             }
-
+            var ticket = item.ticket;
+            delete item.ticket;
+            // create intent to pass to our attached controllers.
             var intent = {
                 'name': '/midas/intents/contentItem/store',
-                'data': item
+                'data': {
+                    content_item: item,
+                    ticket: ticket
+                },
+                'target_uri': 'index.php/de/workflow/run'
             };
-            // @todo Pass a success callback that updates the content item state from the list
+            // @todo update the content item state from the list
             // and decide if and how we want to reflect the state changes in the gui.
-            that.propagateIntent(intent);
+            that.propagateIntent(intent, callback);
             that.items_list.add(item);
             that.editing_form.highlight();
             that.editing_form.markClean();
-            callback();
         };
         if (true == validation_res.success)
         {
-            var latitude = this.editing_form.val('location[latitude]');
-            var longitude = this.editing_form.val('location[longitude]');
-            if (0 < latitude.length && 0 < longitude.length)
+            // after validation, soft check for location data and warn if they have not been provided.
+            var latitude = +this.editing_form.val('location[coordinates][latitude]');
+            var longitude = +this.editing_form.val('location[coordinates][longitude]');
+
+            if (0 < latitude && 0 < longitude)
             {
                store_data();
             }

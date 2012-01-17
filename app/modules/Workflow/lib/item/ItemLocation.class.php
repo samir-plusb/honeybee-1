@@ -77,6 +77,21 @@ class ItemLocation implements IItemLocation
     protected $name;
 
     /**
+     * Holds the location's relevance.
+     *
+     * @var int
+     */
+    protected $relevance;
+
+    /**
+     * Creates a new ContentItem instance.
+     */
+    public function __construct(array $data = array())
+    {
+        $this->hydrate($data);
+    }
+
+    /**
      * Returns an array holding the location's longitude and latitude.
      *
      * <pre>
@@ -175,6 +190,16 @@ class ItemLocation implements IItemLocation
     }
 
     /**
+     * Returns the location's relevance
+     *
+     * @return int
+     */
+    public function getRelevance()
+    {
+        return $this->relevance;
+    }
+
+    /**
      * Returns an array representation of the location.
      *
      * @return string
@@ -184,7 +209,7 @@ class ItemLocation implements IItemLocation
         $props = array(
             'coordinates', 'city', 'postalCode',
             'administrativeDistrict', 'district', 'neighborhood',
-            'street', 'housenumber', 'name'
+            'street', 'housenumber', 'name', 'relevance'
         );
         $data = array();
         foreach ($props as $prop)
@@ -193,6 +218,38 @@ class ItemLocation implements IItemLocation
             $data[$prop] = $this->$getter();
         }
         return $data;
+    }
+
+    /**
+     * Hydrates the given data into the item.
+     * This method is used to internally setup our state
+     * and has privleged write access to all properties.
+     * Properties that are set during hydrate dont mark the item as modified.
+     *
+     * @param array $data
+     */
+    protected function hydrate(array $data)
+    {
+        $simpleProps = array(
+            'coordinates', 'city', 'postalCode',
+            'administrativeDistrict', 'district', 'neighborhood',
+            'street', 'housenumber', 'name', 'relevance'
+        );
+        foreach ($simpleProps as $prop)
+        {
+            if (array_key_exists($prop, $data))
+            {
+                $setter = 'set'.ucfirst($prop);
+                if (is_callable(array($this, $setter)))
+                {
+                    $this->$setter($data[$prop]);
+                }
+                else
+                {
+                    $this->$prop = $data[$prop];
+                }
+            }
+        }
     }
 }
 

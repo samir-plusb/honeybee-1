@@ -42,15 +42,24 @@ class Items_EditAction extends ItemsBaseAction
 
     public function executeWrite(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        // @todo Persist the model data.
-
+        $contentItemData = $parameters->getParameter('content_item');
+        $ticket = $parameters->getParameter('ticket');
         $this->setAttribute('ticket', $parameters->getParameter('ticket'));
+        $workflowItem = $ticket->getWorkflowItem();
+        if (! $workflowItem->addContentItem($contentItemData))
+        {
+            error_log(print_r($contentItemData, TRUE));
+            $workflowItem->updateContentItem($contentItemData);
+        }
+
+        $supervisor = Workflow_SupervisorModel::getInstance();
+        $supervisor->getItemPeer()->storeItem($workflowItem);
+
         $pluginResult = $this->getContainer()->getAttribute(
             WorkflowBaseInteractivePlugin::ATTR_RESULT,
             WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
         );
-        $pluginResult->setState(WorkflowPluginResult::STATE_OK);
-
+        $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
         return 'Success';
     }
 
@@ -60,7 +69,7 @@ class Items_EditAction extends ItemsBaseAction
 
         foreach ($errors as $error)
         {
-            error_log(print_r($error, TRUE));
+            error_log(__METHOD__ . print_r($error, TRUE));
         }
 
         $this->setAttribute('ticket', $parameters->getParameter('ticket'));
@@ -70,7 +79,7 @@ class Items_EditAction extends ItemsBaseAction
         );
         $pluginResult->setState(WorkflowPluginResult::STATE_ERROR);
 
-        return 'Success';
+        return 'Error';
     }
 }
 

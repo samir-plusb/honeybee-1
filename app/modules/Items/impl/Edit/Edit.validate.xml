@@ -6,6 +6,7 @@
 
     <ae:configuration>
         <validators>
+
             <validator class="WorkflowTicketValidator" required="true" translation_domain="items.errors">
                 <arguments>
                     <argument>ticket</argument>
@@ -14,6 +15,230 @@
                     <error>Invalid data given.</error>
                 </errors>
             </validator>
+        </validators>
+
+        <validators method="write">
+
+            <validator class="string" name="invalid_id" required="true" translation_domain="items.errors">
+                <arguments base="content_item">
+                    <argument>identifier</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid identifier given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_parent_id" required="true" translation_domain="items.errors">
+                <arguments base="content_item">
+                    <argument>parentIdentifier</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid parentIdentifier given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_category" required="true" translation_domain="items.errors">
+                <arguments base="content_item">
+                    <argument>category</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid category given.</error>
+                </errors>
+            </validator>
+
+            <validator class="number" name="invalid_priority" required="true" translation_domain="items.errors">
+                <arguments base="content_item">
+                    <argument>priority</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid priority given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_tags" required="true" translation_domain="items.errors">
+                <arguments base="content_item[tags][]" />
+                <errors>
+                    <error>Invalid tags data given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_title" required="true" translation_domain="items.errors">
+                <arguments base="content_item">
+                    <argument>title</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid title given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_teaser" required="false" translation_domain="items.errors">
+                <arguments base="content_item">
+                    <argument>teaser</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid teaser given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_text" required="true" translation_domain="items.errors">
+                <arguments base="content_item">
+                    <argument>text</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid text given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_source" required="false" translation_domain="items.errors">
+                <arguments base="content_item">
+                    <argument>source</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid source given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_url" required="false" translation_domain="items.errors">
+                <arguments base="content_item">
+                    <argument>url</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid url given.</error>
+                </errors>
+            </validator>
+
+            <validator class="number" name="invalid_location_relevance" required="false" translation_domain="items.errors">
+                <arguments base="content_item[location]">
+                    <argument>relevance</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-relevance given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_name" required="false" translation_domain="items.errors">
+                <arguments base="content_item[location]">
+                    <argument>name</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-name given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_locationdetail" required="false" translation_domain="items.errors">
+                <arguments base="content_item[location]">
+                        <argument>locationdetail</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid locationdetail given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_street" required="false" translation_domain="items.errors">
+                <arguments base="content_item[location]">
+                    <argument>street</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-street given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_uzip" required="false" translation_domain="items.errors">
+                <arguments base="content_item[location]">
+                    <argument>uzip</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-uzip given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_neighborhood" required="false" translation_domain="items.errors">
+                <arguments base="content_item[location]">
+                    <argument>neighborhood</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-neighborhood given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_subneighborhood" required="false" translation_domain="items.errors">
+                <arguments base="content_item[location]">
+                    <argument>subneighborhood</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-subneighborhood given.</error>
+                </errors>
+            </validator>
+
+            <validator class="number" name="invalid_location_latitude" required="false" translation_domain="items.errors">
+                <arguments base="content_item[location][coordinates]">
+                    <argument>latitude</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-latitude given.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="cast_to">float</ae:parameter>
+                </ae:parameters>
+            </validator>
+
+            <validator class="number" name="invalid_location_longitude" required="false" translation_domain="items.errors">
+                <arguments base="content_item[location][coordinates]">
+                    <argument>longitude</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-longitude given.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="cast_to">float</ae:parameter>
+                </ae:parameters>
+            </validator>
+
+            <validator class="number" name="invalid_date_isevent" required="false" translation_domain="items.errors">
+                <arguments base="content_item[date]">
+                    <argument>isevent</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid is-event flag given.</error>
+                </errors>
+            </validator>
+
+            <validator class="datetime" name="invalid_date_from" required="false" translation_domain="items.errors">
+                <arguments base="content_item[date]">
+                    <argument>from</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid date-from data given.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="formats">dd.MM.yyyy</ae:parameter>
+                    <ae:parameter name="cast_to">
+                        <ae:parameters>
+                            <ae:parameter name="type">date</ae:parameter>
+                            <ae:parameter name="format">yyyy-MM-dd</ae:parameter>
+                        </ae:parameters>
+                    </ae:parameter>
+                </ae:parameters>
+            </validator>
+
+            <validator class="datetime" name="invalid_date_till" required="false" translation_domain="items.errors">
+                <arguments base="content_item[date]">
+                    <argument>till</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid date-till data given.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="formats">dd.MM.yyyy</ae:parameter>
+                    <ae:parameter name="cast_to">
+                        <ae:parameters>
+                            <ae:parameter name="type">date</ae:parameter>
+                            <ae:parameter name="format">yyyy-MM-dd</ae:parameter>
+                        </ae:parameters>
+                    </ae:parameter>
+                </ae:parameters>
+            </validator>
+
         </validators>
     </ae:configuration>
 </ae:configurations>

@@ -19,14 +19,14 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
      * @type HTMLUlElement
      */
     element: null,
-    
+
     /**
      * An object holding the content item collection inside an { [id]: [item] } structure,
      * thereby holding an additional key 'length' that holds the total number of content items.
      * @type {Object}
      */
     content_items: null,
-    
+
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
      * @param {HTMLElement} element The HTMLUlElement that serves as the ui base for our list.
@@ -69,7 +69,7 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
         }
         this.updateStatusDisplay();
     },
-    
+
     /**
      * @description Add a content item to the list.
      * @param {Objet} item The content item to add.
@@ -106,7 +106,7 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
             this.updateStatusDisplay();
         }
     },
-    
+
     /**
      * @description Remove a content item from the list.
      * @param {Number} cid The cid of the content item to remove.
@@ -121,7 +121,12 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
             this.updateStatusDisplay();
         }
     },
-    
+
+    size: function()
+    {
+        return this.content_items.length;
+    },
+
     /**
      * @description Get a content item by cid.
      * @param {Number} cid The cid of the content item to get.
@@ -130,7 +135,7 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
     {
         return this.content_items[cid] || null;
     },
-    
+
     /**
      * @description Update the status display.
      */

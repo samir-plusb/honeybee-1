@@ -84,6 +84,13 @@ interface IItemLocation
     public function getName();
 
     /**
+     * Returns the location's relevance
+     *
+     * @return int
+     */
+    public function getRelevance();
+
+    /**
      * Returns an array representation of the location.
      *
      * <pre>
@@ -100,7 +107,8 @@ interface IItemLocation
      *     'neighborhood'            => 'Niederschönhausen',
      *     'street'                  => 'Shrinkstreet',
      *     'house_num'               => '23',
-     *     'name'                    => 'Vereinsheim Pankow - Niederschönhausen'
+     *     'name'                    => 'Vereinsheim Pankow - Niederschönhausen',
+     *     'relevance'               => 1
      * )
      * </pre>
      *

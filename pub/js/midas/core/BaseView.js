@@ -46,17 +46,17 @@ midas.core.BaseView = midas.core.BaseObject.extend(
             this.onInitGui.apply(this);
         }
     },
-    
+
     /**
      * Propagte an intent to all attached controllers.
      * @param {Object} intent
      * @returns {Boolean} True if the intent was handled else false.
      */
-    propagateIntent: function(intent)
+    propagateIntent: function(intent, callback)
     {
         for (var i = 0; i < this.controllers.length; i++)
         {
-            if (this.controllers[i].apply(intent))
+            if (this.controllers[i].apply(intent, callback))
             {
                 return true;
             }
@@ -102,11 +102,11 @@ midas.core.BaseView = midas.core.BaseObject.extend(
             this.controllers = this.controllers.splice(index, 1);
         }
     },
-    
+
     // -----------
     // --------------- DIALOG HANDLING
     // -----------
-    
+
     /**
      * @description Displays a confirm dialog.
      * @param {String} title The text to display as the dialog's title.
@@ -138,7 +138,7 @@ midas.core.BaseView = midas.core.BaseObject.extend(
             }
         });
     },
-    
+
     /**
      * @description Displays a warning dialog.
      * @param {String} title The text to display as the dialog's title.
@@ -155,7 +155,7 @@ midas.core.BaseView = midas.core.BaseObject.extend(
             modal: true,
             width: '20em',
             buttons: {
-                "Ok": function() 
+                "Ok": function()
                 {
                     $(this).dialog( "close" );
                     ok();

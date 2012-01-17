@@ -17,8 +17,7 @@ class UserIsItemOwnerAssertion implements Zend_Acl_Assert_Interface
 			// let's assume that any generic user cannot edit this workflow-item.
 			return FALSE;
 		}
-
-		return $resource->getOwnerName() == $role->getAttribute('name');
+		return $resource->getOwnerName() == $role->getAttribute('login');
 	}
 }
 

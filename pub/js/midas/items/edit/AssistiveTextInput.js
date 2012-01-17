@@ -13,7 +13,7 @@ midas.items.edit.AssistiveTextInput = midas.items.edit.Input.extend(
      * @type String
      */
     log_prefix: 'AssistiveTextInput',
-    
+
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
      * @param {HTMLElement} element The HTMLForm input, select...
@@ -24,9 +24,9 @@ midas.items.edit.AssistiveTextInput = midas.items.edit.Input.extend(
         this.parent(element, options);
         this.createContextMenu();
     },
-    
+
     /**
-     * @description Creates a contextmenu that is bound to the input's element. 
+     * @description Creates a contextmenu that is bound to the input's element.
      */
     createContextMenu: function()
     {
@@ -56,7 +56,7 @@ midas.items.edit.AssistiveTextInput = midas.items.edit.Input.extend(
             { disable_native_context_menu: false, leftClick: false }
         );
     },
-    
+
     /**
      * @description Returns an object defining the menu items to use
      * inside the context menu that is created for the input.
@@ -65,7 +65,6 @@ midas.items.edit.AssistiveTextInput = midas.items.edit.Input.extend(
     getMenuItems: function()
     {
         return [
-            { 'key': 'new_item', 'label': 'neues Item aus Auswahl', 'class': 'menu-item-break' },
             { 'key': 'localize_item', 'label': 'lokalisieren', 'class': 'menu-item-break' },
             { 'key': 'set_title', 'label': 'als Überschrift setzen' },
             { 'key': 'append_title', 'label': 'an Überschrift anhängen' },
