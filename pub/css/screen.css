@@ -461,3 +461,6 @@ header .personal-info a.logout:hover {
 .validation-hint.bottom p {
   top: 0;
 }
+#input_date_isevent {
+    width: 20px;
+}

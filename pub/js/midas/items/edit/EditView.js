@@ -499,7 +499,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     $('.list_position').val(list_pos);
                     that.editing_form.reset();
                     $('.ticket-identifier').val(ticket.id);
-                    $('.workflow-item-identifier').val(import_item.identifier);
+                    $('.workflow-item-identifier').val(resp.data[0].identifier);
                     for (var i = 0; i < content_items.length; i++)
                     {
                         content_items[i].cid = midas.core.CidSequence.nextCid('content_item');
