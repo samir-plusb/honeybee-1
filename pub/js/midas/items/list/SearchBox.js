@@ -30,8 +30,8 @@ midas.items.list.SearchBox = midas.core.Behaviour.extend(
         this.reset_btn.click(function(event)
         {
             event.preventDefault();
-            that.val('');
-            that.focus();
+            that.search_input.val('');
+            that.search_input.focus();
             $(this).hide();
         });
 

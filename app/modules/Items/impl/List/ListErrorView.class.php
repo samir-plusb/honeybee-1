@@ -24,6 +24,24 @@ class Items_List_ListErrorView extends ItemsBaseView
         $this->setupHtml($parameters);
         $this->setAttribute('_title', 'Newstream - Error');
     }
+
+    /**
+     * Handle presentation logic for commandline interfaces.
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
+     */
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        $this->getResponse()->setContent(json_encode(
+            array(
+                'state' => 'error',
+                'data' => 'An unexpected error occured while loading list items.'
+            )
+        ));
+    }
 }
 
 ?>

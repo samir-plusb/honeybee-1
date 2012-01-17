@@ -7,7 +7,7 @@
     <ae:configuration>
         <validators>
 
-            <validator class="WorkflowTicketValidator" required="true" translation_domain="items.errors">
+            <validator class="WorkflowTicketValidator" name="invalid_ticket" required="true" translation_domain="items.errors">
                 <arguments>
                     <argument>ticket</argument>
                 </arguments>
@@ -15,6 +15,52 @@
                     <error>Invalid data given.</error>
                 </errors>
             </validator>
+
+        </validators>
+
+        <validators method="read">
+
+            <validator class="number" name="invalid_list_pos" required="false" translation_domain="items.errors">
+                <arguments>
+                    <argument>list_pos</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid list position given.</error>
+                </errors>
+            </validator>
+
+            <validator class="inarray" name="invalid_sorting_direction" required="false" translation_domain="items.errors">
+                <arguments base="sorting">
+                    <argument>direction</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="values">asc,desc</ae:parameter>
+                </ae:parameters>
+            </validator>
+
+            <validator class="inarray" name="invalid_sorting_field" required="false" translation_domain="items.errors">
+                <arguments base="sorting">
+                    <argument>field</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="values">title,source,timestamp,state,category,priority,district</ae:parameter>
+                </ae:parameters>
+            </validator>
+
+            <validator class="string" name="invalid_search_phrase" required="false" translation_domain="items.errors">
+                <arguments>
+                    <argument>search_phrase</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="min">3</ae:parameter>
+                    <ae:parameter name="max">50</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error for="min">The search_phrase must be at least 3 chars long.</error>
+                    <error for="max">The search_phrase may not exceed a length of 50 chars.</error>
+                </errors>
+            </validator>
+
         </validators>
 
         <validators method="write">

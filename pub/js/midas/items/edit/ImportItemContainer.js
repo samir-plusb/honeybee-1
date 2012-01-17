@@ -38,7 +38,9 @@ midas.items.edit.ImportItemContainer = midas.core.BaseObject.extend(
      * @type jQuery
      */
     content_text_input: null,
-    
+
+    gui: null,
+
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
      * @param {HTMLElement} element The import item wrapper.
@@ -48,6 +50,12 @@ midas.items.edit.ImportItemContainer = midas.core.BaseObject.extend(
     {
         this.parent(options);
         this.element = element;
+        this.gui = {
+            title: '.subject',
+            source: '.source',
+            timestamp: '.timestamp',
+            content: '.text-content'
+        };
         this.content_panel = this.element.find(this.options.tabs_container);
         this.content_panel.find('.legend').css('display', 'none');
         this.content_text_input = new midas.items.edit.AssistiveTextInput(
@@ -57,6 +65,21 @@ midas.items.edit.ImportItemContainer = midas.core.BaseObject.extend(
             this.fire('contextMenuSelect', [field, item]);
         }.bind(this));
         this.content_panel.tabs();
+        for (var element in this.gui)
+        {
+            this.gui[element] = this.element.find(this.gui[element]);
+        }
+    },
+
+    hydrate: function(data)
+    {
+        for (var element in this.gui)
+        {
+            if (data[element])
+            {
+                this.gui[element].text(data[element]);
+            }
+        }
     }
 });
 

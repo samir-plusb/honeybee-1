@@ -24,7 +24,7 @@ class Items_EditAction extends ItemsBaseAction
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setAttribute('ticket', $parameters->getParameter('ticket'));
-
+        $this->setAttribute('list_pos', $parameters->getParameter('list_pos', 0));
         // The plugin result is passed on to any underlying (plugin)actions via attribute value.
         // All actions that are called from a workflow plugin must set the gate, state and message on the injected result object.
         // If we have no pluginResult set and our container does not have a 'is_workflow_container' set to true,
@@ -65,18 +65,37 @@ class Items_EditAction extends ItemsBaseAction
     public function handleWriteError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $errors = $this->getContainer()->getValidationManager()->getErrorMessages();
-
+        $messages = "";
         foreach ($errors as $error)
         {
-            error_log(__METHOD__ . print_r($error, TRUE));
+            $messages .= implode(PHP_EOL, $error['messages']);
         }
-
+        $this->setAttribute('error_message', $messages);
         $this->setAttribute('ticket', $parameters->getParameter('ticket'));
         $pluginResult = $this->getContainer()->getAttribute(
             WorkflowBaseInteractivePlugin::ATTR_RESULT,
             WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
         );
-        $pluginResult->setState(WorkflowPluginResult::STATE_ERROR);
+        $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
+
+        return 'Error';
+    }
+
+    public function handleReadError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        $errors = $this->getContainer()->getValidationManager()->getErrors();
+        $messages = "";
+        foreach ($errors as $error)
+        {
+            $messages .= implode(PHP_EOL, $error['messages']);
+        }
+        $this->setAttribute('error_message', $messages);
+        $this->setAttribute('ticket', $parameters->getParameter('ticket'));
+        $pluginResult = $this->getContainer()->getAttribute(
+            WorkflowBaseInteractivePlugin::ATTR_RESULT,
+            WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
+        );
+        $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
 
         return 'Error';
     }

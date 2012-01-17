@@ -62,12 +62,24 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
 
         if ($.isArray(this.options.items))
         {
-            for (var i = 0; i < this.options.items.length; i++)
-            {
-                this.add(this.options.items[i]);
-            }
+            this.setItems(this.options.items);
         }
         this.updateStatusDisplay();
+    },
+
+    setItems: function(items)
+    {
+        for (var cid in this.content_items)
+        {
+            if ('length' !== cid)
+            {
+                this.remove(cid);
+            }
+        }
+        for (var i = 0; i < items.length; i++)
+        {
+            this.add(items[i]);
+        }
     },
 
     /**

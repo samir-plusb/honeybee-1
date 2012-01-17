@@ -108,6 +108,7 @@
         </thead>
         <tbody>
 <?php
+    $pos = 0;
     foreach ($t['listData'] as $workflowItem)
     {
 // Render the table's body traversing our data and rendering one tablerow per dataset.
@@ -115,7 +116,16 @@
             $date = new DateTime($importItem['created']['date']);
             $step = $workflowItem['currentState']['step'];
             $grabTicketLink = $ro->gen('workflow.grab', array('ticket' => $workflowItem['ticket']));
-            $processTicketLink = $ro->gen('workflow.run', array('ticket' => $workflowItem['ticket']['id']));
+            $processListFilterParams = array(
+                'sorting' => $sorting
+            );
+            if ($searchPhrase)
+            {
+                $processListFilterParams['search_phrase'] = $searchPhrase;
+            }
+            $processListFilterParams['list_pos'] = $offset + $pos++;
+            $processListFilterParams['ticket'] = $workflowItem['ticket']['id'];
+            $processTicketLink = $ro->gen('workflow.run', $processListFilterParams);
             $releaseLink = $ro->gen('workflow.release', array('ticket' => $workflowItem['ticket']['id']));
             $deleteLink = $ro->gen('workflow.proceed', array('ticket' => $workflowItem['ticket']['id'], 'gate' => 'delete'));
             $ticketCheckoutRel = sprintf('data-checkout-url="%s"', $grabTicketLink);

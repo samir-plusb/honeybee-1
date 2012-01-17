@@ -99,15 +99,12 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             .createImportItemContainer()
             .createMenus()
             .createEditForm();
-
+        // release ticket when page is left.
+        var that = this;
         window.onunload = function()
         {
-            var release_url = $('.release_ticket_url').val();
-            if (release_url)
-            {
-                $.getJSON(release_url);
-            }
-            return false;
+            var ticket_id = that.editing_form.val('ticket');
+            that.releaseTicket(ticket_id);
         };
     },
 
@@ -325,10 +322,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     getImportItemMenuBindings: function()
     {
         return {
-            'prev': function() {this.logDebug('onImportItemPrev');}.bind(this),
+            'prev': this.loadPrevImportItem.bind(this),
             'delete': function() {this.logDebug("onImportItemDelete");}.bind(this),
             'mark': this.markImportItem.bind(this),
-            'next': function() {this.logDebug('onImportItemNext');}.bind(this)
+            'next': this.loadNextImportItem.bind(this)
         };
     },
 
@@ -425,6 +422,68 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             this.propagateIntent(intent);
         }
     },
+
+    loadNextImportItem: function()
+    {
+        var cur_ticket_id = this.editing_form.val('ticket');
+        var list_pos = +$('.list_position').val();
+        var that = this;
+        this.releaseTicket(cur_ticket_id, function(data)
+        {
+            var list_pos = +$('.list_position').val();
+            that.loadImportItem(list_pos + 1);
+        });
+    },
+
+    loadPrevImportItem: function()
+    {
+        var cur_ticket_id = this.editing_form.val('ticket');
+        var that = this;
+        this.releaseTicket(cur_ticket_id, function(data)
+        {
+            var list_pos = +$('.list_position').val();
+            that.loadImportItem(list_pos - 1);
+        });
+    },
+
+    loadImportItem: function(list_pos)
+    {
+        var list_url = $('.list-base-url').val().replace(/\{LIST_POS\}/ig, list_pos);
+        var that = this;
+        var filter = $.parseJSON($('.list-filter').val());
+        if (filter)
+        {
+            list_url += '&'+$.param(filter);
+        }
+        $.getJSON(list_url, function(resp)
+        {
+            if (resp.state == 'ok')
+            {
+                var import_item = resp.data[0].importItem;
+                var content_items = resp.data[0].contentItems;
+                var ticket = resp.data[0].ticket;
+
+                that.grabTicket(ticket.id, ticket.rev, function(err, data)
+                {
+                    if (err)
+                    {
+                        return;
+                    }
+                    that.import_item_container.hydrate(import_item);
+                    $('.list_position').val(list_pos);
+                    that.editing_form.reset();
+                    $('.ticket-identifier').val(ticket.id);
+                    $('.workflow-item-identifier').val(import_item.identifier);
+                    for (var i = 0; i < content_items.length; i++)
+                    {
+                        content_items[i].cid = midas.core.CidSequence.nextCid('content_item');
+                    }
+                    that.items_list.setItems(content_items);
+                });
+            }
+        });
+    },
+
 
     /**
      * @description Loads the given content item into the form.
@@ -645,6 +704,42 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 'target_uri': 'index.php/de/items/api/delete_item'
             };
             this.propagateIntent(intent);
+        }
+    },
+
+    releaseTicket: function(ticket_id, callback)
+    {
+        var release_url = $('.release-ticket-base-url').val();
+        if (release_url && ticket_id)
+        {
+            var bound_url = release_url.replace(/\{\TICKET_ID\}/ig, ticket_id);
+            $.getJSON(bound_url, function(data)
+            {
+                if (callback) callback(data);
+            });
+        }
+    },
+
+    grabTicket: function(ticket_id, ticket_rev, callback)
+    {
+        var grab_url = $('.grab-ticket-base-url').val();
+        if (grab_url && ticket_id && ticket_rev)
+        {
+            var bound_url = grab_url
+                .replace(/\{\TICKET_ID\}/ig, ticket_id)
+                .replace(/\{\TICKET_REV\}/ig, ticket_rev);
+
+            $.getJSON(bound_url, function(data)
+            {
+                if (data && data.state === 'ok')
+                {
+                    if (callback) callback(null, data);
+                }
+                else
+                {
+                    if (callback) callback(data || {}, null);
+                }
+            });
         }
     },
 

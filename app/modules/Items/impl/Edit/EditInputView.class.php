@@ -37,8 +37,27 @@ class Items_Edit_EditInputView extends ItemsBaseView
         $item = $ticket->getWorkflowItem();
         $ticketData = $ticket->toArray();
         $ticketData['item'] = $item->toArray();
-
+        $ro = $this->getContext()->getRouting();
         $this->setAttribute('ticket', $ticketData);
+        $this->setAttribute('list_url', $ro->gen('items.list', array('limit' => 1, 'offset' => '{LIST_POS}')));
+        $listFilter = array(
+            'sorting' => $parameters->getParameter('sorting', array(
+                'direction' => 'desc',
+                'field' => 'timestamp'
+            ))
+        );
+        if ($parameters->hasParameter('search_phrase'))
+        {
+            $listFilter['search_phrase'] = $parameters->getParameter('search_phrase');
+        }
+        $this->setAttribute('list_filter', $listFilter);
+        $this->setAttribute('release_url', $ro->gen('workflow.release', array('ticket' => '{TICKET_ID}')));
+        $this->setAttribute('grab_url', $ro->gen('workflow.grab', array(
+            'ticket' => array(
+                'id' => '{TICKET_ID}',
+                'rev' => '{TICKET_REV}'
+             )
+        )));
     }
 
     /**

@@ -41,6 +41,7 @@
         <h2>Document editing form</h2>
 
         <section class="content-items">
+            <input type="hidden" class="content-list-src" value="<?php echo htmlspecialchars(json_encode($contentItems)); ?>" />
             <div class="content-panel">
                 <h3 class="legend">Items</h3>
                 <ul></ul>
@@ -48,12 +49,16 @@
         </section>
 
         <form accept-charset="utf-8" action="#postdata" method="post">
-            <input class="release_ticket_url" type="hidden" value="<?php echo htmlspecialchars($ro->gen('workflow.release', array('ticket' => $ticketData['_id']), array('relative' => TRUE))); ?>" />
+            <input class="static-value release-ticket-base-url" type="hidden" value="<?php echo urldecode($t['release_url']); ?>" />
+            <input class="static-value list-filter" type="hidden" value="<?php echo htmlspecialchars(json_encode($t['list_filter'])); ?>" />
+            <input class="static-value grab-ticket-base-url" type="hidden" value="<?php echo urldecode($t['grab_url']); ?>" />
+            <input class="static-value list-base-url" type="hidden" value="<?php echo urldecode($t['list_url']); ?>" />
+            <input type="hidden" class="static-value list_position" value="<?php echo $t['list_pos']; ?>" />
+
+            <input type="hidden" class="static-value ticket-identifier" name="ticket" value="<?php echo $ticketData['_id']; ?>" />
+            <input type="hidden" class="static-value workflow-item-identifier" name="parentIdentifier" value="<?php echo $workflowItem['identifier']; ?>" />
             <input type="hidden" name="cid" value="0" />
             <input type="hidden" name="identifier" value="0" />
-            <input type="hidden" class="content-list-src" value="<?php echo htmlspecialchars(json_encode($contentItems)); ?>" />
-            <input type="hidden" class="static-value" name="ticket" value="<?php echo $ticketData['_id']; ?>" />
-            <input type="hidden" class="static-value" name="parentIdentifier" value="<?php echo $workflowItem['identifier']; ?>" />
 
             <div class="main-data content-panel"> <!-- <fieldset> as soon as the firefox (legend position render) bug is fixed -->
                 <h3 class="legend">Redaktionelle Einstellungen</h3>
@@ -209,11 +214,11 @@
                 <h3 class="legend">Daten</h3>
                 <dl>
                     <dt>Betreff</dt>
-                    <dd><?php echo $importItem['title']; ?></dd>
+                    <dd class="subject"><?php echo $importItem['title']; ?></dd>
                     <dt>Von</dt>
-                    <dd><?php echo $importItem['source']; ?></dd>
+                    <dd class="source"><?php echo $importItem['source']; ?></dd>
                     <dt>Versanddatum</dt>
-                    <dd><?php echo $importItem['timestamp']; ?></dd>
+                    <dd class="timestamp"><?php echo $importItem['timestamp']; ?></dd>
                 </dl>
             </div>
 
@@ -226,7 +231,7 @@
                 </ul>
                 <div id="content-tabs-1">
                     <div class="input-full">
-                        <textarea readonly="readonly"><?php echo strip_tags(htmlspecialchars_decode($importItem['content'])); ?></textarea>
+                        <textarea class="text-content" readonly="readonly"><?php echo strip_tags(htmlspecialchars_decode($importItem['content'])); ?></textarea>
                     </div>
                 </div>
             </div>

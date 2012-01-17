@@ -22,6 +22,7 @@ class Workflow_ReleaseTicketAction extends ProjectBaseAction
         $user = $this->getContext()->getUser();
         $error = '';
         $reason = '';
+        $tm = $this->getContext()->getTranslationManager();
         if ($ticket->getCurrentOwner() === $user->getAttribute('login'))
         {
             $ticket->setCurrentOwner(WorkflowTicket::NULL_USER);

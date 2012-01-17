@@ -64,7 +64,26 @@ class Items_List_ListSuccessView extends ItemsBaseView
      */
     public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $this->getResponse()->setContent(json_encode($this->getAttribute('items')));
+        $listData = array();
+        $ticketPeer = Workflow_SupervisorModel::getInstance()->getTicketPeer();
+        foreach ($this->getAttribute('items', array()) as $item)
+        {
+            $itemData = $item->toArray();
+            $ticket = $ticketPeer->getTicketById($itemData['ticketId']);
+            $itemData['ticket'] = array(
+                'id' => $ticket->getIdentifier(),
+                'rev' => $ticket->getRevision()
+            );
+            $itemData['importItem']['content'] = strip_tags(htmlspecialchars_decode($itemData['importItem']['content']));
+            $itemData['owner'] = $ticket->getCurrentOwner();
+            $listData[] = $itemData;
+        }
+        $this->getResponse()->setContent(json_encode(
+            array(
+                'state' => 'ok',
+                'data' => $listData
+            )
+        ));
     }
 
     public function setupHtml(AgaviRequestDataHolder $parameters, $layoutName = NULL)
