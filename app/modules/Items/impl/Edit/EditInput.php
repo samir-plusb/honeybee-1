@@ -48,6 +48,7 @@
         </section>
 
         <form accept-charset="utf-8" action="#postdata" method="post">
+            <input class="release_ticket_url" type="hidden" value="<?php echo htmlspecialchars($ro->gen('workflow.release', array('ticket' => $ticketData['_id']), array('relative' => TRUE))); ?>" />
             <input type="hidden" name="cid" value="0" />
             <input type="hidden" name="identifier" value="0" />
             <input type="hidden" class="content-list-src" value="<?php echo htmlspecialchars(json_encode($contentItems)); ?>" />

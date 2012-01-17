@@ -99,6 +99,16 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             .createImportItemContainer()
             .createMenus()
             .createEditForm();
+
+        window.onunload = function()
+        {
+            var release_url = $('.release_ticket_url').val();
+            if (release_url)
+            {
+                $.getJSON(release_url);
+            }
+            return false;
+        };
     },
 
     /**
