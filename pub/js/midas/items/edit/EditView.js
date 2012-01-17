@@ -317,7 +317,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         return {
             'prev': function() {this.logDebug('onImportItemPrev');}.bind(this),
             'delete': function() {this.logDebug("onImportItemDelete");}.bind(this),
-            'mark': function() {this.logDebug('onImportItemMark');}.bind(this),
+            'mark': this.markImportItem.bind(this),
             'next': function() {this.logDebug('onImportItemNext');}.bind(this)
         };
     },
@@ -397,6 +397,24 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     // -----------
     // --------------- HANDLING CONTENT ITEM DATA
     // -----------
+
+    markImportItem: function()
+    {
+        var ticket = this.editing_form.val('ticket');
+        if (ticket)
+        {
+            // create intent to pass to our attached controllers.
+            var intent = {
+                'name': '/midas/intents/importItem/mark',
+                'data': {
+                    ticket: ticket,
+                    gate: 'publish'
+                },
+                'target_uri': 'index.php/de/workflow/proceed'
+            };
+            this.propagateIntent(intent);
+        }
+    },
 
     /**
      * @description Loads the given content item into the form.
@@ -600,9 +618,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      */
     deleteContentItem: function()
     {
-        var item = this.items_list.getItem(this.editing_form.val('cid')).data;
+        var item = this.items_list.getItem(this.editing_form.val('cid'));
         if (item)
         {
+            item = item.data;
             this.items_list.remove(item.cid);
             this.editing_form.reset();
             var ticket = this.editing_form.val('ticket');
@@ -615,7 +634,6 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 },
                 'target_uri': 'index.php/de/items/api/delete_item'
             };
-            console.log(item);
             this.propagateIntent(intent);
         }
     },

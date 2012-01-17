@@ -25,9 +25,9 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
      */
     protected function doProcess()
     {
+        // @todo Export item to fe api
         $result = new WorkflowPluginResult();
-        $result->setState(WorkflowPluginResult::STATE_OK);
-        $result->setGate(self::GATE_ARCHIV);
+        $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
         $result->setMessage('Ready to get the disposition to whereever rockin!');
         $result->freeze();
         return $result;

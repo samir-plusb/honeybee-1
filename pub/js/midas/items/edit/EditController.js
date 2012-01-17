@@ -76,6 +76,16 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
     onMarkImportItemIntent: function(intent, callback)
     {
         this.logDebug("onMarkImportItemIntent");
+        
+        $.post(intent.target_uri, intent.data, function()
+        {
+            if (callback)
+            {
+                callback();
+            }
+        }, 'json');
+
+        return true;
     },
 
     /**

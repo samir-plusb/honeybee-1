@@ -86,10 +86,10 @@
                     <input id="input_publisher" name="publisher" type="text" readonly="readonly" />
                 </div>
                 <div class="input-full tags">
-                    <label for="input_tags" for="input_tags">Tags</label>
+                    <label for="input_tags">Tags</label>
                     <ul class="tagHandlerContainer">
                         <li class="tagInput">
-                            <input id="input_tags" class="jsb-input-tag tagInputField ui-autocomplete-input" name="tags" type="text" id="input_tags" />
+                            <input class="jsb-input-tag tagInputField ui-autocomplete-input" name="tags" type="text" id="input_tags" />
                             <input type="hidden" value="<?php echo htmlspecialchars(json_encode($t['tag_options'])); ?>" class="jsb-input-tag-options" />
                         </li>
                     </ul>

@@ -134,8 +134,8 @@
                 </td>
                 <td class="state">
                     <!-- @todo Map steps to label colors. -->
-                    <span class="label success">
-                        <?php echo $tm->_($step, 'items.workflow'); ?>
+                    <span class="label <?php echo ('refine_news' == $step) ? 'success' : 'warning'; ?>">
+                        <?php echo $tm->_($step, 'items.news_workflow'); ?>
                     </span>
                 </td>
                 <td class="category">

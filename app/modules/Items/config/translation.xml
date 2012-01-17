@@ -19,11 +19,13 @@
                         </ae:parameter>
                     </ae:parameter>
 
-                    <ae:parameter name="workflow">
+                    <ae:parameter name="news_workflow">
                         <ae:parameter name="de">
-                            <ae:parameter name="refine">Neu</ae:parameter>
+                            <ae:parameter name="refine_news">Neu</ae:parameter>
+                            <ae:parameter name="publish_news">Publiziert</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
+
 
                     <ae:parameter name="ui">
                         <ae:parameter name="de">
