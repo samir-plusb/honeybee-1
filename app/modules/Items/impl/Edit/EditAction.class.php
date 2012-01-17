@@ -48,7 +48,6 @@ class Items_EditAction extends ItemsBaseAction
         $workflowItem = $ticket->getWorkflowItem();
         if (! $workflowItem->addContentItem($contentItemData))
         {
-            error_log(print_r($contentItemData, TRUE));
             $workflowItem->updateContentItem($contentItemData);
         }
 
