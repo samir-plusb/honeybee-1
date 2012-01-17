@@ -353,7 +353,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
      */
     public function isNew()
     {
-        return ! empty($this->currentStep);
+        return empty($this->currentStep);
     }
 
     /**

@@ -157,19 +157,18 @@ class WorkflowHandler
                 );
             }
 
-            if (NULL !== $initalGate)
-            {
-                $code = $this->useGate($initalGate);
-                $initalGate = NULL;
-            }
-            else
+            if (!$initalGate)
             {
                 $result = $this->executePlugin();
                 $ticket->setPluginResult($result);
                 $code = $this->processPluginResult($result);
             }
-
-            $this->getPeer()->saveTicket($this->getTicket());
+            else
+            {
+                $code = $this->useGate($initalGate);
+                $initalGate = NULL;
+            }
+            $this->getPeer()->saveTicket($ticket);
         }
         // @todo Unset ticket afterwards?
         // Not that it would matter as this instance is thrown away after run...
@@ -320,6 +319,7 @@ class WorkflowHandler
     public function getCurrentStep()
     {
         $step = $this->getTicket()->getCurrentStep();
+
         if (! $step)
         {
             $step = $this->firstStep;
