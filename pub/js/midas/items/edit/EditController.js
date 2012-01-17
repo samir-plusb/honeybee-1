@@ -30,18 +30,9 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
     {
         return {
             '/midas/intents/contentItem/store': this.onStoreContentItemIntent.bind(this),
-            '/midas/intents/contentItem/delete': 'onDeleteContentItemIntent'
+            '/midas/intents/contentItem/delete': 'onDeleteContentItemIntent',
+            '/midas/intents/importItem/mark': 'onMarkImportItemIntent'
         };
-    },
-
-    /**
-     * @description <p>Handles creating new content items.</p>
-     * <p>Mostly this method will be invoked from a view,
-     * thereby reflecting an users intent to create a new content item.</p>
-     */
-    onNewContentItemIntent: function()
-    {
-        this.logDebug("Executing: onNewContentItemIntent");
     },
 
     /**
@@ -55,7 +46,7 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
         {
             callback();
         }, 'json');
-        
+
         return true;
     },
 
@@ -64,9 +55,17 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
      * <p>Mostly this method will be invoked from a view,
      * thereby reflecting an users intent of wanting to delete a content item.</p>
      */
-    onDeleteContentItemIntent: function()
+    onDeleteContentItemIntent: function(intent, callback)
     {
-        this.logDebug("Executing: onDeleteContentItemIntent");
+        $.post(intent.target_uri, intent.data, function()
+        {
+            if (callback)
+            {
+                callback();
+            }
+        }, 'json');
+
+        return true;
     },
 
     /**
@@ -74,7 +73,7 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
      * <p>Mostly this method will be invoked from a view,
      * thereby reflecting an users intent of wanting to mark an import item.</p>
      */
-    onMarkImportItemIntent: function()
+    onMarkImportItemIntent: function(intent, callback)
     {
         this.logDebug("onMarkImportItemIntent");
     },
@@ -84,7 +83,7 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
      * <p>Mostly this method will be invoked from a view,
      * thereby reflecting an users intent of wanting to delete an import item.</p>
      */
-    onDeleteImportItemIntent: function()
+    onDeleteImportItemIntent: function(intent, callback)
     {
         this.logDebug("onDeleteImportItemIntent");
     }

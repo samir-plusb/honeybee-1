@@ -600,15 +600,23 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      */
     deleteContentItem: function()
     {
-        if (this.items_list.remove(this.editing_form.val('cid')))
+        var item = this.items_list.getItem(this.editing_form.val('cid')).data;
+        if (item)
         {
+            this.items_list.remove(item.cid);
             this.editing_form.reset();
-            // @todo Pass a success callback that purges the content item from the list
-            // and decide if and how we want to express the pending delete operation in the gui.
-            this.propagateIntent({
+            var ticket = this.editing_form.val('ticket');
+            // create intent to pass to our attached controllers.
+            var intent = {
                 'name': '/midas/intents/contentItem/delete',
-                'data': {}
-            });
+                'data': {
+                    content_item: item.identifier,
+                    ticket: ticket
+                },
+                'target_uri': 'index.php/de/items/api/delete_item'
+            };
+            console.log(item);
+            this.propagateIntent(intent);
         }
     },
 

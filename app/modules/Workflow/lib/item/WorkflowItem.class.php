@@ -361,6 +361,28 @@ class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
         return TRUE;
     }
 
+    public function getContentItem($contentItemId)
+    {
+        if (isset($this->contentItems[$contentItemId]))
+        {
+            return $this->contentItems[$contentItemId];
+        }
+        return NULL;
+    }
+
+    public function removeContentItem(IContentItem $contentItem)
+    {
+        $contentItems = array();
+        foreach ($this->contentItems as $curItem)
+        {
+            if ($curItem->getIdentifier() !== $contentItem->getIdentifier())
+            {
+                $contentItems[] = $curItem;
+            }
+        }
+        $this->contentItems = $contentItems;
+    }
+
     public function updateContentItem(array $data, $identifier = NULL)
     {
         $contentItemId = $identifier;

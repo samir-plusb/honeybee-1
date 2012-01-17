@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+	parent="%core.module_dir%/Items/config/validators.xml"
+>
+
+    <ae:configuration>
+
+        <validators>
+            <validator class="WorkflowTicketValidator" name="invalid_ticket" required="true" translation_domain="items.errors">
+                <arguments>
+                    <argument>ticket</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid data given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_item_id" required="true" translation_domain="items.errors">
+                <arguments>
+                    <argument>content_item</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid content-item id given.</error>
+                </errors>
+            </validator>
+        </validators>
+
+    </ae:configuration>
+
+</ae:configurations>

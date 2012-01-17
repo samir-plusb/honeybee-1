@@ -6,6 +6,7 @@
             <route name=".list" pattern="^/list" action="List"/>
             <route name=".edit" pattern="^/edit" action="Edit"/>
             <route name=".api" pattern="^/api">
+                <route name=".delete_item" pattern="^/delete_item" action="Api_DeleteItem"/>
                 <route name=".localize" pattern="^/localize" action="Api_Localize"/>
                 <route name=".extract_date" pattern="^/extract_date" action="Api_ExtractDate"/>
             </route>
