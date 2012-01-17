@@ -27,6 +27,7 @@
                     </description>
                     <plugin type="PublishNews">
                         <gates>
+                            <gate_step name="demote">refine_news</gate_step>
                             <gate_end name="archiv" />
                         </gates>
                     </plugin>

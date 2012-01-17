@@ -103,11 +103,33 @@ midas.items.list.ListView = midas.core.BaseView.extend(
 
     editItem: function(edit_link)
     {
+        var that = this;
         this.grabTicket(edit_link, function(err, resp)
         {
             if (! err)
             {
-                window.location.href = edit_link.attr('href');
+                var demote_url = false;
+                if ((demote_url = edit_link.attr('data-demote-url')))
+                {
+                    $.getJSON(demote_url, function(resp)
+                    {
+                        if ('ok' === resp.state)
+                        {
+                            window.location.href = edit_link.attr('href');
+                        }
+                        else
+                        {
+                            that.error_dialog.find('.error-title').text(resp.reason);
+                            that.error_dialog.find('.error-text').text(resp.msg);
+                            that.error_dialog.modal('show');
+                            callback(resp, null);
+                        }
+                    });
+                }
+                else
+                {
+                    window.location.href = edit_link.attr('href');
+                }
             }
         });
     },

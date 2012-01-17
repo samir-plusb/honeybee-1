@@ -119,10 +119,18 @@
             $releaseLink = $ro->gen('workflow.release', array('ticket' => $workflowItem['ticket']['id']));
             $deleteLink = $ro->gen('workflow.proceed', array('ticket' => $workflowItem['ticket']['id'], 'gate' => 'delete'));
             $ticketCheckoutRel = sprintf('data-checkout-url="%s"', $grabTicketLink);
+            $demoteLink = $ro->gen('workflow.proceed', array('ticket' => $workflowItem['ticket']['id'], 'gate' => 'demote'));
+            $preEditDemote = '';
+
+            if ('publish_news' === $step)
+            {
+                $preEditDemote = sprintf('data-demote-url="%s"', $demoteLink);
+            }
+
 ?>
             <tr>
                 <td class="title">
-                    <a href="<?php echo $processTicketLink; ?>" <?php echo $ticketCheckoutRel; ?>>
+                    <a href="<?php echo $processTicketLink; ?>" <?php echo sprintf('%s %s', $ticketCheckoutRel, $preEditDemote); ?>>
                         <?php echo htmlspecialchars($importItem['title']); ?>
                     </a>
                 </td>
