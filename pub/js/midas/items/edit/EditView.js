@@ -396,7 +396,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             },
             'localize_item': function(src_field)
             {
-                var urls = that.edit_service.extractLocation(
+                that.edit_service.extractLocation(
                     src_field.getSelection(),
                     function(locations)
                     {
