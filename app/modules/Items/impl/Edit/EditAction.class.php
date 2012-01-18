@@ -64,7 +64,7 @@ class Items_EditAction extends ItemsBaseAction
 
     public function handleWriteError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $errors = $this->getContainer()->getValidationManager()->getErrorMessages();
+        $errors = $this->getContainer()->getValidationManager()->getErrors();
         $messages = "";
         foreach ($errors as $error)
         {
@@ -77,7 +77,6 @@ class Items_EditAction extends ItemsBaseAction
             WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
         );
         $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
-
         return 'Error';
     }
 

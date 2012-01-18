@@ -58,6 +58,13 @@ class Items_Edit_EditInputView extends ItemsBaseView
                 'rev' => '{TICKET_REV}'
              )
         )));
+        $this->setAttribute('edit_view_routes', array(
+            'api_extract_date' => $ro->gen('items.api.extract_date'),
+            'api_extract_location' => $ro->gen('items.api.extract_location'),
+            'api_delete_item' => $ro->gen('items.api.delete_item'),
+            'workflow_run' => $ro->gen('workflow.run'),
+            'workflow_proceed' => $ro->gen('workflow.proceed')
+        ));
     }
 
     /**

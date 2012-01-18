@@ -17,6 +17,10 @@
         <a class="pull-right logout" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
     </aside>
 </header>
+<!-- Holds the routing data for the edit view -->
+<div class="jsb-routing">
+    <input class="jsb-routing-options" value="<?php echo htmlspecialchars(json_encode($t['edit_view_routes'])); ?>" />
+</div>
 <div class="topmenu-container content-menu">
     <menu id="content-item-menu" class="action-button-list">
         <li>

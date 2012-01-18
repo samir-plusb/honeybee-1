@@ -67,6 +67,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      */
     items_list: null,
 
+    routing: null,
+
     // -----------
     // --------------- CONSTRUCTION / GUI INITIALIZING
     // -----------
@@ -79,13 +81,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     init: function(element, options)
     {
         this.parent(element, options);
-        this.edit_service = new midas.items.edit.EditService({
-            api: {
-                extract_date: 'index.php/de/items/api/extract_date',
-                validate_url: 'index.php/de/items/api/validate_url',
-                extract_location: 'index.php/de/items/api/extract_location'
-            }
-        });
+        this.routing = new midas.core.Routing('div.jsb-routing');
+        this.edit_service = new midas.items.edit.EditService(this.routing);
     },
 
     /**
@@ -442,7 +439,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     ticket: ticket,
                     gate: 'delete'
                 },
-                'target_uri': 'index.php/de/workflow/proceed'
+                'target_uri': this.routing.getRoute('workflow_proceed')
             };
             var that = this;
             this.propagateIntent(intent, function()
@@ -457,6 +454,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var ticket = this.editing_form.val('ticket');
         if (ticket)
         {
+            console.log(this.routing.getRoute('workflow_proceed'));
             // create intent to pass to our attached controllers.
             var intent = {
                 'name': '/midas/intents/importItem/mark',
@@ -464,7 +462,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     ticket: ticket,
                     gate: 'publish'
                 },
-                'target_uri': 'index.php/de/workflow/proceed'
+                'target_uri': this.routing.getRoute('workflow_proceed')
             };
             var that = this;
             this.propagateIntent(intent, function()
@@ -635,7 +633,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     content_item: item,
                     ticket: ticket
                 },
-                'target_uri': 'index.php/de/workflow/run'
+                'target_uri': this.routing.getRoute('workflow_run')
             };
             // @todo update the content item state from the list
             // and decide if and how we want to reflect the state changes in the gui.
@@ -756,7 +754,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     content_item: item.identifier,
                     ticket: ticket
                 },
-                'target_uri': 'index.php/de/items/api/delete_item'
+                'target_uri': this.routing.getRoute('api_delete_item')
             };
             this.propagateIntent(intent);
         }

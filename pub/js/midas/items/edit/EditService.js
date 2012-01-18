@@ -14,13 +14,16 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
      */
     log_prefix: 'EditService',
 
+    routing: null,
+
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
      * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
      */
-    init: function(options)
+    init: function(routing, options)
     {
         this.parent(options);
+        this.routing = routing;
     },
 
     /**
@@ -70,7 +73,7 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
      */
     extractLocation: function(text, callback)
     {
-        $.getJSON(this.options.api.extract_location, {geo_text: text}, function(data)
+        $.getJSON(this.routing.getRoute('api_extract_location'), {geo_text: text}, function(data)
         {
             callback(data.location);
         });
@@ -83,7 +86,7 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
      */
     extractDate: function(text, callback)
     {
-        $.getJSON(this.options.api.extract_date, {date_text: text}, function(data)
+        $.getJSON(this.routing.getRoute('api_extract_date'), {date_text: text}, function(data)
         {
             callback(data.date);
         });
@@ -96,7 +99,7 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
      */
     validateUrl: function(url, callback)
     {
-        $.getJSON(this.options.api.validate_url, {url: url}, function(result)
+        $.getJSON(this.routing.getRoute('api_validate_url'), {url: url}, function(result)
         {
             callback(result);
         });

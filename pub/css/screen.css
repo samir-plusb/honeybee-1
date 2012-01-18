@@ -464,3 +464,7 @@ header .personal-info a.logout:hover {
 #input_date_isevent {
     width: 20px;
 }
+.jsb-routing
+{
+    display: none;
+}

@@ -55,6 +55,7 @@
                     <script>js/midas/core/BaseObject.js</script>
                     <script>js/midas/core/CidSequence.js</script>
                     <script>js/midas/core/Behaviour.js</script>
+                    <script>js/midas/core/Routing.js</script>
                     <script>js/midas/core/BaseController.js</script>
                     <script>js/midas/core/BaseView.js</script>
                     <script>js/midas/core/CommandTriggerList.js</script>
