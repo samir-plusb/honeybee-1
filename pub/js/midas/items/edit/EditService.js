@@ -75,7 +75,18 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
     {
         $.getJSON(this.routing.getRoute('api_extract_location'), {geo_text: text}, function(data)
         {
-            callback(data.location);
+            var location_count = data.location.items_count;
+            var found_location = null;
+            for (var i = 0; i < location_count; i++)
+            {
+                var loc = data.location[i];
+                if (loc && "Außerhalb Berlins" != loc['administrative district'])
+                {
+                    found_location = loc;
+                    break;
+                }
+            }
+            callback(found_location);
         });
     },
 

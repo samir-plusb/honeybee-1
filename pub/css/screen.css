@@ -461,10 +461,29 @@ header .personal-info a.logout:hover {
 .validation-hint.bottom p {
   top: 0;
 }
-#input_date_isevent {
+
+/* custom stuff port to less */
+#input_date_isevent
+{
     width: 20px;
 }
 .jsb-routing
 {
     display: none;
+}
+em.bold{
+    font-weight: bold;
+    display: block;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+.item-isevent label
+{
+    width: 95%;
+    float: right;
+    margin-bottom: 1em;
+}
+.item-isevent input
+{
+    margin: 0;
 }

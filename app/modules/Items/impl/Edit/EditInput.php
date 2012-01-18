@@ -178,14 +178,15 @@
             <div class="extra-data-right">
                 <div class="datetime-data content-panel"> <!-- <fieldset> -->
                     <h3 class="legend">Zeiten</h3>
-                    <div class="input-full">
+                    <div class="item-isevent input-full">
                         <label for="input_date_isevent">Ist Teilnahme des Nutzers durch den Veranstalter erwünscht?</label>
                         <input type="hidden" name="date[isevent]" value="0" />
                         <input id="input_date_isevent" type="checkbox" name="date[isevent]" value="1" />
                     </div>
                     <div class="input-full">
                         <label for="input_date_from">
-                            Wann findet das statt? <span>Bei Ausstellungen: Startdatum = Enddatum</span>. von
+                            Wann findet das statt? <em class="bold">Bei Ausstellungen: Startdatum = Enddatum</em>
+                            von
                         </label>
                         <input id="input_date_from" name="date[from]" class="jsb-input-date" type="text" />
                         <input type="hidden" value='{ "regex": "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{4,4}$", "date_format": "dd.mm.yy" }' class="jsb-input-date-options" />

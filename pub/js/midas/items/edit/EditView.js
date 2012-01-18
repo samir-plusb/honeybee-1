@@ -395,27 +395,23 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             {
                 that.edit_service.extractLocation(
                     src_field.getSelection(),
-                    function(locations)
+                    function(location)
                     {
-                        if (0 < locations.items_count)
+                        if (! location)
                         {
-                            var location = locations[locations.items_count - 1];
-                            if ("Außerhalb Berlins" == location['administrative district'])
-                            {
-                                alert(
-                                    "Die Lokalisierung dieses Items ist möglicherweise fehlgeschlagen." +
-                                    "Bitte überprüfe, ob die Lokalisierung wirklich korrekt vorgenommen wurde."
-                                );
-                            }
-                            else
-                            {
-                                that.editing_form.val('location[district]', location.district);
-                                that.editing_form.val('location[administrativeDistrict]', location['administrative district']);
-                                that.editing_form.val('location[postalCode]', location.uzip);
-                                that.editing_form.val('location[street]', location.street);
-                                that.editing_form.val('location[coordinates][latitude]', location.latitude);
-                                that.editing_form.val('location[coordinates][longitude]', location.longitude);
-                            }
+                            alert(
+                                "Die Lokalisierung dieses Items ist möglicherweise fehlgeschlagen." +
+                                "Bitte überprüfe, ob die Lokalisierung wirklich korrekt vorgenommen wurde."
+                            );
+                        }
+                        else
+                        {
+                            that.editing_form.val('location[district]', location.district);
+                            that.editing_form.val('location[administrativeDistrict]', location['administrative district']);
+                            that.editing_form.val('location[postalCode]', location.uzip);
+                            that.editing_form.val('location[street]', location.street);
+                            that.editing_form.val('location[coordinates][latitude]', location.latitude);
+                            that.editing_form.val('location[coordinates][longitude]', location.longitude);
                         }
                     }
                 );
@@ -454,7 +450,6 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var ticket = this.editing_form.val('ticket');
         if (ticket)
         {
-            console.log(this.routing.getRoute('workflow_proceed'));
             // create intent to pass to our attached controllers.
             var intent = {
                 'name': '/midas/intents/importItem/mark',
