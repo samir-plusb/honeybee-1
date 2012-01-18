@@ -25,11 +25,22 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
      */
     protected function doProcess()
     {
-        // @todo Export item to fe api
+        $now = new DateTime();
+        $workflowItem = $this->ticket->getWorkflowItem();
+        foreach ($workflowItem->getContentItems() as $contentItem)
+        {
+            $contentItem->applyValues(array(
+                'publishDate' => $now->format(DATE_ISO8601)
+            ));
+        }
+        $supervisor = Workflow_SupervisorModel::getInstance();
+        $supervisor->getItemPeer()->storeItem($workflowItem);
+
         $result = new WorkflowPluginResult();
         $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
         $result->setMessage('Ready to get the disposition to whereever rockin!');
         $result->freeze();
+        
         return $result;
     }
 

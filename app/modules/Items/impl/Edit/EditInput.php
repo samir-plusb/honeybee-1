@@ -93,7 +93,7 @@
                 </div>
                 <div class="input-left editor">
                     <label label="input_publisher" for="publisher">Bearbeiter:</label>
-                    <input id="input_publisher" name="publisher" type="text" readonly="readonly" value="<?php echo htmlspecialchars($t['editor']); ?>" />
+                    <input class="static-value" id="input_publisher" name="publisher" type="text" readonly="readonly" value="<?php echo htmlspecialchars($t['editor']); ?>" />
                 </div>
                 <div class="input-full tags">
                     <label for="input_tags">Tags</label>

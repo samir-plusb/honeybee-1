@@ -122,6 +122,13 @@ class ContentItem implements IContentItem
     protected $publisher;
 
     /**
+     * Holds the item's (last)published date.
+     *
+     * @var string
+     */
+    protected $publishDate;
+
+    /**
      * Holds the item's location.
      *
      * @var IItemLocation
@@ -299,13 +306,23 @@ class ContentItem implements IContentItem
     }
 
     /**
-     * Returns the item's publisher.
+     * Returns the iten
      *
      * @return string
      */
     public function getPublisher()
     {
         return $this->publisher;
+    }
+
+    /**
+     * Returns the item's publish date.
+     *
+     * @return string A ISO8601 UTC formatted date string
+     */
+    public function getPublishDate()
+    {
+        return $this->publishDate;
     }
 
     /**
@@ -353,7 +370,7 @@ class ContentItem implements IContentItem
         $props = array(
             'identifier', 'parentIdentifier', 'created', 'lastModified',
             'type', 'title', 'priority', 'category', 'tags', 'teaser', 'text',
-            'url', 'date', 'location', 'source', 'publisher'
+            'url', 'date', 'location', 'source', 'publisher', 'publishDate'
         );
         $data = array();
         foreach ($props as $prop)
@@ -393,7 +410,7 @@ class ContentItem implements IContentItem
     {
         $writeableProps = array(
             'type', 'title', 'priority', 'category', 'tags', 'teaser', 'text',
-            'url', 'date', 'location', 'source', 'publisher'
+            'url', 'date', 'location', 'source', 'publisher', 'publishDate'
         );
         foreach ($writeableProps as $prop)
         {
@@ -425,7 +442,7 @@ class ContentItem implements IContentItem
         $simpleProps = array(
             'identifier', 'parentIdentifier', 'created', 'lastModified',
             'type', 'title', 'priority', 'category', 'tags', 'teaser', 'text',
-            'url', 'date', 'location', 'source', 'publisher'
+            'url', 'date', 'location', 'source', 'publisher', 'publishDate'
         );
         foreach ($simpleProps as $prop)
         {
