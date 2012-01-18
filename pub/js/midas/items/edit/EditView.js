@@ -92,13 +92,13 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     onInitGui: function()
     {
         this.createSlidePanel()
-            .createContentItemsList()
-            .createImportItemContainer()
-            .createMenus()
-            .createEditForm();
+        .createContentItemsList()
+        .createImportItemContainer()
+        .createMenus()
+        .createEditForm();
         // release ticket when page is left.
         var that = this;
-        window.onunload = function()
+        window.onbeforeunload = function()
         {
             var ticket_id = that.editing_form.val('ticket');
             that.releaseTicket(ticket_id);
@@ -114,22 +114,37 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         this.slide_panel = new midas.items.edit.SlidePanel(
             this.layout_root.find('.slide-panel').first()
-            .css({'position': 'absolute', 'width': '100%'}),
-            {range: '20em'}
-        ).on('slideinstart', function()
-        {
+            .css({
+                'position': 'absolute',
+                'width': '100%'
+            }),
+
+            {
+                range: '20em'
+            }
+            ).on('slideinstart', function()
+            {
             var list_button = $('.action-list');
             list_button.html(list_button[0].orgText + " &#9667;");
-            $('.import-data-layoutbox').animate({'opacity': 0.4}, 500);
-            $('.import-data-layoutbox .overlay').css('display', 'block').animate({'opacity': 0.5}, 500);
+            $('.import-data-layoutbox').animate({
+                'opacity': 0.4
+            }, 500);
+            $('.import-data-layoutbox .overlay').css('display', 'block').animate({
+                'opacity': 0.5
+            }, 500);
         }).on("slideoutstart", function()
         {
             var list_button = $('.action-list');
             list_button.html(list_button[0].orgText + " &#9657;");
-            $('.import-data-layoutbox').animate({'opacity': 1}, 500);
-            $('.import-data-layoutbox .overlay').animate({'opacity': 0}, 500, function()
+            $('.import-data-layoutbox').animate({
+                'opacity': 1
+            }, 500);
+            $('.import-data-layoutbox .overlay').animate({
+                'opacity': 0
+            }, 500, function()
+
             {
-                 $('.import-data-layoutbox .overlay').css('display', 'none');
+                $('.import-data-layoutbox .overlay').css('display', 'none');
             });
         });
         var list_button = $('.action-list');
@@ -157,7 +172,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 items: this.loadItems(),
                 state_display: this.layout_root.find('.info-small')
             }
-        )
+            )
         .on('itemClicked', function(item)
         {
             if (that.items_list.org_item)
@@ -182,8 +197,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 if (item.data.cid == that.items_list.org_item.data.cid)
                 {
                     $('.document-editing').removeClass('preview');
-                    // @todo Sugar: apply diff if the item is the same as loaded.
-                    // Overwrite item.data for this, before passing it to the form.
+                // @todo Sugar: apply diff if the item is the same as loaded.
+                // Overwrite item.data for this, before passing it to the form.
                 }
                 else
                 {
@@ -224,8 +239,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         this.import_item_container = new midas.items.edit.ImportItemContainer(
             this.layout_root.find('.document-data').first(),
-            {tabs_container: '.item-content'}
-        ).on('contextMenuSelect', this.onContextMenuClicked.bind(this));
+            {
+                tabs_container: '.item-content'
+            }
+            ).on('contextMenuSelect', this.onContextMenuClicked.bind(this));
         return this;
     },
 
@@ -239,7 +256,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         this.editing_form = new midas.items.edit.EditForm(
             this.layout_root.find('.document-editing form')
-        )
+            )
         .on('changed', function()
         {
             this.editing_form.markDirty();
@@ -263,12 +280,16 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         this.context_menu_actions = this.getContextMenuBindings();
         this.content_item_menu = new midas.core.CommandTriggerList(
             this.layout_root.find('#content-item-menu'),
-            {'commands': this.getContentItemMenuBindings()}
-        );
+            {
+                'commands': this.getContentItemMenuBindings()
+                }
+            );
         this.import_item_menu = new midas.core.CommandTriggerList(
             this.layout_root.find('#import-item-menu'),
-            {'commands': this.getImportItemMenuBindings()}
-        );
+            {
+                'commands': this.getImportItemMenuBindings()
+                }
+            );
         return this;
     },
 
@@ -368,8 +389,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     src_field.val().replace(
                         selection,
                         that.edit_service.removeHyphens(selection)
-                    )
-                );
+                        )
+                    );
             },
             'remove_linefeeds': function(src_field)
             {
@@ -378,14 +399,14 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     src_field.val().replace(
                         selection,
                         that.edit_service.removeLineFeeds(selection)
-                    )
-                );
+                        )
+                    );
             },
             'set_url': function(src_field)
             {
                 var urls = that.edit_service.extractUrls(
                     src_field.getSelection()
-                );
+                    );
                 if (0 < urls.length)
                 {
                     that.editing_form.val('url', urls[0].trim());
@@ -402,7 +423,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                             alert(
                                 "Die Lokalisierung dieses Items ist möglicherweise fehlgeschlagen." +
                                 "Bitte überprüfe, ob die Lokalisierung wirklich korrekt vorgenommen wurde."
-                            );
+                                );
                         }
                         else
                         {
@@ -414,7 +435,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                             that.editing_form.val('location[coordinates][longitude]', location.longitude);
                         }
                     }
-                );
+                    );
             }
         };
     },
@@ -527,8 +548,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             }
             else
             {
-                // @todo display message and return to list view or something like that.
-            }
+        // @todo display message and return to list view or something like that.
+        }
         });
     },
 
@@ -578,14 +599,14 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             {
                 that.storeContentItem(
                     that.editing_form.reset.bind(that.editing_form)
-                );
+                    );
             };
             this.confirm(
                 "Drohender Datenverlust",
                 "Item wurde noch nicht gespeichert. Jetzt speichern?",
                 store_and_reset,
                 this.editing_form.reset.bind(this.editing_form)
-            );
+                );
         }
         else
         {
@@ -645,7 +666,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
             if (0 < latitude && 0 < longitude)
             {
-               store_data();
+                store_data();
             }
             else
             {
@@ -655,15 +676,23 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     store_data,
                     function()
                     {
-                        err_callback({type: 'location', data: null, msg: "Location not provided, save aborted by user."});
+                        err_callback({
+                            type: 'location',
+                            data: null,
+                            msg: "Location not provided, save aborted by user."
+                        });
                     }
-                );
+                    );
             }
         }
         else
         {
             this.displayValidationNotification();
-            err_callback({type: 'validation', data: validation_res, msg: "EditForm validation failed."});
+            err_callback({
+                type: 'validation',
+                data: validation_res,
+                msg: "EditForm validation failed."
+            });
         }
     },
 
@@ -726,7 +755,9 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         hint.css('left', main_data.offset().left + (main_data.width() / 2) - (hint.width() / 2));
         hint.animate({
             opacity: 0
-        }, 3000, function() { hint.remove(); });
+        }, 3000, function() {
+            hint.remove();
+        });
     },
 
     /**
@@ -774,8 +805,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         if (grab_url && ticket_id && ticket_rev)
         {
             var bound_url = grab_url
-                .replace(/\{\TICKET_ID\}/ig, ticket_id)
-                .replace(/\{\TICKET_REV\}/ig, ticket_rev);
+            .replace(/\{\TICKET_ID\}/ig, ticket_id)
+            .replace(/\{\TICKET_REV\}/ig, ticket_rev);
 
             $.getJSON(bound_url, function(data)
             {
