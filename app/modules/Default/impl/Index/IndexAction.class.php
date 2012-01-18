@@ -22,7 +22,7 @@
  * @package         Default
  * @subpackage      Mvc
  */
-class Default_IndexAction extends DefaultBaseAction 
+class Default_IndexAction extends DefaultBaseAction
 {
     /**
      * This Action does not yet serve any Request methods.
@@ -75,9 +75,14 @@ class Default_IndexAction extends DefaultBaseAction
      *                     1. The view that will be executed.
      *
      */
-    public function getDefaultViewName() 
+    public function getDefaultViewName()
     {
         return 'Success';
+    }
+
+    public function isSecure()
+    {
+        return TRUE;
     }
 
 }

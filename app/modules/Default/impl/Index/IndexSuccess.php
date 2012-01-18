@@ -2,25 +2,27 @@
 	<div class="topbar-inner">
 		<div class="container-fluid">
 			<h2 class="left">
-				<a class="brand" href="<?php echo $ro->getBaseHref() ?>">Midas - News Stream</a>
+				<a class="brand" href="<?php echo $ro->gen('index') ?>">Midas</a>
 			</h2>
+            <a class="pull-right logout" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
 		</div>
 	</div>
 </div>
 
-<div class="container" style="margin-top:40px">
+<div class="container-fluid">
 	<div class="content">
-		<div class="page-header">
-			<h1><?php echo $tm->_('Welcome to Midas','default.ui') ?></h1>
-		</div>
-		<div class="row">
-			<div class="span8">
-			    <ul>
-			        <li>
-                        <a href="<?php echo $ro->gen('items.list'); ?>"><?php echo $tm->_('News item list','default.ui')?></a>
-                    </li>
-			    </ul>
-			</div>
-		</div>
+        <h1><?php echo $tm->_('Task Overview','default.ui') ?></h1>
+        <ul class="module-list">
+            <li>
+                <a href="<?php echo $ro->gen('items.list'); ?>">
+                    <h3 class="label"><?php echo $tm->_('News Stream','default.ui')?></h3>
+                </a>
+            </li>
+            <li>
+                <a href="<?php echo $ro->gen('items.stats'); ?>">
+                    <h3 class="label"><?php echo $tm->_('News Stats','default.ui')?></h3>
+                </a>
+            </li>
+        </ul>
 	</div>
 </div>

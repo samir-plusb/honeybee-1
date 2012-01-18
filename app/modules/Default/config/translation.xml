@@ -5,21 +5,22 @@
         <translators default_domain="default.ui">
             <translator domain="default">
                 <message_translator class="AgaviSimpleTranslator">
-                
+
                     <ae:parameter name="ui">
                         <ae:parameter name="de">
                             <ae:parameter name="Logout">Abmelden</ae:parameter>
-                            <ae:parameter name="Welcome to Midas">Willkommen bei Midas</ae:parameter>
-                            <ae:parameter name="News item list">Nachrichtenliste</ae:parameter>
+                            <ae:parameter name="Task Overview">Aufgabenübersicht</ae:parameter>
+                            <ae:parameter name="News Stream">News Editieren</ae:parameter>
+                            <ae:parameter name="News Stats">News Statistik</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
-                    
+
                     <ae:parameter name="messages">
                         <ae:parameter name="de">
 <!--                             <ae:parameter name=""></ae:parameter> -->
                         </ae:parameter>
                     </ae:parameter>
-                    
+
                 </message_translator>
 
             </translator>

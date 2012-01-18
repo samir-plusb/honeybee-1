@@ -83,6 +83,15 @@
                 </errors>
             </validator>
 
+            <validator class="string" name="invalid_publisher" required="true" translation_domain="items.errors">
+                <arguments base="content_item">
+                    <argument>publisher</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid parentIdentifier given.</error>
+                </errors>
+            </validator>
+
             <validator class="string" name="invalid_category" required="true" translation_domain="items.errors">
                 <arguments base="content_item">
                     <argument>category</argument>

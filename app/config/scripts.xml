@@ -121,6 +121,18 @@
                     <script>js/midas/items/edit/init.js</script>
                 </javascripts>
             </deployment>
+
+            <deployment viewpath="default.index*">
+                <stylesheets>
+                    <script>css/dashboard.css</script>
+                </stylesheets>
+            </deployment>
+
+            <deployment viewpath="items.stats*">
+                <stylesheets>
+                    <script>css/stats.css</script>
+                </stylesheets>
+            </deployment>
         </deployments>
 
     </ae:configuration>

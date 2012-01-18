@@ -81,10 +81,26 @@ midas.items.edit.Input = midas.core.Behaviour.extend(
         {
             return;
         }
-        var ret = this.element.val.apply(
-            this.element,
-            arguments
-        );
+        var ret = this.element;
+        if ('checkbox' == this.element.attr('type'))
+        {
+            if (1 <= arguments.length)
+            {
+                this.element.attr('checked', (this.element.val() == arguments[0]));
+            }
+            else if (true === this.element.attr('checked'))
+            {
+                return this.element.val();
+            }
+        }
+        else
+        {
+             ret = this.element.val.apply(
+                this.element,
+                arguments
+            );
+        }
+
         if (1 === arguments.length && this.prev_val != arguments[0])
         {
             this.revalidate();

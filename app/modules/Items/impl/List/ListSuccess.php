@@ -16,7 +16,7 @@
     <div class="topbar-inner">
         <div class="container-fluid">
             <h2 class="left">
-                <a href="<?php echo $ro->gen(NULL); ?>" class="brand"><?php echo $t['_title']; ?></a>
+                <a href="<?php echo $ro->gen('index'); ?>" class="brand">Midas</a>
             </h2>
             <a class="pull-right logout" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
             <form class="jsb-searchbox search-form pull-right" action="<?php echo $ro->gen(NULL); ?>" method="GET">

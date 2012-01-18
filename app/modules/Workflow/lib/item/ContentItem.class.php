@@ -115,6 +115,13 @@ class ContentItem implements IContentItem
     protected $date;
 
     /**
+     * Holds the item's (last)publisher.
+     *
+     * @var string
+     */
+    protected $publisher;
+
+    /**
      * Holds the item's location.
      *
      * @var IItemLocation
@@ -292,6 +299,16 @@ class ContentItem implements IContentItem
     }
 
     /**
+     * Returns the item's publisher.
+     *
+     * @return string
+     */
+    public function getPublisher()
+    {
+        return $this->publisher;
+    }
+
+    /**
      * Returns the ContentItem's location data.
      *
      * @return IItemLocation
@@ -336,7 +353,7 @@ class ContentItem implements IContentItem
         $props = array(
             'identifier', 'parentIdentifier', 'created', 'lastModified',
             'type', 'title', 'priority', 'category', 'tags', 'teaser', 'text',
-            'url', 'date', 'location', 'source'
+            'url', 'date', 'location', 'source', 'publisher'
         );
         $data = array();
         foreach ($props as $prop)
@@ -376,7 +393,7 @@ class ContentItem implements IContentItem
     {
         $writeableProps = array(
             'type', 'title', 'priority', 'category', 'tags', 'teaser', 'text',
-            'url', 'date', 'location', 'source'
+            'url', 'date', 'location', 'source', 'publisher'
         );
         foreach ($writeableProps as $prop)
         {
@@ -408,7 +425,7 @@ class ContentItem implements IContentItem
         $simpleProps = array(
             'identifier', 'parentIdentifier', 'created', 'lastModified',
             'type', 'title', 'priority', 'category', 'tags', 'teaser', 'text',
-            'url', 'date', 'location', 'source'
+            'url', 'date', 'location', 'source', 'publisher'
         );
         foreach ($simpleProps as $prop)
         {

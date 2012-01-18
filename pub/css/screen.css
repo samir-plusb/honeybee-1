@@ -477,13 +477,19 @@ em.bold{
     font-size: 13px;
     margin-bottom: 5px;
 }
+.item-isevent
+{
+    overflow: hidden;
+}
 .item-isevent label
 {
     width: 95%;
-    float: right;
-    margin-bottom: 1em;
+    float: left;
+    margin: 0 0 1em 2em;
 }
 .item-isevent input
 {
+    position: absolute;
+    left: 0;
     margin: 0;
 }

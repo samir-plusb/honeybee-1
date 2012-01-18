@@ -179,7 +179,6 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
                 this.fields[name].val(undefined === value[data_key] ? '' : value[data_key]);
                 processed_inputs.push(name);
             }
-
             this.element.find(':input')
              .not(':button, :submit, :reset')
              .each(function(idx, input_field)

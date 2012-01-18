@@ -1,0 +1,68 @@
+/**
+ * Layout common
+ */
+body
+{
+    padding-top: 80px;
+}
+
+.logout
+{
+    font-size: 12pt;
+    margin-top: 10px;
+}
+
+h1
+{
+    margin-bottom: 2em;
+    font-size: 30px;
+    text-shadow: 1px 1px 1px #efefef;
+    color: #9f9f9f;
+}
+
+.stats-list
+{
+    list-style: none;
+    margin: 0;
+    width: 80%;
+}
+
+.stats-list li
+{
+    background: rgba(223, 223, 223, 0.6);
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 10px;
+    margin-bottom: 1em;
+}
+
+.stats-list dt,
+.stats-list dd
+{
+    padding: 5px 5px 5px 10px;
+    float: left;
+    font-size: 16px;
+    margin: 0;
+}
+
+.stats-list dt
+{
+    float: left;
+}
+
+.stats-list dt:first-child
+{
+    padding: 5px 5px 5px 5px;
+}
+
+.stats-list dd
+{
+    border-right: 1px solid #ABABAB;
+    padding: 5px 10px 5px 5px;
+    color: #000000;
+}
+
+.stats-list dd:last-child
+{
+    border: none;
+}

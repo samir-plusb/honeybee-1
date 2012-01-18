@@ -98,11 +98,11 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         .createEditForm();
         // release ticket when page is left.
         var that = this;
-        window.onbeforeunload = function()
+        window.addEventListener("pagehide", function()
         {
             var ticket_id = that.editing_form.val('ticket');
             that.releaseTicket(ticket_id);
-        };
+        }, false);
     },
 
     /**
@@ -659,7 +659,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     content_item: item,
                     ticket: ticket
                 },
-                'target_uri': this.routing.getRoute('workflow_run')
+                'target_uri': that.routing.getRoute('workflow_run')
             };
             // @todo update the content item state from the list
             // and decide if and how we want to reflect the state changes in the gui.

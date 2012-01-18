@@ -6,12 +6,12 @@
 ?>
 <header>
     <h1>
-        <a href="#home"><?php echo $t['_title']; ?></a>
+        <a href="<?php echo $ro->gen('index'); ?>">Midas</a>
     </h1>
     <aside class="personal-info">
         <h2>Userinfo Box</h2>
         <p>
-            Diese Nachricht wird von <a href="#profile?">Shrink0r</a> bearbeitet.
+            Diese Nachricht wird von <?php echo htmlspecialchars($t['editor']); ?> bearbeitet.
             Du hast bisher 0 Mails abgehakt.
         </p>
         <a class="pull-right logout" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
@@ -93,7 +93,7 @@
                 </div>
                 <div class="input-left editor">
                     <label label="input_publisher" for="publisher">Bearbeiter:</label>
-                    <input id="input_publisher" name="publisher" type="text" readonly="readonly" />
+                    <input id="input_publisher" name="publisher" type="text" readonly="readonly" value="<?php echo htmlspecialchars($t['editor']); ?>" />
                 </div>
                 <div class="input-full tags">
                     <label for="input_tags">Tags</label>
@@ -180,7 +180,6 @@
                     <h3 class="legend">Zeiten</h3>
                     <div class="item-isevent input-full">
                         <label for="input_date_isevent">Ist Teilnahme des Nutzers durch den Veranstalter erwünscht?</label>
-                        <input type="hidden" name="date[isevent]" value="0" />
                         <input id="input_date_isevent" type="checkbox" name="date[isevent]" value="1" />
                     </div>
                     <div class="input-full">
