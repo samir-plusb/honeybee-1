@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * The Items_Api_ExtractLocationAction is repsonseable handling location extraction api requests.
+ *
+ * @version         $Id:$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Items
+ * @subpackage      Mvc
+ */
+class Items_Api_ExtractLocationAction extends ItemsBaseAction
+{
+
+    /**
+     * Execute the read logic for this action, hence extract the data.
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
+     * @return      string The name of the view to execute.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
+     */
+    public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        $geoText = $parameters->getParameter('geo_text', '');
+        $url = 'http://h1916210.stratoserver.net/api/localize?string="'.$geoText.'"';
+        $curl = ProjectCurl::create();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        $resp = curl_exec($curl);
+
+        if (($error = curl_error($curl)))
+        {
+            $this->setAttribute('location', array('items_count' => 0));
+        }
+        else
+        {
+            $this->setAttribute('location', json_decode($resp, TRUE));
+        }
+        return 'Success';
+    }
+}
+
+?>
