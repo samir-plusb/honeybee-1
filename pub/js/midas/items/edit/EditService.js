@@ -90,6 +90,21 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
         });
     },
 
+    addSpacesAfterDots: function(text)
+    {
+        var urls = this.extractUrls(text);
+
+        for(var i = 0; i < urls.length; i++)
+        {
+            console.log("Replace before manip -> URL_"+i, urls[i]);
+        }
+        text.replace(regexp, function()
+        {
+           console.log(arguments);
+        });
+        return text.replace(/\b\.\b/ig, '. ');
+    },
+
     /**
      * @description Searches and extracts a date from the given text.
      * @param {String} text

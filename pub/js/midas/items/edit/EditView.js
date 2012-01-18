@@ -402,6 +402,16 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                         )
                     );
             },
+            'dot_spaces': function(src_field)
+            {
+                var selection = src_field.getSelection();
+                src_field.val(
+                    src_field.val().replace(
+                        selection,
+                        that.edit_service.addSpacesAfterDots(selection)
+                    )
+                );
+            },
             'set_url': function(src_field)
             {
                 var urls = that.edit_service.extractUrls(

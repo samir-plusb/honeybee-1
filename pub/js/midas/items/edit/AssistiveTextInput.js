@@ -74,7 +74,8 @@ midas.items.edit.AssistiveTextInput = midas.items.edit.Input.extend(
             { 'key': 'set_startdate', 'label': 'als Startdatum setzen' },
             { 'key': 'set_enddate', 'label': 'als Enddatum setzen', 'class': 'menu-item-break' },
             { 'key': 'remove_hyphens', 'label': 'Bindestriche entfernen' },
-            { 'key': 'remove_linefeeds', 'label': 'Umbrüche entfernen' }
+            { 'key': 'remove_linefeeds', 'label': 'Umbrüche entfernen' },
+            { 'key': 'dot_spaces', 'label': 'Leerzeichen nach Punkt' }
         ];
     }
 });
