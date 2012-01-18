@@ -93,16 +93,20 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
     addSpacesAfterDots: function(text)
     {
         var urls = this.extractUrls(text);
-
-        for(var i = 0; i < urls.length; i++)
+        var max = urls.length || 0;
+        var tokens = {};
+        for (var i = 0; i < max; i++)
         {
-            console.log("Replace before manip -> URL_"+i, urls[i]);
+            var token = 'URL-{'+(i+1)+'}';
+            tokens[token] = urls[i];
+            text = text.replace(urls[i], token);
         }
-        text.replace(regexp, function()
+        text = text.replace(/\b\.\b/ig, '. ')
+        for (var cur_token in tokens)
         {
-           console.log(arguments);
-        });
-        return text.replace(/\b\.\b/ig, '. ');
+            text = text.replace(cur_token, tokens[cur_token]);
+        }
+        return text;
     },
 
     /**
