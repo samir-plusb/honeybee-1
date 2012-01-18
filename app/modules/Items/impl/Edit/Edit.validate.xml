@@ -191,53 +191,47 @@
 
             <validator class="string" name="invalid_location_uzip" required="false" translation_domain="items.errors">
                 <arguments base="content_item[location]">
-                    <argument>uzip</argument>
+                    <argument>postalCode</argument>
                 </arguments>
                 <errors>
-                    <error>Invalid location-uzip given.</error>
+                    <error>Invalid location-postalcode given.</error>
                 </errors>
             </validator>
 
             <validator class="string" name="invalid_location_neighborhood" required="false" translation_domain="items.errors">
                 <arguments base="content_item[location]">
-                    <argument>neighborhood</argument>
+                    <argument>administrativeDistrict</argument>
                 </arguments>
                 <errors>
-                    <error>Invalid location-neighborhood given.</error>
+                    <error>Invalid administrative-district given.</error>
                 </errors>
             </validator>
 
             <validator class="string" name="invalid_location_subneighborhood" required="false" translation_domain="items.errors">
                 <arguments base="content_item[location]">
-                    <argument>subneighborhood</argument>
+                    <argument>district</argument>
                 </arguments>
                 <errors>
-                    <error>Invalid location-subneighborhood given.</error>
+                    <error>Invalid district given.</error>
                 </errors>
             </validator>
 
-            <validator class="number" name="invalid_location_latitude" required="false" translation_domain="items.errors">
+            <validator class="string" name="invalid_location_latitude" required="false" translation_domain="items.errors">
                 <arguments base="content_item[location][coordinates]">
                     <argument>latitude</argument>
                 </arguments>
                 <errors>
                     <error>Invalid location-latitude given.</error>
                 </errors>
-                <ae:parameters>
-                    <ae:parameter name="cast_to">float</ae:parameter>
-                </ae:parameters>
             </validator>
 
-            <validator class="number" name="invalid_location_longitude" required="false" translation_domain="items.errors">
+            <validator class="string" name="invalid_location_longitude" required="false" translation_domain="items.errors">
                 <arguments base="content_item[location][coordinates]">
                     <argument>longitude</argument>
                 </arguments>
                 <errors>
                     <error>Invalid location-longitude given.</error>
                 </errors>
-                <ae:parameters>
-                    <ae:parameter name="cast_to">float</ae:parameter>
-                </ae:parameters>
             </validator>
 
             <validator class="number" name="invalid_date_isevent" required="false" translation_domain="items.errors">

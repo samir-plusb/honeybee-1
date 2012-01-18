@@ -83,7 +83,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             api: {
                 extract_date: 'index.php/de/items/api/extract_date',
                 validate_url: 'index.php/de/items/api/validate_url',
-                extract_location: 'index.php/de/items/api/api/extract_location'
+                extract_location: 'index.php/de/items/api/extract_location'
             }
         });
     },
@@ -394,9 +394,34 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                     that.editing_form.val('url', urls[0].trim());
                 }
             },
-            'localize': function()
+            'localize_item': function(src_field)
             {
-                that.logDebug("on::contentMenu::localize::clicked");
+                var urls = that.edit_service.extractLocation(
+                    src_field.getSelection(),
+                    function(locations)
+                    {
+                        if (0 < locations.items_count)
+                        {
+                            var location = locations[locations.items_count - 1];
+                            if ("Außerhalb Berlins" == location['administrative district'])
+                            {
+                                alert(
+                                    "Die Lokalisierung dieses Items ist möglicherweise fehlgeschlagen." +
+                                    "Bitte überprüfe, ob die Lokalisierung wirklich korrekt vorgenommen wurde."
+                                );
+                            }
+                            else
+                            {
+                                that.editing_form.val('location[district]', location.district);
+                                that.editing_form.val('location[administrativeDistrict]', location['administrative district']);
+                                that.editing_form.val('location[postalCode]', location.uzip);
+                                that.editing_form.val('location[street]', location.street);
+                                that.editing_form.val('location[coordinates][latitude]', location.latitude);
+                                that.editing_form.val('location[coordinates][longitude]', location.longitude);
+                            }
+                        }
+                    }
+                );
             }
         };
     },

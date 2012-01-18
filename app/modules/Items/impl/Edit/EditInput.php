@@ -156,15 +156,15 @@
                     </div>
                     <div class="input-full">
                         <label for="input_location_uzip">PLZ</label>
-                        <input id="input_location_uzip" name="location[uzip]" type="text" />
+                        <input id="input_location_uzip" name="location[postalCode]" type="text" />
                     </div>
                     <div class="input-full">
                         <label for="input_location_neighborhood">Bezirk</label>
-                        <input id="input_location_neighborhood" name="location[neighborhood]" type="text" readonly="readonly" />
+                        <input id="input_location_neighborhood" name="location[administrativeDistrict]" type="text" readonly="readonly" />
                     </div>
                     <div class="input-full">
                         <label for="input_location_subneighborhood">Alter Bezirksname</label>
-                        <input id="input_location_subneighborhood" name="location[subneighborhood]" type="text" readonly="readonly" />
+                        <input id="input_location_subneighborhood" name="location[district]" type="text" readonly="readonly" />
                     </div>
                     <input type="hidden" name="location[coordinates][longitude]" value="23.12" />
                     <input type="hidden" name="location[coordinates][latitude]" value="96.345" />

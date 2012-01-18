@@ -13,7 +13,7 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
      * @type String
      */
     log_prefix: 'EditService',
-    
+
     /**
      * @description 'Magic' method called during our prototype's constructor execution.
      * @param {Object} options An optional object containing options that are used to configure runtime behaviour.
@@ -22,7 +22,7 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
     {
         this.parent(options);
     },
-    
+
     /**
      * @description Removes all hyphens from the given text.
      * @param {String} text
@@ -33,7 +33,7 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
         var newString = text.replace(/\-/img, "");
         return newString.replace(/\s{2,99}/img, ' ');
     },
-    
+
     /**
      * @description Removes all linebreaks from the given text.
      * @param {String} text
@@ -44,7 +44,7 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
         var newString = text.replace(/\n/img, " ");
         return newString.replace(/\s{2,99}/img, ' ');
     },
-    
+
     /**
      * @description Extracts all urls from the given text.
      * @param {String} text
@@ -62,7 +62,7 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
         $.merge(urls, text.match(pseudoUrlPattern) || []);
         return urls;
     },
-    
+
     /**
      * @description Searches and extracts a location from the given text.
      * @param {String} text
@@ -70,14 +70,12 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
      */
     extractLocation: function(text, callback)
     {
-        /*
         $.getJSON(this.options.api.extract_location, {geo_text: text}, function(data)
         {
-            callback(data.date);
+            callback(data.location);
         });
-        */
     },
-    
+
     /**
      * @description Searches and extracts a date from the given text.
      * @param {String} text
@@ -90,7 +88,7 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
             callback(data.date);
         });
     },
-    
+
     /**
      * @description Validates a given url.
      * @param {String} text

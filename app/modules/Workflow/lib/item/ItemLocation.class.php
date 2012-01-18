@@ -109,6 +109,15 @@ class ItemLocation implements IItemLocation
         return $this->coordinates;
     }
 
+    protected function setCoordinates(array $coordinates)
+    {
+        if (empty($coordinates)) return;
+        return $this->coordinates = array(
+            'latitude' => (float)$coordinates['latitude'],
+            'longitude' => (float)$coordinates['longitude']
+        );
+    }
+
     /**
      * Returns the location's city (berlin ...).
      *
