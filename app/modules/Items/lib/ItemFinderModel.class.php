@@ -16,7 +16,7 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
         'timestamp'    => 'importItem.created.date',
         'state'        => 'currentState.step',
         'category'     => 'importItem.category.category_sortable',
-        'district'     => 'contentItems.administrative_district',
+        'district'     => 'contentItems.location.administrativeDistrict',
         'priority'     => 'contentItems.priority'
     );
 

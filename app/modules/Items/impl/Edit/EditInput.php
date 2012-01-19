@@ -170,8 +170,8 @@
                         <label for="input_location_subneighborhood">Alter Bezirksname</label>
                         <input id="input_location_subneighborhood" name="location[district]" type="text" readonly="readonly" />
                     </div>
-                    <input type="hidden" name="location[coordinates][longitude]" value="23.12" />
-                    <input type="hidden" name="location[coordinates][latitude]" value="96.345" />
+                    <input type="hidden" name="location[coordinates][lon]" value="0" />
+                    <input type="hidden" name="location[coordinates][lat]" value="0" />
                     <div id="geo-busy-overlay"></div>
                 </div> <!-- </fieldset> -->
             </div>

@@ -161,6 +161,99 @@
                         "title": {
                             "type": "string",
                             "store": true
+                        },
+                        "priority": {
+                            "type": "short",
+                            "store": true
+                        },
+                        "category": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "tags": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "teaser": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "text": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "source": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "publisher": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "publishDate": {
+                            "type": "date",
+                            "format": "date_time_no_millis",
+                            "store": true
+                        },
+                        "date": {
+                            "include_in_all": false,
+                            "properties": {
+                                "from": {
+                                    "type": "date",
+                                    "format": "date_time_no_millis",
+                                    "store": true
+                                },
+                                "till": {
+                                    "type": "date",
+                                    "format": "date_time_no_millis",
+                                    "store": true
+                                }
+                            }
+                        },
+                        "location": {
+                            "include_in_all": false,
+                            "properties": {
+                                "city": {
+                                    "type": "string",
+                                    "store": true
+                                },
+                                "postalCode": {
+                                    "type": "string",
+                                    "store": true
+                                },
+                                "administrativeDistrict": {
+                                    "type": "string",
+                                    "store": true
+                                },
+                                "district": {
+                                    "type": "string",
+                                    "store": true
+                                },
+                                "neighborhood": {
+                                    "type": "string",
+                                    "store": true
+                                },
+                                "street": {
+                                    "type": "string",
+                                    "store": true
+                                },
+                                "housenumber": {
+                                    "type": "string",
+                                    "store": true
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "store": true
+                                },
+                                "relevance": {
+                                    "type": "short",
+                                    "store": true
+                                },
+                                "coordinates": {
+                                    "type": "geo_point",
+                                    "store": true
+                                }
+                            }
                         }
                     }
                 }

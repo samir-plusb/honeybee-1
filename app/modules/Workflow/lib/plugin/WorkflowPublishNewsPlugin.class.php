@@ -36,11 +36,29 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
         $supervisor = Workflow_SupervisorModel::getInstance();
         $supervisor->getItemPeer()->storeItem($workflowItem);
 
+        $curl = ProjectCurl::create();
+        curl_setopt($curl, CURLOPT_URL, 'http://bo-proto.h1960801.stratoserver.net/news/api/import');
+        curl_setopt($curl, CURLOPT_POST, TRUE);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($workflowItem->toArray()));
+        curl_setopt($curl, CURLOPT_HEADER, array(
+            'Content-Type: application/json; charset=UTF-8',
+            'Accept: application/json; charset=UTF-8',
+            'X-Requested-With: XMLHttpRequest'
+        ));
+        curl_setopt($curl, CURLOPT_VERBOSE, TRUE);
+        $resp = curl_exec($curl);
         $result = new WorkflowPluginResult();
-        $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
-        $result->setMessage('Ready to get the disposition to whereever rockin!');
+        if (($err = curl_error($curl)))
+        {
+            $result->setState(WorkflowPluginResult::STATE_ERROR);
+            $result->setMessage('An error occured while publishing item: Result:' . $result . ', Error: ' . $err);
+        }
+        else
+        {
+            $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
+            $result->setMessage('Ready to get the disposition to whereever rockin!');
+        }
         $result->freeze();
-        
         return $result;
     }
 

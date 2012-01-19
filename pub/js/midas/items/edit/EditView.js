@@ -442,8 +442,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                             that.editing_form.val('location[administrativeDistrict]', location['administrative district']);
                             that.editing_form.val('location[postalCode]', location.uzip);
                             that.editing_form.val('location[street]', location.street);
-                            that.editing_form.val('location[coordinates][latitude]', location.latitude);
-                            that.editing_form.val('location[coordinates][longitude]', location.longitude);
+                            that.editing_form.val('location[coordinates][lat]', location.latitude);
+                            that.editing_form.val('location[coordinates][lon]', location.longitude);
                         }
                         $('#geo-busy-overlay').fadeOut();
                     }
@@ -679,8 +679,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         if (true == validation_res.success)
         {
             // after validation, soft check for location data and warn if they have not been provided.
-            var latitude = +this.editing_form.val('location[coordinates][latitude]');
-            var longitude = +this.editing_form.val('location[coordinates][longitude]');
+            var latitude = +this.editing_form.val('location[coordinates][lat]');
+            var longitude = +this.editing_form.val('location[coordinates][lon]');
 
             if (0 < latitude && 0 < longitude)
             {

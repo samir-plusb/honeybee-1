@@ -18,7 +18,7 @@ interface IItemLocation
      * <pre>
      * Example value structure:
      * array(
-     *     'long' => 12.345,
+     *     'lon' => 12.345,
      *     'lat'  => 23.456
      * )
      * </pre>
@@ -96,9 +96,9 @@ interface IItemLocation
      * <pre>
      * Example structure:
      * array(
-     *     'coords'                   => array(
-     *         'long' => '12.19281',
-     *         'lat'  => '13.2716'
+     *     'coords'                  => array(
+     *         'lon' => '12.19281',
+     *         'lat' => '13.2716'
      *     ),
      *     'city'                    => 'Berlin',
      *     'postal_code'             => '13187',

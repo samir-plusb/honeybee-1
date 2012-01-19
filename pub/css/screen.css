@@ -522,3 +522,9 @@ em.bold{
     height: 100%;
     display: none;
 }
+
+.tagInputField
+{
+    border: none;
+    outline: 0;
+}

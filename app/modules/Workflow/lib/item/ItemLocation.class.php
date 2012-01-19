@@ -109,12 +109,12 @@ class ItemLocation implements IItemLocation
         return $this->coordinates;
     }
 
-    protected function setCoordinates(array $coordinates)
+    protected function setCoordinates($coordinates)
     {
         if (empty($coordinates)) return;
         return $this->coordinates = array(
-            'latitude' => (float)$coordinates['latitude'],
-            'longitude' => (float)$coordinates['longitude']
+            'lat' => (float)$coordinates['lat'],
+            'lon' => (float)$coordinates['lon']
         );
     }
 

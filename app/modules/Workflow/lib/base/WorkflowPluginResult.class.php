@@ -43,13 +43,20 @@ class WorkflowPluginResult implements IWorkflowPluginResult
     }
 
     /**
-     * provide our member data as array as base for json export
+     * Returns an array representation of the location.
      *
-     * @return array
+     * @return string
      */
     public function toArray()
     {
-        return array_filter(get_object_vars($this));
+        $props = array('state', 'gate', 'message');
+        $data = array();
+        foreach ($props as $prop)
+        {
+            $getter = 'get' . ucfirst($prop);
+            $data[$prop] = $this->$getter();
+        }
+        return $data;
     }
 
     public static function fromArray(array $data)
@@ -57,7 +64,7 @@ class WorkflowPluginResult implements IWorkflowPluginResult
         if (! isset($data['state']))
         {
             throw new WorkflowException(
-                "When creating new plugin results from given data, the gate and state information is considered mandatory." .
+                "When creating new plugin results from given data, the state information is considered mandatory." .
                 "The given data is missing one of the latter values."
             );
         }
