@@ -98,11 +98,21 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         .createEditForm();
         // release ticket when page is left.
         var that = this;
-        window.addEventListener("pagehide", function()
+        window.onunload = function()
         {
             var ticket_id = that.editing_form.val('ticket');
-            that.releaseTicket(ticket_id);
-        }, false);
+            var release_url = $('.release-ticket-base-url').val();
+            if (release_url && ticket_id)
+            {
+                var response = $.ajax({
+                    type: 'GET',
+                    url: release_url.replace(/\{\TICKET_ID\}/ig, ticket_id),
+                    dataType: 'json',
+                    data: {},
+                    async: false
+                });
+            }
+        }
     },
 
     /**
