@@ -280,6 +280,6 @@
     </div>
     <div class="modal-footer">
         <button class="btn deny"><?php echo $tm->_('deny_delete', 'items.dialogs'); ?></button>
-        <button class="btn primary confirm"><?php echo $tm->_('confirm_delete', 'items.dialogs'); ?></button>
+        <button class="btn danger confirm"><?php echo $tm->_('confirm_delete', 'items.dialogs'); ?></button>
     </div>
 </div>
