@@ -40,7 +40,7 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
         curl_setopt($curl, CURLOPT_URL, 'http://bo-proto.h1960801.stratoserver.net/news/api/import');
         curl_setopt($curl, CURLOPT_POST, TRUE);
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($workflowItem->toArray()));
-        curl_setopt($curl, CURLOPT_HEADER, array(
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json; charset=UTF-8',
             'Accept: application/json; charset=UTF-8',
             'X-Requested-With: XMLHttpRequest'
