@@ -200,12 +200,12 @@
                             "properties": {
                                 "from": {
                                     "type": "date",
-                                    "format": "date_time_no_millis",
+                                    "format": "dd.MM.yyyy",
                                     "store": true
                                 },
                                 "till": {
                                     "type": "date",
-                                    "format": "date_time_no_millis",
+                                    "format": "dd.MM.yyyy",
                                     "store": true
                                 }
                             }
