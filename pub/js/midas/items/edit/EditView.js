@@ -503,6 +503,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var cur_ticket_id = this.editing_form.val('ticket');
         var list_pos = +$('.list_position').val();
         var that = this;
+        $('#edit-gui-busy-overlay').fadeIn();
         this.releaseTicket(cur_ticket_id, function(data)
         {
             var list_pos = +$('.list_position').val();
@@ -514,6 +515,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         var cur_ticket_id = this.editing_form.val('ticket');
         var that = this;
+        $('#edit-gui-busy-overlay').fadeIn();
         this.releaseTicket(cur_ticket_id, function(data)
         {
             var list_pos = +$('.list_position').val();
@@ -542,6 +544,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 {
                     if (err)
                     {
+                        $('#edit-gui-busy-overlay').fadeOut();
                         return;
                     }
                     that.import_item_container.hydrate(import_item);
@@ -558,8 +561,9 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             }
             else
             {
-        // @todo display message and return to list view or something like that.
-        }
+                // @todo display message and return to list view or something like that.
+            }
+            $('#edit-gui-busy-overlay').fadeOut();
         });
     },
 

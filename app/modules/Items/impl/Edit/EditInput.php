@@ -242,6 +242,7 @@
         </div>
     </section>
 </div>
+<div id="edit-gui-busy-overlay" />
 <!-- Template for rendering form validation error hints. -->
 <script id="input-error-tpl" type="text/html">
     <div class="error-hint ui-corner-all bubble-content">
