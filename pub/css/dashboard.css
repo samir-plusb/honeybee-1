@@ -52,6 +52,12 @@ h1
     height: 100%;
     display: block;
     position: relative;
+    text-decoration: none;
+}
+
+.module-list li:hover h3
+{
+    background: #46A546;
 }
 
 .module-list li h3
