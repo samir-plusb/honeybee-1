@@ -136,7 +136,7 @@
 
             <div class="extra-data-left">
                 <div class="geo-data content-panel"> <!-- <fieldset> -->
-                    <h3 class="legend">Geo</h3>
+                    <h3 class="legend">Geo <img class="localize-icon" src="images/icon-reload.png" title="Localize" /></h3>
                     <div class="input-full">
                         <select class="jsb-input" name="location[relevance]">
                             <option value=""></option>
@@ -172,6 +172,7 @@
                     </div>
                     <input type="hidden" name="location[coordinates][longitude]" value="23.12" />
                     <input type="hidden" name="location[coordinates][latitude]" value="96.345" />
+                    <div id="geo-busy-overlay"></div>
                 </div> <!-- </fieldset> -->
             </div>
 
@@ -242,7 +243,7 @@
         </div>
     </section>
 </div>
-<div id="edit-gui-busy-overlay" />
+<div id="edit-gui-busy-overlay"></div>
 <!-- Template for rendering form validation error hints. -->
 <script id="input-error-tpl" type="text/html">
     <div class="error-hint ui-corner-all bubble-content">

@@ -424,6 +424,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             },
             'localize_item': function(src_field)
             {
+                $('#geo-busy-overlay').fadeIn();
                 that.edit_service.extractLocation(
                     src_field.getSelection(),
                     function(location)
@@ -433,7 +434,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                             alert(
                                 "Die Lokalisierung dieses Items ist möglicherweise fehlgeschlagen." +
                                 "Bitte überprüfe, ob die Lokalisierung wirklich korrekt vorgenommen wurde."
-                                );
+                            );
                         }
                         else
                         {
@@ -444,8 +445,9 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                             that.editing_form.val('location[coordinates][latitude]', location.latitude);
                             that.editing_form.val('location[coordinates][longitude]', location.longitude);
                         }
+                        $('#geo-busy-overlay').fadeOut();
                     }
-                    );
+                );
             }
         };
     },
@@ -504,6 +506,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var list_pos = +$('.list_position').val();
         var that = this;
         $('#edit-gui-busy-overlay').fadeIn();
+        $('#geo-busy-overlay').fadeOut();
         this.releaseTicket(cur_ticket_id, function(data)
         {
             var list_pos = +$('.list_position').val();
@@ -516,6 +519,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var cur_ticket_id = this.editing_form.val('ticket');
         var that = this;
         $('#edit-gui-busy-overlay').fadeIn();
+        $('#geo-busy-overlay').fadeOut();
         this.releaseTicket(cur_ticket_id, function(data)
         {
             var list_pos = +$('.list_position').val();
