@@ -58,7 +58,7 @@
                     <argument>field</argument>
                 </arguments>
                 <ae:parameters>
-                    <ae:parameter name="values">title,source,timestamp,state,category,priority,district</ae:parameter>
+                    <ae:parameter name="values">title,source,timestamp,state,category,priority,district,owner</ae:parameter>
                 </ae:parameters>
             </validator>
 

@@ -70,7 +70,6 @@
             <col class="col-created" />
             <col class="col-state" />
             <col class="col-category" />
-            <col class="col-district" />
             <col class="col-owner" />
             <col class="col-actions" />
         </colgroup>
@@ -79,7 +78,7 @@
 <?php
 // Render the data(table) header by traversing a list of supported header fields,
 // thereby creating a order link and translating each one.
-    foreach (array('title', 'source', 'timestamp', 'state', 'category', 'district', 'owner') as $headerField)
+    foreach (array('title', 'source', 'timestamp', 'state', 'category', 'owner') as $headerField)
     {
         $sortingActive = ($sortField === $headerField);
         $routingData = array(
@@ -159,10 +158,6 @@
                 <td class="category">
                     <?php echo empty($importItem['category']) ? '&#160;' : $importItem['category']; ?>
                 </td>
-                <td class="district">
-<!-- Take the district of the first content-item? -->
-                    &#160;
-                </td>
                 <td class="owner">
 <!--
     The owner label is rendered differently for three possible states:
@@ -172,6 +167,8 @@
     - We just highlight the field differently.
     3.) Nobody owns the item.
     - Just highlight with the 'nobody' color.
+
+<?php echo "###########" . $workflowItem['owner'] . "::" . $t['user'] . "##################" ?>
 -->
 <?php
         if ($workflowItem['owner'] === $t['user'])
@@ -216,7 +213,7 @@
 <?php
 // Render the data(table) header by traversing a list of supported header fields,
 // thereby creating a order link and translating each one.
-    foreach (array('title', 'source', 'timestamp', 'state', 'category', 'district', 'owner') as $headerField)
+    foreach (array('title', 'source', 'timestamp', 'state', 'category', 'owner') as $headerField)
     {
         $sortingActive = ($sortField === $headerField);
         $routingData = array(

@@ -120,7 +120,7 @@ table caption
 
 .col-title
 {
-    min-width: 17em;
+    min-width: 25em;
 }
 
 .col-source,
@@ -129,15 +129,14 @@ table caption
     width: 23em;
 }
 
-.col-created,
+.col-created
+{
+    width: 13em;
+}
+
 .col-state
 {
     width: 9em;
-}
-
-.col-district
-{
-    width: 13em;
 }
 
 .col-priority

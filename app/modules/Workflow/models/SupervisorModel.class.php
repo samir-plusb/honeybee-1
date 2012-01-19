@@ -171,17 +171,6 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
             throw new WorkflowException($message, WorkflowException::UNEXPECTED_EXIT_CODE);
         }
 
-        /**
-         * Sync our item's state with the ticket for search/data convenience,
-         * as we can now ask an item about it's (eventuell)state without needing to refer to it's tickets.
-         */
-        $this->getItemPeer()->storeItem(
-            $ticket->getWorkflowItem()->updateCurrentState(array(
-                'workflow' => $ticket->getWorkflow(),
-                'step'     => $ticket->getCurrentStep(),
-                'owner'    => $ticket->getCurrentOwner()
-            ))
-        );
         return $pluginResult;
     }
 

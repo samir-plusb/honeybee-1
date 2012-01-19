@@ -75,6 +75,18 @@ class WorkflowTicketPeer
         {
             $ticket->setIdentifier($result['id']);
             $ticket->setRevision($result['rev']);
+            /**
+             * Sync our item's state with the ticket for search/data convenience,
+             * as we can now ask an item about it's (eventuell)state without needing to refer to it's tickets.
+             */
+            $supervisor = Workflow_SupervisorModel::getInstance();
+            $supervisor->getItemPeer()->storeItem(
+                $ticket->getWorkflowItem()->updateCurrentState(array(
+                    'workflow' => $ticket->getWorkflow(),
+                    'step'     => $ticket->getCurrentStep(),
+                    'owner'    => $ticket->getCurrentOwner()
+                ))
+            );
             return TRUE;
         }
         return FALSE;

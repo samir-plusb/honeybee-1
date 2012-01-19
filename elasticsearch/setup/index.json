@@ -46,16 +46,18 @@
                 },
                 "currentState": {
                     "include_in_all": false,
-                    "type": "object",
                     "properties": {
                         "workflow": {
-                            "type": "string"
+                            "type": "string",
+                            "store": true
                         },
                         "step": {
-                            "type": "string"
+                            "type": "string",
+                            "store": true
                         },
                         "owner": {
-                            "type": "string"
+                            "type": "string",
+                            "store": true
                         }
                     }
                 },
