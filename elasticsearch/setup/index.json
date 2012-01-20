@@ -67,7 +67,6 @@
                     "properties": {
                         "created": {
                             "include_in_all": false,
-                            "type": "object",
                             "properties": {
                                 "user": {
                                     "type": "string",
@@ -81,7 +80,6 @@
                             }
                         },
                         "lastModified": {
-                            "type": "object",
                             "include_in_all": false,
                             "properties": {
                                 "user": {

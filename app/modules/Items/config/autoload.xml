@@ -14,6 +14,7 @@
         <autoload name="ItemsModuleSetup">%core.module_dir%/Items/models/Setup/ItemsModuleSetup.class.php</autoload>
         <!-- /Models/Setup -->
         <!-- <autoload name="GeoServiceModel">%core.module_dir%/Items/models/Geo/GeoServiceModel.class.php</autoload> -->
+        <autoload name="NewsStatisticProvider">%core.module_dir%/Items/lib/NewsStatisticProvider.class.php</autoload>
 
     </ae:configuration>
 </ae:configurations>

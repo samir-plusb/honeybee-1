@@ -13,32 +13,30 @@
 	<div class="content">
         <h1><?php echo $tm->_('Statistische Angeben zu den Bezirken','default.ui') ?></h1>
         <ul class="stats-list">
+<?php
+    foreach ($t['statistics'] as $district => $stats)
+    {
+        if ('_all' === $district)
+        {
+            continue;
+        }
+?>
             <li>
-                <h3>Charlottenburg</h3>
+                <h3><?php echo ucwords($district); ?></h3>
                 <dl>
                     <dt>Anzahl Items gesamt:</dt>
-                    <dd>499</dd>
+                    <dd>345</dd>
                     <dt>Anzahl Items letzte 7 Tage:</dt>
-                    <dd>29</dd>
+                    <dd><?php echo $stats['published']['week']; ?></dd>
                     <dt>Anzahl Items heute:</dt>
-                    <dd>3</dd>
+                    <dd><?php echo $stats['published']['today']; ?></dd>
                     <dt>Anzahl Items gestern:</dt>
-                    <dd>5</dd>
+                    <dd><?php echo $stats['published']['yesterday']; ?></dd>
                 </dl>
             </li>
-            <li>
-                <h3>Wedding</h3>
-                <dl>
-                    <dt>Anzahl Items gesamt:</dt>
-                    <dd>369</dd>
-                    <dt>Anzahl Items letzte 7 Tage:</dt>
-                    <dd>23</dd>
-                    <dt>Anzahl Items heute:</dt>
-                    <dd>6</dd>
-                    <dt>Anzahl Items gestern:</dt>
-                    <dd>8</dd>
-                </dl>
-            </li>
+<?php
+    }
+?>
         </ul>
 	</div>
 </div>

@@ -35,7 +35,7 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
         }
         $supervisor = Workflow_SupervisorModel::getInstance();
         $supervisor->getItemPeer()->storeItem($workflowItem);
-
+        /*
         $curl = ProjectCurl::create();
         curl_setopt($curl, CURLOPT_URL, 'http://bo-proto.h1960801.stratoserver.net/news/api/import');
         curl_setopt($curl, CURLOPT_POST, TRUE);
@@ -54,10 +54,10 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
             $result->setMessage('An error occured while publishing item: Result:' . $result . ', Error: ' . $err);
         }
         else
-        {
+        {*/
             $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
             $result->setMessage('Ready to get the disposition to whereever rockin!');
-        }
+        //}
         $result->freeze();
         return $result;
     }
