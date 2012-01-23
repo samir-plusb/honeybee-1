@@ -26,6 +26,7 @@ class Items_StatsAction extends ItemsBaseAction
         $provider = new NewsStatisticProvider();
         $stats = $provider->fetchStatistics(7); // from today - 7 days back
         ksort($stats);
+
         $this->setAttribute('statistics', $stats);
 
         return 'Success';

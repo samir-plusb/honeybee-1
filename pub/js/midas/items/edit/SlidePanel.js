@@ -54,12 +54,10 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
         if (! this.has_slided)
         {
             this.slideIn();
-            this.has_slided = true;
         }
         else
         {
             this.slideOut();
-            this.has_slided = false;
         }
     },
 
@@ -72,6 +70,7 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
         {
             return;
         }
+        this.has_slided = true;
         this.fire('slideinstart');
         this.slide("+=" + this.options.range, function()
         {
@@ -88,6 +87,7 @@ midas.items.edit.SlidePanel = midas.core.BaseObject.extend(
         {
             return;
         }
+        this.has_slided = false;
         this.fire('slideoutstart');
         this.slide("-=" + this.options.range, function()
         {

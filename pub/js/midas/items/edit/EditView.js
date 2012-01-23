@@ -104,7 +104,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             var release_url = $('.release-ticket-base-url').val();
             if (release_url && ticket_id)
             {
-                var response = $.ajax({
+                $.ajax({
                     type: 'GET',
                     url: release_url.replace(/\{\TICKET_ID\}/ig, ticket_id),
                     dataType: 'json',
@@ -136,6 +136,13 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 that.localizeText(text_parts.join(" "));
             }
         });
+
+        var first_content_item = this.items_list.getItemByPos(0);
+        if (first_content_item)
+        {
+            this.loadContentItem(first_content_item);
+        }
+        this.loadNearbyItems();
     },
 
     /**
@@ -150,13 +157,9 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             .css({
                 'position': 'absolute',
                 'width': '100%'
-            }),
-
-            {
-                range: '20em'
-            }
-            ).on('slideinstart', function()
-            {
+            }), { range: '20em' }
+        ).on('slideinstart', function()
+        {
             var list_button = $('.action-list');
             list_button.html(list_button[0].orgText + " &#9667;");
             $('.import-data-layoutbox').animate({
@@ -183,7 +186,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var list_button = $('.action-list');
         list_button[0].orgText = list_button.text();
         list_button.html(list_button[0].orgText + " &#9657;");
-        $('.import-data-layoutbox').append($('<div class="overlay"></div>').css('opacity', 0).css('display', 'none'));
+        $('.import-data-layoutbox')
+            .append($('<div class="overlay"></div>')
+            .css('opacity', 0)
+            .css('display', 'none'));
         return this;
     },
 
@@ -272,10 +278,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     {
         this.import_item_container = new midas.items.edit.ImportItemContainer(
             this.layout_root.find('.document-data').first(),
-            {
-                tabs_container: '.item-content'
-            }
-            ).on('contextMenuSelect', this.onContextMenuClicked.bind(this));
+            { tabs_container: '.item-content' }
+        ).on('contextMenuSelect', this.onContextMenuClicked.bind(this));
         return this;
     },
 
@@ -485,20 +489,75 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                         "Bitte überprüfe, ob die Lokalisierung wirklich korrekt vorgenommen wurde."
                     );
                 }
+                else if (1 < location.length)
+                {
+                    that.showLocationSelectDialog(location);
+                }
                 else
                 {
-                    that.editing_form.val('location[district]', location.district);
-                    that.editing_form.val('location[administrativeDistrict]', location['administrative district']);
-                    that.editing_form.val('location[postalCode]', location.uzip);
-                    that.editing_form.val('location[street]', location.street);
-                    that.editing_form.val('location[coordinates][lat]', location.latitude);
-                    that.editing_form.val('location[coordinates][lon]', location.longitude);
+                    that.hydrateLocation(location);
                 }
                 $('#geo-busy-overlay').fadeOut();
             }
         );
     },
 
+    showLocationSelectDialog: function(locations)
+    {
+        for (var i = 0; i < locations.length; i++)
+        {
+            locations[i].pos = i;
+        }
+        var dialog = ich['location-dialog-tpl']({ title: 'Geoauswahl', locations: locations });
+        this.layout_root.append(dialog);
+        dialog.dialog({
+            resizable: false,
+            modal: true,
+            width: '30em'
+        });
+        var that = this;
+        dialog.delegate('li', 'click', function(event)
+        {
+            var pos = $(event.currentTarget).find('input').val();
+            if (pos)
+            {
+                that.hydrateLocation(locations[pos]);
+                dialog.dialog("close");
+                dialog.remove();
+            }
+        });
+    },
+
+    hydrateLocation: function(location)
+    {
+        this.editing_form.val('location[district]', location.district);
+        this.editing_form.val('location[administrativeDistrict]', location['administrative district']);
+        this.editing_form.val('location[postalCode]', location.uzip);
+        this.editing_form.val('location[street]', location.street);
+
+        if (location.latitude && location.longitude)
+        {
+            this.editing_form.val('location[coordinates][lat]', location.latitude);
+            this.editing_form.val('location[coordinates][lon]', location.longitude);
+        }
+        this.loadNearbyItems();
+    },
+
+    loadNearbyItems: function()
+    {
+        var lat = +this.editing_form.val('location[coordinates][lat]');
+        var lon = +this.editing_form.val('location[coordinates][lon]');
+        if (0 < lat && 0 < lon)
+        {
+            var nearby_url = $('.nearby-base-url').val();
+            var bound_url = nearby_url.replace("{LATITUDE}", lat).replace("{LONGITUDE}", lon);
+            $.getJSON(bound_url, function(data)
+            {
+                console.log(data);
+                alert(lat + lon);
+            });
+        }
+    },
 
     // -----------
     // --------------- HANDLING CONTENT ITEM DATA
@@ -509,19 +568,22 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var ticket = this.editing_form.val('ticket');
         if (ticket)
         {
-            // create intent to pass to our attached controllers.
-            var intent = {
-                'name': '/midas/intents/importItem/delete',
-                'data': {
-                    ticket: ticket,
-                    gate: 'delete'
-                },
-                'target_uri': this.routing.getRoute('workflow_proceed')
-            };
             var that = this;
-            this.propagateIntent(intent, function()
+            this.confirm('Sicher?', 'Soll das momentan ausgewählte ImportItem wirklich gelöscht werden?', function()
             {
-                that.loadNextImportItem();
+                // create intent to pass to our attached controllers.
+                var intent = {
+                    'name': '/midas/intents/importItem/delete',
+                    'data': {
+                        ticket: ticket,
+                        gate: 'delete'
+                    },
+                    'target_uri': that.routing.getRoute('workflow_proceed')
+                };
+                that.propagateIntent(intent, function()
+                {
+                    that.loadNextImportItem();
+                });
             });
         }
     },
@@ -639,7 +701,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         {
             that.editing_form.val(item.data);
             that.editing_form.markClean();
-            that.slide_panel.toggle();
+            that.slide_panel.slideOut();
         };
         var store_and_load = function()
         {
@@ -847,20 +909,24 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var item = this.items_list.getItem(this.editing_form.val('cid'));
         if (item)
         {
-            item = item.data;
-            this.items_list.remove(item.cid);
-            this.editing_form.reset();
-            var ticket = this.editing_form.val('ticket');
-            // create intent to pass to our attached controllers.
-            var intent = {
-                'name': '/midas/intents/contentItem/delete',
-                'data': {
-                    content_item: item.identifier,
-                    ticket: ticket
-                },
-                'target_uri': this.routing.getRoute('api_delete_item')
-            };
-            this.propagateIntent(intent);
+            var that = this;
+            this.confirm('Sicher?', 'Soll das momentan ausgewählte ContentItem wirklich gelöscht werden?', function()
+            {
+                item = item.data;
+                that.items_list.remove(item.cid);
+                that.editing_form.reset();
+                var ticket = that.editing_form.val('ticket');
+                // create intent to pass to our attached controllers.
+                var intent = {
+                    'name': '/midas/intents/contentItem/delete',
+                    'data': {
+                        content_item: item.identifier,
+                        ticket: ticket
+                    },
+                    'target_uri': that.routing.getRoute('api_delete_item')
+                };
+                that.propagateIntent(intent);
+            });
         }
     },
 

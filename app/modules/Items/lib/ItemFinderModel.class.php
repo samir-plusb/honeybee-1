@@ -102,6 +102,49 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
 
     }
 
+    public function nearBy(array $where, $sortField, $sortDirection = self::SORT_DESC, $offset = 0, $limit = self::DEFAULT_LIMIT)
+    {
+        if (! isset($where['dist']) || ! isset($where['lon']) || ! isset($where['lat']))
+        {
+            throw new InvalidArgumentException(
+                "Missing information on where you would like to search the nearby items." . PHP_EOL .
+                "Be sure to pass dist, lon and lat inside the \$where array."
+            );
+        }
+
+        if (! isset(self::$sortMapping[$sortField]))
+        {
+            throw new Exception("Invalid sort field given. The field " . $sortField . " is not supported.");
+        }
+
+        $filterContainer = new Elastica_Filter_And();
+        $filterContainer->addFilter(new Elastica_Filter_GeoDistance(
+            'contentItems.location.coordinates',
+            $where['lat'],
+            $where['lon'],
+            $where['dist']
+        ))->addFilter(
+            new Elastica_Filter_Not(new Elastica_Filter_Term(
+                array('currentState.step' => 'delete_news')
+            ))
+        );
+
+        $query = new Elastica_Query(
+            new Elastica_Query_Term(array(
+                'currentState.workflow' => 'news'
+            ))
+        );
+        $query->setFilter($filterContainer)->setLimit($limit)->setFrom($offset)->setSort(
+            array(self::$sortMapping[$sortField] => $sortDirection)
+        );
+        $index = $this->elasticClient->getIndex('midas');
+        $type = $index->getType('item');
+
+        return $this->hydrateResult(
+            $type->search($query)
+        );
+    }
+
     protected function hydrateResult(Elastica_ResultSet $result)
     {
         $items = array();

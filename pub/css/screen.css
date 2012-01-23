@@ -528,3 +528,19 @@ em.bold{
     border: none;
     outline: 0;
 }
+
+.ui-state-error
+{
+    color: #232323;
+}
+
+.geo-list li
+{
+    padding: 10px;
+}
+
+.geo-list li:hover
+{
+    cursor: pointer;
+    background-color: #efefef;
+}

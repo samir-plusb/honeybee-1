@@ -148,6 +148,20 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
         return this.content_items[cid] || null;
     },
 
+    getItemByPos: function(pos)
+    {
+        var i = 0;
+        for (var cid in this.content_items)
+        {
+            if (i === pos)
+            {
+                return this.content_items[cid];
+            }
+            i++;
+        }
+        return null;
+    },
+
     /**
      * @description Update the status display.
      */

@@ -9,11 +9,6 @@
         <a href="<?php echo $ro->gen('index'); ?>">Midas</a>
     </h1>
     <aside class="personal-info">
-        <h2>Userinfo Box</h2>
-        <p>
-            Diese Nachricht wird von <?php echo htmlspecialchars($t['editor']); ?> bearbeitet.
-            Du hast bisher 0 Mails abgehakt.
-        </p>
         <a class="pull-right logout" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
     </aside>
 </header>
@@ -56,6 +51,7 @@
             <input class="static-value release-ticket-base-url" type="hidden" value="<?php echo urldecode($t['release_url']); ?>" />
             <input class="static-value list-filter" type="hidden" value="<?php echo htmlspecialchars(json_encode($t['list_filter'])); ?>" />
             <input class="static-value grab-ticket-base-url" type="hidden" value="<?php echo urldecode($t['grab_url']); ?>" />
+            <input class="static-value nearby-base-url" type="hidden" value="<?php echo urldecode($t['nearby_url']); ?>" />
             <input class="static-value list-base-url" type="hidden" value="<?php echo urldecode($t['list_url']); ?>" />
             <input type="hidden" class="static-value list_position" value="<?php echo $t['list_pos']; ?>" />
 
@@ -200,13 +196,7 @@
 
                 <section class="nearby-items content-panel">
                     <h3 class="legend">Items in der Nähe</h3>
-                    <ul>
-                        <li>
-                            <!-- <a href="/items/edit/{{Item.parent}}">
-                                ({{Item.location.neighborhood|truncate 100}}) {{Item.title|truncate 80}}
-                            </a> -->
-                        </li>
-                    </ul>
+                    <ul></ul>
                 </section>
             </div>
         </form>
@@ -266,6 +256,18 @@
         <p>{{ message }}</p>
     </div>
 </script>
+<script id="location-dialog-tpl" type="text/html">
+    <div title="{{ title }}">
+        <ul class="geo-list">
+            {{#locations}}
+            <li class="data">
+                <p>{{street}} ({{uzip}} / {{neighborhood}})</p>
+                <input type="hidden" value="{{pos}}" />
+            </li>
+            {{/locations}}
+        </ul>
+    </div>
+</script>
 <!-- Template for rendering content-item list items -->
 <script id="content-item-tpl" type="text/html">
     <li class="content-item">
@@ -276,4 +278,7 @@
             <p>{{ text }}</p>
         </article>
     </li>
+</script>
+<script id="nearby-item-tpl" type="text/html">
+    <li>{{importItem.title}}</li>
 </script>
