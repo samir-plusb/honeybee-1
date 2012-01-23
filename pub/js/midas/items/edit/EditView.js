@@ -121,8 +121,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 'location[name]',
                 'location[locationdetail]',
                 'location[street]',
-                'location[postalCode]',
-                'location[administrativeDistrict]'
+                'location[postalCode]'
             ], function(idx, field_name)
             {
                 var val = that.editing_form.val(field_name).trim();
@@ -358,8 +357,15 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      */
     getContentItemMenuBindings: function()
     {
+        var that = this;
         return {
-            'store': this.storeContentItem.bind(this),
+            'store': function()
+            {
+                that.storeContentItem(function(){}, function(data)
+                {
+                    that.warn(data.msg);
+                });
+            },
             'delete': this.deleteContentItem.bind(this),
             'new': this.createNewContentItem.bind(this),
             'list': this.slide_panel.toggle.bind(this.slide_panel)
@@ -535,9 +541,16 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 'target_uri': this.routing.getRoute('workflow_proceed')
             };
             var that = this;
-            this.propagateIntent(intent, function()
+            this.propagateIntent(intent, function(data)
             {
-                that.loadNextImportItem();
+                if (data && 'ok' == data.state)
+                {
+                    that.loadNextImportItem();
+                }
+                else
+                {
+                    alert("An error occured while trying to publish item: ");
+                }
             });
         }
     },
@@ -562,7 +575,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var that = this;
         $('#edit-gui-busy-overlay').fadeIn();
         $('#geo-busy-overlay').fadeOut();
-        this.releaseTicket(cur_ticket_id, function(data)
+        this.releaseTicket(cur_ticket_id, function()
         {
             var list_pos = +$('.list_position').val();
             that.loadImportItem(list_pos - 1);
@@ -632,7 +645,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         {
             that.storeContentItem(load, function(err)
             {
-                this.logDebug("loadCOntentItem::store_and_load.error", err);
+                this.logDebug("loadContentItem::store_and_load.error", err);
             });
         };
         if (this.editing_form.isDirty())
@@ -659,14 +672,14 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             {
                 that.storeContentItem(
                     that.editing_form.reset.bind(that.editing_form)
-                    );
+                );
             };
             this.confirm(
                 "Drohender Datenverlust",
                 "Item wurde noch nicht gespeichert. Jetzt speichern?",
                 store_and_reset,
                 this.editing_form.reset.bind(this.editing_form)
-                );
+            );
         }
         else
         {
@@ -682,8 +695,8 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
      */
     storeContentItem: function(callback, err_callback)
     {
-        err_callback = 'Function' == typeof err_callback ? err_callback : function() {};
-        callback = 'Function' == typeof callback ? callback : function() {};
+        err_callback = $.isFunction(err_callback) ? err_callback : function() {};
+        callback = $.isFunction(callback) ? callback : function() {};
         var validation_res = this.editing_form.validate();
         var that = this;
         // does the actual storing and is called if the data validation complies.
@@ -713,10 +726,20 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             };
             // @todo update the content item state from the list
             // and decide if and how we want to reflect the state changes in the gui.
-            that.propagateIntent(intent, callback);
-            that.items_list.add(item);
-            that.editing_form.highlight();
-            that.editing_form.markClean();
+            that.propagateIntent(intent, function(data)
+            {
+                if (data && 'ok' == data.state)
+                {
+                    that.items_list.add(item);
+                    that.editing_form.highlight();
+                    that.editing_form.markClean();
+                    callback(data);
+                }
+                else
+                {
+                    err_callback(data);
+                }
+            });
         };
         if (true == validation_res.success)
         {
@@ -724,7 +747,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             var latitude = +this.editing_form.val('location[coordinates][lat]');
             var longitude = +this.editing_form.val('location[coordinates][lon]');
 
-            if (0 < latitude && 0 < longitude)
+            if (latitude && longitude)
             {
                 store_data();
             }
@@ -742,17 +765,12 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                             msg: "Location not provided, save aborted by user."
                         });
                     }
-                    );
+                );
             }
         }
         else
         {
             this.displayValidationNotification();
-            err_callback({
-                type: 'validation',
-                data: validation_res,
-                msg: "EditForm validation failed."
-            });
         }
     },
 

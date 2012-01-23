@@ -25,7 +25,7 @@ class Items_Edit_EditInputView extends ItemsBaseView
         $this->setAttribute('_title', 'Midas - News Refinement');
 
         $this->setAttribute('tag_options', array(
-            'mandatory' => TRUE,
+            'mandatory' => FALSE,
             'tags' => AgaviConfig::get('items.tags', array())
         ));
         $this->setAttribute(

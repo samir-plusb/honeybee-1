@@ -43,9 +43,9 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
      */
     onStoreContentItemIntent: function(intent, callback)
     {
-        $.post(intent.target_uri, intent.data, function()
+        $.post(intent.target_uri, intent.data, function(data, textStatus, jqXHR)
         {
-            callback();
+            callback(data);
         }, 'json');
 
         return true;
@@ -58,11 +58,11 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
      */
     onDeleteContentItemIntent: function(intent, callback)
     {
-        $.post(intent.target_uri, intent.data, function()
+        $.post(intent.target_uri, intent.data, function(data, textStatus, jqXHR)
         {
             if (callback)
             {
-                callback();
+                callback(data);
             }
         }, 'json');
 
@@ -76,11 +76,11 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
      */
     onMarkImportItemIntent: function(intent, callback)
     {
-        $.post(intent.target_uri, intent.data, function()
+        $.post(intent.target_uri, intent.data, function(data, textStatus, jqXHR)
         {
             if (callback)
             {
-                callback();
+                callback(data);
             }
         }, 'json');
 
@@ -94,11 +94,11 @@ midas.items.edit.EditController = midas.core.BaseController.extend(
      */
     onDeleteImportItemIntent: function(intent, callback)
     {
-        $.post(intent.target_uri, intent.data, function()
+        $.post(intent.target_uri, intent.data, function(data, textStatus, jqXHR)
         {
             if (callback)
             {
-                callback();
+                callback(data);
             }
         }, 'json');
 

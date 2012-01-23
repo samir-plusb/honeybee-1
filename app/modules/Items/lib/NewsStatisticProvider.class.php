@@ -79,6 +79,15 @@ class NewsStatisticProvider
                     'today' => 0
                 )
             );
+
+            $query = new Elastica_Query(
+                new Elastica_Query_Term(array(
+                    'contentItems.location.district' => $district
+                ))
+            );
+            $index = $this->elasticClient->getIndex('midas');
+            $type = $index->getType('item');
+            $stats[$district]['published']['eversince'] = $type->count($query);
         }
 
         foreach ($items as $workflowItem)
@@ -100,12 +109,12 @@ class NewsStatisticProvider
             foreach ($contentItems as $contentItem)
             {
                 $publishDate = $contentItem->getPublishDate();
-                $aDistrict = $contentItem->getLocation()->getAdministrativeDistrict();
+                $aDistrict = $contentItem->getLocation()->getDistrict();
                 if (empty($publishDate) || empty($aDistrict))
                 {
                     continue;
                 }
-                $aDistrict = strtolower($aDistrict);
+                $aDistrict = mb_strtolower($aDistrict, 'utf-8');
                 $contentItemTimeRubric = $this->resolveDateToTimeIndex($publishDate);
                 if (! array_key_exists($aDistrict, $stats))
                 {

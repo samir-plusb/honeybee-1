@@ -58,7 +58,7 @@
                         </tr>-->
                         <tr>
                             <th>veredelte und publizierte Einträge</th>
-                            <td>333</td>
+                            <td><?php echo $stats['published']['eversince']; ?></td>
                             <td><?php echo $stats['published']['week']; ?></td>
                             <td><?php echo $stats['published']['yesterday']; ?></td>
                             <td><?php echo $stats['published']['today']; ?></td>

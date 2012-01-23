@@ -80,10 +80,17 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
             for (var i = 0; i < location_count; i++)
             {
                 var loc = data.location[i];
+
                 if (loc && "Außerhalb Berlins" != loc['administrative district'])
                 {
-                    found_location = loc;
-                    break;
+                    if (! found_location)
+                    {
+                        found_location = loc;
+                    }
+                    else if (loc.street && ! found_location.street)
+                    {
+                        found_location = loc;
+                    }
                 }
             }
             callback(found_location);
