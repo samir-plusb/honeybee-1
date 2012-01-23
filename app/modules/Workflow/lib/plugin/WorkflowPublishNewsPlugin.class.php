@@ -35,6 +35,7 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
         }
         $supervisor = Workflow_SupervisorModel::getInstance();
         $supervisor->getItemPeer()->storeItem($workflowItem);
+        $result = new WorkflowPluginResult();
         /*
         $curl = ProjectCurl::create();
         curl_setopt($curl, CURLOPT_URL, 'http://bo-proto.h1960801.stratoserver.net/news/api/import');
@@ -47,7 +48,6 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
         ));
         curl_setopt($curl, CURLOPT_VERBOSE, TRUE);
         $resp = curl_exec($curl);
-        $result = new WorkflowPluginResult();
         if (($err = curl_error($curl)))
         {
             $result->setState(WorkflowPluginResult::STATE_ERROR);

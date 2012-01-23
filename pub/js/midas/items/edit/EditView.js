@@ -113,6 +113,30 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 });
             }
         }
+
+        $('.localize-icon').click(function(event)
+        {
+            var text_parts = [];
+            $.each([
+                'location[name]',
+                'location[locationdetail]',
+                'location[street]',
+                'location[postalCode]',
+                'location[administrativeDistrict]'
+            ], function(idx, field_name)
+            {
+                var val = that.editing_form.val(field_name).trim();
+
+                if (val.length > 3)
+                {
+                    text_parts.push(val);
+                }
+            });
+            if (0 < text_parts.length)
+            {
+                that.localizeText(text_parts.join(" "));
+            }
+        });
     },
 
     /**
@@ -435,32 +459,40 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             'localize_item': function(src_field)
             {
                 $('#geo-busy-overlay').fadeIn();
-                that.edit_service.extractLocation(
-                    src_field.getSelection(),
-                    function(location)
-                    {
-                        if (! location)
-                        {
-                            alert(
-                                "Die Lokalisierung dieses Items ist möglicherweise fehlgeschlagen." +
-                                "Bitte überprüfe, ob die Lokalisierung wirklich korrekt vorgenommen wurde."
-                            );
-                        }
-                        else
-                        {
-                            that.editing_form.val('location[district]', location.district);
-                            that.editing_form.val('location[administrativeDistrict]', location['administrative district']);
-                            that.editing_form.val('location[postalCode]', location.uzip);
-                            that.editing_form.val('location[street]', location.street);
-                            that.editing_form.val('location[coordinates][lat]', location.latitude);
-                            that.editing_form.val('location[coordinates][lon]', location.longitude);
-                        }
-                        $('#geo-busy-overlay').fadeOut();
-                    }
-                );
+                that.localizeText(src_field.getSelection());
             }
         };
     },
+
+    localizeText: function(text)
+    {
+        $('#geo-busy-overlay').fadeIn();
+        var that = this;
+        this.edit_service.extractLocation(
+            text,
+            function(location)
+            {
+                if (! location)
+                {
+                    alert(
+                        "Die Lokalisierung dieses Items ist möglicherweise fehlgeschlagen." +
+                        "Bitte überprüfe, ob die Lokalisierung wirklich korrekt vorgenommen wurde."
+                    );
+                }
+                else
+                {
+                    that.editing_form.val('location[district]', location.district);
+                    that.editing_form.val('location[administrativeDistrict]', location['administrative district']);
+                    that.editing_form.val('location[postalCode]', location.uzip);
+                    that.editing_form.val('location[street]', location.street);
+                    that.editing_form.val('location[coordinates][lat]', location.latitude);
+                    that.editing_form.val('location[coordinates][lon]', location.longitude);
+                }
+                $('#geo-busy-overlay').fadeOut();
+            }
+        );
+    },
+
 
     // -----------
     // --------------- HANDLING CONTENT ITEM DATA

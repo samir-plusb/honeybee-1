@@ -23,16 +23,48 @@
 ?>
             <li>
                 <h3><?php echo ucwords($district); ?></h3>
-                <dl>
-                    <dt>Anzahl Items gesamt:</dt>
-                    <dd>345</dd>
-                    <dt>Anzahl Items letzte 7 Tage:</dt>
-                    <dd><?php echo $stats['published']['week']; ?></dd>
-                    <dt>Anzahl Items heute:</dt>
-                    <dd><?php echo $stats['published']['today']; ?></dd>
-                    <dt>Anzahl Items gestern:</dt>
-                    <dd><?php echo $stats['published']['yesterday']; ?></dd>
-                </dl>
+                <table class="stats-data">
+                    <colgroup>
+                        <col class="col-title" />
+                        <col class="col-all" />
+                        <col class="col-week" />
+                        <col class="col-yesterday" />
+                        <col class="col-today" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <span class="label">Insgesamt</span>
+                            </th>
+                            <th>
+                                <span class="label">letzte 7 Tage</span>
+                            </th>
+                            <th>
+                                <span class="label">Gestern</span>
+                            </th>
+                            <th>
+                                <span class="label <?php echo (5 > $stats['published']['today']) ? 'warning' : 'success'; ?>">Heute</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--<tr>
+                            <th>importierte Einträge</th>
+                            <td>333</td>
+                            <td><?php echo $stats['imported']['week']; ?></td>
+                            <td><?php echo $stats['imported']['yesterday']; ?></td>
+                        <td><?php echo $stats['imported']['today']; ?></td>
+                        </tr>-->
+                        <tr>
+                            <th>veredelte und publizierte Einträge</th>
+                            <td>333</td>
+                            <td><?php echo $stats['published']['week']; ?></td>
+                            <td><?php echo $stats['published']['yesterday']; ?></td>
+                            <td><?php echo $stats['published']['today']; ?></td>
+                        </tr>
+                    </tbody>
+                </table>
             </li>
 <?php
     }

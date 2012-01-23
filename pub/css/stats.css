@@ -36,33 +36,31 @@ h1
     margin-bottom: 1em;
 }
 
-.stats-list dt,
-.stats-list dd
+.stats-list thead th:first-child
 {
-    padding: 5px 5px 5px 10px;
-    float: left;
-    font-size: 16px;
+    text-align: right;
+    padding-right: 35px;
+    max-width: 200px;
+}
+
+.stats-list table
+{
     margin: 0;
 }
 
-.stats-list dt
+.col-title
 {
-    float: left;
+    width: 26em;
 }
 
-.stats-list dt:first-child
+.col-all,
+.col-week,
+.col-yesterday
 {
-    padding: 5px 5px 5px 5px;
+    width: 13em;
 }
 
-.stats-list dd
+.col-today
 {
-    border-right: 1px solid #ABABAB;
-    padding: 5px 10px 5px 5px;
-    color: #000000;
-}
-
-.stats-list dd:last-child
-{
-    border: none;
+    min-width: 10em;
 }
