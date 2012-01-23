@@ -482,7 +482,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             text,
             function(location)
             {
-                if (! location)
+                if (0 === location.length)
                 {
                     alert(
                         "Die Lokalisierung dieses Items ist möglicherweise fehlgeschlagen." +
@@ -495,7 +495,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                 }
                 else
                 {
-                    that.hydrateLocation(location);
+                    that.hydrateLocation(location[0]);
                 }
                 $('#geo-busy-overlay').fadeOut();
             }
@@ -551,10 +551,13 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         {
             var nearby_url = $('.nearby-base-url').val();
             var bound_url = nearby_url.replace("{LATITUDE}", lat).replace("{LONGITUDE}", lon);
-            $.getJSON(bound_url, function(data)
+            $.getJSON(bound_url, function(resp)
             {
-                console.log(data);
-                alert(lat + lon);
+                for(var i = 0; i < resp.data.length; i++)
+                {
+                    var li = ich['nearby-item-tpl'](resp.data[i].importItem);
+                    $('.nearby-list').append(li);
+                }
             });
         }
     },

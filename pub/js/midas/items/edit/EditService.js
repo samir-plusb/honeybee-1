@@ -77,7 +77,6 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
         {
             var location_count = data.location.items_count;
             var found_locations = [];
-            console.log(data);
             for (var i = 0; i < location_count; i++)
             {
                 var loc = data.location[i];

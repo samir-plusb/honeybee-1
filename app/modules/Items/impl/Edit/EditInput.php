@@ -196,7 +196,7 @@
 
                 <section class="nearby-items content-panel">
                     <h3 class="legend">Items in der Nähe</h3>
-                    <ul></ul>
+                    <ul class="nearby-list"></ul>
                 </section>
             </div>
         </form>
@@ -280,5 +280,5 @@
     </li>
 </script>
 <script id="nearby-item-tpl" type="text/html">
-    <li>{{importItem.title}}</li>
+    <li>{{title}}</li>
 </script>

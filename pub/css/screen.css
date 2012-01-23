@@ -544,3 +544,21 @@ em.bold{
     cursor: pointer;
     background-color: #efefef;
 }
+
+.nearby-list
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nearby-list li
+{
+    padding: 10px 0;
+    border-bottom: 1px solid #ababab;
+}
+
+.nearby-list li:last-child
+{
+    border-bottom: none;
+}
