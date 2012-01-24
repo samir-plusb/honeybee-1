@@ -44,6 +44,34 @@
                     "type": "string",
                     "store": true
                 },
+                "created": {
+                    "include_in_all": false,
+                    "properties": {
+                        "user": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "date": {
+                            "type": "date",
+                            "format": "date_time_no_millis",
+                            "store": true
+                        }
+                    }
+                },
+                "lastModified": {
+                    "include_in_all": false,
+                    "properties": {
+                        "user": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "date": {
+                            "type": "date",
+                            "format": "date_time_no_millis",
+                            "store": true
+                        }
+                    }
+                },
                 "currentState": {
                     "include_in_all": false,
                     "properties": {

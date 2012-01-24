@@ -48,8 +48,11 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
                 array('currentState.workflow' => 'news')
             )
         );
-        $query->setLimit($limit)->setFrom($offset)->setSort(
-            array(self::$sortMapping[$sortField] => $sortDirection)
+        $query->setLimit($limit)->setFrom($offset)->addSort(
+            array(
+                array(self::$sortMapping[$sortField] => $sortDirection),
+                array('_uid' => 'asc')
+            )
         );
         $query->setFilter(new Elastica_Filter_Not(new Elastica_Filter_Term(
             array('currentState.step' => 'delete_news')
@@ -83,8 +86,11 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
             $termQuery->setMinimumMatch(count($terms));
             $query->setQuery($termQuery);
         }
-        $query->setLimit($limit)->setFrom($offset)->setSort(
-            array(self::$sortMapping[$sortField] => $sortDirection)
+        $query->setLimit($limit)->setFrom($offset)->addSort(
+            array(
+                array(self::$sortMapping[$sortField] => $sortDirection),
+                array('_uid' => 'asc')
+            )
         );
         $query->setFilter(new Elastica_Filter_Not(new Elastica_Filter_Term(
             array('currentState.step' => 'delete_news')
@@ -134,8 +140,11 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
                 'currentState.workflow' => 'news'
             ))
         );
-        $query->setFilter($filterContainer)->setLimit($limit)->setFrom($offset)->setSort(
-            array(self::$sortMapping[$sortField] => $sortDirection)
+        $query->setFilter($filterContainer)->setLimit($limit)->setFrom($offset)->addSort(
+            array(
+                array(self::$sortMapping[$sortField] => $sortDirection),
+                array('_uid' => 'asc')
+            )
         );
         $index = $this->elasticClient->getIndex('midas');
         $type = $index->getType('item');
