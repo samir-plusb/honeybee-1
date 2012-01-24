@@ -681,6 +681,13 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
                         content_items[i].cid = midas.core.CidSequence.nextCid('content_item');
                     }
                     that.items_list.setItems(content_items);
+                    // load first content item into form
+                    var first_content_item = that.items_list.getItemByPos(0);
+                    if (first_content_item)
+                    {
+                        that.loadContentItem(first_content_item);
+                    }
+                    that.loadNearbyItems();
                 });
             }
             else
