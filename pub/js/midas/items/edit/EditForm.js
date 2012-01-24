@@ -362,6 +362,7 @@ midas.items.edit.EditForm = midas.core.BaseObject.extend(
         );
 
         this.markClean();
+        $('.nearby-list').empty();
     },
 
     /**
