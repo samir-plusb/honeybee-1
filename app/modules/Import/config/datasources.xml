@@ -20,14 +20,6 @@
                 </settings>
             </datasource>
 
-            <datasource name="rss" class="RssDataSource">
-                <description>Provides access to a given rss feed.</description>
-                <recordType>RssDataRecord</recordType>
-                <settings>
-                    <setting name="rss_url">http://www.spiegel.de/schlagzeilen/index.rss</setting>
-                </settings>
-            </datasource>
-
             <datasource name="dpa" class="NewswireDataSource">
                 <description>Provides access to the DPA messages.</description>
                 <recordType>DpaNitfNewswireDataRecord</recordType>
@@ -41,6 +33,16 @@
                 <description>Provides raw mime mail data, when it is pushed in by procmail.</description>
                 <recordType>ImapDataRecord</recordType>
             </datasource>
+
+            <!-- RSS  DATASOURCE EXAMPLE
+            <datasource name="rss" class="RssDataSource">
+                <description>Provides access to a given rss feed.</description>
+                <recordType>RssDataRecord</recordType>
+                <settings>
+                    <setting name="rss_url">http://www.spiegel.de/schlagzeilen/index.rss</setting>
+                </settings>
+            </datasource>
+            -->
 
         </datasources>
     </ae:configuration>

@@ -8,8 +8,8 @@ DirectorySlash Off
 
 <IfModule mod_rewrite.c>
 	RewriteEngine On
-	RewriteBase /midas
-	
+	RewriteBase /
+
 	# Special rule for calls to index.php so it can't be called directly, also prevents an infinite loop.
 	# Redirect target *must* be "./index.php" or else mod_rewrite thinks the URL is the same and skips.
 	# The check on REDIRECT_STATUS makes sure it's a direct request and not an internal redirect.
