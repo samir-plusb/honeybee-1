@@ -89,6 +89,10 @@
             <setting name="base_dir">%core.app_dir%/../data/assets</setting>
         </settings>
 
+        <settings prefix="news_workflow.">
+            <setting name="sync2fe">false</setting>
+        </settings>
+
         <settings prefix="items.">
             <setting name="tags">
                 <ae:parameters>
