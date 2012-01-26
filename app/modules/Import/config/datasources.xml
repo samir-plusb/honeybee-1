@@ -24,7 +24,8 @@
                 <description>Provides access to the DPA messages.</description>
                 <recordType>DpaNitfNewswireDataRecord</recordType>
                 <settings>
-                    <setting name="glob">%import.newswire_dir%/dpa-BerlinBrandenburg/*.xml</setting>
+                    <setting name="path">%import.newswire_dir%/dpa-BerlinBrandenburg/</setting>
+                    <setting name="regexp">\.xml$</setting>
                     <setting name="timestamp_file">/var/tmp/dpa.time.stamp</setting>
                 </settings>
             </datasource>

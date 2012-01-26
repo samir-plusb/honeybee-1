@@ -15,21 +15,21 @@ class NewswireDataSource extends ImportBaseDataSource
     // ---------------------------------- <MEMBERS> ----------------------------------------------
 
     /**
-     * @var         GlobIterator Iterator over the newswire messages
+     * @var ProjectFileSystemRegexpIterator Iterator over the newswire messages
      */
     protected $iterator;
     /**
      *
-     * @var         string path name to timestamp file
+     * @var string path name to timestamp file
      */
     protected $timestampFile;
     /**
      *
-     * @var         int UNIX timestamp
+     * @var int UNIX timestamp
      */
     protected $lastImportTime;
     /**
-     * @var         int UNIX timestamp of last fetched item
+     * @var int UNIX timestamp of last fetched item
      */
     protected $lastItemModifiedTime;
 
@@ -106,7 +106,10 @@ class NewswireDataSource extends ImportBaseDataSource
         }
         else
         {
-            $this->iterator = new GlobIterator($this->config->getSetting(NewswireDataSourceConfig::CFG_GLOB));
+            $this->iterator = new ProjectFileSystemRegexpIterator(
+                $this->config->getSetting(NewswireDataSourceConfig::CFG_DIRECTORY_PATH),
+                $this->config->getSetting(NewswireDataSourceConfig::CFG_REGEXP)
+            );
         }
 
         while ($this->iterator->valid())
@@ -117,7 +120,6 @@ class NewswireDataSource extends ImportBaseDataSource
             }
             $this->iterator->next();
         }
-
         return FALSE;
     }
 
@@ -150,7 +152,7 @@ class NewswireDataSource extends ImportBaseDataSource
      */
     protected function updateTimestamp($time)
     {
-        if (FALSE === $time && $this->iterator instanceof DirectoryIterator)
+        if (FALSE === $time && $this->iterator)
         {
             $time = $this->iterator->getMTime();
         }

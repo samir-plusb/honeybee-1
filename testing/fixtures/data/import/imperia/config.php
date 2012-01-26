@@ -57,7 +57,8 @@ return array(
             'recordType' => 'DpaNitfNewswireDataRecord',
             'settings' =>
             array(
-                'glob' => 'var/tmp/dpa/regio-berlinbrandenburg/dpa-BerlinBrandenburg/*.xml',
+                'path' => 'var/tmp/dpa/regio-berlinbrandenburg/dpa-BerlinBrandenburg/',
+                'regexp' => '\.xml$',
                 'timestamp_file' => '/var/tmp/dpa.time.stamp'
             )
         )

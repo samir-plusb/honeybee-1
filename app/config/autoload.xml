@@ -14,6 +14,7 @@
             <autoload name="ProjectScriptsConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectScriptsConfigHandler.class.php</autoload>
             <autoload name="ProjectAclConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectAclConfigHandler.class.php</autoload>
             <autoload name="ProjectScriptPacker">%core.lib_dir%/deployment/ProjectScriptPacker.class.php</autoload>
+            <autoload name="ProjectFileSystemRegexpIterator">%core.lib_dir%/iterator/ProjectFileSystemRegexpIterator.class.php</autoload>
 
             <!-- Zend (can be removed when agavi delivers integration) -->
             <autoload name="Zend_Acl">%core.app_dir%/../libs/Zend/Acl.php</autoload>
