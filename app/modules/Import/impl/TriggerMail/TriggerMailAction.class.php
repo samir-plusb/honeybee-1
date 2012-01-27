@@ -40,6 +40,20 @@ class Import_TriggerMailAction extends ImportBaseAction
 
         return $this->runImports($dataImport, $dataSources);
     }
+
+    public function handleWriteError(AgaviRequestDataHolder $parameters)
+    {
+        $errors = array();
+
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $error)
+        {
+            $errors[] = $error['message'];
+        }
+
+        $this->logError("Mail import validation error(s): " . implode(', ' . PHP_EOL, $errors));
+
+        return 'Error';
+    }
 }
 
 ?>

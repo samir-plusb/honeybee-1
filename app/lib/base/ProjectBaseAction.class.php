@@ -70,7 +70,6 @@ class ProjectBaseAction extends AgaviAction
         return $this->handleError($parameters);
     }
 
-
     /**
      * Default error handling for method Write (POST Requests)
      *
