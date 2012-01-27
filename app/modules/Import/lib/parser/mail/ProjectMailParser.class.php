@@ -232,7 +232,8 @@ class ProjectMailParser extends MimeMailParser
     {
         if (! $this->from)
         {
-            $this->from = $this->getAddress(self::HEADER_FROM);
+            // $this->from = $this->getAddress(self::HEADER_FROM);
+            $this->from = $this->getHeader(self::HEADER_FROM);
         }
 
         return $this->from;
@@ -314,6 +315,7 @@ class ProjectMailParser extends MimeMailParser
     protected function getAddress($type = self::HEADER_FROM)
     {
         $address = $this->getHeader($type);
+
         $body = $this->getMessageBody(self::BODY_TEXT) . $this->getMessageBody(self::BODY_HTML);
 
         if ($address && $body)
