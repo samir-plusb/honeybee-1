@@ -63,6 +63,8 @@ class WorkflowPluginResult implements IWorkflowPluginResult
     {
         if (! isset($data['state']))
         {
+            // @todo Workflow results without a valid state should ot be persisted in the first place.
+            // Find a solution for this later, will ignore for now.
             throw new WorkflowException(
                 "When creating new plugin results from given data, the state information is considered mandatory." .
                 "The given data is missing one of the latter values."
@@ -74,7 +76,7 @@ class WorkflowPluginResult implements IWorkflowPluginResult
         {
             $result->setGate($data['gate']);
         }
-        $result->setState($data['state']);
+        $result->setMessage(isset($data['state']) ? $data['state'] : NULL);
         $result->setMessage(isset($data['message']) ? $data['message'] : NULL);
         $result->freeze();
 
