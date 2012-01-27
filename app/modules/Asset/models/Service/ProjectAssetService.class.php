@@ -302,8 +302,8 @@ class ProjectAssetService implements IAssetService
             ProjectAssetInfo::XPROP_EXTENSION => $extension ? strtolower($extension) : NULL,
             ProjectAssetInfo::XPROP_SIZE      => filesize($file->getPath())
         );
-
-        if (($finfo = new finfo(FILEINFO_MIME, AgaviConfig::get('assets.mime_database'))))
+// new finfo(FILEINFO_MIME, AgaviConfig::get('assets.mime_database'))
+        if (($finfo = new finfo(FILEINFO_MIME)))
         {
             $data[ProjectAssetInfo::XPROP_MIME_TYPE] = $finfo->file($file->getPath());
         }
