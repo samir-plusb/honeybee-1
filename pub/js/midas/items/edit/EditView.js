@@ -530,10 +530,22 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
     hydrateLocation: function(location)
     {
-        this.editing_form.val('location[district]', location.district);
-        this.editing_form.val('location[administrativeDistrict]', location['administrative district']);
-        this.editing_form.val('location[postalCode]', location.uzip);
-        this.editing_form.val('location[street]', location.street);
+        if (location.district)
+        {
+            this.editing_form.val('location[district]', location.district);
+        }
+        if (location['administrative district'])
+        {
+            this.editing_form.val('location[administrativeDistrict]', location['administrative district']);
+        }
+        if (location.uzip)
+        {
+            this.editing_form.val('location[postalCode]', location.uzip);
+        }
+        if (location.street)
+        {
+            this.editing_form.val('location[street]', location.street);
+        }
 
         if (location.latitude && location.longitude)
         {
@@ -549,8 +561,11 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         var lon = +this.editing_form.val('location[coordinates][lon]');
         if (0 < lat && 0 < lon)
         {
+            $('.nearby-list').empty();
+
             var nearby_url = $('.nearby-base-url').val();
             var bound_url = nearby_url.replace("{LATITUDE}", lat).replace("{LONGITUDE}", lon);
+            
             $.getJSON(bound_url, function(resp)
             {
                 for(var i = 0; i < resp.data.length; i++)
