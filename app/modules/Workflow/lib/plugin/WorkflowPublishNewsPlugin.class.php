@@ -61,6 +61,12 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
                 $result->setMessage('Successfully published item to frontend.');
             }
         }
+        else
+        {
+            $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
+            $result->setMessage('Skipping frontend publishing due to system settings...');
+        }
+
         $result->freeze();
         return $result;
     }
