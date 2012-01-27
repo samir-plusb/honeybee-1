@@ -91,6 +91,7 @@
 
         <settings prefix="news_workflow.">
             <setting name="sync2fe">false</setting>
+            <setting name="localize_api">http://6-strato.berlinonline.de/api/localize</setting>
         </settings>
 
         <settings prefix="items.">

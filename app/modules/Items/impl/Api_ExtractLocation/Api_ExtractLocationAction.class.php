@@ -25,7 +25,7 @@ class Items_Api_ExtractLocationAction extends ItemsBaseAction
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $geoText = $parameters->getParameter('geo_text', '');
-        $url = 'http://h1916210.stratoserver.net/api/localize?string="'.$geoText.'"';
+        $url = sprintf('%s?string=%s', AgaviConfig::get('news_workflow.localize_api'), $geoText);
         $curl = ProjectCurl::create();
         curl_setopt($curl, CURLOPT_URL, $url);
         $resp = curl_exec($curl);
