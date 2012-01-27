@@ -40,25 +40,18 @@ class ImportMailValidator extends AgaviValidator
             $stdinFileData = $this->getData($this->getArgument());
         }
 
-        if (! is_array($stdinFileData) || ! isset($stdinFileData['tmp_name']))
+        if (! is_array($stdinFileData) || ! isset($stdinFileData['contents']))
         {
             $this->throwError('invalid_data');
 
             return FALSE;
         }
 
-        if (!is_readable($stdinFileData['tmp_name']))
-        {
-            $this->throwError('invalid_file');
-
-            return FALSE;
-        }
-
-        $contents = file_get_contents($stdinFileData['tmp_name']);
+        $contents = $stdinFileData['contents'];
 
         if (empty($contents))
         {
-            $this->throwError();
+            $this->throwError('missing_data');
 
             return FALSE;
         }

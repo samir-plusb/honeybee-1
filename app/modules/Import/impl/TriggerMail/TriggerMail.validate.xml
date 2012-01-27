@@ -11,7 +11,9 @@
                     <ae:parameter name="source">files</ae:parameter>
                 </ae:parameters>
                 <errors>
-                    <error>Invalid mail data given.</error>
+                    <error>Missing mail data, but a valid raw mime mail string is required.</error>
+                    <error for="invalid_data">The format of the given mail data is not as expected.</error>
+                    <error for="missing_data">Missing mail content, was it correctly passed to stdin?</error>
                 </errors>
             </validator>
 

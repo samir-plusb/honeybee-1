@@ -75,7 +75,7 @@ class MailTriggerActionTest extends AgaviActionTestCase
             'name' => 'testmail',
             'type' => 'application/octet-stream',
             'size' => $size,
-            'tmp_name' => $path,
+            'contents' => file_get_contents($path),
             'error' => UPLOAD_ERR_OK,
             'is_uploaded_file' => false,
         );
