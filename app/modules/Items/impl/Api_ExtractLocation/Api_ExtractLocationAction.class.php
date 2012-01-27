@@ -30,6 +30,8 @@ class Items_Api_ExtractLocationAction extends ItemsBaseAction
         curl_setopt($curl, CURLOPT_URL, $url);
         $resp = curl_exec($curl);
 
+        $this->logInfo("Received following response for localization of '" . $geoText . "': " . PHP_EOL . $resp);
+
         if (($error = curl_error($curl)))
         {
             $this->setAttribute('location', array('items_count' => 0));
