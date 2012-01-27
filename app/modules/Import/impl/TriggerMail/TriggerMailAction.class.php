@@ -21,35 +21,39 @@ class Import_TriggerMailAction extends ImportBaseAction
      */
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
-        $rawMail = $parameters->getParameter(
-            ImportMailValidator::DEFAULT_PARAM_EXPORT
-        );
-
-        $this->logInfo("Incoming mail import - raw data: " . PHP_EOL . $rawMail);
-
-        $importFactory = $this->createImportFactory();
-        $dataImport = $importFactory->createDataImport(self::DATAIMPORT_WORKFLOW);
-        $dataSources = array(
-            $importFactory->createDataSource(
-                self::DATASOURCE_PROCMAIL,
-                array(
-                    ArrayDataSourceConfig::CFG_DATA => array($rawMail)
+        try
+        {
+            $rawMail = $parameters->getParameter(ImportMailValidator::DEFAULT_PARAM_EXPORT);
+            $importFactory = $this->createImportFactory();
+            $dataImport = $importFactory->createDataImport(self::DATAIMPORT_WORKFLOW);
+            $dataSources = array(
+                $importFactory->createDataSource(
+                    self::DATASOURCE_PROCMAIL,
+                    array(
+                        ArrayDataSourceConfig::CFG_DATA => array($rawMail)
+                    )
                 )
-            )
-        );
+            );
 
-        return $this->runImports($dataImport, $dataSources);
+            return $this->runImports($dataImport, $dataSources);
+        }
+        catch (Exception $e)
+        {
+            $this->setAttribute('errors', array($e->getMessage()));
+            $this->logError("An unexpected error occured during import: " . $e->getMessage());
+        }
+
+        return 'Error';
     }
 
     public function handleWriteError(AgaviRequestDataHolder $parameters)
     {
         $errors = array();
-
         foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $error)
         {
             $errors[] = $error['message'];
         }
-
+        $this->setAttribute('errors', $errors);
         $this->logError("Mail import validation error(s): " . implode(', ' . PHP_EOL, $errors));
 
         return 'Error';
