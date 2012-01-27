@@ -25,6 +25,8 @@ class Import_TriggerMailAction extends ImportBaseAction
             ImportMailValidator::DEFAULT_PARAM_EXPORT
         );
 
+        $this->logInfo("Incoming mail import - raw data: " . PHP_EOL . $rawMail);
+
         $importFactory = $this->createImportFactory();
         $dataImport = $importFactory->createDataImport(self::DATAIMPORT_WORKFLOW);
         $dataSources = array(

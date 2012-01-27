@@ -87,12 +87,20 @@ class ProjectBaseAction extends AgaviAction
     protected function logError($msg)
     {
         $logger = $this->getContext()->getLoggerManager()->getLogger('error');
-        $errMsg = sprintf("[%s] ", get_class($this), $msg);
+        $errMsg = sprintf("[%s] %s", get_class($this), $msg);
         $logger->log(
             new AgaviLoggerMessage($errMsg, AgaviLogger::ERROR)
         );
     }
 
+    protected function logInfo($msg)
+    {
+        $logger = $this->getContext()->getLoggerManager()->getLogger('app');
+        $infoMsg = sprintf("[%s] %s", get_class($this), $msg);
+        $logger->log(
+            new AgaviLoggerMessage($infoMsg, AgaviLogger::INFO)
+        );
+    }
 }
 
 ?>
