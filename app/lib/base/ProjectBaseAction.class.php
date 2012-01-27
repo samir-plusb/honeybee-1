@@ -83,4 +83,16 @@ class ProjectBaseAction extends AgaviAction
         return $this->handleError($parameters);
     }
 
+
+    protected function logError($msg)
+    {
+        $logger = $this->getContext()->getLoggerManager()->getLogger('error');
+        $errMsg = sprintf("[%s] ", get_class($this), $msg);
+        $logger->log(
+            new AgaviLoggerMessage($errMsg, AgaviLogger::ERROR)
+        );
+    }
+
 }
+
+?>

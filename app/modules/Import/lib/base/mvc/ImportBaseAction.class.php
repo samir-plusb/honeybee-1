@@ -101,6 +101,7 @@ class ImportBaseAction extends ProjectBaseAction
             {
                 /* @todo better exception handling */
                 $this->setAttribute('errors', array($e->getMessage()));
+                $this->logError("An unexpected error occured during import: " . $e->getMessage());
                 $view = 'Error';
             }
         }
