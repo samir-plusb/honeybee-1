@@ -4,6 +4,10 @@ class FrontendApiClient
 {
     const SETTING_BASE_URL = 'items.frontend_api_url';
 
+    const URL_SUFFIX_DELETE = 'delete';
+
+    const URL_SUFFIX_UPDATE = 'update';
+
     const STATUS_CODE_OK = 200;
 
     public function updateWorkflowItem(IWorkflowItem $workflowItem)
@@ -61,13 +65,13 @@ class FrontendApiClient
     protected function buildUpdateItemUrl()
     {
         $baseUrl = AgaviConfig::get(self::SETTING_BASE_URL);
-        return $baseUrl . 'import';
+        return $baseUrl . self::URL_SUFFIX_UPDATE;
     }
 
     protected function buildDeleteItemUrl()
     {
         $baseUrl = AgaviConfig::get(self::SETTING_BASE_URL);
-        return $baseUrl . 'delete';
+        return $baseUrl . self::URL_SUFFIX_DELETE;
     }
 
     protected function logInfo($msg)

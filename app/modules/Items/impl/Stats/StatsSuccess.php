@@ -22,7 +22,6 @@
         }
 ?>
             <li>
-                <h3><?php echo ucwords($district); ?></h3>
                 <table class="stats-data">
                     <colgroup>
                         <col class="col-title" />
@@ -33,7 +32,9 @@
                     </colgroup>
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>
+                                <h3><?php echo ucwords($district); ?></h3>
+                            </th>
                             <th>
                                 <span class="label">Insgesamt</span>
                             </th>
