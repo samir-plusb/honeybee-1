@@ -19,7 +19,7 @@ class FrontendApiClient
 
         foreach ($workflowItem->getContentItems() as $contentItem)
         {
-            $contentItemIds[] = $contentItem->getIdentifier();
+            $apiData['ContentItems'][] = $contentItem->getIdentifier();
         }
 
         $this->sendApiRequest($this->buildDeleteItemUrl(), $apiData);
