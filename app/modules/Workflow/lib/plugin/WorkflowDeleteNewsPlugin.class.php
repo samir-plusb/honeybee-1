@@ -58,6 +58,10 @@ class WorkflowDeleteNewsPlugin extends WorkflowBasePlugin
                 $feClient->deleteWorkflowItem($workflowItem);
 
                 $result->setMessage('Successfully sent delete notification to frontend.');
+                $this->logInfo(sprintf(
+                    "Successfully sent delete notification to frontend.",
+                    $workflowItem->getIdentifier()
+                ));
             }
             catch(FrontendApiClientException $e)
             {

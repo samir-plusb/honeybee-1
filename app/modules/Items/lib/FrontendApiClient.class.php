@@ -41,6 +41,8 @@ class FrontendApiClient
         $response = curl_exec($curlHandle);
         $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
 
+        $this->logInfo("[" . get_class($this) . "] Trying to send api-request to url: " . $url);
+
         if (self::STATUS_CODE_OK !== $respCode)
         {
             $err = curl_error($curlHandle);
@@ -52,6 +54,8 @@ class FrontendApiClient
             }
             throw new FrontendApiClientException($message);
         }
+
+        $this->logInfo("[" . get_class($this) . "] Successfully sent api request to url: " . $url);
     }
 
     protected function buildUpdateItemUrl()
@@ -64,6 +68,18 @@ class FrontendApiClient
     {
         $baseUrl = AgaviConfig::get(self::SETTING_BASE_URL);
         return $baseUrl . 'delete';
+    }
+
+    protected function logInfo($msg)
+    {
+        $ctx = AgaviContext::getInstance();
+        $logger = $ctx->getLoggerManager()->getLogger('app');
+        $logger->log(
+            new AgaviLoggerMessage(
+                $msg,
+                AgaviLogger::INFO
+            )
+        );
     }
 }
 
