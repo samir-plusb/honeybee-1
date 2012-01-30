@@ -13,7 +13,6 @@
  */
 class ProjectAclConfigHandler extends AgaviXmlConfigHandler
 {
-
     const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/config/access_control/1.0';
 
     /**
@@ -80,7 +79,9 @@ class ProjectAclConfigHandler extends AgaviXmlConfigHandler
                     foreach ($membersNode->get('member') as $memberNode)
                     {
                         $externalRole = sprintf(
-                            '%s::%s', $memberNode->getAttribute('type'), $memberNode->nodeValue
+                            '%s::%s',
+                            $memberNode->getAttribute('type'),
+                            $memberNode->nodeValue
                         );
                         $externalRoles[$externalRole] = $role;
                         $members[] = array(
@@ -126,7 +127,7 @@ class ProjectAclConfigHandler extends AgaviXmlConfigHandler
         $data['resources'] = $parsedResources;
         $data['resource_actions'] = $resourceActions;
         $data['external_roles'] = $externalRoles;
-        $configCode = sprintf('return %s;', var_export($data, true));
+        $configCode = sprintf('return %s;', var_export($data, TRUE));
         return $this->generate($configCode, $config);
     }
 

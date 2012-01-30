@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WorkflowConfigHandler parses configuration files that follow the midas workflow markup.
  *
@@ -12,29 +13,29 @@
  */
 class WorkflowConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/workflow/1.0';
+    const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/workflow/1.0';
 
-	/**
-	 * Execute this configuration handler.
-	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
-	 *
-	 * @return     string Data to be written to a cache file.
-	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
-	 *                                             file does not exist or is not
-	 *                                             readable.
-	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
-	 *                                        improperly formatted.
-	 */
-	public function execute(AgaviXmlConfigDomDocument $document)
-	{
-		$document->setDefaultNamespace(self::XML_NAMESPACE, 'workflow');
-		$config = $document->documentURI;
+    /**
+     * Execute this configuration handler.
+     *
+     * @param      string An absolute filesystem path to a configuration file.
+     * @param      string An optional context in which we are currently running.
+     *
+     * @return     string Data to be written to a cache file.
+     *
+     * @throws     <b>AgaviUnreadableException</b> If a requested configuration
+     *                                             file does not exist or is not
+     *                                             readable.
+     * @throws     <b>AgaviParseException</b> If a requested configuration file is
+     *                                        improperly formatted.
+     */
+    public function execute(AgaviXmlConfigDomDocument $document)
+    {
+        $document->setDefaultNamespace(self::XML_NAMESPACE, 'workflow');
+        $config = $document->documentURI;
         $data = array();
         /* @var $cfgNode AgaviXmlConfigDomElement */
-		foreach($document->getConfigurationElements() as $cfgNode)
+        foreach ($document->getConfigurationElements() as $cfgNode)
         {
             $workflow = $cfgNode->getChild('workflow');
             $parsedSteps = array();
@@ -58,11 +59,11 @@ class WorkflowConfigHandler extends AgaviXmlConfigHandler
                 'start_at' => $workflow->getChild('start_at')->nodeValue,
                 'steps' => $parsedSteps
             );
-		}
+        }
         $this->verifyWorkflowLogic($data);
         $configCode = sprintf('return %s;', var_export($data, true));
-		return $this->generate($configCode, $config);
-	}
+        return $this->generate($configCode, $config);
+    }
 
     /**
      * Grab the gate definitions from the given gates container
@@ -98,6 +99,7 @@ class WorkflowConfigHandler extends AgaviXmlConfigHandler
     {
         // @todo Check if all gates refer to existing targets (steps, workflows, etc) and throw an AgaviParseException if not.
     }
+
 }
 
 ?>
