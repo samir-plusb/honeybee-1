@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ProjectAclConfigHandler parses configuration files that follow the midas access_control markup.
  *
@@ -12,33 +13,34 @@
  */
 class ProjectAclConfigHandler extends AgaviXmlConfigHandler
 {
-	const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/config/access_control/1.0';
 
-	/**
-	 * Execute this configuration handler.
-	 *
-	 * @param      string An absolute filesystem path to a configuration file.
-	 * @param      string An optional context in which we are currently running.
-	 *
-	 * @return     string Data to be written to a cache file.
-	 *
-	 * @throws     <b>AgaviUnreadableException</b> If a requested configuration
-	 *                                             file does not exist or is not
-	 *                                             readable.
-	 * @throws     <b>AgaviParseException</b> If a requested configuration file is
-	 *                                        improperly formatted.
-	 */
-	public function execute(AgaviXmlConfigDomDocument $document)
-	{
-		$document->setDefaultNamespace(self::XML_NAMESPACE, 'acl');
-		$config = $document->documentURI;
+    const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/config/access_control/1.0';
+
+    /**
+     * Execute this configuration handler.
+     *
+     * @param      string An absolute filesystem path to a configuration file.
+     * @param      string An optional context in which we are currently running.
+     *
+     * @return     string Data to be written to a cache file.
+     *
+     * @throws     <b>AgaviUnreadableException</b> If a requested configuration
+     *                                             file does not exist or is not
+     *                                             readable.
+     * @throws     <b>AgaviParseException</b> If a requested configuration file is
+     *                                        improperly formatted.
+     */
+    public function execute(AgaviXmlConfigDomDocument $document)
+    {
+        $document->setDefaultNamespace(self::XML_NAMESPACE, 'acl');
+        $config = $document->documentURI;
         $data = array();
         $parsedResources = array();
         $parsedRoles = array();
         $resourceActions = array();
         $externalRoles = array();
         /* @var $cfgNode AgaviXmlConfigDomElement */
-		foreach($document->getConfigurationElements() as $cfgNode)
+        foreach ($document->getConfigurationElements() as $cfgNode)
         {
             // parse resources
             $resourcesNode = $cfgNode->getChild('resources');
@@ -78,9 +80,7 @@ class ProjectAclConfigHandler extends AgaviXmlConfigHandler
                     foreach ($membersNode->get('member') as $memberNode)
                     {
                         $externalRole = sprintf(
-                            '%s::%s',
-                            $memberNode->getAttribute('type'),
-                            $memberNode->nodeValue
+                            '%s::%s', $memberNode->getAttribute('type'), $memberNode->nodeValue
                         );
                         $externalRoles[$externalRole] = $role;
                         $members[] = array(
@@ -120,15 +120,16 @@ class ProjectAclConfigHandler extends AgaviXmlConfigHandler
                     'parent' => $resourceNode->getAttribute('parent', NULL)
                 );
             }
-		}
+        }
 
         $data['roles'] = $parsedRoles;
         $data['resources'] = $parsedResources;
         $data['resource_actions'] = $resourceActions;
         $data['external_roles'] = $externalRoles;
         $configCode = sprintf('return %s;', var_export($data, true));
-		return $this->generate($configCode, $config);
-	}
+        return $this->generate($configCode, $config);
+    }
+
 }
 
 ?>
