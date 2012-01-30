@@ -26,18 +26,63 @@ class WorkflowDeleteNewsPlugin extends WorkflowBasePlugin
     protected function doProcess()
     {
         $result = new WorkflowPluginResult();
+
         try
         {
             $this->ticket->getWorkflowItem()->delete();
             $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
             $result->setGate(self::GATE_TRASH);
+            $this->logInfo(sprintf(
+                "Successfully moved (news)item: %s to the trash",
+                $workflowItem->getIdentifier()
+            ));
         }
         catch(CouchdbClientException $e)
         {
-            $result = new WorkflowPluginResult();
             $result->setState(WorkflowPluginResult::STATE_ERROR);
             $result->setMessage($e->getMessage());
+
+            $this->logError(sprintf(
+                "An error occured while deleting item: %s from the database\n
+                The couchdb client threw the following exception: \n%s",
+                $workflowItem->getIdentifier(),
+                $e->getMessage()
+            ));
         }
+
+        if (TRUE === AgaviConfig::get('items.frontend_sync', FALSE))
+        {
+            try
+            {
+                $feClient = new FrontendApiClient();
+                $feClient->deleteWorkflowItem($workflowItem);
+
+                $result->setMessage('Successfully sent delete notification to frontend.');
+            }
+            catch(FrontendApiClientException $e)
+            {
+                $result->setState(WorkflowPluginResult::STATE_ERROR);
+                $result->setMessage('An error occured while deleting item from frontend');
+
+                $this->logError(sprintf(
+                    "An error occured while deleting item with id: %s\n
+                    The client api call threw the following error:\n%s",
+                    $workflowItem->getIdentifier(),
+                    $e->getMessage()
+                ));
+            }
+        }
+        else
+        {
+            $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
+            $result->setMessage('Skipping frontend deletion due to system settings...');
+
+            $this->logInfo(sprintf(
+                "Skipped frontend sync for deletion  of item: %s due to system settings",
+                $workflowItem->getIdentifier()
+            ));
+        }
+
         $result->freeze();
         return $result;
     }

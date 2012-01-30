@@ -90,11 +90,13 @@
         </settings>
 
         <settings prefix="news_workflow.">
-            <setting name="sync2fe">false</setting>
             <setting name="localize_api">http://6-strato.berlinonline.de/api/localize</setting>
         </settings>
 
         <settings prefix="items.">
+            <setting name="frontend_api_url">http://bo-proto.h1960801.stratoserver.net/news/api/</setting>
+            <setting name="frontend_sync">off</setting>
+
             <setting name="tags">
                 <ae:parameters>
                     <ae:parameter>mitmachen</ae:parameter>

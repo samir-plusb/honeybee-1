@@ -27,44 +27,48 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
     {
         $now = new DateTime();
         $workflowItem = $this->ticket->getWorkflowItem();
+
         foreach ($workflowItem->getContentItems() as $contentItem)
         {
             $contentItem->applyValues(array(
                 'publishDate' => $now->format(DATE_ISO8601)
             ));
         }
+
         $supervisor = Workflow_SupervisorModel::getInstance();
         $supervisor->getItemPeer()->storeItem($workflowItem);
         $result = new WorkflowPluginResult();
 
-        if (TRUE === AgaviConfig::get('news_workflow.sync2fe', FALSE))
+        if (TRUE === AgaviConfig::get('items.frontend_sync', FALSE))
         {
-            $curl = ProjectCurl::create();
-            curl_setopt($curl, CURLOPT_URL, 'http://bo-proto.h1960801.stratoserver.net/news/api/import');
-            curl_setopt($curl, CURLOPT_POST, TRUE);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($workflowItem->toArray()));
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json; charset=UTF-8',
-                'Accept: application/json; charset=UTF-8',
-                'X-Requested-With: XMLHttpRequest'
-            ));
-            curl_setopt($curl, CURLOPT_VERBOSE, TRUE);
-            $resp = curl_exec($curl);
-            if (($err = curl_error($curl)))
+            try
             {
-                $result->setState(WorkflowPluginResult::STATE_ERROR);
-                $result->setMessage('An error occured while publishing item: Result:' . $result . ', Error: ' . $err);
-            }
-            else
-            {
+                $feClient = new FrontendApiClient();
+                $feClient->updateWorkflowItem($workflowItem);
+
                 $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
                 $result->setMessage('Successfully published item to frontend.');
+                
+                $this->logInfo("Successfully published (news)item: " . $workflowItem->getIdentifier());
+            }
+            catch(FrontendApiClientException $e)
+            {
+                $result->setState(WorkflowPluginResult::STATE_ERROR);
+                $result->setMessage('An error occured while publishing item to frontend');
+
+                $this->logError(sprintf(
+                    "An error occured while publishing item with id: %s\n
+                    The client api call threw the following error:\n%s",
+                    $workflowItem->getIdentifier(),
+                    $e->getMessage()
+                ));
             }
         }
         else
         {
             $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
             $result->setMessage('Skipping frontend publishing due to system settings...');
+            $this->logInfo("Successfully published (news)item: " . $workflowItem->getIdentifier());
         }
 
         $result->freeze();

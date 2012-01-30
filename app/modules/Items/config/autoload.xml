@@ -13,8 +13,10 @@
         <!-- Models/Setup -->
         <autoload name="ItemsModuleSetup">%core.module_dir%/Items/models/Setup/ItemsModuleSetup.class.php</autoload>
         <!-- /Models/Setup -->
-        <!-- <autoload name="GeoServiceModel">%core.module_dir%/Items/models/Geo/GeoServiceModel.class.php</autoload> -->
         <autoload name="NewsStatisticProvider">%core.module_dir%/Items/lib/NewsStatisticProvider.class.php</autoload>
+
+        <autoload name="FrontendApiClient">%core.module_dir%/Items/lib/FrontendApiClient.class.php</autoload>
+        <autoload name="FrontendApiClientException">%core.module_dir%/Items/lib/FrontendApiClientException.class.php</autoload>
 
     </ae:configuration>
 </ae:configurations>
