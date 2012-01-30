@@ -112,6 +112,11 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
             new AgaviLoggerMessage($infoMsg, AgaviLogger::INFO)
         );
     }
+
+    protected function getContext()
+    {
+        return AgaviContext::getInstance();
+    }
 }
 
 ?>
