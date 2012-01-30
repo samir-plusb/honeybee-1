@@ -29,7 +29,8 @@ class WorkflowDeleteNewsPlugin extends WorkflowBasePlugin
 
         try
         {
-            $this->ticket->getWorkflowItem()->delete();
+            $workflowItem = $this->ticket->getWorkflowItem();
+            $workflowItem->delete();
             $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
             $result->setGate(self::GATE_TRASH);
             $this->logInfo(sprintf(
