@@ -33,7 +33,7 @@ class NewsStatisticProvider
      */
     public function fetchStatistics($daysBack) // @codingStandardsIgnoreEnd
     {
-        $itemsData = $this->findItemsWithTillNow($daysBack);
+        $itemsData = $this->findItemsPublishedTillNow($daysBack);
         $stats = $this->generateStats($itemsData['items']);
 
         return $stats;
@@ -133,7 +133,7 @@ class NewsStatisticProvider
         return $stats;
     }
 
-    protected function findItemsWithTillNow($daysBack)
+    protected function findItemsPublishedTillNow($daysBack)
     {
         $tm = $this->getContext()->getTranslationManager();
         $sevenDaysAgo = $tm->createCalendar();

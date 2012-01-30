@@ -11,7 +11,7 @@
 
 <div class="container-fluid">
 	<div class="content">
-        <h1><?php echo $tm->_('Statistische Angeben zu den Bezirken','default.ui') ?></h1>
+        <h1><?php echo $tm->_('Statistische Angaben zu den Bezirken', 'default.ui') ?></h1>
         <ul class="stats-list">
 <?php
     foreach ($t['statistics'] as $district => $stats)
