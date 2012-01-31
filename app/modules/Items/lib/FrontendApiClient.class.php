@@ -20,12 +20,10 @@ class FrontendApiClient
         $apiData = array(
             'ContentItems' => array()
         );
-
         foreach ($workflowItem->getContentItems() as $contentItem)
         {
             $apiData['ContentItems'][] = $contentItem->getIdentifier();
         }
-
         $this->sendApiRequest($this->buildDeleteItemUrl(), $apiData);
     }
 
@@ -46,7 +44,7 @@ class FrontendApiClient
         $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
 
         $this->logInfo(sprintf(
-            "[%s] Trying to send api-request to url: %s with the following data:\n",
+            "[%s] Trying to send api-request to url: %s with the following data: %s\n",
             get_class($this),
             $url,
             print_r($data, TRUE)
