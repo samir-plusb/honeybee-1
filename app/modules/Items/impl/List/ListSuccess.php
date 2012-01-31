@@ -256,7 +256,7 @@
 ?>
     </table>
 <?php
-    if (20 <= count($t['listData']))
+    if (10 <= count($t['listData']))
     {
         echo $slots['pagination'];
     }
