@@ -19,6 +19,8 @@ class Workflow_Run_RunErrorView extends ProjectBaseView
      */
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
+        $this->setupHtml($parameters);
+        
         return $this->getAttribute('content');
     }
 

@@ -110,7 +110,9 @@ class NewsStatisticProvider
             {
                 $publishDate = $contentItem->getPublishDate();
                 $aDistrict = $contentItem->getLocation()->getDistrict();
-                if (empty($publishDate) || empty($aDistrict))
+                $attributes = $workflowItem->getAttributes();
+                $isDeleted = (isset($attributes['marked_deleted']) && TRUE === $attributes['marked_deleted']);
+                if ($isDeleted || empty($publishDate) || empty($aDistrict))
                 {
                     continue;
                 }

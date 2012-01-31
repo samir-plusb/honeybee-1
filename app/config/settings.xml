@@ -81,7 +81,6 @@
         <settings prefix="import.">
             <setting name="config_dir">%core.modules_dir%/Import/config/</setting>
             <setting name="newswire_dir">/var/tmp/dpa/regio-berlinbrandenburg/</setting>
-            <setting name="trigger_workflow">false</setting>
         </settings>
 
         <settings prefix="assets.">
@@ -172,7 +171,6 @@
         </settings>
 
         <settings prefix="import.">
-            <setting name="trigger_workflow">false</setting>
             <setting name="config_dir">%core.testing_dir%/fixtures/configs/import/</setting>
             <setting name="newswire_dir">%core.testing_dir%/fixtures/data/import/newswire/</setting>
         </settings>

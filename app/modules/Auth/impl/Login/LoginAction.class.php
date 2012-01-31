@@ -314,7 +314,7 @@ class Auth_LoginAction extends AuthBaseAction
                 'login' => $username,
                 'name' => $this->getLdapAttribute($username, AgaviConfig::get("ldap.user_name_attr", "cn")),
                 'email' => $this->getLdapAttribute($username, AgaviConfig::get("ldap.user_email_attr", "mail")),
-                'acl_role' => $user->mapExternalRoleToDomain('ldap_group', 'files') // @todo Define how multiple hits are mapped.
+                'acl_role' => 'user' // default user without privleges
             );
         $user->setAttributes($attr);
 
@@ -352,11 +352,19 @@ class Auth_LoginAction extends AuthBaseAction
         {
             return;
         }
+
         foreach ($info as $key => $val)
         {
             if (!empty($val[AgaviConfig::get("ldap.group_name_attr")][0]))
             {
-                $user->addCredential($val[AgaviConfig::get("ldap.group_name_attr")][0]);
+                $ldapRole = $val[AgaviConfig::get("ldap.group_name_attr")][0];
+                $user->addCredential($ldapRole);
+                
+                if (($domainRole = $user->mapExternalRoleToDomain('ldap_group', $ldapRole)))
+                {
+                    // @todo Define how multiple roles are mapped.
+                    $user->setAttribute('acl_role', $domainRole);
+                }
             }
         }
     }

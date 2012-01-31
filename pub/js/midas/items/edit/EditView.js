@@ -468,7 +468,6 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
             },
             'localize_item': function(src_field)
             {
-                $('#geo-busy-overlay').fadeIn();
                 that.localizeText(src_field.getSelection());
             }
         };
@@ -476,6 +475,12 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
     localizeText: function(text)
     {
+        if (! text || ! text.length)
+        {
+            this.warn("No localization possible!", "Can not localize without a text given to work on.");
+            return;
+        }
+
         $('#geo-busy-overlay').fadeIn();
         var that = this;
         this.edit_service.extractLocation(
@@ -565,7 +570,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
             var nearby_url = $('.nearby-base-url').val();
             var bound_url = nearby_url.replace("{LATITUDE}", lat).replace("{LONGITUDE}", lon);
-            
+
             $.getJSON(bound_url, function(resp)
             {
                 for(var i = 0; i < resp.data.length; i++)
