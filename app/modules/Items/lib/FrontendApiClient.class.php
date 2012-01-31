@@ -45,7 +45,12 @@ class FrontendApiClient
         $response = curl_exec($curlHandle);
         $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
 
-        $this->logInfo("[" . get_class($this) . "] Trying to send api-request to url: " . $url);
+        $this->logInfo(sprintf(
+            "[%s] Trying to send api-request to url: %s with the following data:\n",
+            get_class($this),
+            $url,
+            print_r($data, TRUE)
+        ));
 
         if (self::STATUS_CODE_OK !== $respCode)
         {
