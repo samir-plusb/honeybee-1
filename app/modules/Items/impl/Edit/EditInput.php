@@ -30,7 +30,7 @@
 <div class="topmenu-container import-menu">
     <menu id="import-item-menu" class="action-button-list">
         <li><a href="#prev" class="btn small">&#8592; Zur&#252;ck</a></li>
-        <li><a href="#mark" class="btn small important">Abhaken</a></li>
+        <li><a href="#mark" class="btn small important">Publizieren</a></li>
         <li><a href="#next" class="btn small">Vor &#8594;</a></li>
         <li><a href="#delete" class="btn small danger">L&#246;schen</a></li>
     </menu>
