@@ -73,6 +73,7 @@ midas.items.edit.EditService = midas.core.BaseObject.extend(
      */
     extractLocation: function(text, callback)
     {
+        text += ' Berlin'; // help the api localize stuff in berlin.
         $.getJSON(this.routing.getRoute('api_extract_location'), {geo_text: text}, function(data)
         {
             var location_count = data.location.items_count;
