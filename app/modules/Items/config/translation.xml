@@ -23,6 +23,7 @@
                         <ae:parameter name="de">
                             <ae:parameter name="refine_news">Neu</ae:parameter>
                             <ae:parameter name="publish_news">Publiziert</ae:parameter>
+                            <ae:parameter name="edit_news"><![CDATA[Publiziert, In Bearbeitung]]></ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
 

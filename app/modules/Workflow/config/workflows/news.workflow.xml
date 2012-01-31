@@ -27,8 +27,21 @@
                     </description>
                     <plugin type="PublishNews">
                         <gates>
-                            <gate_step name="demote">refine_news</gate_step>
+                            <gate_step name="demote">edit_news</gate_step>
+                            <gate_step label="delete this newsitem" name="delete">delete_news</gate_step>
                             <gate_end name="archiv" />
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="edit_news">
+                    <description>
+                        Edit an exisiting newsitem (correction etc.)
+                    </description>
+                    <plugin type="RefineNews">
+                        <gates>
+                            <gate_step label="publish this newsitem" name="publish">publish_news</gate_step>
+                            <gate_step label="delete this newsitem" name="delete">delete_news</gate_step>
                         </gates>
                     </plugin>
                 </step>

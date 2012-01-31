@@ -151,7 +151,18 @@
                 </td>
                 <td class="state">
                     <!-- @todo Map steps to label colors. -->
-                    <span class="label <?php echo ('refine_news' == $step) ? 'success' : 'warning'; ?>">
+<?php
+            $label = 'warning';
+            if ('refine_news' == $step)
+            {
+                $label = 'success';
+            }
+            elseif ('edit_news' == $step)
+            {
+                $label = 'notice';
+            }
+?>
+                    <span class="label <?php echo $label; ?>">
                         <?php echo $tm->_($step, 'items.news_workflow'); ?>
                     </span>
                 </td>
