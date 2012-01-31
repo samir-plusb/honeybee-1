@@ -135,7 +135,6 @@
                     <h3 class="legend">Geo <img class="localize-icon" src="images/icon-reload.png" title="Localize" /></h3>
                     <div class="input-full">
                         <select class="jsb-input" name="location[relevance]">
-                            <option value=""></option>
                             <option value="0">Betrifft den Bezirk (z.B. Wilmersdorf)</option>
                             <option value="1">Betrifft den Verwaltungsbezirk (z.B. Charlottenburg-Wilmersdorf)</option>
                             <option value="2">Betrifft die ganze Stadt</option>
