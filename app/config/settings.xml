@@ -197,7 +197,7 @@
     <!--        </SHRINK ENVIRONMENTS>         -->
 
     <!--        <PRODUCTION>                   -->
-    <ae:configuration environment=".*development-shrink-work">
+    <ae:configuration environment="production-hetzner">
         <settings prefix="items.">
             <setting name="frontend_sync">on</setting>
         </settings>
