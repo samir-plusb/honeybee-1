@@ -196,4 +196,12 @@
     </ae:configuration>
     <!--        </SHRINK ENVIRONMENTS>         -->
 
+    <!--        <PRODUCTION>                   -->
+    <ae:configuration environment=".*development-shrink-work">
+        <settings prefix="items.">
+            <setting name="frontend_sync">on</setting>
+        </settings>
+    </ae:configuration>
+    <!--        </PRODUCTION>                  -->
+
 </ae:configurations>
