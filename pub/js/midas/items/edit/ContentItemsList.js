@@ -153,6 +153,10 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
         var i = 0;
         for (var cid in this.content_items)
         {
+            if ('length' === cid)
+            {
+                continue;
+            }
             if (i === pos)
             {
                 return this.content_items[cid];
