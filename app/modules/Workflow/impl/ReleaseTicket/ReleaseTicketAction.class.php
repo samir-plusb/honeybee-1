@@ -43,7 +43,10 @@ class Workflow_ReleaseTicketAction extends ProjectBaseAction
         }
         else
         {
-            $error = "The ticket is currently owned by " . $ticket->getCurrentOwner() . ", you may not release ownership of other's tickets.";
+            $error = sprintf(
+                "The ticket is currently owned by %s, you may not release ownership of other's tickets.",
+                $ticket->getCurrentOwner()
+            );
             $reason = $tm->_('ticket_not_avail', 'workflow.errors');
         }
         $this->setAttribute('reason', $reason);

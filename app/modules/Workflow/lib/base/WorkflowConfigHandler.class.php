@@ -61,7 +61,7 @@ class WorkflowConfigHandler extends AgaviXmlConfigHandler
             );
         }
         $this->verifyWorkflowLogic($data);
-        $configCode = sprintf('return %s;', var_export($data, true));
+        $configCode = sprintf('return %s;', var_export($data, TRUE));
         return $this->generate($configCode, $config);
     }
 
@@ -97,7 +97,8 @@ class WorkflowConfigHandler extends AgaviXmlConfigHandler
      */
     protected function verifyWorkflowLogic(array $data)
     {
-        // @todo Check if all gates refer to existing targets (steps, workflows, etc) and throw an AgaviParseException if not.
+        // @todo Check if all gates refer to existing targets (steps, workflows, etc)
+        // and throw an AgaviParseException if not.
     }
 
 }

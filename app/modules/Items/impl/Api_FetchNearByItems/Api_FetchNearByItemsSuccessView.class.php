@@ -1,7 +1,8 @@
 <?php
 
 /**
- * The Items_FetchNearByItems_FetchNearByItemsSuccessView class handles Items/FetchNearByItems success data presentation.
+ * The Items_FetchNearByItems_FetchNearByItemsSuccessView class
+ * handles Items/FetchNearByItems success data presentation.
  *
  * @version         $Id: $
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -31,7 +32,9 @@ class Items_Api_FetchNearByItems_Api_FetchNearByItemsSuccessView extends ItemsBa
                 'id' => $ticket->getIdentifier(),
                 'rev' => $ticket->getRevision()
             );
-            $itemData['importItem']['content'] = strip_tags(htmlspecialchars_decode($itemData['importItem']['content']));
+            $itemData['importItem']['content'] = strip_tags(
+                htmlspecialchars_decode($itemData['importItem']['content'])
+            );
             $itemData['owner'] = $ticket->getCurrentOwner();
             $listData[] = $itemData;
         }

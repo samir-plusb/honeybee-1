@@ -40,7 +40,10 @@ class Items_Edit_EditInputView extends ItemsBaseView
         $ro = $this->getContext()->getRouting();
         $this->setAttribute('ticket', $ticketData);
         $this->setAttribute('list_url', $ro->gen('items.list', array('limit' => 1, 'offset' => '{LIST_POS}')));
-        $this->setAttribute('nearby_url', $ro->gen('items.api.items_nearby', array('lon' => '{LONGITUDE}', 'lat' => '{LATITUDE}')));
+        $this->setAttribute('nearby_url', $ro->gen(
+            'items.api.items_nearby',
+            array('lon' => '{LONGITUDE}', 'lat' => '{LATITUDE}'))
+        );
         $listFilter = array(
             'sorting' => $parameters->getParameter('sorting', array(
                 'direction' => 'desc',

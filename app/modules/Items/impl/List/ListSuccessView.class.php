@@ -74,7 +74,9 @@ class Items_List_ListSuccessView extends ItemsBaseView
                 'id' => $ticket->getIdentifier(),
                 'rev' => $ticket->getRevision()
             );
-            $itemData['importItem']['content'] = strip_tags(htmlspecialchars_decode($itemData['importItem']['content']));
+            $itemData['importItem']['content'] = strip_tags(
+                htmlspecialchars_decode($itemData['importItem']['content'])
+            );
             $itemData['owner'] = $ticket->getCurrentOwner();
             $listData[] = $itemData;
         }

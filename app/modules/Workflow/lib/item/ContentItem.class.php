@@ -391,9 +391,12 @@ class ContentItem implements IContentItem
             }
             else
             {
-                throw new InvalidArgumentException(
-                    "Can only process scalar values when exporting object to array. Invalid data type: '" . gettype($val) ."' given for: " . $prop
-                );
+                throw new InvalidArgumentException(sprintf(
+                    "Can only process scalar values when exporting object to array.\n" .
+                    "Invalid data type: '%s' given for: %s",
+                    gettype($val),
+                    $prop
+                ));
             }
         }
         return $data;

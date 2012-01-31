@@ -17,9 +17,10 @@ class WorkflowItemDataImport extends BaseDataImport
     {
         if (!$config instanceof WorkflowItemDataImportConfig)
         {
-            throw new DataImportException(
-                "Invalid config object given. Instance of WorkflowItemDataImportConfig expected, got: " . get_class($config)
-            );
+            throw new DataImportException(sprintf(
+                "Invalid config object given. Instance of WorkflowItemDataImportConfig expected, got: %s",
+                get_class($config)
+            ));
         }
         parent::__construct($config);
     }

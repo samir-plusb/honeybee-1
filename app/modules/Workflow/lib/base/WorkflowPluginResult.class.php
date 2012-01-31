@@ -118,10 +118,11 @@ class WorkflowPluginResult implements IWorkflowPluginResult
     {
         if (! is_string($gate))
         {
-            throw new InvalidArgumentException(
-                "Only strings may be provided when referring to workflow gates (e.g. gate-names)." . PHP_EOL .
-                "Lookup the name of the desired gate in your workflow's definition. Given value -> " . print_r($gate, TRUE)
-            );
+            throw new InvalidArgumentException(sprintf(
+                "Only strings may be provided when referring to workflow gates (e.g. gate-names).\n" .
+                "Lookup the name of the desired gate in your workflow's definition. Given value -> %s",
+                print_r($gate, TRUE)
+            ));
         }
         $this->verifyMutability();
         $this->gate = $gate;

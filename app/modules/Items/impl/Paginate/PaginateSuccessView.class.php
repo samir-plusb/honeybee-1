@@ -74,8 +74,7 @@ class Items_Paginate_PaginateSuccessView extends ItemsBaseView
         $routing = $this->getContext()->getRouting();
         $limit = $this->getAttribute('limit');
         $currentOffset = $this->getAttribute('offset');
-        $totalCount = $this->getAttribute('total_count');
-        $currentPage = (int) floor($currentOffset / $limit);
+        $currentPage = (int)floor($currentOffset / $limit);
         $lastPage = $this->getAttribute('last_page');
         $searchPhrase = $this->getAttribute('search_phrase', FALSE);
         $sorting = $this->getAttribute('sorting', FALSE);

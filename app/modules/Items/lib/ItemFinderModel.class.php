@@ -103,11 +103,6 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
         );
     }
 
-    public function filter(array $filter, $sortField, $sortDirection = self::SORT_DESC, $offset = 0, $limit = self::DEFAULT_LIMIT)
-    {
-
-    }
-
     public function nearBy(array $where, $sortField, $sortDirection = self::SORT_DESC, $offset = 0, $limit = self::DEFAULT_LIMIT)
     {
         if (! isset($where['dist']) || ! isset($where['lon']) || ! isset($where['lat']))

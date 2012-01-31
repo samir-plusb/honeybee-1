@@ -23,7 +23,8 @@ class Workflow_GrabTicketAction extends ProjectBaseAction
         $error = '';
         $reason = '';
         $tm = $this->getContext()->getTranslationManager();
-        if (WorkflowTicket::NULL_USER === $ticket->getCurrentOwner() || $ticket->getCurrentOwner() === $user->getAttribute('login'))
+        if (WorkflowTicket::NULL_USER === $ticket->getCurrentOwner() ||
+            $ticket->getCurrentOwner() === $user->getAttribute('login'))
         {
             $ticket->setCurrentOwner($user->getAttribute('login'));
 

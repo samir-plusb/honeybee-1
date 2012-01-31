@@ -45,7 +45,7 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
      *
      * @var string
      */
-    protected $workflow = null;
+    protected $workflow = NULL;
 
 
     /**
@@ -209,7 +209,9 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     {
         if ($workflow && !is_string($workflow))
         {
-            throw new InvalidArgumentException("Invalid type given to setWorkflow call. Type: " . var_export($workflow, true));
+            throw new InvalidArgumentException(
+                "Invalid type given to setWorkflow call. Type: " . var_export($workflow, TRUE)
+            );
         }
         elseif ($workflow)
         {

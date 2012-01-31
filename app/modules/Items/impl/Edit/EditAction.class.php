@@ -26,7 +26,8 @@ class Items_EditAction extends ItemsBaseAction
         $this->setAttribute('ticket', $parameters->getParameter('ticket'));
         $this->setAttribute('list_pos', $parameters->getParameter('list_pos', 0));
         // The plugin result is passed on to any underlying (plugin)actions via attribute value.
-        // All actions that are called from a workflow plugin must set the gate, state and message on the injected result object.
+        // All actions that are called from a workflow plugin must set the gate,
+        // state and message on the injected result object.
         // If we have no pluginResult set and our container does not have a 'is_workflow_container' set to true,
         // then we have not been invoked from workflow execution.
         // Depending on the action's semantics and eventuell assumptions concerning out execution context,

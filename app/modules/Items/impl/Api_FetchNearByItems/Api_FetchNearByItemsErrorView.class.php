@@ -1,7 +1,8 @@
 <?php
 
 /**
- * The Items_FetchNearByItems_FetchNearByItemsSuccessView class handles Items/FetchNearByItems success data presentation.
+ * The Items_FetchNearByItems_FetchNearByItemsSuccessView class
+ * handles Items/FetchNearByItems success data presentation.
  *
  * @version         $Id: $
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG

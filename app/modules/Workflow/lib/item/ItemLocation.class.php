@@ -111,11 +111,13 @@ class ItemLocation implements IItemLocation
 
     protected function setCoordinates($coordinates)
     {
-        if (empty($coordinates)) return;
-        return $this->coordinates = array(
-            'lat' => (float)$coordinates['lat'],
-            'lon' => (float)$coordinates['lon']
-        );
+        if (! empty($coordinates))
+        {
+            $this->coordinates = array(
+                'lat' => (float)$coordinates['lat'],
+                'lon' => (float)$coordinates['lon']
+            );
+        }
     }
 
     /**
