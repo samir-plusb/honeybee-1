@@ -6,7 +6,7 @@ class FrontendApiClient
 
     const URL_SUFFIX_DELETE = 'delete';
 
-    const URL_SUFFIX_UPDATE = 'update';
+    const URL_SUFFIX_UPDATE = 'import';
 
     const STATUS_CODE_OK = 200;
 
