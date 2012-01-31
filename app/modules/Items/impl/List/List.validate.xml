@@ -62,6 +62,16 @@
                 </ae:parameters>
             </validator>
 
+
+            <validator class="boolean" name="invalid_only_editable_flag" required="false" >
+                <arguments>
+                    <argument>only_editable</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid only_editable flag provided. Be sure to pass a boolean compatible value.</error>
+                </errors>
+            </validator>
+
         </validators>
     </ae:configuration>
 </ae:configurations>

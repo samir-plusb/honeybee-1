@@ -34,6 +34,11 @@ class Items_ListAction extends ItemsBaseAction
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $itemFinder = $this->getContext()->getModel('ItemFinder');
+        if (TRUE === $parameters->getParameter('only_editable', FALSE))
+        {
+            $itemFinder->enableEditFilter();
+        }
+
         $limit = $parameters->getParameter('limit', self::DEFAULT_LIMIT);
         $offset = $parameters->getParameter('offset', self::DEFAULT_OFFSET);
         $searchPhrase = $parameters->getParameter('search_phrase');
@@ -46,6 +51,7 @@ class Items_ListAction extends ItemsBaseAction
             'tickets'    => array(),
             'totalCount' => 0
         );
+
         if (! empty($searchPhrase))
         {
             $this->setAttribute('search_phrase', $searchPhrase);

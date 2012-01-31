@@ -26,6 +26,18 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
      */
     protected $elasticClient;
 
+    protected $filterForNewItems = FALSE;
+
+    public function enableEditFilter()
+    {
+        $this->filterForNewItems = TRUE;
+    }
+
+    public function disableEditFilter()
+    {
+        $this->filterForNewItems = FALSE;
+    }
+
     public function initialize(AgaviContext $context, array $parameters = array())
     {
         parent::initialize($context, $parameters);
@@ -48,15 +60,21 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
                 array('currentState.workflow' => 'news')
             )
         );
+
+        $filterContainer = $this->addNewItemsFilter(
+            new Elastica_Filter_Not(
+                new Elastica_Filter_Term(
+                    array('currentState.step' => 'delete_news')
+                )
+            )
+        );
         $query->setLimit($limit)->setFrom($offset)->addSort(
             array(
                 array(self::$sortMapping[$sortField] => $sortDirection),
                 array('_uid' => 'asc')
             )
         );
-        $query->setFilter(new Elastica_Filter_Not(new Elastica_Filter_Term(
-            array('currentState.step' => 'delete_news')
-        )));
+        $query->setFilter($filterContainer);
         $index = $this->elasticClient->getIndex('midas');
         $type = $index->getType('item');
 
@@ -86,15 +104,21 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
             $termQuery->setMinimumMatch(count($terms));
             $query->setQuery($termQuery);
         }
+
+        $filterContainer = $this->addNewItemsFilter(
+            new Elastica_Filter_Not(
+                new Elastica_Filter_Term(
+                    array('currentState.step' => 'delete_news')
+                )
+            )
+        );
+        $query->setFilter($filterContainer);
         $query->setLimit($limit)->setFrom($offset)->addSort(
             array(
                 array(self::$sortMapping[$sortField] => $sortDirection),
                 array('_uid' => 'asc')
             )
         );
-        $query->setFilter(new Elastica_Filter_Not(new Elastica_Filter_Term(
-            array('currentState.step' => 'delete_news')
-        )));
         $index = $this->elasticClient->getIndex('midas');
         $type = $index->getType('item');
 
@@ -147,6 +171,27 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
         return $this->hydrateResult(
             $type->search($query)
         );
+    }
+
+    protected function addNewItemsFilter(Elastica_Filter_Abstract $filter)
+    {
+        if (! $this->filterForNewItems)
+        {
+            return $filter;
+        }
+
+        $filterContainer = $filter;
+        if (! ($filterContainer instanceof Elastica_Filter_And))
+        {
+            $filterContainer = new Elastica_Filter_And();
+        }
+        return $filterContainer->addFilter(
+            new Elastica_Filter_Term(
+                array('currentState.step' => 'refine_news')
+        ))->addFilter(
+            new Elastica_Filter_Term(
+                array('currentState.owner' => 'nobody')
+        ));
     }
 
     protected function hydrateResult(Elastica_ResultSet $result)
