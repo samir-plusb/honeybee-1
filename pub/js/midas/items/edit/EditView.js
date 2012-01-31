@@ -543,6 +543,10 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         {
             this.editing_form.val('location[administrativeDistrict]', location['administrative district']);
         }
+        if (location['neighborhood'])
+        {
+            this.editing_form.val('location[neighborhood]', location['neighborhood']);
+        }
         if (location.uzip)
         {
             this.editing_form.val('location[postalCode]', location.uzip);

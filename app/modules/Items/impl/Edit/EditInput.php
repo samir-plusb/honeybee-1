@@ -158,12 +158,16 @@
                         <input id="input_location_uzip" name="location[postalCode]" type="text" />
                     </div>
                     <div class="input-full">
-                        <label for="input_location_neighborhood">Bezirk</label>
-                        <input id="input_location_neighborhood" name="location[administrativeDistrict]" type="text" readonly="readonly" />
+                        <label for="input_location_adistrict">Verwaltungsbezirk</label>
+                        <input id="input_location_adistrict" name="location[administrativeDistrict]" type="text" readonly="readonly" />
                     </div>
                     <div class="input-full">
-                        <label for="input_location_subneighborhood">Alter Bezirksname</label>
-                        <input id="input_location_subneighborhood" name="location[district]" type="text" readonly="readonly" />
+                        <label for="input_location_district">Alter Bezirksname</label>
+                        <input id="input_location_district" name="location[district]" type="text" readonly="readonly" />
+                    </div>
+                    <div class="input-full">
+                        <label for="input_location_neighborhood">Stadtteil</label>
+                        <input id="input_location_neighborhood" name="location[neighborhood]" type="text" readonly="readonly" />
                     </div>
                     <input type="hidden" name="location[coordinates][lon]" value="0" />
                     <input type="hidden" name="location[coordinates][lat]" value="0" />
