@@ -116,7 +116,9 @@
             $step = $workflowItem['currentState']['step'];
             $grabTicketLink = $ro->gen('workflow.grab', array('ticket' => $workflowItem['ticket']));
             $processListFilterParams = array(
-                'sorting' => $sorting
+                'sorting' => $sorting,
+                'limit' => $limit,
+                'offset' => $offset
             );
             if ($searchPhrase)
             {

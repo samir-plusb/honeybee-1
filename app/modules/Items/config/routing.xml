@@ -10,6 +10,8 @@
                 <route name=".items_nearby" pattern="^/items_nearby" action="Api_FetchNearByItems"/>
                 <route name=".extract_location" pattern="^/extract_location" action="Api_ExtractLocation"/>
                 <route name=".extract_date" pattern="^/extract_date" action="Api_ExtractDate"/>
+                <route name=".next_item" pattern="^/next_item" action="Api_NextItem"/>
+                <route name=".prev_item" pattern="^/prev_item" action="Api_PrevItem"/>
             </route>
         </routes>
     </ae:configuration>

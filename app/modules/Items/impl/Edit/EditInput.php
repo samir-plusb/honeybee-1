@@ -52,7 +52,9 @@
             <input class="static-value list-filter" type="hidden" value="<?php echo htmlspecialchars(json_encode($t['list_filter'])); ?>" />
             <input class="static-value grab-ticket-base-url" type="hidden" value="<?php echo urldecode($t['grab_url']); ?>" />
             <input class="static-value nearby-base-url" type="hidden" value="<?php echo urldecode($t['nearby_url']); ?>" />
-            <input class="static-value list-base-url" type="hidden" value="<?php echo urldecode($t['list_url']); ?>" />
+            <input class="static-value list-url" type="hidden" value="<?php echo urldecode($t['list_url']); ?>" />
+            <input class="static-value next-item-base-url" type="hidden" value="<?php echo urldecode($t['next_item_url']); ?>" />
+            <input class="static-value prev-item-base-url" type="hidden" value="<?php echo urldecode($t['prev_item_url']); ?>" />
             <input type="hidden" class="static-value list_position" value="<?php echo $t['list_pos']; ?>" />
 
             <input type="hidden" class="static-value ticket-identifier" name="ticket" value="<?php echo $ticketData['_id']; ?>" />

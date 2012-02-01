@@ -2,7 +2,8 @@
 <ae:configurations
     xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
-    parent="%core.module_dir%/Workflow/config/validators.xml">
+    parent="%core.module_dir%/Workflow/config/validators.xml"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <ae:configuration>
         <validators>
@@ -20,46 +21,9 @@
 
         <validators method="read">
 
-            <validator class="number" name="invalid_list_pos" required="false" translation_domain="items.errors">
-                <arguments>
-                    <argument>list_pos</argument>
-                </arguments>
-                <errors>
-                    <error>Invalid list position given.</error>
-                </errors>
-            </validator>
-
-            <validator class="inarray" name="invalid_sorting_direction" required="false" translation_domain="items.errors">
-                <arguments base="sorting">
-                    <argument>direction</argument>
-                </arguments>
-                <ae:parameters>
-                    <ae:parameter name="values">asc,desc</ae:parameter>
-                </ae:parameters>
-            </validator>
-
-            <validator class="inarray" name="invalid_sorting_field" required="false" translation_domain="items.errors">
-                <arguments base="sorting">
-                    <argument>field</argument>
-                </arguments>
-                <ae:parameters>
-                    <ae:parameter name="values">title,source,timestamp,state,category,priority,district,owner</ae:parameter>
-                </ae:parameters>
-            </validator>
-
-            <validator class="string" name="invalid_search_phrase" required="false" translation_domain="items.errors">
-                <arguments>
-                    <argument>search_phrase</argument>
-                </arguments>
-                <ae:parameters>
-                    <ae:parameter name="min">3</ae:parameter>
-                    <ae:parameter name="max">50</ae:parameter>
-                </ae:parameters>
-                <errors>
-                    <error for="min">The search_phrase must be at least 3 chars long.</error>
-                    <error for="max">The search_phrase may not exceed a length of 50 chars.</error>
-                </errors>
-            </validator>
+            <xi:include href="%core.module_dir%/Items/impl/List/List.validate.xml"
+                        xpointer="xmlns(v=http://agavi.org/agavi/config/parts/validators/1.1) xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/ae:configuration/v:validators/*)">
+            </xi:include>
 
         </validators>
 

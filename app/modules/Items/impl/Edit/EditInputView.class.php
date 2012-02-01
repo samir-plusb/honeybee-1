@@ -39,12 +39,16 @@ class Items_Edit_EditInputView extends ItemsBaseView
         $ticketData['item'] = $item->toArray();
         $ro = $this->getContext()->getRouting();
         $this->setAttribute('ticket', $ticketData);
-        $this->setAttribute('list_url', $ro->gen('items.list', array('limit' => 1, 'offset' => '{LIST_POS}', 'only_editable' => TRUE)));
+        $browseApiParams = array('cur_item' => '{CUR_ITEM}');
+        $this->setAttribute('next_item_url', $ro->gen('items.api.next_item', $browseApiParams));
+        $this->setAttribute('prev_item_url', $ro->gen('items.api.prev_item', $browseApiParams));
         $this->setAttribute('nearby_url', $ro->gen(
             'items.api.items_nearby',
             array('lon' => '{LONGITUDE}', 'lat' => '{LATITUDE}'))
         );
         $listFilter = array(
+            'limit' => $parameters->getParameter('limit'),
+            'offset' => $parameters->getParameter('offset'),
             'sorting' => $parameters->getParameter('sorting', array(
                 'direction' => 'desc',
                 'field' => 'timestamp'
@@ -55,6 +59,7 @@ class Items_Edit_EditInputView extends ItemsBaseView
             $listFilter['search_phrase'] = $parameters->getParameter('search_phrase');
         }
         $this->setAttribute('list_filter', $listFilter);
+        $this->setAttribute('list_url', $ro->gen('items.list', $listFilter));
         $this->setAttribute('release_url', $ro->gen('workflow.release', array('ticket' => '{TICKET_ID}')));
         $this->setAttribute('grab_url', $ro->gen('workflow.grab', array(
             'ticket' => array(

@@ -653,8 +653,7 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         $('#geo-busy-overlay').fadeOut();
         this.releaseTicket(cur_ticket_id, function(data)
         {
-            var list_pos = +$('.list_position').val();
-            that.loadImportItem(list_pos + 1);
+            that.loadImportItem('next');
         });
     },
 
@@ -666,40 +665,57 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
         $('#geo-busy-overlay').fadeOut();
         this.releaseTicket(cur_ticket_id, function()
         {
-            var list_pos = +$('.list_position').val();
-            that.loadImportItem(list_pos - 1);
+            that.loadImportItem('prev');
         });
     },
 
-    loadImportItem: function(list_pos)
+    loadImportItem: function(direction)
     {
-        var list_url = $('.list-base-url').val().replace(/\{LIST_POS\}/ig, list_pos);
+        var url = '';
+        var item_id = $('.workflow-item-identifier').val();
+        if ('prev' === direction)
+        {
+            url = $('.prev-item-base-url').val().replace(/\{CUR_ITEM}/ig, item_id);
+        }
+        if ('next' === direction)
+        {
+            url = $('.next-item-base-url').val().replace(/\{CUR_ITEM}/ig, item_id);
+        }
         var that = this;
         var filter = $.parseJSON($('.list-filter').val());
         if (filter)
         {
-            list_url += '&'+$.param(filter);
+            url += '&'+$.param(filter);
         }
-        $.getJSON(list_url, function(resp)
+        $.getJSON(url, function(resp)
         {
             if (resp.state == 'ok')
             {
-                var import_item = resp.data[0].importItem;
-                var content_items = resp.data[0].contentItems;
-                var ticket = resp.data[0].ticket;
+                var workflow_item = resp.item;
 
-                that.grabTicket(ticket.id, ticket.rev, function(err, data)
+                if (! workflow_item)
+                {
+                    alert("Kein nächstes Item vorhanden.\nKehre zurück zur Listenansicht.");
+                    window.location.href = $('.list-url').val();
+                    return;
+                }
+
+                var import_item = workflow_item.importItem;
+                var content_items = workflow_item.contentItems;
+                var ticket = resp.ticket;
+
+                that.grabTicket(ticket._id, ticket._rev, function(err, data)
                 {
                     if (err)
                     {
                         $('#edit-gui-busy-overlay').fadeOut();
                         return;
                     }
+
                     that.import_item_container.hydrate(import_item);
-                    $('.list_position').val(list_pos);
                     that.editing_form.reset();
-                    $('.ticket-identifier').val(ticket.id);
-                    $('.workflow-item-identifier').val(resp.data[0].identifier);
+                    $('.ticket-identifier').val(ticket._id);
+                    $('.workflow-item-identifier').val(workflow_item.identifier);
                     for (var i = 0; i < content_items.length; i++)
                     {
                         content_items[i].cid = midas.core.CidSequence.nextCid('content_item');

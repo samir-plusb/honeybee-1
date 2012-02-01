@@ -26,16 +26,16 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
      */
     protected $elasticClient;
 
-    protected $filterForNewItems = FALSE;
+    protected $currentItemId = NULL;
 
-    public function enableEditFilter()
+    public function enableEditFilter($curItemId)
     {
-        $this->filterForNewItems = TRUE;
+        $this->currentItemId = $curItemId;
     }
 
     public function disableEditFilter()
     {
-        $this->filterForNewItems = FALSE;
+        $this->currentItemId = NULL;
     }
 
     public function initialize(AgaviContext $context, array $parameters = array())
@@ -175,7 +175,7 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
 
     protected function addNewItemsFilter(Elastica_Filter_Abstract $filter)
     {
-        if (! $this->filterForNewItems)
+        if (NULL === $this->currentItemId)
         {
             return $filter;
         }
@@ -185,13 +185,18 @@ class ItemFinderModel extends AgaviModel implements AgaviISingletonModel
         {
             $filterContainer = new Elastica_Filter_And();
         }
-        return $filterContainer->addFilter(
+        $filterContainer->addFilter(
             new Elastica_Filter_Term(
                 array('currentState.step' => 'refine_news')
         ))->addFilter(
             new Elastica_Filter_Term(
                 array('currentState.owner' => 'nobody')
         ));
+
+        $idOrFilter = new Elastica_Filter_Or();
+        return $idOrFilter->addFilter(
+            new Elastica_Filter_Ids('item', array($this->currentItemId))
+        )->addFilter($filterContainer);
     }
 
     protected function hydrateResult(Elastica_ResultSet $result)
