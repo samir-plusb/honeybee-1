@@ -577,10 +577,14 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
 
             $.getJSON(bound_url, function(resp)
             {
+                var item_id = $('.workflow-item-identifier').val();
                 for(var i = 0; i < resp.data.length; i++)
                 {
-                    var li = ich['nearby-item-tpl'](resp.data[i].importItem);
-                    $('.nearby-list').append(li);
+                    if (item_id != resp.data[i].identifier)
+                    {
+                        var li = ich['nearby-item-tpl'](resp.data[i].importItem);
+                        $('.nearby-list').append(li);
+                    }
                 }
             });
         }
@@ -647,7 +651,6 @@ midas.items.edit.EditView = midas.core.BaseView.extend(
     loadNextImportItem: function()
     {
         var cur_ticket_id = this.editing_form.val('ticket');
-        var list_pos = +$('.list_position').val();
         var that = this;
         $('#edit-gui-busy-overlay').fadeIn();
         $('#geo-busy-overlay').fadeOut();
