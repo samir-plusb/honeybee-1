@@ -92,8 +92,17 @@ midas.items.edit.ContentItemsList = midas.core.BaseObject.extend(
         {
             throw "Can not item that has no valid cid.";
         }
-
-        var rendered_html = ich['content-item-tpl'](item, true);
+        var tpl_item = $.extend({}, item, {
+            text: function()
+            {
+                if (150 < item.text.length)
+                {
+                    return item.text.substring(0, 147) + '...';
+                }
+                return item.text;
+            }
+        });
+        var rendered_html = ich['content-item-tpl'](tpl_item, true);
         var tmp_item = $('<div></div>').html(rendered_html.replace('&gt;', '>').replace('&lt;', '<'));
 
         var rendered_item = tmp_item.find('li');
