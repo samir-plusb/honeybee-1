@@ -30,7 +30,7 @@ class Items_Api_FetchNearByItemsAction extends ItemsBaseAction
             'lon' => $parameters->getParameter('lon')
         );
 
-        $result = $itemFinder->nearBy($where, 'title', 'asc', 0, 15);
+        $result = $itemFinder->nearBy($where, 'publish_date', 'desc', 0, 15);
         $this->setAttribute('items', $result['items']);
         $this->setAttribute('totalCount', $result['totalCount']);
 
