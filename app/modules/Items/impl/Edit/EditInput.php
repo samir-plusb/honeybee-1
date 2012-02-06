@@ -228,10 +228,40 @@
                     <li>
                         <a href="#content-tabs-1">Inhalt</a>
                     </li>
+<?php
+    if (! empty($t['assets']))
+    {
+?>
+                    <li class="asset-list-tab">
+                        <a href="#asset-list-tab">Assets</a>
+                    </li>
+<?php
+    }
+?>
                 </ul>
                 <div id="content-tabs-1">
                     <div class="input-full">
                         <textarea class="text-content" readonly="readonly"><?php echo strip_tags(htmlspecialchars_decode($importItem['content'])); ?></textarea>
+                    </div>
+                </div>
+                <div id="asset-list-tab">
+                    <div class="input-full">
+                        <ul class="asset-list">
+<?php
+        foreach ($t['assets'] as $asset)
+        {
+            $metaData = $asset['metaData'];
+            $assetCaption = isset($metaData['caption']) ? htmlspecialchars($metaData['caption']) : 'No Title';
+            $assetAltText = isset($metaData['alt']) ? htmlspecialchars($metaData['alt']) : $assetCaption;
+            $displayedText = sprintf('%s (%s)', $asset['fullname'], $assetCaption);
+?>
+                            <li>
+                                <a target="_blank" href="<?php echo $asset['url']; ?>" title="<?php echo $assetAltText; ?>"><?php echo $displayedText; ?></a>
+                            </li>
+<?php
+        }
+?>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -286,4 +316,9 @@
 </script>
 <script id="nearby-item-tpl" type="text/html">
     <li>{{title}}</li>
+</script>
+<script id="asset-item-tpl" type="text/html">
+    <li>
+        <a target="_blank" href="{{url}}" title="{{alt}}">{{caption}}</a>
+    </li>
 </script>

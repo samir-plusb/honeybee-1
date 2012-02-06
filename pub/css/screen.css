@@ -562,3 +562,13 @@ em.bold{
 {
     border-bottom: none;
 }
+
+.asset-list-tab
+{
+    display: none;
+}
+
+.asset-list
+{
+
+}

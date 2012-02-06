@@ -26,7 +26,7 @@
                         <ae:parameter name="var_name">t</ae:parameter>
                     </renderer>
                 </renderers>
-                
+
                 <layouts default="default">
                     <layout name="default">
 			<!-- include common layer definitions from the sandbox -->
@@ -42,7 +42,7 @@
                         <xi:include xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xmlns(ot=http://agavi.org/agavi/config/parts/output_types/1.0) xpointer(/ae:configurations/ae:sandbox/ot:layers/*)" />
                     </layout>
                 </layouts>
-                
+
                 <ae:parameter name="http_headers">
                     <ae:parameter name="Content-Type">text/html; charset=UTF-8</ae:parameter>
                 </ae:parameter>
@@ -51,6 +51,12 @@
             <output_type name="json">
                 <ae:parameter name="http_headers">
                     <ae:parameter name="Content-Type">application/json; charset=UTF-8</ae:parameter>
+                </ae:parameter>
+            </output_type>
+
+            <output_type name="binary">
+                <ae:parameter name="http_headers">
+                    <ae:parameter name="Content-Type">application/octet-stream;</ae:parameter>
                 </ae:parameter>
             </output_type>
 

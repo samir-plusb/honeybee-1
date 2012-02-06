@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
-    
+
     <ae:configuration context="web">
         <routes>
-            <route pattern="asset." module="Asset">
-                <route pattern="put" action="Put" />
-            </route>
+            <route name=".put" pattern="^/put" action="Put" />
+            <route name=".get" pattern="^/get" action="Get" />
+            <route name=".binary" pattern="^/binary" action="Binary" output_type="binary"/>
         </routes>
     </ae:configuration>
-    
+
     <ae:configuration context="console">
         <routes>
-            <route pattern="asset." module="Asset">
-                <route pattern="setup" action="Setup" method="write" />
-                <route pattern="put" action="Put" method="write" />
-                <route pattern="get" action="Get" method="read" />
-                <route pattern="delete" action="Delete" method="write" />
+            <route pattern="asset" module="Asset">
+                <route pattern=".setup" action="Setup" method="write" />
+                <route pattern=".put" action="Put" method="write" />
+                <route pattern=".get" action="Get" method="read" />
+                <route pattern=".delete" action="Delete" method="write" />
             </route>
         </routes>
     </ae:configuration>
-    
+
 </ae:configurations>

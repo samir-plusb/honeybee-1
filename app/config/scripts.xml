@@ -73,6 +73,7 @@
                     <script>js/midas/items/edit/AssistiveTextInput.js</script>
                     <script>js/midas/items/edit/EditForm.js</script>
                     <script>js/midas/items/edit/ContentItemsList.js</script>
+                    <script>js/midas/items/edit/AssetList.js</script>
                     <script>js/midas/items/edit/ImportItemContainer.js</script>
                     <script>js/midas/items/edit/EditService.js</script>
                     <script>js/midas/items/edit/EditView.js</script>

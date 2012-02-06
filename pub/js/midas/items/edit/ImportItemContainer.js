@@ -39,6 +39,8 @@ midas.items.edit.ImportItemContainer = midas.core.BaseObject.extend(
      */
     content_text_input: null,
 
+    asset_list: null,
+
     gui: null,
 
     /**
@@ -65,6 +67,8 @@ midas.items.edit.ImportItemContainer = midas.core.BaseObject.extend(
             this.fire('contextMenuSelect', [field, item]);
         }.bind(this));
         this.content_panel.tabs();
+        this.asset_list = new midas.items.edit.AssetList('.asset-list', { tab: $('.asset-list-tab').first() });
+
         for (var element in this.gui)
         {
             this.gui[element] = this.element.find(this.gui[element]);
@@ -73,12 +77,24 @@ midas.items.edit.ImportItemContainer = midas.core.BaseObject.extend(
 
     hydrate: function(data)
     {
+        this.content_panel.tabs('select', 0);
+
         for (var element in this.gui)
         {
             if (data[element])
             {
                 this.gui[element].text(data[element]);
             }
+        }
+
+        if (data.assets && 0 < data.assets.length)
+        {
+            this.asset_list.hydrate(data.assets);
+            this.asset_list.show();
+        }
+        else
+        {
+            this.asset_list.hide();
         }
     }
 });

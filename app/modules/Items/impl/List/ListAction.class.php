@@ -33,34 +33,45 @@ class Items_ListAction extends ItemsBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
+        $this->setActionAttributes($parameters);
+        $itemFinder = $this->getAttribute('finder');
+        $result = $this->loadItems();
+
+        $this->setAttribute('items', $result['items']);
+        $this->setAttribute('totalCount', $result['totalCount']);
+
+        return 'Success';
+    }
+
+    protected function setActionAttributes(AgaviRequestDataHolder $parameters)
+    {
         $itemFinder = $this->getContext()->getModel('ItemFinder');
-        $limit = $parameters->getParameter('limit', self::DEFAULT_LIMIT);
-        $offset = $parameters->getParameter('offset', self::DEFAULT_OFFSET);
-        $searchPhrase = $parameters->getParameter('search_phrase');
+        $this->setAttribute('offset', $parameters->getParameter('offset', self::DEFAULT_OFFSET));
+        $this->setAttribute('limit', $parameters->getParameter('limit', self::DEFAULT_LIMIT));
         $sorting = array(
             'direction' => $parameters->getParameter('sorting[direction]', self::DEFAULT_SORT_DIRECTION),
             'field'     => $parameters->getParameter('sorting[field]', self::DEFAULT_SORT_FIELD)
         );
-
-        $result = array(
-            'tickets'    => array(),
-            'totalCount' => 0
-        );
-
+        $this->setAttribute('sorting', $sorting);
+        $this->setAttribute('finder', $itemFinder);
+        $searchPhrase = $parameters->getParameter('search_phrase');
         if (! empty($searchPhrase))
         {
             $this->setAttribute('search_phrase', $searchPhrase);
-            $result = $itemFinder->search(
-                strtolower($searchPhrase),
-                $sorting['field'],
-                $sorting['direction'],
-                $offset,
-                $limit
-            );
         }
-        else
+    }
+
+    protected function loadItems()
+    {
+        $itemFinder = $this->getAttribute('finder');
+        $limit = $this->getAttribute('limit');
+        $offset = $this->getAttribute('offset');
+        $sorting = $this->getAttribute('sorting');
+
+        if ($this->hasAttribute('search_phrase'))
         {
-            $result = $itemFinder->fetchAll(
+            return $itemFinder->search(
+                strtolower($this->getAttribute('search_phrase')),
                 $sorting['field'],
                 $sorting['direction'],
                 $offset,
@@ -68,13 +79,12 @@ class Items_ListAction extends ItemsBaseAction
             );
         }
 
-        $this->setAttribute('offset', $offset);
-        $this->setAttribute('limit', $limit);
-        $this->setAttribute('items', $result['items']);
-        $this->setAttribute('totalCount', $result['totalCount']);
-        $this->setAttribute('sorting', $sorting);
-
-        return 'Success';
+        return $itemFinder->fetchAll(
+            $sorting['field'],
+            $sorting['direction'],
+            $offset,
+            $limit
+        );
     }
 
     public function handleError(AgaviRequestDataHolder $parameters)

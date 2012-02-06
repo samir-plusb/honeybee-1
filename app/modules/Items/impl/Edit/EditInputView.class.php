@@ -37,8 +37,12 @@ class Items_Edit_EditInputView extends ItemsBaseView
         $item = $ticket->getWorkflowItem();
         $ticketData = $ticket->toArray();
         $ticketData['item'] = $item->toArray();
-        $ro = $this->getContext()->getRouting();
+        $assetData = $this->prepareAssets($item->getImportItem());
+
         $this->setAttribute('ticket', $ticketData);
+        $this->setAttribute('assets', $assetData);
+
+        $ro = $this->getContext()->getRouting();
         $browseApiParams = array('cur_item' => '{CUR_ITEM}');
         $this->setAttribute('next_item_url', $ro->gen('items.api.next_item', $browseApiParams));
         $this->setAttribute('prev_item_url', $ro->gen('items.api.prev_item', $browseApiParams));
@@ -77,6 +81,22 @@ class Items_Edit_EditInputView extends ItemsBaseView
         ));
     }
 
+    protected function prepareAssets(IImportItem $item)
+    {
+        $assetService = ProjectAssetService::getInstance();
+        $assets = array();
+        $ro = $this->getContext()->getRouting();
+        foreach ($item->getMedia() as $mediaId)
+        {
+            $asset = $assetService->get($mediaId);
+            $curAssetData = $asset->toArray();
+            $curAssetData['url'] = $ro->gen('asset.binary', array('aid' => $mediaId));
+            $assets[] = $curAssetData;
+        }
+
+        return $assets;
+    }
+
     /**
      * Handle presentation logic for commandline interfaces.
      *
@@ -103,7 +123,6 @@ class Items_Edit_EditInputView extends ItemsBaseView
     {
         $this->getResponse()->setContent(json_encode($this->getAttribute('items')));
     }
-
 }
 
 ?>
