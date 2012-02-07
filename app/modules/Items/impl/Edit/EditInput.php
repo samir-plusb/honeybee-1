@@ -228,16 +228,9 @@
                     <li>
                         <a href="#content-tabs-1">Inhalt</a>
                     </li>
-<?php
-    if (! empty($t['assets']))
-    {
-?>
                     <li class="asset-list-tab">
                         <a href="#asset-list-tab">Assets</a>
                     </li>
-<?php
-    }
-?>
                 </ul>
                 <div id="content-tabs-1">
                     <div class="input-full">
