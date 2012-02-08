@@ -23,7 +23,7 @@
 ?>
             <li>
                 <table class="stats-data">
-                    
+
                     <thead>
                         <tr>
                             <th class="col-district">
@@ -81,7 +81,7 @@
         for ($m = $t['days_back'] - 1; $m >= 0; $m--)
         {
 ?>
-                            <td><?php echo $stats['lastDays'][$m]; ?></td>
+                            <td class="col-day <?php echo 'col-day-'.$m; ?>"><?php echo $stats['lastDays'][$m]; ?></td>
 <?php
         }
 ?>
