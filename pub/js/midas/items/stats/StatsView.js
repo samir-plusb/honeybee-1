@@ -57,6 +57,7 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
                     var url = tab.attr('data-stats-uri');
                     $.getJSON(url, function(resp)
                     {
+                        trigger.find('img').fadeOut();
                         container.animate({ 'height': '15em' }, 500, function()
                         {
                             container[0].graph = that.drawGraph(
@@ -64,7 +65,6 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
                                 resp.data[district]
                             );
                             container[0].isBusy = false;
-                            trigger.find('img').fadeOut();
                             container[0].isShowing = true;
                         });
                     });
