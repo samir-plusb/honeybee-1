@@ -8,15 +8,27 @@
     <ae:configuration>
 
         <validators>
-            <validator class="number" name="invalid_days_back" required="false">
+            <validator class="number" name="invalid_days_back" required="false" translation_domain="items.errors">
                 <arguments>
                     <argument>days_back</argument>
                 </arguments>
                 <ae:parameters>
                     <ae:parameter name="min">1</ae:parameter>
+                    <ae:parameter name="max">20</ae:parameter>
                 </ae:parameters>
+                <errors>
+                    <error>Invalid days_back parameter.</error>
+                </errors>
+            </validator>
+
+            <validator class="inarray" name="invalid_district" required="false" translation_domain="items.errors">
+                <arguments>
+                    <argument>district</argument>
+                </arguments>
                 <ae:parameters>
-                    <ae:parameter name="max">10</ae:parameter>
+                    <ae:parameter name="values">
+                        Charlottenburg,Friedrichshain,Hellersdorf,Hohenschönhausen,Köpenick,Kreuzberg,Lichtenberg,Marzahn,Mitte,Neukölln,Pankow,Prenzlauer Berg,Reinickendorf,Schöneberg,Spandau,Steglitz,Tempelhof,Tiergarten,Treptow,Wedding,Weißensee,Wilmersdorf,Zehlendorf
+                    </ae:parameter>
                 </ae:parameters>
                 <errors>
                     <error>Invalid days_back parameter.</error>

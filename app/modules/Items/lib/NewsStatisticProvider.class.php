@@ -2,16 +2,65 @@
 
 class NewsStatisticProvider
 {
+    const DISTRICT_ALL = 'all';
+
+    const DISTRICT_CHAR = 'Charlottenburg';
+
+    const DISTRICT_FRIED = 'Friedrichshain';
+
+    const DISTRICT_HELLER = 'Hellersdorf';
+
+    const DISTRICT_HOHEN = 'Hohenschönhausen';
+
+    const DISTRICT_KÖP = 'Köpenick';
+
+    const DISTRICT_KREUZ = 'Kreuzberg';
+
+    const DISTRICT_LICHT = 'Lichtenberg';
+
+    const DISTRICT_MAR = 'Marzahn';
+
+    const DISTRICT_MIT = 'Mitte';
+
+    const DISTRICT_NEUK = 'Neukölln';
+
+    const DISTRICT_PANK = 'Pankow';
+
+    const DISTRICT_PRENZ = 'Prenzlauer Berg';
+
+    const DISTRICT_REI = 'Reinickendorf';
+
+    const DISTRICT_SCHÖ = 'Schöneberg';
+
+    const DISTRICT_SPAN = 'Spandau';
+
+    const DISTRICT_STEG = 'Steglitz';
+
+    const DISTRICT_TEMP = 'Tempelhof';
+
+    const DISTRICT_TIER = 'Tiergarten';
+
+    const DISTRICT_TREP = 'Treptow';
+
+    const DISTRICT_WED = 'Wedding';
+
+    const DISTRICT_WEISS = 'Weißensee';
+
+    const DISTRICT_WIL = 'Wilmersdorf';
+
+    const DISTRICT_ZEH = 'Zehlendorf';
+
+    protected static $supportedDistricts = array(
+        self::DISTRICT_CHAR, self::DISTRICT_FRIED, self::DISTRICT_HELLER, self::DISTRICT_HOHEN, self::DISTRICT_KÖP,
+        self::DISTRICT_KREUZ, self::DISTRICT_LICHT, self::DISTRICT_MAR, self::DISTRICT_MIT, self::DISTRICT_NEUK,
+        self::DISTRICT_PANK, self::DISTRICT_PRENZ, self::DISTRICT_REI, self::DISTRICT_SCHÖ, self::DISTRICT_SPAN,
+        self::DISTRICT_STEG, self::DISTRICT_TEMP, self::DISTRICT_TIER, self::DISTRICT_TREP, self::DISTRICT_WED,
+        self::DISTRICT_WEISS, self::DISTRICT_WIL, self::DISTRICT_ZEH
+    );
+
     protected $elasticClient;
 
     protected $couchClient;
-
-    protected static $districts = array(
-        'Charlottenburg', 'Friedrichshain', 'Hellersdorf', 'Hohenschönhausen', 'Köpenick', 'Kreuzberg',
-        'Lichtenberg', 'Marzahn', 'Mitte', 'Neukölln', 'Pankow', 'Prenzlauer Berg', 'Reinickendorf',
-        'Schöneberg', 'Spandau', 'Steglitz', 'Tempelhof', 'Tiergarten', 'Treptow', 'Wedding',
-        'Weißensee', 'Wilmersdorf', 'Zehlendorf'
-    );
 
     public function __construct()
     {
@@ -24,27 +73,31 @@ class NewsStatisticProvider
         $this->couchClient = $this->getContext()->getDatabaseConnection('CouchWorkflow');
     }
 
-    /**
-     * Execute the read logic for this action.
-     *
-     * @param       AgaviRequestDataHolder $parameters
-     *
-     * @return      string The name of the view to execute.
-     *
-     */
-    public function fetchDistrictStatistics($daysBack = 4)
+    public function fetchDistrictStatistics($daysBack = 4, $district = self::DISTRICT_ALL)
     {
         $stats = array();
-        foreach (self::$districts as $district)
+
+        if (self::DISTRICT_ALL === $district)
         {
+            foreach ($this->getDistricts() as $curDistrict)
+            {
+                $stats[$curDistrict] = $this->fetchPublishedItemsCountForDistrict($curDistrict, $daysBack);
+            }
+        }
+        else
+        {
+            if (! in_array($district, self::$supportedDistricts))
+            {
+                throw new InvalidArgumentException("The given district '$district' is not supported.");
+            }
             $stats[$district] = $this->fetchPublishedItemsCountForDistrict($district, $daysBack);
         }
         return $stats;
     }
 
-    public function getContext()
+    public function getDistricts()
     {
-        return AgaviContext::getInstance();
+        return self::$supportedDistricts;
     }
 
     protected function fetchPublishedItemsCountForDistrict($district, $daysBack)
@@ -93,25 +146,22 @@ class NewsStatisticProvider
             /* @var $contentItem ContentItem */
             foreach ($workflowItem->getContentItems() as $contentItem)
             {
-                if (($location = $contentItem->getLocation()))
+                if (($location = $contentItem->getLocation()) && $district == $location->getDistrict())
                 {
-                    if ($district == $location->getDistrict())
+                    // get the correct index, week or one of the past days and increment.
+                    $daysAgoIndex = $this->determineDayIndex($contentItem, $daysBack);
+                    if (0 <= $daysAgoIndex)
                     {
-                        // get the correct index, week or one of the past days and increment.
-                        $daysAgoIndex = $this->determineDayIndex($contentItem, $daysBack);
-                        if (0 <= $daysAgoIndex)
-                        {
-                            $itemsPerDay[$daysAgoIndex]++;
-                        }
-                        if ($this->wasPublishedDuringLastWeek($contentItem))
-                        {
-                            $itemsLastWeek++;
-                        }
+                        $itemsPerDay[$daysAgoIndex]++;
+                    }
+                    if ($this->wasPublishedDuringLastWeek($contentItem))
+                    {
+                        $itemsLastWeek++;
                     }
                 }
             }
         }
-
+        ksort($itemsPerDay);
         return array(
             'week' => $itemsLastWeek,
             'lastDays' => $itemsPerDay
@@ -228,6 +278,11 @@ class NewsStatisticProvider
         $publishedDate->set(AgaviDateDefinitions::MINUTE, 59);
         $publishedDate->set(AgaviDateDefinitions::SECOND, 59);
         return $publishedDate;
+    }
+
+    protected function getContext()
+    {
+        return AgaviContext::getInstance();
     }
 }
 

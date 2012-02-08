@@ -13,5 +13,11 @@ midas.items = {
      * @namespace The midas.items.list namespace holds all Items/List* related stuff.
      * @name midas.items.list
      */
-    list: {}
+    list: {},
+
+    /**
+     * @namespace The midas.items.stats namespace holds all Items/Stats* related stuff.
+     * @name midas.items.stats
+     */
+    stats: {}
 };

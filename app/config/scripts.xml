@@ -62,6 +62,15 @@
                 </javascripts>
             </package>
 
+            <package name="flotr" depends="midas.core">
+                <javascripts>
+                    <script>js/libs/flotr2.js</script>
+                </javascripts>
+                <stylesheets>
+                    <script>css/RGraph/common.css</script>
+                </stylesheets>
+            </package>
+
             <package name="midas.items.edit" depends="midas.core jquery-ui">
                 <javascripts>
                     <script>js/midas/items/items.js</script>
@@ -130,6 +139,13 @@
             </deployment>
 
             <deployment viewpath="items.stats*">
+                <package ref="flotr" />
+
+                <javascripts>
+                    <script>js/midas/items/items.js</script>
+                    <script>js/midas/items/stats/StatsView.js</script>
+                    <script>js/midas/items/stats/init.js</script>
+                </javascripts>
                 <stylesheets>
                     <script>css/stats.css</script>
                 </stylesheets>

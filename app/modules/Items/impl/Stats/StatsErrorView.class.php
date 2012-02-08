@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Items_Stats_StatsSuccessView class handles Items/Stats success data presentation.
+ * The Items_Stats_StatsErrorView class handles Items/Stats error data presentation.
  *
  * @version         $Id: $
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -9,7 +9,7 @@
  * @package         Items
  * @subpackage      Mvc
  */
-class Items_Stats_StatsSuccessView extends ItemsBaseView
+class Items_Stats_StatsErrorView extends ItemsBaseView
 {
     /**
      * Handle presentation logic for the web  (html).
@@ -22,7 +22,7 @@ class Items_Stats_StatsSuccessView extends ItemsBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
-        $this->setAttribute('_title', 'News Stats');
+        $this->setAttribute('_title', 'News Stats - Error');
     }
 
     /**
@@ -36,7 +36,7 @@ class Items_Stats_StatsSuccessView extends ItemsBaseView
     public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getResponse()->setContent(json_encode(
-            array('state' => 'ok', 'data' => $this->getAttribute('statistics'))
+            array('state' => 'error', 'messages' => $this->getAttribute('errors'))
         ));
     }
 }

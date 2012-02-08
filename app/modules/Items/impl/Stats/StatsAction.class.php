@@ -25,13 +25,25 @@ class Items_StatsAction extends ItemsBaseAction
     {
         $provider = new NewsStatisticProvider();
         $daysBack = $parameters->getParameter('days_back', 5);
-        $stats = $provider->fetchDistrictStatistics($daysBack);
-        ksort($stats);
+        $district = $parameters->getParameter('district', NewsStatisticProvider::DISTRICT_ALL);
+        $stats = $provider->fetchDistrictStatistics($daysBack, $district);
 
         $this->setAttribute('statistics', $stats);
         $this->setAttribute('days_back', $daysBack);
 
         return 'Success';
+    }
+
+    public function handleError(AgaviRequestDataHolder $parameters)
+    {
+        $errors = array();
+        $validation_manager = $this->getContainer()->getValidationManager();
+        foreach ($validation_manager->getErrorMessages() as $error)
+        {
+            $errors[] = $error['message'];
+        }
+        $this->setAttribute('errors', $errors);
+        return 'Error';
     }
 }
 

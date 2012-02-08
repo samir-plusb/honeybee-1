@@ -54,3 +54,24 @@ td.col-day-0
     font-weight: bold;
     font-size: 14pt;
 }
+
+.graph-container
+{
+    height: 0;
+    overflow: hidden;
+    margin-top: 1em;
+}
+
+.col-district h3
+{
+    float: left;
+}
+
+.graph-trigger
+{
+    float: right;
+    cursor: pointer;
+    font-size: 7pt;
+    border-radius: 15px;
+    margin-right: 3em;
+}

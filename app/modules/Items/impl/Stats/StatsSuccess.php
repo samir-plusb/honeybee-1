@@ -22,12 +22,13 @@
         }
 ?>
             <li>
-                <table class="stats-data">
+                <table class="stats-data" data-stats-uri="<?php echo $ro->gen('items.stats', array('district' => $district, 'days_back' => 20)); ?>">
 
                     <thead>
                         <tr>
                             <th class="col-district">
                                 <h3><?php echo $district; ?></h3>
+                                <button class="graph-trigger btn">Chart</button>
                             </th>
                             <th>
                                 <span class="label">Insgesamt</span>
@@ -88,6 +89,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="graph-container"></div>
             </li>
 <?php
     }
