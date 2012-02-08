@@ -45,13 +45,12 @@ h1
 {
     margin: 0;
 }
-
-th.col-day-1
+thead th span
 {
-    opacity: 0.8;
+    box-shadow: 5px 5px 5px #ccc;
 }
-
-th.col-day-2
+td.col-day-0
 {
-    opacity: 0.6;
+    font-weight: bold;
+    font-size: 14pt;
 }
