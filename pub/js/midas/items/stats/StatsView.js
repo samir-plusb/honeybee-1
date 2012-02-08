@@ -88,15 +88,18 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
 
     drawGraph: function(container, data)
     {
+        // @todo today's time should be set to 00:00:00
         var today = (new Date()).getTime();
         var d1 = [],
+        d2 = [],
         max = 10,
         options, graph, i, x, o;
 
         for (i = data.lastDays.length - 1; i >= 0; i--) {
-            x = today - (i + 1) * 1000 * 3600 * 24;
+            x = today - ((i + 1) * 1000 * 3600 * 24);
             max = Math.max(max, data.lastDays[i]);
             d1.push([ x, data.lastDays[i] ]);
+            d2.push([ x, 5 ]);
         }
         options = {
             xaxis: {
@@ -118,7 +121,23 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
 
         function drawGraph(opts) {
             o = Flotr._.extend(Flotr._.clone(options), opts || {});
-            return Flotr.draw(container[0], [d1], o);
+            return Flotr.draw(container[0], [{
+            data: d2,
+            lines: {
+                show: true,
+                fillColor: ["#ababab", "#fff"],
+                fill: true,
+                fillOpacity: 0.4,
+                color: "#ababab"
+            }
+        }, {
+            data: d1,
+            lines: {
+                show: true,
+                fill: false,
+                color: "#08AAEF"
+            }
+        }], o);
         }
 
         graph = drawGraph();
@@ -126,6 +145,8 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
         Flotr.EventAdapter.observe(container[0], "flotr:select", function(area) {
             graph = drawGraph({
                 xaxis: {
+                    min: area.x1,
+                    max: area.x2,
                     mode: "time",
                     labelsAngle: 45
                 },
