@@ -6,8 +6,6 @@ class NewsStatisticProvider
 
     protected $couchClient;
 
-    protected $today;
-
     protected static $districts = array(
         'Charlottenburg', 'Friedrichshain', 'Hellersdorf', 'Hohenschönhausen', 'Köpenick', 'Kreuzberg',
         'Lichtenberg', 'Marzahn', 'Mitte', 'Neukölln', 'Pankow', 'Prenzlauer Berg', 'Reinickendorf',
@@ -37,23 +35,11 @@ class NewsStatisticProvider
     public function fetchDistrictStatistics($daysBack = 4)
     {
         $stats = array();
-
         foreach (self::$districts as $district)
         {
             $stats[$district] = $this->fetchPublishedItemsCountForDistrict($district, $daysBack);
         }
-
         return $stats;
-    }
-
-    public function getTodaysDate()
-    {
-        $tm = $this->getContext()->getTranslationManager();
-        $today = $tm->createCalendar();
-        $today->set1(AgaviDateDefinitions::HOUR_OF_DAY, 23);
-        $today->set1(AgaviDateDefinitions::MINUTE, 59);
-        $today->set1(AgaviDateDefinitions::SECOND, 59);
-        return $today;
     }
 
     public function getContext()
@@ -80,10 +66,28 @@ class NewsStatisticProvider
         $query->setFilter(
             $this->buildPublishedFilterForDistrict($district, $daysBack)
         );
-        $itemsIndex = $this->elasticClient->getIndex('midas')->getType('item');
-        $searchData = $itemsIndex->search($query);
+
+        $stats = $this->mapItemsToPastDaysByDistrict(
+            $this->elasticClient->getIndex('midas')->getType('item')->search($query),
+            $district,
+            $daysBack
+        );
+        $stats['totalCount'] = $this->fetchTotalPublishCountForDistrict($district, $daysBack);
+
+        return $stats;
+    }
+
+    protected function mapItemsToPastDaysByDistrict(Elastica_ResultSet $results, $district, $daysBack)
+    {
+        $itemsLastWeek = 0;
+        $itemsPerDay = array();
+        for ($i = 0; $i < $daysBack; $i++)
+        {
+            $itemsPerDay[$i] = 0;
+        }
+
         /* @var $workflowItemResult Elastica_Result */
-        foreach($searchData->getResults() as $workflowItemResult)
+        foreach($results as $workflowItemResult)
         {
             $workflowItem = new WorkflowItem($workflowItemResult->getData());
             /* @var $contentItem ContentItem */
@@ -97,17 +101,21 @@ class NewsStatisticProvider
                         $daysAgoIndex = $this->determineDayIndex($contentItem, $daysBack);
                         if (0 <= $daysAgoIndex)
                         {
-                            $stats['lastDays'][$daysAgoIndex]++;
+                            $itemsPerDay[$daysAgoIndex]++;
                         }
                         if ($this->wasPublishedDuringLastWeek($contentItem))
                         {
-                            $stats['week']++;
+                            $itemsLastWeek++;
                         }
                     }
                 }
             }
         }
-        return $stats;
+
+        return array(
+            'week' => $itemsLastWeek,
+            'lastDays' => $itemsPerDay
+        );
     }
 
     protected function buildPublishedFilterForDistrict($district, $daysBack)
@@ -133,18 +141,11 @@ class NewsStatisticProvider
 
     protected function buildPublishedItemsDateRangeFilter($daysBack)
     {
-        $tm = $this->getContext()->getTranslationManager();
-        $lowerDate = $tm->createCalendar();
-        $lowerDate->add(AgaviDateDefinitions::DATE, -$daysBack);
-        $lowerDate->set1(AgaviDateDefinitions::HOUR_OF_DAY, 0);
-        $lowerDate->set1(AgaviDateDefinitions::MINUTE, 0);
-        $lowerDate->set1(AgaviDateDefinitions::SECOND, 0);
-
         $publishDateFilter = new Elastica_Filter_Range();
-
-        return $publishDateFilter->addField('contentItems.publishDate',
+        return $publishDateFilter->addField(
+            'contentItems.publishDate',
             array(
-                'from' => $lowerDate->getNativeDateTime()->format(DATE_ISO8601),
+                'from' => $this->getDateByDaysPastFromNow($daysBack)->getNativeDateTime()->format(DATE_ISO8601),
                 'to'   => $this->getTodaysDate()->getNativeDateTime()->format(DATE_ISO8601)
             )
         );
@@ -152,34 +153,23 @@ class NewsStatisticProvider
 
     protected function determineDayIndex(ContentItem $item, $daysBack)
     {
-        $tm = $this->getContext()->getTranslationManager();
-        $publishedDate = $tm->createCalendar(
-            new DateTime($item->getPublishDate())
-        );
-
-        $daysAgo = $tm->createCalendar();
-        $daysAgo->set(AgaviDateDefinitions::HOUR, 0);
-        $daysAgo->set(AgaviDateDefinitions::MINUTE, 0);
-        $daysAgo->set(AgaviDateDefinitions::SECOND, 0);
-        $daysAgo->add(AgaviDateDefinitions::DATE, -$daysBack);
+        $publishedDate = $this->getItemsPublishDate($item);
         $curDaysBack = $daysBack;
+        $daysAgo = $this->getDateByDaysPastFromNow($curDaysBack);
         if ($publishedDate->before($daysAgo))
         {
             return -1;
         }
-        $fieldDiff = $daysAgo->fieldDifference($publishedDate, AgaviDateDefinitions::DATE);
 
-        while (1 < $fieldDiff && 0 < $curDaysBack)
+        $fieldDiff = $daysAgo->fieldDifference($publishedDate, AgaviDateDefinitions::DATE);
+        while (0 !== $fieldDiff && 0 <= $curDaysBack)
         {
             $curDaysBack--;
-            $daysAgo = $tm->createCalendar();
-            $daysAgo->set(AgaviDateDefinitions::HOUR, 0);
-            $daysAgo->set(AgaviDateDefinitions::MINUTE, 0);
-            $daysAgo->set(AgaviDateDefinitions::SECOND, 0);
-            $daysAgo->add(AgaviDateDefinitions::DATE, -$curDaysBack);
+            $daysAgo = $this->getDateByDaysPastFromNow($curDaysBack);
             $fieldDiff = $daysAgo->fieldDifference($publishedDate, AgaviDateDefinitions::DATE);
         }
-        return ($curDaysBack - 1);
+
+        return (0 === $fieldDiff) ? $curDaysBack : -1;
     }
 
     protected function fetchTotalPublishCountForDistrict($district)
@@ -199,16 +189,45 @@ class NewsStatisticProvider
 
     protected function wasPublishedDuringLastWeek(ContentItem $item)
     {
-        $tm = $this->getContext()->getTranslationManager();
-        $daysAgo = $tm->createCalendar();
+        $publishedDate = $this->getContext()->getTranslationManager()->createCalendar(
+            new DateTime($item->getPublishDate())
+        );
+        return $publishedDate->after(
+            $this->getDateByDaysPastFromNow(7)
+        );
+    }
+
+    protected function getDateByDaysPastFromNow($daysBack)
+    {
+        $daysAgo = $this->getContext()->getTranslationManager()->createCalendar();
         $daysAgo->set(AgaviDateDefinitions::HOUR, 0);
         $daysAgo->set(AgaviDateDefinitions::MINUTE, 0);
         $daysAgo->set(AgaviDateDefinitions::SECOND, 0);
-        $daysAgo->add(AgaviDateDefinitions::DATE, -7);
-        $publishedDate = $tm->createCalendar(
+        if (0 < $daysBack)
+        {
+            $daysAgo->add(AgaviDateDefinitions::DATE, -$daysBack);
+        }
+        return $daysAgo;
+    }
+
+    protected function getTodaysDate()
+    {
+        $today = $this->getContext()->getTranslationManager()->createCalendar();
+        $today->set1(AgaviDateDefinitions::HOUR_OF_DAY, 23);
+        $today->set1(AgaviDateDefinitions::MINUTE, 59);
+        $today->set1(AgaviDateDefinitions::SECOND, 59);
+        return $today;
+    }
+
+    protected function getItemsPublishDate(IContentItem $item)
+    {
+        $publishedDate = $this->getContext()->getTranslationManager()->createCalendar(
             new DateTime($item->getPublishDate())
         );
-        return $publishedDate->after($daysAgo);
+        $publishedDate->set(AgaviDateDefinitions::HOUR, 23);
+        $publishedDate->set(AgaviDateDefinitions::MINUTE, 59);
+        $publishedDate->set(AgaviDateDefinitions::SECOND, 59);
+        return $publishedDate;
     }
 }
 
