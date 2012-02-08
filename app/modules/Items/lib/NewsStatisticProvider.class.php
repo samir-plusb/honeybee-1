@@ -179,10 +179,6 @@ class NewsStatisticProvider
             $daysAgo->add(AgaviDateDefinitions::DATE, -$curDaysBack);
             $fieldDiff = $daysAgo->fieldDifference($publishedDate, AgaviDateDefinitions::DATE);
         }
-        if (0 === $curDaysBack)
-        {
-            return -1;
-        }
         return ($curDaysBack - 1);
     }
 
