@@ -30,9 +30,13 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
 
         foreach ($workflowItem->getContentItems() as $contentItem)
         {
-            $contentItem->applyValues(array(
-                'publishDate' => $now->format(DATE_ISO8601)
-            ));
+            $publishDate = $contentItem->getPublishDate();
+            if (empty($publishDate))
+            {
+                $contentItem->applyValues(
+                    array('publishDate' => $now->format(DATE_ISO8601))
+                );
+            }
         }
 
         $supervisor = Workflow_SupervisorModel::getInstance();
@@ -48,7 +52,7 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
 
                 $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
                 $result->setMessage('Successfully published item to frontend.');
-                
+
                 $this->logInfo("Successfully published (news)item: " . $workflowItem->getIdentifier());
             }
             catch(FrontendApiClientException $e)
