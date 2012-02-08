@@ -52,6 +52,8 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
                 if (! container[0].graph && ! container[0].isBusy)
                 {
                     container.isBusy = true;
+                    var trigger = $(this);
+                    trigger.find('img').show();
                     var url = tab.attr('data-stats-uri');
                     $.getJSON(url, function(resp)
                     {
@@ -62,6 +64,7 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
                                 resp.data[district]
                             );
                             container[0].isBusy = false;
+                            trigger.find('img').fadeOut();
                             container[0].isShowing = true;
                         });
                     });

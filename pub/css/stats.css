@@ -74,4 +74,14 @@ td.col-day-0
     font-size: 7pt;
     border-radius: 15px;
     margin-right: 3em;
+    position: relative;
+}
+
+.graph-trigger img
+{
+    position: absolute;
+    left: -4em;
+    height: 15px;
+    widht: 15px;
+    display: none;
 }
