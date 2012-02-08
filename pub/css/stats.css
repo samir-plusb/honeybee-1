@@ -46,19 +46,12 @@ h1
     margin: 0;
 }
 
-.col-title
+th.col-day-1
 {
-    width: 26em;
+    opacity: 0.9;
 }
 
-.col-all,
-.col-week,
-.col-yesterday
+th.col-day-2
 {
-    width: 13em;
-}
-
-.col-today
-{
-    min-width: 10em;
+    opacity: 0.8;
 }

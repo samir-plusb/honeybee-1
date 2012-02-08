@@ -8,7 +8,20 @@
     <ae:configuration>
 
         <validators>
-            
+            <validator class="number" name="invalid_days_back" required="false">
+                <arguments>
+                    <argument>days_back</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="min">1</ae:parameter>
+                </ae:parameters>
+                <ae:parameters>
+                    <ae:parameter name="max">10</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error>Invalid days_back parameter.</error>
+                </errors>
+            </validator>
         </validators>
 
     </ae:configuration>

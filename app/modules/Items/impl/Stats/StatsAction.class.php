@@ -24,10 +24,12 @@ class Items_StatsAction extends ItemsBaseAction
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $provider = new NewsStatisticProvider();
-        $stats = $provider->fetchStatistics(7); // from today - 7 days back
+        $daysBack = $parameters->getParameter('days_back', 5);
+        $stats = $provider->fetchDistrictStatistics($daysBack);
         ksort($stats);
 
         $this->setAttribute('statistics', $stats);
+        $this->setAttribute('days_back', $daysBack);
 
         return 'Success';
     }

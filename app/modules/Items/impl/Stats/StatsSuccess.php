@@ -23,17 +23,11 @@
 ?>
             <li>
                 <table class="stats-data">
-                    <colgroup>
-                        <col class="col-title" />
-                        <col class="col-all" />
-                        <col class="col-week" />
-                        <col class="col-yesterday" />
-                        <col class="col-today" />
-                    </colgroup>
+                    
                     <thead>
                         <tr>
-                            <th>
-                                <h3><?php echo ucwords($district); ?></h3>
+                            <th class="col-district">
+                                <h3><?php echo $district; ?></h3>
                             </th>
                             <th>
                                 <span class="label">Insgesamt</span>
@@ -41,28 +35,56 @@
                             <th>
                                 <span class="label">letzte 7 Tage</span>
                             </th>
-                            <th>
-                                <span class="label">Gestern</span>
+<?php
+        for ($i = $t['days_back'] - 1; 0 <= $i; $i--)
+        {
+?>
+                            <th class="col-day <?php echo 'col-day-'.$i; ?>">
+<?php
+            if (2 == $i)
+            {
+?>
+                                <span class="label <?php echo (5 > $stats['lastDays'][2]) ? 'warning' : 'success'; ?>">Vorgestern</span>
+<?php
+            }
+            elseif (1 == $i)
+            {
+?>
+                               <span class="label <?php echo (5 > $stats['lastDays'][1]) ? 'warning' : 'success'; ?>">Gestern</span>
+<?php
+            }
+            elseif (0 == $i)
+            {
+?>
+                               <span class="label <?php echo (5 > $stats['lastDays'][0]) ? 'warning' : 'success'; ?>">Heute</span>
+<?php
+            }
+            else
+            {
+?>
+                               <span class="label"><?php echo "Vor $i Tagen"; ?></span>
+<?php
+            }
+?>
                             </th>
-                            <th>
-                                <span class="label <?php echo (5 > $stats['published']['today']) ? 'warning' : 'success'; ?>">Heute</span>
-                            </th>
+<?php
+        }
+?>
                         </tr>
                     </thead>
                     <tbody>
-                        <!--<tr>
-                            <th>importierte Einträge</th>
-                            <td>333</td>
-                            <td><?php echo $stats['imported']['week']; ?></td>
-                            <td><?php echo $stats['imported']['yesterday']; ?></td>
-                        <td><?php echo $stats['imported']['today']; ?></td>
-                        </tr>-->
                         <tr>
                             <th>veredelte und publizierte Einträge</th>
-                            <td><?php echo $stats['published']['eversince']; ?></td>
-                            <td><?php echo $stats['published']['week']; ?></td>
-                            <td><?php echo $stats['published']['yesterday']; ?></td>
-                            <td><?php echo $stats['published']['today']; ?></td>
+                            <td><?php echo $stats['totalCount']; ?></td>
+                            <td><?php echo $stats['week']; ?></td>
+<?php
+        for ($m = $t['days_back'] - 1; $m >= 0; $m--)
+        {
+?>
+                            <td><?php echo $stats['lastDays'][$m]; ?></td>
+<?php
+        }
+?>
                         </tr>
                     </tbody>
                 </table>

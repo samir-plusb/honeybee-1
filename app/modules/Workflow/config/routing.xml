@@ -14,6 +14,7 @@
         <routes>
             <route pattern="workflow." module="Workflow">
                 <route pattern="^run" action="Run" />
+                <route pattern="^setup" action="Setup" method="write" />
             </route>
         </routes>
     </ae:configuration>

@@ -72,6 +72,10 @@
                         }
                     }
                 },
+                "attributes": {
+                    "type": "object",
+                    "dynamic": true
+                },
                 "currentState": {
                     "include_in_all": false,
                     "properties": {
