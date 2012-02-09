@@ -67,21 +67,26 @@ td.col-day-0
     float: left;
 }
 
-.graph-trigger
+.graph-trigger-container
 {
     float: right;
-    cursor: pointer;
-    font-size: 7pt;
-    border-radius: 15px;
     margin-right: 3em;
     position: relative;
 }
 
-.graph-trigger img
+.graph-trigger
+{
+    cursor: pointer;
+    font-size: 7pt;
+    border-radius: 15px;
+}
+
+.graph-trigger-container img
 {
     position: absolute;
     left: -20px;
     height: 15px;
     widht: 15px;
+    top: 5px;
     display: none;
 }

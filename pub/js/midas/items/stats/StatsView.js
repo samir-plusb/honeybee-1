@@ -53,11 +53,11 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
                 {
                     container.isBusy = true;
                     var trigger = $(this);
-                    trigger.find('img').show();
+                    trigger.parent().find('img').show();
                     var url = tab.attr('data-stats-uri');
                     $.getJSON(url, function(resp)
                     {
-                        trigger.find('img').fadeOut();
+                        trigger.parent().find('img').fadeOut();
                         container.animate({'height': '15em'}, 500, function()
                         {
                             container[0].graph = that.drawGraph(
@@ -95,7 +95,7 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
         options, graph, i, x, o;
 
         cur_date.setDate((new Date()).getDate() - (data.lastDays.length - 1));
-        cur_date.setHours(0, 0, 0, 0);
+        cur_date.setUTCHours(0, 0, 0, 0);
         for (i = data.lastDays.length - 1; i >= 0; i--) {
             x = cur_date.getTime();
             max = Math.max(max, data.lastDays[i]);

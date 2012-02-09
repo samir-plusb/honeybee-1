@@ -28,7 +28,10 @@
                         <tr>
                             <th class="col-district">
                                 <h3><?php echo $district; ?></h3>
-                                <button class="graph-trigger btn">Chart<img src="images/loading-small.gif" /></button>
+                                <div class="graph-trigger-container">
+                                    <img src="images/loading-small.gif" />
+                                    <button class="graph-trigger btn">Chart</button>
+                                </div>
                             </th>
                             <th>
                                 <span class="label">Insgesamt</span>
