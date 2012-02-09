@@ -216,23 +216,18 @@ class NewsStatisticProvider
 
     protected function determineDayIndex(ContentItem $item, $daysBack)
     {
-        $publishedDate = $this->getItemsPublishDate($item);
         $curDaysBack = $daysBack;
         $daysAgo = $this->getDateByDaysPastFromNow($curDaysBack);
+        $publishedDate = $this->getItemsPublishDate($item);
         if ($publishedDate->before($daysAgo))
         {
             return -1;
         }
-
-        $fieldDiff = $daysAgo->fieldDifference($publishedDate, AgaviDateDefinitions::DATE);
-        while (0 !== $fieldDiff && 0 <= $curDaysBack)
+        while (! $publishedDate->equals($daysAgo) && 0 < $curDaysBack)
         {
-            $curDaysBack--;
-            $daysAgo = $this->getDateByDaysPastFromNow($curDaysBack);
-            $fieldDiff = $daysAgo->fieldDifference($publishedDate, AgaviDateDefinitions::DATE);
+            $daysAgo = $this->getDateByDaysPastFromNow(--$curDaysBack);
         }
-
-        return (0 === $fieldDiff) ? $curDaysBack : -1;
+        return $publishedDate->equals($daysAgo) ? $curDaysBack : -1;
     }
 
     protected function fetchTotalPublishCountForDistrict($district)
@@ -253,7 +248,7 @@ class NewsStatisticProvider
     protected function wasPublishedDuringLastWeek(ContentItem $item)
     {
         $publishedDate = $this->getContext()->getTranslationManager()->createCalendar(
-            new DateTime($item->getPublishDate())
+            strtotime($item->getPublishDate())
         );
         return $publishedDate->after(
             $this->getDateByDaysPastFromNow(7)
@@ -263,9 +258,10 @@ class NewsStatisticProvider
     protected function getDateByDaysPastFromNow($daysBack)
     {
         $daysAgo = $this->getContext()->getTranslationManager()->createCalendar();
-        $daysAgo->set(AgaviDateDefinitions::HOUR, 0);
+        $daysAgo->set(AgaviDateDefinitions::HOUR_OF_DAY, 0);
         $daysAgo->set(AgaviDateDefinitions::MINUTE, 0);
         $daysAgo->set(AgaviDateDefinitions::SECOND, 0);
+        $daysAgo->set(AgaviDateDefinitions::MILLISECOND, 0);
         if (0 < $daysBack)
         {
             $daysAgo->add(AgaviDateDefinitions::DATE, -$daysBack);
@@ -279,17 +275,20 @@ class NewsStatisticProvider
         $today->set1(AgaviDateDefinitions::HOUR_OF_DAY, 23);
         $today->set1(AgaviDateDefinitions::MINUTE, 59);
         $today->set1(AgaviDateDefinitions::SECOND, 59);
+        $today->set(AgaviDateDefinitions::MILLISECOND, 999);
         return $today;
     }
 
     protected function getItemsPublishDate(IContentItem $item)
     {
         $publishedDate = $this->getContext()->getTranslationManager()->createCalendar(
-            new DateTime($item->getPublishDate())
+            strtotime($item->getPublishDate())
         );
-        $publishedDate->set(AgaviDateDefinitions::HOUR, 23);
-        $publishedDate->set(AgaviDateDefinitions::MINUTE, 59);
-        $publishedDate->set(AgaviDateDefinitions::SECOND, 59);
+        $publishedDate->set(AgaviDateDefinitions::HOUR_OF_DAY, 0);
+        $publishedDate->set(AgaviDateDefinitions::MINUTE, 0);
+        $publishedDate->set(AgaviDateDefinitions::SECOND, 0);
+        $publishedDate->set(AgaviDateDefinitions::MILLISECOND, 0);
+
         return $publishedDate;
     }
 
