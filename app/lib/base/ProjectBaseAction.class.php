@@ -11,7 +11,6 @@
  */
 class ProjectBaseAction extends AgaviAction
 {
-
     /**
      * add a validation error out of the action
      *
@@ -98,6 +97,11 @@ class ProjectBaseAction extends AgaviAction
         $logger->log(
             new AgaviLoggerMessage($infoMsg, AgaviLogger::INFO)
         );
+    }
+
+    protected function isSecure()
+    {
+        return TRUE;
     }
 }
 
