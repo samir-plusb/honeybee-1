@@ -88,6 +88,11 @@ class ImportBaseAction extends ProjectBaseAction
 
         return $view;
     }
+
+    public function isSecure()
+    {
+        return FALSE;
+    }
 }
 
 ?>
