@@ -162,7 +162,8 @@ class NewsStatisticProvider
                     $daysAgoIndex = $this->determineDayIndex($contentItem, $daysBack);
                     if (0 <= $daysAgoIndex)
                     {
-                        $statsLogMessage .= "Incrementing stat counter for item " . $contentItem->getIdentifier() . PHP_EOL;
+                        $statsLogMessage .= "Incrementing stat counter for item " .
+                            $contentItem->getIdentifier() . " at position $daysAgoIndex" . PHP_EOL;
                         $itemsPerDay[$daysAgoIndex]++;
                     }
                     if ($this->wasPublishedDuringLastWeek($contentItem))
