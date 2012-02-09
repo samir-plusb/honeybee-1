@@ -138,7 +138,7 @@ class NewsStatisticProvider
         {
             $itemsPerDay[$i] = 0;
         }
-
+        $statsLogMessage = "----- DISTRICT $district------\n";
         /* @var $workflowItemResult Elastica_Result */
         foreach($results as $workflowItemResult)
         {
@@ -146,12 +146,23 @@ class NewsStatisticProvider
             /* @var $contentItem ContentItem */
             foreach ($workflowItem->getContentItems() as $contentItem)
             {
+                if (! $contentItem->getPublishDate())
+                {
+                    // Hack, as there should not be any published items with a published date at this time.
+                    // If there are any let's track them down ...
+                    $this->logError(
+                        "Content-Item without published date encountered during stats generation:\n" .
+                        print_r($contentItem->toArray(), TRUE)
+                    );
+                    continue;
+                }
                 if (($location = $contentItem->getLocation()) && $district == $location->getDistrict())
                 {
                     // get the correct index, week or one of the past days and increment.
                     $daysAgoIndex = $this->determineDayIndex($contentItem, $daysBack);
                     if (0 <= $daysAgoIndex)
                     {
+                        $statsLogMessage .= "Incrementing stat counter for item " . $contentItem->getIdentifier() . PHP_EOL;
                         $itemsPerDay[$daysAgoIndex]++;
                     }
                     if ($this->wasPublishedDuringLastWeek($contentItem))
@@ -161,6 +172,7 @@ class NewsStatisticProvider
                 }
             }
         }
+        $this->logInfo($statsLogMessage . PHP_EOL . "------------------------------" . PHP_EOL);
         ksort($itemsPerDay);
         return array(
             'week' => $itemsLastWeek,
@@ -283,6 +295,24 @@ class NewsStatisticProvider
     protected function getContext()
     {
         return AgaviContext::getInstance();
+    }
+
+    protected function logError($msg)
+    {
+        $logger = $this->getContext()->getLoggerManager()->getLogger('error');
+        $errMsg = sprintf("[%s] %s", get_class($this), $msg);
+        $logger->log(
+            new AgaviLoggerMessage($errMsg, AgaviLogger::ERROR)
+        );
+    }
+
+    protected function logInfo($msg)
+    {
+        $logger = $this->getContext()->getLoggerManager()->getLogger('app');
+        $infoMsg = sprintf("[%s] %s", get_class($this), $msg);
+        $logger->log(
+            new AgaviLoggerMessage($infoMsg, AgaviLogger::INFO)
+        );
     }
 }
 
