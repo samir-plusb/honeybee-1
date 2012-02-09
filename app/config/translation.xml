@@ -13,20 +13,18 @@
             </available_locale>
         </available_locales>
 
-<!--         <translators default_domain="toplevel"> -->
-<!--             <translator domain="toplevel"> -->
-<!--                 <message_translator class="AgaviSimpleTranslator"> -->
-
-<!--                         Messages are definesd inside the translations/messages.xml -->
-<!--                 </message_translator> -->
-
-<!--                 <date_formatter> -->
-<!--                     <ae:parameter name="type">date</ae:parameter> -->
-<!--                     <ae:parameter name="format">full</ae:parameter> -->
-<!--                 </date_formatter> -->
-
-<!--             </translator> -->
-<!--         </translators> -->
+       <translators default_domain="date_formats">
+           <translator domain="date_formats">
+                <translator domain="datetime">
+                        <date_formatter>
+                            <ae:parameters>
+                                <ae:parameter name="type">datetime</ae:parameter>
+                                <ae:parameter name="format">yyyy-MM-dd HH:mm:ss</ae:parameter>
+                            </ae:parameters>
+                        </date_formatter>
+                </translator>
+            </translator>
+       </translators>
 
     </ae:configuration>
 

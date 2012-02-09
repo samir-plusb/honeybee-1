@@ -112,7 +112,9 @@
     {
 // Render the table's body traversing our data and rendering one tablerow per dataset.
             $importItem = $workflowItem['importItem'];
-            $date = new DateTime($importItem['created']['date']);
+            $date = $tm->createCalendar(
+                new DateTime($importItem['created']['date'])
+            );
             $step = $workflowItem['currentState']['step'];
             $grabTicketLink = $ro->gen('workflow.grab', array('ticket' => $workflowItem['ticket']));
             $processListFilterParams = array(
@@ -149,7 +151,7 @@
                     <?php echo $importItem['source']; ?>
                 </td>
                 <td class="date">
-                    <?php echo $date->format('Y-m-d H:i:s'); ?>
+                    <?php echo $tm->_d($date, 'date_formats.datetime'); ?>
                 </td>
                 <td class="state">
                     <!-- @todo Map steps to label colors. -->

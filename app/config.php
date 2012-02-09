@@ -55,6 +55,6 @@ AgaviConfig::set('project.libs', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATO
 // |  - core.template_dir (defaults to "<core.app_dir>/templates")             |
 // +---------------------------------------------------------------------------+
 
-date_default_timezone_set('Europe/London');
+date_default_timezone_set('Europe/Berlin');
 
 ?>
