@@ -99,7 +99,7 @@ class ProjectBaseAction extends AgaviAction
         );
     }
 
-    protected function isSecure()
+    public function isSecure()
     {
         return TRUE;
     }
