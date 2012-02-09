@@ -58,7 +58,7 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
                     $.getJSON(url, function(resp)
                     {
                         trigger.find('img').fadeOut();
-                        container.animate({ 'height': '15em' }, 500, function()
+                        container.animate({'height': '15em'}, 500, function()
                         {
                             container[0].graph = that.drawGraph(
                                 container,
@@ -73,12 +73,12 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
                 {
                     if (container[0].isShowing)
                     {
-                        container.animate({ 'height': 0 }, 200);
+                        container.animate({'height': 0}, 200);
                         container[0].isShowing = false;
                     }
                     else
                     {
-                        container.animate({ 'height': '15em' }, 200);
+                        container.animate({'height': '15em'}, 200);
                         container[0].isShowing = true;
                     }
                 }
@@ -88,61 +88,77 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
 
     drawGraph: function(container, data)
     {
-        // @todo today's time should be set to 00:00:00
-        var today = (new Date()).getTime();
         var d1 = [],
         d2 = [],
         max = 10,
+        cur_date = new Date(),
         options, graph, i, x, o;
 
+        cur_date.setDate((new Date()).getDate() - (data.lastDays.length - 1));
+        cur_date.setHours(0, 0, 0, 0);
         for (i = data.lastDays.length - 1; i >= 0; i--) {
-            x = today - ((i + 1) * 1000 * 3600 * 24);
+            x = cur_date.getTime();
             max = Math.max(max, data.lastDays[i]);
             d1.push([ x, data.lastDays[i] ]);
             d2.push([ x, 5 ]);
+            cur_date.setDate(cur_date.getDate() + 1);
         }
+
         options = {
             xaxis: {
                 mode: "time",
                 labelsAngle: 45,
                 noTicks: data.lastDays.length,
-                minorTickFreq: 1
+                minorTickFreq: 2,
+                showMinorLabels: true
             },
             yaxis: {
                 min: 0,
-                max: max
+                max: max,
+                tickDecimals: 0,
+                title: "Anzahl Items"
             },
             selection: {
                 mode: "x"
+            },
+            grid: {
+                minorVerticalLines: true
             },
             HtmlText: false,
             title: "Die letzten 20 Tage"
         };
 
-        function drawGraph(opts) {
+        function drawGraph(opts)
+        {
             o = Flotr._.extend(Flotr._.clone(options), opts || {});
-            return Flotr.draw(container[0], [{
-            data: d2,
-            lines: {
-                show: true,
-                fillColor: ["#ababab", "#fff"],
-                fill: true,
-                fillOpacity: 0.4,
-                color: "#ababab"
-            }
-        }, {
-            data: d1,
-            lines: {
-                show: true,
-                fill: false,
-                color: "#08AAEF"
-            }
-        }], o);
+            var days_data = {
+                data: d1,
+                lines: {
+                    show: true,
+                    fill: false,
+                    color: "#08AAEF",
+                    lineWidth: 3
+                }
+            };
+            var optimal_data = {
+                data: d2,
+                lines: {
+                    show: true,
+                    fillColor: ["#46A546", "#fff"],
+                    fill: true,
+                    fillOpacity: 0.3,
+                    color: "#46A546",
+                    lineWidth: 1,
+                    shadowSize: 0
+                }
+            };
+            return Flotr.draw(container[0], [ optimal_data, days_data ], o);
         }
 
         graph = drawGraph();
 
-        Flotr.EventAdapter.observe(container[0], "flotr:select", function(area) {
+        Flotr.EventAdapter.observe(container[0], "flotr:select", function(area)
+        {
             graph = drawGraph({
                 xaxis: {
                     min: area.x1,
@@ -156,7 +172,8 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
                 }
             });
         });
-        Flotr.EventAdapter.observe(container[0], "flotr:click", function() {
+        Flotr.EventAdapter.observe(container[0], "flotr:click", function()
+        {
             graph = drawGraph();
         });
 
