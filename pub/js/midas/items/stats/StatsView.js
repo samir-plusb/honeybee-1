@@ -109,7 +109,6 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
                 mode: "time",
                 labelsAngle: 45,
                 noTicks: data.lastDays.length,
-                minorTickFreq: 2,
                 showMinorLabels: true
             },
             yaxis: {
@@ -168,7 +167,9 @@ midas.items.stats.StatsView = midas.core.BaseView.extend(
                 },
                 yaxis: {
                     min: 0,
-                    max: Math.max(area.y2, 10)
+                    max: Math.max(area.y2, 10),
+                    tickDecimals: 0,
+                    title: "Anzahl Items"
                 }
             });
         });
