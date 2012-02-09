@@ -80,7 +80,7 @@ td.col-day-0
 .graph-trigger img
 {
     position: absolute;
-    left: -4em;
+    left: -20px;
     height: 15px;
     widht: 15px;
     display: none;
