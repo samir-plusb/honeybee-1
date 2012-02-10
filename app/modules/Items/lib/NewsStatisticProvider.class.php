@@ -1,7 +1,22 @@
 <?php
 
+/**
+ * The NewsStatisticProvider is responseable for collecting statistics on items published per district.
+ *
+ * @version         $Id: $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Items
+ * @subpackage      Lib
+ */
 class NewsStatisticProvider
 {
+    // ---------------------------------- <CONSTANTS> --------------------------------------------
+
+    /**
+     * Represents 'all' districts.
+     * Is used to tell the provider to generate stats for all districts.
+     */
     const DISTRICT_ALL = 'all';
 
     const DISTRICT_CHAR = 'Charlottenburg';
@@ -50,6 +65,37 @@ class NewsStatisticProvider
 
     const DISTRICT_ZEH = 'Zehlendorf';
 
+    /**
+     * Name of the elastic search index that is queried when gathering news-item information.
+     */
+    const ES_IDX_NAME = 'midas';
+
+    /**
+     * Name of the elastic search type that we query for news-items.
+     */
+    const ES_TYPE_NAME = 'item';
+
+    /**
+     * Name of the couchdb design document that contains a view we use to fetch total counts.
+     */
+    const COUCH_DESIGN_DOC = 'designWorkflow';
+
+    /**
+     * Name of the couchdb view (map & reduce) that provides access to the total number of content-items
+     * that have been published for a given district.
+     */
+    const COUCH_VIEW_NAME = 'contentItemsByDistrict';
+
+    // ---------------------------------- </CONSTANTS> -------------------------------------------
+
+
+    // ---------------------------------- <MEMBERS> ----------------------------------------------
+
+    /**
+     * An array containing the names of all districts that are supported for reporting.
+     *
+     * @var array
+     */
     protected static $supportedDistricts = array(
         self::DISTRICT_CHAR, self::DISTRICT_FRIED, self::DISTRICT_HELLER, self::DISTRICT_HOHEN, self::DISTRICT_KÖP,
         self::DISTRICT_KREUZ, self::DISTRICT_LICHT, self::DISTRICT_MAR, self::DISTRICT_MIT, self::DISTRICT_NEUK,
@@ -58,133 +104,169 @@ class NewsStatisticProvider
         self::DISTRICT_WEISS, self::DISTRICT_WIL, self::DISTRICT_ZEH
     );
 
+    /**
+     * Holds the client instance used to talk to elastic search.
+     *
+     * @var Elastica_Client
+     */
     protected $elasticClient;
 
+    /**
+     * Holds the client instance used to talk to couchdb.
+     *
+     * @var ExtendedCouchDbClient
+     */
     protected $couchClient;
 
-    public function __construct()
-    {
-        $this->elasticClient = new Elastica_Client(array(
-            'host'      => AgaviConfig::get('elasticsearch.host', 'localhost'),
-            'port'      => AgaviConfig::get('elasticsearch.port', 9200),
-            'transport' => AgaviConfig::get('elasticsearch.transport', 'Http')
-        ));
+    // ---------------------------------- </MEMBERS> ---------------------------------------------
 
-        $this->couchClient = $this->getContext()->getDatabaseConnection('CouchWorkflow');
+
+    // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
+
+    /**
+     * Create a new NewsStatisticProvider instance.
+     *
+     * @param Elastica_Client $elasticClient
+     * @param ExtendedCouchDbClient $couchClient
+     */
+    public function __construct(Elastica_Client $elasticClient, ExtendedCouchDbClient $couchClient)
+    {
+        $this->elasticClient = $elasticClient;
+        $this->couchClient = $couchClient;
     }
 
+    /**
+     * Provides an array containing information on how many content-items where published
+     * per day for the given district. The data is provided on a per day base reaching back
+     * $daysBack number of days.
+     *
+     * @param int $daysBack The number of days to go back when collecting the stat data.
+     * @param string $district One of the supported DISTRICT_* constants.
+     *
+     * @return array An assoc array holding a stats array for each demanded district.
+     *
+     * <pre>
+     * Example result structure for following parameters: $daysBack => 5, $district => DISTRICT_WED.
+     * If multiple district have been demanded, then the structure is repeated for each district.
+     *
+     * array(
+     *     [Wedding] => Array
+     *     (
+     *         [week] => 27
+     *         [totalCount] => 23
+     *         [lastDays] => Array
+     *         (
+     *             [0] => 2
+     *             [1] => 5
+     *             [2] => 7
+     *             [3] => 2
+     *             [4] => 4
+     *         )
+     *     ),
+     *     ...
+     * )
+     * </pre>
+     *
+     * @todo Passing an array of districts to process should be more flexible.
+     */
     public function fetchDistrictStatistics($daysBack = 4, $district = self::DISTRICT_ALL)
     {
         $stats = array();
-
+        $districts = $this->getDistricts();
         if (self::DISTRICT_ALL === $district)
         {
-            foreach ($this->getDistricts() as $curDistrict)
+            foreach ($districts as $curDistrict)
             {
-                $stats[$curDistrict] = $this->fetchPublishedItemsCountForDistrict($curDistrict, $daysBack);
+                $stats[$curDistrict] = $this->fetchPublishedItemsCountForDistrict($daysBack, $curDistrict);
             }
         }
         else
         {
-            if (! in_array($district, self::$supportedDistricts))
+            if (! in_array($district, $districts))
             {
                 throw new InvalidArgumentException("The given district '$district' is not supported.");
             }
-            $stats[$district] = $this->fetchPublishedItemsCountForDistrict($district, $daysBack);
+            $stats[$district] = $this->fetchPublishedItemsCountForDistrict($daysBack, $district);
         }
         return $stats;
     }
 
+    /**
+     * Returns an array district names that are supported by the stat provider.
+     *
+     * @return array
+     */
     public function getDistricts()
     {
         return self::$supportedDistricts;
     }
 
-    protected function fetchPublishedItemsCountForDistrict($district, $daysBack)
-    {
-        $stats = array(
-            'totalCount' => $this->fetchTotalPublishCountForDistrict($district),
-            'week' => 0,
-            'lastDays' => array()
-        );
-        for ($i = 0; $i < $daysBack; $i++)
-        {
-            $stats['lastDays'][$i] = 0;
-        }
+    // ---------------------------------- </PUBLIC METHODS> --------------------------------------
 
+
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
+
+    /**
+     * Collects various types of content-item counts,
+     * such as items per day, per week and in total for the given district
+     * reaching back the given number of $daysback.
+     *
+     * @param int $daysBack
+     * @param string $district
+     *
+     * @return array
+     *
+     * <pre>
+     * Example result structure for following parameters: $daysBack => 5, $district => DISTRICT_WED.
+     * Atm you are provided a 'totalCount', a 'week' based and an 'items per day' count.
+     *
+     * array(
+     *     [week] => 27
+     *     [totalCount] => 23
+     *     [lastDays] => Array
+     *     (
+     *         [0] => 2
+     *         [1] => 5
+     *         [2] => 7
+     *         [3] => 2
+     *         [4] => 4
+     *     )
+     * )
+     * </pre>
+     */
+    protected function fetchPublishedItemsCountForDistrict($daysBack, $district)
+    {
         $query = new Elastica_Query(
             new Elastica_Query_MatchAll()
         );
-        $query->setLimit(100000);
+        $query->setLimit(500000); // @todo Need to find sensefull control for this parameter.
         $query->setFilter(
-            $this->buildPublishedFilterForDistrict($district, $daysBack)
+            $this->buildPublishedFilterForDistrict(
+                // we need items for at least a week to fill the 'week' count, so lets take the bigger value
+                (7 <= $daysBack) ? $daysBack : 7,
+                $district
+            )
         );
-
-        $stats = $this->mapItemsToPastDaysByDistrict(
-            $this->elasticClient->getIndex('midas')->getType('item')->search($query),
-            $district,
-            $daysBack
-        );
-        $stats['totalCount'] = $this->fetchTotalPublishCountForDistrict($district, $daysBack);
-
+        $itemsIndex = $this->elasticClient->getIndex(self::ES_IDX_NAME)->getType(self::ES_TYPE_NAME);
+        $stats = $this->mapItemsToPastDaysByDistrict($itemsIndex->search($query), $daysBack, $district);
+        $stats['totalCount'] = $this->fetchTotalPublishCountForDistrict($district);
         return $stats;
     }
 
-    protected function mapItemsToPastDaysByDistrict(Elastica_ResultSet $results, $district, $daysBack)
-    {
-        $itemsLastWeek = 0;
-        $itemsPerDay = array();
-        for ($i = 0; $i < $daysBack; $i++)
-        {
-            $itemsPerDay[$i] = 0;
-        }
-        $statsLogMessage = "----- DISTRICT $district------\n";
-        /* @var $workflowItemResult Elastica_Result */
-        foreach($results as $workflowItemResult)
-        {
-            $workflowItem = new WorkflowItem($workflowItemResult->getData());
-            /* @var $contentItem ContentItem */
-            foreach ($workflowItem->getContentItems() as $contentItem)
-            {
-                if (! $contentItem->getPublishDate())
-                {
-                    // Hack, as there should not be any published items with a published date at this time.
-                    // If there are any let's track them down ...
-                    $this->logError(
-                        "Content-Item without published date encountered during stats generation:\n" .
-                        print_r($contentItem->toArray(), TRUE)
-                    );
-                    continue;
-                }
-                if (($location = $contentItem->getLocation()) && $district == $location->getDistrict())
-                {
-                    // get the correct index, week or one of the past days and increment.
-                    $daysAgoIndex = $this->determineDayIndex($contentItem, $daysBack);
-                    if (0 <= $daysAgoIndex)
-                    {
-                        $statsLogMessage .= "Incrementing stat counter for item " .
-                            $contentItem->getIdentifier() . " at position $daysAgoIndex" . PHP_EOL;
-                        $itemsPerDay[$daysAgoIndex]++;
-                    }
-                    if ($this->wasPublishedDuringLastWeek($contentItem))
-                    {
-                        $itemsLastWeek++;
-                    }
-                }
-            }
-        }
-        $this->logInfo($statsLogMessage . PHP_EOL . "------------------------------" . PHP_EOL);
-        ksort($itemsPerDay);
-        return array(
-            'week' => $itemsLastWeek,
-            'lastDays' => $itemsPerDay
-        );
-    }
-
-    protected function buildPublishedFilterForDistrict($district, $daysBack)
+    /**
+     * Returns an elastic search (and)filter that is setup to filter for published
+     * items on a per ditrict base reaching the number of given $daysBack.
+     * !CAUTION! Deleted items are not filtered out as they are supposed to be reflected by the
+     * stats provided by this class (ask product management to obtain deeper knowledge on this requirement).
+     *
+     * @param int $daysBack
+     * @param string $district
+     *
+     * @return Elastica_Filter_And
+     */
+    protected function buildPublishedFilterForDistrict($daysBack, $district)
     {
         $filter = new Elastica_Filter_And();
-
         return $filter->addFilter(
             new Elastica_Filter_Term(
                 array('currentState.workflow' => 'news')
@@ -197,24 +279,112 @@ class NewsStatisticProvider
             new Elastica_Filter_Exists('contentItems.publishDate')
         )->addFilter(
             $this->buildPublishedItemsDateRangeFilter(
-                (7 <= $daysBack) ? $daysBack : 7
+                $this->getDateByDaysPastFromNow($daysBack)
             )
         );
     }
 
-    protected function buildPublishedItemsDateRangeFilter($daysBack)
+    /**
+     * Builds an elastic search daterange filter,
+     * that reaches from the given $lowerDate until today.
+     *
+     * @param AgaviCalendar $lowerDate
+     *
+     * @return Elastica_Filter_Range
+     */
+    protected function buildPublishedItemsDateRangeFilter(AgaviCalendar $lowerDate)
     {
         $publishDateFilter = new Elastica_Filter_Range();
         return $publishDateFilter->addField(
             'contentItems.publishDate',
             array(
-                'from' => $this->getDateByDaysPastFromNow($daysBack)->getNativeDateTime()->format(DATE_ISO8601),
+                'from' => $lowerDate->getNativeDateTime()->format(DATE_ISO8601),
                 'to'   => $this->getTodaysDate()->getNativeDateTime()->format(DATE_ISO8601)
             )
         );
     }
 
-    protected function determineDayIndex(ContentItem $item, $daysBack)
+    /**
+     * Takes the result of an elastic search query that was fired against the ES_TYPE_NAME type
+     * of the ES_IDX_NAME index and returns an array reflecting the number of items,
+     * that have been published to the given $district if they were published within
+     * either the last week or within $daysBack from today.
+     *
+     * @param Elastica_ResultSet $results
+     * @param type $district
+     * @param type $daysBack
+     *
+     * @return array
+     *
+     * <pre>
+     * Example result structure for following parameters: $daysBack => 5, $district => 'Wedding'.
+     * Each index beneath the result array's key 'lastDays' stands for one of the $daysBack,
+     * whereas the index 0 represents 'today' and the last index maps to today - $daysBack.
+     *
+     * array(
+     *     [week] => 27
+     *     [lastDays] => Array
+     *     (
+     *         [0] => 2
+     *         [1] => 5
+     *         [2] => 7
+     *         [3] => 2
+     *         [4] => 4
+     *     )
+     * )
+     * </pre>
+     */
+    protected function mapItemsToPastDaysByDistrict(Elastica_ResultSet $results, $daysBack, $district)
+    {
+        $itemsLastWeek = 0;
+        // Initialize our 'items per day' counts for the given number of $daysBack.
+        $itemsPerDay = array();
+        for ($i = 0; $i < $daysBack; $i++)
+        {
+            $itemsPerDay[$i] = 0;
+        }
+        /* @var $workflowItemResult Elastica_Result */
+        foreach($results as $workflowItemResult)
+        {
+            $workflowItem = new WorkflowItem($workflowItemResult->getData());
+            /* @var $contentItem ContentItem */
+            foreach ($workflowItem->getContentItems() as $contentItem)
+            {
+                if (($location = $contentItem->getLocation()) && $district == $location->getDistrict())
+                {
+                    // Get the correct index, week or one of the past days and increment the item count.
+                    $daysAgoIndex = $this->determineDayIndex($contentItem, $daysBack);
+                    if (0 <= $daysAgoIndex)
+                    {
+                        $itemsPerDay[$daysAgoIndex]++;
+                    }
+                    if ($this->wasPublishedDuringLastWeek($contentItem))
+                    {
+                        $itemsLastWeek++;
+                    }
+                }
+            }
+        }
+        return array(
+            'lastDays' => $itemsPerDay,
+            'week' => $itemsLastWeek
+        );
+    }
+
+    /**
+     * Return a 'past days index' for the given content-item,
+     * hence find out if the item was published within $dyasBack from today
+     * and if so, then on which specific day within the latter range.
+     * The returned value represents the items publish day in form of an integer,
+     * starting with 0 (today) and +1 for every day back.
+     * So yesterday would be 1 and the day before yesterday 2 etc.
+     *
+     * @param IContentItem $item
+     * @param int $daysBack
+     *
+     * @return int Either a value between 0 and ($daysBack - 1) or -1 if the item is out of range.
+     */
+    protected function determineDayIndex(IContentItem $item, $daysBack)
     {
         $curDaysBack = $daysBack;
         $daysAgo = $this->getDateByDaysPastFromNow($curDaysBack);
@@ -230,12 +400,37 @@ class NewsStatisticProvider
         return $publishedDate->equals($daysAgo) ? $curDaysBack : -1;
     }
 
+    /**
+     * Tells if a given content-item was published within the last week from now.
+     *
+     * @param IContentItem $item
+     *
+     * @return bool
+     */
+    protected function wasPublishedDuringLastWeek(IContentItem $item)
+    {
+        $publishedDate = $this->getTranslationManager()->createCalendar(
+            strtotime($item->getPublishDate())
+        );
+        return $publishedDate->after(
+            $this->getDateByDaysPastFromNow(7)
+        );
+    }
+
+    /**
+     * Returns the total number of items,
+     * that have been published for the gien district so far.
+     *
+     * @param string $district
+     *
+     * @return int
+     */
     protected function fetchTotalPublishCountForDistrict($district)
     {
         $result = $this->couchClient->getView(
             NULL,
-            'designWorkflow',
-            "contentItemsByDistrict",
+            self::COUCH_DESIGN_DOC,
+            self::COUCH_VIEW_NAME,
             array('key' => $district)
         );
         if (! empty($result['rows']))
@@ -245,19 +440,24 @@ class NewsStatisticProvider
         return 0;
     }
 
-    protected function wasPublishedDuringLastWeek(ContentItem $item)
-    {
-        $publishedDate = $this->getContext()->getTranslationManager()->createCalendar(
-            strtotime($item->getPublishDate())
-        );
-        return $publishedDate->after(
-            $this->getDateByDaysPastFromNow(7)
-        );
-    }
 
+    // ---------------------------------- </WORKING METHODS> -------------------------------------
+
+
+    // ---------------------------------- <HELPER METHODS> ---------------------------------------
+
+    /**
+     * Return an AgaviCalendar instance that reflects the date
+     * $daysBack from now and has a time set to 00:00:00.000
+     * as a base for clean date calculations.
+     *
+     * @param int $daysBack
+     *
+     * @return AgaviCalendar
+     */
     protected function getDateByDaysPastFromNow($daysBack)
     {
-        $daysAgo = $this->getContext()->getTranslationManager()->createCalendar();
+        $daysAgo = $this->getTranslationManager()->createCalendar();
         $daysAgo->set(AgaviDateDefinitions::HOUR_OF_DAY, 0);
         $daysAgo->set(AgaviDateDefinitions::MINUTE, 0);
         $daysAgo->set(AgaviDateDefinitions::SECOND, 0);
@@ -269,9 +469,37 @@ class NewsStatisticProvider
         return $daysAgo;
     }
 
+    /**
+     * Return an AgaviCalendar instance that reflects the given content-item's
+     * publish-date and has a time set to 00:00:00.000
+     * as a base for clean date calculations.
+     *
+     * @param IContentItem $item
+     *
+     * @return AgaviCalendar
+     */
+    protected function getItemsPublishDate(IContentItem $item)
+    {
+        $publishedDate = $this->getTranslationManager()->createCalendar(
+            strtotime($item->getPublishDate())
+        );
+        $publishedDate->set(AgaviDateDefinitions::HOUR_OF_DAY, 0);
+        $publishedDate->set(AgaviDateDefinitions::MINUTE, 0);
+        $publishedDate->set(AgaviDateDefinitions::SECOND, 0);
+        $publishedDate->set(AgaviDateDefinitions::MILLISECOND, 0);
+        return $publishedDate;
+    }
+
+    /**
+     * Helper method used by the buildPublishedItemsDateRangeFilter method
+     * in order to build it's filter in a way that will consider items,
+     * that have been published until today's last possible millisecond.
+     *
+     * @return AgaviCalendar
+     */
     protected function getTodaysDate()
     {
-        $today = $this->getContext()->getTranslationManager()->createCalendar();
+        $today = $this->getTranslationManager()->createCalendar();
         $today->set1(AgaviDateDefinitions::HOUR_OF_DAY, 23);
         $today->set1(AgaviDateDefinitions::MINUTE, 59);
         $today->set1(AgaviDateDefinitions::SECOND, 59);
@@ -279,41 +507,17 @@ class NewsStatisticProvider
         return $today;
     }
 
-    protected function getItemsPublishDate(IContentItem $item)
+    /**
+     * Helper method for obtaining agavi's translation manager.
+     *
+     * @return AgaviTranslationManager
+     */
+    protected function getTranslationManager()
     {
-        $publishedDate = $this->getContext()->getTranslationManager()->createCalendar(
-            strtotime($item->getPublishDate())
-        );
-        $publishedDate->set(AgaviDateDefinitions::HOUR_OF_DAY, 0);
-        $publishedDate->set(AgaviDateDefinitions::MINUTE, 0);
-        $publishedDate->set(AgaviDateDefinitions::SECOND, 0);
-        $publishedDate->set(AgaviDateDefinitions::MILLISECOND, 0);
-
-        return $publishedDate;
+        return AgaviContext::getInstance()->getTranslationManager();
     }
 
-    protected function getContext()
-    {
-        return AgaviContext::getInstance();
-    }
-
-    protected function logError($msg)
-    {
-        $logger = $this->getContext()->getLoggerManager()->getLogger('error');
-        $errMsg = sprintf("[%s] %s", get_class($this), $msg);
-        $logger->log(
-            new AgaviLoggerMessage($errMsg, AgaviLogger::ERROR)
-        );
-    }
-
-    protected function logInfo($msg)
-    {
-        $logger = $this->getContext()->getLoggerManager()->getLogger('app');
-        $infoMsg = sprintf("[%s] %s", get_class($this), $msg);
-        $logger->log(
-            new AgaviLoggerMessage($infoMsg, AgaviLogger::INFO)
-        );
-    }
+    // ---------------------------------- </HELPER METHODS> --------------------------------------
 }
 
 ?>
