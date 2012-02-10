@@ -3,11 +3,12 @@
     <ae:configuration>
         <!-- Lib/Mvc -->
         <autoload name="ItemsBaseAction">%core.module_dir%/Items/lib/mvc/ItemsBaseAction.class.php</autoload>
+        <autoload name="ItemsListBaseAction">%core.module_dir%/Items/lib/mvc/ItemsListBaseAction.class.php</autoload>
         <autoload name="ItemsBaseModel">%core.module_dir%/Items/lib/mvc/ItemsBaseModel.class.php</autoload>
         <autoload name="ItemsBaseView">%core.module_dir%/Items/lib/mvc/ItemsBaseView.class.php</autoload>
         <!-- Lib/Mvc -->
 
-        <autoload name="ItemFinderModel">%core.module_dir%/Items/lib/ItemFinderModel.class.php</autoload>
+        <autoload name="ItemFinder">%core.module_dir%/Items/lib/ItemFinder.class.php</autoload>
         <autoload name="TicketFinderModel">%core.module_dir%/Items/lib/TicketFinderModel.class.php</autoload>
 
         <!-- Models/Setup -->

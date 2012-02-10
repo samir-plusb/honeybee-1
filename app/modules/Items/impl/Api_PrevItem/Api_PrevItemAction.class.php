@@ -10,43 +10,40 @@
  * @package         Items
  * @subpackage      Mvc
  */
-class Items_Api_PrevItemAction extends ItemsBaseAction
+class Items_Api_PrevItemAction extends ItemsListBaseAction
 {
-    const DEFAULT_LIMIT = 30;
-
-    const DEFAULT_OFFSET = 0;
-
-    const DEFAULT_SORT_FIELD = 'timestamp';
-
-    const DEFAULT_SORT_DIRECTION = 'desc';
-
     /**
-     * Execute the read logic for this action, hence prompt for an asset.
+     * Execute the read logic for this action, hence find/load the previous item.
      *
      * @param       AgaviRequestDataHolder $parameters
      *
      * @return      string The name of the view to execute.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @codingStandardsIgnoreStart
      */
-    public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeRead(AgaviRequestDataHolder $parameters)
     {
         $this->setActionAttributes($parameters);
         $item = $this->findPreviousItem();
-
         if ($item)
         {
             $supervisor = Workflow_SupervisorModel::getInstance();
             $ticketPeer = $supervisor->getTicketPeer();
             $this->setAttribute('ticket', $ticketPeer->getTicketById($item->getTicketId()));
         }
-
         $this->setAttribute('item', $item);
-
         return 'Success';
     }
 
+    /**
+     * Try and find the previous item relative to our current item.
+     * This is done in a sliding window manner,
+     * recursively calling our findPreviousItem method until we hit either beginning of our range.
+     * As mentioned inside the ItemFinder, this method is a hack until product management has
+     * distinguished the behaviour we really want.
+     *
+     * 10.02.2012 thorsten schmitt-rink - works for the moment, get rid of as soon as possible.
+     *
+     * @return IWorkflowItem
+     */
     protected function findPreviousItem()
     {
         $result = $this->loadItems();
@@ -95,87 +92,6 @@ class Items_Api_PrevItemAction extends ItemsBaseAction
         $offset -= $limit;
         $this->setAttribute('offset', (0 > $offset) ? 0 : $offset);
         return $this->findPreviousItem();
-    }
-
-    protected function loadItems()
-    {
-        $itemFinder = $this->getAttribute('finder');
-
-        $limit = $this->getAttribute('limit');
-        $offset = $this->getAttribute('offset');
-        $sorting = $this->getAttribute('sorting');
-        $result = array(
-            'tickets'    => array(),
-            'totalCount' => 0
-        );
-
-        if ($this->hasAttribute('search_phrase'))
-        {
-            $result = $itemFinder->search(
-                strtolower($this->getAttribute('search_phrase')),
-                $sorting['field'],
-                $sorting['direction'],
-                $offset,
-                $limit
-            );
-        }
-        else
-        {
-            $result = $itemFinder->fetchAll(
-                $sorting['field'],
-                $sorting['direction'],
-                $offset,
-                $limit
-            );
-        }
-        return $result;
-    }
-
-    protected function setActionAttributes(AgaviRequestDataHolder $parameters)
-    {
-        $itemFinder = $this->getContext()->getModel('ItemFinder');
-        $itemFinder->enableEditFilter($parameters->getParameter('cur_item'));
-
-        $limit = $parameters->getParameter('limit', self::DEFAULT_LIMIT);
-        $offset = $parameters->getParameter('offset', self::DEFAULT_OFFSET);
-        $searchPhrase = $parameters->getParameter('search_phrase');
-        $sorting = array(
-            'direction' => $parameters->getParameter('sorting[direction]', self::DEFAULT_SORT_DIRECTION),
-            'field'     => $parameters->getParameter('sorting[field]', self::DEFAULT_SORT_FIELD)
-        );
-
-        if ($searchPhrase)
-        {
-            $this->setAttribute('search_phrase', $searchPhrase);
-        }
-
-        $this->setAttribute('offset', $offset);
-        $this->setAttribute('limit', $limit);
-        $this->setAttribute('sorting', $sorting);
-        $this->setAttribute('finder', $itemFinder);
-        $this->setAttribute('cur_item', $parameters->getParameter('cur_item'));
-    }
-
-    public function handleError(AgaviRequestDataHolder $parameters)
-    {
-        parent::handleError($parameters);
-        $errors = array();
-
-        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
-        {
-            $errors[implode(', ', array_values($errMsg['errors']))] = $errMsg['message'];
-        }
-        $this->setAttribute('error_messages', $errors);
-        return 'Error';
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see AgaviAction::isSecure()
-     */
-    public function isSecure()
-    {
-        return TRUE;
     }
 }
 
