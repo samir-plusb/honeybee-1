@@ -35,12 +35,12 @@ class Items_Api_PrevItemAction extends ItemsListBaseAction
 
     /**
      * Try and find the previous item relative to our current item.
+     *
      * This is done in a sliding window manner,
      * recursively calling our findPreviousItem method until we hit either beginning of our range.
      * As mentioned inside the ItemFinder, this method is a hack until product management has
      * distinguished the behaviour we really want.
-     *
-     * 10.02.2012 thorsten schmitt-rink - works for the moment, get rid of as soon as possible.
+     * <b>10.02.2012 thorsten schmitt-rink - works for the moment, get rid of as soon as possible.</b>
      *
      * @return IWorkflowItem
      */

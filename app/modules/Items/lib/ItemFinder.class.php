@@ -116,16 +116,17 @@ class ItemFinder
     /**
      * Fetch all items that match the given searchPhrase
      * within the current range of offset and limit ordered by the given sorting parameters.
+     *
      * At the moment we support two search modes that depend on the number of whitespace separated terms
      * that are passed as the searchPhrase:
      *
-     * 1. wildcard-search:
-     *    Is used when only one term is provided within the search phrase and allows you to use a wildcard syntax.
-     *    Examples: "wildthi*" or "wild*thi" or "*thing" etc.
-     * 2. term-search:
-     *    Is used when ore than one whitespace separated term is provided within the searchPhrase
-     *    and will return only records that contain all of the terms indpendant from the term order.
-     *    Examples: "wild thing cars"
+     * *1. wildcard-search:
+     *     Is used when only one term is provided within the search phrase and allows you to use a wildcard syntax.
+     *     Examples: "wildthi*" or "wild*thi" or "*thing" etc.
+     * *2. term-search:
+     *     Is used when ore than one whitespace separated term is provided within the searchPhrase
+     *     and will return only records that contain all of the terms indpendant from the term order.
+     *     Examples: "wild thing cars"
      *
      * @param string $sortField
      * @param string $sortDirection
@@ -240,6 +241,13 @@ class ItemFinder
      * against our list of supported sorting-field aliases,
      * thereby translating the alias to it's corresponding realname.
      *
+     * Example structure:
+     * <pre>
+     * array(
+     *     array('importItem.created.date' => 'desc'),
+     *     array('_uid' => 'asc')
+     * )
+     * </pre>
      * Notice 10.02.2012
      * The elastic search' internal _uid field is added to keep the sorting stable
      * on the couchdb river provided data inside elastic search.
@@ -251,15 +259,6 @@ class ItemFinder
      * @throws InvalidArgumentException If the given sortField is not supported.
      *
      * @return array An array that can be passed to the Elastica_Query's addSort method as is.
-     *
-     * <pre>
-     * Example structure:
-     *
-     * array(
-     *     array('importItem.created.date' => 'desc'),
-     *     array('_uid' => 'asc')
-     * )
-     * </pre>
      */
     protected function prepareSortingParams($sortField, $sortDirection)
     {
@@ -329,13 +328,8 @@ class ItemFinder
      * Hydrates a given elastic search query result into an array of IWorkflowItems
      * and returns them along with a totalCount for the query that was issued.
      *
-     * @param Elastica_ResultSet $result
-     *
-     * @return array
-     *
-     * <pre>
      * An example of the returned data structure:
-     *
+     * <pre>
      * array(
      *     'items' => array(
      *         [0] => (WorkflowItem)
@@ -343,6 +337,10 @@ class ItemFinder
      *     'totalCount' => 1024
      * )
      * </pre>
+     *
+     * @param Elastica_ResultSet $result
+     *
+     * @return array
      */
     protected function hydrateResult(Elastica_ResultSet $result)
     {

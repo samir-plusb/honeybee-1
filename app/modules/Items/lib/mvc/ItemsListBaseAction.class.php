@@ -88,7 +88,6 @@ class ItemsListBaseAction extends ItemsBaseAction
      * Depends on self::setActionAttributes() being called before.
      *
      * @return array
-     * 
      * @see ItemFinder::search and ItemFinder::fetchAll for return value documentation.
      */
     protected function loadItems()

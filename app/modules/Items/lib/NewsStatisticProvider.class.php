@@ -140,15 +140,9 @@ class NewsStatisticProvider
      * per day for the given district. The data is provided on a per day base reaching back
      * $daysBack number of days.
      *
-     * @param int $daysBack The number of days to go back when collecting the stat data.
-     * @param string $district One of the supported DISTRICT_* constants.
-     *
-     * @return array An assoc array holding a stats array for each demanded district.
-     *
-     * <pre>
      * Example result structure for following parameters: $daysBack => 5, $district => DISTRICT_WED.
-     * If multiple district have been demanded, then the structure is repeated for each district.
-     *
+     * If multiple districts have been demanded, then the structure is repeated for each district.
+     * <pre>
      * array(
      *     [Wedding] => Array
      *     (
@@ -167,6 +161,10 @@ class NewsStatisticProvider
      * )
      * </pre>
      *
+     * @param int $daysBack The number of days to go back when collecting the stat data.
+     * @param string $district One of the supported DISTRICT_* constants.
+     *
+     * @return array An assoc array holding a stats array for each demanded district.
      * @todo Passing an array of districts to process should be more flexible.
      */
     public function fetchDistrictStatistics($daysBack = 4, $district = self::DISTRICT_ALL)
@@ -211,15 +209,9 @@ class NewsStatisticProvider
      * such as items per day, per week and in total for the given district
      * reaching back the given number of $daysback.
      *
-     * @param int $daysBack
-     * @param string $district
-     *
-     * @return array
-     *
-     * <pre>
      * Example result structure for following parameters: $daysBack => 5, $district => DISTRICT_WED.
      * Atm you are provided a 'totalCount', a 'week' based and an 'items per day' count.
-     *
+     * <pre>
      * array(
      *     [week] => 27
      *     [totalCount] => 23
@@ -233,6 +225,11 @@ class NewsStatisticProvider
      *     )
      * )
      * </pre>
+     *
+     * @param int $daysBack
+     * @param string $district
+     *
+     * @return array
      */
     protected function fetchPublishedItemsCountForDistrict($daysBack, $district)
     {
@@ -310,17 +307,10 @@ class NewsStatisticProvider
      * that have been published to the given $district if they were published within
      * either the last week or within $daysBack from today.
      *
-     * @param Elastica_ResultSet $results
-     * @param type $district
-     * @param type $daysBack
-     *
-     * @return array
-     *
-     * <pre>
      * Example result structure for following parameters: $daysBack => 5, $district => 'Wedding'.
      * Each index beneath the result array's key 'lastDays' stands for one of the $daysBack,
      * whereas the index 0 represents 'today' and the last index maps to today - $daysBack.
-     *
+     * <pre>
      * array(
      *     [week] => 27
      *     [lastDays] => Array
@@ -333,6 +323,12 @@ class NewsStatisticProvider
      *     )
      * )
      * </pre>
+     *
+     * @param Elastica_ResultSet $results
+     * @param type $district
+     * @param type $daysBack
+     *
+     * @return array
      */
     protected function mapItemsToPastDaysByDistrict(Elastica_ResultSet $results, $daysBack, $district)
     {
