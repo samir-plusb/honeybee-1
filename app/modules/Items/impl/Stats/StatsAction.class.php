@@ -23,7 +23,17 @@ class Items_StatsAction extends ItemsBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $provider = new NewsStatisticProvider();
+        $provider = new NewsStatisticProvider(
+            new Elastica_Client(
+                array(
+                    'host'      => AgaviConfig::get('elasticsearch.host', 'localhost'),
+                    'port'      => AgaviConfig::get('elasticsearch.port', 9200),
+                    'transport' => AgaviConfig::get('elasticsearch.transport', 'Http')
+                )
+            ),
+            $this->getContext()->getDatabaseConnection('CouchWorkflow')
+        );
+
         $daysBack = $parameters->getParameter('days_back', 5);
         $district = $parameters->getParameter('district', NewsStatisticProvider::DISTRICT_ALL);
         $stats = $provider->fetchDistrictStatistics($daysBack, $district);

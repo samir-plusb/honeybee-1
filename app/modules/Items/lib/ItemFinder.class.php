@@ -47,7 +47,7 @@ class ItemFinder
      * An array that maps fieldname aliases to their corresponding realnames.
      * Is used to have a more comfortable handling when passing sort fields to the finder api.
      *
-     * @var array
+     * @type array
      */
     private static $sortMapping = array(
         'title'        => 'importItem.title.title_sortable',
@@ -63,7 +63,7 @@ class ItemFinder
     /**
      * The client used to talk to elastic search.
      *
-     * @var Elastica_Client
+     * @type Elastica_Client
      */
     protected $elasticClient;
 
@@ -75,7 +75,7 @@ class ItemFinder
      * all query filters, adding extra conditions that serve the purpose of finding the
      * 'NEXT' or 'PREVIOUS' item suitable for the user(news-editor) to edit.
      *
-     * @var string
+     * @type string
      */
     protected $currentItemId = NULL;
 
@@ -87,7 +87,7 @@ class ItemFinder
     /**
      * Create a new ItemFinder instance.
      *
-     * @param Elastica_Client $elasticClient
+     * @param Elastica_Client $elasticClient The client that shall be used to query elastic search.
      */
     public function __construct(Elastica_Client $elasticClient)
     {
@@ -97,10 +97,10 @@ class ItemFinder
     /**
      * Fetch all items within the current range of offset and limit ordered by the given sorting parameters.
      *
-     * @param string $sortField
-     * @param string $sortDirection
-     * @param int $offset
-     * @param int $limit
+     * @param string $sortField The sort field alias to sort the data after.
+     * @param string $sortDirection The sort direction to sort the after.
+     * @param int $offset The offset to use when retrieving chunks of data from the overall result.
+     * @param int $limit The number of entries used to limit the returned result.
      *
      * @return array An array holding the WorkflowItems for the current limit&offset and the total-count.
      * @see self::hydrateResult() For documentation on the return value's structure.
@@ -128,10 +128,10 @@ class ItemFinder
      *     and will return only records that contain all of the terms indpendant from the term order.
      *     Examples: "wild thing cars"
      *
-     * @param string $sortField
-     * @param string $sortDirection
-     * @param int $offset
-     * @param int $limit
+     * @param string $sortField The sort field alias to sort the data after.
+     * @param string $sortDirection The sort direction to sort the after.
+     * @param int $offset The offset to use when retrieving chunks of data from the overall result.
+     * @param int $limit The number of entries used to limit the returned result.
      *
      * @return array An array holding the WorkflowItems for the current limit&offset and the total-count.
      * @see self::hydrateResult() For documentation on the return value's structure.
@@ -165,10 +165,10 @@ class ItemFinder
      * The items are returned according to the specified range and order parameters.
      *
      * @param array $where Must contain the following key: dist(ance), lon(gitude) and lat(itude).
-     * @param string $sortField
-     * @param string $sortDirection
-     * @param int $offset
-     * @param int $limit
+     * @param string $sortField The sort field alias to sort the data after.
+     * @param string $sortDirection The sort direction to sort the after.
+     * @param int $offset The offset to use when retrieving chunks of data from the overall result.
+     * @param int $limit The number of entries used to limit the returned result.
      *
      * @throws InvalidArgumentException If the $where data is corrupt or missing.
      *
@@ -253,8 +253,8 @@ class ItemFinder
      * on the couchdb river provided data inside elastic search.
      * If you do not understand this (I know the comment is too short) ask Thorsten Schmitt-Rink
      *
-     * @param string $sortField
-     * @param string $sortDirection
+     * @param string $sortField The sort field alias to sort the data after.
+     * @param string $sortDirection The sort direction to sort the after.
      *
      * @throws InvalidArgumentException If the given sortField is not supported.
      *
@@ -279,12 +279,12 @@ class ItemFinder
      * Fire the given elastic search query against the news items index
      * and return the hydrated result.
      *
-     * @param Elastica_Query $query
-     * @param int $offset
-     * @param int $limit
-     * @param array $sorting
+     * @param Elastica_Query $query The query to send to elastic search. (will be filtered with the basic news filter)
+     * @param int $offset The offset to use when retrieving chunks of data from the overall result.
+     * @param int $limit The number of entries used to limit the returned result.
+     * @param array $sorting The sort parameters that control sorting (field and direction).
      *
-     * @return array
+     * @return array An assoc array holding the found items and the overall total-count.
      * @see self::hydrateResult() For documentation on the return value's structure.
      */
     protected function fireNewsItemQuery(Elastica_Query $query, $offset, $limit, array $sorting)
@@ -308,7 +308,7 @@ class ItemFinder
      * Builds the basic filter applied to all queries of this class.
      * The filter defines only items within the news workflow that are not deleted.
      *
-     * @return Elastica_Filter_And
+     * @return Elastica_Filter_And The prepared and ready to use filter.
      */
     protected function buildBasicNewsFilter()
     {
@@ -338,9 +338,9 @@ class ItemFinder
      * )
      * </pre>
      *
-     * @param Elastica_ResultSet $result
+     * @param Elastica_ResultSet $result The elastic search query result to hydrate into items.
      *
-     * @return array
+     * @return array An assoc array holding the found items and the overall total-count.
      */
     protected function hydrateResult(Elastica_ResultSet $result)
     {
@@ -362,9 +362,9 @@ class ItemFinder
      * item has no owner, item is new or item is the item currently being edited.
      * @see self::$currentItemId doc for more information.
      *
-     * @param Elastica_Filter_Abstract $filter
+     * @param Elastica_Filter_Abstract $filter Any basic filter that will be extended by adding it to the returned or.
      *
-     * @return Elastica_Filter_Or
+     * @return Elastica_Filter_Or The preapred and ready to use filter.
      */
     protected function addEditingStreamFilter(Elastica_Filter_Abstract $filter)
     {

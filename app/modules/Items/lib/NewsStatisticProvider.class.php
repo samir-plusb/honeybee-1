@@ -94,7 +94,7 @@ class NewsStatisticProvider
     /**
      * An array containing the names of all districts that are supported for reporting.
      *
-     * @var array
+     * @type string[]
      */
     protected static $supportedDistricts = array(
         self::DISTRICT_CHAR, self::DISTRICT_FRIED, self::DISTRICT_HELLER, self::DISTRICT_HOHEN, self::DISTRICT_KÖP,
@@ -107,14 +107,14 @@ class NewsStatisticProvider
     /**
      * Holds the client instance used to talk to elastic search.
      *
-     * @var Elastica_Client
+     * @type Elastica_Client
      */
     protected $elasticClient;
 
     /**
      * Holds the client instance used to talk to couchdb.
      *
-     * @var ExtendedCouchDbClient
+     * @type ExtendedCouchDbClient
      */
     protected $couchClient;
 
@@ -126,8 +126,8 @@ class NewsStatisticProvider
     /**
      * Create a new NewsStatisticProvider instance.
      *
-     * @param Elastica_Client $elasticClient
-     * @param ExtendedCouchDbClient $couchClient
+     * @param Elastica_Client $elasticClient The client that shall be used to query elastic search.
+     * @param ExtendedCouchDbClient $couchClient The client to use when talking to couchdb.
      */
     public function __construct(Elastica_Client $elasticClient, ExtendedCouchDbClient $couchClient)
     {
@@ -190,9 +190,9 @@ class NewsStatisticProvider
     }
 
     /**
-     * Returns an array district names that are supported by the stat provider.
+     * Returns the districts that are supported by the stat provider.
      *
-     * @return array
+     * @return string[] An array of district names (, that refer to the class's DISTRICT_* constants)
      */
     public function getDistricts()
     {
@@ -226,10 +226,10 @@ class NewsStatisticProvider
      * )
      * </pre>
      *
-     * @param int $daysBack
-     * @param string $district
+     * @param int $daysBack The number of days to go back when generating the content-item count.
+     * @param string $district The district to fetch the content-item count for.
      *
-     * @return array
+     * @return array An assoc array holding the complete stats for the given district.
      */
     protected function fetchPublishedItemsCountForDistrict($daysBack, $district)
     {
@@ -256,10 +256,10 @@ class NewsStatisticProvider
      * !CAUTION! Deleted items are not filtered out as they are supposed to be reflected by the
      * stats provided by this class (ask product management to obtain deeper knowledge on this requirement).
      *
-     * @param int $daysBack
-     * @param string $district
+     * @param int $daysBack The number of days to go back when fetching news-items.
+     * @param string $district The district to use to filter the searched news-items.
      *
-     * @return Elastica_Filter_And
+     * @return Elastica_Filter_And The prepared and ready to use filter.
      */
     protected function buildPublishedFilterForDistrict($daysBack, $district)
     {
@@ -285,9 +285,9 @@ class NewsStatisticProvider
      * Builds an elastic search daterange filter,
      * that reaches from the given $lowerDate until today.
      *
-     * @param AgaviCalendar $lowerDate
+     * @param AgaviCalendar $lowerDate The date to use for the range filter's lower date.
      *
-     * @return Elastica_Filter_Range
+     * @return Elastica_Filter_Range The prepared date range filter.
      */
     protected function buildPublishedItemsDateRangeFilter(AgaviCalendar $lowerDate)
     {
@@ -324,11 +324,11 @@ class NewsStatisticProvider
      * )
      * </pre>
      *
-     * @param Elastica_ResultSet $results
-     * @param type $district
-     * @param type $daysBack
+     * @param Elastica_ResultSet $results Holds the fresh result returned from querying elastic search.
+     * @param int $daysBack The number of days to go back when fetching news-items.
+     * @param string $district The district to filter the news-items for.
      *
-     * @return array
+     * @return array An assoc array holding data on the weekly and per-day based content-item count.
      */
     protected function mapItemsToPastDaysByDistrict(Elastica_ResultSet $results, $daysBack, $district)
     {
@@ -375,8 +375,8 @@ class NewsStatisticProvider
      * starting with 0 (today) and +1 for every day back.
      * So yesterday would be 1 and the day before yesterday 2 etc.
      *
-     * @param IContentItem $item
-     * @param int $daysBack
+     * @param IContentItem $item The content-item that which's corresponding days-back index shall be determined.
+     * @param int $daysBack The maximum number of days to go back when searching for an items index.
      *
      * @return int Either a value between 0 and ($daysBack - 1) or -1 if the item is out of range.
      */
@@ -399,7 +399,7 @@ class NewsStatisticProvider
     /**
      * Tells if a given content-item was published within the last week from now.
      *
-     * @param IContentItem $item
+     * @param IContentItem $item The content-item to inspect.
      *
      * @return bool
      */
@@ -417,7 +417,7 @@ class NewsStatisticProvider
      * Returns the total number of items,
      * that have been published for the gien district so far.
      *
-     * @param string $district
+     * @param string $district The name (DISTRICT_* constant) of the district which's items shall be counted.
      *
      * @return int
      */
@@ -443,13 +443,11 @@ class NewsStatisticProvider
     // ---------------------------------- <HELPER METHODS> ---------------------------------------
 
     /**
-     * Return an AgaviCalendar instance that reflects the date
-     * $daysBack from now and has a time set to 00:00:00.000
-     * as a base for clean date calculations.
+     * Return an AgaviCalendar instance that reflects the date $daysBack from now.
      *
-     * @param int $daysBack
+     * @param int $daysBack The number of days to go back.
      *
-     * @return AgaviCalendar
+     * @return AgaviCalendar A fresh agavi calendar instance with a time set to 00:00:00.000.
      */
     protected function getDateByDaysPastFromNow($daysBack)
     {
@@ -466,13 +464,11 @@ class NewsStatisticProvider
     }
 
     /**
-     * Return an AgaviCalendar instance that reflects the given content-item's
-     * publish-date and has a time set to 00:00:00.000
-     * as a base for clean date calculations.
+     * Return an AgaviCalendar instance that reflects the given content-item's publish-date.
      *
-     * @param IContentItem $item
+     * @param IContentItem $item The content-item to fetch the publish date from.
      *
-     * @return AgaviCalendar
+     * @return AgaviCalendar A fresh agavi calendar instance with a time set to 00:00:00.000.
      */
     protected function getItemsPublishDate(IContentItem $item)
     {
@@ -491,7 +487,7 @@ class NewsStatisticProvider
      * in order to build it's filter in a way that will consider items,
      * that have been published until today's last possible millisecond.
      *
-     * @return AgaviCalendar
+     * @return AgaviCalendar A fresh agavi calendar instance.
      */
     protected function getTodaysDate()
     {
