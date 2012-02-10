@@ -243,7 +243,7 @@ class ItemFinder
      * Notice 10.02.2012
      * The elastic search' internal _uid field is added to keep the sorting stable
      * on the couchdb river provided data inside elastic search.
-     * If you do not understand this ask Thorsten Schmitt-Rink
+     * If you do not understand this (I know the comment is too short) ask Thorsten Schmitt-Rink
      *
      * @param string $sortField
      * @param string $sortDirection

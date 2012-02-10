@@ -7,4 +7,10 @@
  */
 class Workflow_Plugin_ChooseAction extends WorkflowPluginBaseAction
 {
+    public function isSecure()
+    {
+        return FALSE;
+    }
 }
+
+?>

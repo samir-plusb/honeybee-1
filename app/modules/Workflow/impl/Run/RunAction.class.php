@@ -1,20 +1,24 @@
 <?php
 /**
+ * Push a given workflow ticket further on through it's related workflow.
+ * This can be in terms of user and/or system interaction.
+ * This is the app's main entry point to executing workflows, hence processing tickets.
  *
  * @copyright BerlinOnline
  * @version $Id$
  * @package Workflow
+ * @subpackage Mvc
  */
 class Workflow_RunAction extends ProjectBaseAction
 {
     /**
-     * (non-PHPdoc)
-     * @see AgaviAction::getDefaultViewName()
+     * Run read and write logic for workflow execution.
      *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @codingStandardsIgnoreStart
+     * @param AgaviParameterHolder $parameters
+     *
+     * @return string The name of the view to run afterwards.
      */
-    public function execute(AgaviParameterHolder $parameters) // @codingStandardsIgnoreEnd
+    public function execute(AgaviParameterHolder $parameters)
     {
         try
         {
@@ -41,6 +45,16 @@ class Workflow_RunAction extends ProjectBaseAction
         }
 
         return 'Success';
+    }
+
+    /**
+     * Tells whether this action requires authentication or not.
+     *
+     * @return bool
+     */
+    public function isSecure()
+    {
+        return FALSE;
     }
 }
 
