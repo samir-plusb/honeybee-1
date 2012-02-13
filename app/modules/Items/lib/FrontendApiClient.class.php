@@ -1,20 +1,59 @@
 <?php
 
+/**
+ * The FrontendApiClient is responseable for issuing requests against the current 'local-news' frontend.
+ * These requests are sent in order to keep the frontend in sync with the published/deleted items of the backend.
+ *
+ * @version         $Id: $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Items
+ * @subpackage      Lib
+ */
 class FrontendApiClient
 {
+    // ---------------------------------- <CONSTANTS> --------------------------------------------
+
+    /**
+     * Holds the name of the config setting used to retrieve the correct frontend api url to use for the current env.
+     */
     const SETTING_BASE_URL = 'items.frontend_api_url';
 
+    /**
+     * Holds the url suffix used to build the api url, that we send our delete requests to.
+     */
     const URL_SUFFIX_DELETE = 'delete';
 
+    /**
+     * Holds the url suffix used to build the api url, that we send our update requests to.
+     */
     const URL_SUFFIX_UPDATE = 'import';
 
+    /**
+     * Represents the (htto) status code expected for api requests that were successfully processed.
+     */
     const STATUS_CODE_OK = 200;
 
+    // ---------------------------------- </CONSTANTS> -------------------------------------------
+
+
+    // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
+
+    /**
+     * Sends an 'update' request to the frontend api, enclosing the complete workflow item's data.
+     *
+     * @param IWorkflowItem $workflowItem
+     */
     public function updateWorkflowItem(IWorkflowItem $workflowItem)
     {
         $this->sendApiRequest($this->buildUpdateItemUrl(), $workflowItem->toArray());
     }
 
+    /**
+     * Sends an 'delete' request to the frontend api, enclosing only the id's of the workflow item's content items.
+     *
+     * @param IWorkflowItem $workflowItem
+     */
     public function deleteWorkflowItem(IWorkflowItem $workflowItem)
     {
         $apiData = array(
@@ -27,6 +66,19 @@ class FrontendApiClient
         $this->sendApiRequest($this->buildDeleteItemUrl(), $apiData);
     }
 
+    // ---------------------------------- </PUBLIC METHODS> --------------------------------------
+
+
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
+
+    /**
+     * Send a (json)request to the given api url enclosing the given data.
+     *
+     * @param string $url
+     * @param array $data
+     *
+     * @throws FrontendApiClientException If something other than the expected success occurs.
+     */
     protected function sendApiRequest($url, array $data)
     {
         $curlHandle = ProjectCurl::create();
@@ -43,13 +95,6 @@ class FrontendApiClient
         $response = curl_exec($curlHandle);
         $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
 
-        $this->logInfo(sprintf(
-            "[%s] Trying to send api-request to url: %s with the following data: %s\n",
-            get_class($this),
-            $url,
-            print_r($data, TRUE)
-        ));
-
         if (self::STATUS_CODE_OK !== $respCode)
         {
             $err = curl_error($curlHandle);
@@ -61,33 +106,31 @@ class FrontendApiClient
             }
             throw new FrontendApiClientException($message);
         }
-
-        $this->logInfo("[" . get_class($this) . "] Successfully sent api request to url: " . $url);
     }
 
+    /**
+     * Helper method that build the correct url for sending update requests to the frontend.
+     *
+     * @return string
+     */
     protected function buildUpdateItemUrl()
     {
         $baseUrl = AgaviConfig::get(self::SETTING_BASE_URL);
         return $baseUrl . self::URL_SUFFIX_UPDATE;
     }
 
+    /**
+     * Helper method that build the correct url for sending delete requests to the frontend.
+     *
+     * @return string
+     */
     protected function buildDeleteItemUrl()
     {
         $baseUrl = AgaviConfig::get(self::SETTING_BASE_URL);
         return $baseUrl . self::URL_SUFFIX_DELETE;
     }
 
-    protected function logInfo($msg)
-    {
-        $ctx = AgaviContext::getInstance();
-        $logger = $ctx->getLoggerManager()->getLogger('app');
-        $logger->log(
-            new AgaviLoggerMessage(
-                $msg,
-                AgaviLogger::INFO
-            )
-        );
-    }
+    // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 
 ?>
