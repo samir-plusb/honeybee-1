@@ -80,7 +80,7 @@ class RunActionTest extends AgaviActionTestCase
 
     public function provideTestRunImportArgs()
     {
-        $imports = array('couchdb', 'workflow');
+        $imports = array('workflow');
         $datasources = array('dpa', 'rss');
         $data = array();
         foreach ($imports as $import)

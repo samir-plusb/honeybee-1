@@ -18,7 +18,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
     public static function addView($moduleName, $actionName, $viewName, $outputType)
     {
         $viewHash = sha1($moduleName.$actionName.$viewName);
-        if (!isset(self::$views2Deploy[$viewHash]))
+        if (! isset(self::$views2Deploy[$viewHash]))
         {
             self::$views2Deploy[$viewHash] = array(
                 'module'     => $moduleName,
@@ -121,7 +121,7 @@ class ProjectScriptFilter extends AgaviFilter implements AgaviIGlobalFilter
         $output = NULL;
 /*list($usec3, $sec3) = explode(" ",microtime());
 $r1 = ($usec3/1000 + $sec3*1000);*/
-        if (!$response->isContentMutable() || !($output = $response->getContent()))
+        if (! $response->isContentMutable() || ! ($output = $response->getContent()))
         {
             // throw exception? we cant really live without our scripts...
             return FALSE;
@@ -224,14 +224,14 @@ error_log("<ProjectScriptFilter>" . ($r2 - $r1) . "</ProjectScriptFilter>");*/
                 $package = $this->config->getPackageData($packageName);
                 foreach ($package['javascripts'] as $javascript)
                 {
-                    if (!in_array($javascript, $javascripts))
+                    if (! in_array($javascript, $javascripts))
                     {
                         $javascripts[] = $javascript;
                     }
                 }
                 foreach ($package['stylesheets'] as $stylesheet)
                 {
-                    if (!in_array($stylesheet, $stylesheets))
+                    if (! in_array($stylesheet, $stylesheets))
                     {
                         $stylesheets[] = $stylesheet;
                     }
@@ -272,7 +272,7 @@ error_log("<ProjectScriptFilter>" . ($r2 - $r1) . "</ProjectScriptFilter>");*/
 
                 foreach ($deploymentInfo['javascripts'] as $javascript)
                 {
-                    if (!in_array($javascript, $affectedJavascripts))
+                    if (! in_array($javascript, $affectedJavascripts))
                     {
                         $affectedJavascripts[] = $javascript;
                     }
@@ -280,7 +280,7 @@ error_log("<ProjectScriptFilter>" . ($r2 - $r1) . "</ProjectScriptFilter>");*/
 
                 foreach ($deploymentInfo['stylesheets'] as $stylesheet)
                 {
-                    if (!in_array($stylesheet, $affectedStylesheets))
+                    if (! in_array($stylesheet, $affectedStylesheets))
                     {
                         $affectedStylesheets[] = $stylesheet;
                     }
@@ -316,7 +316,7 @@ error_log("<ProjectScriptFilter>" . ($r2 - $r1) . "</ProjectScriptFilter>");*/
      */
     protected function loadPackage($packageName, array & $loadedPackages)
     {
-        if (!in_array($packageName, $loadedPackages))
+        if (! in_array($packageName, $loadedPackages))
         {
             $package = $this->config->getPackageData($packageName);
             $loadedPackages[] = $packageName;

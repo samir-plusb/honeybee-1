@@ -1,15 +1,15 @@
 <?php
 
 /**
- * The Items_SetupAction is repsonseable for setting up Items module.
+ * The Workflow_SetupAction is repsonseable for setting up the Workflow module.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Items
+ * @package         Workflow
  * @subpackage      Mvc
  */
-class Workflow_SetupAction extends ItemsBaseAction
+class Workflow_SetupAction extends ProjectBaseAction
 {
     /**
      * Execute the write logic for this action, hence process the given asset.

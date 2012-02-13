@@ -1,12 +1,12 @@
 <?php
 
 /**
- * The Items_Setup_SetupErrorView class handle the presentation logic for our Items/Setup actions's error data.
+ * The Workflow_Setup_SetupErrorView class handle the presentation logic for our Workflow/Setup actions's error data.
  *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Asset
+ * @package         Workflow
  * @subpackage      Mvc
  */
 class Workflow_Setup_SetupErrorView extends AssetBaseView

@@ -51,7 +51,7 @@ class WorkflowDeleteNewsPlugin extends WorkflowBasePlugin
             ));
         }
 
-        if (TRUE === AgaviConfig::get('items.frontend_sync', FALSE))
+        if (TRUE === AgaviConfig::get('news.frontend_sync', FALSE))
         {
             try
             {

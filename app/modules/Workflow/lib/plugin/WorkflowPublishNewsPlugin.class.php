@@ -43,7 +43,7 @@ class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
         $supervisor->getItemPeer()->storeItem($workflowItem);
         $result = new WorkflowPluginResult();
 
-        if (TRUE === AgaviConfig::get('items.frontend_sync', FALSE))
+        if (TRUE === AgaviConfig::get('news.frontend_sync', FALSE))
         {
             try
             {

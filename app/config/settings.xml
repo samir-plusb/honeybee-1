@@ -92,7 +92,7 @@
             <setting name="localize_api">http://6-strato.berlinonline.de/api/localize</setting>
         </settings>
 
-        <settings prefix="items.">
+        <settings prefix="news.">
             <setting name="frontend_api_url">http://bo-proto.h1960801.stratoserver.net/news/api/</setting>
             <setting name="frontend_sync">off</setting>
 
@@ -198,7 +198,7 @@
 
     <!--        <PRODUCTION>                   -->
     <ae:configuration environment="production-hetzner">
-        <settings prefix="items.">
+        <settings prefix="news.">
             <setting name="frontend_sync">on</setting>
         </settings>
     </ae:configuration>

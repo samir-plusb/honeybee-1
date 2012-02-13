@@ -14,12 +14,12 @@
         <h1><?php echo $tm->_('Task Overview','default.ui') ?></h1>
         <ul class="module-list">
             <li>
-                <a href="<?php echo $ro->gen('items.list'); ?>">
+                <a href="<?php echo $ro->gen('news.list'); ?>">
                     <h3 class="label"><?php echo $tm->_('News Stream','default.ui')?></h3>
                 </a>
             </li>
             <li>
-                <a href="<?php echo $ro->gen('items.stats'); ?>">
+                <a href="<?php echo $ro->gen('news.stats'); ?>">
                     <h3 class="label"><?php echo $tm->_('News Stats','default.ui')?></h3>
                 </a>
             </li>

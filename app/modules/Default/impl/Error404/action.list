@@ -15,8 +15,7 @@ asset.put -asset (uri)
 asset.get -aid (asset-id)
 asset.delete -aid (asset-id)
 
-- Items Module
-items.setup
-items.list
+- News Module
+news.list
 
 ####################################

@@ -22,6 +22,7 @@ class ProjectScriptFilterConfig
         self::CFG_OUTPUT_TYPES,
         self::CFG_PUB_DIR
     );
+
     protected $settings = array();
 
     public function __construct(array $parameters = array())
@@ -31,9 +32,9 @@ class ProjectScriptFilterConfig
 
     public function get($settingName, $default = NULL)
     {
-        if (!in_array($settingName, self::$supportedSettings))
+        if (! in_array($settingName, self::$supportedSettings))
         {
-            throw new Exception(
+            throw new InvalidArgumentException(
                 sprintf(
                     "The given setting: %s is not supported. Supported settings are:\n- %s",
                     $settingName,
@@ -136,7 +137,7 @@ class ProjectScriptFilterConfig
         }
 
         $cssCacheDir = realpath($parameters[self::CFG_CSS_CACHE_DIR]);
-        if (!is_writable($cssCacheDir))
+        if (! is_writable($cssCacheDir))
         {
             throw new AgaviConfigurationException(
                 "The given css cache directory '$cssCacheDir' is not writeable!"
@@ -144,7 +145,7 @@ class ProjectScriptFilterConfig
         }
 
         $jsCacheDir = realpath($parameters[self::CFG_JS_CACHE_DIR]);
-        if (!is_writable($jsCacheDir))
+        if (! is_writable($jsCacheDir))
         {
             throw new AgaviConfigurationException(
                 "The given js cache directory '$jsCacheDir' is not writeable!"
@@ -168,10 +169,10 @@ class ProjectScriptFilterConfig
             isset($parameters[self::CFG_ENABLE_PACKING])
             &&
             TRUE === $parameters[self::CFG_ENABLE_PACKING]
-            );
+        );
 
         $this->settings[self::CFG_PUB_DIR] = realpath(
-            dirname(AgaviConfig::get('core.app_dir')) . '/pub'
+            dirname(AgaviConfig::get('core.app_dir')) . DIRECTORY_SEPARATOR . 'pub'
         );
 
         $configFile = AgaviConfig::get('core.config_dir') . DIRECTORY_SEPARATOR . 'scripts.xml';

@@ -102,11 +102,11 @@
                 2. The items edit-view has not yet been switched to be compatible with twitter-bootstrap,
                 so it's excluded until this has been fixed.
             -->
-            <deployment viewpath="^(?:(?!items.edit*|workflow.run.success*))*$">
+            <deployment viewpath="^(?:(?!news.edit*|workflow.run.success*))*$">
                 <package ref="twitter-bootstrap" />
             </deployment>
 
-            <deployment viewpath="items.list*">
+            <deployment viewpath="news.list*">
                 <package ref="midas.core" />
 
                 <javascripts>
@@ -121,7 +121,7 @@
                 </stylesheets>
             </deployment>
 
-            <deployment viewpath="items.edit*">
+            <deployment viewpath="news.edit*">
                 <package ref="midas.items.edit" />
 
                 <javascripts>
@@ -135,7 +135,7 @@
                 </stylesheets>
             </deployment>
 
-            <deployment viewpath="items.stats*">
+            <deployment viewpath="news.stats*">
                 <package ref="flotr" />
 
                 <javascripts>

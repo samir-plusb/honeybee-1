@@ -2,7 +2,7 @@
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/translation/1.0">
     <ae:configuration>
 
-        <translators default_domain="items.errors">
+        <translators default_domain="news.errors">
             <translator domain="workflow">
                 <message_translator class="AgaviSimpleTranslator">
 
