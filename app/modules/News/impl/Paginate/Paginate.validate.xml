@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+	parent="%core.module_dir%/News/config/validators.xml">
+
+    <ae:configuration>
+
+        <validators>
+            <xi:include href="%core.module_dir%/News/impl/List/List.validate.xml"
+                xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+                xmlns(v=http://agavi.org/agavi/config/parts/validators/1.1)
+                xpointer(/ae:configurations/ae:configuration/v:validators/*)">
+            </xi:include>
+
+            <validator class="number" name="invalid_total_count" required="false" >
+                <arguments>
+                    <argument>total_count</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="min">0</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error for="min">The total_count must be at least 0.</error>
+                </errors>
+            </validator>
+
+            <validator class="number" name="invalid_paging_range" required="false" >
+                <arguments>
+                    <argument>paging_range</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="min">0</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error for="min">The paging_range must be at least 0.</error>
+                </errors>
+            </validator>
+        </validators>
+
+    </ae:configuration>
+
+</ae:configurations>

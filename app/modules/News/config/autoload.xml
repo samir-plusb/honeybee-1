@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <!-- Lib/Mvc -->
+        <autoload name="NewsBaseAction">%core.module_dir%/News/lib/mvc/NewsBaseAction.class.php</autoload>
+        <autoload name="NewsListBaseAction">%core.module_dir%/News/lib/mvc/NewsListBaseAction.class.php</autoload>
+        <autoload name="NewsBaseModel">%core.module_dir%/News/lib/mvc/NewsBaseModel.class.php</autoload>
+        <autoload name="NewsBaseView">%core.module_dir%/News/lib/mvc/NewsBaseView.class.php</autoload>
+        <autoload name="BrowseNewsBaseView">%core.module_dir%/News/lib/mvc/BrowseNewsBaseView.class.php</autoload>
+        <!-- Lib/Mvc -->
+
+        <autoload name="NewsStatisticProvider">%core.module_dir%/News/lib/NewsStatisticProvider.class.php</autoload>
+        <autoload name="NewsFinder">%core.module_dir%/News/lib/NewsFinder.class.php</autoload>
+        <autoload name="FrontendApiClient">%core.module_dir%/News/lib/FrontendApiClient.class.php</autoload>
+        <autoload name="FrontendApiClientException">%core.module_dir%/News/lib/FrontendApiClientException.class.php</autoload>
+
+    </ae:configuration>
+</ae:configurations>
