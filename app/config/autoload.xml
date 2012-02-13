@@ -18,9 +18,9 @@
 
             <!-- Zend (can be removed when agavi delivers integration) -->
             <autoload name="Zend_Acl">%core.app_dir%/../libs/Zend/Acl.php</autoload>
-			<autoload name="Zend_Acl_Assert_Interface">%core.app_dir%/../libs/Zend/Acl/Assert/Interface.php</autoload>
-			<autoload name="Zend_Acl_Resource_Interface">%core.app_dir%/../libs/Zend/Acl/Resource/Interface.php</autoload>
-			<autoload name="Zend_Acl_Role_Interface">%core.app_dir%/../libs/Zend/Acl/Role/Interface.php</autoload>
+            <autoload name="Zend_Acl_Assert_Interface">%core.app_dir%/../libs/Zend/Acl/Assert/Interface.php</autoload>
+            <autoload name="Zend_Acl_Resource_Interface">%core.app_dir%/../libs/Zend/Acl/Resource/Interface.php</autoload>
+            <autoload name="Zend_Acl_Role_Interface">%core.app_dir%/../libs/Zend/Acl/Role/Interface.php</autoload>
             <!-- /Zend -->
 
             <autoload name="IComparable">%core.app_dir%/models/Core/IComparable.iface.php</autoload>

@@ -16,13 +16,11 @@ class RunActionTest extends AgaviActionTestCase
         $this->moduleName = 'Import';
         $this->actionName = 'Run';
     }
-    
+
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        
-        $itemSetup = new ItemsModuleSetup();
-        $itemSetup->setup(TRUE);
+
         $workflowSetup = new WorkflowModuleSetup();
         $workflowSetup->setup(TRUE);
     }

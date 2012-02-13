@@ -9,10 +9,6 @@
         <autoload name="BrowseItemsBaseView">%core.module_dir%/Items/lib/mvc/BrowseItemsBaseView.class.php</autoload>
         <!-- Lib/Mvc -->
 
-        <!-- Models/Setup -->
-        <autoload name="ItemsModuleSetup">%core.module_dir%/Items/models/Setup/ItemsModuleSetup.class.php</autoload>
-        <!-- /Models/Setup -->
-
         <autoload name="NewsStatisticProvider">%core.module_dir%/Items/lib/NewsStatisticProvider.class.php</autoload>
         <autoload name="ItemFinder">%core.module_dir%/Items/lib/ItemFinder.class.php</autoload>
         <autoload name="FrontendApiClient">%core.module_dir%/Items/lib/FrontendApiClient.class.php</autoload>
