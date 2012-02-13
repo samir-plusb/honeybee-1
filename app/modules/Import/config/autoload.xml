@@ -83,7 +83,7 @@
             <autoload name="ImapDataSource">%core.module_dir%/Import/lib/mail/datasource/ImapDataSource.class.php</autoload>
             <autoload name="ImapDataRecord">%core.module_dir%/Import/lib/mail/datarecord/ImapDataRecord.class.php</autoload>
             <!-- /Mail -->
-            
+
             <!-- Workflow -->
             <autoload name="WorkflowItemDataImport">%core.module_dir%/Import/lib/workflow/WorkflowItemDataImport.class.php</autoload>
             <autoload name="WorkflowItemDataImportConfig">%core.module_dir%/Import/lib/workflow/WorkflowItemDataImportConfig.class.php</autoload>
@@ -126,7 +126,7 @@
             <autoload name="ImportConfigBaseTestCase">%core.module_dir%/Import/lib/testing/ImportConfigBaseTestCase.class.php</autoload>
             <autoload name="DataSourceBaseTestCase">%core.module_dir%/Import/lib/testing/DataSourceBaseTestCase.class.php</autoload>
             <autoload name="DataRecordBaseTestCase">%core.module_dir%/Import/lib/testing/DataRecordBaseTestCase.class.php</autoload>
-            <autoload name="CouchDbDataImportBaseTestCase">%core.module_dir%/Import/lib/testing/CouchDbDataImportBaseTestCase.class.php</autoload>
+            <autoload name="IDataImportBaseTestCase">%core.module_dir%/Import/lib/testing/IDataImportBaseTestCase.class.php</autoload>
             <!-- Testing -->
         </autoloads>
     </ae:configuration>

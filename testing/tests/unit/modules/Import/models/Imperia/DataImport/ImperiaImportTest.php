@@ -1,6 +1,6 @@
 <?php
 
-class ImperiaImportTest extends CouchDbDataImportBaseTestCase
+class ImperiaImportTest extends IDataImportBaseTestCase
 {
     static private $docIds = array( // normally these are provided by the imperia-trigger script.
         '/2/10330/10343/10890/1389047',
@@ -10,7 +10,7 @@ class ImperiaImportTest extends CouchDbDataImportBaseTestCase
 
     protected function getImportName()
     {
-        return 'couchdb';
+        return 'workflow';
     }
 
     // @codeCoverageIgnoreStart

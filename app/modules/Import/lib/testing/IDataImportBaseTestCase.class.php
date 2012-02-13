@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The CouchDbDataImportBaseTestCase class provides base functionality for CouchDbDataImport implementation tests.
+ * The IDataImportBaseTestCase class provides base functionality for IDataImport implementation tests.
  *
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -9,7 +9,7 @@
  * @package         Import
  * @subpackage      Testing
  */
-abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
+abstract class IDataImportBaseTestCase extends AgaviPhpUnitTestCase
 {
     // ---------------------------------- <ABSTRACT METHODS> -------------------------------------
 
@@ -53,7 +53,7 @@ abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
 
         $import = $importFactory->createDataImport($this->getImportName());
 
-        $this->assertInstanceOf('CouchDbDataImport', $import);
+        $this->assertInstanceOf('IDataImport', $import);
     }
 
     /**
@@ -102,11 +102,8 @@ abstract class CouchDbDataImportBaseTestCase extends AgaviPhpUnitTestCase
         );
 
         $import = $importFactory->createDataImport($this->getImportName());
-
         $dataSourceParams = $this->getDataSourceParameters($dataSourceName);
         $dataSource = $importFactory->createDataSource('imperia', $dataSourceParams);
-
-        // And let them rock!
         $import->run($dataSource);
     }
 
