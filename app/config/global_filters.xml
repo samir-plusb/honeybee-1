@@ -49,7 +49,7 @@
         </filters>
     </ae:configuration>
 
-    <ae:configuration environment="testing*">
+    <ae:configuration environment="testing.*">
         <filters>
 
             <filter name="ScriptFilter" class="ProjectScriptFilter">
