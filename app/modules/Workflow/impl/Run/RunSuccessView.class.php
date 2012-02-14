@@ -16,8 +16,11 @@ class Workflow_Run_RunSuccessView extends ProjectBaseView
      *                     <li>An AgaviExecutionContainer to forward the execution to or</li>
      *                     <li>Any other type will be set as the response content.</li>
      *                   </ul>
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeHtml(AgaviRequestDataHolder $parameters)
+    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         return $this->getAttribute('content');
     }

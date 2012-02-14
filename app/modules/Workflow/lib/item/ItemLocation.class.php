@@ -38,6 +38,8 @@ class ItemLocation implements IItemLocation
      * Holds the location's administrative district.
      *
      * @var string
+     *
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     protected $administrativeDistrict;
 

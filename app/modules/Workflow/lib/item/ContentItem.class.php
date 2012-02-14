@@ -9,6 +9,8 @@
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Workflow
  * @subpackage Item
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ContentItem implements IContentItem
 {

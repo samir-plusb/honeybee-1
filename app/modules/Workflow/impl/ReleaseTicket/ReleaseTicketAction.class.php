@@ -22,7 +22,7 @@ class Workflow_ReleaseTicketAction extends ProjectBaseAction
         $user = $this->getContext()->getUser();
         $error = '';
         $reason = '';
-        $tm = $this->getContext()->getTranslationManager();
+        $translationManager = $this->getContext()->getTranslationManager();
         if ($ticket->getCurrentOwner() === $user->getAttribute('login'))
         {
             $ticket->setCurrentOwner(WorkflowTicket::NULL_USER);
@@ -33,12 +33,12 @@ class Workflow_ReleaseTicketAction extends ProjectBaseAction
                 {
                     return 'Success';
                 }
-                $error = $tm->_('release_ticket_error_text', 'workflow.errors');
-                $reason = $tm->_('release_ticket_unex_error', 'workflow.errors');
+                $error = $translationManager->_('release_ticket_error_text', 'workflow.errors');
+                $reason = $translationManager->_('release_ticket_unex_error', 'workflow.errors');
             }
             catch(CouchdbClientException $e)
             {
-                $reason = $tm->_('release_ticket_db_error', 'workflow.errors');
+                $reason = $translationManager->_('release_ticket_db_error', 'workflow.errors');
             }
         }
         else
@@ -47,7 +47,7 @@ class Workflow_ReleaseTicketAction extends ProjectBaseAction
                 "The ticket is currently owned by %s, you may not release ownership of other's tickets.",
                 $ticket->getCurrentOwner()
             );
-            $reason = $tm->_('ticket_not_avail', 'workflow.errors');
+            $reason = $translationManager->_('ticket_not_avail', 'workflow.errors');
         }
         $this->setAttribute('reason', $reason);
         $this->setAttribute('error_msg', $error);

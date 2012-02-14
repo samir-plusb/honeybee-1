@@ -18,7 +18,7 @@ class WorkflowTicketValidator extends AgaviValidator
     {
         $originalValue =& $this->getData($this->getArgument());
         $revision = NULL;
-        $id = NULL;
+        $identifier = NULL;
 
         if (TRUE === $this->getParameter('validate_revision'))
         {
@@ -29,7 +29,7 @@ class WorkflowTicketValidator extends AgaviValidator
             }
             if (isset($originalValue['id']) && isset($originalValue['rev']))
             {
-                $id = $originalValue['id'];
+                $identifier = $originalValue['id'];
                 $revision = $originalValue['rev'];
             }
             else
@@ -40,9 +40,9 @@ class WorkflowTicketValidator extends AgaviValidator
         }
         else
         {
-            $id = $originalValue;
+            $identifier = $originalValue;
         }
-        $ticket = Workflow_SupervisorModel::getInstance()->getTicketPeer()->getTicketById($id, $revision);
+        $ticket = Workflow_SupervisorModel::getInstance()->getTicketPeer()->getTicketById($identifier, $revision);
         if (! $ticket instanceof WorkflowTicket)
         {
             $this->throwError('instance');

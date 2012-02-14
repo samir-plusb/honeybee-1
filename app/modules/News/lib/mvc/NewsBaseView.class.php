@@ -8,6 +8,8 @@
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
  * @subpackage      Mvc
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren) The News module seems to have alot of views. ^^
  */
 class NewsBaseView extends ProjectBaseView
 {

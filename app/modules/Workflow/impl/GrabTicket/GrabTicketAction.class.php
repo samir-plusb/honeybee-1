@@ -22,7 +22,7 @@ class Workflow_GrabTicketAction extends ProjectBaseAction
         $user = $this->getContext()->getUser();
         $error = '';
         $reason = '';
-        $tm = $this->getContext()->getTranslationManager();
+        $translationManager = $this->getContext()->getTranslationManager();
         if (WorkflowTicket::NULL_USER === $ticket->getCurrentOwner() ||
             $ticket->getCurrentOwner() === $user->getAttribute('login'))
         {
@@ -35,8 +35,8 @@ class Workflow_GrabTicketAction extends ProjectBaseAction
                 {
                     return 'Success';
                 }
-                $error = $tm->_('invalid_rev_text', 'workflow.errors');
-                $reason = $tm->_('invalid_rev_title', 'workflow.errors');
+                $error = $translationManager->_('invalid_rev_text', 'workflow.errors');
+                $reason = $translationManager->_('invalid_rev_title', 'workflow.errors');
             }
             catch(CouchdbClientException $e)
             {
@@ -46,7 +46,7 @@ class Workflow_GrabTicketAction extends ProjectBaseAction
         }
         else
         {
-            $reason = $tm->_('ticket_not_avail', 'workflow.errors');
+            $reason = $translationManager->_('ticket_not_avail', 'workflow.errors');
         }
         $this->setAttribute('reason', $reason);
         $this->setAttribute('error_msg', $error);

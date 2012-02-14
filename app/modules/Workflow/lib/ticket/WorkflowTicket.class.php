@@ -23,6 +23,8 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
      * document id in database
      *
      * @var string
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     private $id;
 
@@ -467,15 +469,15 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
 
     public function createWorkflowExecutionContainer($moduleName, $actionName, AgaviRequestDataHolder $arguments = NULL, $outputType = NULL, $requestMethod = NULL)
     {
-        $workflowExecutionContainer = $this->container->createExecutionContainer(
+        $executionContainer = $this->container->createExecutionContainer(
             $moduleName,
             $actionName,
             $arguments ? $arguments : $this->container->getArguments(),
             $outputType,
             $requestMethod
         );
-        $workflowExecutionContainer->setParameter('is_workflow_container', TRUE);
-        return $workflowExecutionContainer;
+        $executionContainer->setParameter('is_workflow_container', TRUE);
+        return $executionContainer;
     }
 
     /**

@@ -8,6 +8,8 @@
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
  * @subpackage      Lib
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to the broad usage of the Elastica lib.
  */
 class NewsFinder
 {

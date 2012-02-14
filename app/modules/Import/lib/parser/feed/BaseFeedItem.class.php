@@ -18,6 +18,8 @@ abstract class BaseFeedItem
      * Holds our identifier.
      *
      * @var         string
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     protected  $id;
 

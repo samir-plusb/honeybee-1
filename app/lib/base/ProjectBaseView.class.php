@@ -8,6 +8,8 @@
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Project
  * @subpackage      Mvc
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class ProjectBaseView extends AgaviView
 {

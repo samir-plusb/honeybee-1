@@ -50,7 +50,7 @@ class BrowseNewsBaseView extends NewsBaseView
     {
         $assetService = ProjectAssetService::getInstance();
         $assets = array();
-        $ro = $this->getContext()->getRouting();
+        $routing = $this->getContext()->getRouting();
         foreach ($item->getMedia() as $mediaId)
         {
             $asset = $assetService->get($mediaId);
@@ -59,7 +59,7 @@ class BrowseNewsBaseView extends NewsBaseView
             $assetCaption = isset($metaData['caption']) ? htmlspecialchars($metaData['caption']) : 'No Title';
             $assets[] = array(
                 'id' => $mediaId,
-                'url' => $ro->gen('asset.binary', array('aid' => $mediaId)),
+                'url' => $routing->gen('asset.binary', array('aid' => $mediaId)),
                 'caption' => sprintf('%s (%s)', $asset->getFullName(), $assetCaption),
                 'altText' => isset($metaData['alt']) ? htmlspecialchars($metaData['alt']) : $assetCaption
             );
