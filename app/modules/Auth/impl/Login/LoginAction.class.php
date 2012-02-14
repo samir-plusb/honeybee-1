@@ -41,7 +41,7 @@ class Auth_LoginAction extends AuthBaseAction
      *
      * @todo        Fallback to standard login action if ldap server is not available
      *
-     * @param       AgaviParameterHolder $rd
+     * @param       AgaviParameterHolder $parameters
      *
      * @return      string The name of the view to execute.
      *
@@ -51,11 +51,11 @@ class Auth_LoginAction extends AuthBaseAction
      *
      * @todo Map a given ldap group to the corresponding domain role
      */
-    public function executeWrite(AgaviParameterHolder $rd)
+    public function executeWrite(AgaviParameterHolder $parameters)
     {
         $this->checkLdapConfig();
 
-        $username = $rd->getParameter("username");
+        $username = $parameters->getParameter("username");
 
         $logger = $this->getContext()
                 ->getLoggerManager()
@@ -63,7 +63,7 @@ class Auth_LoginAction extends AuthBaseAction
 
         $this->ldap = ldap_connect(AgaviConfig::get("ldap.host"), AgaviConfig::get("ldap.port", 389));
 
-        if (!$this->ldap)
+        if (! $this->ldap)
         {
             //todo introduce a fallback action from config to allow other logins for dev environments.
             $errorMessage = "Can not connect to LDAP Server: " . AgaviConfig::get("ldap.host");
@@ -78,7 +78,7 @@ class Auth_LoginAction extends AuthBaseAction
             sprintf("%s=%s,%s", AgaviConfig::get("ldap.user_search", "uid"), $this->getLdapEscapedString($username),
                 AgaviConfig::get("ldap.base_user"));
 
-        if (!@ldap_bind($this->ldap, $bindRdn, $rd->getParameter("password")))
+        if (! @ldap_bind($this->ldap, $bindRdn, $parameters->getParameter("password")))
         {
             if (0x31 == ldap_errno($this->ldap))
             {
@@ -129,24 +129,24 @@ class Auth_LoginAction extends AuthBaseAction
 
             $entry = ldap_read($this->ldap, $ldapDn, $filter);
 
-            if (!$entry)
+            if (! $entry)
             {
                 throw new AgaviSecurityException(ldap_error($this->ldap));
             }
 
             $info = ldap_get_entries($this->ldap, $entry);
 
-            if (!$info || 0 == $info["count"])
+            if (! $info || 0 == $info["count"])
             {
                 $this->getContext()
                     ->getUser()
                     ->setAuthenticated(FALSE);
 
-                $tm = $this->getContext()
+                $translationManager = $this->getContext()
                         ->getTranslationManager();
                 $errorMessage =
                     sprintf(
-                        $tm->_('Failed authentication attempt for username %1$s, require group membership of "%2$s"'),
+                        $translationManager->_('Failed authentication attempt for username %1$s, require group membership of "%2$s"'),
                         $username, AgaviConfig::get("ldap.group_required"));
                 $this->setAttribute('error', $errorMessage);
                 $this->getContainer()
@@ -171,11 +171,11 @@ class Auth_LoginAction extends AuthBaseAction
     /**
      * This method handles validation errors that occur upon our received input data.
      *
-     * @param       AgaviRequestDataHolder $rd
+     * @param       AgaviRequestDataHolder $parameters
      *
      * @return      string The name of the view to execute.
      */
-    public function handleError(AgaviRequestDataHolder $rd)
+    public function handleError(AgaviRequestDataHolder $parameters)
     {
         $logger = $this->getContext()
                 ->getLoggerManager()
@@ -184,7 +184,7 @@ class Auth_LoginAction extends AuthBaseAction
         $logger->log(
                 new AgaviLoggerMessage(
                     sprintf('Failed authentication attempt for username %1$s, validation failed',
-                        $rd->getParameter('username')), AgaviILogger::INFO));
+                        $parameters->getParameter('username')), AgaviILogger::INFO));
 
         return 'Input';
     }
@@ -228,7 +228,7 @@ class Auth_LoginAction extends AuthBaseAction
 
         foreach ($ldap_settings as $setting)
         {
-            if (!AgaviConfig::has("ldap." . $setting))
+            if (! AgaviConfig::has("ldap." . $setting))
             {
                 $missing[] = "ldap." . $setting;
             }
@@ -303,7 +303,7 @@ class Auth_LoginAction extends AuthBaseAction
     {
         $user = $this->getContext()
                 ->getUser();
-        if (!$user instanceof AgaviISecurityUser)
+        if (! $user instanceof AgaviISecurityUser)
         {
             return;
         }
@@ -318,16 +318,10 @@ class Auth_LoginAction extends AuthBaseAction
             );
         $user->setAttributes($attr);
 
-
         /*
          * Find groups of user
          */
-
-        $ldapDn =
-            sprintf("%s=%s,%s", AgaviConfig::get("ldap.group_search"), AgaviConfig::get("ldap.group_required"),
-                AgaviConfig::get("ldap.base_group"));
-
-        $dn =
+        $distinguishedName =
             AgaviConfig::get("ldap.group_member_attr_is_dn")
                 ? sprintf("%s=%s,%s", AgaviConfig::get("ldap.user_search", "uid"),
                     $this->getLdapEscapedString($username), AgaviConfig::get("ldap.base_user"))
@@ -335,14 +329,14 @@ class Auth_LoginAction extends AuthBaseAction
 
         $filter =
             sprintf("(& (objectClass=%s) (%s=%s))", AgaviConfig::get("ldap.group_object_class", "posixGroup"),
-                AgaviConfig::get("ldap.group_member_attr", "memberUid"), $this->getLdapEscapedString($dn));
+                AgaviConfig::get("ldap.group_member_attr", "memberUid"), $this->getLdapEscapedString($distinguishedName));
 
         $entry =
             ldap_search($this->ldap, AgaviConfig::get("ldap.base_group"), $filter,
                 array(
                     AgaviConfig::get("ldap.group_name_attr")
                 ));
-        if (!$entry)
+        if (! $entry)
         {
             throw new AgaviSecurityException(ldap_error($this->ldap));
         }
@@ -353,13 +347,13 @@ class Auth_LoginAction extends AuthBaseAction
             return;
         }
 
-        foreach ($info as $key => $val)
+        foreach ($info as $val)
         {
             if (!empty($val[AgaviConfig::get("ldap.group_name_attr")][0]))
             {
                 $ldapRole = $val[AgaviConfig::get("ldap.group_name_attr")][0];
                 $user->addCredential($ldapRole);
-                
+
                 if (($domainRole = $user->mapExternalRoleToDomain('ldap_group', $ldapRole)))
                 {
                     // @todo Define how multiple roles are mapped.

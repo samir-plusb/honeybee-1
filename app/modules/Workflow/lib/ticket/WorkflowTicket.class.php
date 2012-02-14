@@ -23,8 +23,6 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
      * document id in database
      *
      * @var string
-     *
-     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     private $id;
 

@@ -11,6 +11,7 @@
  * @subpackage Item
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * * @SuppressWarnings(PHPMD.TooManyMethods)
  */
 class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
 {

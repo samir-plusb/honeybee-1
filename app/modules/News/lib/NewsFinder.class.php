@@ -10,6 +10,7 @@
  * @subpackage      Lib
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to the broad usage of the Elastica lib.
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  */
 class NewsFinder
 {
