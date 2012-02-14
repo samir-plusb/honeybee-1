@@ -721,7 +721,7 @@ class ExtendedCouchDbClient
         if (NULL === $data)
         {
             throw new CouchdbClientException(
-                $this->lastUri.': Response body can not be parsed to JSON: '. $response,
+                $this->lastUri.': Response body can not be parsed to JSON: '. $this->lastResponse,
                 CouchdbClientException::UNPARSEABLE_RESPONSE);
         }
         return $data;

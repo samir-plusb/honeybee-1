@@ -46,7 +46,16 @@ class Import_TriggerMailAction extends ImportBaseAction
         return 'Error';
     }
 
-    public function handleWriteError(AgaviRequestDataHolder $parameters)
+    /**
+     * Handle write errors, hence failed validation on the incoming data.
+     *
+     * @param AgaviRequestDataHolder $parameters
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
+     */
+    public function handleWriteError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $errors = array();
         foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $error)

@@ -34,7 +34,7 @@ class News_Api_ExtractLocationAction extends NewsBaseAction
             "Received following response for localization of '" . $url . "': " . PHP_EOL . $resp
         );
 
-        if (($error = curl_error($curl)))
+        if (curl_error($curl))
         {
             $this->setAttribute('location', array('items_count' => 0));
         }

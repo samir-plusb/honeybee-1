@@ -44,7 +44,16 @@ class News_StatsAction extends NewsBaseAction
         return 'Success';
     }
 
-    public function handleError(AgaviRequestDataHolder $parameters)
+    /**
+     * Handle read errors, hence failed validation on the incoming parameters.
+     *
+     * @param AgaviRequestDataHolder $parameters
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
+     */
+    public function handleReadError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $errors = array();
         $validation_manager = $this->getContainer()->getValidationManager();

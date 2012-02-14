@@ -12,7 +12,7 @@
 class News_FetchNearByItemsAction extends NewsBaseAction
 {
     /**
-     * Execute the read logic for this action, hence extract the data.
+     * Execute the read logic for this action, hence find the news items near the provided content-item.
      *
      * @param       AgaviRequestDataHolder $parameters
      *
@@ -37,7 +37,16 @@ class News_FetchNearByItemsAction extends NewsBaseAction
         return 'Success';
     }
 
-    public function handleReadError(AgaviRequestDataHolder $parameters)
+    /**
+     * Handle read errors, hence failed validation on the incoming parameters.
+     *
+     * @param AgaviRequestDataHolder $parameters
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
+     */
+    public function handleReadError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         return 'Error';
     }

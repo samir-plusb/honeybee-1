@@ -16,8 +16,11 @@ class Auth_Login_LoginErrorView extends AuthBaseView
      * Execute any html related presentation logic and sets up our template attributes.
      *
      * @param       AgaviRequestDataHolder $parameters
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeHtml(AgaviRequestDataHolder $parameters)
+    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $translationManager = $this->getContext()->getTranslationManager();
 

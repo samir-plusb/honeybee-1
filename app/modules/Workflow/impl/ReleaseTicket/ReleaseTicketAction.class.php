@@ -8,13 +8,13 @@
 class Workflow_ReleaseTicketAction extends ProjectBaseAction
 {
     /**
-     * (non-PHPdoc)
-     * @see AgaviAction::getDefaultViewName()
+     * Execute the action's read logic, hence release ownership of the given ticket(id).
      *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @codingStandardsIgnoreStart
+     * @param AgaviParameterHolder $parameters
+     *
+     * @return string
      */
-    public function executeRead(AgaviParameterHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeRead(AgaviParameterHolder $parameters)
     {
         /* @var $ticket WorkflowTicket */
         $ticket = $parameters->getParameter('ticket');

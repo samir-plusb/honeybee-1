@@ -54,11 +54,6 @@ class WorkflowTicketPeer
         return $ticket;
     }
 
-    public function getTickets($limit = 0, $offset = 0)
-    {
-
-    }
-
     /**
      * store ticket in the database
      *

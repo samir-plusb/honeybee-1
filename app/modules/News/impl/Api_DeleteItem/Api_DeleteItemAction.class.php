@@ -13,7 +13,7 @@ class News_Api_DeleteItemAction extends NewsBaseAction
 {
 
     /**
-     * Execute the read logic for this action, hence extract the data.
+     * Execute writes for delete item action, hence delete the given content item.
      *
      * @param       AgaviRequestDataHolder $parameters
      *
@@ -47,7 +47,16 @@ class News_Api_DeleteItemAction extends NewsBaseAction
         return 'Success';
     }
 
-    public function handleWriteError(AgaviRequestDataHolder $parameters)
+    /**
+     * Handle write errors, hence failed validation on the incoming data.
+     *
+     * @param AgaviRequestDataHolder $parameters
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
+     */
+    public function handleWriteError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setAttribute(
             'err_message',

@@ -8,10 +8,14 @@
 class Workflow_ReleaseTicket_ReleaseTicketErrorView extends ProjectBaseView
 {
     /**
-     * (non-PHPdoc)
-     * @see ProjectBaseView::executeJson()
+     * Prepares and sets our json data on our webresponse.
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeJson(AgaviRequestDataHolder $parameters)
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         return json_encode(
             array(

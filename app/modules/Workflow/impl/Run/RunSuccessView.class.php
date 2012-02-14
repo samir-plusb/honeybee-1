@@ -23,19 +23,27 @@ class Workflow_Run_RunSuccessView extends ProjectBaseView
     }
 
     /**
-     * (non-PHPdoc)
-     * @see ProjectBaseView::executeText()
+     * Prepares and sets our text data on our console response.
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         return $this->getAttribute('content');
     }
 
     /**
-     * (non-PHPdoc)
-     * @see ProjectBaseView::executeJson()
+     * Prepares and sets our json data on our webresponse.
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeJson(AgaviRequestDataHolder $parameters)
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         return json_encode(
             array(
