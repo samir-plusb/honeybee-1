@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns="http://agavi.org/agavi/config/parts/databases/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+
     <ae:configuration>
         <databases default="CouchWorkflow">
             <database name="CouchWorkflow" class="CouchDatabase">
@@ -28,6 +29,7 @@
             </database>
         </databases>
     </ae:configuration>
+
     <ae:configuration environment="testing.*">
         <databases default="CouchWorkflow">
             <database name="CouchWorkflow" class="CouchDatabase">
@@ -56,4 +58,5 @@
             </database>
         </databases>
     </ae:configuration>
+
 </ae:configurations>

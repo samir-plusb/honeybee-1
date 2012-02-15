@@ -6,19 +6,6 @@
     <ae:configuration>
         <dataimports>
 
-            <dataimport name="couchdb" class="CouchDbDataImport">
-                <description>Imports data into a configured coucdb database.</description>
-                <datasources>
-                    <datasource>imperia</datasource>
-                    <datasource>rss</datasource>
-                    <datasource>dpa</datasource>
-                    <datasource>imap</datasource>
-                </datasources>
-                <settings>
-                    <setting name="couchdb_database">midas_import</setting>
-                </settings>
-            </dataimport>
-
             <dataimport name="workflow" class="WorkflowItemDataImport">
                 <description>Imports data in form of IWorkflowItems.</description>
                 <datasources>
