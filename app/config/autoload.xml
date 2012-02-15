@@ -17,6 +17,8 @@
             <autoload name="ProjectFileSystemRegexpIterator">%core.lib_dir%/iterator/ProjectFileSystemRegexpIterator.class.php</autoload>
 
             <autoload name="ElasticSearchDatabase">%core.lib_dir%/agavi/database/ElasticSearchDatabase.class.php</autoload>
+            <autoload name="CouchDatabase">%core.lib_dir%/agavi/database/CouchDatabase.class.php</autoload>
+            <autoload name="IDatabaseSetup">%core.lib_dir%/agavi/database/IDatabaseSetup.iface.php</autoload>
 
             <!-- Zend (can be removed when agavi delivers integration) -->
             <autoload name="Zend_Acl">%core.app_dir%/../libs/Zend/Acl.php</autoload>

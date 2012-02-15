@@ -1,14 +1,14 @@
 <?php
 
 /**
- * The ICouchDatabaseSetup interface is responseable for setting up couchdb for usage. eg. define design documents
+ * The IDatabaseSetup interface is responseable for setting up databases for usage.
  *
  * @package         Database
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer
  */
-interface ICouchDatabaseSetup
+interface IDatabaseSetup
 {
     /**
      * Setup everything required to provide the functionality exposed by our module.

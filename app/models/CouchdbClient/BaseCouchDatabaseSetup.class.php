@@ -12,7 +12,7 @@
  * @author Tom Anheyer
  * @package Database
  */
-abstract class BaseCouchDatabaseSetup implements ICouchDatabaseSetup
+abstract class BaseCouchDatabaseSetup implements IDatabaseSetup
 {
     /**
      * our connection to our database

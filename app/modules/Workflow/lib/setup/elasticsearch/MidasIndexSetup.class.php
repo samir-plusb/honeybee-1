@@ -1,6 +1,6 @@
 <?php
 
-class MidasIndexSetup implements ICouchDatabaseSetup
+class MidasIndexSetup implements IDatabaseSetup
 {
     /**
      *
