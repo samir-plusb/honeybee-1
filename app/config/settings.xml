@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/settings/1.0"
-    xmlns:xi="http://www.w3.org/2001/XInclude">
+                   xmlns:xi="http://www.w3.org/2001/XInclude">
     <ae:configuration>
 
         <system_actions>
@@ -81,6 +81,7 @@
         <settings prefix="import.">
             <setting name="config_dir">%core.modules_dir%/Import/config/</setting>
             <setting name="newswire_dir">/var/tmp/dpa/regio-berlinbrandenburg/</setting>
+            <setting name="imperia_datarecord.base_href">http://www.berlin.de</setting>
         </settings>
 
         <settings prefix="assets.">
@@ -162,6 +163,7 @@
 
     <ae:configuration environment="testing.*">
         <settings>
+            <setting name="fixture_server_url">http://ci.berlinonline.de/fixtures</setting>
             <setting name="default_context">web</setting>
             <setting name="fixtures_dir">%core.testing_dir%/fixtures/</setting>
         </settings>
@@ -171,8 +173,8 @@
         </settings>
 
         <settings prefix="import.">
-            <setting name="config_dir">%core.testing_dir%/fixtures/configs/import/</setting>
-            <setting name="newswire_dir">%core.testing_dir%/fixtures/data/import/newswire/</setting>
+            <setting name="config_dir">%core.testing_dir%/fixtures/import/config/</setting>
+            <setting name="newswire_dir">%core.testing_dir%/fixtures/import/newswire/</setting>
         </settings>
     </ae:configuration>
 

@@ -13,22 +13,22 @@
                     <testfile>unit/models/Event/ProjectEventProxyTest.php</testfile>
 
                     <!-- IImportFactory Tests -->
-                    <testfile>unit/modules/Import/models/Base/Factory/ImportFactoryConfigTest.php</testfile>
-                    <testfile>unit/modules/Import/models/Base/Factory/ImportFactoryTest.php</testfile>
+                    <testfile>unit/modules/Import/lib/base/factory/ImportFactoryConfigTest.php</testfile>
+                    <testfile>unit/modules/Import/lib/base/factory/ImportFactoryTest.php</testfile>
 
                     <!-- IDataRecord Tests -->
-                    <testfile>unit/modules/Import/models/Imperia/DataRecord/PoliceReportDataRecordTest.php</testfile>
-                    <testfile>unit/modules/Import/models/Newswire/DataRecord/DpaNitfDataRecordTest.php</testfile>
+                    <testfile>unit/modules/Import/lib/imperia/datarecord/PoliceReportDataRecordTest.php</testfile>
+                    <testfile>unit/modules/Import/lib/newswire/datarecord/DpaNitfDataRecordTest.php</testfile>
 
                     <!-- IDataSource Tests -->
-                    <testfile>unit/modules/Import/models/Imperia/DataSource/ImperiaDataSourceConfigTest.php</testfile>
-                    <testfile>unit/modules/Import/models/Imperia/DataSource/ImperiaDataSourceTest.php</testfile>
-                    <testfile>unit/modules/Import/models/Newswire/DataSource/NewswireDataSourceTest.php</testfile>
-                    <testfile>unit/modules/Import/models/Rss/DataSource/RssDataSourceTest.php</testfile>
+                    <testfile>unit/modules/Import/lib/imperia/datasource/ImperiaDataSourceConfigTest.php</testfile>
+                    <testfile>unit/modules/Import/lib/imperia/datasource/ImperiaDataSourceTest.php</testfile>
+                    <testfile>unit/modules/Import/lib/newswire/datasource/NewswireDataSourceTest.php</testfile>
+                    <testfile>unit/modules/Import/lib/rss/datasource/RssDataSourceTest.php</testfile>
 
                     <!-- IDataImport Tests -->
-                    <testfile>unit/modules/Import/models/Imperia/DataImport/ImperiaImportConfigTest.php</testfile>
-                    <testfile>unit/modules/Import/models/Imperia/DataImport/ImperiaImportTest.php</testfile>
+                    <testfile>unit/modules/Import/lib/imperia/dataimport/ImperiaImportConfigTest.php</testfile>
+                    <testfile>unit/modules/Import/lib/imperia/dataimport/ImperiaImportTest.php</testfile>
 
                     <!-- Flow Tests -->
                     <testfile>fragment/Import/Imperia/ImperiaTriggerActionTest.class.php</testfile>

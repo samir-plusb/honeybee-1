@@ -2,7 +2,7 @@
 
 class ImperiaImportConfigTest extends ImportConfigBaseTestCase
 {
-    const CFG_FIXTURE = 'data/import/imperia/config.import.php';
+    const CFG_FIXTURE = 'import/config/config.import.php';
 
     protected function getConfigImplementor()
     {

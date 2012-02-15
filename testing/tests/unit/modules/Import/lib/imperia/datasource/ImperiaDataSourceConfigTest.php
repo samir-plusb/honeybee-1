@@ -2,7 +2,7 @@
 
 class ImperiaDataSourceConfigTest extends ImportConfigBaseTestCase
 {
-    const CFG_FIXTURE = 'data/import/imperia/config.datasource.php';
+    const CFG_FIXTURE = 'import/config/config.datasource.php';
 
     protected function getConfigImplementor()
     {

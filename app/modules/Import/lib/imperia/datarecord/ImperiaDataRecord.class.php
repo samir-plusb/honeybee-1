@@ -59,7 +59,7 @@ class ImperiaDataRecord extends ImportBaseDataRecord
      *
      * @todo Move to config cause of evn awareness?
      */
-    const LINK_BASE_URL = 'http://www.berlin.de';
+    const LINK_BASE_URL_SETTING = 'import.imperia_datarecord.base_href';
 
     // ---------------------------------- <CONSTANTS> --------------------------------------------
 
@@ -301,9 +301,9 @@ class ImperiaDataRecord extends ImportBaseDataRecord
     {
         $parser = new ImperiaXmlParser();
         $parsedData = $parser->parseXml($data);
-        
+
         $recordData = array();
-        $recordData[self::PROP_TITLE] = $parsedData['title']; 
+        $recordData[self::PROP_TITLE] = $parsedData['title'];
         $recordData[self::PROP_SUBTITLE] = $parsedData['subtitle'];
         $recordData[self::PROP_DIRECTORY] = $parsedData['directory'];
         $recordData[self::PROP_FILENAME] = $parsedData['filename'];
@@ -316,20 +316,31 @@ class ImperiaDataRecord extends ImportBaseDataRecord
         $recordData[self::PROP_CATEGORY] = sprintf('// %s', join(' // ', array_reverse($parsedData['categories'])));
         $recordData[self::PROP_GEO] = array();
         $recordData[self::PROP_MEDIA] = array();
-        
+
         foreach ($parsedData['images'] as $imageInfo)
         {
-            $recordData[self::PROP_MEDIA][] = $this->createAsset($imageInfo);
+            try
+            {
+                $recordData[self::PROP_MEDIA][] = $this->createAsset($imageInfo);
+            }
+            catch(Exception $e)
+            {
+                if (0 !== strpos(AgaviConfig::get('core.environment'), 'testing.*'))
+                {
+                    // @todo add environment based logginf configs
+                    // so we can transparently log to agavi without spamming the app log.
+                    error_log("Failed to download asset from url: " . print_r($imageInfo, TRUE));
+                }
+            }
         }
-        
         return $recordData;
     }
 
     // ---------------------------------- </ImportBaseDataRecord IMPL> ---------------------------
-    
-    
+
+
     // ---------------------------------- <ImportBaseDataRecord OVERRIDES> -----------------------
-    
+
     /**
      * Return an array holding property names of properties,
      * which we want to expose through our IDataRecord::toArray() method.
@@ -351,9 +362,9 @@ class ImperiaDataRecord extends ImportBaseDataRecord
         );
 
     }
-    
+
     // ---------------------------------- <ImportBaseDataRecord OVERRIDES> -----------------------
-    
+
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
 
@@ -366,7 +377,7 @@ class ImperiaDataRecord extends ImportBaseDataRecord
         {
             $this->link = sprintf(
                 "%s%s/%s",
-                self::LINK_BASE_URL,
+                AgaviConfig::get(self::LINK_BASE_URL_SETTING),
                 $this->directory,
                 $this->filename
             );
@@ -384,17 +395,17 @@ class ImperiaDataRecord extends ImportBaseDataRecord
     protected function generateSource(array $categories)
     {
         $catReverse = array_reverse($categories);
-        
+
         if ('Land' != $catReverse[0])
         {
             return 'Imperia-Unknown';
         }
-        
+
         if ('Senatsverwaltungen' == $catReverse[1])
         {
             return $catReverse[2];
         }
-        
+
         return $catReverse[1];
     }
 
@@ -407,9 +418,9 @@ class ImperiaDataRecord extends ImportBaseDataRecord
      */
     protected function createAsset(array $imageInfo)
     {
-        $src = self::LINK_BASE_URL . $imageInfo['src'];
+        $src = AgaviConfig::get(self::LINK_BASE_URL_SETTING) . $imageInfo['src'];
         unset($imageInfo['src']);
-        
+
         return ProjectAssetService::getInstance()->put($src, $imageInfo)->getId();
     }
 

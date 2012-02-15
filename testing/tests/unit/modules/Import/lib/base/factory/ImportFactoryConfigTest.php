@@ -2,14 +2,14 @@
 
 class ImportFactoryConfigTest extends AgaviUnitTestCase
 {
-    const CFG_FIXTURE = 'data/import/imperia/config.php';
-    
+    const CFG_FIXTURE = 'import/config/config.php';
+
     protected $imperiaFactoryConfig;
 
     protected function setUp()
     {
         parent::setUp();
-        
+
         $this->imperiaFactoryConfig = new ImportFactoryConfig(
             AgaviConfig::get('import.config_dir')
         );
@@ -19,17 +19,17 @@ class ImportFactoryConfigTest extends AgaviUnitTestCase
     {
         $fixture = include $this->buildFixturePath();
         $expected = $fixture['dataimports']['couchdb'];
-        
+
         $importConfig = $this->imperiaFactoryConfig->getDataImportConfig('couchdb');
 
         $this->assertEquals($expected, $importConfig);
     }
-    
+
     public function testGetDataSourceConfig()
     {
         $fixture = include $this->buildFixturePath();
         $expected = $fixture['datasources']['imperia'];
-        
+
         $sourceConfig = $this->imperiaFactoryConfig->getDataSourceConfig('imperia');
 
         $this->assertEquals($expected, $sourceConfig);
@@ -57,20 +57,20 @@ class ImportFactoryConfigTest extends AgaviUnitTestCase
             ImportFactoryConfig::CFG_IMPORTS_CONFIG => 'DataImportsFactoryConfig',
             ImportFactoryConfig::CFG_SOURCES_CONFIG => 'DataSourcesFactoryConfig'
         );
-        
+
         foreach ($expectedSettings as $name => $expectedClass)
         {
             $configObject = $this->imperiaFactoryConfig->getSetting($name);
-            
+
             $this->assertInstanceOf($expectedClass, $configObject);
         }
     }
-    
+
     private function buildFixturePath()
     {
         return AgaviConfig::get('core.fixtures_dir') . self::CFG_FIXTURE;
     }
-    
+
     // @codeCoverageIgnoreEnd
 }
 

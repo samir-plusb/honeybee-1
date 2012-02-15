@@ -10,15 +10,15 @@
  */
 class DpaNitfDataRecordTest extends DataRecordBaseTestCase
 {
-    const CFG_XML_FIXTURE = 'data/import/newswire/dpa-ServiceLine/iptc-zin-20110527-18-dpa_30598702.xml';
+    const CFG_XML_FIXTURE = 'import/newswire/dpa-ServiceLine/iptc-zin-20110527-18-dpa_30598702.xml';
 
-    const CFG_DATA_FIXTURE = 'data/import/newswire/iptc-zin-20110527-18-dpa_30598702.php';
+    const CFG_DATA_FIXTURE = 'import/newswire/iptc-zin-20110527-18-dpa_30598702.php';
 
     public function testToArray()
     {
         $values = $this->dataRecord->toArray();
     }
-    
+
     protected function getDataRecordClass()
     {
         return 'DpaNitfNewswireDataRecord';
@@ -38,7 +38,7 @@ class DpaNitfDataRecordTest extends DataRecordBaseTestCase
     {
         return 'dpa - Deutsche Presse-Agentur GmbH';
     }
-    
+
     protected function getDataRecordOrigin()
     {
         return AgaviConfig::get('core.fixtures_dir') . $this->getRecordXmlFixturePath();

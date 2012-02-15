@@ -5,7 +5,7 @@
  */
 class MailTriggerActionTest extends AgaviActionTestCase
 {
-    const MAIL_FIXTURE_PATH = 'data/import/mail/testmail';
+    const MAIL_FIXTURE_PATH = 'import/mail/testmail';
 
     // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
     // @codeCoverageIgnoreStart
