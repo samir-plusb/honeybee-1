@@ -55,6 +55,11 @@
                     <testfile>flow/Workflow/Run/WorkflowRunFlowTest.php</testfile>
                 </testfiles>
             </suite>
+            <suite name="News">
+                <testfiles>
+                    <testfile>fragment/News/List/ListActionTest.class.php</testfile>
+                </testfiles>
+            </suite>
         </suites>
     </ae:configuration>
 </ae:configurations>
