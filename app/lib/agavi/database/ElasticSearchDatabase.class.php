@@ -45,7 +45,7 @@ class ElasticSearchDatabase extends AgaviDatabase
         $this->connection = $this->elasticaClient->getIndex(
             $this->getParameter('index')
         );
-        
+
         try
         {
             $this->connection->getStatus();
@@ -76,14 +76,19 @@ class ElasticSearchDatabase extends AgaviDatabase
         }
 
         $setupClass = $this->getParameter('setup_class');
-
         if (! class_exists($setupClass))
         {
             throw new AgaviDatabaseException("Setup class '$setupClass' can not be found.");
         }
-
         $setup = new $setupClass($this);
-        $setup->setup(TRUE);
+        if ($setup instanceof IDatabaseSetup)
+        {
+            $setup->setup();
+        }
+        else
+        {
+            throw new AgaviDatabaseException('Setup class does not implement IDatabaseSetup: '.$setupClass);
+        }
     }
 
     protected function triggerTearDownHook()

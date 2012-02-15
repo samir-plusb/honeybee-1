@@ -55,11 +55,13 @@
                     <testfile>flow/Workflow/Run/WorkflowRunFlowTest.php</testfile>
                 </testfiles>
             </suite>
+            <!-- @todo Can use as soon as we have an elastic search instance for integration.
             <suite name="News">
                 <testfiles>
                     <testfile>fragment/News/List/ListActionTest.class.php</testfile>
                 </testfiles>
             </suite>
+            -->
         </suites>
     </ae:configuration>
 </ae:configurations>

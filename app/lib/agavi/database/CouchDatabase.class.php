@@ -99,7 +99,7 @@ class CouchDatabase extends AgaviDatabase
             throw new AgaviDatabaseException('Setup class does not exists: '.$class);
         }
         $setup = new $class();
-        if ($setup instanceof ICouchDatabaseSetup)
+        if ($setup instanceof IDatabaseSetup)
         {
             $setup->setup();
         }

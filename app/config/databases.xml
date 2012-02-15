@@ -21,6 +21,7 @@
                 <ae:parameter name="index">midas</ae:parameter>
                 <ae:parameter name="setup_class">MidasIndexSetup</ae:parameter>
                 <ae:parameter name="river">
+                    <ae:parameter name="config">workflow_river</ae:parameter>
                     <ae:parameter name="name">workflow_river</ae:parameter>
                     <ae:parameter name="db">workflow</ae:parameter>
                 </ae:parameter>

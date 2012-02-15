@@ -25,9 +25,16 @@ class MidasIndexSetup implements IDatabaseSetup
         $index = $this->database->getConnection();
         if ($tearDownFirst)
         {
-            $index->delete();
+            try
+            {
+
+            }
+            catch(Exception $e)
+            {
+                $index->delete();
+            }
         }
-        $index->create($indexSettings);
+        $index->create($indexSettings, $tearDownFirst);
         if ($this->database->hasParameter('river'))
         {
             $riverParams = $this->database->getParameter('river');
