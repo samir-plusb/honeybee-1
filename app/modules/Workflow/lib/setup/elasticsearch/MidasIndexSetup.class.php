@@ -27,11 +27,11 @@ class MidasIndexSetup implements IDatabaseSetup
         {
             try
             {
-
+                $index->delete();
             }
             catch(Exception $e)
             {
-                $index->delete();
+                // log and continue.
             }
         }
         $index->create($indexSettings, $tearDownFirst);
