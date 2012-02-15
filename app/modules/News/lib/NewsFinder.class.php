@@ -32,11 +32,6 @@ class NewsFinder
     const SORT_ASC = 'asc';
 
     /**
-     * Name of the elastic search index that is queried when gathering news-item information.
-     */
-    const ES_IDX_NAME = 'midas';
-
-    /**
      * Name of the elastic search type that we query for news-items.
      */
     const ES_TYPE_NAME = 'item';
@@ -64,11 +59,11 @@ class NewsFinder
     );
 
     /**
-     * The client used to talk to elastic search.
+     * The elastic search index that holds our news data.
      *
-     * @type Elastica_Client
+     * @type Elastica_Index
      */
-    protected $elasticClient;
+    protected $midasIndex;
 
     /**
      * !HACK - Violation of SRP!
@@ -90,11 +85,11 @@ class NewsFinder
     /**
      * Create a new NewsFinder instance.
      *
-     * @param Elastica_Client $elasticClient The client that shall be used to query elastic search.
+     * @param Elastica_Index $elasticIndex The index that shall be used to query elastic search.
      */
-    public function __construct(Elastica_Client $elasticClient)
+    public function __construct(Elastica_Index $elasticIndex)
     {
-        $this->elasticClient = $elasticClient;
+        $this->midasIndex = $elasticIndex;
     }
 
     /**
@@ -208,7 +203,7 @@ class NewsFinder
              $this->prepareSortingParams($sortField, $sortDirection)
         );
 
-        $index = $this->elasticClient->getIndex(self::ES_IDX_NAME);
+        $index = $this->midasIndex->getIndex(self::ES_IDX_NAME);
         return $this->hydrateResult(
             $index->getType(self::ES_TYPE_NAME)->search($query)
         );
@@ -292,10 +287,8 @@ class NewsFinder
      */
     protected function fireNewsItemQuery(Elastica_Query $query, $offset, $limit, array $sorting)
     {
-        $index = $this->elasticClient->getIndex(self::ES_IDX_NAME);
-
         return $this->hydrateResult(
-            $index->getType(self::ES_TYPE_NAME)->search(
+            $this->midasIndex->getType(self::ES_TYPE_NAME)->search(
                 $query->setFilter(
                     $this->addEditingStreamFilter(
                         $this->buildBasicNewsFilter()

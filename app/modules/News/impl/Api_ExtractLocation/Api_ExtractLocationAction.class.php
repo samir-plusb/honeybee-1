@@ -25,7 +25,7 @@ class News_Api_ExtractLocationAction extends NewsBaseAction
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $geoText = $parameters->getParameter('geo_text', '');
-        $url = sprintf('%s?string=%s', AgaviConfig::get('news_workflow.localize_api'), urlencode($geoText));
+        $url = sprintf('%s?string=%s', AgaviConfig::get('news.localize_api_url'), urlencode($geoText));
         $curl = ProjectCurl::create();
         curl_setopt($curl, CURLOPT_URL, $url);
         $resp = curl_exec($curl);

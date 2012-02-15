@@ -135,3 +135,5 @@ class CouchDatabase extends AgaviDatabase
 
     }
 }
+
+?>

@@ -16,6 +16,8 @@
             <autoload name="ProjectScriptPacker">%core.lib_dir%/deployment/ProjectScriptPacker.class.php</autoload>
             <autoload name="ProjectFileSystemRegexpIterator">%core.lib_dir%/iterator/ProjectFileSystemRegexpIterator.class.php</autoload>
 
+            <autoload name="ElasticSearchDatabase">%core.lib_dir%/agavi/database/ElasticSearchDatabase.class.php</autoload>
+
             <!-- Zend (can be removed when agavi delivers integration) -->
             <autoload name="Zend_Acl">%core.app_dir%/../libs/Zend/Acl.php</autoload>
             <autoload name="Zend_Acl_Assert_Interface">%core.app_dir%/../libs/Zend/Acl/Assert/Interface.php</autoload>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
+<ae:configurations
     xmlns="http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0"
     xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
-    <ae:configuration>        
+    <ae:configuration>
         <dataimports>
-            
+
             <dataimport name="couchdb" class="CouchDbDataImport">
                 <description>Imports data into a configured coucdb database.</description>
                 <datasources>
@@ -15,12 +15,10 @@
                     <datasource>imap</datasource>
                 </datasources>
                 <settings>
-                    <setting name="couchdb_host">%couchdb.import.host%</setting>
-                    <setting name="couchdb_port">%couchdb.import.port%</setting>
-                    <setting name="couchdb_database">%couchdb.import.database%</setting>
+                    <setting name="couchdb_database">midas_import</setting>
                 </settings>
             </dataimport>
-            
+
             <dataimport name="workflow" class="WorkflowItemDataImport">
                 <description>Imports data in form of IWorkflowItems.</description>
                 <datasources>
@@ -33,7 +31,7 @@
                     <setting name="notify">true</setting>
                 </settings>
             </dataimport>
-            
+
         </dataimports>
     </ae:configuration>
 </ae:configurations>

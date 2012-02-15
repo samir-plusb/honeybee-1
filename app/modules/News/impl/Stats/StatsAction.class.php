@@ -24,13 +24,7 @@ class News_StatsAction extends NewsBaseAction
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $provider = new NewsStatisticProvider(
-            new Elastica_Client(
-                array(
-                    'host'      => AgaviConfig::get('elasticsearch.host', 'localhost'),
-                    'port'      => AgaviConfig::get('elasticsearch.port', 9200),
-                    'transport' => AgaviConfig::get('elasticsearch.transport', 'Http')
-                )
-            ),
+            $this->getContext()->getDatabaseConnection('EsNews'),
             $this->getContext()->getDatabaseConnection('CouchWorkflow')
         );
 

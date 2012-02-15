@@ -1,53 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/settings/1.0"
                    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <!--
+    ####################
+    DEFAULT
+    ####################
+    -->
     <ae:configuration>
 
         <system_actions>
-
             <system_action name="default">
                 <module>Default</module>
                 <action>Index</action>
             </system_action>
-
             <system_action name="error_404">
                 <module>Default</module>
                 <action>Error404</action>
             </system_action>
-
             <system_action name="login">
                 <module>Auth</module>
                 <action>Login</action>
             </system_action>
-
             <system_action name="module_disabled">
                 <module>Default</module>
                 <action>ModuleDisabled</action>
             </system_action>
-
             <system_action name="secure">
                 <module>Default</module>
                 <action>Secure</action>
             </system_action>
-
             <system_action name="unavailable">
                 <module>Default</module>
                 <action>Unavailable</action>
             </system_action>
-
         </system_actions>
 
         <settings>
             <setting name="app_name">Midas - Content Refining Middleware</setting>
-
             <setting name="available">true</setting>
             <setting name="debug">false</setting>
-
             <setting name="use_database">true</setting>
             <setting name="use_logging">true</setting>
             <setting name="use_security">true</setting>
             <setting name="use_translation">true</setting>
         </settings>
+
 
         <settings prefix="ldap.">
             <setting name="host">ldap://localhost</setting>
@@ -65,12 +62,8 @@
             <setting name="group_required">files</setting>
         </settings>
 
-        <settings prefix="couchdb.import.">
-            <setting name="host">localhost</setting>
-            <setting name="port">5984</setting>
-            <setting name="database">midas_import</setting>
-        </settings>
 
+        <!-- @todo as these are import related, move them to the import settings node. -->
         <settings prefix="imperia.">
             <setting name="base_url">https://imperia.berlinonline.de/</setting>
             <setting name="docid_api_url">
@@ -78,25 +71,32 @@
             </setting>
         </settings>
 
+
         <settings prefix="import.">
             <setting name="config_dir">%core.modules_dir%/Import/config/</setting>
             <setting name="newswire_dir">/var/tmp/dpa/regio-berlinbrandenburg/</setting>
             <setting name="imperia_datarecord.base_href">http://www.berlin.de</setting>
         </settings>
 
+
         <settings prefix="assets.">
             <setting name="mime_database">/usr/share/misc/magic.mgc</setting>
             <setting name="base_dir">%core.app_dir%/../data/assets</setting>
         </settings>
 
-        <settings prefix="news_workflow.">
-            <setting name="localize_api">http://6-strato.berlinonline.de/api/localize</setting>
-        </settings>
 
         <settings prefix="news.">
+            <!--
+                These setting specify external urls that we call to get some work done for us.
+            -->
+            <setting name="localize_api_url">http://6-strato.berlinonline.de/api/localize</setting>
             <setting name="frontend_api_url">http://bo-proto.h1960801.stratoserver.net/news/api/</setting>
             <setting name="frontend_sync">off</setting>
 
+            <!--
+                The tags and categories settings define values that are used as dropdown options
+                by the corresponding form inputs on the news editing page.
+            -->
             <setting name="tags">
                 <ae:parameters>
                     <ae:parameter>mitmachen</ae:parameter>
@@ -117,6 +117,7 @@
             </setting>
         </settings>
 
+
         <exception_templates>
             <exception_template>%core.agavi_dir%/exception/templates/shiny.php</exception_template>
             <exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
@@ -124,12 +125,24 @@
 
     </ae:configuration>
 
+
+    <!--
+    ####################
+    DEVELOPMENT COMMONS
+    ####################
+    -->
     <ae:configuration environment="development*">
         <settings>
             <setting name="debug">true</setting>
         </settings>
     </ae:configuration>
 
+
+    <!--
+    ####################
+    TAY
+    ####################
+    -->
     <ae:configuration environment=".*cw-tay.*">
         <settings>
             <setting name="debug">true</setting>
@@ -139,7 +152,9 @@
         </settings>
         <settings prefix="curl.">
             <setting name="proxy">proxy:3128</setting>
-<!--             <setting name="verbose">TRUE</setting> -->
+            <!--
+            <setting name="verbose">TRUE</setting>
+            -->
         </settings>
         <settings prefix="php.">
             <setting name="default-stream">
@@ -152,6 +167,12 @@
         </settings>
     </ae:configuration>
 
+
+    <!--
+    ####################
+    BERLINONLINE DEVEL
+    ####################
+    -->
     <ae:configuration environment=".*bo-devel.*">
         <settings prefix="ldap.">
             <setting name="host">ldap://bohome3</setting>
@@ -161,15 +182,17 @@
         </settings>
     </ae:configuration>
 
+
+    <!--
+    ####################
+    TESTING
+    ####################
+    -->
     <ae:configuration environment="testing.*">
         <settings>
             <setting name="fixture_server_url">http://ci.berlinonline.de/fixtures</setting>
             <setting name="default_context">web</setting>
             <setting name="fixtures_dir">%core.testing_dir%/fixtures/</setting>
-        </settings>
-
-        <settings prefix="couchdb.import.">
-            <setting name="database">midas_import_testing</setting>
         </settings>
 
         <settings prefix="import.">
@@ -178,7 +201,12 @@
         </settings>
     </ae:configuration>
 
-    <!--        <SHRINK ENVIRONMENTS>         -->
+
+    <!--
+    ####################
+    SHRINK
+    ####################
+    -->
     <ae:configuration environment=".*development-shrink-work">
         <settings prefix="curl.">
             <setting name="proxy">proxy2:3128</setting>
@@ -196,14 +224,17 @@
             </setting>
         </settings>
     </ae:configuration>
-    <!--        </SHRINK ENVIRONMENTS>         -->
 
-    <!--        <PRODUCTION>                   -->
+
+    <!--
+    ####################
+    PRODUCTION
+    ####################
+    -->
     <ae:configuration environment="production-hetzner">
         <settings prefix="news.">
             <setting name="frontend_sync">on</setting>
         </settings>
     </ae:configuration>
-    <!--        </PRODUCTION>                  -->
 
 </ae:configurations>

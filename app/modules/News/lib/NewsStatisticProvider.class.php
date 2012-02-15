@@ -107,11 +107,11 @@ class NewsStatisticProvider
     );
 
     /**
-     * Holds the client instance used to talk to elastic search.
+     * Holds the elastic search index that holds our data.
      *
-     * @type Elastica_Client
+     * @type Elastica_Index
      */
-    protected $elasticClient;
+    protected $midasIndex;
 
     /**
      * Holds the client instance used to talk to couchdb.
@@ -128,12 +128,12 @@ class NewsStatisticProvider
     /**
      * Create a new NewsStatisticProvider instance.
      *
-     * @param Elastica_Client $elasticClient The client that shall be used to query elastic search.
+     * @param Elastica_Index $elasticIndex The index that shall be used to query elastic search.
      * @param ExtendedCouchDbClient $couchClient The client to use when talking to couchdb.
      */
-    public function __construct(Elastica_Client $elasticClient, ExtendedCouchDbClient $couchClient)
+    public function __construct(Elastica_Index $elasticIndex, ExtendedCouchDbClient $couchClient)
     {
-        $this->elasticClient = $elasticClient;
+        $this->midasIndex = $elasticIndex;
         $this->couchClient = $couchClient;
     }
 
@@ -246,7 +246,7 @@ class NewsStatisticProvider
                 $district
             )
         );
-        $itemsIndex = $this->elasticClient->getIndex(self::ES_IDX_NAME)->getType(self::ES_TYPE_NAME);
+        $itemsIndex = $this->midasIndex->getType(self::ES_TYPE_NAME);
         $stats = $this->mapItemsToPastDaysByDistrict($itemsIndex->search($query), $daysBack, $district);
         $stats['totalCount'] = $this->fetchTotalPublishCountForDistrict($district);
         return $stats;

@@ -7,6 +7,24 @@
                 <ae:parameter name="database">workflow</ae:parameter>
                 <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
             </database>
+
+            <database name="CouchAssets" class="CouchDatabase">
+                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="database">assets</ae:parameter>
+                <ae:parameter name="setup">AssetModuleSetup</ae:parameter>
+            </database>
+
+            <database name="EsNews" class="ElasticSearchDatabase">
+                <ae:parameter name="host">localhost</ae:parameter>
+                <ae:parameter name="port">9200</ae:parameter>
+                <ae:parameter name="transport">Http</ae:parameter>
+                <ae:parameter name="index">midas</ae:parameter>
+                <ae:parameter name="setup_class">MidasIndexSetup</ae:parameter>
+                <ae:parameter name="river">
+                    <ae:parameter name="name">workflow_river</ae:parameter>
+                    <ae:parameter name="db">workflow</ae:parameter>
+                </ae:parameter>
+            </database>
         </databases>
     </ae:configuration>
     <ae:configuration environment="testing.*">
@@ -15,6 +33,25 @@
                 <ae:parameter name="url">http://localhost:5984/</ae:parameter>
                 <ae:parameter name="database">workflow_testing</ae:parameter>
                 <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
+            </database>
+
+            <database name="CouchAssets" class="CouchDatabase">
+                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="database">assets_testing</ae:parameter>
+                <ae:parameter name="setup">AssetModuleSetup</ae:parameter>
+            </database>
+
+            <database name="EsNews" class="ElasticSearchDatabase">
+                <ae:parameter name="host">localhost</ae:parameter>
+                <ae:parameter name="port">9200</ae:parameter>
+                <ae:parameter name="transport">Http</ae:parameter>
+                <ae:parameter name="index">midas_testing</ae:parameter>
+                <ae:parameter name="setup_class">MidasIndexSetup</ae:parameter>
+                <ae:parameter name="river">
+                    <ae:parameter name="config">workflow_river</ae:parameter>
+                    <ae:parameter name="name">workflow_river_testing</ae:parameter>
+                    <ae:parameter name="db">workflow_testing</ae:parameter>
+                </ae:parameter>
             </database>
         </databases>
     </ae:configuration>

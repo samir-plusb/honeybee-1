@@ -3,7 +3,7 @@
 /**
  * The AssetIdSequence class provides an incremental sequence of id's that are unique
  * for the scope of it's current sequence.
- * 
+ *
  * @version         $Id:$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
@@ -13,91 +13,67 @@
 class AssetIdSequence
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------
-    
+
     /**
-     * Holds the name of our coucdb database.
+     * Holds the name of our coucdb database id for the document we store our ids in.
      */
-    const COUCHDB_DATABASE = 'asset_idsequence';
-    
+    const COUCHDB_DOCID = '#__id__sequence__#';
+
     // ---------------------------------- </CONSTANTS> -------------------------------------------
-    
-    
+
+
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      * Holds the client we use to talk to couchdb.
-     * 
-     * @var         ExtendedCouchDbClient 
+     *
+     * @var         ExtendedCouchDbClient
      */
     protected $couchDbClient;
-    
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-    
-    
+
+
     // ---------------------------------- <CONSTRUCTOR> ------------------------------------------
-    
+
     /**
      * Create a new AssetIdSequence instance,
      * thereby initializing our couchdb client.
      */
-    public function __construct()
+    public function __construct(ExtendedCouchDbClient $couchClient)
     {
-        $this->couchDbClient = new ExtendedCouchDbClient(
-            $this->buildCouchDbUri()
-        );
+        $this->couchDbClient = $couchClient;
     }
-    
+
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
-    
-    
+
+
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
-    
+
     /**
      * Return the next id from our sequence,
      * thereby incrementing the current one.
-     * 
-     * @return      int 
+     *
+     * @return      int
      */
     public function nextId()
     {
-        $viewData = $this->couchDbClient->getView(self::COUCHDB_DATABASE, 'idsequence', 'curId');
-            
-        if (1 !== $viewData['total_rows'])
+        $idSeqDocument = $this->couchDbClient->getDoc(NULL, self::COUCHDB_DOCID);
+
+        if (! $idSeqDocument)
         {
             throw new Exception(
                 "The idsequence is an invalid state as it has more than row for the curId view."
             );
         }
 
-        $row = $viewData['rows'][0];
-        $docData = $row['value'];
-        $docData['curId']++;
-        
-        $this->couchDbClient->storeDoc(self::COUCHDB_DATABASE, $docData);
-        
-        return $docData['curId'];
+        $idSeqDocument['curId']++;
+        $idSeqDocument['_id'] = self::COUCHDB_DOCID;
+        $this->couchDbClient->storeDoc(NULL, $idSeqDocument);
+        return $idSeqDocument['curId'];
     }
-    
+
     // ---------------------------------- </PUBLIC METHODS> --------------------------------------
-    
-    
-    // ---------------------------------- <WORKING METHODS> --------------------------------------
-    
-    /**
-     * Return a string we can use to connect to couchdb.
-     * 
-     * @return      string 
-     */
-    protected function buildCouchDbUri()
-    {
-        return sprintf(
-            "http://%s:%d/",
-            AgaviConfig::get('couchdb.import.host'),
-            AgaviConfig::get('couchdb.import.port')
-        );
-    }
-    
-    // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
 
 ?>

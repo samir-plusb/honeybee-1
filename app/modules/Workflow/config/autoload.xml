@@ -8,7 +8,8 @@
         <autoload name="IWorkflowPlugin">%core.module_dir%/Workflow/lib/base/IWorkflowPlugin.iface.php</autoload>
         <autoload name="WorkflowBasePlugin">%core.module_dir%/Workflow/lib/base/WorkflowBasePlugin.class.php</autoload>
         <autoload name="WorkflowBaseInteractivePlugin">%core.module_dir%/Workflow/lib/base/WorkflowBaseInteractivePlugin.class.php</autoload>
-        <autoload name="WorkflowModuleSetup">%core.module_dir%/Workflow/lib/setup/WorkflowModuleSetup.class.php</autoload>
+        <autoload name="WorkflowModuleSetup">%core.module_dir%/Workflow/lib/setup/couchdb/WorkflowModuleSetup.class.php</autoload>
+        <autoload name="MidasIndexSetup">%core.module_dir%/Workflow/lib/setup/elasticsearch/MidasIndexSetup.class.php</autoload>
 
         <autoload name="IWorkflowPluginResult">%core.module_dir%/Workflow/lib/base/IWorkflowPluginResult.iface.php</autoload>
         <autoload name="WorkflowPluginResult">%core.module_dir%/Workflow/lib/base/WorkflowPluginResult.class.php</autoload>

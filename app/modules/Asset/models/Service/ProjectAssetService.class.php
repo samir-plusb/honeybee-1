@@ -34,11 +34,6 @@ class ProjectAssetService implements IAssetService
      */
     const URI_SCHEME_HTTP = 'http';
 
-    /**
-     * Holds the name of our couchdb database.
-     */
-    const COUCHDB_DATABASE = 'assets';
-
     // ---------------------------------- </CONSTANTS> -------------------------------------------
 
 
@@ -72,14 +67,13 @@ class ProjectAssetService implements IAssetService
 
     /**
      * Create a new ProjectAssetService instance.
+     *
+     * @param string $databaseName The name of an agavi database configuration to use.
      */
-    public function __construct()
+    public function __construct($databaseName)
     {
-        $this->couchDbClient = new ExtendedCouchDbClient(
-            $this->buildCouchDbUri()
-        );
-
-        $this->idSequence = new AssetIdSequence();
+        $this->couchDbClient = AgaviContext::getInstance()->getDatabaseConnection($databaseName);
+        $this->idSequence = new AssetIdSequence($this->couchDbClient);
     }
 
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
@@ -92,11 +86,11 @@ class ProjectAssetService implements IAssetService
      *
      * @return      ProjectAssetService
      */
-    public static function getInstance()
+    public static function getInstance($databaseName = 'CouchAssets')
     {
         if (NULL === self::$instance)
         {
-            self::$instance = new ProjectAssetService();
+            self::$instance = new ProjectAssetService($databaseName);
         }
 
         return self::$instance;
@@ -141,7 +135,7 @@ class ProjectAssetService implements IAssetService
      */
     public function get($assetId)
     {
-        $asset = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
+        $asset = $this->couchDbClient->getDoc(NULL, $assetId);
 
         return new ProjectAssetInfo($asset['_id'], $asset);
     }
@@ -153,7 +147,7 @@ class ProjectAssetService implements IAssetService
      */
     public function findByOrigin($origin)
     {
-        $assetData = $this->couchDbClient->getView(self::COUCHDB_DATABASE, 'lists', 'origins', array('key' => $origin));
+        $assetData = $this->couchDbClient->getView(NULL, 'lists', 'assetsByOrigin', array('key' => $origin));
         $assetInfo = NULL;
 
         if (count($assetData['rows']) > 0)
@@ -174,7 +168,7 @@ class ProjectAssetService implements IAssetService
      */
     public function update($assetId, array $metaData = array())
     {
-        $assetData = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
+        $assetData = $this->couchDbClient->getDoc(NULL, $assetId);
         $curMetaData = (array)$assetData[ProjectAssetInfo::XPROP_META_DATA];
         $isEqual = TRUE;
 
@@ -205,10 +199,10 @@ class ProjectAssetService implements IAssetService
      */
     public function delete($assetId)
     {
-        $assetData = $this->couchDbClient->getDoc(self::COUCHDB_DATABASE, $assetId);
+        $assetData = $this->couchDbClient->getDoc(NULL, $assetId);
         $assetFile = new AssetFile($assetId);
 
-        if ($this->couchDbClient->deleteDoc(self::COUCHDB_DATABASE, $assetId, $assetData['_rev']))
+        if ($this->couchDbClient->deleteDoc(NULL, $assetId, $assetData['_rev']))
         {
             return $assetFile->delete();
         }
@@ -220,20 +214,6 @@ class ProjectAssetService implements IAssetService
 
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
-
-    /**
-     * Return a string we can use to connect to couchdb.
-     *
-     * @return      string
-     */
-    protected function buildCouchDbUri()
-    {
-        return sprintf(
-            "http://%s:%d/",
-            AgaviConfig::get('couchdb.import.host'),
-            AgaviConfig::get('couchdb.import.port')
-        );
-    }
 
     /**
      * Return an array with 'ready to store' asset data.
@@ -331,7 +311,7 @@ class ProjectAssetService implements IAssetService
             $document['_rev'] = $revision;
         }
 
-        $response = (array)$this->couchDbClient->storeDoc(self::COUCHDB_DATABASE, $document);
+        $response = (array)$this->couchDbClient->storeDoc(NULL, $document);
 
         if (isset($response['ok']) && TRUE === $response['ok'])
         {

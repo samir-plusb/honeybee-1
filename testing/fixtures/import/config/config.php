@@ -15,9 +15,7 @@ return array(
             ),
             'settings' =>
             array(
-                'couchdb_host' => 'localhost',
-                'couchdb_port' => '5984',
-                'couchdb_database' => 'midas_import_testing'
+                'couchdb_database' => 'midas_import'
             )
         ),
         'workflow' =>

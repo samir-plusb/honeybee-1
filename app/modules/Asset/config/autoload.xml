@@ -8,12 +8,12 @@
             <autoload name="AssetBaseView">%core.module_dir%/Asset/lib/mvc/AssetBaseView.class.php</autoload>
             <autoload name="AssetBaseModel">%core.module_dir%/Asset/lib/mvc/AssetBaseModel.class.php</autoload>
             <!-- /Lib/Mvc -->
-            
+
             <!-- Lib/Validator -->
             <autoload name="AssetResourceValidator">%core.module_dir%/Asset/lib/validator/AssetResourceValidator.class.php</autoload>
             <autoload name="AssetInfoValidator">%core.module_dir%/Asset/lib/validator/AssetInfoValidator.class.php</autoload>
             <!-- /Lib/Validator -->
-            
+
             <!-- Models/Service -->
             <autoload name="IAssetService">%core.module_dir%/Asset/models/Service/IAssetService.iface.php</autoload>
             <autoload name="ProjectAssetService">%core.module_dir%/Asset/models/Service/ProjectAssetService.class.php</autoload>
@@ -23,9 +23,9 @@
             <autoload name="IAssetFile">%core.module_dir%/Asset/models/AssetInfo/IAssetFile.iface.php</autoload>
             <autoload name="AssetFile">%core.module_dir%/Asset/models/AssetInfo/AssetFile.class.php</autoload>
             <!-- /Models/Service -->
-            
+
             <!-- Models/Setup -->
-            <autoload name="AssetModuleSetup">%core.module_dir%/Asset/models/Setup/AssetModuleSetup.class.php</autoload>
+            <autoload name="AssetModuleSetup">%core.module_dir%/Asset/lib/setup/AssetModuleSetup.class.php</autoload>
             <!-- /Models/Setup -->
         <!-- /LIBS -->
         </autoloads>

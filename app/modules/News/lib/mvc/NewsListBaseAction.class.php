@@ -58,13 +58,7 @@ class NewsListBaseAction extends NewsBaseAction
             'field'     => $parameters->getParameter('sorting[field]', self::DEFAULT_SORT_FIELD)
         ));
         $this->setAttribute('finder', new NewsFinder(
-            new Elastica_Client(
-                array(
-                    'host'      => AgaviConfig::get('elasticsearch.host', 'localhost'),
-                    'port'      => AgaviConfig::get('elasticsearch.port', 9200),
-                    'transport' => AgaviConfig::get('elasticsearch.transport', 'Http')
-                )
-            )
+            $this->getContext()->getDatabaseConnection('EsNews')
         ));
 
         $searchPhrase = $parameters->getParameter('search_phrase');

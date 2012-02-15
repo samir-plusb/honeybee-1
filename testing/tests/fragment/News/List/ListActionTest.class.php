@@ -12,11 +12,16 @@ class ListActionTest extends AgaviActionTestCase
         $this->contextName = 'web';
         $this->moduleName = 'News';
         $this->actionName = 'List';
+
+        $midasSetup = new MidasIndexSetup(
+            $this->getContext()->getDatabaseManager()->getDatabase('EsNews')
+        );
+        $midasSetup->setup(TRUE);
     }
 
     // @codeCoverageIgnoreEnd
 
-    public function testRunImportWithoutParams()
+    public function testReadDefaultList()
     {
         $this->runActionWithParameters('read', array());
         $this->assertViewNameEquals('Success');

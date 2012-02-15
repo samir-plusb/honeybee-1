@@ -29,7 +29,7 @@ class CouchDbDataImport extends BaseDataImport
      * </pre>
      */
     const EVENT_RECORD_SUCCESS = 'midas.events.import.record_success';
-    
+
     /**
      * The CouchDb standard doc-id fieldname.
      */
@@ -49,11 +49,6 @@ class CouchDbDataImport extends BaseDataImport
      * The default value to use for our @see CouchDbDataImport::importBufferSize.
      */
     const DEFAULT_BUFFER_SIZE = 50;
-
-    /**
-     * Name of database config section
-     */
-    const DATABASE_CONFIG = 'midas_import';
 
     // ---------------------------------- </CONSTANTS> -------------------------------------------
 
@@ -120,7 +115,9 @@ class CouchDbDataImport extends BaseDataImport
     {
         parent::init($dataSource);
 
-        $this->couchClient = AgaviContext::getInstance()->getDatabaseConnection(self::DATABASE_CONFIG);
+        $this->couchClient = AgaviContext::getInstance()->getDatabaseConnection(
+            $this->config->getSetting(CouchDbDataImportConfig::CFG_COUCHDB_DATABASE)
+        );
 
         $this->importBuffer = array();
         $this->importBufferSize = $this->config->getSetting(
