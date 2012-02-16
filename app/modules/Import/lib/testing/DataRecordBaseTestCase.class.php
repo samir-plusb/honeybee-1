@@ -46,7 +46,7 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
      * @return      string
      */
     abstract protected function getDataRecordOrigin();
-    
+
     /**
      * Return the name of the source to pass to our data record.
      *
@@ -70,7 +70,7 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
         parent::setUp();
 
         // Reset our asset module so we can guess ids (start at 1).
-        $setup = new AssetModuleSetup();
+        $setup = new AssetDatabaseSetup();
         $setup->setup(TRUE);
 
         $recordImpl = $this->getDataRecordClass();

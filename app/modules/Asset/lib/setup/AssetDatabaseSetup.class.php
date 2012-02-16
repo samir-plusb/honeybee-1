@@ -9,7 +9,7 @@
  * @package         Asset
  * @subpackage      Setup
  */
-class AssetModuleSetup extends BaseCouchDatabaseSetup
+class AssetDatabaseSetup extends BaseCouchDatabaseSetup
 {
     /**
      * Create a new AssetModuleSetup instance.

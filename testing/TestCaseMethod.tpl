@@ -43,16 +43,5 @@ if('' != '{agavi_default_context}') {
 
 require_once '{filename}';
 
-spl_autoload_register(function($class) use ($libsDir)
-{
-    $fileName = str_replace('_', DIRECTORY_SEPARATOR, $class . '.php');
-    $filePath = $libsDir . '/Elastica/lib/' . $fileName;
-
-    if (file_exists($filePath))
-    {
-        require_once $filePath;
-    }
-});
-
 __phpunit_run_isolated_test()
 ?>

@@ -23,7 +23,7 @@ class Asset_SetupAction extends AssetBaseAction
      */
     public function executeWrite(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $moduleSetup = new AssetModuleSetup();
+        $moduleSetup = new AssetDatabaseSetup();
 
         try
         {

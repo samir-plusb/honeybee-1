@@ -48,17 +48,3 @@ $_SERVER['AGAVI_ENVIRONMENT'] = ProjectEnvironmentConfig::toEnvString();
 Agavi::bootstrap(
     ProjectEnvironmentConfig::toEnvString()
 );
-
-// +---------------------------------------------------------------------------+
-// | Register Elastica autoloading in the very end to prevent stat overhead.   |
-// +---------------------------------------------------------------------------+
-spl_autoload_register(function($class) use ($libsDir)
-{
-    $fileName = str_replace('_', DIRECTORY_SEPARATOR, $class . '.php');
-    $filePath = $libsDir . '/Elastica/lib/' . $fileName;
-
-    if (file_exists($filePath))
-    {
-        require_once $filePath;
-    }
-});

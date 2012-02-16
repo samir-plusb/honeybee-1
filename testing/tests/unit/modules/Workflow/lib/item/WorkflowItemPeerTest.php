@@ -39,9 +39,9 @@ class WorkflowItemPeerTest extends AgaviUnitTestCase
      */
     public function setUp()
     {
-        $workflowSetup = new WorkflowModuleSetup();
+        $workflowSetup = new WorkflowDatabaseSetup();
         $workflowSetup->setup(TRUE);
-        
+
         $this->supervisor = Workflow_SupervisorModel::getInstance();
         $this->item = new WorkflowItem(json_decode(self::ITEM,TRUE));
 

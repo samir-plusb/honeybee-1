@@ -4,19 +4,19 @@
     <ae:configuration>
         <databases default="CouchWorkflow">
             <database name="CouchWorkflow" class="CouchDatabase">
-                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
                 <ae:parameter name="database">workflow</ae:parameter>
-                <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
+                <ae:parameter name="setup">WorkflowDatabaseSetup</ae:parameter>
             </database>
 
             <database name="CouchAssets" class="CouchDatabase">
-                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
                 <ae:parameter name="database">assets</ae:parameter>
-                <ae:parameter name="setup">AssetModuleSetup</ae:parameter>
+                <ae:parameter name="setup">AssetDatabaseSetup</ae:parameter>
             </database>
 
             <database name="EsNews" class="ElasticSearchDatabase">
-                <ae:parameter name="host">localhost</ae:parameter>
+                <ae:parameter name="host">127.0.0.1</ae:parameter>
                 <ae:parameter name="port">9200</ae:parameter>
                 <ae:parameter name="transport">Http</ae:parameter>
                 <ae:parameter name="index">midas</ae:parameter>
@@ -33,19 +33,19 @@
     <ae:configuration environment="testing.*">
         <databases default="CouchWorkflow">
             <database name="CouchWorkflow" class="CouchDatabase">
-                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
                 <ae:parameter name="database">workflow_testing</ae:parameter>
-                <ae:parameter name="setup">WorkflowModuleSetup</ae:parameter>
+                <ae:parameter name="setup">WorkflowDatabaseSetup</ae:parameter>
             </database>
 
             <database name="CouchAssets" class="CouchDatabase">
-                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
                 <ae:parameter name="database">assets_testing</ae:parameter>
-                <ae:parameter name="setup">AssetModuleSetup</ae:parameter>
+                <ae:parameter name="setup">AssetDatabaseSetup</ae:parameter>
             </database>
 
             <database name="EsNews" class="ElasticSearchDatabase">
-                <ae:parameter name="host">localhost</ae:parameter>
+                <ae:parameter name="host">127.0.0.1</ae:parameter>
                 <ae:parameter name="port">9200</ae:parameter>
                 <ae:parameter name="transport">Http</ae:parameter>
                 <ae:parameter name="index">midas_testing</ae:parameter>
@@ -59,7 +59,7 @@
 
             <!-- For the Import/RunActionTest with the CouchDbDataImport -->
             <database name="CouchImport" class="CouchDatabase">
-                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
                 <ae:parameter name="database">midas_import_testing</ae:parameter>
             </database>
         </databases>

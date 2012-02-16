@@ -3,60 +3,58 @@
 class MidasIndexSetup implements IDatabaseSetup
 {
     /**
-     *
      * @var ElasticSearchDatabase
      */
     protected $database;
 
-    protected $indexDefPath;
-
-    public function __construct(ElasticSearchDatabase $database, $indexDefPath = NULL)
+    public function __construct()
     {
-        $this->database = $database;
-        $this->indexDefPath = $indexDefPath ? $indexDefPath : dirname(__FILE__) . '/index.json';
+        $this->database = AgaviContext::getInstance()->getDatabaseManager()->getDatabase('EsNews');
     }
 
     public function setup($tearDownFirst = FALSE)
     {
-        $indexSettings = json_decode(
-            file_get_contents($this->indexDefPath),
-            TRUE
-        );
-        $index = $this->database->getConnection();
-        if ($tearDownFirst)
-        {
-            try
-            {
-                $index->delete();
-            }
-            catch(Exception $e)
-            {
-                // log and continue.
-                error_log(__METHOD__ . PHP_EOL . 'Exception: ' . $e->__toString());
-            }
-        }
-        $index->create($indexSettings, $tearDownFirst);
+        $this->createIndex($tearDownFirst);
+
         if ($this->database->hasParameter('river'))
         {
-            $riverParams = $this->database->getParameter('river');
-            $riverPath = sprintf(
-                "_river/%s/_meta",
-                $riverParams['name']
-            );
-            $riverFile = sprintf("%s/%s.json",
-                dirname(__FILE__),
-                $riverParams['config']
-            );
-            $riverSettings = json_decode(
-                file_get_contents($riverFile),
-                TRUE
-            );
-            $riverSettings['couchdb']['db'] = $riverParams['db'];
-            $riverSettings['index']['index'] = $this->database->getParameter('index');
-
-            $index->getClient()->request($riverPath, 'DELETE');
-            $index->getClient()->request($riverPath, 'PUT', $riverSettings);
+            $this->createRiver($tearDownFirst);
         }
+    }
+
+    protected function createIndex($tearDownFirst)
+    {
+        $indexSettings = json_decode(
+            file_get_contents(dirname(__FILE__) . '/index.json'),
+            TRUE
+        );
+        $index = $this->database->getResource();
+        $index->create($indexSettings, $tearDownFirst);
+    }
+
+    protected function createRiver($tearDownFirst)
+    {
+        $riverParams = $this->database->getParameter('river');
+        $riverPath = sprintf(
+            "_river/%s/_meta",
+            $riverParams['name']
+        );
+
+        if ($tearDownFirst)
+        {
+            $this->database->getConnection()->request($riverPath, 'DELETE');
+        }
+
+        $riverSettings = json_decode(
+            file_get_contents(
+                sprintf("%s/%s.json", dirname(__FILE__), $riverParams['config'])
+            ),
+            TRUE
+        );
+        $riverSettings['couchdb']['db'] = $riverParams['db'];
+        $riverSettings['index']['index'] = $this->database->getParameter('index');
+
+        $this->database->getConnection()->request($riverPath, 'PUT', $riverSettings);
     }
 }
 

@@ -11,25 +11,27 @@
 class ElasticSearchDatabase extends AgaviDatabase
 {
     /**
+     * The client used to talk to elastic search.
+     *
+     * @var Elastica_Client
+     */
+    protected $connection;
+
+    /**
      * The elastic search index that is considered as our 'connection'
      * which stands for the resource this class works on.
      *
      * @var Elastica_Index
      */
-    protected $connection;
-
-    /**
-     * The client used to talk to elastic search.
-     *
-     * @var Elastica_Client
-     */
-    protected $elasticaClient;
+    protected $resource;
 
     protected function connect()
     {
+        $this->registerAutoload();
+
         try
         {
-            $this->elasticaClient = new Elastica_Client(
+            $this->connection = new Elastica_Client(
                 array(
                     'host'      => $this->getParameter('host', 'localhost'),
                     'port'      => $this->getParameter('port', 9200),
@@ -42,19 +44,19 @@ class ElasticSearchDatabase extends AgaviDatabase
             throw new AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
         }
 
-        $this->connection = $this->elasticaClient->getIndex(
+        $this->resource = $this->connection->getIndex(
             $this->getParameter('index')
         );
 
         try
         {
-            $this->connection->getStatus();
+            $this->resource->getStatus();
         }
         catch (Elastica_Exception_Response $e)
         {
             if (0 === strpos($e->getMessage(), 'IndexMissingException'))
             {
-                $this->triggerSetupHook();
+                $this->createIndex();
             }
             else
             {
@@ -66,12 +68,14 @@ class ElasticSearchDatabase extends AgaviDatabase
     public function shutdown()
     {
         $this->connection = NULL;
+        $this->resource = NULL;
     }
 
-    protected function triggerSetupHook()
+    protected function createIndex()
     {
         if (! $this->hasParameter('setup_class'))
         {
+            $this->resource->create();
             return;
         }
 
@@ -80,33 +84,33 @@ class ElasticSearchDatabase extends AgaviDatabase
         {
             throw new AgaviDatabaseException("Setup class '$setupClass' can not be found.");
         }
-        $setup = new $setupClass($this);
-        if ($setup instanceof IDatabaseSetup)
-        {
-            $setup->setup();
-        }
-        else
+        $indexSetup = new $setupClass($this);
+        if (! ($indexSetup instanceof IDatabaseSetup))
         {
             throw new AgaviDatabaseException('Setup class does not implement IDatabaseSetup: '.$setupClass);
         }
+        $indexSetup->setup();
     }
 
-    protected function triggerTearDownHook()
+    protected function registerAutoload()
     {
-        if (! $this->hasParameter('setup_class'))
+        $libDir = realpath(
+            $this->getParameter(
+                'libdir',
+                AgaviConfig::get('project.libs') . DIRECTORY_SEPARATOR . 'Elastica' . DIRECTORY_SEPARATOR . 'lib'
+            )
+        );
+
+        spl_autoload_register(function($class) use ($libDir)
         {
-            return;
-        }
+            $fileName = str_replace('_', DIRECTORY_SEPARATOR, $class . '.php');
+            $filePath = $libDir . DIRECTORY_SEPARATOR . $fileName;
 
-        $setupClass = $this->getParameter('setup_class');
-
-        if (! class_exists($setupClass))
-        {
-            throw new AgaviDatabaseException("Setup class '$setupClass' can not be found.");
-        }
-
-        $setup = new $setupClass;
-        $setup->tearDown();
+            if (file_exists($filePath))
+            {
+                require $filePath;
+            }
+        });
     }
 }
 

@@ -8,7 +8,7 @@
  * @author          Tom Anheyer
  * @package         Workflow
  */
-class WorkflowModuleSetup extends BaseCouchDatabaseSetup
+class WorkflowDatabaseSetup extends BaseCouchDatabaseSetup
 {
     /**
      * Create a new AssetModuleSetup instance.

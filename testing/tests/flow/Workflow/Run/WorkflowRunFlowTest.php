@@ -47,7 +47,7 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
      */
     public function setUp()
     {
-        $workflowSetup = new WorkflowModuleSetup();
+        $workflowSetup = new WorkflowDatabaseSetup();
         $workflowSetup->setup(TRUE);
 
         $this->supervisor = Workflow_SupervisorModel::getInstance();

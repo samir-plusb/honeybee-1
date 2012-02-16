@@ -58,7 +58,7 @@ class NewsListBaseAction extends NewsBaseAction
             'field'     => $parameters->getParameter('sorting[field]', self::DEFAULT_SORT_FIELD)
         ));
         $this->setAttribute('finder', new NewsFinder(
-            $this->getContext()->getDatabaseConnection('EsNews')
+            $this->getContext()->getDatabaseManager()->getDatabase('EsNews')->getResource()
         ));
 
         $searchPhrase = $parameters->getParameter('search_phrase');

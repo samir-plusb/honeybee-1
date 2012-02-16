@@ -21,7 +21,7 @@ class RunActionTest extends AgaviActionTestCase
     {
         parent::setUpBeforeClass();
 
-        $workflowSetup = new WorkflowModuleSetup();
+        $workflowSetup = new WorkflowDatabaseSetup();
         $workflowSetup->setup(TRUE);
     }
 

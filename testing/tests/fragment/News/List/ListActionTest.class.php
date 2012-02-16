@@ -13,6 +13,9 @@ class ListActionTest extends AgaviActionTestCase
         $this->moduleName = 'News';
         $this->actionName = 'List';
 
+        $workflowSetup = new WorkflowDatabaseSetup();
+        $workflowSetup->setup(TRUE);
+
         $midasSetup = new MidasIndexSetup(
             $this->getContext()->getDatabaseManager()->getDatabase('EsNews')
         );

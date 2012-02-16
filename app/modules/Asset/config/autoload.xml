@@ -25,7 +25,7 @@
             <!-- /Models/Service -->
 
             <!-- Models/Setup -->
-            <autoload name="AssetModuleSetup">%core.module_dir%/Asset/lib/setup/AssetModuleSetup.class.php</autoload>
+            <autoload name="AssetDatabaseSetup">%core.module_dir%/Asset/lib/setup/AssetDatabaseSetup.class.php</autoload>
             <!-- /Models/Setup -->
         <!-- /LIBS -->
         </autoloads>

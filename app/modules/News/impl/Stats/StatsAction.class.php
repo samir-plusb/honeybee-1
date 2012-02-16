@@ -24,7 +24,7 @@ class News_StatsAction extends NewsBaseAction
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $provider = new NewsStatisticProvider(
-            $this->getContext()->getDatabaseConnection('EsNews'),
+            $this->getContext()->getDatabaseManager()->getDatabase('EsNews')->getResource(),
             $this->getContext()->getDatabaseConnection('CouchWorkflow')
         );
 

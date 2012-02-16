@@ -35,7 +35,7 @@
                 <recordType>ImapDataRecord</recordType>
             </datasource>
 
-            <!-- RSS  DATASOURCE EXAMPLE
+            <!-- RSS  DATASOURCE EXAMPLE -->
             <datasource name="rss" class="RssDataSource">
                 <description>Provides access to a given rss feed.</description>
                 <recordType>RssDataRecord</recordType>
@@ -43,7 +43,7 @@
                     <setting name="rss_url">http://www.spiegel.de/schlagzeilen/index.rss</setting>
                 </settings>
             </datasource>
-            -->
+            <!-- -->
 
         </datasources>
     </ae:configuration>

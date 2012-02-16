@@ -38,9 +38,9 @@ class WorkflowTicketTest extends AgaviUnitTestCase
      */
     public function setUp()
     {
-        $setup = new WorkflowModuleSetup();
+        $setup = new WorkflowDatabaseSetup();
         $setup->setup(TRUE);
-        
+
         $this->supervisor = Workflow_SupervisorModel::getInstance();
         $this->item = new WorkflowItem(json_decode(self::ITEM,TRUE));
         $itemsDb = $this->supervisor->getItemPeer()->storeItem($this->item);

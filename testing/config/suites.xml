@@ -65,6 +65,7 @@
             <suite name="News">
                 <testfiles>
                     <testfile>fragment/News/List/ListActionTest.class.php</testfile>
+                    <testfile>flow/News/List/NewsListFlowTest.class.php</testfile>
                 </testfiles>
             </suite>
         </suites>
