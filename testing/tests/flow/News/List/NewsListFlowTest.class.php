@@ -7,20 +7,28 @@
  */
 class NewsListFlowTest extends AgaviFlowTestCase
 {
-    public function __construct($name = NULL, array $data = array(), $dataName = '')
-    {
-        $_SERVER['argv'] = array($this->getDispatchScriptName(), $this->getRoutingInput());
-        parent::__construct($name, $data, $dataName);
-    }
 
     public function testListWithoutParams()
     {
+        $this->login();
         $this->dispatch();
         $matcher = array(
-            'tag'        => 'form' // the login form, gotta find a solution for this :(
+            'tag' => 'table'
         );
-
         $this->assertResponseHasTag($matcher, 'Missing data table on page.');
+    }
+
+    protected function login()
+    {
+        $user = $this->getContext()->getUser();
+        $username = "general_g";
+        $password = "n0tf0und";
+        $authProviderClass = AgaviConfig::get('core.auth_provider');
+
+        $authProvider = new $authProviderClass();
+        $authResponse = $authProvider->authenticate($username, $password);
+        $user->setAttributes($authResponse->getAttributes());
+        $user->setAuthenticated(AuthResponse::STATE_AUTHORIZED === $authResponse->getState());
     }
 }
 
