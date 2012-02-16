@@ -36,15 +36,16 @@ class MidasIndexSetup implements IDatabaseSetup
     {
         $riverParams = $this->database->getParameter('river');
         $riverPath = sprintf(
-            "_river/%s/_meta",
+            "_river/%s",
             $riverParams['name']
         );
 
-        if ($tearDownFirst)
+        if (TRUE === $tearDownFirst)
         {
-            $this->database->getConnection()->request($riverPath, 'DELETE');
+            $this->database->getConnection()->request($riverPath, Elastica_Request::DELETE);
         }
 
+        $riverPath .= '/_meta';
         $riverSettings = json_decode(
             file_get_contents(
                 sprintf("%s/%s.json", dirname(__FILE__), $riverParams['config'])
@@ -54,7 +55,7 @@ class MidasIndexSetup implements IDatabaseSetup
         $riverSettings['couchdb']['db'] = $riverParams['db'];
         $riverSettings['index']['index'] = $this->database->getParameter('index');
 
-        $this->database->getConnection()->request($riverPath, 'PUT', $riverSettings);
+        $this->database->getConnection()->request($riverPath, Elastica_Request::PUT, $riverSettings);
     }
 }
 
