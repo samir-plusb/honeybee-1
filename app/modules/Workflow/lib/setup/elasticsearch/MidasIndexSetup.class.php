@@ -32,6 +32,7 @@ class MidasIndexSetup implements IDatabaseSetup
             catch(Exception $e)
             {
                 // log and continue.
+                error_log(__METHOD__ . PHP_EOL . 'Exception: ' . $e->__toString());
             }
         }
         $index->create($indexSettings, $tearDownFirst);
