@@ -2,35 +2,37 @@
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/testing/suites/1.0">
     <ae:configuration>
         <suites>
-            <suite name="couch">
+            <suite name="Libraries">
                 <testfiles>
+                    <!-- CouchDbClient Tests -->
                     <testfile>unit/models/couchdb/ExtendedCouchDbClientTest.php</testfile>
-                </testfiles>
-            </suite>
-            <suite name="Default">
-                <testfiles>
+
                     <!-- IEventProxy Tests -->
                     <testfile>unit/models/Event/ProjectEventProxyTest.php</testfile>
+                </testfiles>
+            </suite>
 
-                    <!-- IImportFactory Tests -->
+            <suite name="Import">
+                <testfiles>
+                    <!-- IImportFactory Unit Tests -->
                     <testfile>unit/modules/Import/lib/base/factory/ImportFactoryConfigTest.php</testfile>
                     <testfile>unit/modules/Import/lib/base/factory/ImportFactoryTest.php</testfile>
 
-                    <!-- IDataRecord Tests -->
+                    <!-- IDataRecord Unit Tests -->
                     <testfile>unit/modules/Import/lib/imperia/datarecord/PoliceReportDataRecordTest.php</testfile>
                     <testfile>unit/modules/Import/lib/newswire/datarecord/DpaNitfDataRecordTest.php</testfile>
 
-                    <!-- IDataSource Tests -->
+                    <!-- IDataSource Unit Tests -->
                     <testfile>unit/modules/Import/lib/imperia/datasource/ImperiaDataSourceConfigTest.php</testfile>
                     <testfile>unit/modules/Import/lib/imperia/datasource/ImperiaDataSourceTest.php</testfile>
                     <testfile>unit/modules/Import/lib/newswire/datasource/NewswireDataSourceTest.php</testfile>
                     <testfile>unit/modules/Import/lib/rss/datasource/RssDataSourceTest.php</testfile>
 
-                    <!-- IDataImport Tests -->
+                    <!-- IDataImport Unit Tests -->
                     <testfile>unit/modules/Import/lib/imperia/dataimport/ImperiaImportConfigTest.php</testfile>
                     <testfile>unit/modules/Import/lib/imperia/dataimport/ImperiaImportTest.php</testfile>
 
-                    <!-- Flow Tests -->
+                    <!-- Fragment Tests -->
                     <testfile>fragment/Import/Imperia/ImperiaTriggerActionTest.class.php</testfile>
                     <testfile>fragment/Import/Imperia/ImperiaTriggerSuccessViewTest.class.php</testfile>
                     <testfile>fragment/Import/Imperia/ImperiaTriggerErrorViewTest.class.php</testfile>
@@ -46,22 +48,25 @@
                     <testfile>fragment/Import/Mail/MailTriggerErrorViewTest.class.php</testfile>
                 </testfiles>
             </suite>
+
             <suite name="Workflow">
                 <testfiles>
+                    <!-- Unit Tests -->
                     <testfile>unit/modules/Workflow/config/WorkflowConfigSyntaxTest.php</testfile>
                     <testfile>unit/modules/Workflow/models/WorkflowSupervisorTest.php</testfile>
                     <testfile>unit/modules/Workflow/lib/item/WorkflowItemPeerTest.php</testfile>
                     <testfile>unit/modules/Workflow/lib/ticket/WorkflowTicketTest.php</testfile>
+
+                    <!-- Flow Tests -->
                     <testfile>flow/Workflow/Run/WorkflowRunFlowTest.php</testfile>
                 </testfiles>
             </suite>
-            <!-- @todo Can use as soon as we have an elastic search instance for integration.
+
             <suite name="News">
                 <testfiles>
                     <testfile>fragment/News/List/ListActionTest.class.php</testfile>
                 </testfiles>
             </suite>
-            -->
         </suites>
     </ae:configuration>
 </ae:configurations>

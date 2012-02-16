@@ -7,7 +7,6 @@
     ####################
     -->
     <ae:configuration>
-
         <system_actions>
             <system_action name="default">
                 <module>Default</module>
@@ -45,7 +44,6 @@
             <setting name="use_translation">true</setting>
         </settings>
 
-
         <settings prefix="ldap.">
             <setting name="host">ldap://localhost</setting>
             <setting name="base">dc=bo,dc=intern</setting>
@@ -62,7 +60,6 @@
             <setting name="group_required">files</setting>
         </settings>
 
-
         <!-- @todo as these are import related, move them to the import settings node. -->
         <settings prefix="imperia.">
             <setting name="base_url">https://imperia.berlinonline.de/</setting>
@@ -71,19 +68,16 @@
             </setting>
         </settings>
 
-
         <settings prefix="import.">
             <setting name="config_dir">%core.modules_dir%/Import/config/</setting>
             <setting name="newswire_dir">/var/tmp/dpa/regio-berlinbrandenburg/</setting>
             <setting name="imperia_datarecord.base_href">http://www.berlin.de</setting>
         </settings>
 
-
         <settings prefix="assets.">
             <setting name="mime_database">/usr/share/misc/magic.mgc</setting>
             <setting name="base_dir">%core.app_dir%/../data/assets</setting>
         </settings>
-
 
         <settings prefix="news.">
             <!--
@@ -92,7 +86,6 @@
             <setting name="localize_api_url">http://6-strato.berlinonline.de/api/localize</setting>
             <setting name="frontend_api_url">http://bo-proto.h1960801.stratoserver.net/news/api/</setting>
             <setting name="frontend_sync">off</setting>
-
             <!--
                 The tags and categories settings define values that are used as dropdown options
                 by the corresponding form inputs on the news editing page.
@@ -117,12 +110,21 @@
             </setting>
         </settings>
 
-
         <exception_templates>
             <exception_template>%core.agavi_dir%/exception/templates/shiny.php</exception_template>
             <exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
         </exception_templates>
+    </ae:configuration>
 
+    <!--
+    ####################
+    PRODUCTION
+    ####################
+    -->
+    <ae:configuration environment="production-hetzner">
+        <settings prefix="news.">
+            <setting name="frontend_sync">on</setting>
+        </settings>
     </ae:configuration>
 
 
@@ -134,6 +136,40 @@
     <ae:configuration environment="development*">
         <settings>
             <setting name="debug">true</setting>
+        </settings>
+    </ae:configuration>
+
+
+    <!--
+    ####################
+    TESTING
+    ####################
+    -->
+    <ae:configuration environment="testing.*">
+        <settings>
+            <setting name="fixture_server_url">http://ci.berlinonline.de/fixtures</setting>
+            <setting name="default_context">web</setting>
+            <setting name="fixtures_dir">%core.testing_dir%/fixtures/</setting>
+        </settings>
+
+        <settings prefix="import.">
+            <setting name="config_dir">%core.testing_dir%/fixtures/import/config/</setting>
+            <setting name="newswire_dir">%core.testing_dir%/fixtures/import/newswire/</setting>
+        </settings>
+    </ae:configuration>
+
+
+    <!--
+    ####################
+    BERLINONLINE DEVEL
+    ####################
+    -->
+    <ae:configuration environment=".*bo-devel.*">
+        <settings prefix="ldap.">
+            <setting name="host">ldap://bohome3</setting>
+        </settings>
+        <settings prefix="curl.">
+            <setting name="proxy">proxy:3128</setting>
         </settings>
     </ae:configuration>
 
@@ -170,40 +206,6 @@
 
     <!--
     ####################
-    BERLINONLINE DEVEL
-    ####################
-    -->
-    <ae:configuration environment=".*bo-devel.*">
-        <settings prefix="ldap.">
-            <setting name="host">ldap://bohome3</setting>
-        </settings>
-        <settings prefix="curl.">
-            <setting name="proxy">proxy:3128</setting>
-        </settings>
-    </ae:configuration>
-
-
-    <!--
-    ####################
-    TESTING
-    ####################
-    -->
-    <ae:configuration environment="testing.*">
-        <settings>
-            <setting name="fixture_server_url">http://ci.berlinonline.de/fixtures</setting>
-            <setting name="default_context">web</setting>
-            <setting name="fixtures_dir">%core.testing_dir%/fixtures/</setting>
-        </settings>
-
-        <settings prefix="import.">
-            <setting name="config_dir">%core.testing_dir%/fixtures/import/config/</setting>
-            <setting name="newswire_dir">%core.testing_dir%/fixtures/import/newswire/</setting>
-        </settings>
-    </ae:configuration>
-
-
-    <!--
-    ####################
     SHRINK
     ####################
     -->
@@ -222,18 +224,6 @@
                     <ae:parameter name="request_fulluri">true</ae:parameter>
                 </ae:parameter>
             </setting>
-        </settings>
-    </ae:configuration>
-
-
-    <!--
-    ####################
-    PRODUCTION
-    ####################
-    -->
-    <ae:configuration environment="production-hetzner">
-        <settings prefix="news.">
-            <setting name="frontend_sync">on</setting>
         </settings>
     </ae:configuration>
 

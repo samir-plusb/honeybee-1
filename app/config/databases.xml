@@ -56,6 +56,12 @@
                     <ae:parameter name="db">workflow_testing</ae:parameter>
                 </ae:parameter>
             </database>
+
+            <!-- For the Import/RunActionTest with the CouchDbDataImport -->
+            <database name="CouchImport" class="CouchDatabase">
+                <ae:parameter name="url">http://localhost:5984/</ae:parameter>
+                <ae:parameter name="database">midas_import_testing</ae:parameter>
+            </database>
         </databases>
     </ae:configuration>
 

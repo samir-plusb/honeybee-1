@@ -7,14 +7,14 @@
         <dataimports>
 
             <dataimport name="couchdb" class="CouchDbDataImport">
-                <description>Imports data into a configured coucdb database.</description>
+                <description>Imports data into a configured couchdb database.</description>
                 <datasources>
                     <datasource>imperia</datasource>
                     <datasource>dpa</datasource>
                     <datasource>rss</datasource>
                 </datasources>
                 <settings>
-                    <setting name="couchdb_database">midas_import</setting>
+                    <setting name="couchdb_database">CouchImport</setting>
                 </settings>
             </dataimport>
 

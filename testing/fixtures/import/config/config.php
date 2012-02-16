@@ -6,7 +6,7 @@ return array(
         'couchdb' =>
         array(
             'class' => 'CouchDbDataImport',
-            'description' => 'Imports data into a configured coucdb database.',
+            'description' => 'Imports data into a configured couchdb database.',
             'datasources' =>
             array(
                 0 => 'imperia',
@@ -15,7 +15,7 @@ return array(
             ),
             'settings' =>
             array(
-                'couchdb_database' => 'midas_import'
+                'couchdb_database' => 'CouchImport'
             )
         ),
         'workflow' =>

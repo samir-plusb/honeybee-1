@@ -21,6 +21,11 @@ class CouchDbDataImportConfig extends DataImportConfig
      */
     const CFG_COUCHDB_DATABASE = 'couchdb_database';
 
+    /**
+     * Name of the config parameter that holds our buffer size.
+     */
+    const PARAM_BUFFER_SIZE = 50;
+
     // ---------------------------------- </CONSTANTS> -------------------------------------------
 
 
