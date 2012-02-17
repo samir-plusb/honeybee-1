@@ -14,8 +14,11 @@ class SimpleAuthProvider extends BaseAuthProvider
         return 'simple';
     }
 
-    //put your code here
-    public function authenticate($username, $password, $options = array())
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
+     */
+    public function authenticate($username, $password, $options = array()) // @codingStandardsIgnoreEnd
     {
         $errors = array();
 
