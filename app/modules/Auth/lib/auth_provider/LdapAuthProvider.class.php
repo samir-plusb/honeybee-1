@@ -104,7 +104,7 @@ class LdapAuthProvider extends BaseAuthProvider
             $this->getLdapEscapedString($username),
             AgaviConfig::get("ldap.base_user")
         );
-        if (! ldap_bind($this->ldap, $bindRdn, $password))
+        if (! @ldap_bind($this->ldap, $bindRdn, $password))
         {
             if (0x31 == ldap_errno($this->ldap))
             {
@@ -124,6 +124,7 @@ class LdapAuthProvider extends BaseAuthProvider
 
     private function verifyGroupMembership($username)
     {
+        $errors = array();
         $bindRdn = sprintf(
             "%s=%s,%s",
             AgaviConfig::get("ldap.user_search", "uid"),
@@ -214,10 +215,10 @@ class LdapAuthProvider extends BaseAuthProvider
             AgaviConfig::get("ldap.base_user")
         );
         $filter = "(objectClass=*)"; // @todo move to constant
-        $entry = ldap_read($this->ldap, $ldapDn, $filter, array($attribute));
+        $entry = @ldap_read($this->ldap, $ldapDn, $filter, array($attribute));
         if ($entry)
         {
-            $info = ldap_get_entries($this->ldap, $entry);
+            $info = @ldap_get_entries($this->ldap, $entry);
             return empty($info[0][$attribute][0]) ? FALSE : $info[0][$attribute][0];
         }
         return FALSE;
