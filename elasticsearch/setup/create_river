@@ -1,3 +1,0 @@
-#/bin/bash
-
-curl -XPUT 'localhost:9200/_river/workflow_river/_meta' -d @./river.json
