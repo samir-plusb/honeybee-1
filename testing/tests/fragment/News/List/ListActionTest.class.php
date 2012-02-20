@@ -48,7 +48,18 @@ class ListActionTest extends AgaviActionTestCase
         $this->assertEquals($expectedItems, $itemCount);
     }
 
-    public function testSearchDefaultList()
+    public function testTermSearchDefaultList()
+    {
+        $this->runActionWithParameters('read', array('search_phrase' => 'zeit'));
+        $this->assertViewNameEquals('Success');
+        $this->assertContainerAttributeExists('items');
+
+        $itemCount = count($this->container->getAttribute('items'));
+        $expectedItems = 1;
+        $this->assertEquals($expectedItems, $itemCount);
+    }
+
+    public function testWildcardSearchDefaultList()
     {
         $this->runActionWithParameters('read', array('search_phrase' => 'tage*'));
         $this->assertViewNameEquals('Success');
