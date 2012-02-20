@@ -5,35 +5,23 @@ class ListActionTest extends AgaviActionTestCase
     // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
     // @codeCoverageIgnoreStart
 
-    public static function setupBeforeClass($name = NULL, array $data = array(), $dataName = '')
-    {
-        parent::setUpBeforeClass($name, $data, $dataName);
-
-        $midasSetup = new MidasIndexSetup();
-        $midasSetup->tearDown();
-
-        $workflowSetup = new WorkflowDatabaseSetup();
-        $workflowSetup->setup(TRUE);
-
-        $command = sprintf(
-            "AGAVI_ENVIRONMENT=%s %s/bin/cli import.run -i workflow -d rss",
-            ProjectEnvironmentConfig::getEnvironment(),
-            dirname(AgaviConfig::get('core.app_dir'))
-        );
-        $output = array();
-        exec($command, $output);
-
-        $midasSetup->setUp();
-    }
-
     public function __construct($name = NULL, array $data = array(), $dataName = '')
     {
-        $this->setRunTestInSeparateProcess(FALSE);
         parent::__construct($name, $data, $dataName);
 
         $this->contextName = 'web';
         $this->moduleName = 'News';
         $this->actionName = 'List';
+    }
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        AgaviConfig::set('news.connections', array(
+            'elasticsearch' => 'EsNewsFixtures',
+            'couchdb' => 'CouchWorkflowFixtures'
+        ));
     }
 
     // @codeCoverageIgnoreEnd
@@ -83,7 +71,6 @@ class ListActionTest extends AgaviActionTestCase
     protected function runActionWithParameters($method, array $arguments)
     {
         $this->setRequestMethod($method);
-
         $this->setArguments(
             $this->createRequestDataHolder(
                 array(
@@ -91,19 +78,8 @@ class ListActionTest extends AgaviActionTestCase
                 )
             )
         );
-
         $this->runAction();
     }
-
-    protected function getTemplateFile()
-	{
-		if($this->doBootstrap())
-        {
-			return AgaviConfig::get('core.testing_dir') . DIRECTORY_SEPARATOR . 'TestCaseMethod.tpl';
-		}
-
-		return null;
-	}
 }
 
 ?>
