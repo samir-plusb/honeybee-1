@@ -12,12 +12,12 @@ class NewsListFlowTest extends AgaviFlowTestCase
     {
         $this->login();
         $this->dispatch();
-        $matcher = array(
-            'tag' => 'table'
-        );
+        $matcher = array('tag' => 'table');
         $this->assertResponseHasTag($matcher, 'Missing data table on page.');
     }
 
+    // the http redirects set by the login view make it hard to test transparently against secure actions atm.
+    // so we fake the login by directly calling the auth provider with a static testing-only account.
     protected function login()
     {
         $user = $this->getContext()->getUser();
