@@ -105,29 +105,30 @@ class ProjectEnvironmentConfig
     /**
      * Create a new ProjectEnvironmentConfig instance.
      *
-     * @param       boolean $testing_enabled If testing is enabled
+     * @param       boolean $testingEnabled If testing is enabled
      */
-    private function __construct($testing_enabled = FALSE)
+    private function __construct($testingEnabled = FALSE)
     {
-        $this->testingEnabled = $testing_enabled;
+        $this->testingEnabled = $testingEnabled;
 
-        $base_dir = dirname(dirname(dirname(dirname(__FILE__))));
+        $baseDir = dirname(dirname(dirname(dirname(__FILE__))));
 
-        $local_config_dir =
-            $base_dir . DIRECTORY_SEPARATOR .
+        $localConfigDir =
+            $baseDir . DIRECTORY_SEPARATOR .
             'etc' . DIRECTORY_SEPARATOR .
             'local' . DIRECTORY_SEPARATOR;
 
         $filename = $this->testingEnabled ? 'testing.' . self::CONFIG_FILE_NAME : self::CONFIG_FILE_NAME;
-        $config_filepath = $local_config_dir . self::CONFIG_FILE_PREFIX . $filename;
+        $configFilepath = $localConfigDir . self::CONFIG_FILE_PREFIX . $filename;
 
-        $this->config = include($config_filepath);
+        $this->config = include($configFilepath);
 
         if (isset($_SERVER['HTTP_HOST']))
         {
             $this->currentHost = $_SERVER['HTTP_HOST'];
         }
-        if (($env = getenv('AGAVI_ENVIRONMENT')))
+        // No override allowed for testing environments.
+        if (($env = getenv('AGAVI_ENVIRONMENT')) && TRUE !== $testingEnabled)
         {
             $this->config[self::CFG_ENVIRONMENT] = $env;
         }
@@ -141,15 +142,15 @@ class ProjectEnvironmentConfig
     /**
      * Initialize our config instance, thereby loading our evironment settings.
      *
-     * @param       boolean $testing_enabled
+     * @param       boolean $testingEnabled
      *
      * @return      ProjectEnvironmentConfig
      */
-    public static function load($testing_enabled = FALSE)
+    public static function load($testingEnabled = FALSE)
     {
         if (NULL === self::$instance)
         {
-            self::$instance = new ProjectEnvironmentConfig($testing_enabled);
+            self::$instance = new ProjectEnvironmentConfig($testingEnabled);
         }
 
         return self::$instance;
