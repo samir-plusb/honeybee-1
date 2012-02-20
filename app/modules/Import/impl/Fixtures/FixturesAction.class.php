@@ -17,8 +17,11 @@ class Import_FixturesAction extends ImportBaseAction
      * @param       AgaviRequestDataHolder $parameters
      *
      * @return      string The name of the view to execute.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
      */
-    public function executeWrite(AgaviRequestDataHolder $parameters)
+    public function executeWrite(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         // Switch database connections to point to our fixture database configs.
         AgaviConfig::set('news.connections', array(

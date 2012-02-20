@@ -50,7 +50,7 @@ class ElasticSearchDatabase extends AgaviDatabase
 
         try
         {
-            $s = $this->resource->getStatus();
+            $this->resource->getStatus();
         }
         catch (Elastica_Exception_Response $e)
         {
@@ -89,7 +89,7 @@ class ElasticSearchDatabase extends AgaviDatabase
         {
             throw new AgaviDatabaseException('Setup class does not implement IDatabaseSetup: '.$setupClass);
         }
-        
+
         $indexSetup->setup();
     }
 
