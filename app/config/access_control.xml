@@ -31,7 +31,7 @@
                     Has all required rights to read, update and publish news.
                 </description>
                 <members>
-                    <member type="ldap_group">midas.editor</member>
+                    <member type="ldap">midas.editor</member>
                 </members>
                 <acl>
                     <grant>refine_news::read</grant>
@@ -47,7 +47,7 @@
                     for the news process.
                 </description>
                 <members>
-                    <member type="ldap_group">midas.cvd</member>
+                    <member type="ldap">midas.cvd</member>
                 </members>
             </role>
         </roles>

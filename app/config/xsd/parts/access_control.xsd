@@ -71,7 +71,7 @@
 
     <xs:simpleType name="MemberTypes">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="ldap_group"/>
+            <xs:enumeration value="ldap"/>
         </xs:restriction>
     </xs:simpleType>
 
