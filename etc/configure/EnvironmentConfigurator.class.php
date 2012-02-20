@@ -220,7 +220,10 @@ PHP_CODE;
 #!/bin/bash
 export PHP_COMMAND=%s
 export BASE_HREF="%s"
-export AGAVI_ENVIRONMENT=%s
+
+if (test -z "\$AGAVI_ENVIRONMENT") ; then
+   export AGAVI_ENVIRONMENT=%s
+fi
 
 # Project base path
 cw_path="`dirname $0`/.."
