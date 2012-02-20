@@ -33,8 +33,7 @@ class ListActionTest extends AgaviActionTestCase
         $this->assertContainerAttributeExists('items');
 
         $itemCount = count($this->container->getAttribute('items'));
-        error_log("testReadDefaultList --> ITEEEM COUNT: " . $itemCount);
-        $expectedItems = 20;
+        $expectedItems = 30;
         $this->assertEquals($expectedItems, $itemCount);
     }
 
@@ -45,20 +44,18 @@ class ListActionTest extends AgaviActionTestCase
         $this->assertContainerAttributeExists('items');
 
         $itemCount = count($this->container->getAttribute('items'));
-        error_log("testReadListWithLimitAndOfsset --> ITEEEM COUNT: " . $itemCount);
-        $expectedItems = 20;
+        $expectedItems = 10;
         $this->assertEquals($expectedItems, $itemCount);
     }
 
     public function testSearchDefaultList()
     {
-        $this->runActionWithParameters('read', array('search_term' => 'das*'));
+        $this->runActionWithParameters('read', array('search_phrase' => 'tage*'));
         $this->assertViewNameEquals('Success');
         $this->assertContainerAttributeExists('items');
 
         $itemCount = count($this->container->getAttribute('items'));
-        error_log("testSearchDefaultList --> ITEEEM COUNT: " . $itemCount);
-        $expectedItems = 20;
+        $expectedItems = 3;
         $this->assertEquals($expectedItems, $itemCount);
     }
 

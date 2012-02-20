@@ -2,6 +2,7 @@
 
 PROJECT=`readlink -f $( dirname $0 )/../..`
 LOCAL_CONFIG_SH=$PROJECT/etc/local/local.config.sh
+SETUP_DIR=`readlink -f $( dirname $0 )`
 
 if [ -f $LOCAL_CONFIG_SH ] ; then
   echo "[INFO] Found and sourcing the local.config.sh"
@@ -22,9 +23,3 @@ if (test -z "$AGAVI_ENVIRONMENT") ; then
 fi
 
 AGAVI_ENVIRONMENT=testing."$AGAVI_ENVIRONMENT" $PHP_COMMAND -d html_errors=off -f "$PROJECT"/bin/cli.php import.fixtures
-
-# Move this stuff to the fixtures action.
-#curl -XDELETE localhost:9200/midas_fixtures
-#curl -XDELETE localhost:9200/_river/workflow_river_fixtures/_meta
-#./create_index
-#./create_river

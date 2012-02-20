@@ -1,3 +1,0 @@
-#/bin/bash
-
-curl -XPUT 'localhost:9200/midas_fixtures/' -d @./index.json

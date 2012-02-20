@@ -20,20 +20,29 @@ class Import_FixturesAction extends ImportBaseAction
      */
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
+        // Switch database connections to point to our fixture database configs.
         AgaviConfig::set('news.connections', array(
             'elasticsearch' => 'EsNewsFixtures',
             'couchdb' => 'CouchWorkflowFixtures'
         ));
+        // Tear down the index and the river before resetting the workflow lib.
+        $midasIndexSetup = new MidasIndexSetup();
+        $midasIndexSetup->tearDown();
+        // Reset the couch database for before (news)workflow fixture import.
+        $workflowSetup = new WorkflowDatabaseSetup();
+        $workflowSetup->setup(TRUE);
         $importFactory = new ImportFactory(
             new ImportFactoryConfig(
                 AgaviConfig::get('import.config_dir')
             )
         );
-        $dataImport = $importFactory->createDataImport('workflow');
-        $dataSource = $importFactory->createDataSource('rss');
         try
         {
-            $dataImport->run($dataSource);
+            // Enable workflow integration in all cases (environment).
+            $dataImport = $importFactory->createDataImport('workflow', array(
+                WorkflowItemDataImportConfig::CFG_NOTIFY_SUPERVISOR => TRUE
+            ));
+            $dataImport->run($importFactory->createDataSource('rss'));
         }
         catch(AgaviAutoloadException $e)
         {
@@ -41,6 +50,7 @@ class Import_FixturesAction extends ImportBaseAction
             $this->setAttribute('errors', array($e->getMessage()));
             return 'Error';
         }
+        $midasIndexSetup->setup();
         return 'Success';
     }
 }
