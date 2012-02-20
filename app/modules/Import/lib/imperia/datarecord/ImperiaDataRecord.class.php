@@ -329,7 +329,7 @@ class ImperiaDataRecord extends ImportBaseDataRecord
                 {
                     // @todo add environment based logginf configs
                     // so we can transparently log to agavi without spamming the app log.
-                    error_log(
+                    $this->logError(
                         sprintf(
                             "Failed to download asset from url: %s with error: %s",
                             print_r($imageInfo, TRUE),

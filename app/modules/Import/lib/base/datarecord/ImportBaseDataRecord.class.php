@@ -527,6 +527,14 @@ abstract class ImportBaseDataRecord implements IDataRecord, IComparable
     }
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------
+
+    protected function logError($msg)
+    {
+        $logger = AgaviContext::getInstance()->getLoggerManager()->getLogger('error');
+        $logger->log(
+            new AgaviLoggerMessage($msg, AgaviLogger::ERROR)
+        );
+    }
 }
 
 ?>
