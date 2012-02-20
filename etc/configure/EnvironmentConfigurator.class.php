@@ -69,22 +69,22 @@ class EnvironmentConfigurator
 
     protected function promptPhpPath()
     {
-        $php_command = null;
+        $php_command = NULL;
         $default_php_path = isset($_SERVER['PHP_COMMAND']) ? $_SERVER['PHP_COMMAND'] : @exec('which php');
 
-        while (!$this->testPhp($php_command))
+        while (! $this->testPhp($php_command))
         {
             $php_command = $this->readline('Enter path to php', $default_php_path);
         }
 
         return $php_command;
     }
-    
+
     protected function promptBaseHref()
     {
-        $base_href = null;
+        $base_href = NULL;
 
-        while (!trim($base_href))
+        while (! trim($base_href))
         {
             $base_href = $this->readline('Enter the project\'s base url');
         }
@@ -94,7 +94,7 @@ class EnvironmentConfigurator
 
     protected function promptEnvironment()
     {
-        $environment = null;
+        $environment = NULL;
 
         while (!$this->testEnvironment($environment))
         {
@@ -105,10 +105,10 @@ class EnvironmentConfigurator
             "Environment is '" . $environment . PHP_EOL . "Are you sure you want to keep this?(y/n)"
         );
 
-        return (self::CONFIRM_POSITIVE === $answer) ? $environment : false;
+        return (self::CONFIRM_POSITIVE === $answer) ? $environment : FALSE;
     }
 
-    protected function readline($label, $default = null, $promptchar = ':', $hide_input = false)
+    protected function readline($label, $default = NULL, $promptchar = ':', $hide_input = FALSE)
     {
         print(
             empty($default)
@@ -129,7 +129,7 @@ class EnvironmentConfigurator
             print(PHP_EOL);
         }
 
-        if (0 === strlen($value) && null !== $default)
+        if (0 === strlen($value) && NULL !== $default)
         {
             return $default;
         }
@@ -148,10 +148,10 @@ class EnvironmentConfigurator
 
         $config_code = sprintf(
             $this->getConfigCodeTemplateString(),
-            var_export($config, true)
+            var_export($config, TRUE)
         );
 
-        if (false === file_put_contents($config_filepath, $config_code))
+        if (FALSE === file_put_contents($config_filepath, $config_code))
         {
             die ('Can not write: '.$config_filepath);
         }
@@ -165,10 +165,10 @@ class EnvironmentConfigurator
 
         $config_code = sprintf(
             $this->getConfigCodeTemplateString(),
-            var_export($config, true)
+            var_export($config, TRUE)
         );
 
-        if (false === file_put_contents($config_filepath, $config_code))
+        if (FALSE === file_put_contents($config_filepath, $config_code))
         {
             die ('Can not write: '.$config_filepath);
         }
@@ -179,15 +179,16 @@ class EnvironmentConfigurator
     {
         $sh_config_filepath = $this->getLocalConfigShFilePath();
 
-        if (!file_exists($sh_config_filepath))
+        if (! file_exists($sh_config_filepath))
         {
             $config_code = sprintf(
                 $this->getLocalShConfigCode(),
                 $config[ProjectEnvironmentConfig::CFG_PHP],
-                $config[ProjectEnvironmentConfig::CFG_BASE_HREF]
+                $config[ProjectEnvironmentConfig::CFG_BASE_HREF],
+                $config[ProjectEnvironmentConfig::CFG_ENVIRONMENT]
             );
 
-            if (false === file_put_contents($sh_config_filepath, $config_code))
+            if (FALSE === file_put_contents($sh_config_filepath, $config_code))
             {
                 // @todo Throw an exception or warn about the error.
             }
@@ -219,6 +220,7 @@ PHP_CODE;
 #!/bin/bash
 export PHP_COMMAND=%s
 export BASE_HREF="%s"
+export AGAVI_ENVIRONMENT=%s
 
 # Project base path
 cw_path="`dirname $0`/.."
@@ -241,22 +243,22 @@ SH_CODE;
 
     protected function testPhp($path)
     {
-        if (empty($path)) return false;
+        if (empty($path)) return FALSE;
 
         $output = array();
         exec("$path -v", $output);
 
         if (1 < count($output) && strstr($output[0], 'PHP 5.3'))
         {
-            return true;
+            return TRUE;
         }
 
-        return false;
+        return FALSE;
     }
 
     protected function testEnvironment($environment)
     {
-        return !empty($environment) && 3 <= strlen($environment);
+        return ! empty($environment) && 3 <= strlen($environment);
     }
 
     // ---------------------------------- </VALUE CHECKING> ---------------------------------------------
