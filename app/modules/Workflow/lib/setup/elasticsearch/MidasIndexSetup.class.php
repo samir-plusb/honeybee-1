@@ -9,7 +9,9 @@ class MidasIndexSetup implements IDatabaseSetup
 
     public function __construct()
     {
-        $this->database = AgaviContext::getInstance()->getDatabaseManager()->getDatabase('EsNews');
+        $this->database = AgaviContext::getInstance()->getDatabaseManager()->getDatabase(
+            NewsFinder::getElasticSearchDatabaseName()
+        );
     }
 
     public function setup($tearDownFirst = FALSE)

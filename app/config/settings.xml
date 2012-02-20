@@ -64,9 +64,6 @@
         <!-- @todo as these are import related, move them to the import settings node. -->
         <settings prefix="imperia.">
             <setting name="base_url">https://imperia.berlinonline.de/</setting>
-            <setting name="docid_api_url">
-                https://imperia.berlinonline.de/imperia/ContentWorker/export-to-mail.php?getNotifications=1
-            </setting>
         </settings>
 
         <settings prefix="import.">
@@ -81,6 +78,18 @@
         </settings>
 
         <settings prefix="news.">
+            <!--
+                This settings defines the name of the database (databases.xml) connections,
+                that are used by the news module to write(couch) and read(elastic) data.
+                This setting has been introduced to allow switching the used databases at runtime.
+                
+            -->
+            <setting name="connections">
+                <ae:parameters>
+                    <ae:parameter name="couchdb">CouchWorkflow</ae:parameter>
+                    <ae:parameter name="elasticsearch">EsNews</ae:parameter>
+                </ae:parameters>
+            </setting>
             <!--
                 These setting specify external urls that we call to get some work done for us.
             -->
@@ -237,8 +246,9 @@
     <ae:configuration environment="testing.*">
         <settings>
             <setting name="fixture_server_url">http://ci.berlinonline.de/fixtures</setting>
-            <setting name="default_context">web</setting>
             <setting name="fixtures_dir">%core.app_dir%/../testing/fixtures/</setting>
+            <setting name="default_context">web</setting>
+            <!-- @todo Nest the logins as auth provider parameters -->
             <setting name="auth_provider">SimpleAuthProvider</setting>
             <setting name="simple_logins">
                 <ae:parameters>

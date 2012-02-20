@@ -55,6 +55,12 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
         return AgaviContext::getInstance()->getModel('Supervisor', 'Workflow');
     }
 
+    public static function getCouchDbDatabasename()
+    {
+        $connections = AgaviConfig::get('news.connections');
+        return $connections['couchdb'];
+    }
+
     /**
      * (non-PHPdoc)
      * @see AgaviModel::initialize()
@@ -62,7 +68,9 @@ class Workflow_SupervisorModel extends ProjectBaseModel implements AgaviISinglet
     public function initialize(AgaviContext $context, array $parameters = array())
     {
         parent::initialize($context, $parameters);
-        $database = $this->context->getDatabaseManager()->getDatabase(self::DATABASE_CONFIG_NAME);
+        $database = $this->context->getDatabaseManager()->getDatabase(
+            self::getCouchDbDatabasename()
+        );
         $this->couchClient = $database->getConnection();
     }
 

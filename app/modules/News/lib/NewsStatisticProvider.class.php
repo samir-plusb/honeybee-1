@@ -125,6 +125,18 @@ class NewsStatisticProvider
 
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
 
+    public static function create()
+    {
+        return new NewsStatisticProvider(
+            AgaviContext::getInstance()->getDatabase(
+                NewsFinder::getElasticSearchDatabaseName()
+            )->getResource(),
+            AgaviContext::getInstance()->getDatabase(
+                Workflow_SupervisorModel::getCouchDbDatabasename()
+            )
+        );
+    }
+
     /**
      * Create a new NewsStatisticProvider instance.
      *

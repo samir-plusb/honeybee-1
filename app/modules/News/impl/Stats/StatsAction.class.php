@@ -23,10 +23,7 @@ class News_StatsAction extends NewsBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $provider = new NewsStatisticProvider(
-            $this->getContext()->getDatabaseManager()->getDatabase('EsNews')->getResource(),
-            $this->getContext()->getDatabaseConnection('CouchWorkflow')
-        );
+        $provider = NewsStatisticProvider::create();
 
         $daysBack = $parameters->getParameter('days_back', 5);
         $district = $parameters->getParameter('district', NewsStatisticProvider::DISTRICT_ALL);

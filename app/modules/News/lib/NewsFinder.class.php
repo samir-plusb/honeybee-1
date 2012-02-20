@@ -92,6 +92,22 @@ class NewsFinder
         $this->midasIndex = $elasticIndex;
     }
 
+    public static function create()
+    {
+        error_log(NewsFinder::getElasticSearchDatabaseName());
+        return new NewsFinder(
+            AgaviContext::getInstance()->getDatabaseManager()->getDatabase(
+                self::getElasticSearchDatabaseName()
+            )->getResource()
+        );
+    }
+
+    public static function getElasticSearchDatabaseName()
+    {
+        $connections = AgaviConfig::get('news.connections');
+        return $connections['elasticsearch'];
+    }
+
     /**
      * Fetch all items within the current range of offset and limit ordered by the given sorting parameters.
      *

@@ -57,7 +57,35 @@
                 </ae:parameter>
             </database>
 
-            <!-- For the Import/RunActionTest with the CouchDbDataImport -->
+            <!--  TESTING ONLY DATABASES  -->
+            <!--
+                This database contains fixtures that are used for readonly tests,
+                which need a large dataset to work on.
+            -->
+            <database name="CouchWorkflowFixtures" class="CouchDatabase">
+                <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
+                <ae:parameter name="database">workflow_fixtures</ae:parameter>
+                <ae:parameter name="setup">WorkflowDatabaseSetup</ae:parameter>
+            </database>
+
+            <database name="EsNewsFixtures" class="ElasticSearchDatabase">
+                <ae:parameter name="host">127.0.0.1</ae:parameter>
+                <ae:parameter name="port">9200</ae:parameter>
+                <ae:parameter name="transport">Http</ae:parameter>
+                <ae:parameter name="index">midas_fixtures</ae:parameter>
+                <ae:parameter name="setup_class">MidasIndexSetup</ae:parameter>
+                <ae:parameter name="river">
+                    <ae:parameter name="config">workflow_river</ae:parameter>
+                    <ae:parameter name="name">workflow_river_fixtures</ae:parameter>
+                    <ae:parameter name="db">workflow_fixtures</ae:parameter>
+                </ae:parameter>
+            </database>
+
+            <!--
+                This database connection is used to test the CouchDbDataImport,
+                which is currently not integrated into any prod relevant code.
+                The Import/RunActionTest relies on this connection to exist.
+            -->
             <database name="CouchImport" class="CouchDatabase">
                 <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
                 <ae:parameter name="database">midas_import_testing</ae:parameter>
