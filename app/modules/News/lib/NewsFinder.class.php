@@ -94,7 +94,6 @@ class NewsFinder
 
     public static function create()
     {
-        error_log(NewsFinder::getElasticSearchDatabaseName());
         return new NewsFinder(
             AgaviContext::getInstance()->getDatabaseManager()->getDatabase(
                 self::getElasticSearchDatabaseName()
