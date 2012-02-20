@@ -1,0 +1,14 @@
+{
+    "type" : "couchdb",
+    "couchdb" : {
+        "host" : "127.0.0.1",
+        "port" : 5984,
+        "db" : "workflow_fixtures",
+        "filter" : null
+    },
+    "index" : {
+        "index" : "midas_fixtures",
+        "bulk_size" : "100",
+        "bulk_timeout" : "10ms"
+    }
+}
