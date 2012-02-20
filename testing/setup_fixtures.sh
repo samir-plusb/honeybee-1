@@ -21,5 +21,5 @@ fi
 if (test -z "$AGAVI_ENVIRONMENT") ; then
   echo "[ERROR] Unable to find your configured agavi environment!"
 fi
-
+# @todo Make sure we have a consistent return code coming from the fixture action and check it.
 AGAVI_ENVIRONMENT=testing."$AGAVI_ENVIRONMENT" $PHP_COMMAND -d html_errors=off -f "$PROJECT"/bin/cli.php import.fixtures

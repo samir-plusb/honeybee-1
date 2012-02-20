@@ -44,6 +44,10 @@
             <directory suffix=".php">../../app/modules/News/</directory>
             <directory suffix=".php">../../testing/</directory>
             <exclude>
+                <!--
+                    Fixtures are not executed during test runtime and therefore are excluded from the code coverage.
+                -->
+                <directory>../../app/modules/Import/impl/Fixtures/</directory>
                 <directory suffix="Success.php">../../app/</directory>
                 <directory suffix="Input.php">../../app/</directory>
                 <directory suffix="Error.php">../../app/</directory>
