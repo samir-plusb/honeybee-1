@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PROJECT=`readlink -f $( dirname $0 )/../..`
+PROJECT=`readlink -f $( dirname $0 )/..`
 LOCAL_CONFIG_SH=$PROJECT/etc/local/local.config.sh
 SETUP_DIR=`readlink -f $( dirname $0 )`
 
