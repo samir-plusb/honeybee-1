@@ -16,6 +16,10 @@ if (test -z "$PHP_COMMAND") ; then
   exit 0
 fi
 
-echo "[Executing] `which rlwrap` $PHP_COMMAND -d html_errors=off -f `dirname $0`/cli.php $@"
-PHP_COMMAND=$PHP_COMMAND `which rlwrap` $PHP_COMMAND -d html_errors=off -f "`dirname $0`/cli.php" -- "$@"
-
+if [ -z "$AGAVI_ENVIRONMENT" ] ; then
+    echo "[Executing] `which rlwrap` $PHP_COMMAND -d html_errors=off -f `dirname $0`/cli.php $@"
+    PHP_COMMAND=$PHP_COMMAND `which rlwrap` $PHP_COMMAND -d html_errors=off -f "`dirname $0`/cli.php" -- "$@"
+else
+    echo "[Executing] `which rlwrap` $AGAVI_ENVIRONMENT $PHP_COMMAND -d html_errors=off -f `dirname $0`/cli.php $@"
+    PHP_COMMAND=$PHP_COMMAND AGAVI_ENVIRONMENT=$AGAVI_ENVIRONMENT $PHP_COMMAND -d html_errors=off -f "`dirname $0`/cli.php" -- "$@"
+fi

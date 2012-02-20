@@ -50,11 +50,11 @@ class ElasticSearchDatabase extends AgaviDatabase
 
         try
         {
-            $this->resource->getStatus();
+            $s = $this->resource->getStatus();
         }
         catch (Elastica_Exception_Response $e)
         {
-            if (0 === strpos($e->getMessage(), 'IndexMissingException'))
+            if (FALSE !== strpos($e->getMessage(), 'IndexMissingException'))
             {
                 $this->createIndex();
             }
@@ -89,6 +89,7 @@ class ElasticSearchDatabase extends AgaviDatabase
         {
             throw new AgaviDatabaseException('Setup class does not implement IDatabaseSetup: '.$setupClass);
         }
+        
         $indexSetup->setup();
     }
 
