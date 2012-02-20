@@ -21,7 +21,7 @@ if (test -z "$AGAVI_ENVIRONMENT") ; then
   echo "[ERROR] Unable to find your configured agavi environment!"
 fi
 
-AGAVI_ENVIRONMENT=testing."$AGAVI_ENVIRONMENT" /usr/bin/php -d html_errors=off -f "$PROJECT"/bin/cli.php import.fixtures
+AGAVI_ENVIRONMENT=testing."$AGAVI_ENVIRONMENT" $PHP_COMMAND -d html_errors=off -f "$PROJECT"/bin/cli.php import.fixtures
 
 # Move this stuff to the fixtures action.
 #curl -XDELETE localhost:9200/midas_fixtures
