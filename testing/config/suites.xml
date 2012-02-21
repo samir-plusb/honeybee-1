@@ -64,14 +64,12 @@
 
             <suite name="News">
                 <testfiles>
-                    <!--
                     <testfile>fragment/News/List/ListActionTest.class.php</testfile>
                     <testfile>fragment/News/Stats/StatsActionTest.class.php</testfile>
                     <testfile>fragment/News/Edit/EditActionTest.class.php</testfile>
                     <testfile>fragment/News/Edit/EditWorkflowActionTest.class.php</testfile>
                     <testfile>fragment/News/Api/ExtractLocationActionTest.class.php</testfile>
                     <testfile>fragment/News/Api/ExtractDateActionTest.class.php</testfile>
-                    -->
                     <testfile>flow/News/List/ListFlowTest.class.php</testfile>
                 </testfiles>
             </suite>
