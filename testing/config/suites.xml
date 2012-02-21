@@ -70,7 +70,8 @@
                     <testfile>fragment/News/Edit/EditWorkflowActionTest.class.php</testfile>
                     <testfile>fragment/News/Api/ExtractLocationActionTest.class.php</testfile>
                     <testfile>fragment/News/Api/ExtractDateActionTest.class.php</testfile>
-                    <testfile>flow/News/List/ListFlowTest.class.php</testfile>
+                    <testfile>flow/News/ListFlowTest.class.php</testfile>
+                    <testfile>flow/News/StatsFlowTest.class.php</testfile>
                 </testfiles>
             </suite>
         </suites>
