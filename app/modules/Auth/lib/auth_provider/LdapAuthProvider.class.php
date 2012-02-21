@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * The LdapAuthProvider provides authentication to the configured ldap server.
+ * It's settings are configured with a 'ldap.' prefix inside the app's settings.xml.
+ *
+ * @version         $Id:$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
+ * @package         Auth
+ * @subpackage      AuthProvider
+ */
 class LdapAuthProvider extends BaseAuthProvider
 {
     /**
