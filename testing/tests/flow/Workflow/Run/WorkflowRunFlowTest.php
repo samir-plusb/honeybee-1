@@ -36,8 +36,11 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
     public function __construct($name = NULL, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
+        $this->moduleName = 'Workflow';
+        $this->actionName = 'Run';
         $this->input = 'workflow.run';
         $this->contextName = 'console';
+        $this->isolationDefaultContext = 'console';
     }
 
     /**

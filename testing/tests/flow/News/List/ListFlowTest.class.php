@@ -10,12 +10,15 @@ class ListFlowTest extends AgaviFlowTestCase
 		$this->actionName = 'List';
 		$this->moduleName = 'News';
 		$this->input = '/de/news/list';
+	}
 
+    public function setUp()
+    {
         AgaviConfig::set('news.connections', array(
             'elasticsearch' => 'EsNewsFixtures',
             'couchdb' => 'CouchWorkflowFixtures',
         ));
-	}
+    }
 
     public function testDefaultListWithoutParameters()
     {
@@ -45,15 +48,6 @@ class ListFlowTest extends AgaviFlowTestCase
             )
         ), 'Fixtures should contain exactly 30 news entry rows in the table body of the list view results.');
     }
-
-    public function testDefaultListHeaderSort()
-    {
-        $this->login();
-        $this->dispatch();
-
-        // only one head row should have a sort desc/asc css class
-    }
-
 
     // the http redirects set by the login view make it hard to test transparently against secure actions atm.
     // so we fake the login by directly calling the auth provider with a static testing-only account.
