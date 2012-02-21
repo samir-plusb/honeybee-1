@@ -67,6 +67,7 @@
                     <testfile>fragment/News/List/ListActionTest.class.php</testfile>
                     <testfile>fragment/News/Stats/StatsActionTest.class.php</testfile>
                     <testfile>fragment/News/Edit/EditActionTest.class.php</testfile>
+                    <testfile>fragment/News/Edit/EditWorkflowActionTest.class.php</testfile>
                     <testfile>fragment/News/Api/ExtractLocationActionTest.class.php</testfile>
                     <testfile>fragment/News/Api/ExtractDateActionTest.class.php</testfile>
                     <!-- Commented out the news flow test till we figure out how to use the web context here.

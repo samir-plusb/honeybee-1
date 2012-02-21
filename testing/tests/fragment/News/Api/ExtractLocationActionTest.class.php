@@ -5,8 +5,6 @@ class ExtractLocationActionTest extends AgaviActionTestCase
     // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
     // @codeCoverageIgnoreStart
 
-    protected $ticketId;
-
     public function __construct($name = NULL, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
