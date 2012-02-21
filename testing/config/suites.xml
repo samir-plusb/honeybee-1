@@ -72,6 +72,7 @@
                     <testfile>fragment/News/Api/ExtractDateActionTest.class.php</testfile>
                     <testfile>flow/News/ListFlowTest.class.php</testfile>
                     <testfile>flow/News/StatsFlowTest.class.php</testfile>
+                    <testfile>flow/News/EditFlowTest.class.php</testfile>
                 </testfiles>
             </suite>
         </suites>
