@@ -6,10 +6,6 @@
  * @author tay
  * @version $Id:$
  * @since 31.10.2011
- *
- * @agaviRoutingInput workflow.run
- * @agaviRequestMethod Read
- * @agaviIsolationDefaultContext console
  */
 class WorkflowRunFlowTest extends AgaviFlowTestCase
 {
@@ -39,8 +35,9 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
 
     public function __construct($name = NULL, array $data = array(), $dataName = '')
     {
-        $_SERVER['argv'] = array($this->getDispatchScriptName(), $this->getRoutingInput());
         parent::__construct($name, $data, $dataName);
+        $this->input = 'workflow.run';
+        $this->contextName = 'console';
     }
 
     /**
@@ -62,8 +59,6 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
         $ticket->setWorkflow('TestInteractive');
         $this->supervisor->getTicketPeer()->saveTicket($ticket);
         $this->ticket = $ticket;
-        // :INFO: Required so AgaviRouting does not bail out, when matching (web) routes etc.
-        $_SERVER['SERVER_SOFTWARE'] = 'Apache/2';
     }
 
     // @codeCoverageIgnoreEnd
