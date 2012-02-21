@@ -107,6 +107,9 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
       */
      protected $client;
 
+     // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+     // @codeCoverageIgnoreStart
+
      public function setup()
      {
          $ch = ProjectCurl::create();
@@ -129,18 +132,20 @@ class ExtendedCouchDbClientTest extends AgaviPhpUnitTestCase
          $this->client = new ExtendedCouchDbClient(self::BASEURL, self::DATABASE);
      }
 
-
-     public function tearDown()
-     {
-         $this->setup();
-     }
-
      public function provideDatabaseParameter()
      {
          return array(
              array('database' => self::DATABASE),
              array('database' => NULL)
          );
+     }
+
+     // @codeCoverageIgnoreEnd
+
+
+     public function tearDown()
+     {
+         $this->setup();
      }
 
      /**

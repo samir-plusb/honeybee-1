@@ -34,12 +34,14 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
      */
     protected $supervisor;
 
+    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
+
     public function __construct($name = NULL, array $data = array(), $dataName = '')
     {
         $_SERVER['argv'] = array($this->getDispatchScriptName(), $this->getRoutingInput());
         parent::__construct($name, $data, $dataName);
     }
-
 
     /**
      * (non-PHPdoc)
@@ -63,6 +65,8 @@ class WorkflowRunFlowTest extends AgaviFlowTestCase
         // :INFO: Required so AgaviRouting does not bail out, when matching (web) routes etc.
         $_SERVER['SERVER_SOFTWARE'] = 'Apache/2';
     }
+
+    // @codeCoverageIgnoreEnd
 
 
     /**

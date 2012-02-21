@@ -29,11 +29,6 @@ class DpaNitfDataRecordTest extends DataRecordBaseTestCase
         return self::CFG_XML_FIXTURE;
     }
 
-    protected function getRecordResultFixturePath()
-    {
-        return self::CFG_DATA_FIXTURE;
-    }
-
     protected function getDataRecordSource()
     {
         return 'dpa - Deutsche Presse-Agentur GmbH';
@@ -43,6 +38,16 @@ class DpaNitfDataRecordTest extends DataRecordBaseTestCase
     {
         return AgaviConfig::get('core.fixtures_dir') . $this->getRecordXmlFixturePath();
     }
+
+     // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
+
+    protected function getRecordResultFixturePath()
+    {
+        return self::CFG_DATA_FIXTURE;
+    }
+
+    // @codeCoverageIgnoreEnd
 }
 
 ?>

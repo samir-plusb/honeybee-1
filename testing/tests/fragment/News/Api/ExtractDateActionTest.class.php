@@ -14,6 +14,21 @@ class ExtractDateActionTest extends AgaviActionTestCase
         $this->actionName = 'Api_ExtractDate';
     }
 
+    public function provideTestRunImportArgs()
+    {
+        $data = array(
+            array(
+                'expected' => '01.01.2012',
+                'dateText' => '1 Jan'
+            ),
+            array(
+                'expected' => '04.12.2010',
+                'dateText' => '04.12.2010'
+            )
+        );
+        return $data;
+    }
+
     // @codeCoverageIgnoreEnd
 
     /**
@@ -29,21 +44,6 @@ class ExtractDateActionTest extends AgaviActionTestCase
         $this->assertViewNameEquals('Success');
         $this->assertContainerAttributeExists('date');
         $this->assertContainerAttributeEquals($expected, 'date');
-    }
-
-    public function provideTestRunImportArgs()
-    {
-        $data = array(
-            array(
-                'expected' => '01.01.2012',
-                'dateText' => '1 Jan'
-            ),
-            array(
-                'expected' => '04.12.2010',
-                'dateText' => '04.12.2010'
-            )
-        );
-        return $data;
     }
 
     /**

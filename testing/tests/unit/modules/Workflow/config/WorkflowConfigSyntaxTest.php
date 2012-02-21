@@ -55,6 +55,9 @@ class WorkflowConfigSyntaxTest extends AgaviUnitTestCase
     }
 
 
+    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
+
     /**
      * data provider method for testWorkflowConfig()
      */
@@ -74,4 +77,6 @@ class WorkflowConfigSyntaxTest extends AgaviUnitTestCase
         }
         return $parameters;
     }
+
+    // @codeCoverageIgnoreEnd
 }

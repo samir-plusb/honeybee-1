@@ -10,6 +10,9 @@ class PoliceReportDataRecordTest extends DataRecordBaseTestCase
 
     private static $originalImperiaUrl;
 
+    // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
+    // @codeCoverageIgnoreStart
+
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
@@ -30,6 +33,8 @@ class PoliceReportDataRecordTest extends DataRecordBaseTestCase
             self::$originalImperiaUrl
         );
     }
+
+    // @codeCoverageIgnoreEnd
 
     protected function getRecordXmlFixturePath()
     {
