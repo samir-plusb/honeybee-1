@@ -128,10 +128,10 @@ class NewsStatisticProvider
     public static function create()
     {
         return new NewsStatisticProvider(
-            AgaviContext::getInstance()->getDatabase(
+            AgaviContext::getInstance()->getDatabaseManager()->getDatabase(
                 NewsFinder::getElasticSearchDatabaseName()
             )->getResource(),
-            AgaviContext::getInstance()->getDatabase(
+            AgaviContext::getInstance()->getDatabaseConnection(
                 Workflow_SupervisorModel::getCouchDbDatabasename()
             )
         );
@@ -184,7 +184,7 @@ class NewsStatisticProvider
     public function fetchDistrictStatistics($daysBack = 4, $district = self::DISTRICT_ALL)
     {
         $stats = array();
-        $districts = $this->getDistricts();
+        $districts = self::getDistricts();
         if (self::DISTRICT_ALL === $district)
         {
             foreach ($districts as $curDistrict)
@@ -208,7 +208,7 @@ class NewsStatisticProvider
      *
      * @return string[] An array of district names (, that refer to the class's DISTRICT_* constants)
      */
-    public function getDistricts()
+    public static function getDistricts()
     {
         return self::$supportedDistricts;
     }

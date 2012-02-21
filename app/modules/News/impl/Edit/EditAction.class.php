@@ -32,12 +32,7 @@ class News_EditAction extends NewsBaseAction
         // then we have not been invoked from workflow execution.
         // Depending on the action's semantics and eventuell assumptions concerning out execution context,
         // we should either termininate with an exception or switch the logic.
-        $pluginResult = $this->getContainer()->getAttribute(
-            WorkflowBaseInteractivePlugin::ATTR_RESULT,
-            WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
-        );
-        $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
-
+        $this->setContainerPluginState();
         return 'Input';
     }
 
@@ -55,11 +50,7 @@ class News_EditAction extends NewsBaseAction
         $supervisor = Workflow_SupervisorModel::getInstance();
         $supervisor->getItemPeer()->storeItem($workflowItem);
 
-        $pluginResult = $this->getContainer()->getAttribute(
-            WorkflowBaseInteractivePlugin::ATTR_RESULT,
-            WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
-        );
-        $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
+        $this->setContainerPluginState();
         return 'Success';
     }
 
@@ -73,11 +64,7 @@ class News_EditAction extends NewsBaseAction
         }
         $this->setAttribute('error_message', $messages);
         $this->setAttribute('ticket', $parameters->getParameter('ticket'));
-        $pluginResult = $this->getContainer()->getAttribute(
-            WorkflowBaseInteractivePlugin::ATTR_RESULT,
-            WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
-        );
-        $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
+        $this->setContainerPluginState();
         return 'Error';
     }
 
@@ -91,13 +78,20 @@ class News_EditAction extends NewsBaseAction
         }
         $this->setAttribute('error_message', $messages);
         $this->setAttribute('ticket', $parameters->getParameter('ticket'));
+        $this->setContainerPluginState();
+        return 'Error';
+    }
+
+    protected function setContainerPluginState()
+    {
         $pluginResult = $this->getContainer()->getAttribute(
             WorkflowBaseInteractivePlugin::ATTR_RESULT,
             WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
         );
-        $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
-
-        return 'Error';
+        if ($pluginResult)
+        {
+            $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
+        }
     }
 }
 
