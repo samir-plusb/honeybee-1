@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The DataImportReport class is the base implementation of the IDataImportReport interface.
+ *
+ * @version         $Id:$
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
+ * @package         Import
+ * @subpackage      Base
+ */
 class DataImportReport implements IDataImportReport
 {
     const SEVERITY_SUCCESS = 'success';

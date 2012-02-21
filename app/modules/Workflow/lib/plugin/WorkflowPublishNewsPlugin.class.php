@@ -3,10 +3,10 @@
 /**
  * This plugin takes care of publishing news to the various subscribers.
  *
- * @package Workflow
  * @author tay
  * @version $Id$
- *
+ * @package Workflow
+ * @subpackage Plugin
  */
 class WorkflowPublishNewsPlugin extends WorkflowBasePlugin
 {

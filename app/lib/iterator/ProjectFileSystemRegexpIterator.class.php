@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * The ProjectFileSystemRegexpIterator lets you traverse files on the file system thereby applying
+ * a given regexp to iterate only files that the expression.
+ *
+ * @version         $Id: ProjectLanguageRoutingCallback.class.php 412 2011-10-20 11:06:22Z tschmitt $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Project
+ * @subpackage      Iterator
+ */
 class ProjectFileSystemRegexpIterator extends FilterIterator
 {
     const REGEXP_DELIMITER = '~';

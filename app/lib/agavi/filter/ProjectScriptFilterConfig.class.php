@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The ProjectScriptFilterConfig provides access to the scripts.xml settings.
+ *
+ * @version         $Id: ProjectScriptFilter.class.php 412 2011-10-20 11:06:22Z tschmitt $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Project
+ * @subpackage      Filter
+ */
 class ProjectScriptFilterConfig
 {
     const CFG_ENABLE_PACKING = 'pack_scripts';

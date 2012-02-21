@@ -3,10 +3,10 @@
 /**
  * This interface defines the requirements of an import item in the workflow context
  *
- * @package Workflow
  * @author tay
  * @version $Id$
- *
+ * @package Workflow
+ * @subpackage Plugin
  */
 interface IWorkflowPlugin
 {

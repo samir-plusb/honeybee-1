@@ -4,7 +4,7 @@
  * WorkflowConfigHandler parses configuration files that follow the midas workflow markup.
  *
  * @package    Workflow
- * @subpackage Config
+ * @subpackage Base
  *
  * @author     Thorsten Schmitt-Rink
  * @copyright  The Agavi Project

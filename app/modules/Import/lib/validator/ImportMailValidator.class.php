@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The ImportMailValidator class provides validation of import related raw mime mail data.
+ *
+ * @version         $Id: $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Import
+ * @subpackage      Validator
+ */
 class ImportMailValidator extends AgaviValidator
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------

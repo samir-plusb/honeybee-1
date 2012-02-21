@@ -3,11 +3,10 @@
 /**
  * holds the result of a interactive plugin process method call
  *
- * @package Workflow
  * @author tay
  * @version $Id$
- * @since 28.10.2011
- *
+ * @package Workflow
+ * @subpackage Plugin
  */
 class WorkflowInteractivePluginResult extends WorkflowPluginResult
 {

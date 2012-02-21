@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * This IWorkflowPluginResult interface defines the requirements of an workflow plugin.
+ *
+ * @author tay
+ * @version $Id: IWorkflowPlugin.iface.php 690 2012-01-13 02:50:14Z tschmitt $
+ * @package Workflow
+ * @subpackage Plugin
+ */
 interface IWorkflowPluginResult
 {
     /**

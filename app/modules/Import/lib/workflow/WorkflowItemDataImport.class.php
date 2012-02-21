@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The WorkflowItemDataImport is responseable for sending import notifications to the WorkflowSupervisor.
+ *
+ * @version         $Id: ProjectZendAclSecurityUser.class.php 412 2011-10-20 11:06:22Z tschmitt $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
+ * @package         Import
+ * @subpackage      Workflow
+ */
 class WorkflowItemDataImport extends BaseDataImport
 {
     // ---------------------------------- <BaseDataImport OVERRIDES> -----------------------------

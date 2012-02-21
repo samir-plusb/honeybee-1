@@ -3,10 +3,10 @@
 /**
  * This is the simplest plugin which does nothing
  *
- * @package Workflow
  * @author tay
  * @version $Id$
- *
+ * @package Workflow
+ * @subpackage Plugin
  */
 abstract class WorkflowBaseInteractivePlugin extends WorkflowBasePlugin
 {

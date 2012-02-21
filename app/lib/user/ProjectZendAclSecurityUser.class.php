@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The ProjectZendAclSecurityUser is responseable for detecting required scripts and deploying them for your view.
+ *
+ * @version         $Id: ProjectZendAclSecurityUser.class.php 412 2011-10-20 11:06:22Z tschmitt $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
+ * @package         Project
+ * @subpackage      User
+ */
 class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_Role_Interface
 {
     protected $zendAcl;

@@ -8,7 +8,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @package         Import
- * @subpackage      Newsire
+ * @subpackage      Newswire
  */
 class DpaNitfNewswireDataRecord extends NitfNewswireDataRecord
 {

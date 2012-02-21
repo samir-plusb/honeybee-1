@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The ProjectScriptPacker packs an compresses js and css scripts.
+ *
+ * @version         $Id: ProjectLanguageRoutingCallback.class.php 412 2011-10-20 11:06:22Z tschmitt $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         Project
+ * @subpackage      Deployment
+ */
 class ProjectScriptPacker
 {
     public function pack(array $files, $type)

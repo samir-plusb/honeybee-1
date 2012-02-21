@@ -6,8 +6,8 @@
  * @package Workflow
  * @author tay
  * @version $Id$
- * @since 21.10.2011
- *
+ * @package Workflow
+ * @subpackage Plugin
  */
 class WorkflowPluginResult implements IWorkflowPluginResult
 {

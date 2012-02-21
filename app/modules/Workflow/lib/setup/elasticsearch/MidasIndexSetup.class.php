@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * The MidasIndexSetup is responseable for setting midas elasticsearch index.
+ *
+ * @version         $Id: WorkflowDatabaseSetup.class.php 929 2012-02-16 13:26:50Z tschmitt $
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Tom Anheyer
+ * @package         Workflow
+ */
 class MidasIndexSetup implements IDatabaseSetup
 {
     /**
