@@ -10,7 +10,8 @@
  * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Tom Anheyer
- * @package Database
+ * @package Project
+ * @subpackage Database
  */
 abstract class BaseCouchDatabaseSetup implements IDatabaseSetup
 {

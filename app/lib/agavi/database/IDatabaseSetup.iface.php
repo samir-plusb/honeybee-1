@@ -3,10 +3,11 @@
 /**
  * The IDatabaseSetup interface is responseable for setting up databases for usage.
  *
- * @package         Database
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer
+ * @package Project
+ * @subpackage Database
  */
 interface IDatabaseSetup
 {

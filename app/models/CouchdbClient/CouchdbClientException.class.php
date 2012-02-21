@@ -10,7 +10,8 @@
  * @version         $Id: ExtendedCouchDbClient.class.php 460 2011-10-27 07:58:02Z tay $
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          tay
- * @package         Database
+ * @package Project
+ * @subpackage Database
  */
 class CouchdbClientException extends Exception
 {

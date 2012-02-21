@@ -7,7 +7,8 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @author          Tom Anheyer <tanheyer@gmail.com>
- * @package         Database
+ * @package Project
+ * @subpackage Database
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyMethods)

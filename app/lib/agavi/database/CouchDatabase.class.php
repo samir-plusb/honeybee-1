@@ -2,11 +2,11 @@
 /**
  * Provide couch database connection handle
  *
- * @package Database
  * @author tay
  * @version $Id$
  * @since 10.10.2011
- *
+ * @package Project
+ * @subpackage Database
  */
 class CouchDatabase extends AgaviDatabase
 {

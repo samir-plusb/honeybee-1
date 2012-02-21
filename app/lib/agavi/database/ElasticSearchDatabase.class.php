@@ -2,11 +2,11 @@
 /**
  * Provide elastic search database connection handle
  *
- * @package Database
  * @author tay
  * @version $Id$
  * @since 10.10.2011
- *
+ * @package Project
+ * @subpackage Database
  */
 class ElasticSearchDatabase extends AgaviDatabase
 {
