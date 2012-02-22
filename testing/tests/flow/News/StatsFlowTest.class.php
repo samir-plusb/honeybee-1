@@ -20,7 +20,7 @@ class StatsFlowTest extends AgaviFlowTestCase
         ));
     }
 
-    public function testDefaultListWithoutParameters()
+    public function testDefaultListWithoutParametersHtml()
     {
         $this->login();
         $this->dispatch();
@@ -31,7 +31,20 @@ class StatsFlowTest extends AgaviFlowTestCase
                 'count' => 23,
                 'only' => array('tag' => 'li')
             )
-        ), 'The Stats list should contain 30 news list entries as rows for current fixtures.');
+        ), 'The Stats list should contain 23 district stat entries as rows for current fixtures.');
+    }
+
+    public function testDefaultListWithoutParameterJson()
+    {
+        $this->login();
+        $this->dispatch(array(), 'json');
+
+        $resp = $this->response->getContent();
+        $data = json_decode($resp, TRUE);
+
+        $this->assertArrayHasKey('state', $data);
+        $this->assertEquals('ok', $data['state']);
+        $this->assertEquals(23, count($data['data']));
     }
 
     // the http redirects set by the login view make it hard to test transparently against secure actions atm.

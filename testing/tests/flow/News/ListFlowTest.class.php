@@ -20,7 +20,7 @@ class ListFlowTest extends AgaviFlowTestCase
         ));
     }
 
-    public function testDefaultListWithoutParameters()
+    public function testDefaultListWithoutParametersHtml()
     {
         $this->login();
         $this->dispatch();
@@ -32,6 +32,19 @@ class ListFlowTest extends AgaviFlowTestCase
                 'only' => array('tag' => 'tr')
             )
         ), 'News list table body should contain 30 news list entries as rows for current fixtures.');
+    }
+
+    public function testDefaultListWithoutParameterJson()
+    {
+        $this->login();
+        $this->dispatch(array(), 'json');
+
+        $resp = $this->response->getContent();
+        $data = json_decode($resp, TRUE);
+
+        $this->assertArrayHasKey('state', $data);
+        $this->assertEquals('ok', $data['state']);
+        $this->assertEquals(30, count($data['data']));
     }
 
     public function testDefaultListHasCorrectNumberOfResults()
