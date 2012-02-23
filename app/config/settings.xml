@@ -82,7 +82,7 @@
                 This settings defines the name of the database (databases.xml) connections,
                 that are used by the news module to write(couch) and read(elastic) data.
                 This setting has been introduced to allow switching the used databases at runtime.
-                
+
             -->
             <setting name="connections">
                 <ae:parameters>
@@ -266,6 +266,9 @@
         </settings>
 
         <settings prefix="import.">
+            <setting name="imperia_cat_url">
+                https://imperia.berlinonline.de/cgi-bin/xml_export.pl?catid=/2/10/64/10935/
+            </setting>
             <setting name="config_dir">%core.app_dir%/../testing/fixtures/import/config/</setting>
             <setting name="newswire_dir">%core.app_dir%/../testing/fixtures/import/newswire/</setting>
         </settings>
