@@ -38,6 +38,8 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
         return 'Provides imperia export xml data.';
     }
 
+    // @codeCoverageIgnoreStart
+
     protected function fetchRandomImperiaDocIds()
     {
         $this->docCount = rand(2, 10);
@@ -78,6 +80,8 @@ class ImperiaDataSourceTest extends DataSourceBaseTestCase
         }
         return $docIds;
     }
+
+    // @codeCoverageIgnoreEnd
 }
 
 ?>
