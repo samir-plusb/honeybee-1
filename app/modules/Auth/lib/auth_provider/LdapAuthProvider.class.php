@@ -114,7 +114,8 @@ class LdapAuthProvider extends BaseAuthProvider
             $this->getLdapEscapedString($username),
             AgaviConfig::get("ldap.base_user")
         );
-        if (! @ldap_bind($this->ldap, $bindRdn, $password))
+        // @codingStandardsIgnoreStart
+        if (! @ldap_bind($this->ldap, $bindRdn, $password)) // @codingStandardsIgnoreEnd
         {
             if (0x31 == ldap_errno($this->ldap))
             {
@@ -225,10 +226,11 @@ class LdapAuthProvider extends BaseAuthProvider
             AgaviConfig::get("ldap.base_user")
         );
         $filter = "(objectClass=*)"; // @todo move to constant
+        // @codingStandardsIgnoreStart
         $entry = @ldap_read($this->ldap, $ldapDn, $filter, array($attribute));
         if ($entry)
         {
-            $info = @ldap_get_entries($this->ldap, $entry);
+            $info = @ldap_get_entries($this->ldap, $entry); // @codingStandardsIgnoreEnd
             return empty($info[0][$attribute][0]) ? FALSE : $info[0][$attribute][0];
         }
         return FALSE;
