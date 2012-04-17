@@ -16,8 +16,8 @@
 /**
  * AgaviFragmentTestCase is the base class for all fragment tests and provides
  * the necessary assertions
- * 
- * 
+ *
+ *
  * @package    agavi
  * @subpackage testing
  *
@@ -30,27 +30,27 @@
  */
 abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements AgaviIFragmentTestCase
 {
-	
+
 	/**
 	 * @var        string the name of the context to use, null for default context
 	 */
 	protected $contextName = null;
-	
+
 	/**
 	 * @var        string the name of the action to test
 	 */
 	protected $actionName;
-	
+
 	/**
-	 * @var        string the name of the module 
+	 * @var        string the name of the module
 	 */
 	protected $moduleName;
-	
+
 	/**
 	 * @var        bool   the result of the validation process
 	 */
 	protected $validationSuccess;
-	
+
 	/**
 	 * @var        AgaviExecutionContainer the container to run the action in
 	 */
@@ -69,13 +69,13 @@ abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements Aga
 		parent::__construct($name, $data, $dataName);
 		$this->setRunTestInSeparateProcess(true);
 	}
-	
-	
+
+
 	/**
 	 * creates a new AgaviExecutionContainer for each test
-	 * 
+	 *
 	 * @return void
-	 * 
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -83,13 +83,13 @@ abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements Aga
 	{
 		$this->container = $this->createExecutionContainer();
 	}
-	
-	
+
+
 	/**
 	 * unsets the AgaviExecutionContainer after each test
-	 * 
+	 *
 	 * @return void
-	 * 
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -97,12 +97,12 @@ abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements Aga
 	{
 		$this->container = null;
 	}
-	
+
 	/**
 	 * retrieve the application context
-	 * 
+	 *
 	 * @return     AgaviContext the application context
-	 * 
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -110,17 +110,17 @@ abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements Aga
 	{
 		return AgaviContext::getInstance($this->contextName);
 	}
-	
+
 	/**
 	 * normalizes a viewname according to the configured rules
-	 * 
-	 * Please do not use this method, it exists only for internal 
+	 *
+	 * Please do not use this method, it exists only for internal
 	 * purposes and will be removed ASAP. You have been warned
-	 * 
+	 *
 	 * @param      string the short view name
-	 * 
+	 *
 	 * @return     string the full view name
-	 * 
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -137,19 +137,19 @@ abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements Aga
 			);
 			$shortName = AgaviToolkit::canonicalName($shortName);
 		}
-		
+
 		return $shortName;
 	}
 
 	/**
 	 * create an executionfilter for the test
-	 * 
+	 *
 	 * the configured executionfilter class will be wrapped in a testing
-	 * extension to provide advanced capabilities required for testing 
+	 * extension to provide advanced capabilities required for testing
 	 * only
-	 * 
-	 * @return     AgaviExecutionFilter 
-	 * 
+	 *
+	 * @return     AgaviExecutionFilter
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -165,7 +165,7 @@ abstract class AgaviFragmentTestCase extends AgaviPhpUnitTestCase implements Aga
 class %1$s extends %2$s
 {
 	protected $validationResult = null;
-	
+
 	public function executeView(AgaviExecutionContainer $container)
 	{
 		$container->initRequestData();
@@ -186,13 +186,13 @@ class %1$s extends %2$s
 
 	/**
 	 * create an AgaviExecutionContainer for the test
-	 * 
+	 *
 	 * the configured AgaviExecutionContainer class will be wrapped in a testing
-	 * extension to provide advanced capabilities required for testing 
+	 * extension to provide advanced capabilities required for testing
 	 * only
-	 * 
-	 * @return     AgaviExecutionContainer 
-	 * 
+	 *
+	 * @return     AgaviExecutionContainer
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -213,7 +213,7 @@ class %1$s extends %2$s
 	{
 		$this->actionInstance = $action;
 	}
-	
+
 	public function initRequestData()
 	{
 		parent::initRequestData();
@@ -224,25 +224,30 @@ class %1$s extends %2$s
 
 			eval($code);
 		}
-		
+
 		$ecfi['class'] = $wrapper_class;
 		$context->setFactoryInfo('execution_container', $ecfi);
-		
+
 		if(!($arguments instanceof AgaviRequestDataHolder)) {
 			$arguments = $this->createRequestDataHolder(array(AgaviRequestDataHolder::SOURCE_PARAMETERS => $arguments));
 		}
 		// create a new execution container with the wrapped class
+		/* @todo Remove debug code AgaviFragmentTestCase.class.php from 17.04.2012 */
+		$__logger=AgaviContext::getInstance()->getLoggerManager();
+		$__logger->log(__METHOD__.":".__LINE__." : ".__FILE__,AgaviILogger::DEBUG);
+		$__logger->log(print_r(array($this->moduleName, $this->actionName),1),AgaviILogger::DEBUG);
+
 		$container = $context->getController()->createExecutionContainer($this->moduleName, $this->actionName, $arguments, $outputType, $requestMethod);
-		
+
 		return $container;
 	}
 
 	/**
 	 * creates an Action instance and initializes it with this testcases
 	 * container
-	 * 
+	 *
 	 * @return     AgaviAction
-	 * 
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -252,21 +257,21 @@ class %1$s extends %2$s
 		$actionInstance->initialize($this->container);
 		return $actionInstance;
 	}
-	
+
 	/**
 	 * create a requestDataHolder with the given arguments and type
-	 * 
+	 *
 	 * arguments need to be passed in the way {@see AgaviRequestDataHolder} accepts them
-	 * 
+	 *
 	 * array(AgaviRequestDataHolder::SOURCE_PARAMETERS => array('foo' => 'bar'))
-	 * 
+	 *
 	 * if no type is passed, the default for the configured request class will be used
-	 * 
+	 *
 	 * @param      array   a two-dimensional array with the arguments
 	 * @param      string  the subclass of AgaviRequestDataHolder to create
-	 * 
+	 *
 	 * @return     AgaviRequestDataHolder
-	 * 
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -275,15 +280,15 @@ class %1$s extends %2$s
 		if(null === $type) {
 			$type = $this->getContext()->getRequest()->getParameter('request_data_holder_class', 'AgaviRequestDataHolder');
 		}
-		
+
 		$class = new $type($arguments);
 		return $class;
 	}
-	
-	
+
+
 	/**
 	 * assert that the exectionContainer has a given attribute with the expected value
-	 * 
+	 *
 	 * @param      mixed   the expected attribute value
 	 * @param      string  the attribute name
 	 * @param      string  the attribute namespace
@@ -291,9 +296,9 @@ class %1$s extends %2$s
 	 * @param      float   $delta
 	 * @param      integer $maxDepth
 	 * @param      boolean $canonicalizeEol
-	 * 
+	 *
 	 * @see        PHPUnit_Framework_Assert::assertEquals()
-	 * 
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -301,14 +306,14 @@ class %1$s extends %2$s
 	{
 		$this->assertEquals($expected, $this->container->getAttribute($attributeName, $namespace), sprintf($message, $namespace, $attributeName, $expected), $delta, $maxDepth, $canonicalizeEol);
 	}
-	
+
 	/**
-	 * assert that the exectionContainer has a given attribute 
-	 * 
+	 * assert that the exectionContainer has a given attribute
+	 *
 	 * @param      string  the attribute name
 	 * @param      string  the attribute namespace
 	 * @param      string  an optional message to display if the test fails
-	 * 
+	 *
 	 * @author     Felix Gilcher <felix.gilcher@bitextender.com>
 	 * @since      1.0.0
 	 */
@@ -316,7 +321,7 @@ class %1$s extends %2$s
 	{
 		$this->assertTrue($this->container->hasAttribute($attributeName, $namespace), sprintf($message, $namespace, $attributeName));
 	}
-	
+
 	/* --- container delegates --- */
 
 	/**
@@ -340,7 +345,7 @@ class %1$s extends %2$s
 	{
 		$this->container->setRequestData($rd);
 	}
-	
+
 	/**
 	 * @see        AgaviExcutionContainer::setArguments()
 	 *
