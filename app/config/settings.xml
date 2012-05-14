@@ -93,7 +93,7 @@
             <!--
                 These setting specify external urls that we call to get some work done for us.
             -->
-            <setting name="localize_api_url">http://prodmgm.berlinonline.de/geo/api/query</setting>
+            <setting name="localize_api_url">http://geoprototype.berlinonline.de/api/query</setting>
             <setting name="frontend_api_url">http://bo-proto.h1960801.stratoserver.net/news/api/</setting>
             <setting name="frontend_sync">off</setting>
             <!--
