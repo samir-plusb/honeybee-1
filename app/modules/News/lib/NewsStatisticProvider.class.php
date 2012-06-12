@@ -3,11 +3,10 @@
 /**
  * The NewsStatisticProvider is responseable for collecting statistics on items published per district.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
- * @subpackage      Lib
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to the broad usage of the Elastica lib.
  */
@@ -70,23 +69,23 @@ class NewsStatisticProvider
     /**
      * Name of the elastic search index that is queried when gathering news-item information.
      */
-    const ES_IDX_NAME = 'midas';
+    const ES_IDX_NAME = 'midas_news';
 
     /**
      * Name of the elastic search type that we query for news-items.
      */
-    const ES_TYPE_NAME = 'item';
+    const ES_TYPE_NAME = 'news-item';
 
     /**
      * Name of the couchdb design document that contains a view we use to fetch total counts.
      */
-    const COUCH_DESIGN_DOC = 'designWorkflow';
+    const COUCH_DESIGN_DOC = 'contentItems';
 
     /**
      * Name of the couchdb view (map & reduce) that provides access to the total number of content-items
      * that have been published for a given district.
      */
-    const COUCH_VIEW_NAME = 'contentItemsByDistrict';
+    const COUCH_VIEW_NAME = 'byDistrict';
 
     // ---------------------------------- </CONSTANTS> -------------------------------------------
 
@@ -132,7 +131,7 @@ class NewsStatisticProvider
                 NewsFinder::getElasticSearchDatabaseName()
             )->getResource(),
             AgaviContext::getInstance()->getDatabaseConnection(
-                Workflow_SupervisorModel::getCouchDbDatabasename()
+                NewsWorkflowSupervisor::getCouchDbDatabasename()
             )
         );
     }
@@ -353,11 +352,11 @@ class NewsStatisticProvider
         {
             $itemsPerDay[$i] = 0;
         }
-
+        $newsService = NewsWorkflowService::getInstance();
         /* @var $workflowItemResult Elastica_Result */
         foreach($results as $workflowItemResult)
         {
-            $workflowItem = new WorkflowItem($workflowItemResult->getData());
+            $workflowItem = $newsService->createWorkflowItem($workflowItemResult->getData());
             /* @var $contentItem ContentItem */
             foreach ($workflowItem->getContentItems() as $contentItem)
             {

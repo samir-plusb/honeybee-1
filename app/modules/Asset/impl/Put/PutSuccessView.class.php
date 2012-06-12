@@ -3,7 +3,7 @@
 /**
  * The Asset_Put_PutSuccessView class handle the presentation logic for our Asset/Put actions's success data.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset
@@ -25,6 +25,18 @@ class Asset_Put_PutSuccessView extends AssetBaseView
 
         $this->setAttribute('info', $this->getAttribute('asset_info')->toArray());
         $this->setAttribute('_title', 'Asset PUT - Html Form Interface / SUCCESS');
+    }
+
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        $asset = $this->getAttribute('asset_info');
+        $routing = $this->getContext()->getRouting();
+        $data = $asset->toArray();
+        $data['url'] = $routing->gen('asset.binary', array('aid' => $asset->getIdentifier()));
+        $this->getResponse()->setContent(json_encode(array(
+            'state' => 'ok',
+            'data' => $data
+        )));
     }
 
     /**

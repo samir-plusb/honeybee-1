@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" parent="%core.module_dir%/Import/config/validators.xml">
+
+    <ae:configuration>
+
+        <validators>
+            <validator class="string" name="invalid_id" required="true">
+                <arguments>
+                    <argument>id</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid id given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_name" required="true">
+                <arguments>
+                    <argument>name</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid name given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_alias" required="false">
+                <arguments>
+                    <argument>alias</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid alias given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_singular" required="false">
+                <arguments>
+                    <argument>singular</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid singular given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_plural" required="false">
+                <arguments>
+                    <argument>plural</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid plural given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_text" required="false">
+                <arguments>
+                    <argument>text</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid text given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_article" required="false">
+                <arguments>
+                    <argument>article</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid article given.</error>
+                </errors>
+            </validator>
+
+
+            <validator class="string" name="invalid_keywords" required="false">
+                <arguments base="keywords[]">
+                </arguments>
+                <errors>
+                    <error>Invalid keywords given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_tags" required="false">
+                <arguments base="tags[]">
+                </arguments>
+                <errors>
+                    <error>Invalid tags given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_vertical_id" required="true">
+                <arguments>
+                    <argument>vertical_id</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid vertical_id given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_vertical_name" required="true">
+                <arguments>
+                    <argument>vertical_name</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid vertical_name given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_manager" required="false">
+                <arguments base="responsible_sales_manager[]">
+                </arguments>
+                <errors>
+                    <error>Invalid responsible_sales_manager given.</error>
+                </errors>
+            </validator>
+
+        </validators>
+
+    </ae:configuration>
+
+</ae:configurations>

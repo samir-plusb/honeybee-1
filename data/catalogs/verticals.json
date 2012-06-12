@@ -1,0 +1,52 @@
+[
+   {
+      "_id":"4f33f67db4fc47b315000000",
+      "name":"Gesundheit & Beauty",
+      "teaser":""
+   },
+   {
+      "_id":"4f355c07b4fc47ae08000000",
+      "name":"BerlinFinder",
+      "teaser":""
+   },
+   {
+      "_id":"4f355e5cb4fc478301000000",
+      "name":"Auto & Motor",
+      "teaser":""
+   },
+   {
+      "_id":"4f355e8eb4fc47b408000000",
+      "name":"Finanzen & Recht",
+      "teaser":""
+   },
+   {
+      "_id":"4f355f08b4fc478001010000",
+      "name":"Immobilien & Wohnen",
+      "teaser":""
+   },
+   {
+      "_id":"4f355f39b4fc47b508000000",
+      "name":"Reisen & Ausflüge",
+      "teaser":""
+   },
+   {
+      "_id":"4f355f54b4fc478337010000",
+      "name":"Tourismus",
+      "teaser":""
+   },
+   {
+      "_id":"4f3b9034b4fc47d701000000",
+      "name":"Shopping",
+      "teaser":""
+   },
+   {
+      "_id":"4f355f6db4fc47d646000000",
+      "name":"Kultur & Ausgehen",
+      "teaser":""
+   },
+   {
+      "_id":"4f355eb5b4fc47ae08050000",
+      "name":"Jobs & Ausbildung",
+      "teaser":""
+   }
+]

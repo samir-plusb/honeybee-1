@@ -3,7 +3,7 @@
 /**
  * The News_List_ListErrorView class handles News/List error data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

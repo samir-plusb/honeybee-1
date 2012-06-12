@@ -5,46 +5,33 @@
 <ae:configurations
     xmlns="http://berlinonline.de/schemas/midas/config/datasource/definition/1.0"
     xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
-
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
     <ae:configuration>
         <datasources>
+            <xi:include href="%core.app_dir%/modules/News/config/import/datasources.xml"
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xmlns(dd=http://berlinonline.de/schemas/midas/config/datasource/definition/1.0)
+            xpointer(//ae:configurations/ae:configuration/dd:datasources/*)">
+            </xi:include>
 
-            <datasource name="imperia" class="ImperiaDataSource">
-                <description>Provides imperia docids, when they are pushed by the imperia export service.</description>
-                <recordType>PoliceReportDataRecord</recordType>
-                <settings>
-                    <setting name="account_pass">P8TaamVVwOb4JGbPWtqwo</setting>
-                    <setting name="account_user">bo-xml-export</setting>
-                    <setting name="url">%imperia.base_url%</setting>
-                </settings>
-            </datasource>
+            <xi:include href="%core.app_dir%/modules/Shofi/config/datasources.xml"
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xmlns(dd=http://berlinonline.de/schemas/midas/config/datasource/definition/1.0)
+            xpointer(//ae:configurations/ae:configuration/dd:datasources/*)">
+            </xi:include>
 
-            <datasource name="dpa" class="NewswireDataSource">
-                <description>Provides access to the DPA messages.</description>
-                <recordType>DpaNitfNewswireDataRecord</recordType>
-                <settings>
-                    <setting name="path">%import.newswire_dir%/dpa-BerlinBrandenburg/</setting>
-                    <setting name="regexp">\.xml$</setting>
-                    <setting name="timestamp_file">/var/tmp/dpa.time.stamp</setting>
-                </settings>
-            </datasource>
+            <xi:include href="%core.app_dir%/modules/Shofi_Categories/config/datasources.xml"
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xmlns(dd=http://berlinonline.de/schemas/midas/config/datasource/definition/1.0)
+            xpointer(//ae:configurations/ae:configuration/dd:datasources/*)">
+            </xi:include>
 
-            <datasource name="procmail" class="ArrayDataSource">
-                <description>Provides raw mime mail data, when it is pushed in by procmail.</description>
-                <recordType>ImapDataRecord</recordType>
-            </datasource>
-
-            <!-- RSS  DATASOURCE EXAMPLE -->
-            <datasource name="rss" class="RssDataSource">
-                <description>Provides access to a given rss feed.</description>
-                <recordType>RssDataRecord</recordType>
-                <settings>
-                    <setting name="rss_url">http://www.spiegel.de/schlagzeilen/index.rss</setting>
-                </settings>
-            </datasource>
-            <!-- -->
-
+            <xi:include href="%core.app_dir%/modules/Shofi_Verticals/config/datasources.xml"
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xmlns(dd=http://berlinonline.de/schemas/midas/config/datasource/definition/1.0)
+            xpointer(//ae:configurations/ae:configuration/dd:datasources/*)">
+            </xi:include>
         </datasources>
     </ae:configuration>
 </ae:configurations>

@@ -3,7 +3,7 @@
 /**
  * The News_Edit_EditSuccessView class handles News/Edit write success data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
@@ -22,7 +22,7 @@ class News_Edit_EditSuccessView extends NewsBaseView
     public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getResponse()->setContent(json_encode(array(
-            'status' => 'Data successfully processed.'
+            'state' => 'ok'
         )));
     }
 }

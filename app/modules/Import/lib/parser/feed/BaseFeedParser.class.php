@@ -4,17 +4,17 @@
  * The BaseFeedParser is a concrete implementation of the IFeedParser interface
  * and provides basic functionality that usefull to all concrete IFeedParser implementations.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Parser
+ * @subpackage      Parser/Feed
  */
 abstract class BaseFeedParser implements IFeedParser
 {
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      * Holds the XML Document of current feed.
      *
@@ -31,58 +31,58 @@ abstract class BaseFeedParser implements IFeedParser
 
     /**
      * Indicates parser the parser's state (parsed | not parsed).
-     * 
+     *
      * @var         boolean
      */
     private $parsed;
 
     /**
      * Holds our feed's title.
-     * 
+     *
      * @var         string
      */
     protected $title;
 
     /**
      * Holds our feed's description or subtitle.
-     * 
+     *
      * @var         string
      */
     protected $description;
 
     /**
      * Holds our feed's link or URL.
-     * 
+     *
      * @var         string
      */
     protected $link;
 
     /**
      * Holds the feed's timestamp.
-     * 
+     *
      * @var         DateTime
      */
     protected $time;
 
     /**
      * Holds the feed's copyright.
-     * 
+     *
      * @var         string
      */
     protected $copyright;
 
     /**
      * Holds a list of feed items.
-     * 
+     *
      * @var         array
      */
     protected $items;
-    
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
-    
-    
+
+
     // ---------------------------------- <CONSTRUCTOR> ------------------------------------------
-    
+
     /**
      * Setup feed parsing
      *
@@ -94,17 +94,17 @@ abstract class BaseFeedParser implements IFeedParser
         $this->xpath = new DOMXPath($doc);
         $this->items = array();
     }
-    
+
     // ---------------------------------- </CONSTRUCTOR> -----------------------------------------
-    
-        
+
+
     // ---------------------------------- <IFeedParser IMPL> -------------------------------------
-    
+
     /**
      * Returns our feed title.
-     * 
+     *
      * @see         IFeedParser::getTitle()
-     * 
+     *
      * @return      string
      */
     public function getTitle()
@@ -114,7 +114,7 @@ abstract class BaseFeedParser implements IFeedParser
 
     /**
      * Sets our feed title.
-     * 
+     *
      * @param string xpath expression
      */
     protected function setTitle($expression)
@@ -128,9 +128,9 @@ abstract class BaseFeedParser implements IFeedParser
 
     /**
      * Returns our feed link.
-     * 
+     *
      * @see         IFeedParser::getLink()
-     * 
+     *
      * @return      string
      */
     public function getLink()
@@ -141,7 +141,7 @@ abstract class BaseFeedParser implements IFeedParser
     /**
      * Sets our feed link to the value resulting from
      * evaluating the given $expression on our $xpath member..
-     * 
+     *
      * @param string xpath expression
      */
     protected function setLink($expression)
@@ -155,9 +155,9 @@ abstract class BaseFeedParser implements IFeedParser
 
     /**
      * Returns our feed copyright.
-     * 
+     *
      * @see         IFeedParser::getCopyright()
-     * 
+     *
      * @return      string
      */
     public function getCopyright()
@@ -168,7 +168,7 @@ abstract class BaseFeedParser implements IFeedParser
     /**
      * Sets our feed copyright to the value resulting from
      * evaluating the given $expression on our $xpath member.
-     * 
+     *
      * @param string xpath expression
      */
     protected function setCopyright($expression)
@@ -182,9 +182,9 @@ abstract class BaseFeedParser implements IFeedParser
 
     /**
      * Returns our feed description.
-     * 
+     *
      * @see         IFeedParser::getDescription()
-     * 
+     *
      * @return      string
      */
     public function getDescription()
@@ -195,7 +195,7 @@ abstract class BaseFeedParser implements IFeedParser
     /**
      * Sets our feed description to the value resulting from
      * evaluating the given $expression on our $xpath member.
-     * 
+     *
      * @param string xpath expression
      */
     protected function setDescription($expression)
@@ -209,9 +209,9 @@ abstract class BaseFeedParser implements IFeedParser
 
     /**
      * Returns our feed timestamp.
-     * 
+     *
      * @see         IFeedParser::getTime()
-     * 
+     *
      * @return      DateTime
      */
     public function getTime()
@@ -222,7 +222,7 @@ abstract class BaseFeedParser implements IFeedParser
     /**
      * Sets our feed timestamp to a DateTime created from the value,
      * that is returned from our $expression evaluation.
-     * 
+     *
      * @param string xpath expression
      */
     protected function setTime($expression)
@@ -233,16 +233,16 @@ abstract class BaseFeedParser implements IFeedParser
 
     /**
      * Returns our feed items.
-     * 
+     *
      * @see         IFeedParser::getItems()
-     * 
+     *
      * @return      array
      */
     public function getItems()
     {
         return $this->items;
     }
-    
+
     /**
      * Add an item to our feed items list.
      *
@@ -252,37 +252,11 @@ abstract class BaseFeedParser implements IFeedParser
     {
         $this->items[] = $item;
     }
-    
-    // ---------------------------------- </IFeedParser IMPL> ------------------------------------
-    
-    
-    // ---------------------------------- <WORKING METHODS> --------------------------------------
 
-    /**
-     * Initialize a feed item data array.
-     *
-     * <ul>
-     * <li>author - string
-     * <li>title - string
-     * <li>link - string
-     * <li>time - Item - DateTime
-     * <li>text - string
-     * <li>html - string
-     * </ul>
-     *
-     * @return      array
-     */
-    protected function initItemData()
-    {
-        return array(
-            'time'   => NULL,
-            'author' => '',
-            'title'  => '',
-            'link'   => '',
-            'text'   => '',
-            'html'   => ''
-        );
-    }
+    // ---------------------------------- </IFeedParser IMPL> ------------------------------------
+
+
+    // ---------------------------------- <WORKING METHODS> --------------------------------------
 
     /**
      * Query current doc with xpath expression.
@@ -291,7 +265,7 @@ abstract class BaseFeedParser implements IFeedParser
      * @param       DOMNode $contextnode
      *
      * @return      DOMNodeList or FALSE if no items found
-     * 
+     *
      * @todo        Is this really a public method? Maybe make it protected?
      */
     public function query($expression, DOMNode $contextnode = NULL)
@@ -299,12 +273,12 @@ abstract class BaseFeedParser implements IFeedParser
         libxml_clear_errors();
         $nodeList = $this->xpath->query($expression, $contextnode);
         $err = libxml_get_last_error();
-        
+
         if ($err)
         {
             error_log(__METHOD__."($expression) ".print_r($err,1));
         }
-        
+
         return ($nodeList && $nodeList->length > 0) ? $nodeList : FALSE;
     }
 
@@ -317,22 +291,22 @@ abstract class BaseFeedParser implements IFeedParser
     {
         return ! $this->parsed;
     }
-    
+
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 
-    
+
     // ---------------------------------- <PHP SERIALIZE CALLBACKS> ------------------------------
-    
+
     /**
      * Returns an array of property names,
      * oof properties that shall be included into serialization.
-     * 
+     *
      * @return      array
      */
     public function __sleep()
     {
         $this->parsed = TRUE;
-        
+
         return array(
             'title',
             'link',
@@ -343,7 +317,7 @@ abstract class BaseFeedParser implements IFeedParser
             'parsed'
         );
     }
-    
+
     /**
      * Does stuff to restore our state after we have been deserialized.
      */

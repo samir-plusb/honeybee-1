@@ -3,7 +3,7 @@
 /**
  * The News_Api_ExtractDateAction is repsonseable handling date extraction api requests.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

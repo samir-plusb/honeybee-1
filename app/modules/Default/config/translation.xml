@@ -9,7 +9,7 @@
                     <ae:parameter name="ui">
                         <ae:parameter name="de">
                             <ae:parameter name="Logout">Abmelden</ae:parameter>
-                            <ae:parameter name="Task Overview">Aufgabenübersicht</ae:parameter>
+                            <ae:parameter name="Available Modules">Verfügbare Module</ae:parameter>
                             <ae:parameter name="News Stream">News Editieren</ae:parameter>
                             <ae:parameter name="News Stats">News Statistik</ae:parameter>
                         </ae:parameter>

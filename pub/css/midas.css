@@ -1,0 +1,176 @@
+body
+{
+    padding-top: 95px;
+}
+
+.navbar .brand:hover
+{
+  text-decoration: underline;
+}
+
+.logout
+{
+    font-size: 12pt;
+    margin-top: 10px;
+}
+
+.icon-remove
+{
+  cursor: pointer;
+}
+
+.navbar .breadcrumb
+{
+  border-radius: 0;
+}
+
+.breadcrumb li
+{
+    font-size: 11pt;
+    padding-left: 10px;
+}
+.navbar-inner .container-fluid
+{
+  z-index: 500000;
+}
+
+.container-alerts
+{
+  position: fixed;
+  top: 40px;
+  right: 20px;
+  width: 30%;
+  z-index: 10000;
+}
+
+.container-alerts .alert
+{
+  opacity: 0;
+  margin-top: -50px;
+}
+
+/**        -- Widgets --
+ * #############################
+ * #    Tag Container - STD    #
+ * #############################
+ */
+ .tagslist-btn-add
+ {
+  margin-left: 5px;
+ }
+
+.tagslist-list
+{
+  list-style-type: none;
+  margin-left: 0;
+  margin-top: 10px;
+  padding-left: 0;
+}
+
+.tagslist-list .tagslist-tag
+{
+  float: left;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.tagslist-list .highlight-transition
+{
+  transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -webkit-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  -webkit-box-shadow: 0px 0px 1px 1px rgba(200, 200, 200, 0);
+  -moz-box-shadow: 0px 0px 1px 1px rgba(200, 200, 200, 0);
+  box-shadow: 0px 0px 1px 1px rgba(200, 200, 200, 0);
+}
+
+.tagslist-list .highlight
+{
+  -webkit-box-shadow: 0px 0px 3px 5px rgba(91, 192, 222, 0.7);
+  -moz-box-shadow: 0px 0px 3px 5px rgba(91, 192, 222, 0.7);
+  box-shadow: 0px 0px 3px 5px rgba(91, 192, 222, 0.7);
+  background: #2f96b4;
+}
+
+/**
+ * ###############################
+ * #    Tag Container: Pills     #
+ * ###############################
+ */
+.pill-container
+{
+  width: 400px;
+  max-height: 150px;
+  min-height: 150px;
+  overflow: auto;
+  background: white;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  padding: 2px;
+}
+
+.pill-container li a
+{
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #0088cc;
+  color: white;
+}
+
+.pill-container li a i
+{
+  position: relative;
+  float: right;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.pill-container li a i:hover
+{
+  background-color: #005580;
+}
+
+.pill-container li a:hover
+{
+  background-color: #0088cc;
+}
+
+.container-detail-item .tabpane .controls
+{
+  margin-left: 0;
+}
+
+.pill-container .tagslist-tag
+{
+  float: none;
+  margin-top: 0px;
+  margin-right: 0px;
+}
+
+/**
+ * ############################
+ * #    Property Explorer     #
+ * ############################
+ */
+.propertyExplorer .propertyValues ul
+{
+  list-style-type: none;
+  float: left;
+  margin-left: 0;
+}
+
+.propertyExplorer .propertyValues ul li
+{
+  float: left;
+  margin-right: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}

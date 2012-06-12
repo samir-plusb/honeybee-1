@@ -2,10 +2,11 @@
 /**
  *
  * @copyright BerlinOnline
- * @version $Id: RunSuccessView.class.php -1   $
+ * @version $Id$
  * @package Workflow
+ * @subpackage Mvc
  */
-class Workflow_ReleaseTicket_ReleaseTicketSuccessView extends ProjectBaseView
+class Workflow_ReleaseTicket_ReleaseTicketSuccessView extends WorkflowBaseView
 {
     /**
      * Prepares and sets our json data on our webresponse.

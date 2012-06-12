@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <!-- Agavi -->
+        <autoload name="ShofiBaseAction">%core.module_dir%/Shofi/lib/agavi/action/ShofiBaseAction.class.php</autoload>
+        <autoload name="ShofiBaseView">%core.module_dir%/Shofi/lib/agavi/view/ShofiBaseView.class.php</autoload>
+        <autoload name="PrototypeImportValidator">%core.module_dir%/Shofi/lib/agavi/validator/PrototypeImportValidator.class.php</autoload>
+        <autoload name="ShofiCoreItemValidator">%core.module_dir%/Shofi/lib/agavi/validator/ShofiCoreItemValidator.class.php</autoload>
+        <autoload name="ShofiDetailItemValidator">%core.module_dir%/Shofi/lib/agavi/validator/ShofiDetailItemValidator.class.php</autoload>
+        <autoload name="ShofiSalesItemValidator">%core.module_dir%/Shofi/lib/agavi/validator/ShofiSalesItemValidator.class.php</autoload>
+        <!-- /Agavi -->
+
+        <autoload name="IShofiEntity">%core.module_dir%/Shofi/lib/IShofiEntity.iface.php</autoload>
+
+        <!-- Import Integration -->
+        <!-- Wkg -->
+        <autoload name="WkgDataSourceConfig">%core.module_dir%/Shofi/lib/import/wkg/WkgDataSourceConfig.class.php</autoload>
+        <autoload name="WkgDataSource">%core.module_dir%/Shofi/lib/import/wkg/WkgDataSource.class.php</autoload>
+        <autoload name="WkgDataRecord">%core.module_dir%/Shofi/lib/import/wkg/WkgDataRecord.class.php</autoload>
+
+        <autoload name="PrototypeDataRecord">%core.module_dir%/Shofi/lib/import/prototype/PrototypeDataRecord.class.php</autoload>
+
+        <autoload name="ShofiDataRecord">%core.module_dir%/Shofi/lib/import/ShofiDataRecord.class.php</autoload>
+
+        <autoload name="ShofiDataImport">%core.module_dir%/Shofi/lib/import/ShofiDataImport.class.php</autoload>
+        <autoload name="ShofiDataImportConfig">%core.module_dir%/Shofi/lib/import/ShofiDataImportConfig.class.php</autoload>
+        <autoload name="ShofiWorkflowService">%core.module_dir%/Shofi/lib/ShofiWorkflowService.class.php</autoload>
+        <!-- /Import Integration -->
+
+
+        <!-- Workflow Integration -->
+        <!-- Item -->
+        <autoload name="ShofiMasterRecord">%core.module_dir%/Shofi/lib/workflow/item/ShofiMasterRecord.class.php</autoload>
+        <autoload name="ShofiWorkflowItem">%core.module_dir%/Shofi/lib/workflow/item/ShofiWorkflowItem.class.php</autoload>
+        <autoload name="ShofiCoreItem">%core.module_dir%/Shofi/lib/workflow/item/ShofiCoreItem.class.php</autoload>
+        <autoload name="ShofiDetailItem">%core.module_dir%/Shofi/lib/workflow/item/ShofiDetailItem.class.php</autoload>
+        <autoload name="ShofiSalesItem">%core.module_dir%/Shofi/lib/workflow/item/ShofiSalesItem.class.php</autoload>
+        <autoload name="IShofiCoreItem">%core.module_dir%/Shofi/lib/workflow/item/IShofiCoreItem.iface.php</autoload>
+        <autoload name="IShofiDetailItem">%core.module_dir%/Shofi/lib/workflow/item/IShofiDetailItem.iface.php</autoload>
+        <autoload name="IShofiSalesItem">%core.module_dir%/Shofi/lib/workflow/item/IShofiSalesItem.iface.php</autoload>
+        <autoload name="ShofiWorkflowSupervisor">%core.module_dir%/Shofi/lib/workflow/ShofiWorkflowSupervisor.class.php</autoload>
+
+        <autoload name="WorkflowEditPlacePlugin">%core.module_dir%/Shofi/lib/workflow/plugin/WorkflowEditPlacePlugin.class.php</autoload> 
+        <autoload name="WorkflowDeletePlacePlugin">%core.module_dir%/Shofi/lib/workflow/plugin/WorkflowDeletePlacePlugin.class.php</autoload>        
+        <!-- /Workflow Integration -->
+
+        <autoload name="ContentMachineHttpExport">%core.module_dir%/Shofi/lib/ContentMachineHttpExport.class.php</autoload>
+
+        <autoload name="ShofiDatabaseSetup">%core.module_dir%/Shofi/lib/setup/couchdb/ShofiDatabaseSetup.class.php</autoload>
+
+        <autoload name="ShofiFinder">%core.module_dir%/Shofi/lib/ShofiFinder.class.php</autoload>
+
+        <!-- Renderer -->
+        <autoload name="ShofiCategoryListRenderer">%core.module_dir%/Shofi/lib/renderer/ShofiCategoryListRenderer.class.php</autoload>
+        <autoload name="ShofiVerticalListRenderer">%core.module_dir%/Shofi/lib/renderer/ShofiVerticalListRenderer.class.php</autoload>
+        <!-- /Renderer -->
+    </ae:configuration>
+</ae:configurations>

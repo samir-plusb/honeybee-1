@@ -3,7 +3,7 @@
 /**
  * The Import_Run_RunErrorView class handles run-import error presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
@@ -26,7 +26,7 @@ class Import_Run_RunErrorView extends ImportBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $content = implode("\n", $this->getErrorMessages());
+        $content = implode("\n", $this->getAttribute('errors', array()));
         $content = 'An error occoured: ' . $content;
 
         $this->getResponse()->setContent($content);

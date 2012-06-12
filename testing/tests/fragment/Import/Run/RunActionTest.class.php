@@ -21,7 +21,7 @@ class RunActionTest extends AgaviActionTestCase
     {
         parent::setUpBeforeClass();
 
-        $workflowSetup = new WorkflowDatabaseSetup();
+        $workflowSetup = new NewsDatabaseSetup();
         $workflowSetup->setup(TRUE);
     }
 
@@ -80,7 +80,7 @@ class RunActionTest extends AgaviActionTestCase
 
     public function provideTestRunImportArgs()
     {
-        $imports = array('couchdb', 'workflow');
+        $imports = array('couchdb', 'news');
         $datasources = array('dpa', 'rss');
         $data = array();
         foreach ($imports as $import)
@@ -93,6 +93,10 @@ class RunActionTest extends AgaviActionTestCase
                 );
             }
         }
+        $data[] =  array(
+            'importName'      => 'shofi',
+            'dataSourceNames' => 'wkg'
+        );
         return $data;
     }
 

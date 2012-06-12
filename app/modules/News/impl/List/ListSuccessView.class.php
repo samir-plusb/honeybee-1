@@ -3,7 +3,7 @@
 /**
  * The News_List_ListSuccessView class handles News/List success data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
@@ -23,17 +23,17 @@ class News_List_ListSuccessView extends NewsBaseView
     {
         $this->setupHtml($parameters);
         $listData = array();
-        $ticketPeer = Workflow_SupervisorModel::getInstance()->getTicketPeer();
-        foreach ($this->getAttribute('items', array()) as $item)
+        $ticketStore = WorkflowSupervisorFactory::createByTypeKey('news')->getWorkflowTicketStore();
+        foreach ($this->getAttribute('items', array()) as $workflowItem)
         {
-            $itemData = $item->toArray();
-            $ticket = $ticketPeer->getTicketById($itemData['ticketId']);
-            $itemData['ticket'] = array(
+            $workflowItemData = $workflowItem->toArray();
+            $ticket = $ticketStore->fetchByIdentifier($workflowItemData['ticketId']);
+            $workflowItemData['ticket'] = array(
                 'id' => $ticket->getIdentifier(),
                 'rev' => $ticket->getRevision()
             );
-            $itemData['owner'] = $ticket->getCurrentOwner();
-            $listData[] = $itemData;
+            $workflowItemData['owner'] = $ticket->getCurrentOwner();
+            $listData[] = $workflowItemData;
         }
         $this->setAttribute('user', $this->getContext()->getUser()->getAttribute('login'));
         $this->setAttribute('listData', $listData);
@@ -65,17 +65,17 @@ class News_List_ListSuccessView extends NewsBaseView
     public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $listData = array();
-        $ticketPeer = Workflow_SupervisorModel::getInstance()->getTicketPeer();
+        $ticketStore = WorkflowSupervisorFactory::createByTypeKey('news')->getWorkflowTicketStore();
         foreach ($this->getAttribute('items', array()) as $item)
         {
             $itemData = $item->toArray();
-            $ticket = $ticketPeer->getTicketById($itemData['ticketId']);
+            $ticket = $ticketStore->fetchByIdentifier($itemData['ticketId']);
             $itemData['ticket'] = array(
                 'id' => $ticket->getIdentifier(),
                 'rev' => $ticket->getRevision()
             );
-            $itemData['importItem']['content'] = strip_tags(
-                htmlspecialchars_decode($itemData['importItem']['content'])
+            $itemData['masterRecord']['content'] = strip_tags(
+                htmlspecialchars_decode($itemData['masterRecord']['content'])
             );
             $itemData['owner'] = $ticket->getCurrentOwner();
             $listData[] = $itemData;
@@ -91,24 +91,26 @@ class News_List_ListSuccessView extends NewsBaseView
     public function setupHtml(AgaviRequestDataHolder $parameters, $layoutName = NULL)
     {
         parent::setupHtml($parameters, $layoutName);
+
         $this->setAttribute('_title', 'Midas - News Stream');
 
-        $paginationData = array(
-            'paging_range' => AgaviConfig::get('news.pagination.range', 9),
-            'total_count'  => $this->getAttribute('totalCount'),
-            'offset'       => $parameters->getParameter('offset', 0),
-            'limit'        => $parameters->getParameter('limit', AgaviConfig::get('pagination.default_limit', 15)),
-            'sorting'      => $this->getAttribute('sorting')
-        );
-
-        if ($this->hasAttribute('search_phrase'))
-        {
-            $paginationData['search_phrase'] = $this->getAttribute('search_phrase');
-        }
+        $listConfig = ListConfig::fromArray(AgaviConfig::get('news.list_config', array()));
+        $listState = ListState::fromArray(array(
+            'offset' => $parameters->getParameter('offset', 0),
+            'limit' => $parameters->getParameter('limit', $listConfig->getDefaultLimit()),
+            'sortDirection' => $parameters->getParameter('sorting[direction]', 'masterRecord.created.date'),
+            'sortField' => $parameters->getParameter('sorting[field]', 'asc'),
+            'data' => $this->getAttribute('items'),
+            'totalCount' => $this->getAttribute('totalCount'),
+            'search' => $parameters->getParameter('search_phrase')
+        ));
 
         $this->getLayer('content')->setSlot(
             'pagination',
-            $this->createSlotContainer('News', 'Paginate', $paginationData)
+            $this->createSlotContainer('Common', 'Paginate', array(
+                'config' => $listConfig,
+                'state' => $listState
+            ))
         );
     }
 

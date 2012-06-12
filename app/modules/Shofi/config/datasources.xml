@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://berlinonline.de/schemas/midas/config/datasource/definition/1.0"
+    xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+
+    <ae:configuration>
+        <datasources>
+
+            <datasource name="wkg" class="WkgDataSource">
+                <description>Provides wkg location data coming from xml files.</description>
+                <recordType>WkgDataRecord</recordType>
+                <settings>
+                    <setting name="directory">%core.app_dir%/../data/wkg/</setting>
+                    <setting name="file_pattern">^10195_\d{8,8}_00145\.xml$</setting>
+                </settings>
+            </datasource>
+
+            <datasource name="prototype" class="ArrayDataSource">
+                <description>Provides location data coming from the shofi prototype.</description>
+                <recordType>PrototypeDataRecord</recordType>
+            </datasource>
+
+            <datasource name="prototype.category" class="ArrayDataSource">
+                <description>Provides category data coming from the shofi prototype.</description>
+                <recordType>PrototypeCategoryDataRecord</recordType>
+            </datasource>
+
+        </datasources>
+    </ae:configuration>
+</ae:configurations>

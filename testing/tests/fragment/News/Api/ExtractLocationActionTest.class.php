@@ -2,6 +2,8 @@
 
 class ExtractLocationActionTest extends AgaviActionTestCase
 {
+    const JSON_FIXTURE = 'News/location.api.fixture.json';
+
     // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
     // @codeCoverageIgnoreStart
 
@@ -18,66 +20,11 @@ class ExtractLocationActionTest extends AgaviActionTestCase
 
     public function testDefaultRead()
     {
-        $this->runActionWithParameters('read', array('geo_text' => 'Schlossstrasse 2, Berlin'));
+        $this->runActionWithParameters('read', array('geo_text' => 'Schlossstrasse 2+Berlin'));
         $this->assertViewNameEquals('Success');
         $this->assertContainerAttributeExists('location');
-        $expectedLocation = array (
-            array (
-                'street' => 'Schloßplatz 2',
-                'uzip' => '10178',
-                'neighborhood' => 'Mitte',
-                'district' => 'Mitte',
-                'administrative district' => 'Mitte',
-                'longitude' => 13.400815,
-                'latitude' => 52.5158399,
-            ),
-            array (
-                'street' => 'Schloßstraße 2',
-                'uzip' => '12163',
-                'neighborhood' => 'Steglitz',
-                'district' => 'Steglitz',
-                'administrative district' => 'Steglitz-Zehlendorf',
-                'longitude' => 13.32725,
-                'latitude' => 52.46445,
-            ),
-            array (
-                'street' => 'Schloßstraße 2',
-                'uzip' => '14059',
-                'neighborhood' => 'Charlottenburg',
-                'district' => 'Charlottenburg',
-                'administrative district' => 'Charlottenburg-Wilmersdorf',
-                'longitude' => 13.29492,
-                'latitude' => 52.51802,
-            ),
-            array (
-                'street' => 'Schloßstraße 2',
-                'uzip' => '13467',
-                'neighborhood' => 'Hermsdorf',
-                'district' => 'Reinickendorf',
-                'administrative district' => 'Reinickendorf',
-                'longitude' => 13.3136246,
-                'latitude' => 52.616895,
-            ),
-            array (
-                'street' => 'Schloßstraße 2',
-                'uzip' => '13507',
-                'neighborhood' => 'Tegel',
-                'district' => 'Reinickendorf',
-                'administrative district' => 'Reinickendorf',
-                'longitude' => 13.2832885,
-                'latitude' => 52.590951,
-            ),
-            array (
-                'street' => 'Schloßallee 2',
-                'uzip' => '13156',
-                'neighborhood' => 'Niederschönhausen',
-                'district' => 'Pankow',
-                'administrative district' => 'Pankow',
-                'longitude' => 13.4202616,
-                'latitude' => 52.5813313,
-            ),
-            'items_count' => 6,
-        );
+        $fixturePath = AgaviConfig::get('core.fixtures_dir') . DIRECTORY_SEPARATOR . self::JSON_FIXTURE;
+        $expectedLocation = json_decode(file_get_contents($fixturePath), TRUE);
         $this->assertContainerAttributeEquals($expectedLocation, 'location');
     }
 

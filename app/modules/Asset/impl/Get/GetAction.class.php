@@ -3,7 +3,7 @@
 /**
  * The Asset_GetAction delivers assets.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

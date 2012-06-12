@@ -3,7 +3,7 @@
 /**
  * The DataRecordBaseTestCase class provides base functionality for IDataRecord implementation tests.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
@@ -60,7 +60,7 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
     // ---------------------------------- <AgaviPhpUnitTestCase OVERRIDES> -----------------------
 
     /**
-     * Setup before each test, hence create an instance of the IImportConfig
+     * Setup before each test, hence create an instance of the IConfig
      * implementation that we are testing.
      *
      * @see         AgaviPhpUnitTestCase::setUp()
@@ -142,7 +142,6 @@ abstract class DataRecordBaseTestCase extends AgaviPhpUnitTestCase
         foreach ($this->loadDataRecordResultFixture() as $propName => $value)
         {
             $getterMethod = 'get' . ucfirst($propName);
-
             $ret[] = array('expected' => $value, 'getterName' => $getterMethod);
         }
 

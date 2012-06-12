@@ -3,7 +3,7 @@
 /**
  * The News_EditAction is repsonseable for loading our imported news for display.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
@@ -36,39 +36,24 @@ class News_EditAction extends NewsBaseAction
         return 'Input';
     }
 
-    public function executeWrite(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeWrite(AgaviRequestDataHolder $parameters)
     {
         $contentItemData = $parameters->getParameter('content_item');
+
         $ticket = $parameters->getParameter('ticket');
         $this->setAttribute('ticket', $parameters->getParameter('ticket'));
-        $workflowItem = $ticket->getWorkflowItem();
+        $newsService = NewsWorkflowService::getInstance();
+        $workflowItem = $newsService->fetchWorkflowItemById($ticket->getItem());
         if (! $workflowItem->addContentItem($contentItemData))
         {
             $workflowItem->updateContentItem($contentItemData);
         }
-
-        $supervisor = Workflow_SupervisorModel::getInstance();
-        $supervisor->getItemPeer()->storeItem($workflowItem);
-
+        $newsService->storeWorkflowItem($workflowItem);
         $this->setContainerPluginState();
         return 'Success';
     }
 
-    public function handleWriteError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-    {
-        $errors = $this->getContainer()->getValidationManager()->getErrors();
-        $messages = "";
-        foreach ($errors as $error)
-        {
-            $messages .= implode(PHP_EOL, $error['messages']);
-        }
-        $this->setAttribute('error_message', $messages);
-        $this->setAttribute('ticket', $parameters->getParameter('ticket'));
-        $this->setContainerPluginState();
-        return 'Error';
-    }
-
-    public function handleReadError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function handleError(AgaviRequestDataHolder $parameters)
     {
         $errors = $this->getContainer()->getValidationManager()->getErrors();
         $messages = "";

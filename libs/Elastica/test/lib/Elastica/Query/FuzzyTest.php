@@ -18,7 +18,8 @@ class Elastica_Query_FuzzyTest extends PHPUnit_Framework_TestCase
 			'fuzzy' => array(
 				'user' => array(
 					'value' => 'Nicolas',
-					'boost' => 1.0
+					'boost' => 1.0,
+					"min_similarity" => 1
 				)
 			)
 		);

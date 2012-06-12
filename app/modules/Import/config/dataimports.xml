@@ -1,24 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    See the testing/fixtures/config/import/dataimports.xml for example configurations of all dataimport types.
+-->
 <ae:configurations
     xmlns="http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0"
     xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+
     <ae:configuration>
         <dataimports>
+            <xi:include href="%core.app_dir%/modules/News/config/import/dataimports.xml"
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xmlns(dd=http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0)
+            xpointer(//ae:configurations/ae:configuration/dd:dataimports/*)">
+            </xi:include>
 
-            <dataimport name="workflow" class="WorkflowItemDataImport">
-                <description>Imports data in form of IWorkflowItems.</description>
-                <datasources>
-                    <datasource>imperia</datasource>
-                    <datasource>rss</datasource>
-                    <datasource>dpa</datasource>
-                    <datasource>imap</datasource>
-                </datasources>
-                <settings>
-                    <setting name="notify">true</setting>
-                </settings>
-            </dataimport>
+             <xi:include href="%core.app_dir%/modules/Shofi/config/dataimports.xml"
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xmlns(dd=http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0)
+            xpointer(//ae:configurations/ae:configuration/dd:dataimports/*)">
+            </xi:include>
 
+            <xi:include href="%core.app_dir%/modules/Shofi_Categories/config/dataimports.xml"
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xmlns(dd=http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0)
+            xpointer(//ae:configurations/ae:configuration/dd:dataimports/*)">
+            </xi:include>
+
+            <xi:include href="%core.app_dir%/modules/Shofi_Verticals/config/dataimports.xml"
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xmlns(dd=http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0)
+            xpointer(//ae:configurations/ae:configuration/dd:dataimports/*)">
+            </xi:include>
         </dataimports>
     </ae:configuration>
 </ae:configurations>

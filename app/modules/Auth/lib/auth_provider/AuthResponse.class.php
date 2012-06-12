@@ -4,7 +4,7 @@
  * The AuthResponse class is the default implementation of the IAuthResponse interface.
  * It provides data representing the result of an authentication attempt.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Auth

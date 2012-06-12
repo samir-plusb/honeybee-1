@@ -3,7 +3,7 @@
 /**
  * The News_Api_ExtractLocationAction is repsonseable handling location extraction api requests.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
@@ -28,6 +28,11 @@ class News_Api_ExtractLocationAction extends NewsBaseAction
         $url = sprintf('%s?string=%s', AgaviConfig::get('news.localize_api_url'), urlencode($geoText));
         $curl = ProjectCurl::create();
         curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'X-Requested-With: XMLHttpRequest',
+            'Content-Type:application/json',
+            'Accept:application/json; charset=utf-8'
+        ));
         $resp = curl_exec($curl);
 
         $this->logInfo(

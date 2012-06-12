@@ -15,6 +15,9 @@
                 <errors>
                     <error>Invalid data given.</error>
                 </errors>
+                <ae:parameters>
+                    <ae:parameter name="type">news</ae:parameter>
+                </ae:parameters>
             </validator>
 
         </validators>

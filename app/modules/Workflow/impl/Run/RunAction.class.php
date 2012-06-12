@@ -9,7 +9,7 @@
  * @package Workflow
  * @subpackage Mvc
  */
-class Workflow_RunAction extends ProjectBaseAction
+class Workflow_RunAction extends WorkflowBaseAction
 {
     /**
      * Run read and write logic for workflow execution.
@@ -23,7 +23,7 @@ class Workflow_RunAction extends ProjectBaseAction
         try
         {
             $ticket = $parameters->getParameter('ticket');
-            $supervisor = Workflow_SupervisorModel::getInstance();
+            $supervisor = $parameters->getParameter(WorkflowSupervisorValidator::DEFAULT_EXPORT);
             $result = $supervisor->processTicket($ticket, $this->getContainer());
             if ($result instanceof WorkflowInteractivePluginResult)
             {
@@ -34,7 +34,7 @@ class Workflow_RunAction extends ProjectBaseAction
                 $this->setAttribute('content', $result->getMessage());
             }
         }
-        catch (WorkflowException $e)
+        catch (Exception $e)
         {
             $this->setAttribute(
                 'content',
@@ -43,7 +43,14 @@ class Workflow_RunAction extends ProjectBaseAction
             $this->setAttribute('reason', $e->getCode());
             return 'Error';
         }
-
+        $errorStates = array(
+            WorkflowPluginResult::STATE_ERROR,
+            WorkflowPluginResult::STATE_NOT_ALLOWED
+        );
+        if (in_array($result->getState(), $errorStates))
+        {
+            return 'Error';
+        }
         return 'Success';
     }
 

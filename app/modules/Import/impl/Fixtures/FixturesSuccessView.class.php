@@ -3,7 +3,7 @@
 /**
  * The Import_Fixtures_FixturesSuccessView class handles fixtures import success presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import

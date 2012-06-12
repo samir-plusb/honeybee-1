@@ -3,11 +3,10 @@
 /**
  * The NewsFinderModel is responseable for finding news-items and provides several methods to do so.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
- * @subpackage      Lib
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to the broad usage of the Elastica lib.
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -34,7 +33,7 @@ class NewsFinder
     /**
      * Name of the elastic search type that we query for news-items.
      */
-    const ES_TYPE_NAME = 'item';
+    const ES_TYPE_NAME = 'news-item';
 
     // ---------------------------------- </CONSTANTS> -------------------------------------------
 
@@ -48,14 +47,13 @@ class NewsFinder
      * @type array
      */
     private static $sortMapping = array(
-        'title'        => 'importItem.title.title_sortable',
-        'source'       => 'importItem.source.source_sortable',
-        'timestamp'    => 'importItem.created.date',
-        'state'        => 'currentState.step',
-        'category'     => 'importItem.category.category_sortable',
-        'owner'        => 'currentState.owner',
-        'priority'     => 'contentItems.priority',
-        'publish_date' => 'contentItems.publishDate'
+        'masterRecord.title' => 'masterRecord.title.title_sortable',
+        'masterRecord.source' => 'masterRecord.source.source_sortable',
+        'masterRecord.created.date' => 'masterRecord.created.date',
+        'currentState.step' => 'currentState.step',
+        'masterRecord.category' => 'masterRecord.category.category_sortable',
+        'masterRecord.priority' => 'contentItems.priority',
+        'contentItems.publish_date' => 'contentItems.publishDate'
     );
 
     /**
@@ -148,8 +146,10 @@ class NewsFinder
      *
      * @return array An array holding the WorkflowItems for the current limit&offset and the total-count.
      * @see self::hydrateResult() For documentation on the return value's structure.
+     *
+     * @codingStandardsIgnoreStart
      */
-    public function search($searchPhrase, $sortField, $sortDirection = self::SORT_DESC, $offset = 0, $limit = self::DEFAULT_LIMIT)
+    public function search($searchPhrase, $sortField, $sortDirection = self::SORT_DESC, $offset = 0, $limit = self::DEFAULT_LIMIT) // @codingStandardsIgnoreEnd
     {
         $query = new Elastica_Query();
         $terms = explode(' ', $searchPhrase);
@@ -187,8 +187,10 @@ class NewsFinder
      *
      * @return array An array holding the WorkflowItems for the current limit&offset and the total-count.
      * @see self::hydrateResult() For documentation on the return value's structure.
+     *
+     * @codingStandardsIgnoreStart
      */
-    public function nearBy(array $where, $sortField, $sortDirection = self::SORT_DESC, $offset = 0, $limit = self::DEFAULT_LIMIT)
+    public function nearBy(array $where, $sortField, $sortDirection = self::SORT_DESC, $offset = 0, $limit = self::DEFAULT_LIMIT) // @codingStandardsIgnoreEnd
     {
         if (! isset($where['dist']) || ! isset($where['lon']) || ! isset($where['lat']))
         {
@@ -257,7 +259,7 @@ class NewsFinder
      * Example structure:
      * <pre>
      * array(
-     *     array('importItem.created.date' => 'desc'),
+     *     array('masterRecord.created.date' => 'desc'),
      *     array('_uid' => 'asc')
      * )
      * </pre>
@@ -356,10 +358,11 @@ class NewsFinder
     protected function hydrateResult(Elastica_ResultSet $result)
     {
         $items = array();
+        $newsService = NewsWorkflowService::getInstance();
         /* @var $items Elastica_Result */
         foreach($result->getResults() as $doc)
         {
-            $items[] = new WorkflowItem($doc->getData());
+            $items[] = $newsService->createWorkflowItem($doc->getData());
         }
         return array(
             'items' => $items,

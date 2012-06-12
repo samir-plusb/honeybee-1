@@ -3,7 +3,7 @@
 /**
  * The News_Stats_StatsErrorView class handles News/Stats error data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

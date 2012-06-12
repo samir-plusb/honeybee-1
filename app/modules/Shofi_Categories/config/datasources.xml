@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://berlinonline.de/schemas/midas/config/datasource/definition/1.0"
+    xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+
+    <ae:configuration>
+        <datasources>
+
+            <datasource name="prototype.category" class="ArrayDataSource">
+                <description>Provides category data coming from the shofi prototype.</description>
+                <recordType>PrototypeCategoryDataRecord</recordType>
+            </datasource>
+
+        </datasources>
+    </ae:configuration>
+</ae:configurations>

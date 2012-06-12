@@ -5,7 +5,7 @@
  * to the outside world in order to provide typical list behaviour such as limit/offset based pagination,
  * search and sorting.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

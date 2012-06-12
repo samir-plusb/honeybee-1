@@ -41,7 +41,7 @@ class Elastica_TypeTest extends PHPUnit_Framework_TestCase
 
 		// Test if source is returned
 		$result = $resultSet->current();
-		$this->assertEquals(3, $result->getId());
+		$this->assertEquals(3, $result->getIdentifier());
 		$data = $result->getData();
 		$this->assertEquals('rolf', $data['username']);
 	}
@@ -86,7 +86,7 @@ class Elastica_TypeTest extends PHPUnit_Framework_TestCase
 
 		// Tests if no source is in response except id
 		$result = $resultSet->current();
-		$this->assertEquals(3, $result->getId());
+		$this->assertEquals(3, $result->getIdentifier());
 		$this->assertEmpty($result->getData());
 	}
 

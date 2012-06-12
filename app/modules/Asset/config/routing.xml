@@ -3,19 +3,21 @@
 
     <ae:configuration context="web">
         <routes>
-            <route name=".put" pattern="^/put" action="Put" />
             <route name=".get" pattern="^/get" action="Get" />
             <route name=".binary" pattern="^/binary" action="Binary" output_type="binary"/>
+            <route name=".put" pattern="^/put" action="Put" />
+            <route name=".delete" pattern="^/delete" action="Delete" />
+            <route name=".update" pattern="^/update" action="Update" />
         </routes>
     </ae:configuration>
 
     <ae:configuration context="console">
         <routes>
             <route pattern="asset" module="Asset">
-                <route pattern=".setup" action="Setup" method="write" />
-                <route pattern=".put" action="Put" method="write" />
                 <route pattern=".get" action="Get" method="read" />
+                <route pattern=".put" action="Put" method="write" />
                 <route pattern=".delete" action="Delete" method="write" />
+                <route pattern=".update" action="Update" method="write" />
             </route>
         </routes>
     </ae:configuration>

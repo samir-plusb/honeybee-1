@@ -2,10 +2,11 @@
 /**
  *
  * @copyright BerlinOnline
- * @version $Id: GrabTicketErrorView.class.php -1   $
+ * @version $Id$
  * @package Workflow
+ * @subpackage Mvc
  */
-class Workflow_Proceed_ProceedErrorView extends ProjectBaseView
+class Workflow_Proceed_ProceedErrorView extends WorkflowBaseView
 {
     /**
      * Prepares and sets our json data on our webresponse.

@@ -38,6 +38,14 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
 
         // set the title
         $this->setAttribute('_title', $this->translationManager->_('Welcome to the ContentWorker web frontend.'));
+
+        $this->setBreadcrumb();
+    }
+
+    protected function setBreadcrumb()
+    {
+        $this->getContext()->getUser()->setAttribute('breadcrumbs', array(), 'midas.breadcrumbs');
+        $this->getContext()->getUser()->setAttribute('modulecrumb', NULL, 'midas.breadcrumbs');
     }
     
     /**

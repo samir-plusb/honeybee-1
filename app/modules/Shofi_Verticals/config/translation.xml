@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/translation/1.0">
+    <ae:configuration>
+
+        <translators default_domain="shofi_verticals.errors">
+            <translator domain="shofi_verticals">
+                <message_translator class="AgaviSimpleTranslator">
+
+                    <ae:parameter name="list">
+                        <ae:parameter name="de">
+                            <ae:parameter name="created">Erstellt</ae:parameter>
+                            <ae:parameter name="name">Name</ae:parameter>
+                            <ae:parameter name="url">Leuchtturm Url</ae:parameter>
+                            <ae:parameter name="step">Status</ae:parameter>
+                            <ae:parameter name="owner">Besitzer</ae:parameter>
+                            <ae:parameter name="actions">Aktionen</ae:parameter>
+                            <ae:parameter name="edit">Bearbeiten</ae:parameter>
+                            <ae:parameter name="promote">Publizieren</ae:parameter>
+                            <ae:parameter name="delete">Löschen</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+
+                     <ae:parameter name="errors">
+                        <ae:parameter name="de">
+                            <ae:parameter name="storage_error">Das speichern der Ortsdaten schlug fehl.</ae:parameter>
+                            <ae:parameter name="geo_invalid">Lokalisierung fehlt.</ae:parameter>
+                            <ae:parameter name="export_error">Während der Datenverarbeitung trat ein unerwarteter Fehler auf.</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+
+                </message_translator>
+
+            </translator>
+        </translators>
+
+    </ae:configuration>
+
+</ae:configurations>

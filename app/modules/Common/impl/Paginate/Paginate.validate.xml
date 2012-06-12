@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+	parent="%core.module_dir%/News/config/validators.xml">
+
+    <ae:configuration>
+
+        <validators>
+
+            <validator class="ListConfigValidator" name="invalid_list_config" required="true">
+                <arguments>
+                    <argument>config</argument>
+                </arguments>
+                <errors>
+                    <error>The provided list config is missing or corrupt.</error>
+                    <error for="type">The provided list config must be either a valid array or IListConfig instance.</error>
+                </errors>
+            </validator>
+
+             <validator class="ListStateValidator" name="invalid_list_state" required="true">
+                <arguments>
+                    <argument>state</argument>
+                </arguments>
+                <errors>
+                    <error>The provided list state is missing or corrupt.</error>
+                    <error for="type">The provided list state must be either a valid array or IListState instance.</error>
+                </errors>
+            </validator>
+
+        </validators>
+
+    </ae:configuration>
+
+</ae:configurations>

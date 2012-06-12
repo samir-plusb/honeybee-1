@@ -1,9 +1,10 @@
 <?php
 
 /**
- * The News_Api_ExtractLocation_Api_ExtractLocationSuccessView class handles News/Api_ExtractLocation success data presentation.
+ * The News_Api_ExtractLocation_Api_ExtractLocationSuccessView class
+ * handles News/Api_ExtractLocation success data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
@@ -22,13 +23,13 @@ class News_Api_ExtractLocation_Api_ExtractLocationSuccessView extends NewsBaseVi
     public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getResponse()->setContent(
-            json_encode(
+            htmlspecialchars_decode(json_encode(
                 array(
                     'state' => 'ok',
                     'location' => $this->getAttribute('location')
                 )
             )
-        );
+        ));
     }
 
 }

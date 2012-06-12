@@ -6,22 +6,20 @@
  * @subpackage Workflow
  * @author tay
  * @version $Id$
- * @since 13.10.2011
+ * @since 13.10.2011 ,andreas.maengel@berlinonline.de,warning@service.berlinonline.de
  *
  */
 class WorkflowConfigSyntaxTest extends AgaviUnitTestCase
 {
     /**
-     *
-     * @var Workflow_SupervisorModel
+     * @var NewsWorkflowSupervisor
      */
     protected $supervisor;
 
     public function setUp()
     {
-        $this->supervisor = Workflow_SupervisorModel::getInstance();
+        $this->supervisor = WorkflowSupervisorFactory::createByTypeKey('news');
     }
-
 
     /**
      * check for correct answer if workflow does not exists
@@ -32,7 +30,6 @@ class WorkflowConfigSyntaxTest extends AgaviUnitTestCase
         $this->supervisor->getWorkflowByName('__not_existing_workflow');
     }
 
-
     /**
      * check for defined standard workflow
      */
@@ -40,7 +37,6 @@ class WorkflowConfigSyntaxTest extends AgaviUnitTestCase
     {
         return $this->testWorkflowConfig('_init');
     }
-
 
     /**
      * check syntax of all existing workflows
@@ -54,7 +50,6 @@ class WorkflowConfigSyntaxTest extends AgaviUnitTestCase
         self::assertInstanceOf('WorkflowHandler', $workflow);
     }
 
-
     // As these are run outside of the code coverage's scope, they allways will be marked as non-executed.
     // @codeCoverageIgnoreStart
 
@@ -64,7 +59,7 @@ class WorkflowConfigSyntaxTest extends AgaviUnitTestCase
     public function getAllWorkflowNames()
     {
         $pattern = AgaviConfig::get('core.app_dir').
-            '/'.Workflow_SupervisorModel::WORKFLOW_CONFIG_DIR .
+            '/'.WorkflowSupervisor::WORKFLOW_CONFIG_DIR .
             '*.workflow.xml';
         $files = glob($pattern);
         $parameters = array();

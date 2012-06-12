@@ -3,11 +3,11 @@
 /**
  * The ProjectScriptFilterConfig provides access to the scripts.xml settings.
  *
- * @version         $Id: ProjectScriptFilter.class.php 412 2011-10-20 11:06:22Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Project
- * @subpackage      Filter
+ * @subpackage      Agavi/Filter
  */
 class ProjectScriptFilterConfig
 {

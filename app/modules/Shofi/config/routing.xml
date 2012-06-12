@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
+
+    <ae:configuration context="web">
+        <routes>
+            <!-- prototype import/delete api -->
+            <route pattern="/import/prototype" action="Import_Prototype" />
+            <route pattern="/delete/prototype" action="Import_PrototypeDelete" />
+            <!-- web views -->
+            <route name=".list" pattern="/list" action="List" method="read" />
+            <route name=".edit" pattern="/edit" action="Edit" />
+        </routes>
+    </ae:configuration>
+
+    <ae:configuration context="console">
+        <routes>
+            <route pattern="shofi.fixdata" module="Shofi" action="FixData" method="write" />
+        </routes>
+    </ae:configuration>
+
+</ae:configurations>

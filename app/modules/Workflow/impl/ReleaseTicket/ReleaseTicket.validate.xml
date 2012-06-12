@@ -6,12 +6,24 @@
 
     <ae:configuration>
         <validators>
-            <validator class="WorkflowTicketValidator" required="true" translation_domain="workflow.errors">
+            <validator class="WorkflowTicketValidator" required="true">
                 <arguments>
                     <argument>ticket</argument>
                 </arguments>
                 <errors>
-                    <error>Invalid ticket data given.</error>
+                    <error>Invalid data given.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="type_argument">type</ae:parameter>
+                </ae:parameters>
+            </validator>
+
+            <validator class="WorkflowSupervisorValidator" required="true" translation_domain="workflow.errors">
+                <arguments>
+                    <argument>type</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid supervisor type key given.</error>
                 </errors>
             </validator>
         </validators>

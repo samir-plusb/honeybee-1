@@ -15,8 +15,8 @@ class StatsFlowTest extends AgaviFlowTestCase
     public function setUp()
     {
         AgaviConfig::set('news.connections', array(
-            'elasticsearch' => 'EsNewsFixtures',
-            'couchdb' => 'CouchWorkflowFixtures',
+            'elasticsearch' => 'News.ReadFixtures',
+            'couchdb' => 'News.WriteFixtures'
         ));
     }
 

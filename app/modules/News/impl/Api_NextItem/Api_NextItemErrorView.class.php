@@ -3,7 +3,7 @@
 /**
  * The News_Api_NextItem_Api_NextItemErrorView class handles News/Api_NextItem's error data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

@@ -2,10 +2,11 @@
 /**
  *
  * @copyright BerlinOnline
- * @version $Id: ProceedSuccessView.class.php 679 2012-01-09 17:23:50Z tschmitt $
+ * @version $Id$
  * @package Workflow
+ * @subpackage Mvc
  */
-class Workflow_Proceed_ProceedSuccessView extends ProjectBaseView
+class Workflow_Proceed_ProceedSuccessView extends WorkflowBaseView
 {
     /**
      * Prepares and sets our json data on our webresponse.

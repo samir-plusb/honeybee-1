@@ -1,0 +1,56 @@
+{
+   "identifier": "4f1439bfb4fc475f0b000000",
+   "revision": "5-cfe246ea496c74728ad50cdeb84904af",
+   "ticketId": "292a020eb63a7010cb286568b65fbeb6",
+   "masterRecord": {
+       "identifier": "494aff55de80fbfc5226cadcc65905bd6f3b13f4",
+       "created": {
+           "date": "2012-03-19T18:18:37+0100",
+           "user": "system"
+       },
+       "lastModified": {
+           "date": "2012-03-19T18:18:37+0100",
+           "user": "system"
+       },
+       "source": "prototype.category",
+       "timestamp": "2012-03-30T13:40:35+0200",
+       "name": "Ärtze und Mediziner",
+       "alias": "Aerzte",
+       "singular": "Arzt",
+       "plural": "Ärzte",
+       "genderArticle": "der",
+       "text": "(text) Ärzte helfen ihnen wieder zu fit zu werden.",
+       "keywords": null,
+       "tags": [
+           "tagone",
+           "tagtwo"
+       ],
+       "salesManager": {
+           "name": "mister derickson",
+           "email": "foo@bar.com",
+           "phone": "030-29033127"
+       },
+       "vertical": {
+           "id": "4f1439bfdf3fc4sad0b000000",
+           "name": "Gesundheit und Sport"
+       },
+       "parentIdentifier": "4f1439bfb4fc475f0b000000",
+       "origin": null
+   },
+   "attributes": {
+   },
+   "currentState": {
+       "workflow": "shofi_categories",
+       "step": "edit_category",
+       "owner": "nobody"
+   },
+   "created": {
+       "date": "2012-03-19T18:18:37+0100",
+       "user": "system"
+   },
+   "lastModified": {
+       "date": "2012-03-19T18:18:37+0100",
+       "user": "system"
+   },
+   "type": "ShofiCategoriesWorkflowItem"
+}

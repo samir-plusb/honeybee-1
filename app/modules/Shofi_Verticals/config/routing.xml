@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
+
+    <ae:configuration context="web">
+        <routes>
+            <!-- web views -->
+            <route name=".list" pattern="/list" action="List" method="read" />
+            <route name=".suggest" pattern="/suggest" action="Suggest" method="read" />
+            <route name=".edit" pattern="/edit" action="Edit" />
+        </routes>
+    </ae:configuration>
+
+    <ae:configuration context="console">
+        <routes>
+            <route pattern="shofi_verticals." module="Shofi_Verticals" />
+        </routes>
+    </ae:configuration>
+
+</ae:configurations>

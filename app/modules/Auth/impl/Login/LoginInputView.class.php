@@ -12,6 +12,12 @@
  */
 class Auth_Login_LoginInputView extends AuthBaseView
 {
+    public function executeBinary(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        $this->memoizeLocationForLaterRedirect();
+        $this->getContext()->getController()->getGlobalResponse()->setHttpStatusCode(401);
+    }
+
     /**
      * Execute any html related presentation logic and sets up our template attributes.
      *
@@ -22,27 +28,7 @@ class Auth_Login_LoginInputView extends AuthBaseView
         parent::setupHtml($parameters);
 
         $translationManager = $this->getContext()->getTranslationManager();
-
-        if ($this->getContext()->getRequest()->hasAttributeNamespace('org.agavi.controller.forwards.login'))
-        {
-            // we were redirected to the login form by the controller because the requested action required security
-            // so store the input URL in the session for a redirect after login
-            $url = $this->getContext()->getRequest()->getUrl();
-
-            /**
-             * Prevent redirecting to strange urls after logging in (js, css files, ...)
-             */
-            if (!preg_match('#\.(jpe?g|css|js|png|gif|ico|swf)\??#', $url))
-            {
-                $this->getContext()->getUser()->setAttribute('redirect', $url, 'de.berlinonline.contentworker.login');
-            }
-        }
-        else
-        {
-            // clear the redirect URL just to be sure
-            $this->getContext()->getUser()->removeAttribute('redirect', 'de.berlinonline.contentworker.login');
-        }
-
+        $this->memoizeLocationForLaterRedirect();
         // set the title
         $this->setAttribute('_title', $translationManager->_('Login', 'auth.ui'));
     }
@@ -89,6 +75,29 @@ class Auth_Login_LoginInputView extends AuthBaseView
                 'auth.messages'
             )
         );
+    }
+
+    protected function memoizeLocationForLaterRedirect()
+    {
+        if ($this->getContext()->getRequest()->hasAttributeNamespace('org.agavi.controller.forwards.login'))
+        {
+            // we were redirected to the login form by the controller because the requested action required security
+            // so store the input URL in the session for a redirect after login
+            $url = $this->getContext()->getRequest()->getUrl();
+
+            /**
+             * Prevent redirecting to strange urls after logging in (js, css files, ...)
+             */
+            if (!preg_match('#\.(jpe?g|css|js|png|gif|ico|swf)\??#', $url))
+            {
+                $this->getContext()->getUser()->setAttribute('redirect', $url, 'de.berlinonline.contentworker.login');
+            }
+        }
+        else
+        {
+            // clear the redirect URL just to be sure
+            $this->getContext()->getUser()->removeAttribute('redirect', 'de.berlinonline.contentworker.login');
+        }
     }
 }
 

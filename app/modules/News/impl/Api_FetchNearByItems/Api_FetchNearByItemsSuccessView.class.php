@@ -4,7 +4,7 @@
  * The News_Api_FetchNearByItems_Api_FetchNearByItemsSuccessView class
  * handles Items/FetchNearByItems success data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
@@ -23,17 +23,17 @@ class News_Api_FetchNearByItems_Api_FetchNearByItemsSuccessView extends NewsBase
     public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $listData = array();
-        $ticketPeer = Workflow_SupervisorModel::getInstance()->getTicketPeer();
+        $ticketStore = WorkflowSupervisor::getInstance()->getWorkflowTicketStore();
         foreach ($this->getAttribute('items', array()) as $item)
         {
             $itemData = $item->toArray();
-            $ticket = $ticketPeer->getTicketById($itemData['ticketId']);
+            $ticket = $ticketStore->fetchByIdentifier($itemData['ticketId']);
             $itemData['ticket'] = array(
                 'id' => $ticket->getIdentifier(),
                 'rev' => $ticket->getRevision()
             );
-            $itemData['importItem']['content'] = strip_tags(
-                htmlspecialchars_decode($itemData['importItem']['content'])
+            $itemData['masterRecord']['content'] = strip_tags(
+                htmlspecialchars_decode($itemData['masterRecord']['content'])
             );
             $itemData['owner'] = $ticket->getCurrentOwner();
             $listData[] = $itemData;

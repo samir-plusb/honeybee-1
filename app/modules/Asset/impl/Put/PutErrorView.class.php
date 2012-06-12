@@ -3,7 +3,7 @@
 /**
  * The Asset_Put_PutSuccessView class handle the presentation logic for our Asset/Put actions's error data.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

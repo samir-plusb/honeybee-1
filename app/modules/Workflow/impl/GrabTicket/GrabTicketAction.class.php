@@ -2,10 +2,11 @@
 /**
  *
  * @copyright BerlinOnline
- * @version $Id: Workflow_GrabTicketAction.class.php -1   $
+ * @version $Id$
  * @package Workflow
+ * @subpackage Mvc
  */
-class Workflow_GrabTicketAction extends ProjectBaseAction
+class Workflow_GrabTicketAction extends WorkflowBaseAction
 {
     /**
      * (non-PHPdoc)
@@ -16,6 +17,10 @@ class Workflow_GrabTicketAction extends ProjectBaseAction
      */
     public function executeRead(AgaviParameterHolder $parameters) // @codingStandardsIgnoreEnd
     {
+        $supervisor = $parameters->getParameter(WorkflowSupervisorValidator::DEFAULT_EXPORT);
+
+        error_log(__METHOD__ . " " . get_class($supervisor));
+
         /* @var $ticket WorkflowTicket */
         $ticket = $parameters->getParameter('ticket');
         $this->setAttribute('ticket', $ticket);
@@ -30,9 +35,17 @@ class Workflow_GrabTicketAction extends ProjectBaseAction
 
             try
             {
-                $supervisor = Workflow_SupervisorModel::getInstance();
-                if ($supervisor->getTicketPeer()->saveTicket($ticket))
+                if ($supervisor->getWorkflowTicketStore()->save($ticket))
                 {
+                    $item = $supervisor->getWorkflowItemStore()->fetchByIdentifier($ticket->getItem());
+                    $supervisor->getWorkflowItemStore()->save(
+                        $item->setCurrentState(array(
+                            'workflow' => $ticket->getWorkflow(),
+                            'step'     => $ticket->getCurrentStep(),
+                            'owner'    => $ticket->getCurrentOwner()
+                        ))
+                    );
+                    $supervisor->getWorkflowItemStore()->save($item);
                     return 'Success';
                 }
                 $error = $translationManager->_('invalid_rev_text', 'workflow.errors');

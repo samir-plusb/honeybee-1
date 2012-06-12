@@ -4,7 +4,7 @@
  * The LdapAuthProvider provides authentication to the configured ldap server.
  * It's settings are configured with a 'ldap.' prefix inside the app's settings.xml.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Auth
@@ -301,9 +301,9 @@ class LdapAuthProvider extends BaseAuthProvider
                 $userAttributes['ldap_groups'][] = $val[$ldapGroupAttr][0];
             }
         }
-        if (0 < count($userAttributes['ldap_groups']))
+        if (! empty($userAttributes['ldap_groups']))
         {
-            $userAttributes['external_role'] = $userAttributes['ldap_groups'][0];
+            $userAttributes['external_roles'] = $userAttributes['ldap_groups'];
         }
         return $userAttributes;
     }

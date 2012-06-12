@@ -12,7 +12,7 @@ class WorkflowHandler
     /**
      * maximal number of executions of one specific workflow step to avoid endless workflow loops
      */
-    const MAX_STEP_EXECUTIONS = 20;
+    const MAX_STEP_EXECUTIONS = 2000;
 
     /**
      * workflow process error
@@ -75,9 +75,14 @@ class WorkflowHandler
     private $ticket;
 
     /**
+     * @var WorkflowSupervisor
+     */
+    protected $supervisor;
+
+    /**
      * initialize workflow
      *
-     * This method is called by {@see Workflow_SupervisorModel::getWorkflowByName()} after reading and parsing a
+     * This method is called by {@see WorkflowSupervisor::getWorkflowByName()} after reading and parsing a
      * workflow xml definition.
      *
      * The array for $config parameter has the form:
@@ -110,7 +115,7 @@ class WorkflowHandler
      *  </pre>
      *
      * @throws WorkflowException on invalid workflow structure
-     * @see Workflow_SupervisorModel::getWorkflowByName()
+     * @see WorkflowSupervisor::getWorkflowByName()
      * @param array $config parse result of xml workflow definition in the format
      *                      AgaviReturnArrayConfigHandler::convertToArray
      */
@@ -120,6 +125,11 @@ class WorkflowHandler
         $this->description = $config['description'];
         $this->firstStep = $config['start_at'];
         $this->steps = $config['steps'];
+    }
+
+    public function setSupervisor(WorkflowSupervisor $supervisor)
+    {
+        $this->supervisor = $supervisor;
     }
 
     /**
@@ -168,7 +178,7 @@ class WorkflowHandler
                 $code = $this->useGate($initalGate);
                 $initalGate = NULL;
             }
-            $this->getPeer()->saveTicket($ticket);
+            $this->getWorkflowTicketStore()->save($ticket);
         }
         // @todo Unset ticket afterwards?
         // Not that it would matter as this instance is thrown away after run...
@@ -450,12 +460,11 @@ class WorkflowHandler
     }
 
     /**
-     * @todo Rename to getTicketPeer
-     * @return WorkflowTicketPeer
+     * @return WorkflowTicketStore
      */
-    public function getPeer()
+    public function getWorkflowTicketStore()
     {
-        return Workflow_SupervisorModel::getInstance()->getTicketPeer();
+        return $this->supervisor->getWorkflowTicketStore();
     }
 
     /**

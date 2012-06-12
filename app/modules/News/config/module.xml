@@ -1,26 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations
-	xmlns="http://agavi.org/agavi/config/parts/module/1.1"
-	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
-	<ae:configuration>
-		<module enabled="true">
-			<settings>
-				<setting name="title">News Module</setting>
-				<setting name="authors">
-					<ae:parameter name="thorsten.schmittrink@berlinonline.de">Thorsten Schmitt-Rink</ae:parameter>
-				</setting>
-				<setting name="homepage">http://www.agavi.org</setting>
-				<setting name="update_url" />
-				<setting name="description">
-                                    This module provides access to local news data, which is composed of different data sources such as imperia, procmail or the dpa stream.
-                                </setting>
-				<setting name="agavi.action.path">%core.module_dir%/${moduleName}/impl/${actionName}/${actionName}Action.class.php</setting>
-				<setting name="agavi.cache.path">%core.module_dir%/${moduleName}/impl/${actionName}/${actionName}.cache.xml</setting>
-				<setting name="agavi.template.directory">%core.module_dir%/${module}/impl/</setting>
-				<setting name="agavi.validate.path">%core.module_dir%/${moduleName}/impl/${actionName}/${actionName}.validate.xml</setting>
-				<setting name="agavi.view.path">%core.module_dir%/${moduleName}/impl/${viewName}View.class.php</setting>
-				<setting name="agavi.view.name">${actionName}/${actionName}${viewName}</setting>
-			</settings>
-		</module>
-	</ae:configuration>
+    xmlns="http://agavi.org/agavi/config/parts/module/1.1"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <module enabled="true">
+
+            <!--
+            ############################
+            #         Agavi Core       #
+            ############################
+            -->
+            <settings>
+                <!-- module meta data -->
+                <setting name="title">News Module</setting>
+                <setting name="authors">
+                    <ae:parameter name="thorsten.schmitt-rink@berlinonline.de">Thorsten Schmitt-Rink</ae:parameter>
+                </setting>
+                <setting name="homepage">http://www.berlinonline.de</setting>
+                <setting name="update_url" />
+                <setting name="description">
+                    This module provides access to news data, thereby integrating into the Import
+                    and the Workflow modules by providing the required interface implementations with news specialization.
+                    The data imported for this module is composed of different data sources such as imperia, procmail or the dpa stream
+                </setting>
+
+                <!-- impl directory layout -->
+                <setting name="agavi.action.path">%core.module_dir%/${moduleName}/impl/${actionName}/${actionName}Action.class.php</setting>
+                <setting name="agavi.cache.path">%core.module_dir%/${moduleName}/impl/${actionName}/${actionName}.cache.xml</setting>
+                <setting name="agavi.template.directory">%core.module_dir%/${module}/impl/</setting>
+                <setting name="agavi.validate.path">%core.module_dir%/${moduleName}/impl/${actionName}/${actionName}.validate.xml</setting>
+                <setting name="agavi.view.path">%core.module_dir%/${moduleName}/impl/${viewName}View.class.php</setting>
+                <setting name="agavi.view.name">${actionName}/${actionName}${viewName}</setting>
+            </settings>
+
+            <!--
+            ############################
+            #       Shofi Specific     #
+            ############################
+            -->
+            <settings prefix="news.">
+                <!-- list integration {@see IListConfig} -->
+                <setting name="list_config">
+                    <!-- common list params -->
+                    <ae:parameter name="defaultLimit">15</ae:parameter>
+                    <ae:parameter name="translationDomain">news.list</ae:parameter>
+                    <ae:parameter name="pagingRange">9</ae:parameter>
+                    <ae:parameter name="routeName">news.list</ae:parameter>
+                    <ae:parameter name="typeKey">news</ae:parameter>
+
+                    <!--
+                        define which list data shall be displayed
+                        the names are fully qualified paths referring to values inside the list data
+                    -->
+                    <ae:parameter name="fields">
+                        <ae:parameters>
+                            <ae:parameter name="title">
+                                <ae:parameter name="valuefield">masterRecord.title</ae:parameter>
+                                <ae:parameter name="sortfield">masterRecord.title.title_sortable</ae:parameter>
+                            </ae:parameter>
+                            <ae:parameter name="source">
+                                <ae:parameter name="valuefield">masterRecord.source</ae:parameter>
+                                <ae:parameter name="sortfield">masterRecord.source.source_sortable</ae:parameter>
+                            </ae:parameter>
+                            <ae:parameter name="created">
+                                <ae:parameter name="valuefield">masterRecord.created.date</ae:parameter>
+                                <ae:parameter name="sortfield">masterRecord.created.date</ae:parameter>
+                            </ae:parameter>
+                            <ae:parameter name="category">
+                                <ae:parameter name="valuefield">masterRecord.category</ae:parameter>
+                                <ae:parameter name="sortfield">masterRecord.category.category_sortable</ae:parameter>
+                            </ae:parameter>
+                            <ae:parameter name="step">
+                                <ae:parameter name="valuefield">currentState.step</ae:parameter>
+                                <ae:parameter name="sortfield">currentState.step</ae:parameter>
+                            </ae:parameter>
+                            <ae:parameter name="owner">
+                                <ae:parameter name="valuefield">currentState.owner</ae:parameter>
+                                <ae:parameter name="sortfield">currentState.owner</ae:parameter>
+                            </ae:parameter>
+                        </ae:parameters>
+                    </ae:parameter>
+
+                    <!-- map fieldnames to the fields used for sorting inside the elasticsearch the index. -->
+                    <ae:parameter name="sortAliases">
+                        <ae:parameters>
+                            <ae:parameter name="masterRecord.title">masterRecord.title.title_sortable</ae:parameter>
+                            <ae:parameter name="masterRecord.source">masterRecord.source.source_sortable</ae:parameter>
+                            <ae:parameter name="masterRecord.category">masterRecord.category.category_sortable</ae:parameter>
+                        </ae:parameters>
+                    </ae:parameter>
+
+                    <!-- define our clientside controller along with some options -->
+                    <ae:parameter name="clientSideController">
+                        <ae:parameter name="implementor">ListController</ae:parameter>
+                    </ae:parameter>
+
+                    <!--
+                        define the actions that are available for the list items and batch processing:
+                        - you can choose to delegate actions to the workflow handler or the configured client-side controller
+                        - actions are assigned using a simple invocation syntax refering to either the workflow handler or controller.
+                        - whereas the workflow handler only provides a proceed and a run method, 
+                          by changing the controller implementation you can easily pluck in new actions by extending the base controller.
+                        by convention the first two parameters of your controller's action callbacks should always be "is_batch" and "item".
+                    -->
+                    <ae:parameter name="itemActions">
+                        <ae:parameters>
+                            <ae:parameter name="edit">ctrl.run(is_batch, item)</ae:parameter>
+                            <ae:parameter name="promote">ctrl.proceed(is_batch, item, 'promote')</ae:parameter>
+                            <ae:parameter name="delete">ctrl.proceed(is_batch, item, 'delete')</ae:parameter>
+                        </ae:parameters>
+                    </ae:parameter>
+
+                    <ae:parameter name="batchActions">
+                        <ae:parameters>
+                            <ae:parameter name="promote">ctrl.proceed(is_batch, null, 'promote')</ae:parameter>
+                            <ae:parameter name="delete">ctrl.proceed(is_batch, null, 'delete')</ae:parameter>
+                        </ae:parameters>
+                    </ae:parameter>
+                </setting>
+            </settings>
+        </module>
+    </ae:configuration>
 </ae:configurations>

@@ -4,8 +4,6 @@
         <routes>
             <route pattern="import." module="Import">
                 <route pattern="run" action="Run" method="write" />
-                <route pattern="trigger.imperia" action="TriggerImperia" method="write" />
-                <route pattern="trigger.mail" action="TriggerMail" method="write" />
                 <route pattern="fixtures" action="Fixtures" method="write" />
             </route>
         </routes>

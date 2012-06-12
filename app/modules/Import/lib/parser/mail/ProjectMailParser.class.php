@@ -5,11 +5,11 @@
  * and adds in some usefull stuff, such as encoding awareness, a bit more convenient access
  * to dates, subject and mail body and documents the available headers/bodies via constants.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Parser
+ * @subpackage      Parser/Mail
  */
 class ProjectMailParser extends MimeMailParser
 {
@@ -50,6 +50,8 @@ class ProjectMailParser extends MimeMailParser
      * and can be used with mb_* string functions.
      */
     const ENC_UTF8 = 'UTF-8';
+
+    const DEFAULT_ENC = 'WINDOWS-1252';
 
     /**
      * Holds a flag that represents a 'no value' state
@@ -173,7 +175,7 @@ class ProjectMailParser extends MimeMailParser
 
         if ($targetEncoding !== $currentEncoding)
         {
-            $body = mb_convert_encoding($body, $targetEncoding, $currentEncoding);
+            $body = mb_convert_encoding($body, $targetEncoding, $currentEncoding ? $currentEncoding : self::DEFAULT_ENC);
         }
 
         $this->body[$type] = $body;

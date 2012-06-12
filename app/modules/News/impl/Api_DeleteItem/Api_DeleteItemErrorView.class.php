@@ -3,7 +3,7 @@
 /**
  * The News_Api_DeleteItem_Api_DeleteItemErrorView class handles News/Api_DeleteItem's error data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

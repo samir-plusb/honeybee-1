@@ -43,6 +43,7 @@
             <setting name="use_security">true</setting>
             <setting name="use_translation">true</setting>
             <setting name="auth_provider">LdapAuthProvider</setting>
+            <setting name="test_bootstrap_tpl">%core.app_dir%/../testing/TestCaseMethod.tpl</setting>
         </settings>
 
         <settings prefix="ldap.">
@@ -58,18 +59,11 @@
             <setting name="group_member_attr">member</setting>
             <setting name="group_member_attr_is_dn">true</setting>
             <setting name="group_name_attr">cn</setting>
-            <setting name="group_required">files</setting>
-        </settings>
-
-        <!-- @todo as these are import related, move them to the import settings node. -->
-        <settings prefix="imperia.">
-            <setting name="base_url">https://imperia.berlinonline.de/</setting>
+            <setting name="group_required">midas.editor</setting>
         </settings>
 
         <settings prefix="import.">
             <setting name="config_dir">%core.modules_dir%/Import/config/</setting>
-            <setting name="newswire_dir">/var/tmp/dpa/regio-berlinbrandenburg/</setting>
-            <setting name="imperia_datarecord.base_href">http://www.berlin.de</setting>
         </settings>
 
         <settings prefix="assets.">
@@ -77,7 +71,23 @@
             <setting name="base_dir">%core.app_dir%/../data/assets</setting>
         </settings>
 
+        <!-- @todo: Move to the concrete module directories and auto include somehow. -->
+        <settings prefix="workflow.">
+            <setting name="workflows">
+                <ae:parameter name="news">%core.module_dir%/News/config/workflow/standard.workflow.xml</ae:parameter>
+                <ae:parameter name="shofi_places">%core.module_dir%/Shofi/config/workflows.xml</ae:parameter>
+                <ae:parameter name="shofi_categories">%core.module_dir%/Shofi_Categories/config/workflows.xml</ae:parameter>
+                <ae:parameter name="shofi_verticals">%core.module_dir%/Shofi_Verticals/config/workflows.xml</ae:parameter>
+            </setting>
+        </settings>
+
+        <!-- move to the news module -->
         <settings prefix="news.">
+            <!--  News-Import related settings. -->
+            <setting name="import.newswire_dir">/var/tmp/dpa/regio-berlinbrandenburg/</setting>
+            <setting name="imperia.asset_base_href">http://www.berlin.de/</setting>
+            <setting name="imperia.base_url">https://imperia.berlinonline.de/</setting>
+
             <!--
                 This settings defines the name of the database (databases.xml) connections,
                 that are used by the news module to write(couch) and read(elastic) data.
@@ -86,15 +96,15 @@
             -->
             <setting name="connections">
                 <ae:parameters>
-                    <ae:parameter name="couchdb">CouchWorkflow</ae:parameter>
-                    <ae:parameter name="elasticsearch">EsNews</ae:parameter>
+                    <ae:parameter name="couchdb">News.Write</ae:parameter>
+                    <ae:parameter name="elasticsearch">News.Read</ae:parameter>
                 </ae:parameters>
             </setting>
             <!--
                 These setting specify external urls that we call to get some work done for us.
             -->
             <setting name="localize_api_url">http://geoprototype.berlinonline.de/api/query</setting>
-            <setting name="frontend_api_url">http://bo-proto.h1960801.stratoserver.net/news/api/</setting>
+            <setting name="frontend_api_url">http://prodmgm.berlinonline.de/news/api/</setting>
             <setting name="frontend_sync">off</setting>
             <!--
                 The tags and categories settings define values that are used as dropdown options
@@ -120,6 +130,40 @@
             </setting>
         </settings>
 
+        <!-- move to the shofi module -->
+        <settings prefix="shofi.">
+            <setting name="cm_export_url">http://cm-fe.dev/index.php/adressen/midas-import</setting>
+            <setting name="cm_export_enabled">false</setting>
+            <setting name="connections">
+                <ae:parameters>
+                    <ae:parameter name="couchdb">Shofi.Write</ae:parameter>
+                    <ae:parameter name="elasticsearch">Shofi.Read</ae:parameter>
+                </ae:parameters>
+            </setting>
+        </settings>
+
+        <!-- move to the shofi_categories module -->
+        <settings prefix="shofi_categories.">
+            <setting name="cm_export_url">http://cm-fe.dev/index.php/adressen/midas-import</setting>
+            <setting name="cm_export_enabled">false</setting>
+            <setting name="connections">
+                <ae:parameters>
+                    <ae:parameter name="couchdb">Shofi.Write</ae:parameter>
+                    <ae:parameter name="elasticsearch">Shofi.Read</ae:parameter>
+                </ae:parameters>
+            </setting>
+        </settings>
+
+        <!-- move to the shofi_categories module -->
+        <settings prefix="shofi_verticals.">
+            <setting name="connections">
+                <ae:parameters>
+                    <ae:parameter name="couchdb">Shofi.Write</ae:parameter>
+                    <ae:parameter name="elasticsearch">Shofi.Read</ae:parameter>
+                </ae:parameters>
+            </setting>
+        </settings>
+
         <exception_templates>
             <exception_template>%core.agavi_dir%/exception/templates/shiny.php</exception_template>
             <exception_template context="console">%core.agavi_dir%/exception/templates/plaintext.php</exception_template>
@@ -134,6 +178,35 @@
     <ae:configuration environment="production-hetzner">
         <settings prefix="news.">
             <setting name="frontend_sync">on</setting>
+        </settings>
+
+         <settings prefix="shofi.">
+            <setting name="cm_export_url">http://bde.cms.berlinonline.de/adressen/midas-import</setting>
+            <setting name="cm_export_enabled">false</setting>
+            <setting name="connections">
+                <ae:parameters>
+                    <ae:parameter name="couchdb">Shofi.Write</ae:parameter>
+                    <ae:parameter name="elasticsearch">Shofi.Read</ae:parameter>
+                </ae:parameters>
+            </setting>
+        </settings>
+    </ae:configuration>
+
+    <!--
+    ####################
+    STAGE
+    ####################
+    -->
+    <ae:configuration environment="stage">
+        <settings prefix="shofi.">
+            <setting name="cm_export_url">http://bde.cms.berlinonline.de/adressen/midas-import</setting>
+            <setting name="cm_export_enabled">true</setting>
+            <setting name="connections">
+                <ae:parameters>
+                    <ae:parameter name="couchdb">Shofi.Write</ae:parameter>
+                    <ae:parameter name="elasticsearch">Shofi.Read</ae:parameter>
+                </ae:parameters>
+            </setting>
         </settings>
     </ae:configuration>
 
@@ -223,11 +296,11 @@
             <setting name="auth_provider">SimpleAuthProvider</setting>
             <setting name="simple_logins">
                 <ae:parameters>
-                    <ae:parameter name="general_g">
-                        <ae:parameter name="pwd">n0tf0und</ae:parameter>
+                    <ae:parameter name="shrink0r">
+                        <ae:parameter name="pwd">shrink0r</ae:parameter>
                         <ae:parameter name="attributes">
                             <ae:parameter name="acl_role">news-editor</ae:parameter>
-                            <ae:parameter name="login">general</ae:parameter>
+                            <ae:parameter name="login">shrink0r</ae:parameter>
                             <ae:parameter name="name">General Gaff</ae:parameter>
                             <ae:parameter name="email">general@null.ly</ae:parameter>
                         </ae:parameter>
@@ -244,9 +317,18 @@
     ####################
     -->
     <ae:configuration environment="testing.*">
+        <settings prefix="assets.">
+            <setting name="mime_database">/usr/share/misc/magic.mgc</setting>
+            <setting name="base_dir">%core.app_dir%/../data/testing/assets</setting>
+        </settings>
+
+        <settings prefix="curl.">
+            <setting name="timeout">10</setting>
+        </settings>
+
         <settings>
-            <setting name="fixture_server_url">http://ci.berlinonline.de/fixtures</setting>
-            <setting name="fixtures_dir">%core.app_dir%/../testing/fixtures/</setting>
+            <setting name="fixture_server_url">http://ci.berlinonline.de/fixtures</setting><!-- Testing only setting -->
+            <setting name="fixtures_dir">%core.app_dir%/../testing/fixtures/</setting><!-- Testing only setting -->
             <setting name="default_context">web</setting>
             <!-- @todo Nest the logins as auth provider parameters -->
             <setting name="auth_provider">SimpleAuthProvider</setting>
@@ -266,12 +348,42 @@
         </settings>
 
         <settings prefix="import.">
-            <setting name="imperia_cat_url">
+            <setting name="config_dir">%core.app_dir%/../testing/fixtures/Import/config/</setting>
+        </settings>
+
+        <settings prefix="news.">
+            <setting name="import.newswire_dir">%core.app_dir%/../testing/fixtures/News/import/newswire/</setting>
+            <setting name="imperia.category_url"><!-- Testing only setting -->
                 https://imperia.berlinonline.de/cgi-bin/xml_export.pl?catid=/2/10/64/10935/
             </setting>
-            <setting name="config_dir">%core.app_dir%/../testing/fixtures/import/config/</setting>
-            <setting name="newswire_dir">%core.app_dir%/../testing/fixtures/import/newswire/</setting>
+        </settings>
+
+        <settings prefix="shofi.">
+            <setting name="cm_export_enabled">off</setting>
         </settings>
     </ae:configuration>
+
+    <ae:configuration environment="testing.development-shrink-work">
+
+         <settings prefix="curl.">
+            <setting name="proxy">proxy2:3128</setting>
+        </settings>
+
+        <settings prefix="shofi.">
+            <setting name="cm_export_url">http://localhost/contentmachine/fe/index.php/adressen/midas-import</setting>
+        </settings>
+    </ae:configuration>
+
+    <xi:include href="%core.module_dir%/Shofi/config/settings.xml"
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+    </xi:include>
+
+    <xi:include href="%core.module_dir%/Shofi_Categories/config/settings.xml"
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+    </xi:include>
+
+    <xi:include href="%core.module_dir%/Shofi_Verticals/config/settings.xml"
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+    </xi:include>
 
 </ae:configurations>

@@ -190,7 +190,7 @@ class Elastica_Client
 				'index' => array(
 					'_index' => $doc->getIndex(),
 					'_type' => $doc->getType(),
-					'_id' => $doc->getId()
+					'_id' => $doc->getIdentifier()
 				)
 			);
 

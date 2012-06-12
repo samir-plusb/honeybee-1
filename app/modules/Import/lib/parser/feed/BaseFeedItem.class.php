@@ -8,7 +8,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @package         Import
- * @subpackage      Parser
+ * @subpackage      Parser/Feed
  */
 abstract class BaseFeedItem
 {
@@ -19,7 +19,7 @@ abstract class BaseFeedItem
      *
      * @var         string
      */
-    protected  $id;
+    protected  $identifier;
 
     /**
      * Holds our author.
@@ -115,9 +115,9 @@ abstract class BaseFeedItem
 
     // ---------------------------------- </ABSTRACT METHODS> ------------------------------------
 
-    public function getId()
+    public function getIdentifier()
     {
-        return empty($this->id) ? $this->getLink() : $this->id;
+        return empty($this->identifier) ? $this->getLink() : $this->identifier;
     }
 
     /**
@@ -130,7 +130,7 @@ abstract class BaseFeedItem
         $nodeList = $this->query($expression);
         if ($nodeList)
         {
-            $this->id = $nodeList->item(0)->nodeValue;
+            $this->identifier = $nodeList->item(0)->nodeValue;
         }
     }
 

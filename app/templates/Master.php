@@ -9,8 +9,16 @@ $dir = (($locale->getCharacterOrientation() == 'right-to-left') ? 'rtl' : 'ltr')
         <title><?php echo htmlspecialchars($t['_title']); ?></title>
         <base href="<?php echo $ro->getBaseHref(); ?>" id="base_href"/>
         <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
     </head>
     <body>
+        <?php echo $slots['header']; ?>
+
         <?php echo $inner; ?>
+
+        <footer class="container-fluid">
+            <hr />
+            <p>&#169;BerlinOnline 2012</p>
+        </footer>
     </body>
 </html>

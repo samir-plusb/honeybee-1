@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * ProjectScriptsConfigHandler parses configuration files that follow the midas scripts.xsd markup.
+ *
+ * @version    $Id$
+ * @author     Thorsten Schmitt-Rink
+ * @package    Project
+ * @subpackage Agavi/ConfigHandler
+ */
 class ProjectScriptsConfigHandler extends AgaviXmlConfigHandler
 {
     const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/config/scripts/1.0';

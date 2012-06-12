@@ -21,12 +21,12 @@ class EditActionTest extends AgaviActionTestCase
         parent::setUp();
 
         AgaviConfig::set('news.connections', array(
-            'elasticsearch' => 'EsNewsFixtures',
-            'couchdb' => 'CouchWorkflowFixtures'
+            'elasticsearch' => 'News.ReadFixtures',
+            'couchdb' => 'News.WriteFixtures'
         ));
 
-        $couchDb = Workflow_SupervisorModel::getInstance()->getDatabase();
-        $ticketResp = $couchDb->getView(NULL, 'designWorkflow', 'ticketList', array('limit' => 1));
+        $couchDb = WorkflowSupervisorFactory::createByTypeKey('news')->getDatabase();
+        $ticketResp = $couchDb->getView(NULL, 'tickets', 'all', array('limit' => 1));
 
         $this->ticketId = $ticketResp['rows'][0]['id'];
     }

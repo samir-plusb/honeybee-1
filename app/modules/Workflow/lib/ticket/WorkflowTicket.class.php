@@ -1,201 +1,165 @@
 <?php
 /**
- * A ticket holds the state of one content item in the the associated workflow.
+ * A ticket holds an IWorkflowItem's workflow state, meaning information on what workflow the item is in
+ * and at what position in what state the workflow execution has proceeded to.
+ * It also keeps track of which steps have been executed how many times and serves as a token,
+ * that users must own, when they intend to modify data within the workflow context.
  *
- * @package Workflow
- * @author tay
- * @version $Id$
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @SuppressWarnings(PHPMD.NPathComplexity)
- * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @author          tay
+ * @version         $Id$
+ * @package         Workflow
+ * @subpackage      Ticket
  */
-class WorkflowTicket extends AgaviParameterHolder implements Serializable
+class WorkflowTicket extends BaseDocument
 {
     /**
-     * name of the null user, that indicates no one is currently owning the ticket
+     * The name of the null user, that indicates no one is currently owning the ticket.
      *
      * @var string
      */
     const NULL_USER = 'nobody';
 
     /**
-     * document id in database
+     * The ticket's current revision.
      *
      * @var string
      */
-    private $id;
+    protected $revision;
 
     /**
-     * document release in database
-     *
-     * @var string
-     */
-    private $rev;
-
-    /**
-     * result of last processed plugin
+     * Holds the result of the last plugin execution.
      *
      * @var WorkflowPluginResult
      */
-    protected $result;
+    protected $pluginResult;
 
     /**
-     * The ticket belongs to this workflow
+     * Holds the name of the workflow that we are currently in.
      *
      * @var string
      */
     protected $workflow = NULL;
 
-
     /**
-     * identifier of current workflow step
+     * Holds the name of our current step.
      *
      * @var string
      */
     protected $currentStep;
 
     /**
-     * The administrated workflow item
+     * Holds id of our workflow item.
      *
-     * @var IWorkflowItem
+     * @var string
      */
-    protected $workflowItem;
+    protected $item;
 
     /**
-     * the tickets lock status
+     * Holds flag that indicates whether we are currently blocked or not.
      *
      * @var boolean
      */
     protected $blocked;
 
     /**
-     * @todo fill in documentation here
+     * Holds our current session user.
      *
      * @var AgaviUser
      */
     protected $currentOwner;
 
     /**
-     * @todo fill in documentation here
+     * Holds a future date that we will wait for before proceeding the execution.
      *
      * @var DateTime
      */
     protected $waitUntil;
 
     /**
-     * modification time
+     * Holds a timestamp that reflects our last modification date.
      *
      * @var DateTime
      */
     protected $timestamp;
 
     /**
+     * Holds an array that we use to count our step executions.
+     * Each executed has a key with an integer that represents the current count.
      *
      * @var array
      */
     protected $stepCounts = array();
 
     /**
+     * An assoc array array holding an arbitary number of key-value pairs.
+     *
+     * @var array
+     */
+    protected $parameters = array();
+
+    /**
+     * If we are run in the context of an AgaviAction,
+     * this member will point to the execution container surrounding us.
      *
      * @var AgaviExecutionContainer
      */
     private $container;
 
     /**
-     * get the persistent id of ticket if available
+     * Create a fresh workflow ticket instance from the given data and return it.
      *
-     * @return string
+     * @param array $data
+     *
+     * @return WorkflowTicket
      */
-    public function getIdentifier()
+    public static function fromArray(array $data = array())
     {
-        return $this->id;
+        return new WorkflowTicket($data);
     }
 
     /**
-     * set identifier (primary key)
+     * Set the ticket's identifier.
+     * Either called during hydrate or after a ticket has been stored the first time.
      *
      * @param string $identifier
      */
     public function setIdentifier($identifier)
     {
-        $this->id = $identifier;
+        if (! $this->identifier)
+        {
+            $this->identifier = $identifier;
+        }
     }
 
-
     /**
-     * get sub revison id
+     * Get the ticket's current revision.
      *
      * @return string
      */
     public function getRevision()
     {
-        return $this->rev;
+        return $this->revision;
     }
 
-
     /**
-     * set sub revision id (version) of ticket
+     * Set the ticket's revision.
+     * Either called during hydrate or after a ticket has been stored the first time.
      *
      * @param string $revision
      */
     public function setRevision($revision)
     {
-        $this->rev = $revision;
-    }
-
-
-    /**
-     * Set the plugin result state
-     *
-     * This method must only used by plugings to store their result state
-     *
-     * @see WorkflowHandler::run()
-     * @see IWorkflowPlugin::process()
-     *
-     * @param IWorkflowPluginResult $result from plugin process
-     *
-     * @return void
-     */
-    public function setPluginResult(IWorkflowPluginResult $result)
-    {
-        $this->result = $result;
-    }
-
-
-    /**
-     * get last plugin result if any
-     *
-     * @return WorkflowPluginResult
-     */
-    public function getPluginResult()
-    {
-        return $this->result;
+        $this->revision = $revision;
     }
 
     /**
-     * return the number of executions of the current step
+     * Retrieves the workflow attribute.
      *
-     * @return integer
+     * @return string name of used workflow
      */
-    public function countStep()
+    public function getWorkflow()
     {
-        $this->stepCounts[$this->currentStep] =
-            isset($this->stepCounts[$this->currentStep])
-                ? $this->stepCounts[$this->currentStep] + 1
-                : 1;
-        return $this->stepCounts[$this->currentStep];
-    }
-
-
-    /**
-     * reset the ticket to start a new workflow
-     */
-    public function reset()
-    {
-        $this->workflow = NULL;
-        $this->currentStep = NULL;
-        $this->stepCounts = array();
+        return $this->workflow;
     }
 
     /**
@@ -216,29 +180,40 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
         elseif ($workflow)
         {
             $this->workflow = $workflow;
+            $this->onPropertyChanged("workflow");
         }
     }
 
     /**
-     * Retrieves the workflow attribute.
+     * Return the plugin result from the last ticket processing.
      *
-     * @return string name of used workflow
+     * @return IWorkflowPluginResult
      */
-    public function getWorkflow()
+    public function getPluginResult()
     {
-        return $this->workflow;
+        return $this->pluginResult;
     }
 
     /**
-     * Sets the currentStep attribute.
+     * Set the result of the last plugin execution.
      *
-     * @param        string the new value for currentStep
+     * @see WorkflowHandler::run()
+     * @see IWorkflowPlugin::process()
      *
-     * @return       void
+     * @param IWorkflowPluginResult $result
      */
-    public function setCurrentStep($currentStep)
+    public function setPluginResult($result)
     {
-        $this->currentStep = $currentStep;
+        if ($result instanceof  IWorkflowPluginResult)
+        {
+            $this->pluginResult = $result;
+            $this->onPropertyChanged("pluginResult");
+        }
+        else if(is_array($result))
+        {
+            $this->pluginResult = WorkflowPluginResult::fromArray($result);
+            $this->onPropertyChanged("pluginResult");
+        }
     }
 
     /**
@@ -252,37 +227,101 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     }
 
     /**
-     * Sets the importItem attribute.
+     * Sets the currentStep attribute.
      *
-     * @param        IWorkflowItem the new value for importItem
+     * @param        string the new value for currentStep
      *
      * @return       void
      */
-    public function setWorkflowItem(IWorkflowItem $workflowItem)
+    public function setCurrentStep($currentStep)
     {
-        $this->workflowItem = $workflowItem;
+        $this->currentStep = $currentStep;
+        $this->onPropertyChanged("currentStep");
+    }
+
+    /**
+     * return the number of executions of the current step
+     *
+     * @return integer
+     */
+    public function countStep()
+    {
+        $this->stepCounts[$this->currentStep] =
+            isset($this->stepCounts[$this->currentStep])
+                ? $this->stepCounts[$this->currentStep] + 1
+                : 1;
+        $this->onPropertyChanged("stepsCount");
+        return $this->stepCounts[$this->currentStep];
     }
 
     /**
      * Retrieves the workflow item attribute.
      *
-     * @return       IWorkflowItem
+     * @return       string
      */
-    public function getWorkflowItem()
+    public function getItem()
     {
-        return $this->workflowItem;
+        return $this->item;
     }
 
     /**
-     * Sets the blocked attribute.
+     * Sets the workflowItem attribute.
      *
-     * @param        boolean the new value for blocked
+     * @param        IWorkflowItem the new value for workflowItem
      *
      * @return       void
      */
-    public function setBlocked($blocked)
+    public function setItem($item)
     {
-        $this->blocked = $blocked ? TRUE : FALSE;
+        if ($item instanceof IWorkflowItem)
+        {
+            $this->item = $item->getIdentifier();
+            $this->onPropertyChanged("item");
+        }
+        else
+        {
+            $this->item = $item;
+            $this->onPropertyChanged("item");
+        }
+    }
+
+    /**
+     * Return the ticket's parameters.
+     *
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * Return the value of the parameter with the given name.
+     *
+     * @param string $name The name of the parameter to get the value for.
+     * @param mixed $default The value to return if the parameter is not set.
+     *
+     * @return mixed Either the parameter value or $default if the parameter is not set.
+     */
+    public function getParameter($name, $default)
+    {
+        if (array_key_exists($name, $this->parameters))
+        {
+            return $this->parameters[$name];
+        }
+        return $default;
+    }
+
+    /**
+     * Set a value for the given parameter.
+     *
+     * @param string $name The name of the value to set the parameter for.
+     * @param mixed $value The value to set for the given parameter name.
+     */
+    public function setParameter($name, $value)
+    {
+        $this->parameters[$name] = $value;
+        $this->onPropertyChanged("parameters");
     }
 
     /**
@@ -296,15 +335,26 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     }
 
     /**
-     * Sets the name of the user currently owning this ticket.
+     * Sets the blocked attribute.
      *
-     * @param        string
+     * @param        boolean the new value for blocked
      *
      * @return       void
      */
-    public function setCurrentOwner($currentOwner)
+    public function setBlocked($blocked)
     {
-        $this->currentOwner = $currentOwner;
+        $this->blocked = $blocked ? TRUE : FALSE;
+        $this->onPropertyChanged("blocked");
+    }
+
+    /**
+     * Reset the ticket to start a new workflow.
+     */
+    public function reset()
+    {
+        $this->workflow = NULL;
+        $this->currentStep = NULL;
+        $this->stepCounts = array();
     }
 
     /**
@@ -318,26 +368,16 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     }
 
     /**
-     * Sets the waitUntil attribute.
+     * Sets the name of the user currently owning this ticket.
      *
-     * @param        DateTime the new value for waitUntil
+     * @param        string
      *
      * @return       void
      */
-    public function setWaitUntil(DateTime $waitUntil = NULL)
+    public function setCurrentOwner($currentOwner)
     {
-        $this->waitUntil = $waitUntil;
-    }
-
-
-    /**
-     * Sets the waitUntil attribute.
-     *
-     * @param string $iso8601 the new value for waitUntil in Iso8601 format
-     */
-    public function setWaitUntilFromIso8601($iso8601)
-    {
-        $this->setWaitUntil(empty($iso8601) ? NULL : new DateTiem($iso8601));
+        $this->currentOwner = $currentOwner;
+        $this->onPropertyChanged("currentOwner");
     }
 
     /**
@@ -351,101 +391,28 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
     }
 
     /**
-     * check if this ticket is freshly injected in the workflow
-     */
-    public function isNew()
-    {
-        return empty($this->currentStep);
-    }
-
-    /**
-     * initialize instance
+     * Sets the waitUntil attribute.
      *
-     * @param mixed $recordData from deserializing or database loading
-     */
-    public function __construct(array $data = array())
-    {
-        $this->fromArray($data);
-    }
-
-    public function getNullUser()
-    {
-        return self::DEFAULT_NULL_USER;
-    }
-
-    /**
-     * prepare member data for serializing
-     */
-    public function toArray()
-    {
-        $data = array(
-            '_id' => $this->id,
-            '_rev' => $this->rev,
-            'type' => get_class($this),
-            'ts' => $this->timestamp->format(DATE_ISO8601),
-            'item' => $this->getWorkflowItem()->getIdentifier(),
-            'workflow' => $this->getWorkflow(),
-            'currentOwner' => $this->getCurrentOwner(),
-            'step' => $this->getCurrentStep(),
-            'blocked' => $this->isBlocked(),
-            'wait' => $this->waitUntil instanceof DateTime ? $this->waitUntil->format(DATE_ISO8601) : NULL,
-            'result' => $this->result ? $this->result->toArray() : NULL,
-            'counts' => $this->stepCounts,
-            'p' => $this->getParameters()
-        );
-
-        return array_filter($data);
-    }
-
-
-    /**
-     * initialize object member variables from data array
+     * @param        string the new value for waitUntil
      *
-     * @param array $data member variable values from unserilizing or json decode result
-     * @return
+     * @return       void
      */
-    public function fromArray(array $data)
+    public function setWaitUntil($waitUntil = NULL)
     {
-        $this->id = empty($data['_id']) ? NULL : $data['_id'];
-        $this->rev = empty($data['_rev']) ? NULL : $data['_rev'];
-
-        $this->timestamp = new DateTime(empty($data['ts']) ? NULL : $data['ts']);
-        $this->parameters = isset($data['p']) && is_array($data['p']) ? $data['p'] : array();
-
-        if (array_key_exists('item', $data))
+        if ($waitUntil instanceof DateTime)
         {
-            if ($data['item'] instanceof IWorkflowItem)
-            {
-                $this->setWorkflowItem($data['item']);
-            }
-            else
-            {
-                $itemPeer = Workflow_SupervisorModel::getInstance()->getItemPeer();
-                $this->setWorkflowItem($itemPeer->getItemByIdentifier($data['item']));
-            }
+            $this->waitUntil = $waitUntil->format(DATE_ISO8601);
+            $this->onPropertyChanged("waitUntil");
         }
-
-        $this->setBlocked( isset($data['blocked']) && $data['blocked']);
-        $this->setWaitUntilFromIso8601( empty($data['wait']) ? NULL : $data['wait']);
-        $this->setWorkflow( empty($data['workflow']) ? NULL : $data['workflow']);
-        $this->setCurrentStep( empty($data['step']) ? NULL : $data['step']);
-        $this->setCurrentOwner(empty($data['currentOwner']) ? self::NULL_USER : $data['currentOwner']);
-        if (isset($data['result']))
+        else
         {
-            $this->setPluginResult(WorkflowPluginResult::fromArray($data['result']));
+            $this->waitUntil = $waitUntil;
+            $this->onPropertyChanged("waitUntil");
         }
     }
 
     /**
-     * freshen timestamp
-     */
-    public function touch()
-    {
-        $this->timestamp = new DateTime();
-    }
-
-    /**
-     * set the used current excution container while in interactive mode
+     * Set the used current excution container while in interactive mode.
      *
      * @param AgaviExecutionContainer $container execution container in interactive mode
      */
@@ -454,9 +421,8 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
         $this->container = $container;
     }
 
-
     /**
-     * gets the execution container in interactive mode
+     * Gets the execution container in interactive mode.
      *
      * @return AgaviExecutionContainer
      */
@@ -465,21 +431,9 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
         return $this->container;
     }
 
-    public function createWorkflowExecutionContainer($moduleName, $actionName, AgaviRequestDataHolder $arguments = NULL, $outputType = NULL, $requestMethod = NULL)
-    {
-        $executionContainer = $this->container->createExecutionContainer(
-            $moduleName,
-            $actionName,
-            $arguments ? $arguments : $this->container->getArguments(),
-            $outputType,
-            $requestMethod
-        );
-        $executionContainer->setParameter('is_workflow_container', TRUE);
-        return $executionContainer;
-    }
-
     /**
-     * check if in interactive mode
+     * Check if we are in interactive mode.
+     * @todo only valid with authenticated users?
      *
      * @return boolean
      */
@@ -510,54 +464,39 @@ class WorkflowTicket extends AgaviParameterHolder implements Serializable
         return NULL;
     }
 
-    /*
-     * implenent Serializable
-     */
-
     /**
-     * @see Serializable::serialize()
-     * @return string
+     * Check if this ticket is freshly injected in the workflow.
+     *
+     * @return boolean
      */
-    public function serialize()
+    public function isNew()
     {
-        return serialize($this->toArray());
+        return empty($this->currentStep);
     }
 
     /**
+     * Overrides our parent's getPropertyBlacklist method,
+     * in order to add our container member to the blacklist of properties
+     * that are ignored by toArray and fromArray operations.
      *
-     * @see Serializable::unserialize()
-     * @throws WorkflowException
-     * @param string $serialized
      * @return array
      */
-    public function unserialize($serialized)
+    protected function getPropertyBlacklist()
     {
-        $data = unserialize($serialized);
-        if (! is_array($data))
-        {
-            throw new WorkflowException(
-                'General Gaddafi while unserializing',
-                WorkflowException::ERROR_UNSERIALIZE
-            );
-        }
-        $this->fromArray($data);
-        return $data;
+        return array_merge(
+            parent::getPropertyBlacklist(),
+            array('container')
+        );
     }
 
-
-    /**
-     * Ticket as printable string
-     *
-     * @return string
-     */
-    public function __toString()
+    protected function hydrate(array $data)
     {
-        return sprintf(
-            '%s(Item "%s", Workflow %s/%s, %s)',
-            get_class($this),
-            ($this->workflowItem ? $this->workflowItem->getIdentifier() : ''),
-            $this->workflow, $this->currentStep, $this->result
-        );
+        parent::hydrate($data);
+
+        if (NULL === $this->getCurrentOwner())
+        {
+            $this->setCurrentOwner(self::NULL_USER);
+        }
     }
 }
 

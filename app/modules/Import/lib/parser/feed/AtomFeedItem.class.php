@@ -8,12 +8,12 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @package         Import
- * @subpackage      Parser
+ * @subpackage      Parser/Feed
  */
 class AtomFeedItem extends BaseFeedItem
 {
     // ---------------------------------- <BaseFeedItem IMPL> ------------------------------------
-    
+
     /**
      * Parse xml node describing an item into our instance members.
      */
@@ -27,7 +27,7 @@ class AtomFeedItem extends BaseFeedItem
         $this->text = strip_tags($this->html);
         $this->setHtml('a:content');
     }
-    
+
     // ---------------------------------- </BaseFeedItem IMPL> -----------------------------------
 }
 

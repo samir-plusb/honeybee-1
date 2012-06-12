@@ -61,15 +61,19 @@ class Auth_LoginAction extends AuthBaseAction
                 array('acl_role' => 'user'),
                 $authResponse->getAttributes()
             );
-            if (isset($userAttributes['external_role']))
+            if (isset($userAttributes['external_roles']) && is_array($userAttributes['external_roles']))
             {
-                $domainRole = $user->mapExternalRoleToDomain(
-                    $authProvider->getTypeIdentifier(),
-                    $userAttributes['external_role']
-                );
-                if ($domainRole)
+                foreach ($userAttributes['external_roles'] as $externalRole)
                 {
-                    $userAttributes['acl_role'] = $domainRole;
+                    $domainRole = $user->mapExternalRoleToDomain(
+                        $authProvider->getTypeIdentifier(),
+                        $externalRole
+                    );
+                    if ($domainRole)
+                    {
+                        $userAttributes['acl_role'] = $domainRole;
+                        break;
+                    }
                 }
             }
             $user->setAttributes($userAttributes);
@@ -88,14 +92,14 @@ class Auth_LoginAction extends AuthBaseAction
                 'username_password_mismatch',
                 $errorMessage
             );
-            $this->setAttribute('error', $errorMessage);
+            $this->setAttribute('errors', array('auth' => $errorMessage));
             $user->setAuthenticated(FALSE);
             return 'Input';
         }
 
         $errorMessage = join(PHP_EOL, $authResponse->getErrors());
         $logger->log(new AgaviLoggerMessage($errorMessage));
-        $this->setAttribute('error', $authResponse->getMessage());
+        $this->setAttribute('error', array('auth' => $authResponse->getMessage()));
         $user->setAuthenticated(FALSE);
         return 'Error';
     }
@@ -118,6 +122,11 @@ class Auth_LoginAction extends AuthBaseAction
                 )
             )
         );
+        foreach ($this->getContainer()->getValidationManager()->getErrors() as $field => $error)
+        {
+            $errors[$field] = $error['messages'][0];
+        }
+        $this->setAttribute('errors', $errors);
         return 'Input';
     }
 

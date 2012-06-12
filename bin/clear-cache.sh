@@ -14,7 +14,7 @@ then
 fi
 
 group=$( id -g $user )
-directories="data app/cache app/log"
+directories="data app/cache app/log pub/css/_cache pub/js/_cache"
 
 find app/log -mtime +10 -exec /bin/rm -fv '{}' \;
 rm -rf app/cache/*

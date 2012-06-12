@@ -12,24 +12,25 @@
         Presents common information for the current session
         and holds the list's search box.
      ############################################################################################### -->
-<header data-scrollspy="scrollspy" class="topbar">
-    <div class="topbar-inner">
-        <div class="container-fluid">
-            <h2 class="left">
-                <a href="<?php echo $ro->gen('index'); ?>" class="brand">Midas</a>
+<header class="navbar navbar-fixed-top" data-scrollspy="scrollspy">
+	<div class="navbar-inner">
+		<div class="container-fluid">
+			<h2 class="left">
+                <a href="<?php echo $ro->gen('index'); ?>" class="brand">Midas 2.0</a>
             </h2>
-            <a class="pull-right logout" href="<?php echo $ro->gen('auth.logout'); ?>">Logout</a>
+            <a class="pull-right logout icon-signout" href="<?php echo $ro->gen('auth.logout'); ?>"> Logout</a>
             <form class="jsb-searchbox search-form pull-right" action="<?php echo $ro->gen(NULL); ?>" method="GET">
                 <input type="hidden" value="<?php echo htmlspecialchars(json_encode(array('foo' => 'bar'))); ?>" class="jsb-searchbox-config" />
-                <input type="text" name="search_phrase" value="<?php echo $searchPhrase ? $searchPhrase : '' ?>" placeholder="Suche" />
+                <input type="text" class="input-medium search-query" name="search_phrase" value="<?php echo $searchPhrase ? $searchPhrase : '' ?>" placeholder="Suche" />
                 <input type="hidden" name="sorting[field]" value="<?php echo $sortField; ?>" />
                 <input type="hidden" name="sorting[direction]" value="<?php echo $sortDirection; ?>" />
                 <input type="hidden" name="offset" value="0" />
                 <a href="<?php echo $ro->gen(NULL); ?>" class="<?php echo $searchPhrase ? '' : 'hidden' ?> reset-search">×</a>
             </form>
-        </div>
-    </div>
+		</div>
+	</div>
 </header>
+
 
 <!-- ###############################################################################################
     Searchinfo-Box Section:
@@ -40,7 +41,7 @@
     {
 ?>
 <section class="container-fluid search-message-box">
-    <div class="alert-message search-message info">
+    <div class="alert search-message alert-info">
         <p>
             Du hast nach <strong>&#34;<?php echo $t['search_phrase']; ?>&#34;</strong> gesucht.
             Deine Suche ergab <strong><?php echo $t['totalCount']; ?> Treffer</strong>.
@@ -62,7 +63,7 @@
 <?php
     echo $slots['pagination'];
 ?>
-    <table class="bordered-table zebra-striped">
+    <table class="table table-striped table-bordered">
         <caption>Newsitems Table</caption>
         <colgroup>
             <col class="col-title" />
@@ -111,16 +112,17 @@
     foreach ($t['listData'] as $workflowItem)
     {
 // Render the table's body traversing our data and rendering one tablerow per dataset.
-            $importItem = $workflowItem['importItem'];
+            $masterRecord = $workflowItem['masterRecord'];
             $date = $tm->createCalendar(
-                new DateTime($importItem['created']['date'])
+                new DateTime($masterRecord['created']['date'])
             );
             $step = $workflowItem['currentState']['step'];
-            $grabTicketLink = $ro->gen('workflow.grab', array('ticket' => $workflowItem['ticket']));
+            $grabTicketLink = $ro->gen('workflow.grab', array('ticket' => $workflowItem['ticket'], 'type' => 'news'));
             $processListFilterParams = array(
                 'sorting' => $sorting,
                 'limit' => $limit,
-                'offset' => $offset
+                'offset' => $offset,
+                'type' => 'news'
             );
             if ($searchPhrase)
             {
@@ -129,10 +131,10 @@
             $processListFilterParams['list_pos'] = $offset + $pos++;
             $processListFilterParams['ticket'] = $workflowItem['ticket']['id'];
             $processTicketLink = $ro->gen('workflow.run', $processListFilterParams);
-            $releaseLink = $ro->gen('workflow.release', array('ticket' => $workflowItem['ticket']['id']));
-            $deleteLink = $ro->gen('workflow.proceed', array('ticket' => $workflowItem['ticket']['id'], 'gate' => 'delete'));
+            $releaseLink = $ro->gen('workflow.release', array('ticket' => $workflowItem['ticket']['id'], 'type' => 'news'));
+            $deleteLink = $ro->gen('workflow.proceed', array('ticket' => $workflowItem['ticket']['id'], 'type' => 'news', 'gate' => 'delete'));
             $ticketCheckoutRel = sprintf('data-checkout-url="%s"', $grabTicketLink);
-            $demoteLink = $ro->gen('workflow.proceed', array('ticket' => $workflowItem['ticket']['id'], 'gate' => 'demote'));
+            $demoteLink = $ro->gen('workflow.proceed', array('ticket' => $workflowItem['ticket']['id'], 'type' => 'news', 'gate' => 'demote'));
             $preEditDemote = '';
 
             if ('publish_news' === $step)
@@ -144,11 +146,11 @@
             <tr>
                 <td class="title">
                     <a href="<?php echo $processTicketLink; ?>" <?php echo sprintf('%s %s', $ticketCheckoutRel, $preEditDemote); ?>>
-                        <?php echo htmlspecialchars($importItem['title']); ?>
+                        <?php echo htmlspecialchars($masterRecord['title']); ?>
                     </a>
                 </td>
                 <td class="source">
-                    <?php echo $importItem['source']; ?>
+                    <?php echo $masterRecord['source']; ?>
                 </td>
                 <td class="date">
                     <?php echo $tm->_d($date, 'date_formats.datetime'); ?>
@@ -156,14 +158,14 @@
                 <td class="state">
                     <!-- @todo Map steps to label colors. -->
 <?php
-            $label = 'warning';
+            $label = 'label-warning';
             if ('refine_news' == $step)
             {
-                $label = 'success';
+                $label = 'label-success';
             }
             elseif ('edit_news' == $step)
             {
-                $label = 'notice';
+                $label = 'label-info';
             }
 ?>
                     <span class="label <?php echo $label; ?>">
@@ -171,7 +173,7 @@
                     </span>
                 </td>
                 <td class="category">
-                    <?php echo empty($importItem['category']) ? '&#160;' : $importItem['category']; ?>
+                    <?php echo empty($masterRecord['category']) ? '&#160;' : $masterRecord['category']; ?>
                 </td>
                 <td class="owner">
 <!--
@@ -182,14 +184,12 @@
     - We just highlight the field differently.
     3.) Nobody owns the item.
     - Just highlight with the 'nobody' color.
-
-<?php echo "###########" . $workflowItem['owner'] . "::" . $t['user'] . "##################" ?>
 -->
 <?php
         if ($workflowItem['owner'] === $t['user'])
         {
 ?>
-                    <a class="label notice" href="<?php echo $releaseLink; ?>">
+                    <a class="label label-info" href="<?php echo $releaseLink; ?>">
                         <?php echo $workflowItem['owner']; ?>
                     </a>
 <?php
@@ -197,7 +197,7 @@
         else
         {
 ?>
-                    <span class="label <?php echo (WorkflowTicket::NULL_USER !== $workflowItem['owner']) ? 'important' : ''; ?>">
+                    <span class="label <?php echo (WorkflowTicket::NULL_USER !== $workflowItem['owner']) ? 'label-important' : ''; ?>">
                         <?php echo $workflowItem['owner']; ?>
                     </span>
 <?php
@@ -207,7 +207,7 @@
                 <td class="avail-actions">
                     <form action="<?php echo $deleteLink; ?>" class="delete-item" method="POST" <?php echo $ticketCheckoutRel; ?>>
                         <input type="hidden" name="ticket" value="<?php echo $workflowItem['ticket']['id']; ?>" />
-                        <button type="submit" class="btn small danger">
+                        <button type="submit" class="btn small btn-danger">
                             l&#246;schen
                         </button>
                     </form>

@@ -2,18 +2,18 @@
 
 /**
  * The RssFeedItem is a concrete implementation of the BaseFeedItem base class
- * and is coded to support the concrete structure of rss 2.0. 
+ * and is coded to support the concrete structure of rss 2.0.
  *
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @package         Import
- * @subpackage      Parser
+ * @subpackage      Parser/Feed
  */
 class RssFeedItem extends BaseFeedItem
 {
     // ---------------------------------- <BaseFeedItem IMPL> ------------------------------------
-    
+
     /**
      * Parse xml node describing an item into our instance members.
      */
@@ -41,7 +41,7 @@ class RssFeedItem extends BaseFeedItem
             $this->text = strip_tags($this->html);
         }
     }
-    
+
     // ---------------------------------- </BaseFeedItem IMPL> -----------------------------------
 }
 

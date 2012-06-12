@@ -1,48 +1,43 @@
-<div class="topbar" data-scrollspy="scrollspy">
-	<div class="topbar-inner">
-		<div class="container-fluid">
-			<h2 class="left">
-				<a class="brand" href="<?php echo $ro->gen('index'); ?>">Midas</a>
-			</h2>
-		</div>
-	</div>
-</div>
-
-<div class="container" style="margin-top: 10em; width: 40em;">
-	<div class="content">
-        <?php
-    if (! empty($t['error']))
+<?php
+    $errors = isset($t['errors']) ? $t['errors'] : array();
+?>
+<div class="container" style="margin-top: 10em;">
+    <form class="well" action="<?php echo $ro->gen(NULL); ?>" method="post">
+        <fieldset>
+            <legend><?php echo $tm->_('Sign in using your company account','auth.ui') ?>:</legend>
+<?php
+    if (isset($errors['auth']))
     {
 ?>
-			<div class="row">
-			    <div class=" error span4 offset4">
-			        <?php echo htmlspecialchars($t['error'])?>
-		        </div>
-			</div>
+            <span style="display: inline-block; margin-bottom: 2em;" class="label label-important"><?php echo htmlspecialchars($errors['auth']); ?></span>
 <?php
     }
 ?>
-		<form action="<?php echo $ro->gen(NULL) ?>" method="post">
-			<fieldset>
-                <legend>
-                    <?php echo $tm->_('Login', 'auth.ui') ?>
-                </legend>
-                <div class="clearfix">
-					<label for="username"><?php echo $tm->_('User','auth.ui') ?></label>
-                    <div class="input">
-                        <input type="text" name="username"/>
-                    </div>
-                </div>
-                <div class="clearfix">
-					<label for="password"><?php echo $tm->_('Password','auth.ui') ?></label>
-                    <div class="input">
-                        <input type="password" name="password" />
-                    </div>
-                </div>
-                    <div class="well">
-                        <button class="btn primary" type="submit"><?php echo $tm->_('Sign in','auth.ui') ?></button>
-                    </div>
-			</fieldset>
-		</form>
-	</div>
+            <div class="control-group input-prepend <?php echo isset($errors['username']) ? 'error' : ''; ?>">
+                <label for="user_input" class="control-label add-on icon-user">&#8203;</label>
+                <input type="text" id="user_input" name="username" placeholder="<?php echo $tm->_('Username','auth.ui') ?>" />
+<?php
+    if (isset($errors['username']))
+    {
+?>
+                <span class="help-inline"><?php echo htmlspecialchars($errors['username']); ?></span>
+<?php
+    }
+?>
+            </div>
+            <div class="control-group input-prepend <?php echo isset($errors['password']) ? 'error' : ''; ?>">
+                <label for="password_input" class="add-on icon-lock">&#8203;</label>
+                <input id="password_input" type="password" name="password" placeholder="<?php echo $tm->_('Password','auth.ui') ?>" />
+<?php
+    if (isset($errors['password']))
+    {
+?>
+                <span class="help-inline"><?php echo htmlspecialchars($errors['password']); ?></span>
+<?php
+    }
+?>
+            </div>
+            <button style="display: block;" type="submit" class="icon-signin btn btn-primary"> <?php echo $tm->_('Signin','auth.ui') ?></button>
+        </fieldset>
+    </form>
 </div>

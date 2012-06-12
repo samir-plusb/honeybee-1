@@ -3,7 +3,7 @@
 /**
  * The Import_Fixtures_FixturesErrorView class handles the fixtures import error presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import

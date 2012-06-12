@@ -19,8 +19,8 @@ class StatsActionTest extends AgaviActionTestCase
         parent::setUp();
 
         AgaviConfig::set('news.connections', array(
-            'elasticsearch' => 'EsNewsFixtures',
-            'couchdb' => 'CouchWorkflowFixtures'
+            'elasticsearch' => 'News.ReadFixtures',
+            'couchdb' => 'News.WriteFixtures'
         ));
     }
 

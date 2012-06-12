@@ -2,10 +2,11 @@
 /**
  *
  * @copyright BerlinOnline
- * @version $Id: ProceedAction.class.php 679 2012-01-09 17:23:50Z tschmitt $
+ * @version $Id$
  * @package Workflow
+ * @subpackage Mvc
  */
-class Workflow_ProceedAction extends ProjectBaseAction
+class Workflow_ProceedAction extends WorkflowBaseAction
 {
     /**
      * (non-PHPdoc)
@@ -18,9 +19,9 @@ class Workflow_ProceedAction extends ProjectBaseAction
     {
         try
         {
+            $supervisor = $parameters->getParameter(WorkflowSupervisorValidator::DEFAULT_EXPORT);
             $ticket = $parameters->getParameter('ticket');
             $gate = $parameters->getParameter('gate');
-            $supervisor = Workflow_SupervisorModel::getInstance();
             $result = $supervisor->proceed($ticket, $gate, $this->getContainer());
 
             if ($result instanceof WorkflowInteractivePluginResult)

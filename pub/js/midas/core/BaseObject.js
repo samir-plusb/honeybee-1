@@ -54,6 +54,41 @@ midas.core.BaseObject = midas.core.Module.create(
     },
 
     /**
+     * @description Remove a listener for the given event.
+     * @param {String} event The name of the event to listen for.
+     * @param {Function} callback The callback function to remove.
+     * @returns {midas.core.BaseObejct} Returns the same instance for fluent api support.
+     */
+    removeListener: function(event, callback)
+    {
+        if (! this.listeners[event])
+        {
+            return this;
+        }
+        var idx = this.listeners[event].indexOf(callback);
+        if (-1 !== idx)
+        {
+            this.listeners[event].splice(idx, 1);
+        }
+        return this;
+    },
+
+    /**
+     * @description Remove all listeners for the given event.
+     * @param {String} event The name of the event to listen for.
+     * @returns {midas.core.BaseObejct} Returns the same instance for fluent api support.
+     */
+    removeAllListeners: function(event)
+    {
+        if (! this.listeners[event])
+        {
+            return this;
+        }
+        this.listeners[event] = [];
+        return this;
+    },
+
+    /**
      * @description Propagate the given event to all listeners that registered for it,
      * thereby passing in the given state.
      * @param {String} event The name of the event to listen for.

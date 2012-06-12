@@ -4,7 +4,7 @@
  * The News_Api_NextItemAction is repsonseable handling the retrieval of the next editable item
  * relative to a given current item.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
@@ -22,14 +22,14 @@ class News_Api_NextItemAction extends NewsListBaseAction
     public function executeRead(AgaviRequestDataHolder $parameters)
     {
         $this->setActionAttributes($parameters);
-        $item = $this->findNextItem();
-        if ($item)
+        $workflowItem = $this->findNextItem();
+        if ($workflowItem)
         {
-            $supervisor = Workflow_SupervisorModel::getInstance();
-            $ticketPeer = $supervisor->getTicketPeer();
-            $this->setAttribute('ticket', $ticketPeer->getTicketById($item->getTicketId()));
+            $supervisor = WorkflowSupervisor::getInstance();
+            $ticketStore = $supervisor->getWorkflowTicketStore();
+            $this->setAttribute('ticket', $ticketStore->fetchByIdentifier($workflowItem->getTicketId()));
         }
-        $this->setAttribute('item', $item);
+        $this->setAttribute('item', $workflowItem);
         return 'Success';
     }
 

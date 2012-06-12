@@ -3,7 +3,7 @@
 /**
  * The News_Edit_EditErrorView class handles News/Edit write error data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
@@ -25,19 +25,6 @@ class News_Edit_EditErrorView extends NewsBaseView
             'state' => 'error',
             'msg' => $this->getAttribute('error_message')
         )));
-    }
-
-    /**
-     * Handle presentation logic for commandline interfaces.
-     *
-     * @param       AgaviRequestDataHolder $parameters
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @codingStandardsIgnoreStart
-     */
-    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-    {
-        return '<p>'.$this->getAttribute('error_message').'</p>';
     }
 }
 

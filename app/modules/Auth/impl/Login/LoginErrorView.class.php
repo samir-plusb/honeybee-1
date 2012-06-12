@@ -12,6 +12,13 @@
  */
 class Auth_Login_LoginErrorView extends AuthBaseView
 {
+    public function executeBinary(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        // @easter-egg Return 'I am a teapot' for people,
+        //  that managed to provide data leading into this code path.
+        $this->getContext()->getController()->getGlobalResponse()->setHttpStatusCode(418);
+    }
+
     /**
      * Execute any html related presentation logic and sets up our template attributes.
      *

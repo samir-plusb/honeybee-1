@@ -20,11 +20,16 @@ h1
     color: #9f9f9f;
 }
 
-.stats-list
+.stats-wrapper
+{
+    margin: 0 auto;
+    width: 80%;
+}
+
+.stats-wrapper .stats-list
 {
     list-style: none;
     margin: 0;
-    width: 80%;
 }
 
 .stats-list li
@@ -45,6 +50,12 @@ h1
 {
     margin: 0;
 }
+
+.stats-list table tbody tr
+{
+    background: #f5f5f5;
+}
+
 thead th span
 {
     box-shadow: 5px 5px 5px #ccc;

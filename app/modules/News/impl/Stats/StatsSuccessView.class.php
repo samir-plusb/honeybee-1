@@ -3,7 +3,7 @@
 /**
  * The News_Stats_StatsSuccessView class handles News/Stats success data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

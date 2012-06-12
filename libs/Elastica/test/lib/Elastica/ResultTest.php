@@ -39,7 +39,7 @@ class Elastica_ResultTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('Elastica_Result', $result);
 		$this->assertEquals($indexName, $result->getIndex());
 		$this->assertEquals($typeName, $result->getType());
-		$this->assertEquals($docId, $result->getId());
+		$this->assertEquals($docId, $result->getIdentifier());
 		$this->assertGreaterThan(0, $result->getScore());
 		$this->assertInternalType('array', $result->getData());
 	}
@@ -78,7 +78,7 @@ class Elastica_ResultTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('Elastica_Result', $result);
 		$this->assertEquals($indexName, $result->getIndex());
 		$this->assertEquals($typeName, $result->getType());
-		$this->assertEquals($docId, $result->getId());
+		$this->assertEquals($docId, $result->getIdentifier());
 		$this->assertGreaterThan(0, $result->getScore());
 		$this->assertInternalType('array', $result->getData());
 	}

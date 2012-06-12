@@ -7,7 +7,7 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer
  * @package Project
- * @subpackage Database
+ * @subpackage Agavi/Database
  */
 interface IDatabaseSetup
 {

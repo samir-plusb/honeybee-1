@@ -3,7 +3,7 @@
 /**
  * The News_StatsAction is repsonseable for loading the news statistics.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

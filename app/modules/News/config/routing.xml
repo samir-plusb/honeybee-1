@@ -5,6 +5,7 @@
         <routes>
             <route name=".list" pattern="^/list" action="List"/>
             <route name=".stats" pattern="^/stats" action="Stats"/>
+            <route pattern="/import/imperia" action="Import_Imperia" />
             <route name=".api" pattern="^/api">
                 <route name=".delete_item" pattern="^/delete_item" action="Api_DeleteItem"/>
                 <route name=".items_nearby" pattern="^/items_nearby" action="Api_FetchNearByItems"/>
@@ -20,6 +21,8 @@
         <routes>
             <route pattern="news." module="News">
                 <route pattern="setup" action="Setup" method="write"/>
+                <route pattern="import.imperia" action="Import_Imperia" method="write" />
+                <route pattern="import.mail" action="Import_Mail" method="write" />
             </route>
         </routes>
     </ae:configuration>

@@ -1,27 +1,20 @@
 <?php
 
 /**
- * The WorkflowItem serves as the main implementation of the IWorkflowItem interface.
- * It serves as the aggregate root of all objects (DTO's) that are involved in the process of content refinement.
+ * The WorkflowItem serves as a base implementation of the IWorkflowItem interface.
+ * It covers most of the interface only keeping the fromArray method open for implementation.
+ *
+ * !INFO! The currentState property reflects the workflow-item's ticket's state and is updated each time
+ * the item's ticket is stored.
  *
  * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Workflow
  * @subpackage Item
- *
- * @SuppressWarnings(PHPMD.TooManyFields)
- * * @SuppressWarnings(PHPMD.TooManyMethods)
  */
-class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
+abstract class WorkflowItem extends BaseDocument implements IWorkflowItem, Zend_Acl_Resource_Interface
 {
-    /**
-     * Holds the WorkflowItem's identifier.
-     *
-     * @var string
-     */
-    protected $identifier;
-
     /**
      * Holds the WorkflowItem's revision.
      *
@@ -37,32 +30,11 @@ class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
     protected $ticketId;
 
     /**
-     * Holds information on who created this item and when.
-     *
-     * @var array
-     */
-    protected $created;
-
-     /**
-     * Holds information on who was the last to modify this item and when.
-     *
-     * @var array
-     */
-    protected $lastModified;
-
-    /**
      * Holds our import-item.
      *
-     * @var IImportItem
+     * @var IMasterRecord
      */
-    protected $importItem;
-
-    /**
-     * Returns the list of our IContentItems.
-     *
-     * @var array
-     */
-    protected $contentItems = array();
+    protected $masterRecord;
 
     /**
      * Holds our generic attributes collection.
@@ -84,58 +56,21 @@ class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
     );
 
     /**
-     * Creates a new WorkflowItem instance.
-     */
-    public function __construct(array $data = array())
-    {
-        $this->hydrate($data);
-    }
-
-    /**
-     * Returns the system wide unique identifier of the IWorkflowItem.
+     * Return the name of the class to use as the IMasterRecord implementation for this class.
      *
      * @return string
      */
-    public function getIdentifier()
-    {
-        return $this->identifier;
-    }
+    abstract protected function getMasterRecordImplementor();
 
     /**
-     * Return the resource identifier for this model.
-     *
-     * @todo This is too concrete to be inside the workflow package.
-     * The goal is to have WorkflowItem as an abstract base for the data models
-     * of other packages such as news, shofi or events etc.
-     * This would result in a NewsItem -> WorkflowItem, EventItem -> WorkflowItem ...
-     * relationship, allowing these package specific data models to be processed as workflow resources,
-     * just as the workflow item at the moment.
-     * For this change to work we would use a data model's resource-id as the couchdb type attribute,
-     * when persisting and would have to map the data back to the different WorkflowItem subtypes
-     * instead of always instantiating plain WorkflowItems. As the WorkflowItem class will then be abstract,
-     * this would not be possible any way.
+     * Return a string to Zend_Acl that will map this object instance
+     * to a resource name in zend_acl.
      *
      * @return string
      */
     public function getResourceId()
     {
-        return 'news';
-    }
-
-    public function getOwnerName()
-    {
-        $ticket = NULL;
-        try
-        {
-            $supervisor = Workflow_SupervisorModel::getInstance();
-            $ticket = $supervisor->getTicketPeer()->getTicketById($this->ticketId);
-        }
-        catch (CouchdbClientException $e)
-        {
-            return FALSE;
-        }
-
-        return $ticket->getCurrentOwner();
+        return get_class($this);
     }
 
     /**
@@ -155,9 +90,10 @@ class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
      *
      * @return IWorkflowItem This instance for fluent api support.
      */
-    public function bumpRevision($revision)
+    public function setRevision($revision)
     {
         $this->revision = $revision;
+        $this->onPropertyChanged("revision");
         return $this;
     }
 
@@ -171,16 +107,25 @@ class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
         return $this->ticketId;
     }
 
+    public function setTicketId($ticketId)
+    {
+        $this->ticketId = $ticketId;
+        $this->onPropertyChanged("ticketId");
+        return $this;
+    }
+
     /**
      * Set the WorklflowTicket that is responseable for this item.
      *
      * @param WorkflowTicket $ticket
+     * @todo remove this method, use getTicketId instead. Looser coupling ftw ...
      *
      * @return IWorkflowItem This instance for fluent api support.
      */
     public function setTicket(WorkflowTicket $ticket)
     {
         $this->ticketId = $ticket->getIdentifier();
+        $this->onPropertyChanged("ticketId");
         return $this;
     }
 
@@ -202,214 +147,82 @@ class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
      *
      * @return IWorkflowItem This instance for fluent api support.
      */
-    public function updateCurrentState(array $state)
+    public function setCurrentState(array $state)
     {
         $this->currentState = $state;
+        $this->onPropertyChanged("currentState");
         return $this;
     }
 
     /**
-     * Returns the IContentItem's created date as an array,
-     * containing data about by whom and when the item was created.
-     * The provided date data is a ISO8601 UTC formatted string.
-     * The provided user information is a string holding the username.
+     * Return our related master record.
      *
-     * @return array
+     * @return IMasterRecord
      */
-    public function getCreated()
+    public function getMasterRecord()
     {
-        return $this->created;
-    }
-
-    /**
-     * Update the item's modified timestamp.
-     * If the created timestamp has not yet been set it also assigned.
-     *
-     * @param AgaviUser $user An optional user to use instead of resolving the current session user.
-     *
-     * @return IWorkflowItem This instance for fluent api support.
-     */
-    public function touch(AgaviUser $user = NULL)
-    {
-        $user = $user ? $user : AgaviContext::getInstance()->getUser();
-        $value = array(
-            'date' => date(DATE_ISO8601),
-            'user' => $user->getParameter('username', 'system')
-        );
-        if (! $this->created)
-        {
-            $this->created = $value;
-        }
-        $this->lastModified = $value;
-        return $this;
-    }
-
-    /**
-     * Returns the IContentItem's created date as an array,
-     * containing data about by whom and when the item modified the last time.
-     * The provided date data is a ISO8601 UTC formatted string.
-     * The provided user information is a string holding the username.
-     *
-     * @return array
-     */
-    public function getLastModified()
-    {
-        return $this->lastModified;
-    }
-
-    /**
-     * Return our related import item.
-     *
-     * @return IImportItem
-     */
-    public function getImportItem()
-    {
-        return $this->importItem;
+        return $this->masterRecord;
     }
 
     /**
      * Set an import-item for this workflow-item instance.
      *
-     * @param mixed $importData Either an array or IImportItem instance.
+     * @param mixed $masterRecord
      *
      * @throws Exception If the workflow-item allready has an import-item or an invalid data-type is passed.
-     *
-     * @todo Rename this methosd to set or whatever, but create* is not a good name.
      */
-    public function createImportItem($importData)
+    public function setMasterRecord($masterRecord)
     {
-        if ($this->importItem)
+        if ($this->masterRecord)
         {
-            throw new Exception("Import item allready exists!");
+            throw new Exception("Master record allready exists!");
         }
-
-        if (is_array($importData))
+        if ($masterRecord instanceof IMasterRecord)
         {
-            $importData['parentIdentifier'] = $this->getIdentifier();
-            $this->importItem = new ImportItem($importData);
-            $this->importItem->touch();
+            $this->masterRecord = $masterRecord;
         }
-        elseif ($importData instanceof IImportItem)
+        elseif (is_array($masterRecord))
         {
-            $this->importItem = $importData;
+            $this->masterRecord = $this->createMasterRecord($masterRecord);
         }
         else
         {
-            throw new Exception(
-                "Invalid argument type passed to setImportItem method. Only array and IImportItem are supported."
-            );
+            throw new Exception("Invalid master record parameter given to setMasterRecord!\n".print_r($masterRecord, TRUE));
         }
+        $this->onPropertyChanged("masterRecord");
+    }
+
+    /**
+     * Create a fresh master-record instance,
+     * relating it to our current workflow-item instance.
+     *
+     * @param array $data
+     *
+     * @return IMasterRecord
+     */
+    public function createMasterRecord(array $data)
+    {
+        $data['parentIdentifier'] = $this->getIdentifier();
+        $data['identifier'] = sha1($this->getIdentifier());
+        $implementor = $this->getMasterRecordImplementor();
+        return $implementor::fromArray($data);
     }
 
     /**
      * Update the workflow-item's import item with the given values.
      *
-     * @param array $importData
+     * @param array $masterData
      *
      * @throws Exception If we dont have an import-item.
      */
-    public function updateImportItem(array $importData)
+    public function updateMasterRecord(array $masterData)
     {
-        if (! $this->importItem)
+        if (! $this->masterRecord)
         {
-            throw new Exception("No import-item to update.");
+            throw new Exception("No master-record to update.");
         }
-        $this->importItem->applyValues($importData);
-        $this->importItem->touch();
+        $this->masterRecord->applyValues($masterData);
     }
-
-    /**
-     * Return a list of content items that belong to this workflow item.
-     *
-     * @return array An list of of IContentItems
-     */
-    public function getContentItems()
-    {
-        return $this->contentItems;
-    }
-
-    /**
-     * Add the given content-item to the WorkflowItem's content-item list.
-     *
-     * @param IContentItem|array $contentItem
-     *
-     * @return bool True when the item was added and false if the item allready has been added.
-     */
-    public function addContentItem($contentItem)
-    {
-        $item = $contentItem;
-        if (is_array($item))
-        {
-            if (! isset($item['identifier']))
-            {
-                throw new InvalidArgumentException(
-                    "Missing identifier for addContentItem call." . PHP_EOL .
-                    "Make sure to pass an identifier either inside the passed data array or as method param."
-                );
-            }
-            $item = new ContentItem($contentItem);
-        }
-        else if(! ($contentItem instanceof IContentItem))
-        {
-            throw new InvalidArgumentException(
-                "Invalid argument type given for the contentItem argument." . PHP_EOL .
-                "Make sure to pass either an array or IContentItem instance."
-            );
-        }
-        if (isset($this->contentItems[$item->getIdentifier()]))
-        {
-            return FALSE;
-        }
-        $this->contentItems[$item->getIdentifier()] = $item;
-        return TRUE;
-    }
-
-    public function getContentItem($contentItemId)
-    {
-        if (isset($this->contentItems[$contentItemId]))
-        {
-            return $this->contentItems[$contentItemId];
-        }
-        return NULL;
-    }
-
-    public function removeContentItem(IContentItem $contentItem)
-    {
-        $contentItems = array();
-        foreach ($this->contentItems as $curItem)
-        {
-            if ($curItem->getIdentifier() !== $contentItem->getIdentifier())
-            {
-                $contentItems[] = $curItem;
-            }
-        }
-        $this->contentItems = $contentItems;
-    }
-
-    public function updateContentItem(array $data, $identifier = NULL)
-    {
-        $contentItemId = $identifier;
-        if (! $contentItemId)
-        {
-            if (! isset($data['identifier']))
-            {
-                throw new InvalidArgumentException(
-                    "Missing identifier for updateContentItem call." . PHP_EOL .
-                    "Make sure to pass an identifier either inside the passed data array or as method param."
-                );
-            }
-            $contentItemId = $data['identifier'];
-        }
-        if (! isset($this->contentItems[$contentItemId]))
-        {
-            return FALSE;
-        }
-        $this->contentItems[$contentItemId]->applyValues($data);
-        return TRUE;
-    }
-
-    //@todo addContentItem
-    //@todo removeContentItem
 
     /**
      * Return a generic assoc array of attributes.
@@ -423,101 +236,37 @@ class WorkflowItem implements IWorkflowItem, Zend_Acl_Resource_Interface
     }
 
     /**
-     * Returns an array representation of the IWorkflowItem.
+     * Set the value for the given attribute.
      *
-     * @return string
+     * @param string $name
+     * @param mixed $value
      */
-    public function toArray()
+    public function setAttribute($name, $value)
     {
-        $props = array(
-            'identifier', 'revision', 'created', 'lastModified',
-            'importItem', 'attributes', 'ticketId', 'currentState'
-        );
-        $data = array();
-        foreach ($props as $prop)
-        {
-            $getter = 'get' . ucfirst($prop);
-            $val = $this->$getter();
-            if (is_object($val) && is_callable(array($val, 'toArray')))
-            {
-                $data[$prop] = $val->toArray();
-            }
-            elseif (! is_object($val))
-            {
-                $data[$prop] = $val;
-            }
-            else
-            {
-                throw new InvalidArgumentException(
-                    "Can only process scalar, array and item values when exporting object to array.\n" .
-                    "Errornous type encountered for property: " . $prop
-                );
-            }
-        }
-        $contentItems = array();
-        foreach ($this->getContentItems() as $contentItem)
-        {
-            $contentItems[] = $contentItem->toArray();
-        }
-        $data['contentItems'] = $contentItems;
-        return $data;
+        $this->attributes[$name] = $value;
+    }
+
+    public function setAttributes(array $attributes)
+    {
+        $this->attributes = $attributes;
     }
 
     /**
-     * Hydrates the given data into the item.
+     * Return the value for the given attribute name
+     * and default if the attribute is not set.
      *
-     * @param array $data
+     * @param string $name
+     * @param mixed $default
+     *
+     * @return mixed
      */
-    protected function hydrate(array $data)
+    public function getAttribute($name, $default = NULL)
     {
-        $simpleProps = array(
-            'identifier', 'revision', 'created',
-            'lastModified', 'attributes', 'ticketId', 'currentState');
-        $couchMappings = array('identifier' => '_id', 'revision' => '_rev');
-        foreach ($simpleProps as $prop)
+        if (array_key_exists($name, $this->attributes))
         {
-            if (isset($couchMappings[$prop])
-                && array_key_exists($couchMappings[$prop], $data)
-                || array_key_exists($prop, $data))
-            {
-                $value = (isset($couchMappings[$prop])
-                    && array_key_exists($couchMappings[$prop], $data))
-                    ? $data[$couchMappings[$prop]]
-                    : $data[$prop];
-                $setter = 'set'.ucfirst($prop);
-                if (is_callable(array($this, $setter)))
-                {
-                    $this->$setter($value);
-                }
-                else
-                {
-                    $this->$prop = $value;
-                }
-            }
+            return $this->attributes[$name];
         }
-        if (isset($data['contentItems']))
-        {
-            $this->contentItems = array();
-            foreach ($data['contentItems'] as $contentItemData)
-            {
-                $this->addContentItem(new ContentItem($contentItemData));
-            }
-        }
-        if (isset($data['importItem']))
-        {
-            $this->importItem = new ImportItem($data['importItem']);
-        }
-    }
-
-    public function delete($remove = FALSE)
-    {
-        if ($remove)
-        {
-            return Workflow_SupervisorModel::getInstance()->getItemPeer()->deleteItem($this);
-        }
-        $this->attributes['marked_deleted'] = TRUE;
-        return Workflow_SupervisorModel::getInstance()->getItemPeer()->storeItem($this);
-
+        return $default;
     }
 }
 

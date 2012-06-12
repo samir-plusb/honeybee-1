@@ -8,6 +8,10 @@
                 <validation>%core.app_dir%/modules/Workflow/config/xsd/workflows.xsd</validation>
                 <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/midas/workflow/1.0</ae:parameter>
             </handler>
+            <handler pattern="workflows.xml" class="WorkflowConfigHandler">
+                <validation>%core.app_dir%/modules/Workflow/config/xsd/workflows.xsd</validation>
+                <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/midas/workflow/1.0</ae:parameter>
+            </handler>
         </handlers>
     </ae:configuration>
 </ae:configurations>

@@ -6,7 +6,7 @@
  * @version $Id$
  * @since 10.10.2011
  * @package Project
- * @subpackage Database
+ * @subpackage Agavi/Database
  */
 class CouchDatabase extends AgaviDatabase
 {

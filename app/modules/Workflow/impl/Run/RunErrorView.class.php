@@ -4,8 +4,9 @@
  * @copyright BerlinOnline
  * @version $Id$
  * @package Workflow
+ * @subpackage Mvc
  */
-class Workflow_Run_RunErrorView extends ProjectBaseView
+class Workflow_Run_RunErrorView extends WorkflowBaseView
 {
     /**
      * Handles the Html output type.

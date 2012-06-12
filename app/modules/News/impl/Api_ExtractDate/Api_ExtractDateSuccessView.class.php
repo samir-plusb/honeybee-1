@@ -3,7 +3,7 @@
 /**
  * The News_Api_ExtractDate_Api_ExtractDateSuccessView class handles News/Api_ExtractDate success data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

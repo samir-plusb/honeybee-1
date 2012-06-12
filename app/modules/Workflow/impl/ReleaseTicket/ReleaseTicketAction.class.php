@@ -2,10 +2,11 @@
 /**
  *
  * @copyright BerlinOnline
- * @version $Id: Workflow_GrabTicketAction.class.php -1   $
+ * @version $Id$
  * @package Workflow
+ * @subpackage Mvc
  */
-class Workflow_ReleaseTicketAction extends ProjectBaseAction
+class Workflow_ReleaseTicketAction extends WorkflowBaseAction
 {
     /**
      * Execute the action's read logic, hence release ownership of the given ticket(id).
@@ -16,6 +17,7 @@ class Workflow_ReleaseTicketAction extends ProjectBaseAction
      */
     public function executeRead(AgaviParameterHolder $parameters)
     {
+        $supervisor = $parameters->getParameter(WorkflowSupervisorValidator::DEFAULT_EXPORT);
         /* @var $ticket WorkflowTicket */
         $ticket = $parameters->getParameter('ticket');
         $this->setAttribute('ticket', $ticket);
@@ -25,12 +27,21 @@ class Workflow_ReleaseTicketAction extends ProjectBaseAction
         $translationManager = $this->getContext()->getTranslationManager();
         if ($ticket->getCurrentOwner() === $user->getAttribute('login'))
         {
-            $ticket->setCurrentOwner(WorkflowTicket::NULL_USER);
             try
             {
-                $supervisor = Workflow_SupervisorModel::getInstance();
-                if ($supervisor->getTicketPeer()->saveTicket($ticket))
+                $ticket->setCurrentOwner(WorkflowTicket::NULL_USER);
+                
+                if ($supervisor->getWorkflowTicketStore()->save($ticket))
                 {
+                    $item = $supervisor->getWorkflowItemStore()->fetchByIdentifier($ticket->getItem());
+                    $supervisor->getWorkflowItemStore()->save(
+                        $item->setCurrentState(array(
+                            'workflow' => $ticket->getWorkflow(),
+                            'step'     => $ticket->getCurrentStep(),
+                            'owner'    => $ticket->getCurrentOwner()
+                        ))
+                    );
+                    $supervisor->getWorkflowItemStore()->save($item);
                     return 'Success';
                 }
                 $error = $translationManager->_('release_ticket_error_text', 'workflow.errors');
@@ -39,6 +50,7 @@ class Workflow_ReleaseTicketAction extends ProjectBaseAction
             catch(CouchdbClientException $e)
             {
                 $reason = $translationManager->_('release_ticket_db_error', 'workflow.errors');
+                $error = $e->getMessage();
             }
         }
         else

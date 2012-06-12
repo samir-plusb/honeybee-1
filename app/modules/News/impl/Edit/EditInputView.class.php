@@ -3,7 +3,7 @@
 /**
  * The News_Edit_EditInputView class handles News/Edit read success data presentation.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
@@ -34,10 +34,11 @@ class News_Edit_EditInputView extends NewsBaseView
         );
 
         $ticket = $this->getAttribute('ticket');
-        $item = $ticket->getWorkflowItem();
+        $newsService = NewsWorkflowService::getInstance();
+        $item = $newsService->fetchWorkflowItemById($ticket->getItem());
         $ticketData = $ticket->toArray();
         $ticketData['item'] = $item->toArray();
-        $assetData = $this->prepareAssets($item->getImportItem());
+        $assetData = $this->prepareAssets($item->getMasterRecord());
 
         $this->setAttribute('ticket', $ticketData);
         $this->setAttribute('assets', $assetData);
@@ -81,7 +82,7 @@ class News_Edit_EditInputView extends NewsBaseView
         ));
     }
 
-    protected function prepareAssets(IImportItem $item)
+    protected function prepareAssets(INewsEntity $item)
     {
         $assetService = ProjectAssetService::getInstance();
         $assets = array();

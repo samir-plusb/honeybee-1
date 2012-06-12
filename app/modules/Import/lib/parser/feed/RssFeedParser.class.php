@@ -4,17 +4,17 @@
  * The RssFeedParser is a concrete implementation of the BaseFeedParser base class.
  * It provides support for parsing Rss feeds.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Parser
+ * @subpackage      Parser/Feed
  */
 class RssFeedParser extends BaseFeedParser
 {
     // ---------------------------------- <MEMBERS> ----------------------------------------------
-    
+
     /**
      *
      * Namespace prefix for http://purl.org/rss/1.0/modules/content/
@@ -28,16 +28,16 @@ class RssFeedParser extends BaseFeedParser
      * @var string
      */
     protected $nsElements;
-    
+
     // ---------------------------------- </MEMBERS> ---------------------------------------------
 
-    
+
     // ---------------------------------- <BaseFeedParser OVERRIDES> -----------------------------
-    
+
     /**
      * Create a new RssFeedParser instance.
-     * 
-     * @param        $doc 
+     *
+     * @param        $doc
      */
     public function __construct(DOMDocument $doc)
     {
@@ -57,10 +57,10 @@ class RssFeedParser extends BaseFeedParser
     }
 
     // ---------------------------------- </BaseFeedParser OVERRIDES> ----------------------------
-    
-    
+
+
     // ---------------------------------- <BaseFeedParser IMPL> ----------------------------------
-    
+
     /**
      * Parse the given xml dom as rss.
      *
@@ -89,10 +89,10 @@ class RssFeedParser extends BaseFeedParser
 
 
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
-    
+
     /**
      * Get namespace prefix for http://purl.org/dc/elements/1.1/.
-     * 
+     *
      * @return      string
      */
     public function getNamespaceElements()
@@ -109,7 +109,7 @@ class RssFeedParser extends BaseFeedParser
     {
         return $this->nsContent;
     }
-    
+
     // ---------------------------------- <PUBLIC METHODS> ---------------------------------------
 }
 

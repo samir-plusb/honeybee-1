@@ -1,0 +1,81 @@
+{
+    "Master": {
+        "FirstName": "",
+        "LastName": "",
+        "CompanyName": "TV Preusseb e.V.",
+        "Name": "TV Preusseb e.V.",
+        "Email": "",
+        "Phone": "030-7758014",
+        "Mobile": "",
+        "Fax": "",
+        "Category": "4f105ab1b4fc471f09010000",
+        "AdditionalCategories": [ ],
+        "Location": {
+            "Street": "Malteserstr.",
+            "HouseNo": "36",
+            "Zip": "12249",
+            "City": "36",
+            "Latitude": 52.431947,
+            "Longitude": 13.353681,
+            "AdditionalDetails": "",
+            "Name": "",
+            "Districts": {
+                "District": null,
+                "AdministrativeDistrict": null,
+                "Neighborhood": null
+            }
+        }
+    },
+    "Sales": {
+        "Product": null,
+        "ExpirationDate": null,
+        "Teaser": null,
+        "Text": null,
+        "Attributes": null,
+        "AdditionalCategories": [ "4f105ab1b4fc471f09010000" ],
+        "SearchableKeywords": [ "Test", "Test1" ],
+        "Attachments": [
+           {
+               "path": "/srv/www/PM/BerlinFinder/app/webroot/files/1336050867-h-otello-k-80-berlin_aussenansicht.jpg",
+               "url": "/files/1336050867-h-otello-k-80-berlin_aussenansicht.jpg",
+               "copyright": "H’Otello K’80 Berlin"
+           },
+           {
+               "path": "/srv/www/PM/BerlinFinder/app/webroot/files/1336050921-h-otello-k-80-berlin_lobby.jpg",
+               "url": "/files/1336050921-h-otello-k-80-berlin_lobby.jpg",
+               "copyright": "H’Otello K’80 Berlin"
+           },
+           {
+               "path": "/srv/www/PM/BerlinFinder/app/webroot/files/1336050976-h-otello-k-80-berlin_zimmer.jpg",
+               "url": "/files/1336050976-h-otello-k-80-berlin_zimmer.jpg",
+               "copyright": "H’Otello K’80 Berlin"
+           },
+           {
+               "path": "/srv/www/PM/BerlinFinder/app/webroot/files/1336059333-.",
+               "url": "/files/1336059333-.",
+               "copyright": "tha shrink0r"
+           }
+       ]
+    },
+    "Detail": {
+        "Teaser": null,
+        "Text": null,
+        "OpeningTimes": [ {
+            "from": {
+                "day": "Montag",
+                "time": "09:00"
+            },
+            "till": {
+                "day": "Mittwoch",
+                "time": "20:00"
+            }
+        } ],
+        "SearchableKeywords": [ "Test", "Test1" ],
+        "Attributes": [ { "name": "Kartenzahlung", "values": [ "Visa", "Mastercard" ] } ],
+        "Attachments": []
+    },
+    "Source": {
+        "ListingId": "1543512930"
+    },
+    "id": "4f1439bfb4fc475f0b000000"
+}

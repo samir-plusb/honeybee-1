@@ -12,6 +12,11 @@
  */
 class Auth_Login_LoginSuccessView extends AuthBaseView
 {
+    public function executeBinary(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        $this->executeHtml($parameters);
+    }
+
     /**
      * Execute any html related presentation logic and sets up our template attributes.
      *
@@ -93,7 +98,7 @@ class Auth_Login_LoginSuccessView extends AuthBaseView
 
         if (!empty($requestedModule) && !empty($requestedAction))
         {
-            $container = $this->createForwardContainer($requestedModule, $requestedAction, null, null, 'read');
+            $container = $this->createForwardContainer($requestedModule, $requestedAction, NULL, NULL, 'read');
         }
 
         return $container;

@@ -41,6 +41,7 @@ if('' != '{agavi_default_context}') {
 	AgaviConfig::set('core.default_context', '{agavi_default_context}');
 }
 
+require_once AgaviConfig::get('core.app_dir') . DIRECTORY_SEPARATOR . 'config.php';
 require_once '{filename}';
 
 __phpunit_run_isolated_test()

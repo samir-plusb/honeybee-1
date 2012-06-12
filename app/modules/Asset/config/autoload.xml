@@ -2,32 +2,27 @@
 <ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" parent="%core.system_config_dir%/autoload.xml">
     <ae:configuration>
         <autoloads>
-        <!-- LIBS -->
-            <!-- Lib/Mvc -->
-            <autoload name="AssetBaseAction">%core.module_dir%/Asset/lib/mvc/AssetBaseAction.class.php</autoload>
-            <autoload name="AssetBaseView">%core.module_dir%/Asset/lib/mvc/AssetBaseView.class.php</autoload>
-            <autoload name="AssetBaseModel">%core.module_dir%/Asset/lib/mvc/AssetBaseModel.class.php</autoload>
-            <!-- /Lib/Mvc -->
+            <!-- Agavi -->
+            <autoload name="AssetBaseAction">%core.module_dir%/Asset/lib/agavi/action/AssetBaseAction.class.php</autoload>
+            <autoload name="AssetBaseView">%core.module_dir%/Asset/lib/agavi/view/AssetBaseView.class.php</autoload>
+            <autoload name="AssetResourceValidator">%core.module_dir%/Asset/lib/agavi/validator/AssetResourceValidator.class.php</autoload>
+            <autoload name="AssetInfoValidator">%core.module_dir%/Asset/lib/agavi/validator/AssetInfoValidator.class.php</autoload>
+            <!-- /Agavi -->
 
-            <!-- Lib/Validator -->
-            <autoload name="AssetResourceValidator">%core.module_dir%/Asset/lib/validator/AssetResourceValidator.class.php</autoload>
-            <autoload name="AssetInfoValidator">%core.module_dir%/Asset/lib/validator/AssetInfoValidator.class.php</autoload>
-            <!-- /Lib/Validator -->
+            <!-- Service -->
+            <autoload name="IAssetService">%core.module_dir%/Asset/lib/service/IAssetService.iface.php</autoload>
+            <autoload name="ProjectAssetService">%core.module_dir%/Asset/lib/service/ProjectAssetService.class.php</autoload>
+            <autoload name="AssetIdSequence">%core.module_dir%/Asset/lib/service/AssetIdSequence.class.php</autoload>
+            <autoload name="IdSequenceId">%core.module_dir%/Asset/lib/service/IdSequenceId.class.php</autoload>
+            <autoload name="IAssetInfo">%core.module_dir%/Asset/lib/asset_info/IAssetInfo.iface.php</autoload>
+            <autoload name="ProjectAssetInfo">%core.module_dir%/Asset/lib/asset_info/ProjectAssetInfo.class.php</autoload>
+            <autoload name="IAssetFile">%core.module_dir%/Asset/lib/asset_info/IAssetFile.iface.php</autoload>
+            <autoload name="AssetFile">%core.module_dir%/Asset/lib/asset_info/AssetFile.class.php</autoload>
+            <!-- /Service -->
 
-            <!-- Models/Service -->
-            <autoload name="IAssetService">%core.module_dir%/Asset/models/Service/IAssetService.iface.php</autoload>
-            <autoload name="ProjectAssetService">%core.module_dir%/Asset/models/Service/ProjectAssetService.class.php</autoload>
-            <autoload name="AssetIdSequence">%core.module_dir%/Asset/models/Service/AssetIdSequence.class.php</autoload>
-            <autoload name="IAssetInfo">%core.module_dir%/Asset/models/AssetInfo/IAssetInfo.iface.php</autoload>
-            <autoload name="ProjectAssetInfo">%core.module_dir%/Asset/models/AssetInfo/ProjectAssetInfo.class.php</autoload>
-            <autoload name="IAssetFile">%core.module_dir%/Asset/models/AssetInfo/IAssetFile.iface.php</autoload>
-            <autoload name="AssetFile">%core.module_dir%/Asset/models/AssetInfo/AssetFile.class.php</autoload>
-            <!-- /Models/Service -->
-
-            <!-- Models/Setup -->
+            <!-- Setup -->
             <autoload name="AssetDatabaseSetup">%core.module_dir%/Asset/lib/setup/AssetDatabaseSetup.class.php</autoload>
-            <!-- /Models/Setup -->
-        <!-- /LIBS -->
+            <!-- /Setup -->
         </autoloads>
     </ae:configuration>
 </ae:configurations>

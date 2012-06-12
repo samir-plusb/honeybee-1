@@ -42,6 +42,7 @@
             <directory suffix=".php">../../app/modules/Import/</directory>
             <directory suffix=".php">../../app/modules/Workflow/</directory>
             <directory suffix=".php">../../app/modules/News/</directory>
+            <directory suffix=".php">../../app/modules/Shofi/</directory>
             <directory suffix=".php">../../testing/</directory>
             <exclude>
                 <!--
@@ -50,6 +51,10 @@
                 <directory>../../app/modules/Import/impl/Fixtures/</directory>
                 <directory suffix="Success.php">../../app/</directory>
                 <directory suffix="Input.php">../../app/</directory>
+                <directory suffix="Error.php">../../app/</directory>
+                <file>../../app/modules/Shofi/impl/Edit/CoreItem.php</file>
+                <file>../../app/modules/Shofi/impl/Edit/DetailItem.php</file>
+                <file>../../app/modules/Shofi/impl/Edit/SalesItem.php</file>
                 <directory suffix="Error.php">../../app/</directory>
                 <directory>../fixtures/</directory>
             </exclude>

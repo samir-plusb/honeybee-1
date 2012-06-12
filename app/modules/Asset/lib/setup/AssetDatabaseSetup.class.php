@@ -3,7 +3,7 @@
 /**
  * The AssetModuleSetup is responseable for setting up our module for usage.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset
@@ -17,7 +17,7 @@ class AssetDatabaseSetup extends BaseCouchDatabaseSetup
     public function __construct()
     {
         $this->setDatabase(
-            AgaviContext::getInstance()->getDatabaseConnection('CouchAssets')
+            AgaviContext::getInstance()->getDatabaseConnection('Assets.Write')
         );
     }
 
@@ -33,12 +33,15 @@ class AssetDatabaseSetup extends BaseCouchDatabaseSetup
     {
         parent::setup($tearDownFirst);
 
-        $idSequenceDoc = array(
-            '_id' => AssetIdSequence::COUCHDB_DOCID,
-            'curId' => 0
-        );
+        error_log("SETTING UP THE ASSET DATABASE(teardown: $tearDownFirst)");
 
-        $this->getDatabase()->storeDoc(NULL, $idSequenceDoc);
+        $documentStore = new CouchDocumentStore($this->getDatabase());
+        $documentStore->save(
+            IdSequenceId::fromArray(array(
+                'identifier' => AssetIdSequence::COUCHDB_DOCID,
+                'currentId' => 0
+            )
+        ));
     }
 }
 

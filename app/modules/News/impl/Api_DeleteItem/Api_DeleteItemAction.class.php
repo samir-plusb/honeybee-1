@@ -3,7 +3,7 @@
 /**
  * The News_Api_DeleteItemAction is repsonseable handling the deletion of content items from the editing gui.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News
@@ -26,14 +26,14 @@ class News_Api_DeleteItemAction extends NewsBaseAction
     {
         $ticket = $parameters->getParameter('ticket');
         $contentItemId = $parameters->getParameter('content_item');
-        $workflowItem = $ticket->getWorkflowItem();
+        $workflowItem = $ticket->getItem();
         if (($contentItem = $workflowItem->getContentItem($contentItemId)))
         {
             try
             {
                 $workflowItem->removeContentItem($contentItem);
-                $supervisor = Workflow_SupervisorModel::getInstance();
-                $supervisor->getItemPeer()->storeItem($workflowItem);
+                $supervisor = WorkflowSupervisor::getInstance();
+                $supervisor->getWorkflowItemStore()->save($workflowItem);
             }
             catch (Exception $e)
             {

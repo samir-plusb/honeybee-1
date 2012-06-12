@@ -6,7 +6,7 @@
  * - saves it's meta-data to a couchdb
  * - and returns a new id that is unqiue for the asset
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

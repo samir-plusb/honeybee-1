@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0"
+    xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <dataimports>
+
+            <dataimport name="shofi" class="ShofiDataImport">
+                <description>Imports shofi data in form of ShofiWorkflowItems.</description>
+                <datasources>
+                    <datasource>wkg</datasource>
+                </datasources>
+                <settings>
+                    <setting name="notify">true</setting>
+                </settings>
+            </dataimport>
+
+            <dataimport name="shofi.categories" class="ShofiCategoryDataImport">
+                <description>Imports shofi-category data records directly into the couch (no workflow).</description>
+                <datasources>
+                    <datasource>categories</datasource>
+                </datasources>
+                <settings>
+                    <setting name="couchdb_database">Shofi.Write</setting>
+                </settings>
+            </dataimport>
+
+        </dataimports>
+    </ae:configuration>
+</ae:configurations>

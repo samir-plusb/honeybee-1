@@ -3,14 +3,21 @@
 /**
  * The WorkflowItemDataImport is responseable for sending import notifications to the WorkflowSupervisor.
  *
- * @version         $Id: ProjectZendAclSecurityUser.class.php 412 2011-10-20 11:06:22Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Import
  * @subpackage      Workflow
  */
-class WorkflowItemDataImport extends BaseDataImport
+abstract class WorkflowItemDataImport extends BaseDataImport
 {
+    /**
+     * @var IWorkflowService
+     */
+    protected $workflowService;
+
+    abstract protected function getWorkflowService();
+
     // ---------------------------------- <BaseDataImport OVERRIDES> -----------------------------
 
     /**
@@ -22,7 +29,7 @@ class WorkflowItemDataImport extends BaseDataImport
      *
      * @see         BaseDataImport::__construct()
      */
-    public function __construct(IImportConfig $config)
+    public function __construct(IConfig $config)
     {
         if (!$config instanceof WorkflowItemDataImportConfig)
         {
@@ -32,6 +39,13 @@ class WorkflowItemDataImport extends BaseDataImport
             ));
         }
         parent::__construct($config);
+    }
+
+    protected function init(IDataSource $dataSource)
+    {
+        parent::init($dataSource);
+
+        $this->workflowService = $this->getWorkflowService();
     }
 
     // ---------------------------------- </BaseDataImport OVERRIDES> ----------------------------
@@ -53,28 +67,16 @@ class WorkflowItemDataImport extends BaseDataImport
     {
         $record = $this->getCurrentRecord();
         $importData = $record->toArray();
-        unset ($importData[ImportBaseDataRecord::PROP_IDENT]);
+        unset ($importData[BaseDataRecord::PROP_IDENT]);
 
-        try
+        $workflowItem = $this->workflowService->fetchWorkflowItemById($record->getIdentifier());
+        if (! $workflowItem)
         {
-            /* @var $supervisor Workflow_SupervisorModel */
-            $supervisor = AgaviContext::getInstance()->getModel('Supervisor', 'Workflow');
-            $workflowItem = $supervisor->getItemPeer()->getItemByIdentifier($record->getIdentifier());
-
-            if (! $workflowItem)
-            {
-                $this->createWorkflowItem($record->getIdentifier(), $importData);
-            }
-            else
-            {
-                $this->updateWorkflowItem($workflowItem, $importData);
-            }
+            $this->createWorkflowItem($record->getIdentifier(), $importData);
         }
-        catch(Exception $e)
+        else
         {
-            echo $e->getMessage() . PHP_EOL;
-             // @TODO log exception and/or bubble to parent
-            return FALSE;
+            $this->updateWorkflowItem($workflowItem, $importData);
         }
         return TRUE;
     }
@@ -84,26 +86,27 @@ class WorkflowItemDataImport extends BaseDataImport
      *
      * @param array $importData
      */
-    protected function createWorkflowItem($identifier, array $importData)
+    protected function createWorkflowItem($identifier, array $importData, array $itemData = array())
     {
-        $supervisor = AgaviContext::getInstance()->getModel('Supervisor', 'Workflow');
-        $workflowItem = new WorkflowItem(array(
-            'identifier' => $identifier
-        ));
-        $workflowItem->createImportItem($importData);
-        $supervisor->getItemPeer()->storeItem($workflowItem);
+        $itemData['identifier'] = $identifier;
+        $workflowItem = $this->workflowService->createWorkflowItem($itemData);
+        $workflowItem->setMasterRecord(
+            $workflowItem->createMasterRecord($importData)
+        );
+
         if ($this->notifyEnabled())
         {
             try
             {
-                $supervisor->onWorkflowItemCreated($workflowItem);
+                $this->workflowService->notifyWorkflowItemCreated($workflowItem);
             }
             catch (Exception $e)
             {
-                $supervisor->getItemPeer()->deleteItem($workflowItem);
+                $this->workflowService->deleteWorkflowItem($workflowItem, TRUE);
                 throw $e;
             }
         }
+        return $workflowItem;
     }
 
     /**
@@ -111,14 +114,14 @@ class WorkflowItemDataImport extends BaseDataImport
      *
      * @param array $importData
      */
-    protected function updateWorkflowItem(IWorkflowItem $workflowItem, array $importData)
+    protected function updateWorkflowItem(IWorkflowItem $workflowItem, array $importData, array $itemData = array())
     {
-        $supervisor = AgaviContext::getInstance()->getModel('Supervisor', 'Workflow');
-        $workflowItem->updateImportItem($importData);
-        $supervisor->getItemPeer()->storeItem($workflowItem);
+        $workflowItem->updateMasterRecord($importData);
+        $workflowItem->applyValues($itemData);
+        $this->workflowService->storeWorkflowItem($workflowItem);
         if ($this->notifyEnabled())
         {
-            $supervisor->onWorkflowItemUpdated($workflowItem);
+            $this->workflowService->notifyMasterRecordUpdated($workflowItem);
         }
     }
 

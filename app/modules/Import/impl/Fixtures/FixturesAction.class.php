@@ -3,7 +3,7 @@
 /**
  * The Import_FixturesAction class handles setting up our test fixtures.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
@@ -25,14 +25,22 @@ class Import_FixturesAction extends ImportBaseAction
     {
         // Switch database connections to point to our fixture database configs.
         AgaviConfig::set('news.connections', array(
-            'elasticsearch' => 'EsNewsFixtures',
-            'couchdb' => 'CouchWorkflowFixtures'
+            'elasticsearch' => 'News.ReadFixtures',
+            'couchdb' => 'News.WriteFixtures'
         ));
+        
+        $assetSetup = new AssetDatabaseSetup();
+        $assetSetup->setup(TRUE);
+        
         // Tear down the index and the river before resetting the workflow lib.
-        $midasIndexSetup = new MidasIndexSetup();
+        $midasIndexSetup = new NewsIndexSetup();
         $midasIndexSetup->tearDown();
         // Reset the couch database for before (news)workflow fixture import.
-        $workflowSetup = new WorkflowDatabaseSetup();
+        $workflowSetup = new NewsDatabaseSetup(
+            AgaviContext::getInstance()->getDatabaseConnection(
+                NewsWorkflowSupervisor::getCouchDbDatabasename()
+            )
+        );
         $workflowSetup->setup(TRUE);
         $importFactory = new ImportFactory(
             new ImportFactoryConfig(
@@ -42,10 +50,16 @@ class Import_FixturesAction extends ImportBaseAction
         try
         {
             // Enable workflow integration in all cases (environment).
-            $dataImport = $importFactory->createDataImport('workflow', array(
+            $dataImport = $importFactory->createDataImport('news', array(
                 WorkflowItemDataImportConfig::CFG_NOTIFY_SUPERVISOR => TRUE
             ));
             $dataImport->run($importFactory->createDataSource('rss'));
+/*
+            $dataImport = $importFactory->createDataImport('shofi', array(
+                WorkflowItemDataImportConfig::CFG_NOTIFY_SUPERVISOR => TRUE
+            ));
+            $dataImport->run($importFactory->createDataSource('wkg'));
+ */
         }
         catch(AgaviAutoloadException $e)
         {

@@ -4,8 +4,9 @@
  * @copyright BerlinOnline
  * @version $Id$
  * @package Workflow
+ * @subpackage Mvc
  */
-class Workflow_Run_RunSuccessView extends ProjectBaseView
+class Workflow_Run_RunSuccessView extends WorkflowBaseView
 {
     /**
      * Handles the Html output type.
@@ -48,12 +49,7 @@ class Workflow_Run_RunSuccessView extends ProjectBaseView
      */
     public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        return json_encode(
-            array(
-                'state' => 'ok',
-                'msg' => $this->getAttribute('content')
-            )
-        );
+        $this->getResponse()->setContent($this->getAttribute('content'));
     }
 }
 

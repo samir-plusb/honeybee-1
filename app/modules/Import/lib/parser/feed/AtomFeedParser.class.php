@@ -4,12 +4,12 @@
  * The AtomFeedParser is a concrete implementation of the BaseFeedParser base class.
  * It provides support for parsing Atom feeds.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer <tom.anheyer@berlinonline.de>
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
- * @subpackage      Parser
+ * @subpackage      Parser/Feed
  */
 class AtomFeedParser extends BaseFeedParser
 {
@@ -45,7 +45,7 @@ class AtomFeedParser extends BaseFeedParser
                 $feedData['items'][] = $itemData;
             }
         }
-        
+
         return TRUE;
     }
 

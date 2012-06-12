@@ -3,7 +3,7 @@
 /**
  * The ProjectScriptPacker packs an compresses js and css scripts.
  *
- * @version         $Id: ProjectLanguageRoutingCallback.class.php 412 2011-10-20 11:06:22Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Project
@@ -11,13 +11,14 @@
  */
 class ProjectScriptPacker
 {
-    public function pack(array $files, $type)
+    public function pack(array $files, $type, $baseDir = NULL)
     {
         $combined = '';
 
         foreach ($files as $file)
         {
-            if (! is_readable($file))
+            $path = ($baseDir) ? ($baseDir . DIRECTORY_SEPARATOR . $file) : $file;
+            if (! is_readable($path))
             {
                 throw new Exception(
                     "File " . $file . " is not readable. If you tried to provide an url,
@@ -25,7 +26,7 @@ class ProjectScriptPacker
                 );
             }
 
-            $combined .= file_get_contents($file) . "\n\n\n";
+            $combined .= file_get_contents($path) . "\n\n\n";
         }
 
         return $this->compressScript($combined, $type);

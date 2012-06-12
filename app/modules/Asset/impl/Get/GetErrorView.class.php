@@ -3,7 +3,7 @@
 /**
  * The Asset_Get_GetErrorView class handle the presentation logic for our Asset/Get actions's error data.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

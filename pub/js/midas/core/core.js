@@ -1,3 +1,5 @@
+ZeroClipboard.setMoviePath( 'flash/ZeroClipboard.swf' );
+
 /**
  * @namespace The midas namespace holds all midas related stuff.
  * @name midas

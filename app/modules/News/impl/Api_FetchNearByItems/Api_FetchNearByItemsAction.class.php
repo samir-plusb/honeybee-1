@@ -3,7 +3,7 @@
 /**
  * The News_FetchNearByItemsAction is repsonseable handling location extraction api requests.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

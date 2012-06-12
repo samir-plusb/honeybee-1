@@ -4,28 +4,28 @@
  * The ProjectLanguageRoutingCallbacck response to locale information
  * matched inside a url and applies the corresponding settings to our agavi env.
  * It is also responseable for correctly providing i18n data for url generation.
- * 
+ *
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Project
- * @subpackage      Routing
+ * @subpackage      Agavi/Routing
  */
 class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
 {
     /**
      * An array containing locales that are available to use.
-     * 
-     * @var         array 
+     *
+     * @var         array
      */
     protected $availableLocales = array();
-    
+
     /**
      * Initialize this ProjectLanguageRoutingCallback instance.
-     * 
+     *
      * @param       AgaviContext $context
-     * 
-     * @param       array $route 
+     *
+     * @param       array $route
      */
     public function initialize(AgaviContext $context, array &$route)
     {
@@ -37,15 +37,15 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
         // store the available locales, that's faster
         $this->availableLocales = $this->context->getTranslationManager()->getAvailableLocales();
     }
-    
+
     /**
      * Routing callback that is invoked when the root we are applied to matches (routing runtime).
-     * 
+     *
      * @param       array $parameters
      * @param       AgaviExecutionContainer $container
-     * 
-     * @return      boolean 
-     * 
+     *
+     * @return      boolean
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @codingStandardsIgnoreStart
@@ -59,10 +59,10 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
             // yup, worked. now lets set that as a cookie
             $this->context->getController()->getGlobalResponse()->setCookie(
                 'locale',
-                $parameters['locale'], 
+                $parameters['locale'],
                 '+1 month'
             );
-            
+
             return TRUE;
         }
         catch (AgaviException $e)
@@ -72,15 +72,15 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
             return FALSE;
         }
     }
-    
+
     /**
      * Routing callback that is invoked when the root we are applied to does not match (routing runtime).
-     * 
+     *
      * @param       array $parameters
      * @param       AgaviExecutionContainer $container
-     * 
-     * @return      boolean 
-     * 
+     *
+     * @return      boolean
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @codingStandardsIgnoreStart
@@ -92,13 +92,13 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
         $requestData = $this->context->getRequest()->getRequestData();
 
         $cookie = $requestData->getCookie('locale');
-        
+
         if ($cookie !== NULL)
         {
             try
             {
                 $this->translationManager->setLocale($cookie);
-                
+
                 return;
             }
             catch (AgaviException $e)
@@ -113,7 +113,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
             $hasIntl = function_exists('locale_accept_from_http');
             // try to find the best match for the locale
             $locales = self::parseAcceptLanguage($requestData->getHeader('Accept-Language'));
-            
+
             foreach ($locales as $locale)
             {
                 try
@@ -121,13 +121,13 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
                     if ($hasIntl)
                     {
                         // we don't use this directly on Accept-Language,
-                        // because we might not have the preferred locale, 
+                        // because we might not have the preferred locale,
                         // but another one in any case, it might help clean up the value a bit further
                         $locale = locale_accept_from_http($locale);
                     }
-                    
+
                     $this->translationManager->setLocale($locale);
-                    
+
                     return;
                 }
                 catch (AgaviException $e)
@@ -137,15 +137,15 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
             }
         }
     }
-    
+
     /**
      * Routing callback that is invoked when the root we are applied to does not match (routing runtime).
-     * 
+     *
      * @param       array $parameters
      * @param       AgaviExecutionContainer $container
-     * 
-     * @return      boolean 
-     * 
+     *
+     * @return      boolean
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
@@ -163,23 +163,23 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
                 $this->translationManager->getCurrentLocaleIdentifier()
             );
         }
-        
+
         return TRUE;
     }
-    
+
     /**
      * Resolve a given locale identifier to its corresponding short identifier.
-     * 
+     *
      * @staticvar   string $localeMap
-     * 
+     *
      * @param       string $localeIdentifier
-     * 
-     * @return      string 
+     *
+     * @return      string
      */
     public function getShortestLocaleIdentifier($localeIdentifier)
     {
         static $localeMap = NULL;
-        
+
         if ($localeMap === NULL)
         {
             foreach ($this->availableLocales as $locale)
@@ -187,7 +187,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
                 $localeMap[$locale['identifierData']['language']][] = $locale['identifierData']['territory'];
             }
         }
-        
+
         if (count($localeMap[$short = substr($localeIdentifier, 0, 2)]) > 1)
         {
             return $localeIdentifier;
@@ -197,20 +197,20 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
             return $short;
         }
     }
-    
+
     /**
      * Parses the value of a http accept-language header into an array of identifiers.
-     * 
+     *
      * @param       string $acceptLanguage
-     * 
-     * @return      array 
+     *
+     * @return      array
      */
     protected static function parseAcceptLanguage($acceptLanguage)
     {
         $locales = array();
-        
+
         $matchCount = preg_match_all(
-            '/(^|\s*,\s*)([a-zA-Z]{1,8}(-[a-zA-Z]{1,8})*)\s*(;\s*q\s*=\s*(1(\.0{0,3})?|0(\.[0-9]{0,3})))?/i', 
+            '/(^|\s*,\s*)([a-zA-Z]{1,8}(-[a-zA-Z]{1,8})*)\s*(;\s*q\s*=\s*(1(\.0{0,3})?|0(\.[0-9]{0,3})))?/i',
             $acceptLanguage,
             $matches
         );
@@ -221,7 +221,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
             {
                 $language = str_replace('-', '_', $language);
             }
-            
+
             foreach ($matches[5] as &$quality)
             {
                 if ($quality === '')
@@ -229,7 +229,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
                     $quality = '1';
                 }
             }
-            
+
             $locales = array_combine($matches[2], $matches[5]);
             arsort($locales, SORT_NUMERIC);
         }

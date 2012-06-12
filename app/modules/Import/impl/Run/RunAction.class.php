@@ -3,7 +3,7 @@
 /**
  * The Import_RunAction class handles running imports with selectable datasources.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
@@ -30,7 +30,7 @@ class Import_RunAction extends ImportBaseAction
      */
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
-        $import = $parameters->getParameter(self::PARAM_DATA_IMPORT);
+        $dataImport = $parameters->getParameter(self::PARAM_DATA_IMPORT);
         $dataSources = $parameters->getParameter(self::PARAM_DATA_SOURCE, array());
         $view = 'Success';
 
@@ -38,17 +38,42 @@ class Import_RunAction extends ImportBaseAction
         {
             try
             {
-                $import->run($dataSource);
+                $report = $dataImport->run($dataSource);
+
+                if ($report->hasErrors())
+                {
+                    $errors = array();
+                    foreach ($report->getErrors() as $error)
+                    {
+                        $errors[] = $error['message'];
+                    }
+                    $this->setAttribute('errors', array(
+                        "An unexpected error occured during import: " . print_r($report->getErrors(), TRUE)
+                    ));
+                    $this->logError("An unexpected error occured during import: " . print_r($report->getErrors(), TRUE));
+                    return 'Error';
+                }
             }
-            catch(AgaviAutoloadException $e)
+            catch(Exception $e)
             {
                 /* @todo better exception handling */
                 $this->setAttribute('errors', array($e->getMessage()));
+                $this->logError("An unexpected error occured during import: " . $e->getMessage());
                 $view = 'Error';
             }
         }
-
         return $view;
+    }
+
+    public function handleWriteError(AgaviRequestDataHolder $parameters)
+    {
+        $errors = array();
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $error)
+        {
+            $errors[] = $error['message'];
+        }
+        $this->setAttribute('errors', $errors);
+        return 'Error';
     }
 }
 

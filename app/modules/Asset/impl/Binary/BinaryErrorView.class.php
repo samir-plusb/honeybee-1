@@ -3,7 +3,7 @@
 /**
  * The Asset_Binary_BinaryErrorView class handle the presentation logic for our Asset/Binary actions's error data.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

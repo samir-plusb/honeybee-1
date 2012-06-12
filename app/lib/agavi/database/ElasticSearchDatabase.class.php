@@ -6,7 +6,7 @@
  * @version $Id$
  * @since 10.10.2011
  * @package Project
- * @subpackage Database
+ * @subpackage Agavi/Database
  */
 class ElasticSearchDatabase extends AgaviDatabase
 {
@@ -38,15 +38,14 @@ class ElasticSearchDatabase extends AgaviDatabase
                     'transport' => $this->getParameter('transport', 'Http')
                 )
             );
+            $indexDef = $this->getParameter('index', array());
+            $indexName = isset($indexDef['name']) ? $indexDef['name'] : NULL;
+            $this->resource = $this->connection->getIndex($indexName);
         }
         catch (Exception $e)
         {
             throw new AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
         }
-
-        $this->resource = $this->connection->getIndex(
-            $this->getParameter('index')
-        );
 
         try
         {
@@ -73,23 +72,22 @@ class ElasticSearchDatabase extends AgaviDatabase
 
     protected function createIndex()
     {
-        if (! $this->hasParameter('setup_class'))
+        $indexDef = $this->getParameter('index', array());
+        if (! isset($indexDef['setup_class']))
         {
             $this->resource->create();
             return;
         }
-
-        $setupClass = $this->getParameter('setup_class');
+        $setupClass = $indexDef['setup_class'];
         if (! class_exists($setupClass))
         {
             throw new AgaviDatabaseException("Setup class '$setupClass' can not be found.");
         }
-        $indexSetup = new $setupClass($this);
+        $indexSetup = new $setupClass($this->getName());
         if (! ($indexSetup instanceof IDatabaseSetup))
         {
             throw new AgaviDatabaseException('Setup class does not implement IDatabaseSetup: '.$setupClass);
         }
-
         $indexSetup->setup();
     }
 

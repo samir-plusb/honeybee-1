@@ -1,7 +1,7 @@
 <?php
     $ticketData = $t['ticket'];
     $workflowItem = $ticketData['item'];
-    $importItem = $workflowItem['importItem'];
+    $masterRecord = $workflowItem['masterRecord'];
     $contentItems = $workflowItem['contentItems'];
 ?>
 <header>
@@ -57,7 +57,7 @@
             <input class="static-value prev-item-base-url" type="hidden" value="<?php echo urldecode($t['prev_item_url']); ?>" />
             <input type="hidden" class="static-value list_position" value="<?php echo $t['list_pos']; ?>" />
 
-            <input type="hidden" class="static-value ticket-identifier" name="ticket" value="<?php echo $ticketData['_id']; ?>" />
+            <input type="hidden" class="static-value ticket-identifier" name="ticket" value="<?php echo $ticketData['identifier']; ?>" />
             <input type="hidden" class="static-value workflow-item-identifier" name="parentIdentifier" value="<?php echo $workflowItem['identifier']; ?>" />
             <input type="hidden" name="cid" value="0" />
             <input type="hidden" name="identifier" value="0" />
@@ -214,11 +214,11 @@
                 <h3 class="legend">Daten</h3>
                 <dl>
                     <dt>Betreff</dt>
-                    <dd class="subject"><?php echo $importItem['title']; ?></dd>
+                    <dd class="subject"><?php echo $masterRecord['title']; ?></dd>
                     <dt>Von</dt>
-                    <dd class="source"><?php echo $importItem['source']; ?></dd>
+                    <dd class="source"><?php echo $masterRecord['source']; ?></dd>
                     <dt>Versanddatum</dt>
-                    <dd class="timestamp"><?php echo $importItem['timestamp']; ?></dd>
+                    <dd class="timestamp"><?php echo $masterRecord['timestamp']; ?></dd>
                 </dl>
             </div>
 
@@ -234,7 +234,7 @@
                 </ul>
                 <div id="content-tabs-1">
                     <div class="input-full">
-                        <textarea class="text-content" readonly="readonly"><?php echo strip_tags(htmlspecialchars_decode($importItem['content'])); ?></textarea>
+                        <textarea class="text-content" readonly="readonly"><?php echo strip_tags(htmlspecialchars_decode($masterRecord['content'])); ?></textarea>
                     </div>
                 </div>
                 <div id="asset-list-tab">

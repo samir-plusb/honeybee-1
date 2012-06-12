@@ -3,7 +3,7 @@
 /**
  * The Asset_Delete_DeleteSuccessView class handle the presentation logic for our Asset/Delete actions's success data.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

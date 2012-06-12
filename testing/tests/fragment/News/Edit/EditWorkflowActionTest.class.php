@@ -16,6 +16,8 @@ class EditWorkflowActionTest extends AgaviActionTestCase
 
     protected $ticketId;
 
+    protected $supervisor;
+
     public function __construct($name = NULL, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
@@ -30,11 +32,12 @@ class EditWorkflowActionTest extends AgaviActionTestCase
         parent::setUp();
 
         AgaviConfig::set('news.connections', array(
-            'elasticsearch' => 'EsNewsFixtures',
-            'couchdb' => 'CouchWorkflowFixtures'
+            'elasticsearch' => 'News.ReadFixtures',
+            'couchdb' => 'News.WriteFixtures'
         ));
-        $couchDb = Workflow_SupervisorModel::getInstance()->getDatabase();
-        $ticketResp = $couchDb->getView(NULL, 'designWorkflow', 'ticketList', array('limit' => 1));
+        $this->supervisor = WorkflowSupervisorFactory::createByTypeKey('news');
+        $couchDb = $this->supervisor->getDatabase();
+        $ticketResp = $couchDb->getView(NULL, 'tickets', 'all', array('limit' => 1));
         $this->ticketId = $ticketResp['rows'][0]['id'];
         $this->login();
     }
@@ -43,7 +46,7 @@ class EditWorkflowActionTest extends AgaviActionTestCase
 
     public function testExecuteRead()
     {
-        $this->runActionWithParameters('read', array('ticket' => $this->ticketId));
+        $this->runActionWithParameters('read', array('ticket' => $this->ticketId, 'type' => 'news'));
         $this->assertViewNameEquals('Success');
         $this->assertContainerAttributeExists('content');
 

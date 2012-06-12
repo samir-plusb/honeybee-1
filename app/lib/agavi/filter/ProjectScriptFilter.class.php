@@ -3,11 +3,11 @@
 /**
  * The ProjectScriptFilter is responseable for detecting required scripts and deploying them for your view.
  *
- * @version         $Id: ProjectScriptFilter.class.php 412 2011-10-20 11:06:22Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Project
- * @subpackage      Filter
+ * @subpackage      Agavi/Filter
  *
  * @SuppressWarnings(PHPMD.TooManyMethods)
  */
@@ -211,6 +211,7 @@ error_log("<ProjectScriptFilter>" . ($r2 - $r1) . "</ProjectScriptFilter>");*/
         $deployments = array();
         $javascripts = array();
         $stylesheets = array();
+
         foreach(self::$views2Deploy as $executionData)
         {
             $viewPath = $this->buildViewPath($executionData);
@@ -255,7 +256,6 @@ error_log("<ProjectScriptFilter>" . ($r2 - $r1) . "</ProjectScriptFilter>");*/
         $affectedPackages = array();
         $affectedJavascripts = array();
         $affectedStylesheets = array();
-
         foreach ($this->config->getDeployments() as $curViewpath => $deploymentInfo)
         {
             $escapedPath = str_replace(
@@ -347,7 +347,7 @@ $r1 = ($usec3/1000 + $sec3*1000);*/
         if (!file_exists($deployPath))
         {
             $script_packer = new ProjectScriptPacker();
-            $packedJs = $script_packer->pack($scripts, 'js');
+            $packedJs = $script_packer->pack($scripts, 'js', $pubDir);
             //array_map("unlink", glob($this->config->getJsCacheDir() . '/*.js')); // remove all prev caches
             file_put_contents($deployPath, $packedJs);
         }
@@ -432,7 +432,9 @@ error_log("<CSS PACKING>" . ($r2 - $r1) . "</CSS PACKING>");*/
             };
             // @todo replace all possible @import and possible urls.
             $adjustedCss = preg_replace_callback(
-                '#url\([\'"](?!http|/|data)(.*?)[\'"]\)#i', $replaceCallback, file_get_contents($cssFile)
+                '#url\([\'"](?!http|/|data)(.*?)[\'"]\)#i',
+                $replaceCallback,
+                file_get_contents($pubDir . DIRECTORY_SEPARATOR . $cssFile)
             );
             $tmpPath = tempnam(sys_get_temp_dir(), 'css_');
             file_put_contents($tmpPath, $adjustedCss);
@@ -454,10 +456,11 @@ error_log("<CSS PACKING>" . ($r2 - $r1) . "</CSS PACKING>");*/
         $hashBase = '';
 /*list($usec, $sec) = explode(" ",microtime());
 $now = ($usec/1000 + $sec*1000);*/
-        foreach ($scripts as $javascript)
+        foreach ($scripts as $script)
         {
-            $mTime = filemtime($javascript);
-            $hashBase .= $javascript;
+            $pubDir = $this->config->get(ProjectScriptFilterConfig::CFG_PUB_DIR);
+            $mTime = filemtime($pubDir . DIRECTORY_SEPARATOR . $script);
+            $hashBase .= $script;
 
             if ($lastModified < $mTime)
             {

@@ -3,7 +3,7 @@
 /**
  * The Asset_Binary_BinarySuccessView class handle the presentation logic for our Asset/Binary actions's success data.
  *
- * @version         $Id:$
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset
@@ -23,7 +23,7 @@ class Asset_Binary_BinarySuccessView extends AssetBaseView
     {
         $assetInfo = $this->getAttribute('asset_info');
         $response = $this->getContainer()->getResponse();
-        $binary = new AssetFile($assetInfo->getId());
+        $binary = new AssetFile($assetInfo->getIdentifier());
 
         if (! $binary->fileExists())
         {
@@ -36,9 +36,9 @@ class Asset_Binary_BinarySuccessView extends AssetBaseView
             $response->setHttpHeader('Last-Modified', gmdate('D, d M Y H:i:s', $lastModified).' GMT');
             $response->setHttpHeader('Etag', $lastModified); // timestamp should be sufficient as ETag...
 
-            $timestampFromRequest = $parameters->getHeader('If-Modified-Since', false);
+            $timestampFromRequest = $parameters->getHeader('If-Modified-Since', FALSE);
             if (
-                (false !== $timestampFromRequest && @strtotime($timestampFromRequest) == $lastModified)
+                (FALSE !== $timestampFromRequest && strtotime($timestampFromRequest) == $lastModified)
                 || (trim($parameters->getHeader('If-None-Match', '') == $lastModified))
             )
             {
