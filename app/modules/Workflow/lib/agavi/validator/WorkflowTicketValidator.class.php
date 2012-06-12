@@ -37,7 +37,6 @@ class WorkflowTicketValidator extends AgaviValidator
         {
             $identifier = $originalValue;
         }
-error_log(print_r($originalValue, TRUE));
         $ticketType = $this->getParameter('type', FALSE);
         $typeArgName = $this->getParameter('type_argument', 'type');
         $ticketType = $ticketType ? $ticketType : $this->getData($typeArgName);
