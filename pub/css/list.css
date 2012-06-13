@@ -173,6 +173,11 @@ th.data-header
     padding: 0;
 }
 
+th.header-actions 
+{ 
+    min-width:110px;
+}
+
 .sortable:hover
 {
     background-color: rgba(141, 192, 219, 0.25);

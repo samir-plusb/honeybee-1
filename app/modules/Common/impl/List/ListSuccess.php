@@ -156,7 +156,7 @@
         }
     }
 ?>
-                    <th><?php echo $tm->_('actions', $translationDomain); ?></th>
+                    <th class="header-actions"><?php echo $tm->_('actions', $translationDomain); ?></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: list_items">
