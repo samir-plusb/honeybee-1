@@ -8,6 +8,7 @@
     $ticketId = isset($ticketData['identifier']) ? $ticketData['identifier'] : '';
     $salesItem = $itemData['salesItem'];
     $assetListOptions = $t['asset_widget_opts'];
+    $escape = function($val) { return htmlspecialchars($val); };
 ?>
 <div class="container-fluid controller-edit container-sales-item"
      data-edit-controller-options='<?php echo $controllerOptions; ?>'>
@@ -62,7 +63,7 @@ Editing:
     Holds form for editing the current shofi place's salesItem. (All form values are nested here.)
 ############################################################################################### -->
 			<div class="span8 editing">
-                <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $ticketId; ?>" />
+                <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $escape($ticketId); ?>" />
 				<div class="row-fluid ">
 					<div class="span12">
 <!-- salesItem data -->
@@ -72,7 +73,7 @@ Editing:
 						<div class="control-group">
 							<label class="control-label">Eintrag gekündigt zum</label>
 							<div class="controls">
-								<input type="input" name="salesItem[expireDate]" value="<?php echo $salesItem['expireDate']; ?>" />
+								<input type="input" name="salesItem[expireDate]" value="<?php echo $escape($salesItem['expireDate']); ?>" />
 								<p class="help-block">Hier legst Du fest, bis wann dieser Eintrag verkauft wurde.</p>
 							</div>
 						</div>
@@ -94,13 +95,13 @@ Editing:
 					<div class="control-group ">
 						<label class="control-label">Teaser</label>
 						<div class="controls">
-							<textarea name="salesItem[teaser]" style="width:100%" rows="6"><?php echo $salesItem['teaser']; ?></textarea>
+							<textarea name="salesItem[teaser]" style="width:100%" rows="6"><?php echo $escape($salesItem['teaser']); ?></textarea>
 						</div>
 					</div>
 					<div class="control-group">
 						<label class="control-label">Beschreibungstext</label>
 						<div class="controls">
-							<textarea name="salesItem[text]" style="width:100%" rows="6"><?php echo $salesItem['text']; ?></textarea>
+							<textarea name="salesItem[text]" style="width:100%" rows="6"><?php echo $escape($salesItem['text']); ?></textarea>
 						</div>
 					</div>
 

@@ -118,7 +118,7 @@ class ShofiCoreItem extends BaseDataObject implements IShofiCoreItem
         return $this->fax;
     }
 
-    public function setfax($fax)
+    public function setFax($fax)
     {
         $this->fax = $fax;
     }

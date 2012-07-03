@@ -61,10 +61,12 @@ class ShofiDetailItem extends BaseDataObject implements IShofiDetailItem
     public function setOpeningTimes($openingTimes)
     {
         $openingTimes = is_array($openingTimes) ? $openingTimes : array();
-        $this->openingTimes = array_filter($openingTimes, function($item)
-        {
-            return !empty($item);
-        });
+        $this->openingTimes = array_values(
+            array_filter($openingTimes, function($item)
+            {
+                return !empty($item);
+            })
+        );
     }
 
     public function getAttributes()
@@ -75,10 +77,12 @@ class ShofiDetailItem extends BaseDataObject implements IShofiDetailItem
     public function setAttributes($attributes)
     {
         $attributes = is_array($attributes) ? $attributes : array();
-        $this->attributes = array_filter($attributes, function($item)
-        {
-            return !empty($item);
-        });
+        $this->attributes = array_values(
+            array_filter($attributes, function($attribute)
+            {
+                return !empty($attribute);
+            })
+        );
     }
 
     public function getKeywords()
@@ -89,10 +93,12 @@ class ShofiDetailItem extends BaseDataObject implements IShofiDetailItem
     public function setKeywords($keywords)
     {
         $keywords = is_array($keywords) ? $keywords : array();
-        $this->keywords = array_filter($keywords, function($item)
-        {
-            return !empty($item);
-        });
+        $this->keywords = array_values(
+            array_filter($keywords, function($keyword)
+            {
+                return !empty($keyword);
+            })
+        );
     }
 
     public function getCategory()
@@ -113,10 +119,12 @@ class ShofiDetailItem extends BaseDataObject implements IShofiDetailItem
     public function setAdditionalCategories($additionalCategories)
     {
         $categories = is_array($additionalCategories) ? $additionalCategories : array();
-        $this->additionalCategories = array_filter($categories, function($item)
-        {
-            return !empty($item);
-        });
+        $this->additionalCategories = array_values(
+            array_filter($additionalCategories, function($additionalCategory)
+            {
+                return !empty($additionalCategory);
+            })
+        );
     }
 
     public function getAttachments()

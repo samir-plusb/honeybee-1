@@ -6,6 +6,7 @@
     $assetListOptions = $t['asset_widget_opts'];
     $ticketId = isset($ticketData['identifier']) ? $ticketData['identifier'] : '';
     $categoriesWidgetOptions = $t['top_categories_widget_opts'];
+    $escape = function($val) { return htmlspecialchars($val); };
 ?>
 <div class="container-fluid controller-edit container-vertical-item" data-edit-controller-options="<?php echo $controllerOptions; ?>">
 <!-- controller notifications (optional section for displaying alerts that are added to the controller) -->
@@ -22,26 +23,26 @@
         </div>
     </section>
     <form action="<?php echo $ro->gen(NULL); ?>" method="post" data-bind="submit: onFormSubmit">
-        <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $ticketId; ?>" />
+        <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $escape($ticketId); ?>" />
         <div class="row-fluid" >
             <div class="span6">
                 <h2>Leuchtturm bearbeiten</h2>
                 <div class="control-group ">
                     <label for="Name">Name</label>
                     <div class="controls">
-                        <input type="input" name="vertical[name]" label="Name der Kategorie" value="<?php echo $verticalData['name']; ?>" />
+                        <input type="input" name="vertical[name]" label="Name der Kategorie" value="<?php echo $escape($verticalData['name']); ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                      <label>Berlin.de-URL der Leuchtturm-Startseite</label>
                     <div class="controls">
-                        <input type="input" name="vertical[url]" value="<?php echo $verticalData['url']; ?>" />
+                        <input type="input" name="vertical[url]" value="<?php echo $escape($verticalData['url']); ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="teaser">Teaser</label>
                     <div class="controls">
-                        <textarea name="vertical[teaser]" label="Teaser"><?php echo $verticalData['teaser']; ?></textarea>
+                        <textarea name="vertical[teaser]" label="Teaser"><?php echo $escape($verticalData['teaser']); ?></textarea>
                         <p class="help-block">
                             Hier kannst Du einen kurzen Teaser-Text für diesen Leuchtturm angelegen. <br />Er wird auf den Übersichtsseiten dieses Leuchtturms angezeigt.
                         </p>

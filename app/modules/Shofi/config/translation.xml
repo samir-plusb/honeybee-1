@@ -27,6 +27,7 @@
                             <ae:parameter name="no-product">Nicht verkauft</ae:parameter>
                             <ae:parameter name="buiseness">Geschäftseintrag</ae:parameter>
                             <ae:parameter name="premium">Premiumeintrag</ae:parameter>
+                            <ae:parameter name="last_modified">Zuletzt geändert</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
 

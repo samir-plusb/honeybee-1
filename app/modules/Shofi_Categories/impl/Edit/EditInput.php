@@ -12,6 +12,7 @@
     $placesData = $t['places_data'];
     $assetListOptions = $t['asset_widget_opts'];
     $ticketId = isset($ticketData['identifier']) ? $ticketData['identifier'] : '';
+    $escape = function($val) { return htmlspecialchars($val); };
 ?>
 <div class="container-fluid controller-edit container-category-item" data-edit-controller-options="<?php echo $controllerOptions; ?>">
 <!-- controller notifications (optional section for displaying alerts that are added to the controller) -->
@@ -28,7 +29,7 @@
         </div>
     </section>
     <form action="<?php echo $ro->gen(NULL); ?>" method="post" data-bind="submit: onFormSubmit">
-        <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $ticketId; ?>" />
+        <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $escape($ticketId); ?>" />
         <div class="row-fluid" >
             <div class="span12">
                 <div class="row-fluid">
@@ -38,13 +39,13 @@
                             <div class="control-group">
                                 <label class="control-label">WKG-Branchen-Bezeichnung</label>
                                 <div class="controls">
-                                    <input type="input" name="category[name]" disabled="disabled" value="<?php echo $categoryData['name']; ?>" />
+                                    <input type="input" name="category[name]" disabled="disabled" value="<?php echo $escape($categoryData['name']); ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Text</label>
                                 <div class="controls">
-                                    <textarea name="category[text]" rows="8"><?php echo $categoryData['text']; ?></textarea>
+                                    <textarea name="category[text]" rows="8"><?php echo $escape($categoryData['text']); ?></textarea>
                                 </div>
                             </div>
                         </fieldset>
@@ -60,7 +61,7 @@
     {
 ?>
                             <div class="clipboard-widget" data-clipboard-widget-options="<?php echo $t['clipboard_widget_opts']; ?>">
-                                <a href="#clipboard" class="clipboard-widget-trigger" title="<?php echo $t['contentmachine_link']; ?>"><i class="icon-copy"></i> CM-Url nach Zwischenablage kopieren</a>
+                                <a href="#clipboard" class="clipboard-widget-trigger" title="<?php echo $escape($t['contentmachine_link']); ?>"><i class="icon-copy"></i> CM-Url nach Zwischenablage kopieren</a>
                             </div>
 <?php
     }
@@ -79,14 +80,14 @@
             $selected = 'selected="selected"';
         }
 ?>
-                                        <option value="<?php echo $verticalData['id']; ?>" <?php echo $selected; ?>>
+                                        <option value="<?php echo $escape($verticalData['id']); ?>" <?php echo $selected; ?>>
                                             <?php echo $verticalData['name']; ?>
                                         </option>
 <?php
     }
 ?>
                                     </select>
-                                    <input type="hidden" class="text-hidden" name="category[vertical][name]" value="<?php echo isset($vertical['name']) ? $vertical['name'] : ''; ?>" />
+                                    <input type="hidden" class="text-hidden" name="category[vertical][name]" value="<?php echo $escape(isset($vertical['name']) ? $vertical['name'] : ''); ?>" />
                                 </div>
                             </div>
                         </div>
@@ -117,7 +118,7 @@
                         <section class="tabbable">
                             <ul class="nav nav-tabs">
                                 <li class="active">
-                                    <a href="#tab-1" data-toggle="tab">Suchworte & Aliase</a>
+                                    <a href="#tab-1" data-toggle="tab">Suchworte &amp; Aliase</a>
                                 </li>
                                 <li>
                                     <a href="#tab-2" data-toggle="tab">Verzeichnisbildende Schlagworte</a>
@@ -137,7 +138,7 @@
                                         <div class="control-group">
                                             <label class="control-label">Populärname Singular</label>
                                             <div class="controls">
-                                                <input type="input" name="category[alias]" value="<?php echo $categoryData['alias']; ?>" />
+                                                <input type="input" name="category[alias]" value="<?php echo $escape($categoryData['alias']); ?>" />
                                                 <a href="http://www.semager.de/keywords/?q=" target="_blank" style="display: inline-block;">
                                                     <i class="icon-book"></i>
                                                 </a>
@@ -145,7 +146,7 @@
                                             <div class="control-group">
                                                 <label class="control-label">Populärname Plural</label>
                                                 <div class="controls">
-                                                    <input type="input" name="category[plural]" value="<?php echo $categoryData['plural']; ?>" />
+                                                    <input type="input" name="category[plural]" value="<?php echo $escape($categoryData['plural']); ?>" />
                                                 </div>
                                             </div>
                                         </div>
@@ -158,7 +159,7 @@
     {
         $selected = ($option === $categoryData['genderArticle']) ? 'selected="selected"' : '';
 ?>
-                                                    <option value="<?php echo $option; ?>" <?php echo $selected; ?>><?php echo $tm->_($option, 'shofi.input') ?></option>
+                                                    <option value="<?php echo $escape($option); ?>" <?php echo $selected; ?>><?php echo $tm->_($option, 'shofi.input') ?></option>
 <?php
     }
 ?>
@@ -168,7 +169,7 @@
                                         <div class="control-group">
                                             <label class="control-label">Autotext</label>
                                             <div class="controls">
-                                                <input type="input" name="category[singular]" value="<?php echo $categoryData['singular']; ?>" />
+                                                <input type="input" name="category[singular]" value="<?php echo $escape($categoryData['singular']); ?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -211,19 +212,19 @@
                                 <div class="control-group">
                                     <label class="control-label">Name</label>
                                     <div class="controls">
-                                        <input type="input" name="category[salesManager][name]" value="<?php echo $salesManagerName; ?>" />
+                                        <input type="input" name="category[salesManager][name]" value="<?php echo $escape($salesManagerName); ?>" />
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label">E-Mail</label>
                                     <div class="controls">
-                                        <input type="input" name="category[salesManager][email]" value="<?php echo $salesManagerEmail; ?>" />
+                                        <input type="input" name="category[salesManager][email]" value="<?php echo $escape($salesManagerEmail); ?>" />
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label">Telefon</label>
                                     <div class="controls">
-                                        <input type="input" name="category[salesManager][phone]" value="<?php echo $salesManagerPhone; ?>" />
+                                        <input type="input" name="category[salesManager][phone]" value="<?php echo $escape($salesManagerPhone); ?>" />
                                     </div>
                                 </div>
                             </section>

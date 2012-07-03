@@ -97,10 +97,12 @@ class ShofiCategoriesMasterRecord extends MasterRecord
 
     public function setKeywords(array $keywords)
     {
-        $this->keywords = array_filter($keywords, function($item)
-        {
-            return !empty($item);
-        });
+        $this->keywords = array_values(
+            array_filter($keywords, function($keyword)
+            {
+                return !empty($keyword);
+            })
+        );
     }
 
     public function getTags()
@@ -110,10 +112,12 @@ class ShofiCategoriesMasterRecord extends MasterRecord
 
     public function setTags(array $tags)
     {
-        $this->tags = array_filter($tags, function($item)
-        {
-            return !empty($item);
-        });
+        $this->tags = array_values(
+            array_filter($tags, function($item)
+            {
+                return !empty($item);
+            })
+        );
     }
 
     public function getSalesManager()

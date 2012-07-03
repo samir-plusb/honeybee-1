@@ -11,7 +11,9 @@
  */
 class ShofiSalesItem extends BaseDataObject implements IShofiSalesItem
 {
-    protected $product;
+    const NULL_PRODUCT = 'no-product';
+
+    protected $product = self::NULL_PRODUCT;
 
     protected $expireDate;
 
@@ -40,7 +42,7 @@ class ShofiSalesItem extends BaseDataObject implements IShofiSalesItem
 
     public function setProduct($product)
     {
-        $this->product = $product;
+        $this->product = empty($product) ? self::NULL_PRODUCT : $product;
     }
 
     public function getExpireDate()
@@ -81,10 +83,12 @@ class ShofiSalesItem extends BaseDataObject implements IShofiSalesItem
     public function setAdditionalCategories($additionalCategories)
     {
         $additionalCategories = is_array($additionalCategories) ? $additionalCategories : array();
-        $this->additionalCategories = array_filter($additionalCategories, function($item)
-        {
-            return !empty($item);
-        });
+        $this->additionalCategories = array_values(
+            array_filter($additionalCategories, function($additionalCategory)
+            {
+                return !empty($additionalCategory);
+            })
+        );
     }
 
     public function getAttributes()
@@ -95,10 +99,12 @@ class ShofiSalesItem extends BaseDataObject implements IShofiSalesItem
     public function setAttributes($attributes)
     {
         $attributes = is_array($attributes) ? $attributes : array();
-        $this->attributes = array_filter($attributes, function($item)
-        {
-            return !empty($item);
-        });
+        $this->attributes = array_values(
+            array_filter($attributes, function($attribute)
+            {
+                return !empty($attribute);
+            })
+        );
     }
 
     public function getKeywords()
@@ -109,10 +115,12 @@ class ShofiSalesItem extends BaseDataObject implements IShofiSalesItem
     public function setKeywords($keywords)
     {
         $keywords = is_array($keywords) ? $keywords : array();
-        $this->keywords = array_filter($keywords, function($item)
-        {
-            return !empty($item);
-        });
+        $this->keywords = array_values(
+            array_filter($keywords, function($keyword)
+            {
+                return !empty($keyword);
+            })
+        );
     }
 
     public function getAttachments()

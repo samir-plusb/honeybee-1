@@ -7,6 +7,7 @@
     $location = $coreItem['location'];
     $isHidden = (isset($itemData['attributes']['isHidden']) && 1 == $itemData['attributes']['isHidden']);
     $locationWidgetOpts = $t['location_widget_opts'];
+    $escape = function($val) { return htmlspecialchars($val); };
 ?>
 <div class="container-fluid controller-edit container-core-item"
      data-edit-controller-options='<?php echo $controllerOptions; ?>'>
@@ -61,7 +62,7 @@ Editing:
     Holds form for editing the current shofi place's coreItem. (All form values are nested here.)
 ############################################################################################### -->
             <section class="span6 editing">
-                <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $ticketId; ?>" />
+                <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $escape($ticketId); ?>" />
 <!-- coreItem meta data -->
                 <div class="page-header" style="margin-top:0">
                     <h2>Grundeinstellungen</h2>
@@ -69,7 +70,7 @@ Editing:
                 <div class="control-group">
                     <label class="control-label">R4-Artikel-Id</label>
                     <div class="controls">
-                        <input type="input" name="attributes[r4id]" value="<?php echo isset($itemData['attributes']['r4id']) ? $itemData['attributes']['r4id'] : ''; ?>" />
+                        <input type="input" name="attributes[r4id]" value="<?php echo $escape(isset($itemData['attributes']['r4id']) ? $itemData['attributes']['r4id'] : ''); ?>" />
                         <p class="help-block">Die ID dieses Eintrags in R4</p>
                     </div>
                 </div>
@@ -88,61 +89,61 @@ Editing:
                 <div class="control-group">
                     <label class="control-label">Name</label>
                     <div class="controls">
-                        <input type="input" name="coreItem[name]" value="<?php echo $coreItem['name']; ?>" />
+                        <input type="input" name="coreItem[name]" value="<?php echo $escape($coreItem['name']); ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Unternehmen</label>
                     <div class="controls">
-                        <input type="input" name="coreItem[company]" value="<?php echo $coreItem['company']; ?>" />
+                        <input type="input" name="coreItem[company]" value="<?php echo $escape($coreItem['company']); ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Titel</label>
                     <div class="controls">
-                        <input type="input" name="coreItem[title]" value="<?php echo $coreItem['title']; ?>" />
+                        <input type="input" name="coreItem[title]" value="<?php echo $escape($coreItem['title']); ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="Nachname">Nachname</label>
                     <div class="controls">
-                        <input type="input" name="coreItem[lastName]" value="<?php echo $coreItem['lastName']; ?>" />
+                        <input type="input" name="coreItem[lastName]" value="<?php echo $escape($coreItem['lastName']); ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Vorname</label>
                     <div class="controls">
-                        <input type="input" name="coreItem[firstName]" value="<?php echo $coreItem['firstName']; ?>" />
+                        <input type="input" name="coreItem[firstName]" value="<?php echo $escape($coreItem['firstName']); ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Telefonnummer (mobil)</label>
                     <div class="controls">
-                        <input type="input" name="coreItem[mobile]" value="<?php echo $coreItem['mobile']; ?>" />
+                        <input type="input" name="coreItem[mobile]" value="<?php echo $escape($coreItem['mobile']); ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Telefonnummer</label>
                     <div class="controls">
-                        <input type="input" name="coreItem[phone]" value="<?php echo $coreItem['phone']; ?>" />
+                        <input type="input" name="coreItem[phone]" value="<?php echo $escape($coreItem['phone']); ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Fax</label>
                     <div class="controls">
-                        <input type="input" name="coreItem[fax]" value="<?php echo $coreItem['fax']; ?>" />
+                        <input type="input" name="coreItem[fax]" value="<?php echo $escape($coreItem['fax']); ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Webadresse</label>
                     <div class="controls">
-                        <input type="input" name="coreItem[website]" value="<?php echo $coreItem['website']; ?>" />
+                        <input type="input" name="coreItem[website]" value="<?php echo $escape($coreItem['website']); ?>" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">E-Mail</label>
                     <div class="controls">
-                        <input type="input" name="coreItem[email]" value="<?php echo $coreItem['email']; ?>" />
+                        <input type="input" name="coreItem[email]" value="<?php echo $escape($coreItem['email']); ?>" />
                     </div>
                 </div>
 <!-- coreItem.location data -->

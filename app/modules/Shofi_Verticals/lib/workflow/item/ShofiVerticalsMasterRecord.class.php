@@ -81,7 +81,12 @@ class ShofiVerticalsMasterRecord extends MasterRecord
 
     public function setCategories(array $categories)
     {
-        $this->categories = $categories;
+        $this->categories = array_values(
+            array_filter($categories, function($category)
+            {
+                return !empty($category);
+            })
+        );
     }
 }
 

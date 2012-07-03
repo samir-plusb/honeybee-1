@@ -10,6 +10,7 @@
     $ticketId = isset($ticketData['identifier']) ? $ticketData['identifier'] : '';
     $detailItem = $itemData['detailItem'];
     $assetListOptions = $t['asset_widget_opts'];
+    $escape = function($val) { return htmlspecialchars($val); };
 ?>
 <div class="container-fluid controller-edit container-detail-item"
      data-edit-controller-options='<?php echo $controllerOptions; ?>'>
@@ -65,7 +66,7 @@ Editing:
     Holds form for editing the current shofi place's detailItem. (All form values are nested here.)
 ############################################################################################### -->
             <div class="span8 editing">
-                <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $ticketId; ?>" />
+                <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $escape($ticketId); ?>" />
                 <div class="row-fluid">
                     <div class="span12">
 <!-- detailItem textual content (teaser, text...) -->
@@ -75,13 +76,13 @@ Editing:
                         <div class="control-group ">
                             <label class="control-label">Teaser</label>
                             <div class="controls">
-                                <textarea name="detailItem[teaser]" style="width:100%" rows="6"><?php echo $detailItem['teaser']; ?></textarea>
+                                <textarea name="detailItem[teaser]" style="width:100%" rows="6"><?php echo $escape($detailItem['teaser']); ?></textarea>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Beschreibungstext</label>
                             <div class="controls">
-                                <textarea name="detailItem[text]" style="width:100%" rows="6"><?php echo $detailItem['text']; ?></textarea>
+                                <textarea name="detailItem[text]" style="width:100%" rows="6"><?php echo $escape($detailItem['text']); ?></textarea>
                             </div>
                         </div>
                     </div>

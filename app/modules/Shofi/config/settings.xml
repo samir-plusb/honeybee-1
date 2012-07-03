@@ -39,6 +39,10 @@
                             <ae:parameter name="valuefield">salesItem.product</ae:parameter>
                             <ae:parameter name="sortfield">salesItem.product</ae:parameter>
                         </ae:parameter>
+                        <ae:parameter name="last_modified">
+                            <ae:parameter name="valuefield">masterRecord.lastModified.date</ae:parameter>
+                            <ae:parameter name="sortfield">masterRecord.lastModified.date</ae:parameter>
+                        </ae:parameter>
                         <ae:parameter name="owner">
                             <ae:parameter name="valuefield">currentState.owner</ae:parameter>
                             <ae:parameter name="sortfield">currentState.owner</ae:parameter>
