@@ -12,25 +12,37 @@ class Shofi_Categories_ExportAction extends ShofiCategoriesBaseAction
             'offset' => 0
         ));
         $entriesProcessed = 0;
+        $exportAllowed = (TRUE === AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_ENABLED));
+        $finder->ignoreDeletedItems(FALSE);
         while (($result = $finder->find($listState)) && 0 < $result->getItemsCount())
         {
             $this->printMemUsage();
             echo "Exported " . $entriesProcessed . " categories ..." . PHP_EOL;
             foreach ($result->getItems() as $item)
             {
-				$exportAllowed = (TRUE === AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_ENABLED));
-            	if ($exportAllowed)
-            	{
+                if ($exportAllowed)
+                {
                     echo "Synching category: " . $item->getIdentifier() . " to the contentmachine..." . PHP_EOL;
-                	$cmExport = new ContentMachineHttpExport(
-                    	AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_URL)
-                	);
-                	if (! $cmExport->exportShofiCategory($item))
-                	{
-                    	echo "Error while sending data to fe for item : " . $item->getIdentifier() . PHP_EOL .
-                             ", Error: " . print_r($cmExport->getLastErrors(), TRUE) . PHP_EOL;
-                	}
-            	}
+                    $cmExport = new ContentMachineHttpExport(
+                        AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_URL)
+                    );
+                    $isDeleted = $item->getAttribute('marked_deleted', FALSE);
+                    if ($isDeleted)
+                    {
+                        if (! $cmExport->deleteEntity($item->getIdentifier(), 'category'))
+                        {
+                            echo "Error while deleting data to fe for category : " . $item->getIdentifier() . ', Error: ' . print_r($cmExport->getLastErrors(), TRUE) . PHP_EOL;
+                        }
+                    }
+                    else
+                    {
+                        if (! $cmExport->exportShofiCategory($item))
+                        {
+                            echo "Error while sending data to fe for item : " . $item->getIdentifier() . PHP_EOL .
+                                 ", Error: " . print_r($cmExport->getLastErrors(), TRUE) . PHP_EOL;
+                        }
+                    }
+                }
             }
             $listState->setOffset(
                 $listState->getOffset() + $listState->getLimit()
