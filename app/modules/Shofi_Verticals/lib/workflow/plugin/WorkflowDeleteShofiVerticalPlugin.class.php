@@ -42,7 +42,6 @@ class WorkflowDeleteShofiVerticalPlugin extends WorkflowBasePlugin
 
             $exportAllowed = AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_ENABLED);
             $method = $this->ticket->getExecutionContainer()->getRequestMethod();
-            && AgaviConfig::has(ContentMachineHttpExport::SETTING_EXPORT_URL);
             if ($exportAllowed && 'write' === $method)
             {
                 $cmExport = new ContentMachineHttpExport(
