@@ -19,7 +19,7 @@ class ItemLocation extends BaseDataObject implements IItemLocation
      *
      * @var array
      */
-    protected $coordinates;
+    protected $coordinates = array();
 
     /**
      * Holds the location's city name.
@@ -158,7 +158,7 @@ class ItemLocation extends BaseDataObject implements IItemLocation
      */
     public function setCoordinates($coordinates)
     {
-        if (is_array($coordinates))
+        if (is_array($coordinates) && array_key_exists('lat', $coordinates)  && array_key_exists('lon', $coordinates))
         {
             $this->coordinates = array(
                 'lat' => (float)$coordinates['lat'],
@@ -316,6 +316,44 @@ class ItemLocation extends BaseDataObject implements IItemLocation
     {
         $this->relevance = $relevance;
     }
-}
 
-?>
+    public function asGeoPoint()
+    {
+        if (! empty($this->coordinates['lat']) && ! empty($this->coordinates['lon']))
+        {
+            return GeoPoint::fromArray($this->coordinates);
+        }
+        return NULL;
+    }
+
+    public static function parseStreet($street)
+    {
+        static $offsetStreet = 1;
+        static $offsetNumber = 2;
+        static $offsetDetail = 3;
+
+        $number = NULL;
+        $detail = NULL;
+
+        if (! empty($street))
+        {
+            $pattern = '~([\wßüäö\s-\.]+)\s+([\d\w-|/]+)+(?:,\s*(.*))?~is';
+            $matches = array();
+
+            preg_match_all($pattern, $street, $matches);
+
+            $matchCount = count($matches);
+            if (3 <= $matchCount)
+            {
+                $street = isset($matches[$offsetStreet][0]) ? $matches[$offsetStreet][0] : $street;
+                $number = isset($matches[$offsetNumber][0]) ? $matches[$offsetNumber][0] : NULL;
+                if (isset($matches[$offsetDetail]))
+                {
+                    $detail = isset($matches[$offsetDetail][0]) ? $matches[$offsetDetail][0] : NULL;
+                }
+            }
+        }
+
+        return array('street' => $street, 'number' => $number, 'detail' => $detail);
+    }
+}

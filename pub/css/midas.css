@@ -93,6 +93,68 @@ body
   background: #2f96b4;
 }
 
+.tagslist-inline
+{
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+table td.src-categories
+{
+  vertical-align: middle;
+}
+
+.mapped-categories section
+{
+  margin-bottom: -0.7em;
+}
+
+.mapped-categories .tagslist-input
+{
+  visibility: hidden;
+}
+
+.mapped-categories:hover .tagslist-input,
+.mapped-categories .tagslist-input:focus
+{
+  visibility: visible;
+}
+
+.tagslist-inline .tagslist-tag
+{
+  margin: 0;
+  padding: 0;
+  margin-right: 1em;
+  border-radius: 17px;
+}
+
+.tagslist-inline .tagslist-tag .label-display
+{
+  display: inline-block;
+  border-right: 1px solid #898989;
+  padding: 0.3em 0.7em 0.3em 0.8em;
+  cursor: default;
+}
+
+.tagslist-inline .tagslist-tag .icon-remove
+{
+  display: inline-block;
+  padding: 0.3em 0.7em 0.3em 0.2em;
+  cursor: pointer;
+}
+
+.tagslist-inline .disabled
+{
+  background: gray;
+}
+
+.tagslist-inline .disabled .icon-remove
+{
+  pointer: default;
+}
+
+
 /**
  * ###############################
  * #    Tag Container: Pills     #
@@ -154,6 +216,11 @@ body
   margin-right: 0px;
 }
 
+.category-matching-widget h2
+{
+  margin-bottom: 0.7em;
+}
+
 /**
  * ############################
  * #    Property Explorer     #
@@ -171,6 +238,48 @@ body
   float: left;
   margin-right: 10px;
   padding: 5px;
+  margin-bottom: 7px;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.section-screenings ul,
+.section-media ul
+{
+  list-style: none;
+}
+
+.category-matching-widget th:first-child
+{
+  width: 30em;
+}
+
+.image-editor .select-label,
+.image-editor .select-val
+{
+  width: 40px;
+  margin-right: 1em;
+  display: inline-block;
+}
+
+.image-editor
+{
+  padding-top: 1em;
+}
+
+.image-editor .select-val
+{
+  width: 50px;
+}
+
+.container-vertical-item .assets-container
+{
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.container-vertical-item .form-actions
+{
+  width: 100%;
+  overflow: hidden;
 }

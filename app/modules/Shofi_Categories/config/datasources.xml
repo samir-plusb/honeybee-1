@@ -7,11 +7,6 @@
     <ae:configuration>
         <datasources>
 
-            <datasource name="prototype.category" class="ArrayDataSource">
-                <description>Provides category data coming from the shofi prototype.</description>
-                <recordType>PrototypeCategoryDataRecord</recordType>
-            </datasource>
-
         </datasources>
     </ae:configuration>
 </ae:configurations>

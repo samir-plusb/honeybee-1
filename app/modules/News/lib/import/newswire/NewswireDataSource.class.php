@@ -95,17 +95,16 @@ class NewswireDataSource extends BaseDataSource
      */
     protected function forwardCursor()
     {
-        if ($this->iterator)
-        {
-            $this->iterator->next();
-        }
-        else
+        if (! $this->iterator)
         {
             $this->iterator = new ProjectDirectoryRegexpIterator(
                 $this->config->getSetting(NewswireDataSourceConfig::CFG_DIRECTORY_PATH),
                 $this->config->getSetting(NewswireDataSourceConfig::CFG_REGEXP)
             );
+            
         }
+        
+        $this->iterator->next(); // after construction this call moves the cursor to the first valid element.
 
         while ($this->iterator->valid())
         {

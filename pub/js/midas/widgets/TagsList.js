@@ -21,11 +21,15 @@ midas.widgets.TagsList = midas.widgets.Widget.extend({
     max_reached: null,
 
     enabled: null,
+
+    disabled: null,
+
+    disabled_text: null,
     // </knockout_props>
 
-    init: function(element, options)
+    init: function(element, options, ready_callback)
     {
-        this.parent(element, options);
+        this.parent(element, options, ready_callback);
         this.currently_valid = {};
     },
 
@@ -57,9 +61,11 @@ midas.widgets.TagsList = midas.widgets.Widget.extend({
         this.has_focus = ko.observable(false);
         this.max_reached = ko.observable(false);
         this.is_valid = ko.observable(false);
+        this.disabled = ko.observable(false);
+        this.disabled_text = ko.observable('');
         this.enabled = ko.computed(function()
         {
-            return (that.is_valid() && ! that.max_reached());
+            return (that.is_valid() && ! that.max_reached() && ! that.disabled());
         });
         this.current_tag.subscribe(function(new_value)
         {
@@ -81,6 +87,19 @@ midas.widgets.TagsList = midas.widgets.Widget.extend({
             return false;
         }
         return true;
+    },
+
+    busyStart: function(text)
+    {
+        this.disabled(true);
+        this.disabled_text(text);
+        console.log(text);
+    },
+
+    busyEnd: function()
+    {
+        this.disabled(false);
+        this.disabled_text('');
     },
 
     validate: function()
@@ -116,18 +135,21 @@ midas.widgets.TagsList = midas.widgets.Widget.extend({
                 value: this.options.autocomplete ? this.currently_valid[tag] : tag
             });
             this.current_tag('');
+            this.fire('tagschanged', [ this.fieldname(), this.tags()]);
         }
         else
         {
             this.highlightTag(idx); // tag allready exists, highlight to point this out ^^
         }
         this.has_focus(true); // auto (re)gain focus for better usability
+        
     },
 
     removeTag: function(tag)
     {
         this.tags.remove(tag);
         this.has_focus(true);
+        this.fire('tagschanged', [ this.fieldname(), this.tags()]);
     },
 
     // #########################
@@ -211,3 +233,9 @@ midas.widgets.TagsList.DEFAULT_OPTIONS = {
     allow_duplicates: false,
     tpl: "Float"
 };
+
+midas.widgets.TagsList.TPL = {
+    FLOAT: "Float",
+    STACK: "Stack",
+    INLINE: "Inline"
+}

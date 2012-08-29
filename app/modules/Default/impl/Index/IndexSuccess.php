@@ -18,6 +18,18 @@
                         <li><a href="<?php echo $ro->gen('shofi_verticals.list'); ?>"><i class="icon-list icon-white"></i>Leuchtt&uuml;rme</a></li>
                     </ul>
                 </li>
+                <li class="module-item">
+                    <h3 class="label"><span><?php echo $tm->_('Kino','default.ui')?></span></h3>
+                    <ul class="nav nav-list">
+                        <li><a href="<?php echo $ro->gen('movies.list'); ?>"><i class="icon-list icon-white"></i>Filme</a></li>
+                    </ul>
+                </li>
+                <li class="module-item">
+                    <h3 class="label"><span><?php echo $tm->_('Events','default.ui')?></span></h3>
+                    <ul class="nav nav-list">
+                        <li><a href="<?php echo $ro->gen('events.list'); ?>"><i class="icon-list icon-white"></i>Events</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
 	</div>

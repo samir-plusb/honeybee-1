@@ -82,8 +82,10 @@ Editing:
 							<div class="controls">
 								<select name="salesItem[product]">
 									<option value="no-product" <?php echo ('no-product' == $salesItem['product']) ? 'selected="selected"' : ''; ?>>nicht verkauft</option>
+                                    <option value="basic" <?php echo ('basic' == $salesItem['product']) ? 'selected="selected"' : ''; ?>>Basis verkauft</option>
 									<option value="business" <?php echo ('business' == $salesItem['product']) ? 'selected="selected"' : ''; ?>>Business-Eintrag</option>
 									<option value="premium" <?php echo ('premium' == $salesItem['product']) ? 'selected="selected"' : ''; ?>>Premium-Eintrag</option>
+                                    <option value="freemium" <?php echo ('freemium' == $salesItem['product']) ? 'selected="selected"' : ''; ?>>Freemium-Eintrag</option>
 								</select>
 							</div>
 						</div>

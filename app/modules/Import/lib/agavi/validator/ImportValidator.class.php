@@ -124,6 +124,7 @@ class ImportValidator extends AgaviStringValidator
         }
         catch (Exception $e)
         {
+            throw $e;
             $this->throwError(self::ERR_INVALID_CONFIG);
             return FALSE;
         }

@@ -21,6 +21,8 @@ class ShofiDetailItem extends BaseDataObject implements IShofiDetailItem
 
     protected $keywords = array();
 
+    protected $internalKeywords = array();
+
     protected $category;
 
     protected $additionalCategories = array();
@@ -28,9 +30,25 @@ class ShofiDetailItem extends BaseDataObject implements IShofiDetailItem
     // structure: [{path:"string", url:"string", copyright:string}, {...}]
     protected $attachments = array();
 
+    // string containing embed code
+    protected $videoEmbedCode;
+
     public static function fromArray(array $data = array())
     {
         return new self($data);
+    }
+
+    public function softUpdate(array $data)
+    {
+        $updateData = array();
+        foreach ($data as $propName => $currentValue)
+        {
+            if (empty($this->$propName))
+            {
+                $updateData[$propName] = $currentValue;
+            }
+        }
+        $this->applyValues($updateData);
     }
 
     public function getTeaser()
@@ -101,6 +119,22 @@ class ShofiDetailItem extends BaseDataObject implements IShofiDetailItem
         );
     }
 
+    public function getInternalKeywords()
+    {
+        return $this->internalKeywords;
+    }
+
+    public function setInternalKeywords($internalKeywords)
+    {
+        $internalKeywords = is_array($internalKeywords) ? $internalKeywords : array();
+        $this->internalKeywords = array_values(
+            array_filter($internalKeywords, function($internalKeyword)
+            {
+                return !empty($internalKeyword);
+            })
+        );
+    }
+
     public function getCategory()
     {
         return $this->category;
@@ -120,7 +154,7 @@ class ShofiDetailItem extends BaseDataObject implements IShofiDetailItem
     {
         $categories = is_array($additionalCategories) ? $additionalCategories : array();
         $this->additionalCategories = array_values(
-            array_filter($additionalCategories, function($additionalCategory)
+            array_filter($categories, function($additionalCategory)
             {
                 return !empty($additionalCategory);
             })
@@ -144,6 +178,14 @@ class ShofiDetailItem extends BaseDataObject implements IShofiDetailItem
         }
         $this->attachments = $assets;
     }
-}
 
-?>
+    public function getVideoEmbedCode()
+    {
+        return $this->videoEmbedCode;
+    }
+
+    public function setVideoEmbedCode($videoEmbedCode)
+    {
+        $this->videoEmbedCode = $videoEmbedCode;
+    }
+}

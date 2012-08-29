@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+
+        <!-- # Agavi # -->
+        <autoload name="EventsBaseAction">%core.module_dir%/Events/lib/agavi/action/EventsBaseAction.class.php</autoload>
+        <autoload name="EventsBaseView">%core.module_dir%/Events/lib/agavi/view/EventsBaseView.class.php</autoload>
+        <autoload name="EventItemValidator">%core.module_dir%/Events/lib/agavi/validator/EventItemValidator.class.php</autoload>
+
+        <!-- # Import Integration # -->
+        <autoload name="EventsDataRecord">%core.module_dir%/Events/lib/import/EventsDataRecord.class.php</autoload>
+        <autoload name="EventsDataImport">%core.module_dir%/Events/lib/import/EventsDataImport.class.php</autoload>
+        <autoload name="EventsDataImportConfig">%core.module_dir%/Events/lib/import/EventsDataImportConfig.class.php</autoload>
+        <!-- Events Xml Import -->
+        <autoload name="TipEventsXmlDataSource">%core.module_dir%/Events/lib/import/events-tip/TipEventsXmlDataSource.class.php</autoload>
+        <autoload name="TipEventsXmlDataSourceConfig">%core.module_dir%/Events/lib/import/events-tip/TipEventsXmlDataSourceConfig.class.php</autoload>
+        <autoload name="TipEventsXmlDataRecord">%core.module_dir%/Events/lib/import/events-tip/TipEventsXmlDataRecord.class.php</autoload>
+        <autoload name="TipEventsXmlParser">%core.module_dir%/Events/lib/import/events-tip/TipEventsXmlParser.class.php</autoload>
+        <autoload name="TipEventsFilePoolProvider">%core.module_dir%/Events/lib/import/events-tip/TipEventsFilePoolProvider.class.php</autoload>
+        <autoload name="TipEventsPersonProvider">%core.module_dir%/Events/lib/import/events-tip/TipEventsPersonProvider.class.php</autoload>
+        <autoload name="TipEventsArticleProvider">%core.module_dir%/Events/lib/import/events-tip/TipEventsArticleProvider.class.php</autoload>
+        <autoload name="TipEventsLocationIdProvider">%core.module_dir%/Events/lib/import/events-tip/TipEventsLocationIdProvider.class.php</autoload>
+        <autoload name="TipEventsArchiveIterator">%core.module_dir%/Events/lib/import/events-tip/TipEventsArchiveIterator.class.php</autoload>
+        
+        <!-- # Export Integration # -->
+        <!-- Tip Frontend -->
+        <autoload name="TipFrontendEventExport">%core.module_dir%/Events/lib/export/tip-frontend/TipFrontendEventExport.class.php</autoload>
+        <autoload name="TipFrontendEventFactory">%core.module_dir%/Events/lib/export/tip-frontend/TipFrontendEventFactory.class.php</autoload>
+        <autoload name="TipFrontendEvent">%core.module_dir%/Events/lib/export/tip-frontend/TipFrontendEvent.class.php</autoload>
+
+        <!-- # Workflow Integration # -->
+        <!-- Item -->
+        <autoload name="EventsWorkflowItem">%core.module_dir%/Events/lib/workflow/item/EventsWorkflowItem.class.php</autoload>
+        <autoload name="EventsMasterRecord">%core.module_dir%/Events/lib/workflow/item/EventsMasterRecord.class.php</autoload>
+        <autoload name="EventsSchedule">%core.module_dir%/Events/lib/workflow/item/EventsSchedule.class.php</autoload>
+        <autoload name="EventsLocation">%core.module_dir%/Events/lib/workflow/item/EventsLocation.class.php</autoload>
+        <autoload name="EventsAppointment">%core.module_dir%/Events/lib/workflow/item/EventsAppointment.class.php</autoload>
+        <autoload name="EventsArticle">%core.module_dir%/Events/lib/workflow/item/EventsArticle.class.php</autoload>
+        <autoload name="EventsArchiveEntry">%core.module_dir%/Events/lib/workflow/item/EventsArchiveEntry.class.php</autoload>
+        <!-- Shared -->
+        <autoload name="EventsWorkflowService">%core.module_dir%/Events/lib/EventsWorkflowService.class.php</autoload>
+        <autoload name="EventsWorkflowSupervisor">%core.module_dir%/Events/lib/workflow/EventsWorkflowSupervisor.class.php</autoload>
+        <!-- Plugins -->
+        <autoload name="WorkflowEditEventPlugin">%core.module_dir%/Events/lib/workflow/plugin/WorkflowEditEventPlugin.class.php</autoload>
+        <autoload name="WorkflowDeleteEventPlugin">%core.module_dir%/Events/lib/workflow/plugin/WorkflowDeleteEventPlugin.class.php</autoload>
+
+        <autoload name="EventsDatabaseSetup">%core.module_dir%/Events/lib/setup/couchdb/EventsDatabaseSetup.class.php</autoload>
+        
+        <autoload name="EventsFinder">%core.module_dir%/Events/lib/EventsFinder.class.php</autoload>
+    </ae:configuration>
+</ae:configurations>

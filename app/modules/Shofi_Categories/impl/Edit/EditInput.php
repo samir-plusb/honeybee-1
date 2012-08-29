@@ -37,9 +37,9 @@
                         <h2>Basisdaten</h2>
                         <fieldset class="well">
                             <div class="control-group">
-                                <label class="control-label">WKG-Branchen-Bezeichnung</label>
+                                <label class="control-label">Branchen-Bezeichnung</label>
                                 <div class="controls">
-                                    <input type="input" name="category[name]" disabled="disabled" value="<?php echo $escape($categoryData['name']); ?>" />
+                                    <input type="input" name="category[name]" value="<?php echo $escape($categoryData['name']); ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
@@ -138,8 +138,8 @@
                                         <div class="control-group">
                                             <label class="control-label">Populärname Singular</label>
                                             <div class="controls">
-                                                <input type="input" name="category[alias]" value="<?php echo $escape($categoryData['alias']); ?>" />
-                                                <a href="http://www.semager.de/keywords/?q=" target="_blank" style="display: inline-block;">
+                                                <input type="input" name="category[singular]" value="<?php echo $escape($categoryData['singular']); ?>" />
+                                                <a href="<?php echo sprintf('http://www.semager.de/keywords/?q=%s', $escape($catagoryData['name'])); ?>" target="_blank" style="display: inline-block;">
                                                     <i class="icon-book"></i>
                                                 </a>
                                             </div>
@@ -164,12 +164,6 @@
     }
 ?>
                                                 </select>
-                                            </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <label class="control-label">Autotext</label>
-                                            <div class="controls">
-                                                <input type="input" name="category[singular]" value="<?php echo $escape($categoryData['singular']); ?>" />
                                             </div>
                                         </div>
                                     </div>

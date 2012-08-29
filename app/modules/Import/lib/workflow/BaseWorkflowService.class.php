@@ -98,6 +98,15 @@ abstract class BaseWorkflowService implements IWorkflowService
             );
         }
     }
+
+    protected function logInfo($msg)
+    {
+        $logger = AgaviContext::getInstance()->getLoggerManager()->getLogger('app');
+        $infoMsg = sprintf("[%s] %s", get_class($this), $msg);
+        $logger->log(
+            new AgaviLoggerMessage($infoMsg, AgaviLogger::INFO)
+        );
+    }
 }
 
 ?>

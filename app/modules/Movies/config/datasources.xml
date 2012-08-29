@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://berlinonline.de/schemas/midas/config/datasource/definition/1.0"
+    xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+
+    <ae:configuration>
+        <datasources>
+
+            <datasource name="movies" class="MoviesXmlDataSource">
+                <description>Provides movie data coming from the movies xml import.</description>
+                <recordType>MoviesXmlDataRecord</recordType>
+                <settings>
+                    <setting name="file_path">%core.app_dir%/../data/catalogs/movies/film.xml</setting>
+                </settings>
+            </datasource>
+
+            <datasource name="screenings" class="ScreeningXmlDataSource">
+                <description>Provides movie-screenings data coming from the screening xml import.</description>
+                <recordType>ScreeningXmlDataRecord</recordType>
+                <settings>
+                    <setting name="file_path">%core.app_dir%/../data/catalogs/movies/spielzeit.xml</setting>
+                </settings>
+            </datasource>
+
+        </datasources>
+    </ae:configuration>
+</ae:configurations>

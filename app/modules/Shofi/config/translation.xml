@@ -12,6 +12,7 @@
                             <ae:parameter name="name">Name</ae:parameter>
                             <ae:parameter name="product">Produkt</ae:parameter>
                             <ae:parameter name="category">Kategorie</ae:parameter>
+                            <ae:parameter name="source">Datenquelle</ae:parameter>
                             <ae:parameter name="vertical">Leuchtturm</ae:parameter>
                             <ae:parameter name="firstName">Vorname</ae:parameter>
                             <ae:parameter name="lastName">Nachname</ae:parameter>
@@ -28,6 +29,21 @@
                             <ae:parameter name="buiseness">Geschäftseintrag</ae:parameter>
                             <ae:parameter name="premium">Premiumeintrag</ae:parameter>
                             <ae:parameter name="last_modified">Zuletzt geändert</ae:parameter>
+
+                            <!-- ShofiTranslationRenderer mapped translations -->
+                            <!-- datasources -->
+                            <ae:parameter name="places-wkg">WKG</ae:parameter>
+                            <ae:parameter name="hotels-gdoc">GoogleDocs (Hotels)</ae:parameter>
+                            <ae:parameter name="hotels-btk">BTK (Hotels)</ae:parameter>
+                            <ae:parameter name="restaurants-tip">TIP (Restaurants)</ae:parameter>
+                            <ae:parameter name="theaters-telavision">Telavision (Kinos)</ae:parameter>
+                            <ae:parameter name="places-eventx">EventX (Orte)</ae:parameter>
+                            <!-- products -->
+                            <ae:parameter name="premium">Premium Eintrag</ae:parameter>
+                            <ae:parameter name="freemium">Freemium Eintrag</ae:parameter>
+                            <ae:parameter name="business">Business Eintrag</ae:parameter>
+                            <ae:parameter name="basic">Basis Eintrag</ae:parameter>
+                            <ae:parameter name="no-product">-</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
 
@@ -41,6 +57,15 @@
                     </ae:parameter>
 
                 </message_translator>
+
+                <translator domain="datetime">
+                    <date_formatter>
+                        <ae:parameters>
+                            <ae:parameter name="type">datetime</ae:parameter>
+                            <ae:parameter name="format">EEEE dd-MM-yyyy, HH:mm</ae:parameter>
+                        </ae:parameters>
+                    </date_formatter>
+                </translator>
 
             </translator>
         </translators>

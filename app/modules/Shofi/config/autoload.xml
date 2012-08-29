@@ -1,32 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
     <ae:configuration>
-        <!-- Agavi -->
+        <!-- # Agavi # -->
         <autoload name="ShofiBaseAction">%core.module_dir%/Shofi/lib/agavi/action/ShofiBaseAction.class.php</autoload>
         <autoload name="ShofiBaseView">%core.module_dir%/Shofi/lib/agavi/view/ShofiBaseView.class.php</autoload>
         <autoload name="PrototypeImportValidator">%core.module_dir%/Shofi/lib/agavi/validator/PrototypeImportValidator.class.php</autoload>
         <autoload name="ShofiCoreItemValidator">%core.module_dir%/Shofi/lib/agavi/validator/ShofiCoreItemValidator.class.php</autoload>
         <autoload name="ShofiDetailItemValidator">%core.module_dir%/Shofi/lib/agavi/validator/ShofiDetailItemValidator.class.php</autoload>
         <autoload name="ShofiSalesItemValidator">%core.module_dir%/Shofi/lib/agavi/validator/ShofiSalesItemValidator.class.php</autoload>
-        <!-- /Agavi -->
 
         <autoload name="IShofiEntity">%core.module_dir%/Shofi/lib/IShofiEntity.iface.php</autoload>
 
-        <!-- Import Integration -->
+        <!-- # Import Integration # -->
+        <!-- Common -->
+        <autoload name="ShofiDataRecord">%core.module_dir%/Shofi/lib/import/ShofiDataRecord.class.php</autoload>
+        <autoload name="ShofiDataImport">%core.module_dir%/Shofi/lib/import/ShofiDataImport.class.php</autoload>
+        <autoload name="ShofiDataImportConfig">%core.module_dir%/Shofi/lib/import/ShofiDataImportConfig.class.php</autoload>
+        <autoload name="ShofiWorkflowService">%core.module_dir%/Shofi/lib/ShofiWorkflowService.class.php</autoload>
         <!-- Wkg -->
         <autoload name="WkgDataSourceConfig">%core.module_dir%/Shofi/lib/import/wkg/WkgDataSourceConfig.class.php</autoload>
         <autoload name="WkgDataSource">%core.module_dir%/Shofi/lib/import/wkg/WkgDataSource.class.php</autoload>
         <autoload name="WkgDataRecord">%core.module_dir%/Shofi/lib/import/wkg/WkgDataRecord.class.php</autoload>
+        <!-- Theater-Telavision -->
+        <autoload name="TelavsionTheaterDataSourceConfig">%core.module_dir%/Shofi/lib/import/theater-telavision/TelavsionTheaterDataSourceConfig.class.php</autoload>
+        <autoload name="TelavsionTheaterDataSource">%core.module_dir%/Shofi/lib/import/theater-telavision/TelavsionTheaterDataSource.class.php</autoload>
+        <autoload name="TelavsionTheaterDataRecord">%core.module_dir%/Shofi/lib/import/theater-telavision/TelavsionTheaterDataRecord.class.php</autoload>
+        <autoload name="TelavsionTheaterXmlParser">%core.module_dir%/Shofi/lib/import/theater-telavision/TelavsionTheaterXmlParser.class.php</autoload>
+        <!-- Hotel-Btk -->
+        <autoload name="BtkHotelDataSourceConfig">%core.module_dir%/Shofi/lib/import/hotel-btk/BtkHotelDataSourceConfig.class.php</autoload>
+        <autoload name="BtkHotelDataSource">%core.module_dir%/Shofi/lib/import/hotel-btk/BtkHotelDataSource.class.php</autoload>
+        <autoload name="BtkHotelDataRecord">%core.module_dir%/Shofi/lib/import/hotel-btk/BtkHotelDataRecord.class.php</autoload>
+        <autoload name="BtkHotelXmlParser">%core.module_dir%/Shofi/lib/import/hotel-btk/BtkHotelXmlParser.class.php</autoload>
+        <!-- Hotel-GoogleDocs -->
+        <autoload name="GdocHotelDataSourceConfig">%core.module_dir%/Shofi/lib/import/hotel-gdoc/GdocHotelDataSourceConfig.class.php</autoload>
+        <autoload name="GdocHotelDataSource">%core.module_dir%/Shofi/lib/import/hotel-gdoc/GdocHotelDataSource.class.php</autoload>
+        <autoload name="GdocHotelDataRecord">%core.module_dir%/Shofi/lib/import/hotel-gdoc/GdocHotelDataRecord.class.php</autoload>
+        <autoload name="GoogleDocsService">%core.module_dir%/Shofi/lib/import/hotel-gdoc/GoogleDocsService.class.php</autoload>
+        <!-- Places-EventX -->
+        <autoload name="EventXPlacesDataSourceConfig">%core.module_dir%/Shofi/lib/import/places-eventx/EventXPlacesDataSourceConfig.class.php</autoload>
+        <autoload name="EventXPlacesDataSource">%core.module_dir%/Shofi/lib/import/places-eventx/EventXPlacesDataSource.class.php</autoload>
+        <autoload name="EventXPlacesDataRecord">%core.module_dir%/Shofi/lib/import/places-eventx/EventXPlacesDataRecord.class.php</autoload>
+        <autoload name="EventXPlacesXmlParser">%core.module_dir%/Shofi/lib/import/places-eventx/EventXPlacesXmlParser.class.php</autoload>
+        <!-- Restaurants-Tip -->
+        <autoload name="TipRestaurantDataSourceConfig">%core.module_dir%/Shofi/lib/import/restaurant-tip/TipRestaurantDataSourceConfig.class.php</autoload>
+        <autoload name="TipRestaurantDataSource">%core.module_dir%/Shofi/lib/import/restaurant-tip/TipRestaurantDataSource.class.php</autoload>
+        <autoload name="TipRestaurantDataRecord">%core.module_dir%/Shofi/lib/import/restaurant-tip/TipRestaurantDataRecord.class.php</autoload>
+        <autoload name="TipRestaurantXmlParser">%core.module_dir%/Shofi/lib/import/restaurant-tip/TipRestaurantXmlParser.class.php</autoload>
 
-        <autoload name="PrototypeDataRecord">%core.module_dir%/Shofi/lib/import/prototype/PrototypeDataRecord.class.php</autoload>
-
-        <autoload name="ShofiDataRecord">%core.module_dir%/Shofi/lib/import/ShofiDataRecord.class.php</autoload>
-
-        <autoload name="ShofiDataImport">%core.module_dir%/Shofi/lib/import/ShofiDataImport.class.php</autoload>
-        <autoload name="ShofiDataImportConfig">%core.module_dir%/Shofi/lib/import/ShofiDataImportConfig.class.php</autoload>
-        <autoload name="ShofiWorkflowService">%core.module_dir%/Shofi/lib/ShofiWorkflowService.class.php</autoload>
-        <!-- /Import Integration -->
-
+        <!-- # Export Integration # -->
+        <!-- Tip Frontend -->
+        <autoload name="TipFrontendLocationExport">%core.module_dir%/Shofi/lib/export/tip-frontend/TipFrontendLocationExport.class.php</autoload>
+        <autoload name="TipFrontendLocationFactory">%core.module_dir%/Shofi/lib/export/tip-frontend/TipFrontendLocationFactory.class.php</autoload>
+        <autoload name="TipFrontendLocation">%core.module_dir%/Shofi/lib/export/tip-frontend/TipFrontendLocation.class.php</autoload>
 
         <!-- Workflow Integration -->
         <!-- Item -->
@@ -38,21 +63,28 @@
         <autoload name="IShofiCoreItem">%core.module_dir%/Shofi/lib/workflow/item/IShofiCoreItem.iface.php</autoload>
         <autoload name="IShofiDetailItem">%core.module_dir%/Shofi/lib/workflow/item/IShofiDetailItem.iface.php</autoload>
         <autoload name="IShofiSalesItem">%core.module_dir%/Shofi/lib/workflow/item/IShofiSalesItem.iface.php</autoload>
-        <autoload name="ShofiWorkflowSupervisor">%core.module_dir%/Shofi/lib/workflow/ShofiWorkflowSupervisor.class.php</autoload>
-
+        <!-- Plugins -->
         <autoload name="WorkflowEditPlacePlugin">%core.module_dir%/Shofi/lib/workflow/plugin/WorkflowEditPlacePlugin.class.php</autoload> 
-        <autoload name="WorkflowDeletePlacePlugin">%core.module_dir%/Shofi/lib/workflow/plugin/WorkflowDeletePlacePlugin.class.php</autoload>        
+        <autoload name="WorkflowDeletePlacePlugin">%core.module_dir%/Shofi/lib/workflow/plugin/WorkflowDeletePlacePlugin.class.php</autoload>
+        <!-- Common -->
+        <autoload name="ShofiWorkflowSupervisor">%core.module_dir%/Shofi/lib/workflow/ShofiWorkflowSupervisor.class.php</autoload>
         <!-- /Workflow Integration -->
 
         <autoload name="ContentMachineHttpExport">%core.module_dir%/Shofi/lib/ContentMachineHttpExport.class.php</autoload>
-
         <autoload name="ShofiDatabaseSetup">%core.module_dir%/Shofi/lib/setup/couchdb/ShofiDatabaseSetup.class.php</autoload>
-
         <autoload name="ShofiFinder">%core.module_dir%/Shofi/lib/ShofiFinder.class.php</autoload>
 
         <!-- Renderer -->
+        <autoload name="ShofiDateTimeListRenderer">%core.module_dir%/Shofi/lib/renderer/ShofiDateTimeListRenderer.class.php</autoload>
+        <autoload name="ShofiTranslationListRenderer">%core.module_dir%/Shofi/lib/renderer/ShofiTranslationListRenderer.class.php</autoload>
+        <autoload name="ShofiStreetListValueRenderer">%core.module_dir%/Shofi/lib/renderer/ShofiStreetListValueRenderer.class.php</autoload>
         <autoload name="ShofiCategoryListRenderer">%core.module_dir%/Shofi/lib/renderer/ShofiCategoryListRenderer.class.php</autoload>
         <autoload name="ShofiVerticalListRenderer">%core.module_dir%/Shofi/lib/renderer/ShofiVerticalListRenderer.class.php</autoload>
         <!-- /Renderer -->
+
+        <!-- Matching -->
+        <autoload name="ShofiDataImportReport">%core.module_dir%/Shofi/lib/import/ShofiDataImportReport.class.php</autoload>
+        <autoload name="ShofiCategoryMatcher">%core.module_dir%/Shofi/lib/matching/ShofiCategoryMatcher.class.php</autoload>
+        <autoload name="ShofiPlaceMatcher">%core.module_dir%/Shofi/lib/matching/ShofiPlaceMatcher.class.php</autoload>
     </ae:configuration>
 </ae:configurations>

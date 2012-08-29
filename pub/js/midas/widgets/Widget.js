@@ -9,9 +9,10 @@ midas.widgets.Widget = midas.core.BaseObject.extend({
 
     options: null,
 
-    init: function(element, options)
+    init: function(element, options, ready_callback)
     {
         this.parent();
+        ready_callback = ready_callback || function() {};
         // basic member initialization
         this.element = element;
         this.options = options;
@@ -23,6 +24,7 @@ midas.widgets.Widget = midas.core.BaseObject.extend({
             this.element.load(tpl, null, function()
             {
                 that.initGui();
+                ready_callback();
             });
             return;
         }
@@ -31,6 +33,7 @@ midas.widgets.Widget = midas.core.BaseObject.extend({
             this.element.html(tpl);
         }
         that.initGui();
+        ready_callback();
     },
 
     initGui: function()

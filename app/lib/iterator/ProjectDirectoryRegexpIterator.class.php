@@ -30,10 +30,6 @@ class ProjectDirectoryRegexpIterator extends FilterIterator
             self::REGEXP_DELIMITER,
             $filterRegexp
         );
-
-        // Make sure that we are valid for fresh instances.
-        // Otherwise while($it->valid()) { $it->next(); } will skip the first item.
-        $this->rewind();
     }
 
     public function accept()

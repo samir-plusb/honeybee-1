@@ -3,10 +3,8 @@
 
     <ae:configuration context="web">
         <routes>
-            <!-- prototype import/delete api -->
-            <route pattern="/import/prototype" action="Import_Prototype" />
-            <route pattern="/delete/prototype" action="Import_PrototypeDelete" />
             <!-- web views -->
+            <route name=".config" pattern="/config" action="Config" />
             <route name=".list" pattern="/list" action="List" method="read" />
             <route name=".edit" pattern="/edit" action="Edit" />
         </routes>
@@ -14,7 +12,10 @@
 
     <ae:configuration context="console">
         <routes>
+            <route pattern="shofi.link-r4" module="Shofi" action="LinkR4" method="write" />
+            <route pattern="shofi.update-categories" module="Shofi" action="UpdateCategories" method="write" />
             <route pattern="shofi.fixdata" module="Shofi" action="FixData" method="write" />
+            <route pattern="shofi.mark-duplicates" module="Shofi" action="MarkDuplicates" method="write" />
         </routes>
     </ae:configuration>
 

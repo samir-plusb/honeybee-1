@@ -114,10 +114,9 @@ abstract class WorkflowItemDataImport extends BaseDataImport
      *
      * @param array $importData
      */
-    protected function updateWorkflowItem(IWorkflowItem $workflowItem, array $importData, array $itemData = array())
+    protected function updateWorkflowItem(IWorkflowItem $workflowItem, array $importData)
     {
         $workflowItem->updateMasterRecord($importData);
-        $workflowItem->applyValues($itemData);
         $this->workflowService->storeWorkflowItem($workflowItem);
         if ($this->notifyEnabled())
         {

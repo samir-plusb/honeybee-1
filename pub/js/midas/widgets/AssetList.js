@@ -11,6 +11,14 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
 
     uploader: null,
 
+    ichie: null,
+
+    area_of_interest: null,
+
+    aoi_enabled: null,
+
+    start_active: null,
+
     init: function(element, options)
     {
         this.parent(element, options);
@@ -24,9 +32,31 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
         return 'js/midas/templates/AssetList.html';
     },
 
+    initGui: function()
+    {
+        this.parent();
+        var that = this;
+        this.ichie = window.IchieJs.create({
+            main_container: this.element.find('.ichiejs-main-stage')[0],
+            width: 500,
+            height: 385,
+            onSelectionChanged: function(selection)
+            {
+                var asset;
+                if (that.dialog && (asset = that.dialog.data('cur_asset')))
+                {
+                    that.applyAoiSelection(selection);
+                }
+            }
+        });
+    },
+
     initKnockoutProperties: function()
     {
         this.fieldname = ko.observable(this.options.fieldname);
+        this.aoi_enabled = ko.observable(false);
+        this.start_active = ko.observable(false);
+        this.area_of_interest = ko.observableArray([0, 0, 0, 0]);
         var assets = this.options.assets || [];
         this.assets = ko.observableArray([]);
         for (var i = 0; i < assets.length; i++)
@@ -88,7 +118,8 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
                         asset, {
                             'caption': that.dialog.twodal('promptVal', '.input-caption'),
                             'copyright': that.dialog.twodal('promptVal', '.input-copyright'),
-                            'copyright_url': that.dialog.twodal('promptVal', '.input-copyright-url')
+                            'copyright_url': that.dialog.twodal('promptVal', '.input-copyright-url'),
+                            'aoi': that.aoi_enabled() ? that.area_of_interest() : null
                         }
                     );
                     that.dialog.twodal('hide');
@@ -103,6 +134,37 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
         this.dialog.twodal('promptVal', '.input-caption', asset.caption());
         this.dialog.twodal('promptVal', '.input-copyright', asset.copyright());
         this.dialog.twodal('promptVal', '.input-copyright-url', asset.copyright_url());
+
+        var that = this;
+        this.ichie.launch(asset.url(), function(){
+            if (asset.aoi)
+            {
+                that.ichie.setSelection({
+                    left: asset.aoi[0],
+                    top: asset.aoi[1],
+                    right: asset.aoi[0] + asset.aoi[2],
+                    bottom: asset.aoi[1] + asset.aoi[3]
+                });
+                that.aoi_enabled(true);
+                that.start_active(false); // hack, make sure we trigger a value -change
+                that.start_active(true); // which would not be the case if start_active was true.
+                that.ichie.showSelection();
+            }
+            else
+            {
+                that.ichie.setSelection({
+                    left: 60,
+                    top: 60,
+                    right: 200,
+                    bottom: 200
+                });
+                that.aoi_enabled(false);
+                that.start_active(true); // hack, make sure we trigger a value -change
+                that.start_active(false); // which would not be the case if start_active was false.
+                that.ichie.hideSelection();
+            }
+        });
+
         this.dialog.twodal('show');
     },
 
@@ -129,12 +191,30 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
             asset.caption(newData.caption || '');
             asset.copyright_url(newData.copyright_url || '');
             asset.copyright(newData.copyright || '');
+            asset.setAoi(newData.aoi);
             asset.is_loading(false);
         },
         function(resp)
         {
             asset.is_loading(false);
         });
+    },
+
+    toggleAoiSelection: function()
+    {
+        this.aoi_enabled(! this.aoi_enabled());
+        this.ichie[this.aoi_enabled() ? 'showSelection' : 'hideSelection']();
+    },
+
+    applyAoiSelection: function(selection)
+    {
+        this.area_of_interest.splice(
+            0, 4,
+            Math.floor(selection.left),
+            Math.ceil(selection.top),
+            Math.ceil(selection.right - selection.left),
+            Math.ceil(selection.bottom - selection.top)
+        );
     }
 });
 
@@ -158,6 +238,10 @@ midas.widgets.AssetList.Asset = midas.core.BaseObject.extend({
 
     copyright_url_txt: null,
 
+    aoi: null,
+
+    aoi_enabled: null,
+
     has_id: null,
 
     progress: null,
@@ -168,6 +252,19 @@ midas.widgets.AssetList.Asset = midas.core.BaseObject.extend({
     {
         this.parent();
         this.initKnockoutProperties(data);
+        this.setAoi(data.aoi);
+    },
+
+    setAoi: function(aoi)
+    {
+        if ($.isArray(aoi))
+        {
+            this.aoi = [];
+            for (var i = 0; i < 4; i++)
+            {
+                this.aoi[i] = +aoi[i];
+            }
+        }
     },
 
     initKnockoutProperties: function(data)
@@ -177,6 +274,8 @@ midas.widgets.AssetList.Asset = midas.core.BaseObject.extend({
         this.url = ko.observable(data.url);
         this.name = ko.observable(data.name);
         this.caption = ko.observable(data.caption || '');
+
+        this.aoi_enabled = ko.observable(!!data.aoi);
         this.progress = ko.observable(0);
 
         var that = this;
@@ -196,7 +295,7 @@ midas.widgets.AssetList.Asset = midas.core.BaseObject.extend({
         });
         this.has_id = ko.computed(function()
         {
-            return !!that.id();
+            return !! that.id();
         });
     }
 });
@@ -308,13 +407,15 @@ midas.widgets.AssetList.FileUploader = midas.core.BaseObject.extend({
 
     shiftQueue: function()
     {
+        var that = this;
+
         if (! this.enabled)
         {
             this.queue = [];
             this.is_running = false;
             return;
         }
-        var that = this;
+        
         var file = this.queue.shift();
         if (file)
         {
@@ -368,8 +469,8 @@ midas.widgets.AssetList.FileUploader = midas.core.BaseObject.extend({
         this.fire('upload::start', [ asset ]);  
 
         xhr.open('post', this.put_url, true);
-        xhr.setRequestHeader("Accept", "application/json");                                                                                                                       
-        xhr.send(fd);   
+        xhr.setRequestHeader("Accept", "application/json");                                                                                                 
+        xhr.send(fd);
     }
 });
 

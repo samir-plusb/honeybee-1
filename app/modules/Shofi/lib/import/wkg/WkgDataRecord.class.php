@@ -83,7 +83,7 @@ class WkgDataRecord extends ShofiDataRecord
         $craur = Craur::createFromXml($data);
 
         $values = $this->fetchCraurValues($craur, array(
-            self::PROP_IDENT => 'Listing.ListingID',
+            self::PROP_IMPORT_IDENTIFIER => 'Listing.ListingID',
             self::PROP_COMPANY => 'Listing.CompanyName',
             self::PROP_FIRST_NAME => 'Listing.FirstName',
             self::PROP_LAST_NAME => 'Listing.LastName',
@@ -95,7 +95,7 @@ class WkgDataRecord extends ShofiDataRecord
             self::PROP_FAX => 'Listing.Fax',
             self::PROP_MOBILE => 'Listing.Mobile',
             self::PROP_EMAIL => 'Listing.Email',
-            self::PROP_WEB => 'Listing.Web',
+            self::PROP_WEBSITE => 'Listing.Web',
             self::PROP_CLASS_ID => 'Listing.ClassHeadingId',
             self::PROP_ACTION => 'Listing.Action'
         ));
@@ -108,6 +108,9 @@ class WkgDataRecord extends ShofiDataRecord
                 'postal_code' => 'Listing.Zip'
             ))
         );
+
+        $values[self::PROP_IMPORT_IDENTIFIER] = $this->buildImportIdentifier($values[self::PROP_IMPORT_IDENTIFIER]);
+        
         return $values;
     }
 

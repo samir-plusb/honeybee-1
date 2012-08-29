@@ -43,32 +43,44 @@
     </li>
 </ul>
 <!-- edit additional data modal dialog -->
-<div class="modal modal-edit-asset" style="display: none">
+<div class="modal modal-edit-asset" style="display: none; width:65em">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">×</a>
         <h3>Bilddaten bearbeiten</h3>
     </div>
     <div class="modal-body">
-        <div class="control-group">
-            <label class="control-label">Bildunterschrift</label>
-            <div class="controls">
-                <input type="text" name="caption" class="span4 input-caption" value="" />
+        <form class="form form-vertical" style="float: left;width: 250px; margin-right: 3em;">
+            <div class="control-group">
+                <label class="control-label">Bildunterschrift</label>
+                <div class="controls">
+                    <input type="text" name="caption" class="span4 input-caption" value="" style="width: 200px"/>
+                </div>
             </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Copyright</label>
-            <div class="controls">
-                <input type="text" name="copyright" class="span4 input-copyright" value="" />
+            <div class="control-group">
+                <label class="control-label">Copyright</label>
+                <div class="controls">
+                    <input type="text" name="copyright" class="span4 input-copyright" value="" style="width: 200px"/>
+                </div>
             </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Copyright-Url</label>
-            <div class="controls">
-                <input type="text" class="span4 input-copyright-url" value="" />
+            <div class="control-group">
+                <label class="control-label">Copyright-Url</label>
+                <div class="controls">
+                    <input type="text" class="span4 input-copyright-url" value="" style="width: 200px"/>
+                </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <input type="submit" class="btn btn-primary" data-twodal-event="onstoredata" value="Bilddaten speichern">
-        </div>
+            <button class="btn" type="button" data-toggle="button" style="margin-top: 2em;"
+                    data-bind="css: { 'active': start_active }, click: toggleAoiSelection">Auswahl für "area of interest"</button>
+            <div data-bind="visible: aoi_enabled" class="image-editor">
+                <span class="label label-info select-label">X:</span><span class="select-val" data-bind="text: $data.area_of_interest()[0] + 'px'"></span>
+                <span class="label label-info select-label">Y:</span><span class="select-val" data-bind="text: $data.area_of_interest()[1] + 'px'"></span>
+                <span class="label label-info select-label">Breite:</span><span class="select-val" data-bind="text: $data.area_of_interest()[2] + 'px'"></span>
+                <span class="label label-info select-label">Hoehe:</span><span class="select-val" data-bind="text: $data.area_of_interest()[3] + 'px'"></span>
+            </div>
+            <div class="modal-footer" style="margin-top: 1em;">
+                <input type="button" class="btn btn-primary" data-twodal-event="onstoredata" value="Bilddaten speichern">
+            </div>
+        </form>
+        <!-- IchieJs stage marker -->
+        <div style="float: left" class="ichiejs-main-stage"></div>
     </div>
 </div>

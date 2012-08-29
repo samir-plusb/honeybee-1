@@ -113,6 +113,7 @@ abstract class BaseDataImport implements IDataImport
             }
             catch(Exception $e)
             {
+                throw $e;
                 $doImport = FALSE;
                 $this->report->addRecordError($this->currentRecord, $e->getMessage());
                 $logger = AgaviContext::getInstance()->getLoggerManager()->getLogger('error');

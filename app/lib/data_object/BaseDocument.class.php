@@ -128,6 +128,11 @@ abstract class BaseDocument extends BaseDataObject implements IDocument
         $this->lastModified = $value;
         return $this;
     }
+
+    public function getIdentifierPrefix()
+    {
+        return '';
+    }
 }
 
 ?>

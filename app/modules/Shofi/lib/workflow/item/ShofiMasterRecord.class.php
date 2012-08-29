@@ -11,102 +11,66 @@
  * @package Shofi
  * @subpackage Workflow/Item
  */
-class ShofiMasterRecord extends MasterRecord implements IShofiEntity
+class ShofiMasterRecord extends MasterRecord
 {
-    protected $company;
+    protected $coreItem = array();
 
-    protected $firstName;
+    protected $detailItem = array();
 
-    protected $lastName;
+    protected $salesItem = array();
 
-    protected $title;
-
-    protected $namePrefix;
-
-    protected $histNamePrefix;
-
-    protected $miscNamePrefix;
-
-    protected $location;
-
-    protected $phone;
-
-    protected $fax;
-
-    protected $mobile;
-
-    protected $email;
-
-    protected $web;
+    protected $categorySource;
 
     public static function fromArray(array $data = array())
     {
         return new self($data);
     }
 
-    public function getCompany()
+    public function getCoreItem()
     {
-        return $this->company;
+        return $this->coreItem;
     }
 
-    public function getFirstName()
+    public function setCoreItem(array $data)
     {
-        return $this->firstName;
+        foreach ($data as $key => $value)
+        {
+            $this->coreItem[$key] = $value;
+        }
     }
 
-    public function getLastName()
+    public function getDetailItem()
     {
-        return $this->lastName;
+        return $this->detailItem;
     }
 
-    public function getTitle()
+    public function setDetailItem(array $data)
     {
-        return $this->title;
+        foreach ($data as $key => $value)
+        {
+            $this->detailItem[$key] = $value;
+        }
     }
 
-    public function getNamePrefix()
+    public function getSalesItem()
     {
-        return $this->namePrefix;
+        return $this->salesItem;
     }
 
-    public function getHistNamePrefix()
+    public function setSalesItem(array $data)
     {
-        return $this->histNamePrefix;
+        foreach ($data as $key => $value)
+        {
+            if (! empty($value))
+            {
+                $this->salesItem[$key] = $value;
+            }
+        }
     }
 
-    public function getMiscNamePrefix()
+    public function getCategorySource()
     {
-        return $this->miscNamePrefix;
-    }
-
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-    public function getFax()
-    {
-        return $this->fax;
-    }
-
-    public function getMobile()
-    {
-        return $this->mobile;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    public function getWeb()
-    {
-        return $this->web;
-    }
-
-    public function getLocation()
-    {
-        return $this->location;
+        return $this->categorySource;
     }
 }
 

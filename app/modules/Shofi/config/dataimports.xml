@@ -7,9 +7,14 @@
         <dataimports>
 
             <dataimport name="shofi" class="ShofiDataImport">
-                <description>Imports shofi data in form of ShofiWorkflowItems.</description>
+                <description>Imports shofi data (wkg and theaters) in form of ShofiWorkflowItems.</description>
                 <datasources>
-                    <datasource>wkg</datasource>
+                    <datasource>places-wkg</datasource>
+                    <datasource>theaters-telavision</datasource>
+                    <datasource>hotels-btk</datasource>
+                    <datasource>hotels-gdoc</datasource>
+                    <datasource>places-eventx</datasource>
+                    <datasource>restaurants-tip</datasource>
                 </datasources>
                 <settings>
                     <setting name="notify">true</setting>

@@ -7,7 +7,7 @@
     <ae:configuration>
         <datasources>
 
-            <datasource name="wkg" class="WkgDataSource">
+            <datasource name="places-wkg" class="WkgDataSource">
                 <description>Provides wkg location data coming from xml files.</description>
                 <recordType>WkgDataRecord</recordType>
                 <settings>
@@ -16,16 +16,51 @@
                 </settings>
             </datasource>
 
-            <datasource name="prototype" class="ArrayDataSource">
-                <description>Provides location data coming from the shofi prototype.</description>
-                <recordType>PrototypeDataRecord</recordType>
+            <datasource name="theaters-telavision" class="TelavsionTheaterDataSource">
+                <description>Provides theater data coming from the shofi/theater import directory as xml files.</description>
+                <recordType>TelavsionTheaterDataRecord</recordType>
+                <settings>
+                    <setting name="file_path">%core.app_dir%/../data/catalogs/movies/kino.xml</setting>
+                </settings>
             </datasource>
 
-            <datasource name="prototype.category" class="ArrayDataSource">
-                <description>Provides category data coming from the shofi prototype.</description>
-                <recordType>PrototypeCategoryDataRecord</recordType>
+            <datasource name="hotels-btk" class="BtkHotelDataSource">
+                <description>Provides hotel data coming from the shofi/hotel import directory as xml files.</description>
+                <recordType>BtkHotelDataRecord</recordType>
+                <settings>
+                    <setting name="file_path">%core.app_dir%/../data/catalogs/hotels/hotels.xml</setting>
+                </settings>
             </datasource>
 
+            <datasource name="hotels-gdoc" class="GdocHotelDataSource">
+                <description>Provides hotel data coming from the shofi/hotels google docs spreadsheet.</description>
+                <recordType>GdocHotelDataRecord</recordType>
+                <settings>
+                    <setting name="doc_id">0AiVrBh5tuXpndDFlWTcwd3RVR2gwWUtOVlJDZ2tuWFE</setting>
+                    <setting name="email">bonline.hotel.import@googlemail.com</setting>
+                    <setting name="password">klbo09;A</setting>
+                </settings>
+            </datasource>
+
+            <datasource name="places-eventx" class="EventXPlacesDataSource">
+                <description>Provides places data coming from TIP's event(x) export interface.</description>
+                <recordType>EventXPlacesDataRecord</recordType>
+                <settings>
+                    <setting name="schema">%core.app_dir%/../data/catalogs/schemas/eventx/tip_berlinonline.xsd</setting>
+                    <setting name="source_directory">%core.app_dir%/../data/catalogs/eventx/</setting>
+                    <setting name="files">
+                        <setting>%core.app_dir%/../data/catalogs/eventx/adressen-export.xml</setting>
+                    </setting>
+                </settings>
+            </datasource>
+
+            <datasource name="restaurants-tip" class="TipRestaurantDataSource">
+                <description>Provides places data coming from TIP's restaurant export interface.</description>
+                <recordType>TipRestaurantDataRecord</recordType>
+                <settings>
+                    <setting name="file_path">%core.app_dir%/../data/catalogs/restaurants/gastro.xml</setting>
+                </settings>
+            </datasource>
         </datasources>
     </ae:configuration>
 </ae:configurations>

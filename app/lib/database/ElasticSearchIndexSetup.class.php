@@ -61,6 +61,11 @@ class ElasticSearchIndexSetup implements IDatabaseSetup
                         'tokenizer' => 'icu_tokenizer',
                         'filter' => array('lowercase', 'snowball', 'icu_folding')
                     ),
+                    'noLang' => array(
+                        'type' => 'custom',
+                        'tokenizer' => 'icu_tokenizer',
+                        'filter' => array('lowercase', 'icu_folding')
+                    ),
                     'searchAnalyzer' => array(
                         'type' => 'custom',
                         'tokenizer' => 'icu_tokenizer',
@@ -99,6 +104,7 @@ class ElasticSearchIndexSetup implements IDatabaseSetup
         $elasticaType = $index->getType($type);
         $mapping = new Elastica_Type_Mapping();
         $mapping->setType($elasticaType);
+
         foreach ($typeSettings as $prop => $value)
         {
             if ('properties' === $prop)

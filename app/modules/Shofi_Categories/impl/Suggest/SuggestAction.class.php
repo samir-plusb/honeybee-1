@@ -35,7 +35,7 @@ class Shofi_Categories_SuggestAction extends ShofiCategoriesBaseAction
         );
         $listState = ListState::fromArray(array(
             'offset' => $parameters->getParameter('offset', 0),
-            'limit' => $parameters->getParameter('limit', $listConfig->getDefaultLimit()),
+            'limit' => $parameters->getParameter('limit', 100),
             'sortDirection' => $parameters->getParameter('sorting[direction]', self::DEFAULT_SORT_DIRECTION),
             'sortField' => $parameters->getParameter('sorting[field]', self::DEFAULT_SORT_FIELD),
             'search' => $parameters->getParameter('search_phrase'),

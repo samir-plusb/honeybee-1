@@ -3,7 +3,9 @@
     $categoryWidgetOptions = $t['category_widget_opts'];
     $categoriesWidgetOptions = $t['additional_categories_widget_opts'];
     $keywordsWidgetOptions = $t['keywords_widget_opts'];
+    $internalKeywordsWidgetOptions = $t['internal_keywords_widget_opts'];
     $openingTimesWidgetOptions = $t['opening_times_widget_opts'];
+    $videoEmbedCodeWidgetOpts = $t['embed_code_widget_opts'];
     $attrbuteWidgetOptions = $t['attributes_widget_opts'];
     $itemData = $t['item_data'];
     $ticketData = $t['ticket_data'];
@@ -100,14 +102,26 @@ Editing:
                                 <li><a href="#tab-3" data-toggle="tab">Öffnungszeiten</a></li>
                                 <li><a href="#tab-4" data-toggle="tab">Weitere Eigenschaften</a></li>
                                 <li><a href="#tab-5" data-toggle="tab">Bilder</a></li>
+                                <li><a href="#tab-6" data-toggle="tab">Video</a></li>
                             </ul>
                         </div>
                         <div class="tab-content">
 <!-- **tab: detailItem.keywords -->
                             <div class="tab-pane well active" id="tab-1">
-                                <section class="widget-tags-list widget-keywords"
-                                          data-tags-list-options='<?php echo $keywordsWidgetOptions; ?>'>
-                                </section>
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <h3>Schlagworte</h3>
+                                        <section class="widget-tags-list widget-keywords"
+                                                  data-tags-list-options='<?php echo $keywordsWidgetOptions; ?>'>
+                                        </section>
+                                    </div>
+                                    <div class="span6">
+                                        <h3>interne Schlagworte</h3>
+                                        <section class="widget-tags-list widget-internal-keywords"
+                                                  data-tags-list-options='<?php echo $internalKeywordsWidgetOptions; ?>'>
+                                        </section>
+                                    </div>
+                                </div>
                             </div>
 <!-- **tab: detailItem.categories -->
                             <div class="tab-pane well" id="tab-2">
@@ -138,11 +152,19 @@ Editing:
                                          data-key-values-list-options='<?php echo $attrbuteWidgetOptions; ?>'>
                                 </section>
                             </div>
-<!-- **tab: salesItem.attachments -->
+<!-- **tab: detailItem.attachments -->
                             <div class="tab-pane well" id="tab-5">
                                 <div class="row-fluid">
                                     <section class="widget-asset-list widget-detail-attachments"
                                              data-asset-list-options='<?php echo $assetListOptions; ?>'>
+                                    </section>
+                                </div>
+                            </div>
+<!-- **tab: detailItem.video -->
+                            <div class="tab-pane well" id="tab-6">
+                                <div class="row-fluid">
+                                    <section class="widget-embed-code video-embed-code-widget"
+                                             data-embed-code-widget-options='<?php echo $videoEmbedCodeWidgetOpts; ?>'>
                                     </section>
                                 </div>
                             </div>

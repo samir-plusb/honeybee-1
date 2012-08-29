@@ -160,7 +160,9 @@ class WkgDataSource extends BaseDataSource
     {
         $directory = realpath($this->config->getSetting(WkgDataSourceConfig::CFG_DIRECTORY));
         $filePattern = $this->config->getSetting(WkgDataSourceConfig::CFG_FILE_PATTERN);
-        return new ProjectDirectoryRegexpIterator($directory, $filePattern);
+        $iterator = new ProjectDirectoryRegexpIterator($directory, $filePattern);
+        $iterator->next(); // make sure the iterator is valid
+        return $iterator;
     }
 
     /**

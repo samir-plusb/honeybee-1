@@ -41,5 +41,29 @@ midas.shofi.PlacesListController = midas.list.ListController.extend({
         var url = this.options.category_batch.post_url.replace('{TICKET}', data_model.ticket.id);
         var detailItem = { category: category.id };
         return this.ajaxCurry(url, { detailItem: detailItem }, 'post');
-    }
+    },
+
+    resolveConflict: function(is_batch, data_container)
+    {
+        
+    },
+
+    createResolveConflictBatch: function(items, category)
+    {
+        var batch = new midas.list.ActionBatch();
+        for (var i = 0; i < items.length; i++)
+        {
+            batch.addAction(new midas.list.Action(
+                this.createCategoryBatchPayload(items[i], category)
+            ));
+        }
+        return batch;
+    },
+
+    createResolveConflictBatchPayload: function(data_model, category)
+    {
+        var url = this.options.category_batch.post_url.replace('{TICKET}', data_model.ticket.id);
+        var detailItem = { category: category.id };
+        return this.ajaxCurry(url, { detailItem: detailItem }, 'post');
+    },
 });

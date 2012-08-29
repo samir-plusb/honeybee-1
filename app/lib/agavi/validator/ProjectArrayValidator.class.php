@@ -18,6 +18,7 @@ class ProjectArrayValidator extends AgaviValidator
             }
             return TRUE;
         }
+
         $this->throwError('format');
         return FALSE;
     }  

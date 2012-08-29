@@ -11,8 +11,6 @@ abstract class ShofiCategoriesDataRecord extends BaseDataRecord
 {
     const PROP_NAME = 'name';
 
-    const PROP_ALIAS = 'alias';
-
     const PROP_SINGULAR = 'singular';
 
     const PROP_PLURAL = 'plural';
@@ -61,7 +59,6 @@ abstract class ShofiCategoriesDataRecord extends BaseDataRecord
             parent::getExposedProperties(),
             array(
                 self::PROP_NAME,
-                self::PROP_ALIAS,
                 self::PROP_SINGULAR,
                 self::PROP_PLURAL,
                 self::PROP_TEXT,
@@ -77,11 +74,6 @@ abstract class ShofiCategoriesDataRecord extends BaseDataRecord
     public function getName()
     {
         return $this->name;
-    }
-
-    public function getAlias()
-    {
-        return $this->alias;
     }
 
     public function getSingular()

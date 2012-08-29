@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+
+        <!-- Agavi -->
+        <autoload name="MoviesBaseAction">%core.module_dir%/Movies/lib/agavi/action/MoviesBaseAction.class.php</autoload>
+        <autoload name="MoviesBaseView">%core.module_dir%/Movies/lib/agavi/view/MoviesBaseView.class.php</autoload>
+        <autoload name="MovieItemValidator">%core.module_dir%/Movies/lib/agavi/validator/MovieItemValidator.class.php</autoload>
+        <!-- /Agavi -->
+
+        <!-- Import Integration -->
+        <autoload name="MoviesDataRecord">%core.module_dir%/Movies/lib/import/MoviesDataRecord.class.php</autoload>
+        <autoload name="MoviesDataImport">%core.module_dir%/Movies/lib/import/MoviesDataImport.class.php</autoload>
+        <autoload name="MoviesDataImportConfig">%core.module_dir%/Movies/lib/import/MoviesDataImportConfig.class.php</autoload>
+
+        <!-- Movie Xml Import -->
+        <autoload name="MoviesXmlDataSource">%core.module_dir%/Movies/lib/import/xml/MoviesXmlDataSource.class.php</autoload>
+        <autoload name="MoviesXmlDataSourceConfig">%core.module_dir%/Movies/lib/import/xml/MoviesXmlDataSourceConfig.class.php</autoload>
+        <autoload name="MoviesXmlDataRecord">%core.module_dir%/Movies/lib/import/xml/MoviesXmlDataRecord.class.php</autoload>
+        <autoload name="MoviesXmlParser">%core.module_dir%/Movies/lib/import/xml/MoviesXmlParser.class.php</autoload>
+
+         <!-- Screening Xml Import -->
+        <autoload name="ScreeningXmlDataSource">%core.module_dir%/Movies/lib/import/screening/ScreeningXmlDataSource.class.php</autoload>
+        <autoload name="ScreeningXmlDataSourceConfig">%core.module_dir%/Movies/lib/import/screening/ScreeningXmlDataSourceConfig.class.php</autoload>
+        <autoload name="ScreeningXmlDataRecord">%core.module_dir%/Movies/lib/import/screening/ScreeningXmlDataRecord.class.php</autoload>
+        <autoload name="ScreeningXmlParser">%core.module_dir%/Movies/lib/import/screening/ScreeningXmlParser.class.php</autoload>
+        <!-- /Import Integration -->
+
+        <autoload name="FrontendMovieDocument">%core.module_dir%/Movies/lib/export/FrontendMovieDocument.class.php</autoload>
+        <autoload name="FrontendMovieFactory">%core.module_dir%/Movies/lib/export/FrontendMovieFactory.class.php</autoload>
+        <autoload name="MoviesFrontendExport">%core.module_dir%/Movies/lib/export/MoviesFrontendExport.class.php</autoload>
+        <autoload name="FrontendTheaterDocument">%core.module_dir%/Movies/lib/export/FrontendTheaterDocument.class.php</autoload>
+        <autoload name="FrontendTheaterFactory">%core.module_dir%/Movies/lib/export/FrontendTheaterFactory.class.php</autoload>
+
+        <!-- Workflow Integration -->
+        <!-- Item -->
+        <autoload name="MoviesWorkflowItem">%core.module_dir%/Movies/lib/workflow/item/MoviesWorkflowItem.class.php</autoload>
+        <autoload name="MoviesMasterRecord">%core.module_dir%/Movies/lib/workflow/item/MoviesMasterRecord.class.php</autoload>
+        <!-- Shared -->
+        <autoload name="MoviesWorkflowService">%core.module_dir%/Movies/lib/MoviesWorkflowService.class.php</autoload>
+        <autoload name="MoviesWorkflowSupervisor">%core.module_dir%/Movies/lib/workflow/MoviesWorkflowSupervisor.class.php</autoload>
+        <!-- Plugins -->
+        <autoload name="WorkflowEditMoviePlugin">%core.module_dir%/Movies/lib/workflow/plugin/WorkflowEditMoviePlugin.class.php</autoload>
+        <autoload name="WorkflowDeleteMoviePlugin">%core.module_dir%/Movies/lib/workflow/plugin/WorkflowDeleteMoviePlugin.class.php</autoload>
+        <!-- /Workflow Integration -->
+
+        <autoload name="MoviesDatabaseSetup">%core.module_dir%/Movies/lib/setup/couchdb/MoviesDatabaseSetup.class.php</autoload>
+        
+        <autoload name="MoviesFinder">%core.module_dir%/Movies/lib/MoviesFinder.class.php</autoload>
+    </ae:configuration>
+</ae:configurations>

@@ -4,52 +4,51 @@ class Shofi_Categories_ExportAction extends ShofiCategoriesBaseAction
 {
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
+        $workflowService = ShofiCategoriesWorkflowService::getInstance();
         $finder = ShofiCategoriesFinder::create(ListConfig::fromArray(
             AgaviConfig::get('shofi_categories.list_config')
         ));
-        $listState = ListState::fromArray(array(
-            'limit' => 5000,
-            'offset' => 0
-        ));
+        $listState = ListState::fromArray(array('limit' => 5000, 'offset' => 0));
         $entriesProcessed = 0;
-        $exportAllowed = (TRUE === AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_ENABLED));
-        $finder->ignoreDeletedItems(FALSE);
+		$affectedEntries = 0;
         while (($result = $finder->find($listState)) && 0 < $result->getItemsCount())
         {
             $this->printMemUsage();
             echo "Exported " . $entriesProcessed . " categories ..." . PHP_EOL;
             foreach ($result->getItems() as $item)
             {
-                if ($exportAllowed)
-                {
-                    echo "Synching category: " . $item->getIdentifier() . " to the contentmachine..." . PHP_EOL;
-                    $cmExport = new ContentMachineHttpExport(
-                        AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_URL)
-                    );
-                    $isDeleted = $item->getAttribute('marked_deleted', FALSE);
-                    if ($isDeleted)
-                    {
-                        if (! $cmExport->deleteEntity($item->getIdentifier(), 'category'))
-                        {
-                            echo "Error while deleting data to fe for category : " . $item->getIdentifier() . ', Error: ' . print_r($cmExport->getLastErrors(), TRUE) . PHP_EOL;
-                        }
-                    }
-                    else
-                    {
-                        if (! $cmExport->exportShofiCategory($item))
-                        {
-                            echo "Error while sending data to fe for item : " . $item->getIdentifier() . PHP_EOL .
-                                 ", Error: " . print_r($cmExport->getLastErrors(), TRUE) . PHP_EOL;
-                        }
-                    }
-                }
+                $wkgName = $item->getMasterRecord()->getName();
+                $alias = $item->getMasterRecord()->getAlias();
+				if (! empty($alias))
+				{
+                	echo (
+                    	"[DRY RUN] ~ Overwriting name: " . $wkgName . " with alias: " . $alias . PHP_EOL
+                	);
+					$affectedEntries++;
+					$item->getMasterRecord()->setName($alias);
+				}
+                $workflowService->storeWorkflowItem($item);
+				//$this->exportCategory($item);
             }
-            $listState->setOffset(
-                $listState->getOffset() + $listState->getLimit()
-            );
+
+            $listState->setOffset($listState->getOffset() + $listState->getLimit());
             $entriesProcessed += $listState->getLimit();
         }
+		echo "Totally " . $affectedEntries . " number of categories would have been modified." . PHP_EOL;
         return 'Success';
+    }
+
+    protected function exportCategory(ShofiCategoriesWorkflowItem $workflowItem)
+    {
+        $exportAllowed = (TRUE === AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_ENABLED));
+        if (TRUE === $exportAllowed)
+        {
+            if (! $cmExport->exportShofiCategory($item))
+            {
+                echo "Error while sending data to fe for (category)item : " . $item->getIdentifier() . PHP_EOL . 
+                     ', Error: ' . print_r($cmExport->getLastErrors(), TRUE) . PHP_EOL;
+            }
+        }
     }
 
     protected function printMemUsage()

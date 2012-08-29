@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ######################################################################################### -->
+<!--
+* artikel definition
+*
+* project: 	BerlinOnline Schema
+*
+* version: 	1.0.3
+* date:		2010-06-07
+* author:	Janne K. Olesen (janne.olesen@oberbaum-concept.com)
+*
+* based on schema by Christian Scharff (TIP Verlag GmbH & Co. KG)
+-->
+<!-- ######################################################################################### -->
+
+
+
+<!-- ######################################################################################### -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			xmlns:tbo="http://www.tip-berlin.de/xml/tip_berlinonline"
+			xmlns:tip="http://www.tip-berlin.de/xml/base"
+			targetNamespace="http://www.tip-berlin.de/xml/tip_berlinonline"
+			elementFormDefault="qualified">
+
+
+	<import namespace="http://www.tip-berlin.de/xml/base" schemaLocation="basicTypes.xsd"/>
+	<include schemaLocation="person.xsd"/>
+	<include schemaLocation="archiv.xsd"/>
+	<include schemaLocation="veranstaltungsort.xsd"/>
+	<include schemaLocation="veranstaltung.xsd"/>
+
+
+<!-- ############################### elements ################################################ -->
+
+
+<!-- ############################### groups ################################################## -->
+	<group name="bild">
+		<sequence>
+			<element name="bildURL" type="tip:Textfeld"/>
+			<element name="bildTyp" type="tip:Textfeld"/>
+		</sequence>
+	</group>
+
+<!-- ############################### complexTypes ############################################ -->
+	<complexType name="artikel">
+		<sequence>
+			<element name="aktDat" type="tip:DatumZeit"/>
+			<element ref="tip:name"/>
+			<element ref="tip:text"/>
+			<element name="mediaFile" type="tip:Id" minOccurs="0"/>
+			<element name="gesperrt" type="tip:True" minOccurs="0"/>
+			<element name="typ" type="tip:Textfeld"/>
+			<element name="autor" type="tip:Textfeld" minOccurs="0"/>
+			<element name="author" type="tip:Textfeld" minOccurs="0"/>
+			<element name="heft" type="tip:Textfeld" minOccurs="0"/>
+			<element name="subtitel" type="tip:Textfeld" minOccurs="0"/>
+			<group ref="tbo:bild" minOccurs="0"/>
+			<element name="bx" type="integer" minOccurs="0"/>
+			<element name="by" type="integer" minOccurs="0"/>
+			<element name="bu" type="tip:Textfeld" minOccurs="0"/>
+			<element name="bf" type="tip:Textfeld" minOccurs="0"/>
+			<element name="archiveintrag" type="tbo:ArchivReferenz" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="person" type="tbo:PersonenReferenz" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="ortstermin" type="tbo:OrtsterminReferenz" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="veranstaltung" type="tbo:VeranstaltungsReferenz" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="veranstaltungsort" type="tbo:VeranstaltungsortReferenz" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="key" use="required" type="tbo:ArtikelKey"/>
+	</complexType>
+
+
+<!-- ############################### simpleTypes ############################################# -->
+	<simpleType name="ArtikelKey">
+		<restriction base="string">
+			<pattern value="art_\d+"/>
+		</restriction>
+	</simpleType>
+
+</schema>

@@ -115,24 +115,20 @@ abstract class BaseDataSource implements IDataSource
      */
     public function nextRecord()
     {
-        if (!$this->isInitialized)
+        if (! $this->isInitialized)
         {
             $this->init();
             $this->isInitialized = TRUE;
         }
 
-        if (!$this->forwardCursor())
+        if (! $this->forwardCursor())
         {
             return FALSE;
         }
 
-        $record = $this->createRecord(
-            $this->fetchData()
-        );
-
+        $record = $this->createRecord($this->fetchData());
         $validationResult = $record->validate();
-
-        if (!$validationResult->hasError())
+        if (! $validationResult->hasError())
         {
             return $record;
         }
@@ -181,8 +177,8 @@ abstract class BaseDataSource implements IDataSource
         {
             $recordConfig = new DataRecordConfig(
                 array(
-                    DataRecordConfig::CFG_SOURCE => $this->getCurrentOrigin(),
-                    DataRecordConfig::CFG_ORIGIN => $this->getName()
+                    DataRecordConfig::CFG_SOURCE => $this->getName(),
+                    DataRecordConfig::CFG_ORIGIN => $this->getCurrentOrigin()
                 )
             );
             $recordClass = $this->getRecordImplementor();
@@ -212,7 +208,7 @@ abstract class BaseDataSource implements IDataSource
     {
         $recordClass = $this->config->getSetting(DataSourceConfig::CFG_RECORD_TYPE);
 
-        if (!class_exists($recordClass, TRUE))
+        if (! class_exists($recordClass, TRUE))
         {
             throw new DataSourceException(
                 sprintf(
@@ -234,7 +230,7 @@ abstract class BaseDataSource implements IDataSource
      */
     protected function verifyRecordImplementation($record)
     {
-        if (!($record instanceof IDataRecord))
+        if (! ($record instanceof IDataRecord))
         {
             throw new DataSourceException(
                 sprintf(

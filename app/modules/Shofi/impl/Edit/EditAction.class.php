@@ -139,8 +139,17 @@ class Shofi_EditAction extends ShofiBaseAction
             $view = 'Error';
         }
 
+        // @todo propagte events here, as we dont want add all "onsave" stuff inline.
+        // even more find a better place than the action for doing this 'update/create' logic
+        $keywords = $placeContainer->getDetailItem()->getKeywords();
+        if (in_array('Kino', $keywords))
+        {
+            $frontendExport = new MoviesFrontendExport();
+            $frontendExport->exportTheater($placeContainer);
+        }
+
         $this->setAttribute('errors', $errors);
-        
+       
         return $view;
     }
 

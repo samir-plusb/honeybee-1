@@ -21,13 +21,19 @@
             xpointer(//ae:configurations/ae:configuration/dd:datasources/*)">
             </xi:include>
 
-            <xi:include href="%core.app_dir%/modules/Shofi_Categories/config/datasources.xml"
+            <xi:include href="%core.app_dir%/modules/Shofi_Verticals/config/datasources.xml"
             xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
             xmlns(dd=http://berlinonline.de/schemas/midas/config/datasource/definition/1.0)
             xpointer(//ae:configurations/ae:configuration/dd:datasources/*)">
             </xi:include>
 
-            <xi:include href="%core.app_dir%/modules/Shofi_Verticals/config/datasources.xml"
+            <xi:include href="%core.app_dir%/modules/Movies/config/datasources.xml"
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xmlns(dd=http://berlinonline.de/schemas/midas/config/datasource/definition/1.0)
+            xpointer(//ae:configurations/ae:configuration/dd:datasources/*)">
+            </xi:include>
+
+            <xi:include href="%core.app_dir%/modules/Events/config/datasources.xml"
             xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
             xmlns(dd=http://berlinonline.de/schemas/midas/config/datasource/definition/1.0)
             xpointer(//ae:configurations/ae:configuration/dd:datasources/*)">

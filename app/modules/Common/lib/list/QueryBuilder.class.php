@@ -66,11 +66,6 @@ class QueryBuilder implements IQueryBuilder
 
     protected function createSearchQuery($search)
     {
-        $terms = array();
-        foreach (explode(' ', $search) as $term)
-        {
-            $terms[] = trim($term);
-        }
         $query = new Elastica_Query();
         if (FALSE !== strpos($search, '*'))
         {
@@ -81,9 +76,7 @@ class QueryBuilder implements IQueryBuilder
         else
         {
             $textQuery = new Elastica_Query_Text();
-            $textQuery->setFieldQuery('_all', implode(' ', $terms));
-            $textQuery->setFieldType('_all', 'phrase_prefix');
-            $textQuery->setFieldMaxExpansions('_all', 15);
+            $textQuery->setFieldQuery('_all', $search);
             $query->setQuery($textQuery);
         }
         return $query;

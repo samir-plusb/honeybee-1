@@ -78,6 +78,8 @@
                 <ae:parameter name="shofi_places">%core.module_dir%/Shofi/config/workflows.xml</ae:parameter>
                 <ae:parameter name="shofi_categories">%core.module_dir%/Shofi_Categories/config/workflows.xml</ae:parameter>
                 <ae:parameter name="shofi_verticals">%core.module_dir%/Shofi_Verticals/config/workflows.xml</ae:parameter>
+                <ae:parameter name="movies">%core.module_dir%/Movies/config/workflows.xml</ae:parameter>
+                <ae:parameter name="events">%core.module_dir%/Events/config/workflows.xml</ae:parameter>
             </setting>
         </settings>
 
@@ -200,7 +202,7 @@
     <ae:configuration environment="stage">
         <settings prefix="shofi.">
             <setting name="cm_export_url">http://bde.cms.berlinonline.de/adressen/midas-import</setting>
-            <setting name="cm_export_enabled">true</setting>
+            <setting name="cm_export_enabled">false</setting>
             <setting name="connections">
                 <ae:parameters>
                     <ae:parameter name="couchdb">Shofi.Write</ae:parameter>
@@ -383,6 +385,14 @@
     </xi:include>
 
     <xi:include href="%core.module_dir%/Shofi_Verticals/config/settings.xml"
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+    </xi:include>
+
+    <xi:include href="%core.module_dir%/Movies/config/settings.xml"
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+    </xi:include>
+
+    <xi:include href="%core.module_dir%/Events/config/settings.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
     </xi:include>
 

@@ -11,7 +11,7 @@
     <div class="navbar-inner">
         <div class="container-fluid">
             <h2 class="left">
-                <a style="padding-right: 10px;" href="<?php echo $ro->gen('index'); ?>" class="brand icon-home" title="Midas 2.0 Kalliope - Dashboard"> Midas 2.0</a>
+                <a style="padding-right: 10px;" href="<?php echo $ro->gen('index'); ?>" class="brand icon-home" title="Midas 2.1 Kalliope - Dashboard"> Midas 2.1</a>
 <?php
     if ($modulecrumb)
     {

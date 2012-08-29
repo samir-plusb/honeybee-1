@@ -33,7 +33,11 @@ abstract class ShofiDataRecord extends BaseDataRecord implements IShofiEntity
 
     const PROP_EMAIL = 'email';
 
-    const PROP_WEB = 'web';
+    const PROP_WEBSITE = 'website';
+
+    const PROP_CATEGORY_SRC = 'categorySource';
+
+    const PROP_IMPORT_IDENTIFIER = 'importIdentifier';
 
     protected $company;
 
@@ -61,6 +65,10 @@ abstract class ShofiDataRecord extends BaseDataRecord implements IShofiEntity
 
     protected $web;
 
+    protected $categorySource;
+
+    protected $importIdentifier;
+
     /**
      * Return an array holding property names of properties,
      * which we want to expose through our IDataRecord::toArray() method.
@@ -84,7 +92,9 @@ abstract class ShofiDataRecord extends BaseDataRecord implements IShofiEntity
                 self::PROP_FAX,
                 self::PROP_MOBILE,
                 self::PROP_EMAIL,
-                self::PROP_WEB
+                self::PROP_WEBSITE,
+                self::PROP_CATEGORY_SRC,
+                self::PROP_IMPORT_IDENTIFIER
             )
         );
     }
@@ -152,6 +162,21 @@ abstract class ShofiDataRecord extends BaseDataRecord implements IShofiEntity
     public function getLocation()
     {
         return $this->location;
+    }
+
+    public function getCategorySource()
+    {
+         return $this->categorySource;
+    }
+
+    public function getImportIdentifier()
+    {
+         return $this->importIdentifier;
+    }
+
+    protected function buildImportIdentifier($identifier)
+    {
+         return $this->getSource() . ':' . $identifier;
     }
 }
 

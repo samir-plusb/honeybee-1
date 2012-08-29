@@ -24,9 +24,13 @@
                             <ae:parameter name="valuefield">masterRecord.name</ae:parameter>
                             <ae:parameter name="sortfield">masterRecord.name.raw</ae:parameter>
                         </ae:parameter>
-                        <ae:parameter name="alias">
-                            <ae:parameter name="valuefield">masterRecord.alias</ae:parameter>
-                            <ae:parameter name="sortfield">masterRecord.alias.raw</ae:parameter>
+                        <ae:parameter name="singular">
+                            <ae:parameter name="valuefield">masterRecord.singular</ae:parameter>
+                            <ae:parameter name="sortfield">masterRecord.singular.raw</ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="plural">
+                            <ae:parameter name="valuefield">masterRecord.plural</ae:parameter>
+                            <ae:parameter name="sortfield">masterRecord.plural.raw</ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="vertical">
                             <ae:parameter name="valuefield">masterRecord.vertical.name</ae:parameter>
@@ -48,6 +52,7 @@
                 <ae:parameter name="clientSideController">
                     <ae:parameter name="implementor">CategoriesListController</ae:parameter>
                     <ae:parameter name="options">
+                        <ae:parameter name="find_duplicates_route">shofi.list</ae:parameter>
                         <!-- urls can be either absolut urls or agavi route names. -->
                         <ae:parameter name="vertical_batch">
                             <ae:parameter name="post_url">@see Shofi/ListAction::prepareListConfig</ae:parameter>
@@ -68,6 +73,7 @@
                     <ae:parameters>
                         <ae:parameter name="edit">ctrl.run(is_batch, item)</ae:parameter>
                         <ae:parameter name="assign_vertical">ctrl.assignVertical(is_batch, item)</ae:parameter>
+                        <ae:parameter name="find_dups">ctrl.findDuplicates(item)</ae:parameter>
                         <ae:parameter name="delete">ctrl.proceed(is_batch, item, 'delete')</ae:parameter>
                     </ae:parameters>
                 </ae:parameter>

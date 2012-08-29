@@ -11,6 +11,8 @@
  */
 class ShofiWorkflowItem extends WorkflowItem
 {
+    const ID_PREFIX = 'place-';
+
     /**
      * Holds our core data.
      *
@@ -156,6 +158,11 @@ class ShofiWorkflowItem extends WorkflowItem
     protected function getMasterRecordImplementor()
     {
         return "ShofiMasterRecord";
+    }
+
+    public function getIdentifierPrefix()
+    {
+        return self::ID_PREFIX;
     }
 }
 

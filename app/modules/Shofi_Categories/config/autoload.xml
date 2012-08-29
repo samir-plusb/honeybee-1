@@ -11,7 +11,6 @@
 
         <!-- Import Integration -->
         <autoload name="ShofiCategoriesDataRecord">%core.module_dir%/Shofi_Categories/lib/import/ShofiCategoriesDataRecord.class.php</autoload>
-        <autoload name="PrototypeCategoryDataRecord">%core.module_dir%/Shofi_Categories/lib/import/prototype/PrototypeCategoryDataRecord.class.php</autoload>
 
         <autoload name="ShofiCategoriesDataImport">%core.module_dir%/Shofi_Categories/lib/import/ShofiCategoriesDataImport.class.php</autoload>
         <autoload name="ShofiCategoriesDataImportConfig">%core.module_dir%/Shofi_Categories/lib/import/ShofiCategoriesDataImportConfig.class.php</autoload>

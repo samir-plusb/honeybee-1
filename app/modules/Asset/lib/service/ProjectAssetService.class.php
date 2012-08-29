@@ -270,6 +270,10 @@ class ProjectAssetService implements IAssetService
     protected function extractFileInformation(IAssetFile $file, $assetUri)
     {
         $originParts = parse_url($assetUri);
+        if (! isset($originParts['path']))
+        {
+            return array();
+        }
         $explodedOrigin = explode('/', $originParts['path']);
         $fullname = end($explodedOrigin);
         $explodedName = explode('.', $fullname);

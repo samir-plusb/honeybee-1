@@ -3,7 +3,8 @@
     <ae:configuration>
         <settings prefix="shofi.">
             <setting name="category_autocomp_uri">shofi_categories.suggest</setting>
-            
+            <setting name="hotel_catalogs_dir">%core.app_dir%/../data/catalogs/hotels/</setting>
+
             <!-- list integration {@see IListConfig} -->
             <setting name="list_config">
                 <!-- common list params -->
@@ -19,25 +20,37 @@
                 -->
                 <ae:parameter name="fields">
                     <ae:parameters>
-                        <ae:parameter name="name">
-                            <ae:parameter name="valuefield">coreItem.name</ae:parameter>
-                            <ae:parameter name="sortfield">coreItem.name.raw</ae:parameter>
-                        </ae:parameter>
-                        <ae:parameter name="category">
-                            <ae:parameter name="valuefield">detailItem.category</ae:parameter>
-                            <ae:parameter name="renderer">ShofiCategoryListRenderer</ae:parameter>
+                        <ae:parameter name="source">
+                            <ae:parameter name="valuefield">masterRecord.source</ae:parameter>
+                            <ae:parameter name="sortfield">masterRecord.source.raw</ae:parameter>
+                            <ae:parameter name="renderer">ShofiTranslationListRenderer</ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="vertical">
                             <ae:parameter name="valuefield">detailItem.category</ae:parameter>
                             <ae:parameter name="renderer">ShofiVerticalListRenderer</ae:parameter>
                         </ae:parameter>
+                        <ae:parameter name="category">
+                            <ae:parameter name="valuefield">detailItem.category</ae:parameter>
+                            <ae:parameter name="renderer">ShofiCategoryListRenderer</ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="name">
+                            <ae:parameter name="valuefield">coreItem.name</ae:parameter>
+                            <ae:parameter name="sortfield">coreItem.name.raw</ae:parameter>
+                        </ae:parameter>
                         <ae:parameter name="street">
                             <ae:parameter name="valuefield">coreItem.location.street</ae:parameter>
                             <ae:parameter name="sortfield">coreItem.location.street.raw</ae:parameter>
+                            <ae:parameter name="renderer">ShofiStreetListValueRenderer</ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="last_modified">
+                            <ae:parameter name="valuefield">masterRecord.lastModified.date</ae:parameter>
+                            <ae:parameter name="sortfield">masterRecord.lastModified.date</ae:parameter>
+                            <ae:parameter name="renderer">ShofiDateTimeListRenderer</ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="product">
                             <ae:parameter name="valuefield">salesItem.product</ae:parameter>
                             <ae:parameter name="sortfield">salesItem.product</ae:parameter>
+                            <ae:parameter name="renderer">ShofiTranslationListRenderer</ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="last_modified">
                             <ae:parameter name="valuefield">masterRecord.lastModified.date</ae:parameter>

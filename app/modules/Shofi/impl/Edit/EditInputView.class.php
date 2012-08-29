@@ -185,6 +185,11 @@ class Shofi_Edit_EditInputView extends ShofiBaseView
         {
             $keywords[] = array('label' => $keyword, 'value' => $keyword);
         }
+        $internalKeywords = array();
+        foreach ($detailItem->getInternalKeywords() as $internalKeyword)
+        {
+            $internalKeywords[] = array('label' => $internalKeyword, 'value' => $internalKeyword);
+        }
         $categoryStore = ShofiCategoriesWorkflowService::getInstance()->getWorkflowSupervisor()->getWorkflowItemStore();
         $additionalCategories = array();
         foreach ($detailItem->getAdditionalCategories() as $categoryId)
@@ -218,6 +223,11 @@ class Shofi_Edit_EditInputView extends ShofiBaseView
                 'autobind' => TRUE,
                 'fieldname' => 'detailItem[keywords]',
                 'tags' => $keywords
+            ),
+            'internal_keywords_widget_opts' => array(
+                'autobind' => TRUE,
+                'fieldname' => 'detailItem[internalKeywords]',
+                'tags' => $internalKeywords
             ),
             'opening_times_widget_opts' => array(
                 'autobind' => TRUE,
@@ -259,13 +269,24 @@ class Shofi_Edit_EditInputView extends ShofiBaseView
                 'autobind' => TRUE,
                 'copy_trigger_el' => '.clipboard-widget-trigger',
                 'copy_text' => $this->getAttribute('contentmachine_link')
+            ),
+            'embed_code_widget_opts' => array(
+                'autobind' => TRUE,
+                'fieldname' => 'detailItem[videoEmbedCode]',
+                'embed_code' => $shofiItem->getDetailItem()->getVideoEmbedCode()
             )
         );
+
         $widgetRegistration = array( // register widgets to client-side controller
             array(
                 'name' => 'keywords',
                 'type' => 'TagsList',
                 'selector' => '.widget-keywords'
+            ),
+            array(
+                'name' => 'internal-keywords',
+                'type' => 'TagsList',
+                'selector' => '.widget-internal-keywords'
             ),
             array(
                 'name' => 'opening-times',
@@ -296,6 +317,11 @@ class Shofi_Edit_EditInputView extends ShofiBaseView
                 'name' => 'cm-url2clipboard',
                 'type' => 'ClipboardWidget',
                 'selector' => '.clipboard-widget'
+            ),
+            array(
+                'name' => 'video-embed-code',
+                'type' => 'EmbedCodeWidget',
+                'selector' => '.video-embed-code-widget'
             )
         );
 
@@ -435,6 +461,7 @@ class Shofi_Edit_EditInputView extends ShofiBaseView
                 'caption' => isset($metaData['caption']) ? $metaData['caption'] : '',
                 'copyright' => isset($metaData['copyright']) ? $metaData['copyright'] : '',
                 'copyright_url' => isset($metaData['copyright_url']) ? $metaData['copyright_url'] : '',
+                'aoi' => isset($metaData['aoi']) ? $metaData['aoi'] : NULL,
             );
         }
         return $assets;

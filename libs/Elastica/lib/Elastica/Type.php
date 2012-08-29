@@ -98,6 +98,30 @@ class Elastica_Type implements Elastica_Searchable
 	}
 
 	/**
+	 * Get the documents for the given set of ids from the index/type
+	 *
+	 * @param array $id List of document ids
+	 * @return array An array of Elastica_Document instances
+	 */
+	public function getDocuments(array $ids) {
+		$path = '_mget';
+		$postData = array('ids' => $ids);
+
+		$result = $this->request($path, Elastica_Request::POST, $postData)->getData();
+
+		$documents = array();
+		foreach ($result['docs'] as $doc) {
+			if (! $doc['exists']) {
+				continue;
+			}
+			$document = new Elastica_Document($doc['_id'], $doc['_source'], $doc['_type'], $doc['_index']);
+			$document->setVersion($doc['_version']);
+			$documents[] = $document;
+		}
+		return $documents;
+	}
+
+	/**
 	 * @return string Type name
 	 */
 	public function getName() {

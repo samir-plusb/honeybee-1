@@ -1,0 +1,234 @@
+{
+    "index_analyzer": "noLang",
+    "search_analyzer": "noLang",
+    "dynamic" : false,
+    "_source": {
+        "enabled": true
+    },
+    "_parent": {
+        "type": "ticket"
+    },
+    "properties" : {
+        "ticketId": {
+            "type": "string",
+            "store": true,
+            "index": "not_analyzed"
+        },
+        "created": {
+            "include_in_all": false,
+            "properties": {
+                "user": {
+                    "type": "string",
+                    "store": true
+                },
+                "date": {
+                    "type": "date",
+                    "format": "date_time_no_millis",
+                    "store": true
+                }
+            }
+        },
+        "lastModified": {
+            "include_in_all": false,
+            "properties": {
+                "user": {
+                    "type": "string",
+                    "store": true
+                },
+                "date": {
+                    "type": "date",
+                    "format": "date_time_no_millis",
+                    "store": true
+                }
+            }
+        },
+        "attributes": {
+            "type": "object",
+            "dynamic": true
+        },
+        "currentState": {
+            "include_in_all": false,
+            "properties": {
+                "workflow": {
+                    "type": "string",
+                    "store": true,
+                    "index": "not_analyzed"
+                },
+                "step": {
+                    "type": "string",
+                    "store": true,
+                    "index": "not_analyzed"
+                },
+                "owner": {
+                    "type": "string",
+                    "store": true,
+                    "index": "not_analyzed"
+                }
+            }
+        },
+        "masterRecord" : {
+            "type": "object",
+            "include_in_all": true,
+            "properties": {
+                "created": {
+                    "include_in_all": false,
+                    "properties": {
+                        "user": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "date": {
+                            "type": "date",
+                            "format": "date_time_no_millis",
+                            "store": true
+                        }
+                    }
+                },
+                "lastModified": {
+                    "include_in_all": false,
+                    "properties": {
+                        "user": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "date": {
+                            "type": "date",
+                            "format": "date_time_no_millis",
+                            "store": true
+                        }
+                    }
+                },
+                "source": {
+                    "type": "string",
+                    "index": "not_analyzed",
+                    "store": true
+                },
+                "origin": {
+                    "type": "string",
+                    "index": "not_analyzed",
+                    "store": true
+                },
+                "title": {
+                    "type": "multi_field",
+                    "fields": {
+                        "title": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "raw": {
+                            "type": "string",
+                            "index": "not_analyzed",
+                            "store": true
+                        }
+                    }
+                },
+                "teaser": {
+                    "type": "string",
+                    "store": true
+                },
+                "director": {
+                    "type": "multi_field",
+                    "fields": {
+                        "director": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "raw": {
+                            "type": "string",
+                            "index": "not_analyzed",
+                            "store": true
+                        }
+                    }
+                },
+                "actors": {
+                    "type": "multi_field",
+                    "fields": {
+                        "actors": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "raw": {
+                            "type": "string",
+                            "index": "not_analyzed",
+                            "store": true
+                        }
+                    }
+                },
+                "genre": {
+                    "type": "multi_field",
+                    "fields": {
+                        "genre": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "raw": {
+                            "type": "string",
+                            "index": "not_analyzed",
+                            "store": true
+                        }
+                    }
+                },
+                "rental": {
+                    "type": "string",
+                    "index": "not_analyzed",
+                    "store": true
+                },
+                "fsk": {
+                    "type": "string",
+                    "index": "not_analyzed",
+                    "store": true
+                },
+                "country": {
+                    "type": "string",
+                    "index": "not_analyzed",
+                    "store": true
+                },
+                "duration": {
+                    "type": "string",
+                    "index": "not_analyzed",
+                    "store": true
+                },
+                "year": {
+                    "type": "string",
+                    "index": "not_analyzed",
+                    "store": true
+                },
+                "releaseDate": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd",
+                    "store": true
+                },
+                "screenings": {
+                    "include_in_all": false,
+                    "properties": {
+                        "theaterId": {
+                            "type": "string",
+                            "store": true,
+                            "index": "not_analyzed"
+                        },
+                        "screenId": {
+                            "type": "string",
+                            "store": true,
+                            "index": "not_analyzed"
+                        },
+                        "version": {
+                            "type": "string",
+                            "store": true,
+                            "index": "not_analyzed"
+                        },
+                        "date": {
+                            "type": "date",
+                            "format": "dd.MM.YYYY",
+                            "store": true
+                        },
+                        "time": {
+                            "type": "date",
+                            "format": "HH:mm",
+                            "store": true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ######################################################################################### -->
+<!--
+* veranstaltung definition.
+*
+* project: 	BerlinOnline Schema
+*
+* version: 	1.0.3
+* date:		2010-06-07
+* author:	Janne K. Olesen (janne.olesen@oberbaum-concept.com)
+*
+* based on schema by Christian Scharff (TIP Verlag GmbH & Co. KG)
+-->
+<!-- ######################################################################################### -->
+
+
+
+<!-- ######################################################################################### -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			xmlns:tbo="http://www.tip-berlin.de/xml/tip_berlinonline"
+			xmlns:tip="http://www.tip-berlin.de/xml/base"
+			targetNamespace="http://www.tip-berlin.de/xml/tip_berlinonline"
+			elementFormDefault="qualified">
+
+
+	<import namespace="http://www.tip-berlin.de/xml/base" schemaLocation="basicTypes.xsd"/>
+	<include schemaLocation="veranstaltungsort.xsd"/>
+	<include schemaLocation="person.xsd"/>
+	<include schemaLocation="archiv.xsd"/>
+
+
+<!-- ############################### elements ################################################ -->
+
+
+<!-- ############################### groups ################################################## -->
+	<group name="TerminText">
+		<choice>
+			<element name="filmreihe" type="tip:Textfeld"/>
+			<element name="gruppentext" type="tip:Textfeld"/>
+		</choice>
+	</group>
+
+
+	<group name="FilmVeranstaltung">
+		<sequence>
+			<element name="archiv" type="tbo:Archiv"/>
+			<element name="eintrittspreis" type="tbo:VEintrittspreis" minOccurs="0" maxOccurs="3"/>
+			<element name="tickets" type="tip:Textfeld" minOccurs="0"/>
+			<element name="ortstermine" type="tbo:Ortstermine"/>
+			<element name="altersangabe" type="tbo:Altersangabe" minOccurs="0"/>
+			<element name="mitwirkende" type="tbo:Mitwirkende" minOccurs="0"/>
+			<element name="gesperrt" type="tip:True" minOccurs="0"/>
+		  	<element name="kinder" type="tip:Textfeld" minOccurs="0"/>
+      		<element name="highlight" type="tip:Textfeld" minOccurs="0" />
+		  	<element name="artikel" type="tip:ArtikelRef" minOccurs="0" maxOccurs="5"/>
+		</sequence>
+	</group>
+
+
+	<group name="Veranstaltung">
+		<sequence>
+			<element name="originaltitel" type="tip:Textfeld" minOccurs="0"/>
+			<element name="sortiertitel" type="tip:Textfeld" minOccurs="0"/>
+			<element name="publikum" type="tip:Textfeld" minOccurs="0"/>
+			<element name="tip-punkt" type="tip:True" minOccurs="0"/>
+			<element name="stile" type="tbo:stile" minOccurs="0"/>
+			<element name="eintrittspreis" type="tbo:VEintrittspreis" minOccurs="0" maxOccurs="3"/>
+			<element name="tickets" type="tip:Textfeld" minOccurs="0"/>
+			<element name="ortstermine" type="tbo:Ortstermine"/>
+			<element name="altersangabe" type="tbo:Altersangabe" minOccurs="0"/>
+			<element name="buch" type="tip:Textfeld" minOccurs="0"/>
+			<element name="dauer" type="tip:Textfeld" minOccurs="0"/>
+			<element name="treffpunkt" type="tip:Textfeld" minOccurs="0"/>
+			<element name="mitwirkende" type="tbo:Mitwirkende" minOccurs="0"/>
+			<element name="gesperrt" type="tip:True" minOccurs="0"/>
+      		<element name="highlight" type="tip:Textfeld" minOccurs="0" />
+      		<element name="kinder" type="tip:Textfeld" minOccurs="0"/>
+			<element name="artikel" type="tip:ArtikelRef" minOccurs="0" maxOccurs="5"/>
+		</sequence>
+	</group>
+
+
+<!-- ############################### complexTypes ############################################ -->
+	<complexType name="veranstaltung">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Veranstaltungen. Alle abgeleiteten Typen entsprechen diesem und
+					existieren nur aus historischen Gründen.
+				]]>
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tip:name"/>
+			<element ref="tip:text" minOccurs="0"/>
+			<element name="werke" type="tip:Textfeld" minOccurs="0"/>
+			<element name="aktDat" type="tip:DatumZeit"/>
+			<sequence minOccurs="0">
+				<annotation>
+					<documentation>
+						<![CDATA[
+							sequence wird nicht genommen fuer geloeschte Veranstaltungen, aber fuer
+							alle anderen! Laesst sich leider nicht sauber ausdruecken, da es dem aktuellen
+							export entsprechen muss.
+						]]>
+					</documentation>
+				</annotation>
+				<element name="erfDat" type="tip:DatumZeit"/>
+				<choice>
+					<group ref="tbo:FilmVeranstaltung"/>
+					<group ref="tbo:Veranstaltung"/>
+				</choice>
+				<element name="filepool" type="tip:Textfeld" minOccurs="0" maxOccurs="unbounded"/>
+			</sequence>
+		</sequence>
+		<attribute name="key" use="required" type="tbo:VeranstaltungsKey"/>
+	</complexType>
+
+
+	<complexType name="Ortstermine">
+		<sequence>
+			<element name="ortstermin" type="tbo:Ortstermin" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="Ortstermin">
+		<sequence>
+			<element name="veranstaltungsort" type="tbo:VeranstaltungsortReferenz"/>
+			<element name="mitwirkende" type="tbo:Mitwirkende" minOccurs="0"/>
+			<element name="termin" type="tbo:Termin" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="Termin">
+		<sequence>
+			<element name="aktDat" type="tip:DatumZeit"/>
+      <element name="tagestipp" type="tip:Textfeld" minOccurs="0" />
+			<element name="starttermin" type="tbo:Starttermin"/>
+			<element name="endtermin" type="tbo:Endtermin" minOccurs="0"/>
+			<element name="mitwirkende" type="tbo:Mitwirkende" minOccurs="0"/>
+			<element name="vortext" type="tip:Textfeld" minOccurs="0"/>
+			<element name="nachtext" type="tip:Textfeld" minOccurs="0"/>
+			<group ref="tbo:TerminText" minOccurs="0"/>
+			<element name="einzelheit" type="tip:Textfeld" minOccurs="0"/>
+		</sequence>
+		<attribute name="key" type="tbo:OrtsterminKey" use="required"/>
+	</complexType>
+
+
+	<complexType name="Starttermin">
+		<sequence>
+			<element name="bittmann_termin_id" type="tip:Textfeld" minOccurs="0"/>
+			<element ref="tip:datum"/>
+			<element ref="tip:zeit" minOccurs="0"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="Endtermin">
+		<sequence>
+			<element ref="tip:datum"/>
+			<element ref="tip:zeit" minOccurs="0"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="Altersangabe">
+		<sequence>
+			<element name="alter_von" type="tip:Textfeld" minOccurs="0" form="unqualified"/>
+			<element name="alter_bis" type="tip:Textfeld" minOccurs="0" form="unqualified"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="VEintrittspreis">
+		<simpleContent>
+			<extension base="tip:Textfeld">
+				<attribute name="art">
+					<simpleType>
+						<restriction base="string">
+							<enumeration value="Vorverkauf"/>
+							<enumeration value="Abendkasse"/>
+							<enumeration value="kostenlos"/>
+						</restriction>
+					</simpleType>
+				</attribute>
+			</extension>
+		</simpleContent>
+	</complexType>
+
+
+	<complexType name="VeranstaltungsReferenz">
+		<attribute name="foreignkey" type="tbo:VeranstaltungsKey" use="required"/>
+	</complexType>
+
+
+	<complexType name="OrtsterminReferenz">
+		<attribute name="foreignkey" type="tbo:OrtsterminKey" use="required"/>
+	</complexType>
+
+
+<!-- ############################### simpleTypes ############################################# -->
+	<simpleType name="VeranstaltungsKey">
+		<restriction base="string">
+			<pattern value="v_\d+"/>
+		</restriction>
+	</simpleType>
+
+
+	<simpleType name="OrtsterminKey">
+		<restriction base="string">
+			<pattern value="-?\d+"/>
+		</restriction>
+	</simpleType>
+
+
+<!-- ############################### legacy stuff ############################################ -->
+	<complexType name="ausstellung_führung">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+	<complexType name="bühne">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+  
+	<complexType name="bühne_kabarett">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+	<complexType name="film">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="bühne_musical">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="bühne_oper">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="bühne_schauspiel">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="bühne_tanz">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="bühne_zirkus">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+	
+  <complexType name="bühne_kinder">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="fest-festival">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="führung">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="handel_markt">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="handel_messe">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="information">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="kunst">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="kunst-aktion">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="literatur">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="mode">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="musik">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+	<complexType name="musik_ballroom">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="musik_klassik">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="musik_konzert">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="musik_party">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="sonstige">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="sport">
+		<annotation>
+			<documentation>
+				<![CDATA[
+					Ist eine Altlast, entspricht Veranstaltung.
+				]]>
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tbo:veranstaltung"/>
+		</complexContent>
+	</complexType>
+
+
+
+
+<!-- ######################################################################################### -->
+</schema>

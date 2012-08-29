@@ -56,9 +56,11 @@
                     </section>
                 </div>
 <!-- images widget -->
-                <section class="widget-asset-list widget-verticals-images"
-                         data-asset-list-options='<?php echo $assetListOptions; ?>'>
-                </section>
+                <div class="span6 assets-container">
+                    <section class="widget-asset-list widget-verticals-images"
+                             data-asset-list-options='<?php echo $assetListOptions; ?>'>
+                    </section>
+                </div>
                 <div class="form-actions">
                     <input type="submit" value="Speichern" class="btn btn-primary" />
                 </div>

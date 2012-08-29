@@ -9,9 +9,10 @@
                     <ae:parameter name="list">
                         <ae:parameter name="de">
                             <ae:parameter name="created">Erstellt</ae:parameter>
-                            <ae:parameter name="name">WKG Branchenname</ae:parameter>
+                            <ae:parameter name="name">Branchenname</ae:parameter>
                             <ae:parameter name="vertical">Leuchtturm</ae:parameter>
-                            <ae:parameter name="alias">Populärname</ae:parameter>
+                            <ae:parameter name="singular">Singular</ae:parameter>
+                            <ae:parameter name="plural">Plural</ae:parameter>
                             <ae:parameter name="places_count">Datensätze</ae:parameter>
                             <ae:parameter name="step">Status</ae:parameter>
                             <ae:parameter name="owner">Besitzer</ae:parameter>
@@ -19,6 +20,7 @@
                             <ae:parameter name="edit">Bearbeiten</ae:parameter>
                             <ae:parameter name="promote">Publizieren</ae:parameter>
                             <ae:parameter name="delete">Löschen</ae:parameter>
+                            <ae:parameter name="find_dups">doppelte Einträge finden</ae:parameter>
                             <ae:parameter name="assign_vertical">Leuchtturm zuweisen</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>

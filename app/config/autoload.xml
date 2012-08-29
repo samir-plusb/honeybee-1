@@ -49,6 +49,7 @@
             <autoload name="CouchDocumentStore">%core.lib_dir%/data_object/CouchDocumentStore.class.php</autoload>
             <autoload name="IItemLocation">%core.lib_dir%/data_object/IItemLocation.iface.php</autoload>
             <autoload name="ItemLocation">%core.lib_dir%/data_object/ItemLocation.class.php</autoload>
+            <autoload name="GeoPoint">%core.lib_dir%/data_object/GeoPoint.class.php</autoload>
             <!-- /DataObject -->
 
             <!-- Database -->
@@ -117,6 +118,14 @@
     </xi:include>
 
     <xi:include href="%core.app_dir%/modules/Shofi_Verticals/config/autoload.xml"
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+    </xi:include>
+
+    <xi:include href="%core.app_dir%/modules/Movies/config/autoload.xml"
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+    </xi:include>
+
+    <xi:include href="%core.app_dir%/modules/Events/config/autoload.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
     </xi:include>
 

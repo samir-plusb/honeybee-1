@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <workflow name="events">
+            <description>
+                This workflow defines the process structure for editing/refining created/imported events.
+            </description>
+            <start_at>edit_event</start_at>
+            <steps>
+
+                <step name="edit_event">
+                    <description>Manually edit an event.</description>
+                    <plugin type="EditEvent">
+                        <gates>
+                            <gate_step label="delete this event" name="delete">delete_event</gate_step>
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="delete_event">
+                    <description>
+                        Marks a given event as deleted.
+                        During a configurable time period the item(place) can then be recovered,
+                        before being removed by the system's maintenance.
+                    </description>
+                    <plugin type="DeleteEvent">
+                        <gates>
+                            <gate_end name="trash" />
+                        </gates>
+                    </plugin>
+                </step>
+
+            </steps>
+        </workflow>
+    </ae:configuration>
+</ae:configurations>

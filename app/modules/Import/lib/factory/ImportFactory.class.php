@@ -132,7 +132,7 @@ class ImportFactory implements IImportFactory
 
         $dataSourceSettings = array_merge(
             $settings,
-            $parameters,
+            $parameters,    
             array(
                 DataSourceConfig::CFG_RECORD_TYPE => $recordType
             )

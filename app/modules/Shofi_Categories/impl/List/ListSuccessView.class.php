@@ -70,7 +70,7 @@ class Shofi_Categories_List_ListSuccessView extends ShofiCategoriesBaseView
             $breadcrumbs = array(array(
                 'text' => 'Liste',
                 'link' => $routing->gen('shofi_categories.list', $routeParams),
-                'info' => 'Listenansicht (Seite ' . $page . ')',
+                'info' => '(Branchen) Listenansicht (Seite ' . $page . ')',
                 'icon' => 'icon-list'
             ));
         }
@@ -80,7 +80,7 @@ class Shofi_Categories_List_ListSuccessView extends ShofiCategoriesBaseView
             $breadcrumbs[] = array(
                 'text' => 'Suche',
                 'link' => $routing->gen('shofi_categories.list', $routeParams),
-                'info' => 'Suche nach: ' . $listState->getSearch() . ' (Seite ' . $page . ')',
+                'info' => '(Branchen) Suche nach: ' . $listState->getSearch() . ' (Seite ' . $page . ')',
                 'icon' => 'icon-search'
             );
         }
@@ -90,7 +90,7 @@ class Shofi_Categories_List_ListSuccessView extends ShofiCategoriesBaseView
             $breadcrumbs[] = array(
                 'text' => 'Erweiterte Suche',
                 'link' => $routing->gen('shofi_categories.list', $routeParams),
-                'info' => 'Erweiterte Suche (Seite ' . $page. ')',
+                'info' => '(Branchen) Erweiterte Suche (Seite ' . $page. ')',
                 'icon' => 'icon-search'
             );
         }

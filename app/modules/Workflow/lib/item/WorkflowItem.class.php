@@ -246,6 +246,23 @@ abstract class WorkflowItem extends BaseDocument implements IWorkflowItem, Zend_
         $this->attributes[$name] = $value;
     }
 
+    /**
+     * Remove an attribute by name.
+     *
+     * @param string $name
+     */
+    public function removeAttribute($name)
+    {
+        $this->attributes = array();
+        foreach ($this->attributes as $key => $value)
+        {
+            if ($key !== $name)
+            {
+                $this->attributes[$key] = $value;
+            }
+        }
+    }
+
     public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;

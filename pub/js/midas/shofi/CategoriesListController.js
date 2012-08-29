@@ -42,5 +42,13 @@ midas.shofi.CategoriesListController = midas.list.ListController.extend({
         var url = this.options.vertical_batch.post_url.replace('{TICKET}', data_model.ticket.id);
         var detailItem = { vertical: vertical.id };
         return this.ajaxCurry(url, { detailItem: detailItem }, 'post');
+    },
+
+    findDuplicates: function(data_container)
+    {
+        var category_name = data_container.data.masterRecord.name.toLowerCase();
+        var new_location = this.options.find_duplicates_url.replace(':CATEGORY_NAME:', category_name);
+
+        window.location.href = new_location;
     }
 });

@@ -400,6 +400,15 @@ class ExtendedCouchDbClient
         return $data;
     }
 
+    public function nextUuids($count = 1)
+    {
+        $url = $this->baseUri . '_uuids?count='.(int)$count;
+        $curlHandle = $this->getCurlHandle($url, self::METHOD_GET);
+        $uuidData = $this->getJsonData($curlHandle);
+
+        return $uuidData['uuids'];
+    }
+
     /**
      * Delete a document from the given couchdb database by id and revision.
      *

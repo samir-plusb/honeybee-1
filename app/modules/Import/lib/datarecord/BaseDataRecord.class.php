@@ -299,6 +299,7 @@ abstract class BaseDataRecord implements IDataRecord, IComparable
         return array(
             self::PROP_IDENT,
             self::PROP_SOURCE,
+            self::PROP_ORIGIN,
             self::PROP_TIMESTAMP
         );
     }
@@ -312,8 +313,8 @@ abstract class BaseDataRecord implements IDataRecord, IComparable
     protected function getRequiredProperties()
     {
         return array(
-            self::PROP_IDENT,
             self::PROP_SOURCE,
+            self::PROP_ORIGIN,
             self::PROP_TIMESTAMP
         );
     }

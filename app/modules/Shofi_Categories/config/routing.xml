@@ -3,8 +3,6 @@
 
     <ae:configuration context="web">
         <routes>
-            <!-- prototype import api -->
-            <route pattern="/import/prototype" action="Import_Prototype" />
             <!-- web views -->
             <route name=".list" pattern="/list" action="List" method="read" />
             <route name=".suggest" pattern="/suggest" action="Suggest" method="read" />

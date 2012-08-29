@@ -66,7 +66,7 @@ class Shofi_List_ListSuccessView extends ShofiBaseView
             $breadcrumbs = array(array(
                 'text' => 'Liste',
                 'link' => $routing->gen('shofi.list', $routeParams),
-                'info' => 'Listenansicht (Seite ' . $page . ')',
+                'info' => '(Orte) Listenansicht (Seite ' . $page . ')',
                 'icon' => 'icon-list'
             ));
         }
@@ -76,7 +76,7 @@ class Shofi_List_ListSuccessView extends ShofiBaseView
             $breadcrumbs[] = array(
                 'text' => 'Suche',
                 'link' => $routing->gen('shofi.list', $routeParams),
-                'info' => 'Suche nach: ' . $listState->getSearch() . ' (Seite ' . $page . ')',
+                'info' => '(Orte) Suche nach: ' . $listState->getSearch() . ' (Seite ' . $page . ')',
                 'icon' => 'icon-search'
             );
         }
@@ -86,7 +86,7 @@ class Shofi_List_ListSuccessView extends ShofiBaseView
             $breadcrumbs[] = array(
                 'text' => 'Erweiterte Suche',
                 'link' => $routing->gen('shofi.list', $routeParams),
-                'info' => 'Erweiterte Suche (Seite ' . $page. ')',
+                'info' => '(Orte) Erweiterte Suche (Seite ' . $page. ')',
                 'icon' => 'icon-search'
             );
         }

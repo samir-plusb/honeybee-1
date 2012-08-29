@@ -9,6 +9,11 @@
         "type": "shofi-ticket"
     },
     "properties" : {
+        "id": {
+            "type": "string",
+            "index": "not_analyzed",
+            "store": true
+        },
         "ticketId": {
             "type": "string",
             "store": true
@@ -43,7 +48,15 @@
         },
         "attributes": {
             "type": "object",
-            "dynamic": true
+            "dynamic": true,
+            "include_in_all": true,
+            "properties": {
+                "_default_": {
+                    "type": "string",
+                    "index": "not_analyzed",
+                    "store": true
+                }
+            }
         },
         "currentState": {
             "include_in_all": false,
@@ -125,6 +138,20 @@
                         }
                     }
                 },
+                "categorySource": {
+                    "type": "multi_field",
+                    "fields": {
+                        "categorySource": {
+                            "type": "string",
+                            "store": true
+                        },
+                        "raw": {
+                            "type": "string",
+                            "index": "not_analyzed",
+                            "store": true
+                        }
+                    }
+                },
                 "company": {
                     "type": "multi_field",
                     "fields": {
@@ -143,13 +170,11 @@
                     "type": "multi_field",
                     "fields": {
                         "firstName": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "raw": {
                             "type": "string",
-                            "index": "not_analyzed",
-                            "store": true
+                            "index": "not_analyzed"
                         }
                     }
                 },
@@ -157,8 +182,7 @@
                     "type": "multi_field",
                     "fields": {
                         "lastName": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "raw": {
                             "type": "string",
@@ -171,86 +195,67 @@
                     "type": "multi_field",
                     "fields": {
                         "title": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "raw": {
                             "type": "string",
-                            "index": "not_analyzed",
-                            "store": true
+                            "index": "not_analyzed"
                         }
                     }
                 },
                 "namePrefix": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "histNamePrefix": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "miscNamePrefix": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "phone": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "fax": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "mobile": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "email": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "web": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "location": {
                     "include_in_all": false,
                     "properties": {
                         "city": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "postalCode": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "administrativeDistrict": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "district": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "neighborhood": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "street": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "housenumber": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "name": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "relevance": {
-                            "type": "short",
-                            "store": true
+                            "type": "short"
                         }
                     }
                 }
@@ -264,13 +269,11 @@
                     "include_in_all": false,
                     "properties": {
                         "user": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "date": {
                             "type": "date",
-                            "format": "date_time_no_millis",
-                            "store": true
+                            "format": "date_time_no_millis"
                         }
                     }
                 },
@@ -278,13 +281,11 @@
                     "include_in_all": false,
                     "properties": {
                         "user": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "date": {
                             "type": "date",
-                            "format": "date_time_no_millis",
-                            "store": true
+                            "format": "date_time_no_millis"
                         }
                     }
                 },
@@ -292,13 +293,11 @@
                     "type": "multi_field",
                     "fields": {
                         "company": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "raw": {
                             "type": "string",
-                            "index": "not_analyzed",
-                            "store": true
+                            "index": "not_analyzed"
                         }
                     }
                 },
@@ -306,13 +305,11 @@
                     "type": "multi_field",
                     "fields": {
                         "firstName": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "raw": {
                             "type": "string",
-                            "index": "not_analyzed",
-                            "store": true
+                            "index": "not_analyzed"
                         }
                     }
                 },
@@ -320,13 +317,11 @@
                     "type": "multi_field",
                     "fields": {
                         "lastName": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "raw": {
                             "type": "string",
-                            "index": "not_analyzed",
-                            "store": true
+                            "index": "not_analyzed"
                         }
                     }
                 },
@@ -339,75 +334,63 @@
                         },
                         "raw": {
                             "type": "string",
-                            "index": "not_analyzed",
-                            "store": true
+                            "index": "not_analyzed"
                         }
                     }
                 },
                 "phone": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "fax": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "mobile": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "email": {
-                    "type": "string",
-                    "store": true
+                    "type": "string"
                 },
                 "location": {
                     "include_in_all": false,
                     "properties": {
                         "city": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "postalCode": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "administrativeDistrict": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "district": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "neighborhood": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "street": {
                             "type": "multi_field",
                             "fields": {
                                 "street": {
-                                    "type": "string",
-                                    "store": true
+                                    "type": "string"
                                 },
                                 "raw": {
                                     "type": "string",
-                                    "index": "not_analyzed",
-                                    "store": true
+                                    "index": "not_analyzed"
                                 }
                             }
                         },
                         "housenumber": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "name": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "relevance": {
-                            "type": "short",
-                            "store": true
+                            "type": "short"
+                        },
+                        "coordinates": {
+                            "type": "geo_point"
                         }
                     }
                 }

@@ -1,6 +1,6 @@
 <td>
     <!-- ko if: 'nobody' === <?php echo '$data.display_data.'.$field->getName(); ?> -->
-        <span data-bind="text: <?php echo '$data.display_data.'.$field->getName(); ?>"></span>
+        <span>&nbsp;</span>
     <!-- /ko -->
 
     <!-- ko if: 'nobody' != <?php echo '$data.display_data.'.$field->getName(); ?> -->

@@ -114,6 +114,16 @@ class Shofi_Categories_ListAction extends ShofiCategoriesBaseAction
                 )))
             )
         );
+
+        if (isset($options['find_duplicates_route']))
+        {
+            $options['find_duplicates_url'] = urldecode(htmlspecialchars_decode(
+                $routing->gen($options['find_duplicates_route'], array(
+                    'filter[attributes.conflict_state]' => 'potential_dups_:CATEGORY_NAME:'
+                ))
+            ));
+        }
+
         $config['clientSideController']['options'] = $options;
         return $config;
     }
