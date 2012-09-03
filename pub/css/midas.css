@@ -283,3 +283,36 @@ table td.src-categories
   width: 100%;
   overflow: hidden;
 }
+
+dl {
+  margin-bottom: 20px;
+  color: #565656;
+}
+
+dt,
+dd {
+  line-height: 20px;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 10px;
+  color: #565656
+}
+
+.dl-horizontal dt {
+  float: left;
+  width: 45px;
+  overflow: hidden;
+  clear: left;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dl-horizontal dd {
+  margin-left: 60px;
+}

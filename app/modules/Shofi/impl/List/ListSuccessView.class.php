@@ -41,13 +41,6 @@ class Shofi_List_ListSuccessView extends ShofiBaseView
         $listState = $this->getAttribute('state');
         $page = round($listState->getOffset() / $listState->getLimit()) + 1;
 
-        $moduleCrumb = array(
-            'text' => 'Orte',
-            'link' => $routing->gen('shofi.list'),
-            'info' => 'Orte Listenansicht (Anfang)',
-            'icon' => 'icon-list'
-        );
-
         $breadcrumbs = $this->getContext()->getUser()->getAttribute('breadcrumbs', 'midas.breadcrumbs', array());
         if (1 <= count($breadcrumbs))
         {
@@ -64,9 +57,9 @@ class Shofi_List_ListSuccessView extends ShofiBaseView
         if (! $listState->hasSearch() && ! $listState->hasFilter())
         {
             $breadcrumbs = array(array(
-                'text' => 'Liste',
+                'text' => 'Übersicht, Seite: ' . $page,
                 'link' => $routing->gen('shofi.list', $routeParams),
-                'info' => '(Orte) Listenansicht (Seite ' . $page . ')',
+                'info' => 'Orte - Übersicht, Seite: ' . $page,
                 'icon' => 'icon-list'
             ));
         }
@@ -74,9 +67,9 @@ class Shofi_List_ListSuccessView extends ShofiBaseView
         {
             $routeParams['search_phrase'] = $listState->getSearch();
             $breadcrumbs[] = array(
-                'text' => 'Suche',
+                'text' => sprintf('Suche nach "%s"', $listState->getSearch()),
                 'link' => $routing->gen('shofi.list', $routeParams),
-                'info' => '(Orte) Suche nach: ' . $listState->getSearch() . ' (Seite ' . $page . ')',
+                'info' => sprintf('Suchergebnis für "%s", Seite: %s', $listState->getSearch(), $page),
                 'icon' => 'icon-search'
             );
         }
@@ -86,11 +79,10 @@ class Shofi_List_ListSuccessView extends ShofiBaseView
             $breadcrumbs[] = array(
                 'text' => 'Erweiterte Suche',
                 'link' => $routing->gen('shofi.list', $routeParams),
-                'info' => '(Orte) Erweiterte Suche (Seite ' . $page. ')',
+                'info' => 'Suchergebnis für erweiterte, Seite: ' . $page,
                 'icon' => 'icon-search'
             );
         }
-        $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'midas.breadcrumbs');
         $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'midas.breadcrumbs');
     }
 }

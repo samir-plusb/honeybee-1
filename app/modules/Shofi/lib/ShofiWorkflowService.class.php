@@ -30,40 +30,68 @@ class ShofiWorkflowService extends BaseWorkflowService
         return $shofiFinder->findItemByImportIdentifier($importIdentifier);
     }
 
+    public function findAllImportIdentifiers(IDataSource $dataSource)
+    {
+        $listConfig = ListConfig::fromArray(AgaviConfig::get('shofi.list_config'));
+        $shofiFinder = ShofiFinder::create($listConfig);
+        
+        return $shofiFinder->findAllImportIdentifiers($dataSource);
+    }
+
     public function localizeItem(ShofiWorkflowItem $shofiItem, $force = FALSE)
     {
+        $wasLocalized = FALSE;
         $location = $shofiItem->getCoreItem()->getLocation();
-        $coords = $location->getCoordinates();
-        if (FALSE === $force && ($coords && ! empty($coords['lon']) && ! empty($coords['lat'])))
+        if (FALSE === $force && NULL !== $location->asGeoPoint())
         {
             $this->logInfo(
                 sprintf("No need for localization as item: '%s' allready has coords", $shofiItem->getIdentifier())
             );
-            return FALSE;
         }
-        $url = sprintf(
-            '%s?string=',
-            AgaviConfig::get('news.localize_api_url')
-        );
-        // create 'geoText' that we will query the localize api for.
-        $queryValues = array(
-            $location->getStreet(),
-            $location->getHousenumber(),
-            $location->getDetails(),
-            $location->getCity(),
-            $location->getPostalCode(),
-            'Berlin'
-        );
+        else
+        {
+            $url = sprintf('%s?string=', AgaviConfig::get('shofi.localize_api_url'));
+            // create 'geoText' that we will query the localize api for.
+            $city = $location->getCity();
+            $queryValues = array(
+                $location->getStreet(),
+                $location->getHousenumber(),
+                $city ? $city : 'Berlin',
+                $location->getPostalCode()
+            );
+            $result = $this->fetchGeoCoordinates($queryValues);
+            // if everyting worked hydrate the location data et voila
+            if (0 < $result['items_count'])
+            {
+                $locationData = $result[0];
+                // @todo: set street and housenumber if housenumber was inside the street field ...
+                $location->applyValues(array(
+                    'neighborhood' => isset($locationData['neighborhood']) ? $locationData['neighborhood'] : '',
+                    'district' => isset($locationData['district']) ? $locationData['district'] : NULL,
+                    'administrativeDistrict' => isset($locationData['administrative district']) ? 
+                        $locationData['administrative district'] : NULL,
+                    'coordinates' => array(
+                        'lon' => $locationData['longitude'],
+                        'lat' => $locationData['latitude']
+                    )
+                ));
+                $wasLocalized = TRUE;
+            }
+        }
+        return $wasLocalized;
+    }
+
+    public function fetchGeoCoordinates(array $queryValues)
+    {
+        $url = sprintf('%s?string=', AgaviConfig::get('shofi.geo_service_url'));
         foreach ($queryValues as $queryValue)
         {
             $queryValue = trim($queryValue);
-            if (! empty($queryValue))
+            if ($queryValue)
             {
                 $url .= '+'.urlencode($queryValue);
             }
         }
-        // prepare the api localize url
-        
         // init our curl handle
         $curl = ProjectCurl::create();
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -74,44 +102,22 @@ class ShofiWorkflowService extends BaseWorkflowService
         ));
         // fire the request
         $apiResponse = curl_exec($curl);
-
         $this->logInfo(
             "Received following response for localization of '" . $url . "': " . PHP_EOL . $apiResponse
         );
-
         // and handle the response
         if (curl_error($curl))
         {
             error_log(
-                __METHOD__ . " - Failed localizing item: " . $shofiItem->getIdentifier() .
+                __METHOD__ . " - Failed localizing item: " . print_r($queryValues, TRUE) .
                  PHP_EOL . "Error: " . curl_error($curl)
             );
             return FALSE;
         }
         else
         {
-            // if everyting worked hydrate the location data et voila
-            $localizeResults = json_decode($apiResponse, TRUE);
-            if (0 < $localizeResults['items_count'])
-            {
-                $locationData = $localizeResults[0];
-                // @todo: set street and housenumber if housenumber was inside the street field ...
-                $data = array(
-                    'district' => isset($locationData['district']) ? 
-                        $locationData['district'] : NULL,
-                    'administrativeDistrict' => isset($locationData['administrative district']) ? 
-                        $locationData['administrative district'] : NULL,
-                    'neighborhood' => isset($locationData['neighborhood']) ? $locationData['neighborhood'] : '',
-                    'coordinates' => array(
-                        'lon' => $locationData['longitude'],
-                        'lat' => $locationData['latitude']
-                    )
-                );
-                $location->applyValues($data);
-            }
+            return json_decode($apiResponse, TRUE);
         }
-        $this->logInfo("---------------------------------------");
-        return TRUE;
     }
 
     protected function getWorkflowItemImplementor()
@@ -119,5 +125,3 @@ class ShofiWorkflowService extends BaseWorkflowService
         return self::ITEM_IMPLEMENTOR;
     }
 }
-
-?>

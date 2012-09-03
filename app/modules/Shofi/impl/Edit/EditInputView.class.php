@@ -50,13 +50,6 @@ class Shofi_Edit_EditInputView extends ShofiBaseView
     protected function setBreadcrumb()
     {
         $routing = $this->getContext()->getRouting();
-        $moduleCrumb = array(
-            'text' => 'Orte',
-            'link' => $routing->gen('shofi.list'),
-            'info' => 'Alle Orte die in Midas verwaltet werden.',
-            'icon' => 'icon-list'
-        );
-
         $breadcrumbs = $this->getContext()->getUser()->getAttribute('breadcrumbs', 'midas.breadcrumbs', array());
         foreach ($breadcrumbs as $crumb)
         {
@@ -65,13 +58,14 @@ class Shofi_Edit_EditInputView extends ShofiBaseView
                 return;
             }
         }
+        $item = $this->getAttribute('item');
+        $name = $item->getCoreItem()->getName();
         $breadcrumbs[] = array(
-            'text' => 'Ort bearbeiten',
+            'text' => sprintf('Bearbeitung von: "%s"', empty($name) ? 'Ort' : $name),
             'info' => 'Bearbeitung von Ort: ' . $this->getAttribute('item')->getIdentifier(),
             'icon' => 'icon-pencil'
         );
 
-        $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'midas.breadcrumbs');
         $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'midas.breadcrumbs');
     }
 
@@ -145,7 +139,7 @@ class Shofi_Edit_EditInputView extends ShofiBaseView
         $widgetOptions = array( // template-attributes for passing options to particular widgets
             'location_widget_opts' => array(
                 'autobind' => TRUE,
-                'localize_url' => urldecode(htmlspecialchars($routing->gen('news.api.extract_location', array('geo_text' => '{STRING}')))),
+                'localize_url' => urldecode(htmlspecialchars($routing->gen('shofi.api.localize'))),
                 'location' => $location->toArray()
             ),
             'clipboard_widget_opts' => array(

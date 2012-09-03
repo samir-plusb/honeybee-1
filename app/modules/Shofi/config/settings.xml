@@ -4,7 +4,7 @@
         <settings prefix="shofi.">
             <setting name="category_autocomp_uri">shofi_categories.suggest</setting>
             <setting name="hotel_catalogs_dir">%core.app_dir%/../data/catalogs/hotels/</setting>
-
+            <setting name="geo_service_url">http://geoprototype.berlinonline.de/api/query</setting>
             <!-- list integration {@see IListConfig} -->
             <setting name="list_config">
                 <!-- common list params -->
@@ -24,6 +24,10 @@
                             <ae:parameter name="valuefield">masterRecord.source</ae:parameter>
                             <ae:parameter name="sortfield">masterRecord.source.raw</ae:parameter>
                             <ae:parameter name="renderer">ShofiTranslationListRenderer</ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="last_import_id">
+                            <ae:parameter name="valuefield">attributes.import_ids</ae:parameter>
+                            <ae:parameter name="renderer">ShofiLastImportIdListRenderer</ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="vertical">
                             <ae:parameter name="valuefield">detailItem.category</ae:parameter>
@@ -51,10 +55,6 @@
                             <ae:parameter name="valuefield">salesItem.product</ae:parameter>
                             <ae:parameter name="sortfield">salesItem.product</ae:parameter>
                             <ae:parameter name="renderer">ShofiTranslationListRenderer</ae:parameter>
-                        </ae:parameter>
-                        <ae:parameter name="last_modified">
-                            <ae:parameter name="valuefield">masterRecord.lastModified.date</ae:parameter>
-                            <ae:parameter name="sortfield">masterRecord.lastModified.date</ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="owner">
                             <ae:parameter name="valuefield">currentState.owner</ae:parameter>

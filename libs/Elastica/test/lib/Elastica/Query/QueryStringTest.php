@@ -3,61 +3,98 @@ require_once dirname(__FILE__) . '/../../../bootstrap.php';
 
 class Elastica_Query_QueryStringTest extends PHPUnit_Framework_TestCase
 {
-	public function setUp() {
-	}
+    public function testSearchMultipleFields()
+    {
+        $str = md5(rand());
+        $query = new Elastica_Query_QueryString($str);
 
-	public function tearDown() {
+        $expected = array(
+            'query' => $str
+        );
+
+        $this->assertEquals(array('query_string' => $expected), $query->toArray());
+
+        $fields = array();
+        $max = rand() % 10 + 1;
+        for ($i = 0; $i <  $max; $i++) {
+            $fields[] = md5(rand());
+        }
+
+        $query->setFields($fields);
+        $expected['fields'] = $fields;
+        $this->assertEquals(array('query_string' => $expected), $query->toArray());
+
+        foreach (array(false, true) as $val) {
+            $query->setUseDisMax($val);
+            $expected['use_dis_max'] = $val;
+
+            $this->assertEquals(array('query_string' => $expected), $query->toArray());
+        }
     }
 
+    public function testSearch()
+    {
+        $client = new Elastica_Client();
+        $index = new Elastica_Index($client, 'test');
+        $index->create(array(), true);
+        $index->getSettings()->setNumberOfReplicas(0);
+        //$index->getSettings()->setNumberOfShards(1);
 
-	public function testSearchMultipleFields() {
-		$str = md5(rand());
-		$query = new Elastica_Query_QueryString($str);
+        $type = new Elastica_Type($index, 'helloworld');
 
-		$expected = array(
-			'query' => $str
-		);
+        $doc = new Elastica_Document(1, array('email' => 'test@test.com', 'username' => 'hanswurst', 'test' => array('2', '3', '5')));
+        $type->addDocument($doc);
 
-		$this->assertEquals(array('query_string' => $expected), $query->toArray());
+        // Refresh index
+        $index->refresh();
 
-		$fields = array();
-		$max = rand() % 10 + 1;
-		for($i = 0; $i <  $max; $i++) {
-			$fields[] = md5(rand());
-		}
+        $queryString = new Elastica_Query_QueryString('test*');
+        $resultSet = $type->search($queryString);
 
-		$query->setFields($fields);
-		$expected['fields'] = $fields;
-		$this->assertEquals(array('query_string' => $expected), $query->toArray());
+        $this->assertEquals(1, $resultSet->count());
+    }
 
-		foreach(array(false, true) as $val) {
-			$query->setUseDisMax($val);
-			$expected['use_dis_max'] = $val;
+    public function testSetDefaultOperator()
+    {
+        $operator = 'AND';
+        $query = new Elastica_Query_QueryString('test');
+        $query->setDefaultOperator($operator);
 
-			$this->assertEquals(array('query_string' => $expected), $query->toArray());
-		}
-	}
+        $data = $query->toArray();
 
+        $this->assertEquals($data['query_string']['default_operator'], $operator);
+    }
 
-	public function testSearch() {
+    public function testSetDefaultField()
+    {
+        $default = 'field1';
+        $query = new Elastica_Query_QueryString('test');
+        $query->setDefaultField($default);
 
-		$client = new Elastica_Client();
-		$index = new Elastica_Index($client, 'test');
-		$index->create(array(), true);
-		$index->getSettings()->setNumberOfReplicas(0);
-		//$index->getSettings()->setNumberOfShards(1);
+        $data = $query->toArray();
 
-		$type = new Elastica_Type($index, 'helloworld');
+        $this->assertEquals($data['query_string']['default_field'], $default);
+    }
 
-		$doc = new Elastica_Document(1, array('email' => 'test@test.com', 'username' => 'hanswurst', 'test' => array('2', '3', '5')));
-		$type->addDocument($doc);
+    public function testSetRewrite()
+    {
+            $rewrite = 'scoring_boolean';
+            $query = new Elastica_Query_QueryString('test');
+            $query->setRewrite($rewrite);
 
-		// Refresh index
-		$index->refresh();
+            $data = $query->toArray();
 
-		$queryString = new Elastica_Query_QueryString('test*');
-		$resultSet = $type->search($queryString);
+            $this->assertEquals($data['query_string']['rewrite'], $rewrite);
+    }
 
-		$this->assertEquals(1, $resultSet->count());
-	}
+    public function testSetQueryStringInvalid()
+    {
+        $query = new Elastica_Query_QueryString();
+        try {
+            $query->setQueryString(array());
+            $this->fail('should throw exception because no string');
+        } catch (Elastica_Exception_Invalid $e) {
+            $this->assertTrue(true);
+        }
+    }
 }

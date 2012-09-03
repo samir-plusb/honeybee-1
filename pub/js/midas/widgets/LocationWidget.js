@@ -54,18 +54,9 @@ midas.widgets.LocationWidget = midas.widgets.Widget.extend({
 
     localize: function()
     {
-        var location_string = this.location.values().join(' ').trim();
-        if (0 === location_string.length)
-        {
-            return;
-        }
-        if (! location_string.match(/Berlin/ig))
-        {
-            location_string += '+Berlin';
-        }
         var req = midas.core.Request.curry(
-            this.options.localize_url.replace('{STRING}', location_string),
-            null, 'get', 'json'
+            this.options.localize_url,
+            this.location.values(), 'get', 'json'
         );
         this.is_processing(true);
         var that = this;
@@ -159,7 +150,7 @@ midas.widgets.LocationWidget = midas.widgets.Widget.extend({
         );
         var marker = new google.maps.Marker({
             position: latlng,
-            title:"Hello World!"
+            title: this.location.name()
         });
         var myOptions = {
             zoom: 16,
@@ -230,14 +221,14 @@ midas.widgets.LocationWidget.Location = midas.core.BaseObject.extend({
 
     values: function()
     {
-        var fields = ['name', 'street', 'housenumber', 'details', 'city', 'postal_code'];
-        var values = [];
+        var fields = ['street', 'housenumber', 'city', 'postal_code'];
+        var values = {};
         for (var i = 0; i < fields.length; i++)
         {
             var val = this[fields[i]]().trim();
             if (val)
             {
-                values.push(val);
+                values[fields[i]] = val;
             }
         }
         return values;

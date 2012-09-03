@@ -61,8 +61,6 @@ class Workflow_RunAction extends WorkflowBaseAction
      */
     public function isSecure()
     {
-        return FALSE;
+        return TRUE;
     }
 }
-
-?>

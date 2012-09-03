@@ -44,56 +44,6 @@ class ShofiFinder extends BaseFinder
         ));
     }
 
-    public function findPotentialDuplicates(ShofiWorkflowItem $shofiItem)
-    {
-        $name = $shofiItem->getCoreItem()->getName();
-        $location = $shofiItem->getCoreItem()->getLocation();
-        $lonLat = $location->getCoordinates();
-        $geoField = 'coreItem.location.coordinates';
-
-        $filter = NULL;
-        $nameFilter = NULL;
-        if (! empty($name))
-        {
-            $nameFilter = new Elastica_Filter_Term(array('coreItem.name.raw' => $name));
-            $filter = $nameFilter;
-        }
-        
-        $geoFilter = NULL;
-        if (isset($lonLat['lon']) && isset($lonLat['lat']))
-        {
-            $geoFilter = new Elastica_Filter_GeoDistance($geoField, $lonLat['lon'], $lonLat['lat'], '0.05km');
-            $filter = ! $nameFilter ? $geoFilter : $filter;
-        }
-
-        if ($nameFilter && $geoFilter)
-        {
-            $filter = new Elastica_Filter_Or();
-            $filter->addFilter($nameFilter)->addFilter($geoFilter);
-        }
-
-        $result = NULL;
-        if ($filter)
-        {
-            $duplicatesFilter = new Elastica_Filter_And();
-            $duplicatesFilter->addFilter(new Elastica_Filter_Not(
-                new Elastica_Filter_Ids($this->getIndexType(), array($shofiItem->getIdentifier()))
-            ));
-            $duplicatesFilter->addFilter($filter);
-
-            $result = $this->hydrateResult(
-                $this->esIndex->getType($this->getIndexType())
-                     ->search(Elastica_Query::create($duplicatesFilter)->setLimit(1000))
-            );    
-        }
-        else
-        {
-            $result = FinderResult::fromArray(array());
-        }
-        
-        return $result;
-    }
-
     public function getCategoryFacets(array $categories = array())
     {
         /**
@@ -134,7 +84,7 @@ class ShofiFinder extends BaseFinder
             'limit' => 1, 
             'sortDirection' => 'asc',
             'sortField' => 'name',
-            'filter' => array('attributes.import_ids' => array($importIdentifier))
+            'filter' => array('attributes.import_ids' => $importIdentifier)
         ));
         $result = $this->find($listState);
         $resultItems = $result->getItems();
@@ -144,6 +94,37 @@ class ShofiFinder extends BaseFinder
         }
 
         return (0 < $result->getTotalCount()) ? $resultItems[0] : NULL;
+    }
+
+    public function findAllImportIdentifiers(IDataSource $dataSource)
+    {
+        $query = Elastica_Query::create(NULL);
+        $query->setFields(array('attributes.import_ids'));
+        $sourceFilter = new Elastica_Filter_Prefix('attributes.import_ids', $dataSource->getName().':');
+        $query->setFilter($sourceFilter);
+        $esType = $this->esIndex->getType($this->getIndexType());
+        $resultData = $esType->search($query->setLimit(30000));
+        
+        $importIds = array();
+        foreach ($resultData->getResults() as $hit)
+        {
+            $fields = $hit->getFields();
+            if (is_array($fields['attributes.import_ids']))
+            {
+                foreach ($fields['attributes.import_ids'] as $importId)
+                {
+                    if (0 === strpos($importId, $dataSource->getName()))
+                    {
+                        $importIds[] = $importId;
+                    }
+                }   
+            }
+            elseif (0 === strpos($fields['attributes.import_ids'], $dataSource->getName()))
+            {
+                $importIds[] = $fields['attributes.import_ids'];
+            }
+        }
+        return $importIds;
     }
 
     public function getByCategoryIds(array $categoryIds)

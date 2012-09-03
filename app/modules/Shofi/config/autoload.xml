@@ -75,6 +75,7 @@
         <autoload name="ShofiFinder">%core.module_dir%/Shofi/lib/ShofiFinder.class.php</autoload>
 
         <!-- Renderer -->
+        <autoload name="ShofiLastImportIdListRenderer">%core.module_dir%/Shofi/lib/renderer/ShofiLastImportIdListRenderer.class.php</autoload>
         <autoload name="ShofiDateTimeListRenderer">%core.module_dir%/Shofi/lib/renderer/ShofiDateTimeListRenderer.class.php</autoload>
         <autoload name="ShofiTranslationListRenderer">%core.module_dir%/Shofi/lib/renderer/ShofiTranslationListRenderer.class.php</autoload>
         <autoload name="ShofiStreetListValueRenderer">%core.module_dir%/Shofi/lib/renderer/ShofiStreetListValueRenderer.class.php</autoload>

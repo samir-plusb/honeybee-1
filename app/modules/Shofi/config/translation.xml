@@ -12,7 +12,8 @@
                             <ae:parameter name="name">Name</ae:parameter>
                             <ae:parameter name="product">Produkt</ae:parameter>
                             <ae:parameter name="category">Kategorie</ae:parameter>
-                            <ae:parameter name="source">Datenquelle</ae:parameter>
+                            <ae:parameter name="source">Primärquelle</ae:parameter>
+                            <ae:parameter name="last_import_id">Updatequelle</ae:parameter>
                             <ae:parameter name="vertical">Leuchtturm</ae:parameter>
                             <ae:parameter name="firstName">Vorname</ae:parameter>
                             <ae:parameter name="lastName">Nachname</ae:parameter>

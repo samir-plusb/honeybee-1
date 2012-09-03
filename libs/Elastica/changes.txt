@@ -1,5 +1,146 @@
 CHANGES
 
+2012-08-11
+- Release v0.19.8.0
+- Elastica_Query_Prefix added
+
+2012-07-26
+- Change Elastica_Filter_GeoDistance::__construct(), accepts geohash parameter (BC break, before: ($key, $latitude, $longitude, $distance), after: ($key, $location, $distance) where $location is array('lat' => $latitude, 'lon' => $longitude) or a geohash)
+
+2012-07-17
+- Changed naming for several methods to camelCase
+- Enforced PSR1 code style, as per https://github.com/pmjones/fig-standards/blob/psr-1-style-guide/proposed/PSR-1-basic.md
+- Added Elastica_Script::toArray
+- Added Elastica_ScriptFields
+- Elastica_Query::setScriptFields now takes Elastica_ScriptFields or associative array as argument, the old implementation was bogus.
+
+2012-06-24
+- Simplify Elastica_Type::search and Elastica_Index::search by using Elastica_Search
+- Implement Elastica_Filter_Abstract::setCache and Elastica_Filter_Abstract::setCacheKey
+- Add Elastica_Param::hasParam
+- Remove unsupported use of minimum number should match for Boolean Filter
+- Remove old style path creation through params in Elastica_Index::create and Elastica_Search::search
+
+2012-06-22
+- Add Elastica_Filter_Limit
+- Add getters+setters for Index Setting blocks 'read', 'write' and 'metadata'
+- Add Elastica_Filter_MatchAll
+
+2012-06-20
+- Facet scope added
+
+2012-06-09
+- Change $_parent to null to also support 0 for an id
+- Fix Elasitca_Document->toArray()
+
+2012-05-01
+- Release v0.19.3.0
+- MoreLikeThis Query in Elastica_Document
+- Add query param for request (allows GET params)
+
+2012-03-04
+- Node info call update. The receive os info and more, param is needed. By default, only basics are returned
+- Release v0.19.0.0 which is compatible with ES 0.19.0 http://www.elasticsearch.org/blog/2012/03/01/0.19.0-released.html
+
+2012-02-21
+- Allow percolate queries in bulk requests
+- Fix memory leak in curl requests
+
+2012-01-23
+- Packagist added http://packagist.org/
+
+2012-01-15
+- Vagrantfile for vagrant environment with elasticsearch added. Run: vagrant up
+
+2012-01-08
+- Allow to set curl params over client config #106 #107
+- Add the possiblity to add path or url in config for a request #120
+
+2012-01-04
+- Elastica_Index::exists() and Elastica_Cluster::getIndexNames() added
+
+2012-01-01
+- Elastica_Cluster_Settings added
+- Read only feature for cluster and index added. This feature is elasticsearch >0.19.0 only. ES 0.19.0 release is not out yet
+
+2011-12-29
+- Elastica_Type::deleteByQuery implemented
+
+2011-12-20
+- Release v0.18.6.0
+
+2011-12-19
+- Percolator for Type and Documents added
+
+2011-12-06
+- Elastica_Percolator added. See tests for more details
+
+2011-12-02
+- Rename Elastica_Type::getType() to Elastica_Type::getName(), getType() is now deprecated
+
+2011-12-01
+- Elastica_Filter_Term::addTerm renamed to setTerm, Elastica_Filter_Term::setTerm renamed to setRawTerm
+- Elastica_Query_Term::addTerm renamed to setTerm, Elastica_Query_Term::setTerm renamed to setRawTerm
+
+2011-11-30
+- Release v0.18.5.0
+
+2011-11-28
+- Elastica_Filter_Nested added
+
+2011-11-26
+- Elastica_Search::addIndices(), Elastica_Search::addTypes() added
+
+2011-11-20
+- Release v0.18.4.1
+- Elastica_Log added for logging. Has to be passed as client config to enable
+- Elastica blogging introduced: http://ruflin.com/en/elastica
+
+2011-11-17
+- Release v0.18.4.0
+- Support for Travis CI added: http://travis-ci.org/ruflin/Elastica
+
+2011-11-07
+- Elastica_Index_Stats added
+
+2011-11-05
+- Elastica_Query_Nested added
+
+2011-10-29
+- TTL for document and mapping added
+
+2011-10-28
+- Refactored Elastica_Query_CustomScore::addCSParam to ::addParams
+- Rename Elastica_Query_CustomScore::addParam to ::addCSParam
+- Release v0.18.1.0
+
+2011-10-20
+- Release v0.17.9.0
+- Elastica_Filter_Type added
+
+2011-10-19
+- Elastica_Query_CustomFilterScore added
+
+2011-10-15
+- API Documentation changed to DocBlox
+
+2011-10-10
+- Bug fixing
+- Release v0.17.8.0 added
+
+2011-09-19
+- Release v0.17.7.0 added
+- Release v0.17.6.1 added
+
+2011-09-18
+- Elastica_Exception_ExpectedFieldNotFound renamed to Elastica_Exception_NotFound
+
+2011-08-25
+- Https transport layer added
+
+2011-08-22
+- Typo in Terms query fixed (issue #74)
+
 2011-08-15
 - Refactoring HTTP connection to keep alive connection -> speed improvement during using the same client
 - Release v0.17.6.0 added
