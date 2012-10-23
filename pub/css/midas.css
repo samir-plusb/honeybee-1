@@ -6,11 +6,11 @@ body
 
 html
 {
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cdcdcd), to(#ffffff)); 
-  background: -webkit-linear-gradient(top, #cdcdcd, #ffffff); 
-  background: -moz-linear-gradient(top, #cdcdcd, #ffffff); 
-  background: -ms-linear-gradient(top, #cdcdcd, #ffffff);
-  background: -o-linear-gradient(top, #cdcdcd, #ffffff);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fefefe), to(#ffffff)); 
+  background: -webkit-linear-gradient(top, #fefefe, #ffffff); 
+  background: -moz-linear-gradient(top, #fefefe, #ffffff); 
+  background: -ms-linear-gradient(top, #fefefe, #ffffff);
+  background: -o-linear-gradient(top, #fefefe, #ffffff);
   background-attachment: fixed;
 }
 
