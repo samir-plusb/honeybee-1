@@ -1,0 +1,70 @@
+{
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "agavi/agavi",
+                "version": "1.0.7",
+                "source": {
+                    "url": "http://svn.agavi.org/",
+                    "type": "svn",
+                    "reference": "tags/1.0.7/"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "craur/craur",
+                "version": "1.6.0",
+                "source": {
+                    "url": "https://github.com/DracoBlue/Craur.git",
+                    "type": "git",
+                    "reference": "f4f0bd435ef512b02b6251b1367e9b5103d09926"
+                },
+                "autoload": {
+                    "classmap": ["php/Craur.class.php"]
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "twitter/bootstrap",
+                "version": "2.1.1",
+                "source": {
+                    "url": "https://github.com/twitter/bootstrap.git",
+                    "type": "git",
+                    "reference": "c52368d3c5984b28e6a71e5e1240afdd788fc2e6"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "jquery/jquery",
+                "version": "1.7.2",
+                "dist": {
+                    "url": "http://code.jquery.com/jquery-1.7.2.js",
+                    "type": "file"
+                }
+            }
+        }
+    ],
+    "require": {
+        "php": ">=5.3",
+        "agavi/agavi": "1.0.*",
+        "twig/twig": "1.*",
+        "jquery/jquery": "1.7.2",
+        "twitter/bootstrap": "2.1.1",
+        "craur/craur": "1.6.*",
+        "ruflin/Elastica": "0.19.8.0",
+        "phpunit/phpunit": "3.7.*",
+        "zend/acl": "dev-master",
+        "imagine/Imagine": "0.3.*",
+        "phing/phing": "2.4.*"
+    },
+    "autoload": {
+        "classmap": [ "app/lib/" ]
+    }
+}
