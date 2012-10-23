@@ -30,7 +30,7 @@
 		</div>
 	</div>
 </header>
-
+<div style="margin-top: 60px;"></div>
 
 <!-- ###############################################################################################
     Searchinfo-Box Section:
@@ -40,7 +40,7 @@
     if ($searchPhrase)
     {
 ?>
-<section class="container-fluid search-message-box">
+<section class="container-fluid search-message-box" style="margin-bottom: 1em;">
     <div class="alert search-message alert-info">
         <p>
             Du hast nach <strong>&#34;<?php echo $t['search_phrase']; ?>&#34;</strong> gesucht.

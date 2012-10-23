@@ -3,7 +3,7 @@
 /**
  * The Shofi_Verticals_SuggestAction class is responseable for delivering shofi vertical suggests (autocomplete).
  *
- * @version         $Id: Shofi_Verticals_SuggestAction.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi_Verticals

@@ -37,6 +37,10 @@ class ShofiFinder extends BaseFinder
             new Elastica_Filter_Missing('detailItem.category')
         )->addFilter(
             new Elastica_Filter_Term(array('masterRecord.categorySource.raw' => $categorySource))
+        )->addFilter(
+            new Elastica_Filter_Not(
+                new Elastica_Filter_Term(array('attributes.marked_deleted' => TRUE))
+            )
         );
 
         return $this->hydrateResult($this->esIndex->getType($this->getIndexType())->search(
@@ -50,7 +54,9 @@ class ShofiFinder extends BaseFinder
          * Use elastic search's filter- or queryfacet here instead of this brutforce. ^^
          * Need to build one for elastica.
          */
-        $query = Elastica_Query::create(NULL);
+        $query = Elastica_Query::create(new Elastica_Filter_Not(
+            new Elastica_Filter_Term(array('attributes.marked_deleted' => TRUE))
+        ));
         $facetname = 'categories-facet';
         $facet = new Elastica_Facet_Terms($facetname);
         $facet->setField('detailItem.category');
@@ -77,31 +83,18 @@ class ShofiFinder extends BaseFinder
         ));
     }
 
-    public function findItemByImportIdentifier($importIdentifier)
-    {
-        $listState = ListState::fromArray(array(
-            'offset' => 0,
-            'limit' => 1, 
-            'sortDirection' => 'asc',
-            'sortField' => 'name',
-            'filter' => array('attributes.import_ids' => $importIdentifier)
-        ));
-        $result = $this->find($listState);
-        $resultItems = $result->getItems();
-        if (1 < $result->getTotalCount())
-        {
-            // @todo The same import-identifier more than once. This shouldn't happen. How to handle?
-        }
-
-        return (0 < $result->getTotalCount()) ? $resultItems[0] : NULL;
-    }
-
     public function findAllImportIdentifiers(IDataSource $dataSource)
     {
         $query = Elastica_Query::create(NULL);
         $query->setFields(array('attributes.import_ids'));
         $sourceFilter = new Elastica_Filter_Prefix('attributes.import_ids', $dataSource->getName().':');
-        $query->setFilter($sourceFilter);
+        $deletedFilter = new Elastica_Filter_Not(
+            new Elastica_Filter_Term(array('attributes.marked_deleted' => TRUE))
+        );
+        $filter = new Elastica_Filter_And();
+        $query->setFilter(
+            $filter->addFilter($sourceFilter)->addFilter($deletedFilter)
+        );
         $esType = $this->esIndex->getType($this->getIndexType());
         $resultData = $esType->search($query->setLimit(30000));
         
@@ -140,6 +133,30 @@ class ShofiFinder extends BaseFinder
 
         $andContainer = new Elastica_Filter_And();
         $andContainer->addFilter($categoriesEqual);
+        $andContainer->addFilter($notDeleted);
+
+        $query = Elastica_Query::create($andContainer);
+        $esType = $this->esIndex->getType(
+            $this->getIndexType()
+        );
+        return $this->hydrateResult(
+            $esType->search($query->setLimit(100000))
+        );
+    }
+
+    public function getByLastImportIds(array $importIds)
+    {
+        $importIdFilter = new Elastica_Filter_Terms();
+        $importIdFilter->setTerms('attributes.import_ids', $importIds);
+
+        $notDeleted = new Elastica_Filter_Not(
+            new Elastica_Filter_Term(
+                array('attributes.marked_deleted' => TRUE)
+            )
+        );
+
+        $andContainer = new Elastica_Filter_And();
+        $andContainer->addFilter($importIdFilter);
         $andContainer->addFilter($notDeleted);
 
         $query = Elastica_Query::create($andContainer);

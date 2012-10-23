@@ -160,7 +160,7 @@
                 </tr>
             </thead>
             <tbody data-bind="foreach: list_items">
-                <tr>
+                <tr data-bind='attr: { "class":  $data.css_classes }'>
                     <td>
                         <input type="checkbox" data-bind="checked: selected" />
                     </td>

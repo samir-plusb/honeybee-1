@@ -24,12 +24,7 @@ class ProjectDirectoryRegexpIterator extends FilterIterator
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
             )
         );
-
-        $this->filterRegexp = sprintf(
-            '%1$s%2$s%1$sis',
-            self::REGEXP_DELIMITER,
-            $filterRegexp
-        );
+        $this->filterRegexp = self::REGEXP_DELIMITER.$filterRegexp.self::REGEXP_DELIMITER.'is';
     }
 
     public function accept()

@@ -33,7 +33,7 @@
         <div class="row-fluid" >
             <div class="span12">
                 <div class="row-fluid">
-                    <section class="span4">
+                    <section class="span8 well">
                         <h2>Basisdaten</h2>
                         <fieldset class="well">
                             <div class="control-group">
@@ -43,30 +43,8 @@
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Text</label>
-                                <div class="controls">
-                                    <textarea name="category[text]" rows="8"><?php echo $escape($categoryData['text']); ?></textarea>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </section>
-                    <section class="span4">
-                        <h2>Allgemeines</h2>
-                        <div class="well">
-                            <div class="control-group">
                                 <label class="control-label">Datensätze i. d. Branche <em><?php echo $placesData['total_count']; ?></em></label>
                             </div>
-<?php 
-    if (isset($t['contentmachine_link']))
-    {
-?>
-                            <div class="clipboard-widget" data-clipboard-widget-options="<?php echo $t['clipboard_widget_opts']; ?>">
-                                <a href="#clipboard" class="clipboard-widget-trigger" title="<?php echo $escape($t['contentmachine_link']); ?>"><i class="icon-copy"></i> CM-Url nach Zwischenablage kopieren</a>
-                            </div>
-<?php
-    }
-?>
-          
                             <div class="control-group widget-verticals-dropdown" data-dropdown-widget-options="<?php echo $verticalDropdownOpts; ?>">
                                 <label class="control-label">Leuchtturm</label>
                                 <div class="controls">
@@ -90,9 +68,25 @@
                                     <input type="hidden" class="text-hidden" name="category[vertical][name]" value="<?php echo $escape(isset($vertical['name']) ? $vertical['name'] : ''); ?>" />
                                 </div>
                             </div>
-                        </div>
+                            <div class="control-group">
+                                <label class="control-label">Text</label>
+                                <div class="controls">
+                                    <textarea name="category[text]" rows="8"><?php echo $escape($categoryData['text']); ?></textarea>
+                                </div>
+                            </div>
+                            <?php 
+    if (isset($t['contentmachine_link']))
+    {
+?>
+                            <div class="clipboard-widget" data-clipboard-widget-options="<?php echo $t['clipboard_widget_opts']; ?>">
+                                <a href="#clipboard" class="clipboard-widget-trigger" title="<?php echo $escape($t['contentmachine_link']); ?>"><i class="icon-copy"></i> CM-Url nach Zwischenablage kopieren</a>
+                            </div>
+<?php
+    }
+?>
+                        </fieldset>
                     </section>
-                    <section class="span4">
+                    <section class="span3 well">
                         <h2>Alle Datensätze</h2>
                         <div class="well places places-list-container">
                             <ul id="placesList">
@@ -112,7 +106,7 @@
                 </div>
             </div>
             <div class="row-fluid">
-                <div class="span12">
+                <div class="span8 well">
                     <section>
                         <h2>Kategorisierung und Sucheinstellungen</h2>
                         <section class="tabbable">
@@ -230,12 +224,6 @@
                                 </div>
                             </div>
                         </section>
-                    </div>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span12">
-                    <div class="form-actions">
                         <input type="submit" value="Speichern" class="btn btn-primary" />
                     </div>
                 </div>

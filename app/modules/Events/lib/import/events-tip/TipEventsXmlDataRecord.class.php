@@ -4,7 +4,7 @@
  * The EventsXmlDataRecord class is a concrete implementation of the EventsDataRecord base class.
  * It provides handling for mapping data coming from the xml import into the local event-record format.
  *
- * @version         $Id: EventsXmlDataRecord.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Events

@@ -3,7 +3,7 @@
 /**
  * The EventsArticle class reflects the structure of one of an event's articles.
  *
- * @version $Id: EventsArticle.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package Events

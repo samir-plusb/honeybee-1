@@ -2,6 +2,7 @@
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
     <ae:configuration>
         <settings prefix="shofi.">
+            <setting name="tip_import_dir">%core.app_dir%/../data/catalogs/restaurants/tip</setting>
             <setting name="category_autocomp_uri">shofi_categories.suggest</setting>
             <setting name="hotel_catalogs_dir">%core.app_dir%/../data/catalogs/hotels/</setting>
             <setting name="geo_service_url">http://geoprototype.berlinonline.de/api/query</setting>
@@ -95,6 +96,7 @@
                 <ae:parameter name="batchActions">
                     <ae:parameters>
                         <ae:parameter name="assign_category">ctrl.assignCategory(is_batch, null)</ae:parameter>
+                        <ae:parameter name="mark_deduplciated">ctrl.markDeduplicated(is_batch, null)</ae:parameter>
                         <ae:parameter name="delete">ctrl.proceed(is_batch, null, 'delete')</ae:parameter>
                     </ae:parameters>
                 </ae:parameter>

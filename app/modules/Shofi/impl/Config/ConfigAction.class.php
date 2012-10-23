@@ -3,7 +3,7 @@
 /**
  * The Shofi_ConfigAction class is responseable for handling the config settings that are mutable to users.
  *
- * @version         $Id: Import_ImperiaAction.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi

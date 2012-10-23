@@ -4,7 +4,7 @@
  * The Shofi_Verticals_SuggestErrorView class handles the presentation logic for our
  * Shofi_Verticals/Suggest actions's error data.
  *
- * @version         $Id: SuggestErrorView.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi_Verticals

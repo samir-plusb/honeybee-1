@@ -1,117 +1,114 @@
 <?php
 
-class FrontendTheaterFactory
+class FrontendTheaterFactory extends BaseExportDocumentFactory
 {
-    public function createFromObject(IDataObject $theaterItem, array $options = array())
+    public function createFromObject(IDataObject $dataObject, array $options = array())
     {
-        $excludeScreenings = array_key_exists('excludeScreenings', $options) ? $options['excludeScreenings'] : FALSE;
+        $documentData = $this->mapData($dataObject);
+        $documentData['identifier'] = $this->buildDocumentIdentifier($dataObject);
+        $documentData['slug'] = $this->buildSlug($dataObject);
+        $documentData['screenings'] = $this->buildScreeningList($dataObject);
+        $documentData['additionalInfo'] = $dataObject->getAttribute('prices', '');
+
+        return FrontendTheaterDocument::fromArray($documentData);
+    }
+
+    public function buildDocumentIdentifier(IDataObject $dataObject)
+    {
+        return 'theater-' . $dataObject->getExportId();
+    }
+
+    public function getSlugPattern()
+    {
+        return '<coreItem.name>-<identifier>';
+    }
+
+    protected function mapData(IDataObject $theaterItem)
+    {
         // prepare backend data
         $data = $theaterItem->toArray();
         $exportDataKeys = array(
-            'identifier' => 'identifier',
             'coreItem' => 'coreData',
             'salesItem' => 'salesData',
             'detailItem' => 'detailData',
             'attributes' => 'attributes',
             'lastModified' => 'lastModified'
         );
-        $data['detailItem']['attachments'] = $this->prepareContentMachineAssetData(
+        $data['detailItem']['attachments'] = $this->buildAssetIds(
             $theaterItem->getDetailItem()->getAttachments()
         );
-        $data['salesItem']['attachments'] = $this->prepareContentMachineAssetData(
+        $data['salesItem']['attachments'] = $this->buildAssetIds(
             $theaterItem->getSalesItem()->getAttachments()
         );
-
         // map data to the frontend structure
         $exportData = array();
         foreach ($exportDataKeys as $localKey => $exportKey)
         {
             $exportData[$exportKey] = $data[$localKey];
         }
-        if (! $excludeScreenings)
+        return $exportData;
+    }
+
+    protected function buildScreeningList(IDataObject $theaterItem)
+    {
+        $theaterImportId = NULL;
+        foreach ($theaterItem->getAttribute('import_ids', array()) as $importId)
         {
-            $lists = $this->buildLists(
-                $theaterItem,
-                $this->getRelatedMovies($theaterItem)
-            );
-            $exportData['movies'] = $lists['movies'];
-            $exportData['screenings'] = $lists['screenings'];
+            $parts = explode(':', $importId);
+            if (2 == count($parts) && 'theaters-telavision' === $parts[0])
+            {
+                $theaterImportId = $parts[1];
+            }
         }
-        return FrontendTheaterDocument::fromArray($exportData);
-    }
 
-    public function getRelatedMovies(ShofiWorkflowItem $theaterItem)
-    {
-        $finder = MoviesFinder::create(ListConfig::fromArray(
-            AgaviConfig::get('movies.list_config')
-        ));
-        $result = $finder->find(ListState::fromArray(array(
-            'offset' => 0,
-            'limit' => 500,
-            'filter' => array(
-                'masterRecord.screenings.theaterId' => $theaterItem->getIdentifier()
-            )
-        )));
-        return $result->getItems();
-    }
-
-    protected function buildLists(IDataObject $theaterItem, array $movies)
-    {
         $movieFactory = new FrontendMovieFactory();
-
         $screeningList = array();
-        $movieList = array();
-        foreach ($movies as $movieItem)
+        foreach ($this->getRelatedMovies($theaterItem) as $movieImportId => $movieItem)
         {
             $movieScreenings = $movieItem->getMasterRecord()->getScreenings();
-            $frontendMovie = $movieFactory->createFromObject($movieItem, array('excludeScreenings' => TRUE));
-            $movieId = $frontendMovie->getIdentifier();
+            $movieId = $movieFactory->buildDocumentIdentifier($movieItem);
             foreach ($movieScreenings as &$screening)
             {
-                if ($screening['theaterId'] === $theaterItem->getIdentifier())
+                if ($screening['theaterId'] === $theaterImportId)
                 {
                     unset($screening['theaterId']);
                     $screening['movieId'] = $movieId;
                     $screeningList[] = $screening;
                 }
-                if (! isset($movieList[$movieId]))
-                {
-                    $movieList[$movieId] = $frontendMovie->toArray();
-                }
             }
         }
-
-        return array(
-            'movies' => array_values($movieList),
-            'screenings' => $screeningList
-        );
+        return $screeningList;
     }
 
-    protected function prepareContentMachineAssetData(array $assetIds)
+    protected function getRelatedMovies(ShofiWorkflowItem $theaterItem)
     {
-        $assets = array();
-        $assetService = ProjectAssetService::getInstance();
-        foreach ($assetService->multiGet($assetIds) as $id => $asset)
+        $moviesList = array();
+        $finder = MoviesFinder::create(ListConfig::fromArray(AgaviConfig::get('movies.list_config')));
+        foreach ($finder->findRelatedMovies($theaterItem) as $movieItem)
         {
-            $metaData = $asset->getMetaData();
-            $imagine = new Imagine\Gd\Imagine();
-            $filePath = $asset->getFullPath();
-            $image = $imagine->open($filePath);
-            $size = $image->getSize();
-            $assets[] = array(
-                'id' => $asset->getIdentifier(),
-                'width' => $size->getWidth(),
-                'height' => $size->getHeight(),
-                'mime' => $asset->getMimeType(),
-                'filename' => $asset->getFullName(),
-                'modified' => date(DATE_ISO8601, filemtime($filePath)),
-                'copyright' => isset($metaData['copyright']) ? $metaData['copyright'] : '',
-                'copyright_url' => isset($metaData['copyright_url']) ? $metaData['copyright_url'] : '',
-                'caption' => isset($metaData['caption']) ? $metaData['caption'] : ''
-            );
+            $importId = NULL;
+            foreach ($movieItem->getAttribute('import_ids', array()) as $importId)
+            {
+                $parts = explode(':', $importId);
+                if (2 == count($parts) && 'movies-telavision' === $parts[0])
+                {
+                    $importId = $parts[1];
+                }
+            }
+            if ($importId)
+            {
+                $moviesList[$importId] = $movieItem;
+            }
+            else
+            { // shouldn't happen
+                error_log("Uncountered a referenced movie without import origin data.");
+            }
         }
-        return $assets;
+        return $moviesList;
+    }
+
+    protected function slugifyIdentifier(IDataObject $dataObject)
+    {
+        return str_replace('theater-', '', $this->buildDocumentIdentifier($dataObject));
     }
 }
-
-?>

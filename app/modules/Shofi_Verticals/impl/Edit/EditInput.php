@@ -25,7 +25,7 @@
     <form action="<?php echo $ro->gen(NULL); ?>" method="post" data-bind="submit: onFormSubmit">
         <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $escape($ticketId); ?>" />
         <div class="row-fluid" >
-            <div class="span6">
+            <div class="span5 well">
                 <h2>Leuchtturm bearbeiten</h2>
                 <div class="control-group ">
                     <label for="Name">Name</label>
@@ -49,19 +49,15 @@
                     </div>
                 </div>
 <!-- Categories Widget -->
-                <div class="span6">
-                    <h3>Top-Branchen</h3>
-                    <section class="widget-tags-list widget-top-categories"
-                              data-tags-list-options='<?php echo $categoriesWidgetOptions; ?>'>
-                    </section>
-                </div>
+                <h3>Top-Branchen</h3>
+                <section class="widget-tags-list widget-top-categories"
+                          data-tags-list-options='<?php echo $categoriesWidgetOptions; ?>'>
+                </section>
 <!-- images widget -->
-                <div class="span6 assets-container">
-                    <section class="widget-asset-list widget-verticals-images"
-                             data-asset-list-options='<?php echo $assetListOptions; ?>'>
-                    </section>
-                </div>
-                <div class="form-actions">
+                <section class="widget-asset-list widget-verticals-images"
+                         data-asset-list-options='<?php echo $assetListOptions; ?>'>
+                </section>
+                <div class="form-actions" style="padding-left: 0; padding-bottom: 0">
                     <input type="submit" value="Speichern" class="btn btn-primary" />
                 </div>
             </div>

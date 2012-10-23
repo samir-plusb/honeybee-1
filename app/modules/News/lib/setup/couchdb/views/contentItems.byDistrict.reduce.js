@@ -2,7 +2,7 @@
  * Access published content-items by district.
  *
  * @author tay
- * @version $Id:$
+ * @version $Id$
  */
 function(key, values, rereduce)
 {

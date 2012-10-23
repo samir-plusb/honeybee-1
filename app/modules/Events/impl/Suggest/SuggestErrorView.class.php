@@ -4,7 +4,7 @@
  * The Events_Suggest_SuggestErrorView class handles the presentation logic for our
  * Events/Suggest actions's error data.
  *
- * @version         $Id: Events_Suggest_SuggestErrorView.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Events

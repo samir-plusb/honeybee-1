@@ -61,7 +61,7 @@ Navigation:
 Editing:
     Holds form for editing the current shofi place's coreItem. (All form values are nested here.)
 ############################################################################################### -->
-            <section class="span6 editing">
+            <section class="span6 editing well">
                 <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $escape($ticketId); ?>" />
 <!-- coreItem meta data -->
                 <div class="page-header" style="margin-top:0">

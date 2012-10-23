@@ -43,7 +43,11 @@ class GoogleDocsService
             }
             foreach($rowData as $customEntry) 
             {
-                $outRow[$customEntry->getColumnName()] = $customEntry->getText();
+                $value = trim($customEntry->getText());
+                if (! empty($value))
+                {
+                    $outRow[$customEntry->getColumnName()] = $customEntry->getText();
+                }
             }
             $documentData[] = $outRow;
         }

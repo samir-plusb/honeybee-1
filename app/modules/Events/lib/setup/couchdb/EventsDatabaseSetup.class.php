@@ -3,7 +3,7 @@
 /**
  * The EventsDatabaseSetup is responseable for setting up our module for usage.
  *
- * @version         $Id: EventsDatabaseSetup.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink
  * @package         Events

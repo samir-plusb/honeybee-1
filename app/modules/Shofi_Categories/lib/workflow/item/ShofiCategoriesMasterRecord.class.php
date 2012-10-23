@@ -3,7 +3,7 @@
 /**
  * The ShofiCategoriesMasterRecord holds the main data of a ShofiCategory.
  *
- * @version $Id: ShofiCategoriesMasterRecord.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Shofi_Categories

@@ -3,7 +3,7 @@
 /**
  * The ShofiCategoriesWorkflowItem extends the WorkflowItem and serves as the aggregate root for all aggregated shofi-category data objects.
  *
- * @version $Id: ShofiWorkflowItem.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Shofi_Categories

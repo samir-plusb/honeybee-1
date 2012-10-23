@@ -4,7 +4,7 @@
  * The TipFrontendLocationExport class is responseable for exporting Tip-frontend related events
  * to the correct consumers in the right structure.
  *
- * @version         $Id: TipFrontendLocationExport.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Events

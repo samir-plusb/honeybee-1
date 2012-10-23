@@ -43,6 +43,8 @@ abstract class WorkflowItem extends BaseDocument implements IWorkflowItem, Zend_
      */
     protected $attributes = array();
 
+    protected $exportId;
+
     /**
      * Holds the current state of the workflow item,
      * meaning, workflow step and owner.
@@ -285,6 +287,14 @@ abstract class WorkflowItem extends BaseDocument implements IWorkflowItem, Zend_
         }
         return $default;
     }
-}
 
-?>
+    public function getExportId()
+    {
+        return $this->exportId;
+    }
+
+    public function setExportId($exportId)
+    {
+        $this->exportId = $exportId;
+    }
+}

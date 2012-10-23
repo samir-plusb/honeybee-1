@@ -4,7 +4,7 @@
  * The Events_List_ListErrorView class handles the presentation logic for our
  * Events/List actions's error data.
  *
- * @version         $Id: Events_List_ListErrorView.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Events

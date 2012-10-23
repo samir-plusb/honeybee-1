@@ -3,7 +3,7 @@
 /**
  * The Shofi_Api_ExtractLocationAction is repsonseable handling location extraction api requests.
  *
- * @version         $Id: Api_ExtractLocationAction.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi

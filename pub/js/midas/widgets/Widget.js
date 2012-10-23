@@ -90,12 +90,21 @@ midas.widgets.Widget.factory = function(element, type_key, namespace)
         function($1) { return "-" + $1.toLowerCase(); }
     );
     var opt_attr_name = 'data' + dash_case_impl_name + '-options';
-    // merge options ...
-    var options = $.extend(
-        {},
-        widget_class.DEFAULT_OPTIONS || {},
-        JSON.parse(element.attr(opt_attr_name) || "{}")
-    );
+    var options;
+    try
+    {
+        // merge options ...
+        options = $.extend(
+            {},
+            widget_class.DEFAULT_OPTIONS || {},
+            JSON.parse(element.attr(opt_attr_name) || "{}")
+        );
+    }
+    catch(err)
+    {
+        console.log(element, err);
+        return;
+    }
     // ... and create instance.
     return new widget_class(element, options);
 };

@@ -4,7 +4,7 @@
  * The TipFrontendEventFactory is responseable for creating TipFronendEvents
  * from IDataObjects, in this case restricted to EventsWorkflowItem.
  *
- * @version         $Id: TipFrontendEventFactory.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Events
@@ -18,6 +18,13 @@ class TipFrontendEventFactory
      */
     const OPT_INCLUDE_LOCATIONS = 'includeLocations';
 
+	public static $ranking = array(
+        'Musik & Party' => 1,
+        'Kino & Film' => 2,                        
+        'Kultur & Freizeit' => 3,
+		'Sonstiges' => 4,		
+	);
+
     /**
      * Create a fresh TipFrontendEvent instance, hydrated with given EventsWorkflowItem.
      *
@@ -30,7 +37,7 @@ class TipFrontendEventFactory
         if (! ($dataObject instanceof EventsWorkflowItem))
         {
             throw new InvalidArgumentException(
-                "The given dataObject parameter must be n instance of EventsWorkflowItem."
+                "The given dataObject parameter must be an instance of EventsWorkflowItem."
             );
         }
 
@@ -43,10 +50,10 @@ class TipFrontendEventFactory
 
         // map all properties that need no formatting/renaming
         $directExports = array(
-            'sortTitle', 'contentCreated', 'contentUpdated', 'eventSchedule',
-            'category', 'subcategory', 'tickets', 'book', 'duration',
-            'meetAt', 'highlight', 'duration', 'kidsInfo', 'works', 'price',
-            'tags', 'ageRestriction', 'involvedPeople', 'closes', 'hasTipPoint'
+            'sortTitle', 'contentCreated', 'contentUpdated',
+            'subcategory', 'tickets', 'book', 'duration',
+            'meetAt', 'duration', 'kidsInfo', 'works', 'price',
+            'tags', 'ageRestriction', 'involvedPeople', 'closes'
         );
         $data = $dataObject->getMasterRecord()->toArray();
         foreach ($directExports as $propName)
@@ -78,6 +85,15 @@ class TipFrontendEventFactory
             $exportData['locations'] = $this->buildLocationsList($dataObject);
         }
 
+		$exportData['category'] = array(
+			'name' => $data['category'],
+			'priority' => isset(self::$ranking[$data['category']])?self::$ranking[$data['category']]:99,
+		);
+	
+		$exportData['highlight'] = (TRUE === $data['highlight'] || TRUE === $data['hasTipPoint']);
+
+        $exportData['eventSchedule'] = $this->buildEventSchedule($dataObject);
+ 
         return TipFrontendEvent::fromArray($exportData);
     }
 
@@ -145,6 +161,49 @@ class TipFrontendEventFactory
         }
 
         return $locationsList;
+    }
+
+    /**
+     * Removes old appointments
+     *
+     * @var EventsWorkflowItem $eventItem
+     * @var array List of ShofiWorkflowItem
+     *
+     * @return array List of Appointments.
+     */
+    protected function buildEventSchedule(IDataObject $eventItem)
+    {
+        $data = $eventItem->getMasterRecord()->toArray();
+        // ignore everything thats older than today 0:00
+        $currentTimestamp = strtotime('today 0:00');
+        foreach($data['eventSchedule'] as $locationsKey => &$locations)
+        {
+            foreach ($locations as $locationKey => &$location)
+            {
+                foreach ($location['appointments'] as $appointmentKey => $appointment)
+                {
+                    if (
+                            // If startdate is in the past and we've no enddate (means appointment is over)
+                            (strtotime($appointment['startDate']) < $currentTimestamp && empty($appointment['endDate'])) || 
+                            // If both, startdate and enddate are in the past
+                            (strtotime($appointment['startDate']) < $currentTimestamp && strtotime($appointment['endDate']) < $currentTimestamp))
+                    {
+                        //echo 'Deleted appointment ' . $appointment['startDate'] . ' - ' . $appointment['endDate'] . PHP_EOL;
+                        unset($location['appointments'][$appointmentKey]);
+                    }
+                }
+                if (empty($location['appointments']))
+                {
+                    unset($locations[$locationKey]);
+                }
+            }
+            if (empty($locations))
+            {
+                unset($data['eventSchedule'][$locationsKey]);
+            }
+        }
+        //echo print_r($data['eventSchedule'],1) . PHP_EOL;
+        return $data['eventSchedule'];
     }
 
     /**

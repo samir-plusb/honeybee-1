@@ -4,7 +4,7 @@
  * This plugin takes care of marking shofi verticals as deleted.
  *
  * @author tay
- * @version $Id: WorkflowDeleteShofiVerticalPlugin.class.php 1058 2012-03-22 19:08:10Z tschmitt $
+ * @version $Id$
  * @package Shofi_Verticals
  * @subpackage Workflow/Plugin
  */

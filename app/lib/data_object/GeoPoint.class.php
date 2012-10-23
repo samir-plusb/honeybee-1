@@ -14,6 +14,8 @@ class GeoPoint extends BaseDataObject
 
     const UNIT_METERS = 'meters';
 
+    const EARTH_RADIUS = 3959;
+
     /**
      * Map holding factors to convert distance values from miles to X and the other way around.
      */
@@ -65,8 +67,14 @@ class GeoPoint extends BaseDataObject
             );
         }
 
-        $sin = sin(deg2rad($this->getLat())) * sin(deg2rad($point->getLat()));
-        $cos = cos(deg2rad($this->getLat())) * cos(deg2rad($point->getLat())) * cos(deg2rad($this->getLon() - $point->getLon()));
-        return 69.09 * rad2deg(acos($sin + $cos)) *  self::$unitMap[$unit];
+        $radius = self::EARTH_RADIUS * self::$unitMap[$unit];
+        $deltaRadLat = deg2rad($point->getLat() - $this->getLat());
+        $deltaRadLon = deg2rad($point->getLon() - $this->getLon());
+        $radLat1 = deg2rad($this->getLat());
+        $radLat2 = deg2rad($point->getLat());
+        $sqHalfChord = sin($deltaRadLat / 2) * sin($deltaRadLat / 2) + cos($radLat1) * cos($radLat2) * sin($deltaRadLon / 2) * sin($deltaRadLon / 2);
+        $angDistRad = 2 * asin(sqrt($sqHalfChord));
+
+        return $radius * $angDistRad;
     }
 }

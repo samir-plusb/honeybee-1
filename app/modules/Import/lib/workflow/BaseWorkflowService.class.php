@@ -3,7 +3,7 @@
 /**
  * The BaseWorkflowService serves as the base implementation of the IWorkflowService interface.
  *
- * @version         $Id: WorkflowItemDataImport.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Import

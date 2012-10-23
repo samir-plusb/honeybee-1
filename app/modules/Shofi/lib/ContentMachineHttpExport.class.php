@@ -3,7 +3,7 @@
 /**
  * The ContentMachineHttpExport is responseable for syncing places and catgories to the contentmachine.
  *
- * @version         $Id: ContentMachineHttpExport.class.php 1009 2012-03-02 19:01:55Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi
@@ -27,13 +27,12 @@ class ContentMachineHttpExport
     {
         $data = $entity->toArray();
         $cmDataKeys = array(
-                'coreItem' => 'coreData',
-                'salesItem' => 'salesData',
-                'detailItem' => 'detailData',
-                'attributes' => 'attributes',
-                'lastModified' => 'lastModified'
-                );
-
+            'coreItem' => 'coreData',
+            'salesItem' => 'salesData',
+            'detailItem' => 'detailData',
+            'attributes' => 'attributes',
+            'lastModified' => 'lastModified'
+        );
         $data['detailItem']['attachments'] = $this->prepareContentMachineAssetData(
             $entity->getDetailItem()->getAttachments()
         );
@@ -50,7 +49,11 @@ class ContentMachineHttpExport
 
         return $this->issueCurlRequest(
             $this->flattenData(
-                array('place' => $cmData, 'id' => $entity->getIdentifier(), 'action' => 'write')
+                array(
+                    'place' => $cmData, 
+                    'id' => $this->buildContentMachineId($entity->getIdentifier()), 
+                    'action' => 'write'
+                )
             )
         );
     }
@@ -63,7 +66,11 @@ class ContentMachineHttpExport
         );
         return $this->issueCurlRequest(
             $this->flattenData(
-                array('category' => $categoryData, 'id' => $entity->getIdentifier(), 'action' => 'write')
+                array(
+                    'category' => $categoryData, 
+                    'id' => $this->buildContentMachineId($entity->getIdentifier()), 
+                    'action' => 'write'
+                )
             )
         );
     }
@@ -71,11 +78,12 @@ class ContentMachineHttpExport
     public function exportShofiVertical(ShofiVerticalsWorkflowItem $entity)
     {
         $vertical = $entity->getMasterRecord();
+        $verticalCmId = $this->buildContentMachineId($entity->getIdentifier());
         $verticalImages = $this->prepareContentMachineAssetData(
             $vertical->getImages()
         );
         $postData = array(
-            'id' => $entity->getIdentifier(),
+            'id' => $verticalCmId,
             'name' => $vertical->getName(),
             'portals' => array(
                 'berlin.de' => array(
@@ -89,16 +97,21 @@ class ContentMachineHttpExport
         );
         return $this->issueCurlRequest(
             $this->flattenData(
-                array('vertical' => $postData, 'id' => $entity->getIdentifier(), 'action' => 'write')
+                array(
+                    'vertical' => $postData, 
+                    'id' => $verticalCmId, 
+                    'action' => 'write'
+                )
             )
         );
     }
 
     public function deleteEntity($identifier, $type)
     {
+        $cmId = $this->buildContentMachineId($identifier);
         return $this->issueCurlRequest(
             $this->flattenData(
-                array('id' => $identifier, 'type' => $type, 'action' => 'delete')
+                array('id' => $cmId, 'type' => $type, 'action' => 'delete')
             )
         );
     }
@@ -135,7 +148,7 @@ class ContentMachineHttpExport
 		$this->logInfo(
             "Sending the following to the contentmachine shofi frontend: " . PHP_EOL . print_r($postData, TRUE)
         );
-
+        
         $curl = ProjectCurl::create($this->contentMachineUrl);
         curl_setopt($curl, CURLOPT_POST, TRUE);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
@@ -195,6 +208,9 @@ class ContentMachineHttpExport
             new AgaviLoggerMessage($infoMsg, AgaviLogger::INFO)
         );
     }
-}
 
-?>
+    protected function buildContentMachineId($identifer)
+    {
+        return str_replace(array('place-', 'category-', 'vertical-'), '', $identifer);
+    }
+}

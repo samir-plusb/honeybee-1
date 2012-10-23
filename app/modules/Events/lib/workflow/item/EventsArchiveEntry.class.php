@@ -3,7 +3,7 @@
 /**
  * The EventsArchiveEntry class reflects the structure of an event's archive entry.
  *
- * @version $Id: EventsArchiveEntry.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package Events

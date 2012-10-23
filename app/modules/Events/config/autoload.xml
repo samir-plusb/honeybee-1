@@ -17,6 +17,7 @@
         <autoload name="TipEventsXmlDataRecord">%core.module_dir%/Events/lib/import/events-tip/TipEventsXmlDataRecord.class.php</autoload>
         <autoload name="TipEventsXmlParser">%core.module_dir%/Events/lib/import/events-tip/TipEventsXmlParser.class.php</autoload>
         <autoload name="TipEventsFilePoolProvider">%core.module_dir%/Events/lib/import/events-tip/TipEventsFilePoolProvider.class.php</autoload>
+        <autoload name="TipEventsArchiveSortingIterator">%core.module_dir%/Events/lib/import/events-tip/TipEventsArchiveSortingIterator.class.php</autoload>
         <autoload name="TipEventsPersonProvider">%core.module_dir%/Events/lib/import/events-tip/TipEventsPersonProvider.class.php</autoload>
         <autoload name="TipEventsArticleProvider">%core.module_dir%/Events/lib/import/events-tip/TipEventsArticleProvider.class.php</autoload>
         <autoload name="TipEventsLocationIdProvider">%core.module_dir%/Events/lib/import/events-tip/TipEventsLocationIdProvider.class.php</autoload>

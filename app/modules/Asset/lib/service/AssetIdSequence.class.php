@@ -4,7 +4,7 @@
  * The AssetIdSequence class provides an incremental sequence of id's that are unique
  * for the scope of it's current sequence.
  *
- * @version         $Id: AssetIdSequence.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

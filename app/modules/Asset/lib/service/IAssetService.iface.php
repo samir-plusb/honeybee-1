@@ -7,7 +7,7 @@
  * IAssetService implementations must also deal with IAssetInfo interface as this is defined
  * exchange datatype for IAssetService methods.
  *
- * @version         $Id: IAssetService.iface.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

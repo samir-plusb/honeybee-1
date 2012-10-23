@@ -14,10 +14,9 @@ body
 
 h1
 {
-    margin-bottom: 2em;
+    margin-bottom: 1em;
     font-size: 30px;
     text-shadow: 1px 1px 1px #efefef;
-    color: #9f9f9f;
 }
 
 .stats-wrapper
@@ -34,7 +33,7 @@ h1
 
 .stats-list li
 {
-    background: rgba(223, 223, 223, 0.6);
+    background: rgba(223, 223, 223, 0.8);
     border-radius: 5px;
     overflow: hidden;
     padding: 10px;

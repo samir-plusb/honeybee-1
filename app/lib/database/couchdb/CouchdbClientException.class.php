@@ -7,7 +7,7 @@
  *
  * @see ExtendedCouchDbClient
  *
- * @version         $Id: CouchdbClientException.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          tay
  * @package Project

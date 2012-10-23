@@ -128,7 +128,7 @@
             "meetAt":{
                "type":"string"
             },
-            "highight":{
+            "highlight":{
                "type":"string"
             },
             "kidsInfo":{

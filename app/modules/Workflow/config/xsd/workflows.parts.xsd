@@ -5,7 +5,7 @@
     xmlns:envelope_1_1="http://agavi.org/agavi/config/global/envelope/1.1"
     xmlns="http://berlinonline.de/schemas/midas/workflow/1.0"
     targetNamespace="http://berlinonline.de/schemas/midas/workflow/1.0"
-    elementFormDefault="qualified" version="$Id:$">
+    elementFormDefault="qualified" version="$Id$">
 
     <xs:import namespace="http://agavi.org/agavi/config/global/types/1.0"
         schemaLocation="../../../../../libs/agavi/config/xsd/_types.xsd"/>

@@ -3,7 +3,7 @@
 /**
  * The MoviesMasterRecord holds the main data of a Movies item.
  *
- * @version $Id: MoviesMasterRecord.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Movies
@@ -14,6 +14,12 @@ class MoviesMasterRecord extends MasterRecord
     protected $title;
 
     protected $teaser;
+
+    protected $subline;
+
+    protected $website;
+
+    protected $reviews;
 
     protected $director = array();
 
@@ -193,6 +199,24 @@ class MoviesMasterRecord extends MasterRecord
     {
         $this->isRecommendation = $isRecommendation;
     }
-}
 
-?>
+    public function getSubline()
+    {
+        return $this->subline;
+    }
+
+    public function setSubline($subline)
+    {
+        $this->subline = $subline;
+    }
+
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+    }
+}

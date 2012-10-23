@@ -4,6 +4,17 @@ class Shofi_FixDataAction extends ShofiBaseAction
 {
     protected $categoryStore;
 
+    protected $cmExport;
+	
+    public function initialize(AgaviExecutionContainer $container)
+    {
+        parent::initialize($container);
+
+        $this->cmExport = new ContentMachineHttpExport(
+            AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_URL)
+        );
+    }
+
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
         $workflowService = ShofiWorkflowService::getInstance();
@@ -29,9 +40,9 @@ class Shofi_FixDataAction extends ShofiBaseAction
                         " and place: " . $item->getIdentifier() . PHP_EOL
                     );
                     $detailItem->setAdditionalCategories(NULL);
+                	$workflowService->storeWorkflowItem($item);
+                	$this->exportPlace($item);
                 }
-                $workflowService->storeWorkflowItem($item);
-                //$this->exportPlace($item);
             }
 
             $listState->setOffset($listState->getOffset() + $listState->getLimit());
@@ -41,15 +52,15 @@ class Shofi_FixDataAction extends ShofiBaseAction
         return 'Success';
     }
 
-    protected function exportPlace(ShofiWorkflowItem $workflowItem)
+    protected function exportPlace(ShofiWorkflowItem $item)
     {
         $exportAllowed = (TRUE === AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_ENABLED));
         if (TRUE === $exportAllowed)
         {
-            if (! $cmExport->exportShofiPlace($item))
+            if (! $this->cmExport->exportShofiPlace($item))
             {
                 echo "Error while sending data to fe for (place)item : " . $item->getIdentifier() . PHP_EOL . 
-                     ', Error: ' . print_r($cmExport->getLastErrors(), TRUE) . PHP_EOL;
+                     ', Error: ' . print_r($this->cmExport->getLastErrors(), TRUE) . PHP_EOL;
             }
         }
     }

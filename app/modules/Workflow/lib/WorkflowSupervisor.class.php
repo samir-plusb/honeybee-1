@@ -93,14 +93,14 @@ class WorkflowSupervisor
      */
     public function onWorkflowItemCreated(IWorkflowItem $item)
     {
-        if ($this->getWorkflowTicketStore()->getTicketByWorkflowItem($item))
+        if (($ticket = $this->getWorkflowTicketStore()->getTicketByWorkflowItem($item)))
         {
             throw new WorkflowException("Received create notification for an existing ticket");
         }
 
         $ticket = $this->getWorkflowTicketStore()->createTicketByWorkflowItem($item);
         $item->setTicketId($ticket->getIdentifier());
-        $this->workflowItemStore->save($item);
+        $this->getWorkflowItemStore()->save($item);
         $this->processTicket($ticket);
     }
 

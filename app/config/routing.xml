@@ -131,6 +131,12 @@
     </xi:include>
 
     <xi:include
+        href="%core.app_dir%/modules/Events/config/routing.xml"
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
+    </xi:include>
+
+    <xi:include
         href="%core.app_dir%/modules/News/config/routing.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
             xpointer(/ae:configurations/ae:configuration[@context='console'])/">

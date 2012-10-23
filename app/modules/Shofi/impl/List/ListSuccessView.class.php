@@ -4,7 +4,7 @@
  * The Shofi_List_ListSuccessView class handles the presentation logic for our
  * Shofi/List actions's success data.
  *
- * @version         $Id: Import_ImperiaSuccessView.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi

@@ -23,6 +23,8 @@ class ShofiDataImport extends WorkflowItemDataImport
 
     protected $previousImportIds = array();
 
+    protected $idSequence;
+
     protected function init(IDataSource $dataSource)
     {
         parent::init($dataSource);
@@ -37,6 +39,7 @@ class ShofiDataImport extends WorkflowItemDataImport
         $this->shofiReport = new ShofiDataImportReport(TRUE);
 
         $this->previousImportIds = $this->workflowService->findAllImportIdentifiers($dataSource);
+        $this->idSequence = new ProjectIdSequence('shofi');
     }
 
     protected function getWorkflowService()
@@ -80,7 +83,7 @@ class ShofiDataImport extends WorkflowItemDataImport
                 $detailItem = $workflowItem->getDetailItem();
                 if ($this->mayOverride($workflowItem))
                 {
-                    echo "OVERRIDING EXISITING PLACE WITH GDOC/BTK DATA." . PHP_EOL;
+                    echo "OVERRIDING EXISITING PLACE WITH GDOC DATA." . PHP_EOL;
                     $detailItem->applyValues($importData['detailItem']);
                 }
                 else
@@ -105,10 +108,14 @@ class ShofiDataImport extends WorkflowItemDataImport
         }
 
         // remember that we have been created by the current import-identifier. 
-         $this->registerImportIdentifier($workflowItem, $record->getImportIdentifier());
+        $this->registerImportIdentifier($workflowItem, $record->getImportIdentifier());
         // persist the item's new state and add report incidents.
         $this->workflowService->storeWorkflowItem($workflowItem);
-        if (isset($importContext['match']))
+        $workflowItem->setExportId(
+            $this->idSequence->nextId($workflowItem->getIdentifier())
+        );
+        $this->workflowService->storeWorkflowItem($workflowItem);
+        if (isset($importContext['match']) && 'create' === $importContext['action'])
         {
             $this->registerMatch($workflowItem, $importContext['match']['item']);
         }
@@ -123,7 +130,7 @@ class ShofiDataImport extends WorkflowItemDataImport
             echo "--------------\n";
         }
         // @todo introduce workflow events and relocate the export call to an event handler for created/updated/...
-        //$this->export($workflowItem);
+        $this->export($workflowItem);
         return TRUE;
     }
 
@@ -131,39 +138,41 @@ class ShofiDataImport extends WorkflowItemDataImport
     {
         $action = 'create';
         $match = NULL;
+        $sourceItem = $this->createMatchingSourceItem($record);
         // look for a dataset that has been created by the same origin (import-identifier)
         $workflowItem = $this->workflowService->findItemByImportIdentifier($record->getImportIdentifier());
         if (! $workflowItem)
         {
             // no existing item for the given import-id, let's match!
-            $workflowItem = $this->createMatchingSourceItem($record);
-            $category = $workflowItem->getDetailItem()->getCategory();
-            $match = $category ? $this->placeMatcher->matchClosest($workflowItem) : NULL;
+            $category = $sourceItem->getDetailItem()->getCategory();
+            $match = $category ? $this->placeMatcher->matchClosest($sourceItem) : NULL;
             if ($match)
             {
                 $matchedItem = $match['item'];
-                $this->shofiReport->addIncident(
-                    sprintf(
-                        "An incoming place called '%s' matched against an existing item '%s', id: %s, with a distance of %s meters.",
-                        $workflowItem->getCoreItem()->getName(),
-                        $matchedItem->getCoreItem()->getName(),
-                        $matchedItem->getIdentifier(),
-                        $match['distance']
-                    ),
-                    ShofiDataImportReport::DEBUG
-                );
-                $action = 'update';
-                $workflowItem = $matchedItem;
+                $this->shofiReport->onItemMatched($sourceItem, $matchedItem, $match['distance']);
+                if (TRUE === $match['exactly_same'])
+                {
+                    $action = 'update';
+                    $workflowItem = $matchedItem;
+
+                    $this->shofiReport->addIncident(
+                        sprintf("Found an exact match for place: %s", $workflowItem->getCoreItem()->getName()),
+                        ShofiDataImportReport::DEBUG
+                    );
+                }
             }
+            $workflowItem = $workflowItem ? $workflowItem : $sourceItem;
         }
         else
         {
             $action = 'update';
+
             $this->shofiReport->addIncident(
                 sprintf(
-                    "Found existing place by last-import-id: '%s' with the name %s", 
+                    "Found existing place '%s' by last-import-id: %s for an incoming place with name '%s'.",
+                    $workflowItem->getCoreItem()->getName(),
                     $record->getImportIdentifier(),
-                    $workflowItem->getCoreItem()->getName()
+                    $sourceItem->getCoreItem()->getName()
                 ),
                 ShofiDataImportReport::DEBUG
             );
@@ -230,17 +239,26 @@ class ShofiDataImport extends WorkflowItemDataImport
         {
             $duplicatesGroup = array(
                 'dups' => array($matchedItem->getIdentifier(), $incomingItem->getIdentifier()),
-                'id' => $matchedItem->getIdentifier()
+                'gid' => $matchedItem->getIdentifier()
             );
         }
-        else
+        else if(! in_array($incomingItem->getIdentifier(), $duplicatesGroup['dups']))
         {
             $duplicatesGroup['dups'][] = $incomingItem->getIdentifier();
         }
+
         foreach ($duplicatesGroup['dups'] as $dupId)
         {
+            $curGroup = array(
+                'dups' => $duplicatesGroup['dups'],
+                'gid' => $duplicatesGroup['gid']
+            );
+            if ($duplicatesGroup['gid'] === $dupId)
+            {
+                $curGroup['group_leader'] = TRUE;
+            }
             $duplicate = $this->workflowService->fetchWorkflowItemById($dupId);
-            $duplicate->setAttribute('duplicates_group', $duplicatesGroup);
+            $duplicate->setAttribute('duplicates_group', $curGroup);
             $this->workflowService->storeWorkflowItem($duplicate);
         }
     }
@@ -296,13 +314,6 @@ class ShofiDataImport extends WorkflowItemDataImport
             }
         }
         
-        $keywords = $workflowItem->getDetailItem()->getKeywords();
-        if (in_array('Kino', $keywords))
-        {
-            $boFrontendMovieExport = new MoviesFrontendExport();
-            $boFrontendMovieExport->exportTheater($workflowItem);
-        }
-
         $tipFrontendLocationExport = new TipFrontendLocationExport();
         $tipFrontendLocationExport->export($workflowItem);
     }
@@ -318,20 +329,21 @@ class ShofiDataImport extends WorkflowItemDataImport
     {
         $dataSource = $this->getDataSource();
         $transManager = AgaviContext::getInstance()->getTranslationManager();
-        $routing = AgaviContext::getInstance()->getRouting();
         $dataSourceLabel = $transManager->_($dataSource->getName(), 'shofi.list');
         $reportSubject = sprintf(
             "Shofi %s Importbericht, Datum/Zeit: %s/%s", 
             $dataSourceLabel, date('d-m-Y'), date('H:i')
         );
         $reportLines = array(
-            sprintf("Hi,\nder Shofi-Import für die Quelle %s wurde so eben erfolgreich beendet.", $dataSourceLabel),
+            sprintf("Hallo,\n\nder Shofi-Import für die Quelle '%s' wurde so eben erfolgreich beendet.", $dataSourceLabel),
             "Anbei eine Übersicht zu ausgewählten Infos:\n",
-            sprintf("- es wurden %s neue Orte angelegt.", $this->shofiReport->getItemsCreatedCount()),
-            sprintf("- es wurden %s bestehende Orte aktualisiert.", $this->shofiReport->getItemsUpdatedCount())
+            sprintf("- Es wurden %s neue Orte angelegt.", $this->shofiReport->getItemsCreatedCount()),
+            sprintf("- Es wurden %s bestehende Orte aktualisiert.", $this->shofiReport->getItemsUpdatedCount()),
+            sprintf("- %d Orte wurden positiv mit einem existierenden Ort 'gematched'.", $this->shofiReport->getItemsMatchedCount())
         );
         if ($dataSource instanceof BtkHotelDataSource)
         {
+            $urlTemplate = sprintf("%s/workflow/run?type=shofi&ticket={:TICKET:}", ProjectEnvironmentConfig::getBaseHref());
             $deletedOldImportIds = array();
             foreach ($this->previousImportIds as $previousImportId)
             {
@@ -348,12 +360,12 @@ class ShofiDataImport extends WorkflowItemDataImport
                     $createdNewImportIds[] = $processedImportId;
                 }
             }
-            $reportLines[] = "\nDa es sich um einen BTK-Import handelt, noch ein paar extra Infos:";
-            $reportLines[] = sprintf("Es wurden insgesamt %d neue %s Orte erstellt.", 
-                count($createdNewImportIds), $dataSourceLabel);
+            $reportLines[] = sprintf("\nDa es sich um einen '%s' Import handelte, noch ein paar extra Infos:", $dataSourceLabel);
+            $reportLines[] = sprintf("- Es wurden insgesamt %d Orte erstmalig geliefert.", count($createdNewImportIds));
+            $reportLines[] = sprintf("- %d vormals zur Verfügung gestellte Orte waren nun nicht mehr dabei.", count($deletedOldImportIds));
             if (0 < count($createdNewImportIds))
             {
-                $reportLines[] = sprintf("Es folgt eine Liste mit jeweils Name und Link eines neu erstellten %s Eintrags:",
+                $reportLines[] = sprintf("\nEs folgt eine Liste mit jeweils Name und Link eines neu erstellten %s Eintrags:",
                     $dataSourceLabel);
                 foreach ($createdNewImportIds as $newId)
                 {
@@ -365,15 +377,13 @@ class ShofiDataImport extends WorkflowItemDataImport
                     }
                     $reportLines[] = sprintf("%s, %s",
                         $item->getCoreItem()->getName(),
-                        $routing->gen('workflow.run', array('ticket' => $item->getTicketId(), 'type' => 'shofi'))
+                        str_replace('{:TICKET:}', $item->getTicketId(), $urlTemplate)
                     );
                 }
             }
-            $reportLines[] = sprintf("Es wurden insgesamt %d bereits importierte %s Orte nicht mehr geliefert.", 
-                count($deletedOldImportIds), $dataSourceLabel);
             if (0 < count($deletedOldImportIds))
             {
-                $reportLines[] = sprintf("Hier eine Liste mit den jeweils nicht mehr gelieferten %s Einträgen:",
+                $reportLines[] = sprintf("\nHier eine Liste mit den jeweils nicht mehr gelieferten %s Einträgen:",
                     $dataSourceLabel);
                 foreach ($deletedOldImportIds as $deletedId)
                 {
@@ -385,14 +395,14 @@ class ShofiDataImport extends WorkflowItemDataImport
                     }
                     $reportLines[] = sprintf("%s, %s",
                         $item->getCoreItem()->getName(),
-                        $routing->gen('workflow.run', array('ticket' => $item->getTicketId(), 'type' => 'shofi'))
+                        str_replace('{:TICKET:}', $item->getTicketId(), $urlTemplate)
                     );
                 }
             }
         }
         $reportLines[] = "\nMidas wünscht noch einen guten Tag.\n";
         $reportMessage = implode(PHP_EOL, $reportLines);
-        $mailTo = 'thorsten.schmitt-rink@berlinonline.de jens.bahr.berlinonline.de';
+        $mailTo = 'thorsten.schmitt-rink@berlinonline.de jens.bahr@berlinonline.de';
         mail($mailTo, $reportSubject, $reportMessage);
         echo sprintf("Mail to:\n%s\n----\nSubject:\n%s\n----\nMessage:\n%s\n----\n", 
             $mailTo, $reportSubject, $reportMessage);

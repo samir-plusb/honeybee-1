@@ -46,6 +46,9 @@
                 }
             }
         },
+        "exportId": {
+            "type": "integer"
+        },
         "attributes": {
             "type": "object",
             "dynamic": true,

@@ -49,6 +49,9 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
                 }
             }
         });
+        this.element.find('ul').sortable().bind('sortupdate', function() {
+            console.log('Yay, we\'ve a new sorting!');
+        });;
     },
 
     initKnockoutProperties: function()
@@ -91,6 +94,7 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
         });
         this.uploader.on('upload::complete', function(asset, data)
         {
+            that.element.find('.asset-list').sortable();
             asset.id(data.identifier);
             asset.url(data.url);
         });

@@ -3,7 +3,7 @@
 /**
  * The Shofi_ListAction class is responseable for delivering shofi places to consumers.
  *
- * @version         $Id: Import_ImperiaAction.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi
@@ -114,6 +114,7 @@ class Shofi_ListAction extends ShofiBaseAction
         /* @var $workflowItem IWorkflowItem */
         foreach ($items as $workflowItem)
         {
+            $cssClasses = array();
             $workflowItemData = $workflowItem->toArray();
             // @todo This findOne query is a potential bottle neck and does not scale!
             // Better: Use the read connection instead of the write connection here.
@@ -132,7 +133,8 @@ class Shofi_ListAction extends ShofiBaseAction
             );
             $listData[] = array(
                 'data' => $workflowItemData,
-                'ticket' => $ticketData
+                'ticket' => $ticketData,
+                'css_classes' => $cssClasses
             );
         }
         return $listData;

@@ -134,5 +134,3 @@ abstract class BaseDocument extends BaseDataObject implements IDocument
         return '';
     }
 }
-
-?>

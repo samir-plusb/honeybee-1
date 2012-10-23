@@ -46,8 +46,7 @@ midas.shofi.CategoriesListController = midas.list.ListController.extend({
 
     findDuplicates: function(data_container)
     {
-        var category_name = data_container.data.masterRecord.name.toLowerCase();
-        var new_location = this.options.find_duplicates_url.replace(':CATEGORY_NAME:', category_name);
+        var new_location = this.options.find_duplicates_url.replace(':CATEGORY:', data_container.data.identifier);
 
         window.location.href = new_location;
     }

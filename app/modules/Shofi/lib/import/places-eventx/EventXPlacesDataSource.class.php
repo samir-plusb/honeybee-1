@@ -4,7 +4,7 @@
  * The EventXPlacesDataSource class is a concrete implementation of the BaseDataSource base class.
  * It provides fetching xml based places data.
  *
- * @version         $Id: EventXPlacesDataSource.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Shofi
@@ -132,8 +132,10 @@ class EventXPlacesDataSource extends ArrayDataSource
         $next = each($this->files);
         if (FALSE === $next)
         {
+            echo "End of file for the current archive " . $this->archives->current() . PHP_EOL;
             $this->markArchiveAsImported($this->archives->current());
             $this->deleteDirectory($this->cwd, FALSE);
+            
             return FALSE;
         }
 
@@ -141,14 +143,16 @@ class EventXPlacesDataSource extends ArrayDataSource
         if (! $file)
         {
             echo "YO DAWG, THIS FILE AINT AT A READBALE LOCATION!: " . $file . PHP_EOL; // @todo Do the log dog!
+            
             return $this->loadNextFile(); // retry recursively until we run out of files ...
         }
 
+        echo PHP_EOL . 'Starting to parse ' . $file . PHP_EOL;
         $this->data = $this->parser->parseXml($file);
+        echo 'Counted ' . count($this->data) . ' items' . PHP_EOL;
 
         if (empty($this->data))
         {
-            echo "YO DAWG, THIS FILE IS EMPTY!: " . $file . PHP_EOL; // @todo Do the log dog!
             return $this->loadNextFile();
         }
 
@@ -166,6 +170,10 @@ class EventXPlacesDataSource extends ArrayDataSource
      */
     protected function loadNextArchive()
     {
+        
+        // Reset files-array to set internal cursor to the begin of the array
+        reset($this->files);
+
         if (($nextArchive = $this->forwardArchiveIterator()))
         {
             if (! $this->extractArchive($nextArchive))
@@ -176,7 +184,12 @@ class EventXPlacesDataSource extends ArrayDataSource
             $this->parser = $this->createParser();
             if (! $this->loadNextFile())
             {
+                echo "Could not load, forgive the toad...." . PHP_EOL;
                 return $this->loadNextArchive();
+            }
+            else
+            {
+                return TRUE;
             }
         }
         else
@@ -194,9 +207,13 @@ class EventXPlacesDataSource extends ArrayDataSource
     {
         if (! $this->archives)
         {
-            $this->archives = new TipEventsArchiveIterator($this->cwd, '_adr_imported');
+            //$this->archives = new TipEventsArchiveIterator($this->cwd, '_adr_imported');
+            $this->archives = new TipEventsArchiveSortingIterator($this->cwd, '_adr_imported');
         }
-        $this->archives->next();
+        else
+        {
+            $this->archives->next();
+        }
 
         return $this->archives->current();
     }
@@ -209,6 +226,9 @@ class EventXPlacesDataSource extends ArrayDataSource
     protected function extractArchive($archivePath)
     {
         $archive = new ZipArchive();
+    
+        echo PHP_EOL . PHP_EOL . 'Trying to extract archive ' . basename($archivePath) . PHP_EOL;
+    
         if (TRUE === $archive->open($archivePath))
         {
             if (! $archive->extractTo($this->cwd))

@@ -3,7 +3,7 @@
 /**
  * The base view from which all Shofi_Verticals module views inherit.
  *
- * @version         $Id: ShofiVerticalsBaseView.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi_Verticals

@@ -20,7 +20,7 @@
                 <description>Provides theater data coming from the shofi/theater import directory as xml files.</description>
                 <recordType>TelavsionTheaterDataRecord</recordType>
                 <settings>
-                    <setting name="file_path">%core.app_dir%/../data/catalogs/movies/kino.xml</setting>
+                    <setting name="file_path">%core.app_dir%/../data/catalogs/movies/telavision/kino.xml</setting>
                 </settings>
             </datasource>
 
@@ -58,7 +58,7 @@
                 <description>Provides places data coming from TIP's restaurant export interface.</description>
                 <recordType>TipRestaurantDataRecord</recordType>
                 <settings>
-                    <setting name="file_path">%core.app_dir%/../data/catalogs/restaurants/gastro.xml</setting>
+                    <setting name="file_path">%shofi.tip_import_dir%/gastro.xml</setting>
                 </settings>
             </datasource>
         </datasources>

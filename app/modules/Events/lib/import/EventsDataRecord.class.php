@@ -5,7 +5,7 @@
  * which maps to what the EventsWorkflowItem/EventsMasterRecord expect for creation/updating.
  * This class serves as a base for all datarecord implementations inside the Events module.
  *
- * @version         $Id: EventsDataRecord.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Events
@@ -94,7 +94,7 @@ abstract class EventsDataRecord extends BaseDataRecord
     const PROP_MEET_AT = 'meetAt';
 
     /**
-     * Holds the name of our 'highight' property.
+     * Holds the name of our 'highlight' property.
      */
     const PROP_HIGHLIGHT = 'highlight';
 
@@ -257,11 +257,11 @@ abstract class EventsDataRecord extends BaseDataRecord
     protected $meetAt;
 
     /**
-     * Holds the event's highight.
+     * Holds the event's highlight.
      *
-     * @var string $highight
+     * @var string $highlight
      */
-    protected $highight;
+    protected $highlight;
 
     /**
      * Holds information concerning kids.
@@ -518,7 +518,7 @@ abstract class EventsDataRecord extends BaseDataRecord
     }
 
     /**
-     * Returns the event's highight.
+     * Returns the event's highlight.
      *
      * @return string
      */

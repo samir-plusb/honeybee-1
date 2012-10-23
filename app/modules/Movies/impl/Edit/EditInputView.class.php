@@ -14,15 +14,7 @@ class Movies_Edit_EditInputView extends MoviesBaseView
         $movieItem = $this->getAttribute('item');
         $data = $movieItem->toArray();
         $data['masterRecord']['screenings'] = $this->initScreeningData($movieItem);
-
-        $requiredMedia = array('trailers', 'images', 'galleries');
-        foreach ($requiredMedia as $mediaType)
-        {
-            if (! isset($data['masterRecord']['media'][$mediaType]) || ! is_array($data['masterRecord']['media'][$mediaType]))
-            {
-                $data['masterRecord']['media'][$mediaType] = array();
-            }
-        }
+        $data['masterRecord']['media'] = $this->mapMedia($data['masterRecord']['media']);
         $this->setAttribute('item_data', $data);
 
         $this->setAttribute(
@@ -146,14 +138,22 @@ class Movies_Edit_EditInputView extends MoviesBaseView
         ));
         $screenings = array();
         $theaters = array();
+        $theaterImportId = NULL;
         foreach ($finder->findRelatedTheaters($movieItem) as $theaterItem)
         {
-            $theaters[$theaterItem->getIdentifier()] = $theaterItem;
+            foreach ($theaterItem->getAttribute('import_ids', array()) as $importId)
+            {
+                if (0 === strpos($importId, 'theaters-telavision:'))
+                {
+                    $theaters[$importId] = $theaterItem;
+                    break;
+                }
+            }
         }
-
+        
         foreach ($movieItem->getMasterRecord()->getScreenings() as $screening)
         {
-            $theaterId = $screening['theaterId'];
+            $theaterId = 'theaters-telavision:' . $screening['theaterId'];
             if (! isset($theaters[$theaterId]))
             {
                 continue;
@@ -177,9 +177,71 @@ class Movies_Edit_EditInputView extends MoviesBaseView
             }
             $screenings[$name]['screenings'][$date][] = $screening;
         }
-
+        
         return $screenings;
     }
-}
 
-?>
+    protected function mapMedia(array $media)
+    {
+        $mediaData = array(
+            'trailers' => ! isset($media['trailers']) ? array() : $media['trailers'],
+            'images' => ! isset($media['images']) ? array() : $media['images'],
+            'galleries' => ! isset($media['galleries']) ? array() : $media['galleries'],
+        );
+        $assetKeys = array('scene', 'poster', 'poster600', 'hdPic');
+        $galleryKeys = array('standard', 'big');
+
+        foreach ($assetKeys as $key)
+        {
+            if (isset($media['images'][$key]))
+            {
+                $mediaData['images'][$key] = $this->prepareAssetData($media['images'][$key]);
+            }
+        }
+        foreach ($galleryKeys as $key)
+        {
+            if (isset($media['galleries'][$key]))
+            {
+                $mediaData['galleries'][$key] = $this->prepareAssetsData($media['galleries'][$key]);
+            }
+        }
+        return $mediaData;
+    }
+
+    protected function prepareAssetsData(array $assetIds)
+    {
+        $assetsData = array();
+        foreach ($assetIds as $assetId)
+        {
+            $assetsData[] = $this->prepareAssetData($assetId);
+        }
+        return $assetsData;
+    }
+
+    protected function prepareAssetData($assetId)
+    {
+        $routing = $this->getContext()->getRouting();
+        $assetData = NULL;
+
+        if (NULL !== $assetId && ($asset = ProjectAssetService::getInstance()->get($assetId)))
+        {
+            $metaData = $asset->getMetaData();
+            $imagine = new Imagine\Gd\Imagine();
+            $filePath = $asset->getFullPath();
+            $image = $imagine->open($filePath);
+            $size = $image->getSize();
+            $assetData = array(
+                'src' => $routing->gen('asset.binary', array('aid' => $assetId)),
+                'width' => $size->getWidth(),
+                'height' => $size->getHeight(),
+                'mime' => $asset->getMimeType(),
+                'filename' => $asset->getFullName(),
+                'modified' => date(DATE_ISO8601, filemtime($filePath)),
+                'copyright' => isset($metaData['copyright']) ? $metaData['copyright'] : '',
+                'copyright_url' => isset($metaData['copyright_url']) ? $metaData['copyright_url'] : '',
+                'caption' => isset($metaData['caption']) ? $metaData['caption'] : ''
+            );
+        }
+        return $assetData;
+    }
+}

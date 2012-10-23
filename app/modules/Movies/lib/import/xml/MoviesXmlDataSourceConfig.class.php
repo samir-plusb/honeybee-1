@@ -9,6 +9,11 @@ class MoviesXmlDataSourceConfig extends DataSourceConfig
      */
     const CFG_FILE_PATH = 'file_path';
 
+    /**
+     * Holds the name of the screening's filepath settings that is used to provide movie screenings.
+     */
+    const CFG_SCREENINGS_FILE_PATH = 'screenings_file_path';
+
     // ---------------------------------- <DataSourceConfig OVERRIDES> ---------------------------
 
     /**
@@ -24,12 +29,11 @@ class MoviesXmlDataSourceConfig extends DataSourceConfig
         return array_merge(
             parent::getRequiredSettings(),
             array(
-                self::CFG_FILE_PATH
+                self::CFG_FILE_PATH,
+                self::CFG_SCREENINGS_FILE_PATH
             )
         );
     }
 
     // ---------------------------------- <DataSourceConfig OVERRIDES> ---------------------------
 }
-
-?>

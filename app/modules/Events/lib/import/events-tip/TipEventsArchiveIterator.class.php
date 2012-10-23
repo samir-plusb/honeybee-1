@@ -5,7 +5,7 @@
  * thereby only providing zip files that have a corresponding *_ready in the same directory.
  * This is a workaround to fix ftp-upload <-> import race conditions.
  *
- * @version         $Id: TipEventsArchiveIterator.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Events
@@ -21,7 +21,7 @@ class TipEventsArchiveIterator extends ProjectDirectoryRegexpIterator
 
     protected $processedMarker;
 
-    public function __construct($directoryPath, $processedMarker, $readyMarker = self:: FILE_READY_SUFFIX)
+    public function __construct($directoryPath, $processedMarker, $readyMarker = self::FILE_READY_SUFFIX)
     {
         $this->readyMarker = $readyMarker;
         $this->processedMarker = $processedMarker;
@@ -43,3 +43,4 @@ class TipEventsArchiveIterator extends ProjectDirectoryRegexpIterator
         return is_readable($readyMarker) && ! file_exists($importedMarker);
     }
 }
+

@@ -2,8 +2,6 @@
 
 class FrontendTheaterDocument extends BaseDocument
 {
-    const TYPE_PREFIX = 'theater-';
-
     protected $revision;
 
     protected $coreData;
@@ -12,13 +10,18 @@ class FrontendTheaterDocument extends BaseDocument
 
     protected $detailData;
 
-    protected $attributes;
+    protected $additionalInfo;
 
     protected $lastModified;
 
     protected $screenings = array();
 
-    protected $movies = array();
+    /**
+     * Holds a unique string representation of this object that can be used in urls.
+     * 
+     * @var string
+     */
+    protected $slug;
 
     public static function fromArray(array $data = array())
     {
@@ -37,19 +40,8 @@ class FrontendTheaterDocument extends BaseDocument
         return $this;
     }
 
-    public function setIdentifier($identifier)
+    public function getScreenings()
     {
-        if (0 !== strpos($identifier, self::TYPE_PREFIX))
-        {
-            $identifier = self::TYPE_PREFIX . $identifier;
-        }
-        $this->identifier = $identifier;
-    }
-
-    public function getMovies()
-    {
-        return $this->movies;
+        return $this->screenings;
     }
 }
-
-?>

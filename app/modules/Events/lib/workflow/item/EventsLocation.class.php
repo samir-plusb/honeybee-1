@@ -4,7 +4,7 @@
  * The EventsLocation class reflects the structure of an event's
  * location and appointments at which the event is taking place.
  *
- * @version $Id: EventsSchedule.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package Events

@@ -4,7 +4,7 @@
  * The TheaterDataRecord class is a concrete implementation of the ShofiDataRecord base class.
  * It provides handling for movies/theater xml data.
  *
- * @version         $Id: TheaterDataRecord.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Shofi
@@ -100,9 +100,7 @@ class TelavsionTheaterDataRecord extends ShofiDataRecord
         $coreItem = ShofiCoreItem::fromArray($commonData);
         $salesItem = ShofiSalesItem::fromArray(array());
         $detailItem = ShofiDetailItem::fromArray(array(
-            'text' => $data['description'],
-            'teaser' => $data['name'],
-            'keywords' => array('Kino')
+            'text' => $data['description']
         ));
         $parsedData = array_merge(
             $commonData,

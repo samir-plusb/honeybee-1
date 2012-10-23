@@ -4,7 +4,11 @@
 .list-data
 {
     position: static;
-    margin-bottom: 32px;
+}
+
+.container-batch
+{
+    margin-top: 95px;
 }
 
 .hidden
@@ -82,9 +86,26 @@ form.search-form
     margin: 0;
 }
 
+.container-batch
+{
+    border: 1px solid #efefef;
+    background-color: rgba(253, 253, 253, 0.9);
+}
+
 /**
  * Pagination
  */
+ .pagination
+ {
+    border: 1px solid #efefef;
+    background-color: rgba(253, 253, 253, 0.2);
+ }
+
+ .pagination ul
+ {
+    background-color: rgb(253, 253, 253);
+ }
+
  .pagination .active a,
  .pagination .active span
  {
@@ -120,6 +141,15 @@ form.search-form
 .list-data table.table-bordered
 {
     margin-bottom: 0;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05) inset;
+    border: 1px solid #efefef;
+    background-color: rgba(253, 253, 253, 0.9);
+}
+
+.table-striped tbody tr:nth-child(2n+1) td, 
+.table-striped tbody tr:nth-child(2n+1) th 
+{
+    background-color: rgba(249, 249, 249, 0.9);
 }
 
 table thead
@@ -175,7 +205,7 @@ th.data-header
 
 th.header-actions 
 { 
-    min-width:110px;
+    min-width:115px;
 }
 
 .sortable:hover
@@ -288,3 +318,39 @@ form.delete-item
 {
     cursor: pointer;
 }
+
+/*
+ * Grouping entries inside the list (used for duplicate editing)
+ */
+.table-striped tbody .group-start:first-child td
+{
+  border-top: 3px solid #16337f;
+}
+
+.table-striped tbody .group-end td
+{
+  border-bottom: 3px solid #16337f;
+}
+
+.table-striped tbody .grouped td:first-child
+{
+  border-left: 3px solid #16337f;
+}
+
+.table-striped tbody .grouped td:last-child
+{
+  border-right: 3px solid #16337f;
+}
+/*
+.table-striped tbody .grouped:nth-child(2n+1) td,
+.table-striped tbody .grouped:nth-child(2n+1):hover td
+{
+  background-color: #a3c0e6;
+}
+
+.table-striped tbody .grouped:nth-child(2n) td,
+.table-striped tbody .grouped:nth-child(2n):hover td
+{
+  background-color: #e8ebff;
+}
+*/

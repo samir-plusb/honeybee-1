@@ -4,7 +4,7 @@
  * The TipFrontendLocationFactory is responseable for creating TipFronendEventLocations
  * from IDataObjects, in this case restricted to ShofiWorkflowItems.
  *
- * @version         $Id: TipFrontendLocationFactory.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Events
@@ -42,7 +42,8 @@ class TipFrontendLocationFactory
         // define mappings from backend properties to frontend properties...
         $data = $dataObject->toArray();
         $exportDataKeys = array(
-            'identifier' => 'identifier',
+            'title'		=> 'title',
+			'identifier' => 'identifier',
             'coreItem' => 'coreData',
             'salesItem' => 'salesData',
             'detailItem' => 'detailData',
@@ -58,6 +59,7 @@ class TipFrontendLocationFactory
         $data['category'] = $attributes['tip-category'];
         $data['subcategory'] = $attributes['tip-subcategory'];
         $data['publicTransports'] = isset($attributes['public-transports']) ? $attributes['public-transports'] : array();
+		$data['title'] = $data['coreItem']['name'];
 
         // ... then actually map the data to the frontend structure
         $exportData = array();

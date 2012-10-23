@@ -77,6 +77,10 @@
             <!-- Http -->
             <autoload name="ProjectCurl">%core.lib_dir%/http/ProjectCurl.class.php</autoload>
             <!-- /Http -->
+            
+            <autoload name="BaseExportDocumentFactory">%core.lib_dir%/BaseExportDocumentFactory.class.php</autoload>
+            <autoload name="ProjectIdSequenceMap">%core.lib_dir%/data_object/ProjectIdSequenceMap.class.php</autoload>
+            <autoload name="ProjectIdSequence">%core.lib_dir%/data_object/ProjectIdSequence.class.php</autoload>
 
             <xi:include href="%core.app_dir%/../libs/PhpDebugToolbar/lib/agavi/autoload.xml"
                 xpointer="xmlns(a=http://agavi.org/agavi/config/parts/autoload/1.0) xpointer(//a:autoload)">

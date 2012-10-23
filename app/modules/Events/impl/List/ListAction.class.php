@@ -3,7 +3,7 @@
 /**
  * The Events_ListAction class is responseable for delivering Events to consumers.
  *
- * @version         $Id: Events_ListAction.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Events

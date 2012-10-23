@@ -3,7 +3,7 @@
 /**
  * The EventsDataImport is responseable for importing movie data to the domain's workflow.
  *
- * @version         $Id: EventsDataImport.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Events
@@ -23,7 +23,7 @@ class EventsDataImport extends WorkflowItemDataImport
 
     /**
      * Process/import the data record for the current import loop.
-     * After importing/updating the corresponding workflow-item us synced to FE database.
+     * After importing/updating the corresponding workflow-item is synced to FE database.
      */
     protected function processRecord()
     {

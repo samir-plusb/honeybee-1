@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version         $Id: MoviesDataRecord.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Movies
@@ -12,6 +12,10 @@ abstract class MoviesDataRecord extends BaseDataRecord
     const PROP_TITLE = 'title';
 
     const PROP_TEASER = 'teaser';
+
+    const PROP_SUBLINE = 'subline';
+
+    const PROP_WEBSITE = 'website';
 
     const PROP_DIRECTOR = 'director';
 
@@ -35,9 +39,17 @@ abstract class MoviesDataRecord extends BaseDataRecord
 
     const PROP_MEDIA = 'media';
 
+    const PROP_REVIEWS = 'reviews';
+
+    const PROP_IMPORT_IDENTIFIER = 'importIdentifier';
+
     protected $title;
 
     protected $teaser;
+
+    protected $subline;
+
+    protected $website;
 
     protected $director = array();
 
@@ -61,6 +73,10 @@ abstract class MoviesDataRecord extends BaseDataRecord
 
     protected $media = array();
 
+    protected $reviews = array();
+
+    protected $importIdentifier;
+
     /**
      * Return an array holding property names of properties,
      * which we want to expose through our IDataRecord::toArray() method.
@@ -74,6 +90,8 @@ abstract class MoviesDataRecord extends BaseDataRecord
             array(
                 self::PROP_TITLE,
                 self::PROP_TEASER,
+                self::PROP_SUBLINE,
+                self::PROP_WEBSITE,
                 self::PROP_DIRECTOR,
                 self::PROP_ACTORS,
                 self::PROP_RENTAL,
@@ -84,7 +102,9 @@ abstract class MoviesDataRecord extends BaseDataRecord
                 self::PROP_YEAR,
                 self::PROP_DURATION,
                 self::PROP_SCREENINGS,
-                self::PROP_MEDIA
+                self::PROP_MEDIA,
+                self::PROP_REVIEWS,
+                self::PROP_IMPORT_IDENTIFIER
             )
         );
     }
@@ -97,6 +117,11 @@ abstract class MoviesDataRecord extends BaseDataRecord
     public function getTeaser()
     {
         return $this->teaser;
+    }
+
+    public function getSubline()
+    {
+        return $this->subline;
     }
 
     public function getDirector()
@@ -153,6 +178,24 @@ abstract class MoviesDataRecord extends BaseDataRecord
     {
         return $this->media;
     }
-}
 
-?>
+    public function getReviews()
+    {
+        return $this->reviews;
+    }
+
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    public function getImportIdentifier()
+    {
+         return $this->importIdentifier;
+    }
+
+    protected function buildImportIdentifier($identifier)
+    {
+         return 'movies-telavision:' . $identifier;
+    }
+}

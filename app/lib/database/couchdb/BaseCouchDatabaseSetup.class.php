@@ -7,7 +7,7 @@
  *
  * The setup() method is the working horse.
  *
- * @version $Id: BaseCouchDatabaseSetup.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Tom Anheyer
  * @package Project

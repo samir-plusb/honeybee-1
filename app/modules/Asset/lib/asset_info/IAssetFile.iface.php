@@ -3,7 +3,7 @@
 /**
  * The IAssetFile interface defines a base api for handling an asset's filesystem logic.
  * 
- * @version         $Id: IAssetFile.iface.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

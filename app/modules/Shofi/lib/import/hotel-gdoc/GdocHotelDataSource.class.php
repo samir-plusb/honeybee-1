@@ -4,7 +4,7 @@
  * The GdocHotelDataSource class is a concrete implementation of the BaseDataSource base class.
  * It provides fetching hotels from a google docs spreadsheet.
  *
- * @version         $Id: GdocHotelDataSource.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Shofi

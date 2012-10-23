@@ -51,6 +51,7 @@
                     <script>js/libs/knockout-2.1.0rc.debug.js</script>
                     <script>js/libs/knockout-custom.js</script>
                     <script>js/libs/ZeroClipboard.js</script>
+                    <script>js/libs/jquery.sortable.js</script>
                     <script>js/libs/ichie.min.js</script>
                 </javascripts>
                 <stylesheets>
@@ -222,7 +223,7 @@
                     <script>js/midas/shofi/CategoryMatchingWidget.js</script>
                 </javascripts>
             </deployment>
-            <deployment viewpath="shofi.list*">
+            <deployment viewpath="shofi.(list|viewduplicates)*">
                 <package ref="midas.list" />
                 <javascripts>
                     <script>js/midas/shofi/PlacesListController.js</script>

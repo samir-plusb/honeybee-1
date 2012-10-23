@@ -8,17 +8,39 @@ class Movies_ExportAction extends MoviesBaseAction
             AgaviConfig::get('movies.list_config')
         ));
         $listState = ListState::fromArray(array(
-            'limit' => 5000,
+            'limit' => 100,
             'offset' => 0
         ));
         $entriesProcessed = 0;
+        $today = new DateTime();
+        $export = new MoviesFrontendExport();
         while (($result = $finder->find($listState)) && 0 < $result->getItemsCount())
         {
             $this->printMemUsage();
             echo "Exported " . $entriesProcessed . " movies ..." . PHP_EOL;
             foreach ($result->getItems() as $item)
             {
-				// export movies here ...
+                $screenings = $item->getMasterRecord()->getScreenings();
+                $mayBeExported = empty($screenings);
+                foreach ($screenings as $screening)
+                {
+                    $date = new DateTime($screening['date']);
+                    $diff = $today->diff($date);
+
+                    if (0 === $diff->invert)
+                    {
+                        $mayBeExported = TRUE;
+                    }
+                }
+                if ($mayBeExported)
+                {
+                    $export->exportMovie($item);
+                }
+                else
+                {
+                    $export->deleteMovie($item);
+                    // @todo remove the movie from the frontend if it exists.
+                }
             }
             $listState->setOffset(
                 $listState->getOffset() + $listState->getLimit()
@@ -45,5 +67,3 @@ class Movies_ExportAction extends MoviesBaseAction
         return FALSE;
     }
 }
-
-?>

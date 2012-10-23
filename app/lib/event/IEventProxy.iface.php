@@ -4,7 +4,7 @@
  * The IEventProxy interface exposes a publish/subscribe based event messageing api,
  * that provides x-component communication without coupleling.
  *
- * @version         $Id: IEventProxy.iface.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Project

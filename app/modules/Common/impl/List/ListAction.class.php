@@ -132,6 +132,7 @@ class Common_ListAction extends CommonBaseAction
                 }
             }
             $row['display_data'] = $renderedData;
+            $row['css_classes'] = isset($row['css_classes']) ? $row['css_classes'] : array();
             $listData[] = $row;
         }
         return $listData;

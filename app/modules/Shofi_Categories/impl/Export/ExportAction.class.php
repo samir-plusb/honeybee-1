@@ -2,6 +2,17 @@
 
 class Shofi_Categories_ExportAction extends ShofiCategoriesBaseAction
 {
+    protected $cmExport;
+
+    public function initialize(AgaviExecutionContainer $container)
+    {
+        parent::initialize($container);
+
+        $this->cmExport = new ContentMachineHttpExport(
+            AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_URL)
+        );
+    }
+
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
         $workflowService = ShofiCategoriesWorkflowService::getInstance();
@@ -21,14 +32,12 @@ class Shofi_Categories_ExportAction extends ShofiCategoriesBaseAction
                 $alias = $item->getMasterRecord()->getAlias();
 				if (! empty($alias))
 				{
-                	echo (
-                    	"[DRY RUN] ~ Overwriting name: " . $wkgName . " with alias: " . $alias . PHP_EOL
-                	);
+                	echo ("Overwriting name: " . $wkgName . " with alias: " . $alias . PHP_EOL);
 					$affectedEntries++;
 					$item->getMasterRecord()->setName($alias);
+                    $workflowService->storeWorkflowItem($item);
+                    $this->exportCategory($item);
 				}
-                $workflowService->storeWorkflowItem($item);
-				//$this->exportCategory($item);
             }
 
             $listState->setOffset($listState->getOffset() + $listState->getLimit());
@@ -38,15 +47,15 @@ class Shofi_Categories_ExportAction extends ShofiCategoriesBaseAction
         return 'Success';
     }
 
-    protected function exportCategory(ShofiCategoriesWorkflowItem $workflowItem)
+    protected function exportCategory(ShofiCategoriesWorkflowItem $item)
     {
         $exportAllowed = (TRUE === AgaviConfig::get(ContentMachineHttpExport::SETTING_EXPORT_ENABLED));
         if (TRUE === $exportAllowed)
         {
-            if (! $cmExport->exportShofiCategory($item))
+            if (! $this->cmExport->exportShofiCategory($item))
             {
                 echo "Error while sending data to fe for (category)item : " . $item->getIdentifier() . PHP_EOL . 
-                     ', Error: ' . print_r($cmExport->getLastErrors(), TRUE) . PHP_EOL;
+                     ', Error: ' . print_r($this->cmExport->getLastErrors(), TRUE) . PHP_EOL;
             }
         }
     }

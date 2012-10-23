@@ -9,8 +9,7 @@
             <dataimport name="movies" class="MoviesDataImport">
                 <description>Imports movie data records in form of workflow items.</description>
                 <datasources>
-                    <datasource>movies</datasource>
-                    <datasource>screenings</datasource>
+                    <datasource>movies-telavision</datasource>
                 </datasources>
                 <settings>
                     <setting name="notify">true</setting>

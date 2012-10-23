@@ -14,16 +14,12 @@
         <autoload name="MoviesDataImportConfig">%core.module_dir%/Movies/lib/import/MoviesDataImportConfig.class.php</autoload>
 
         <!-- Movie Xml Import -->
+        <autoload name="ScreeningXmlParser">%core.module_dir%/Movies/lib/import/xml/ScreeningXmlParser.class.php</autoload>
+        <autoload name="MoviesXmlParser">%core.module_dir%/Movies/lib/import/xml/MoviesXmlParser.class.php</autoload>
+        <autoload name="MovieScreeningsProvider">%core.module_dir%/Movies/lib/import/xml/MovieScreeningsProvider.class.php</autoload>
         <autoload name="MoviesXmlDataSource">%core.module_dir%/Movies/lib/import/xml/MoviesXmlDataSource.class.php</autoload>
         <autoload name="MoviesXmlDataSourceConfig">%core.module_dir%/Movies/lib/import/xml/MoviesXmlDataSourceConfig.class.php</autoload>
         <autoload name="MoviesXmlDataRecord">%core.module_dir%/Movies/lib/import/xml/MoviesXmlDataRecord.class.php</autoload>
-        <autoload name="MoviesXmlParser">%core.module_dir%/Movies/lib/import/xml/MoviesXmlParser.class.php</autoload>
-
-         <!-- Screening Xml Import -->
-        <autoload name="ScreeningXmlDataSource">%core.module_dir%/Movies/lib/import/screening/ScreeningXmlDataSource.class.php</autoload>
-        <autoload name="ScreeningXmlDataSourceConfig">%core.module_dir%/Movies/lib/import/screening/ScreeningXmlDataSourceConfig.class.php</autoload>
-        <autoload name="ScreeningXmlDataRecord">%core.module_dir%/Movies/lib/import/screening/ScreeningXmlDataRecord.class.php</autoload>
-        <autoload name="ScreeningXmlParser">%core.module_dir%/Movies/lib/import/screening/ScreeningXmlParser.class.php</autoload>
         <!-- /Import Integration -->
 
         <autoload name="FrontendMovieDocument">%core.module_dir%/Movies/lib/export/FrontendMovieDocument.class.php</autoload>
@@ -31,6 +27,11 @@
         <autoload name="MoviesFrontendExport">%core.module_dir%/Movies/lib/export/MoviesFrontendExport.class.php</autoload>
         <autoload name="FrontendTheaterDocument">%core.module_dir%/Movies/lib/export/FrontendTheaterDocument.class.php</autoload>
         <autoload name="FrontendTheaterFactory">%core.module_dir%/Movies/lib/export/FrontendTheaterFactory.class.php</autoload>
+        <autoload name="FrontendMovieAssetFactory">%core.module_dir%/Movies/lib/export/FrontendMovieAssetFactory.class.php</autoload>
+        <autoload name="FrontendMovieAssetDocument">%core.module_dir%/Movies/lib/export/FrontendMovieAssetDocument.class.php</autoload>
+        <autoload name="FrontendTheaterAssetFactory">%core.module_dir%/Movies/lib/export/FrontendTheaterAssetFactory.class.php</autoload>
+        
+        <autoload name="MoviesAssetRenderer">%core.module_dir%/Movies/lib/renderer/MoviesAssetRenderer.class.php</autoload>
 
         <!-- Workflow Integration -->
         <!-- Item -->

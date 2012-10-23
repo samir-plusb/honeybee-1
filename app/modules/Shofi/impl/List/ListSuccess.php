@@ -9,8 +9,9 @@
     $sortField = $listState->getSortField();
     $categoryAutoCompOpts = $t['category_autocomplete'];
 ?>
-<section class="container-fluid list-data">
+<section class="container-fluid list-data wrapper">
 <?php echo $slots['list']; ?>
+<div class="push"></div>
 </section>
 <!-- ###############################################################################################
     Modal Dialogs:

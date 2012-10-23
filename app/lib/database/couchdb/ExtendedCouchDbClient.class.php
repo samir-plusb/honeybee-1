@@ -3,7 +3,7 @@
 /**
  * The ExtendedCouchDbClient wraps a selection of couchdb api calls to php using CURL
  *
- * @version         $Id: ExtendedCouchDbClient.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @author          Tom Anheyer <tanheyer@gmail.com>

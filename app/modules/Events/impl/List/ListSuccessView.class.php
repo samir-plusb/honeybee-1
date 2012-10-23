@@ -4,7 +4,7 @@
  * The Events_List_ListSuccessView class handles the presentation logic for our
  * Events/List actions's success data.
  *
- * @version         $Id: Events_List_ListSuccessView.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Events

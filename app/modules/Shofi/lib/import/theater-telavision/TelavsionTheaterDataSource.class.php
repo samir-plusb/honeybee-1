@@ -4,7 +4,7 @@
  * The TheaterDataSource class is a concrete implementation of the BaseDataSource base class.
  * It provides fetching xml based theater data.
  *
- * @version         $Id: WkgDataSource.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Shofi

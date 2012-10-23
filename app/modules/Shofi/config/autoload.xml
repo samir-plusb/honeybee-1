@@ -42,6 +42,7 @@
         <autoload name="EventXPlacesDataRecord">%core.module_dir%/Shofi/lib/import/places-eventx/EventXPlacesDataRecord.class.php</autoload>
         <autoload name="EventXPlacesXmlParser">%core.module_dir%/Shofi/lib/import/places-eventx/EventXPlacesXmlParser.class.php</autoload>
         <!-- Restaurants-Tip -->
+        <autoload name="TipAssetsCopyrightProvider">%core.module_dir%/Shofi/lib/import/restaurant-tip/TipAssetsCopyrightProvider.class.php</autoload>
         <autoload name="TipRestaurantDataSourceConfig">%core.module_dir%/Shofi/lib/import/restaurant-tip/TipRestaurantDataSourceConfig.class.php</autoload>
         <autoload name="TipRestaurantDataSource">%core.module_dir%/Shofi/lib/import/restaurant-tip/TipRestaurantDataSource.class.php</autoload>
         <autoload name="TipRestaurantDataRecord">%core.module_dir%/Shofi/lib/import/restaurant-tip/TipRestaurantDataRecord.class.php</autoload>

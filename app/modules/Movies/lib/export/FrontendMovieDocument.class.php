@@ -2,8 +2,6 @@
 
 class FrontendMovieDocument extends BaseDocument
 {
-    const TYPE_PREFIX = 'movie-';
-
     protected $revision;
 
     protected $title;
@@ -14,7 +12,7 @@ class FrontendMovieDocument extends BaseDocument
 
     protected $actors = array();
 
-    protected $isRecommendation = FALSE;
+    protected $topMovie = FALSE;
 
     protected $rental;
 
@@ -32,9 +30,16 @@ class FrontendMovieDocument extends BaseDocument
 
     protected $screenings = array();
 
-    protected $theaters = array();
+    protected $reviews = array();
 
     protected $media = array();
+
+    /**
+     * Holds a unique string representation of this object that can be used in urls.
+     * 
+     * @var string
+     */
+    protected $slug;
 
     public static function fromArray(array $data = array())
     {
@@ -46,6 +51,11 @@ class FrontendMovieDocument extends BaseDocument
         return $this->revision;
     }
 
+    public function setTopMovie($topMovie)
+    {
+        $this->topMovie = (bool)$topMovie;
+    }
+
     public function setRevision($revision)
     {
         $this->revision = $revision;
@@ -53,24 +63,14 @@ class FrontendMovieDocument extends BaseDocument
         return $this;
     }
 
-    public function setIdentifier($identifier)
-    {
-        if (0 !== strpos($identifier, self::TYPE_PREFIX))
-        {
-            $identifier = self::TYPE_PREFIX . $identifier;
-        }
-        $this->identifier = $identifier;
-    }
-
     public function getScreenings()
     {
         return $this->screenings;
     }
 
-    public function getTheaters()
+    public function getMedia()
     {
-        return $this->theaters;
+        return $this->media;
     }
 }
 
-?>

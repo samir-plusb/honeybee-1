@@ -4,7 +4,7 @@
  * The News_Api_ExtractLocation_Api_ExtractLocationSuccessView class
  * handles News/Api_ExtractLocation success data presentation.
  *
- * @version         $Id: Api_ExtractLocationSuccessView.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

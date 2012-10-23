@@ -3,7 +3,7 @@
 /**
  * The EventsWorkflowItem extends the WorkflowItem and serves as the aggregate root for all aggregated event data objects.
  *
- * @version $Id: EventsWorkflowItem.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Events

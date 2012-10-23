@@ -4,7 +4,7 @@
  * The IEvent interface defines the public api for a simple event dto,
  * that is used by the IEventProxy to transport and provide event related information.
  *
- * @version         $Id: IEvent.iface.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Project

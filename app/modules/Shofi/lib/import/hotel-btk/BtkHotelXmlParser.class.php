@@ -5,7 +5,7 @@
  * We are not extending the BaseXmlParser class here, because we will want to refactor that one first,
  * before baking in the old interface all over the place.
  *
- * @version         $Id: HotelXmlParser.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi
@@ -47,7 +47,7 @@ class BtkHotelXmlParser implements IXmlParser
         $checkInfoNode = $providerNode->getElementsByTagName('check-in-out')->item(0);
         $extrasNode = $providerNode->getElementsByTagName('conditionsextras')->item(0);
         
-        return array(
+        $values = array(
             'identifier' => $providerNode->getAttribute('code'),
             'name' => $providerNode->getElementsByTagName('name')->item(0)->nodeValue,
             'type' => $providerNode->getElementsByTagName('type')->item(0)->nodeValue,
@@ -59,6 +59,10 @@ class BtkHotelXmlParser implements IXmlParser
             'check-in-out' => $checkInfoNode->getElementsByTagName('de')->item(0)->nodeValue,
             'conditionsextras' => $extrasNode->getElementsByTagName('de')->item(0)->nodeValue
         );
+
+        return array_filter($values, function($value) {
+            return ! empty($value);
+        });
     }
 
     protected function extractAdress(DOMElement $providerNode)
@@ -82,22 +86,33 @@ class BtkHotelXmlParser implements IXmlParser
     protected function extractFeatures(DOMElement $providerNode)
     {
         $features = array();
-        foreach ($providerNode->getElementsByTagName('features') as $featureNode)
+        $featuresNode = $providerNode->getElementsByTagName('features')->item(0);
+        foreach ($featuresNode->getElementsByTagName('group') as $groupNode)
         {
-            $groupNode = $featureNode->getElementsByTagName('group')->item(0);
             $featureNameNode = $groupNode->getElementsByTagName('name')->item(0);
             $name = $featureNameNode->getElementsByTagName('de')->item(0)->nodeValue;
-
-            $features[$name] = array();
+            $currentFeatureList = array();
             foreach ($groupNode->getElementsByTagName('feature') as $featureNode)
             {
-                $valueNameNode = $featureNode->getElementsByTagName('name')->item(0);
-                $features[$name][] = $valueNameNode->getElementsByTagName('de')->item(0)->nodeValue;
+                $labelNode = $featureNode->getElementsByTagName('name')->item(0);
+                $valueNode = $featureNode->getElementsByTagName('number')->item(0);
+                $label = trim($labelNode->getElementsByTagName('de')->item(0)->nodeValue);
+                $value = $valueNode ? trim($valueNode->nodeValue) : NULL;
+                if (! empty($label))
+                {
+                    $floatVal = (float)$value;
+                    $currentFeatureList[] = $label . (! empty($floatVal) ? ': '.$value : '');
+                }
             }
+            $features[$name] = $currentFeatureList;
         }
         if (($starsNode = $providerNode->getElementsByTagName('stars')->item(0)))
         {
-            $features['stars'] = array($starsNode->nodeValue);
+            $value = trim($starsNode->nodeValue);
+            if (! empty($value))
+            {
+                $features['stars'] = array($starsNode->nodeValue);
+            }
         }
         if (($starsPlusNode = $providerNode->getElementsByTagName('stars-plus')->item(0)))
         {

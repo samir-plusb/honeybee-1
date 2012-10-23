@@ -4,7 +4,7 @@
  * The TipFrontendEvent class is represents the structure of EventsWorkflowItems
  * from the view of the Tip-frontend.
  *
- * @version         $Id: TipFrontendEventLocation.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Events
@@ -483,6 +483,27 @@ class TipFrontendEvent extends BaseDocument
     public function getLocations()
     {
         return $this->locations;
+    }
+
+    /**
+     * Returns true if event has Appointments in locations
+     *
+     * @return array
+     */
+    public function hasAppointments()
+    {
+        if (is_object($this->getEventSchedule()))
+        {
+            foreach ($this->getEventSchedule()->getLocations() as $location => $appointments)
+            {
+                if (!empty($appointments))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

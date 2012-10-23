@@ -3,7 +3,7 @@
 /**
  * The Movies_ListAction class is responseable for delivering movies to consumers.
  *
- * @version         $Id: Movies_ListAction.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Movies

@@ -4,7 +4,7 @@
  * This plugin takes care of marking Events as deleted.
  *
  * @author tay
- * @version $Id: WorkflowDeleteEventPlugin.class.php 1058 2012-03-22 19:08:10Z tschmitt $
+ * @version $Id$
  * @package Events
  * @subpackage Workflow/Plugin
  */

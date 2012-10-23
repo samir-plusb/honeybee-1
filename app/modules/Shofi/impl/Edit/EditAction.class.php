@@ -46,6 +46,28 @@ class Shofi_EditAction extends ShofiBaseAction
         $view = 'Success';
         $errors = array();
         $transManager = $this->getContext()->getTranslationManager();
+
+        $detailData = $parameters->getParameter('detailItem', array());
+        $attributes = array();
+        if (isset($detailData['attributes']))
+        {
+            foreach ($detailData['attributes'] as $key => $values)
+            {
+                $attributes[] = array('name' => $key, 'values' => $values);
+            }
+        }
+        $detailData['attributes'] = $attributes;
+
+        $openingTimes = array();
+        if (isset($detailData['openingTimes']))
+        {
+            foreach ($detailData['openingTimes'] as $openingTime)
+            {
+                $openingTimes[] = $openingTime;
+            }
+        }
+        $detailData['openingTimes'] = $openingTimes;
+
         try
         {
             $ticket = $parameters->getParameter('ticket');
@@ -60,7 +82,7 @@ class Shofi_EditAction extends ShofiBaseAction
                     'coreItem' => $parameters->getParameter('coreItem', array(
                         'location' => array()
                     )),
-                    'detailItem' => $parameters->getParameter('detailItem', array()),
+                    'detailItem' => $detailData,
                     'salesItem' => $parameters->getParameter('salesItem', array())
                 ));
             }
@@ -76,8 +98,7 @@ class Shofi_EditAction extends ShofiBaseAction
                 }
                 if ($parameters->hasParameter('detailItem'))
                 {
-                    $detailItem = $parameters->getParameter('detailItem');
-                    $placeContainer->updateDetailItem($detailItem);
+                    $placeContainer->updateDetailItem($detailData);
                 }
                 if ($parameters->hasParameter('salesItem'))
                 {

@@ -4,7 +4,7 @@
  * The TipEventsFilePoolProvider class provides access to article data contained by the *-export-FP.xml files,
  * which are currently delivered together with the *-export.xml files from our TIP-Import source location.
  *
- * @version         $Id: TipEventsFilePoolProvider.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Events

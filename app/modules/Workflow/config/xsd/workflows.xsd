@@ -3,7 +3,7 @@
     xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
     xmlns:workflow_1_0="http://berlinonline.de/schemas/midas/workflow/1.0"
     targetNamespace="http://agavi.org/agavi/config/global/envelope/1.1" 
-    elementFormDefault="qualified" version="$Id:$">
+    elementFormDefault="qualified" version="$Id$">
         
     <xs:import namespace="http://berlinonline.de/schemas/midas/workflow/1.0" 
         schemaLocation="workflows.parts.xsd"/>

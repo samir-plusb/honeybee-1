@@ -5,7 +5,7 @@
  * It reflects asset based imformation and provides an interface for moving and deleting
  * asset files from the underlying filesystem.
  *
- * @version         $Id: ProjectAssetInfo.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

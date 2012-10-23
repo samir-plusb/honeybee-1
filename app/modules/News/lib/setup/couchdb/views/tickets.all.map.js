@@ -2,7 +2,7 @@
  * Access tickets with workflow items included sorted by timestamp.
  *
  * @author Thorsten Schmitt-Rink
- * @version $Id:$
+ * @version $Id$
  */
 function(doc)
 {

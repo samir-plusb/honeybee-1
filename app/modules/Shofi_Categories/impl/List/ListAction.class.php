@@ -3,7 +3,7 @@
 /**
  * The Shofi_Categories_ListAction class is responseable for delivering shofi categories to consumers.
  *
- * @version         $Id: Shofi_Categories_ListAction.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi_Categories
@@ -119,7 +119,7 @@ class Shofi_Categories_ListAction extends ShofiCategoriesBaseAction
         {
             $options['find_duplicates_url'] = urldecode(htmlspecialchars_decode(
                 $routing->gen($options['find_duplicates_route'], array(
-                    'filter[attributes.conflict_state]' => 'potential_dups_:CATEGORY_NAME:'
+                    'category' => ':CATEGORY:'
                 ))
             ));
         }

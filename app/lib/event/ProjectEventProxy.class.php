@@ -4,7 +4,7 @@
  * ProjectEventProxy is a concrete implementation of the IEventProxy interface
  * and provides typical event routing functionality, based on event names and callbacks.
  *
- * @version         $Id: ProjectEventProxy.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Project

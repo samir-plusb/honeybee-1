@@ -4,7 +4,7 @@
  * The TipEventsPersonProvider class provides access to person data contained by the person-export.xml file,
  * which is currently delivered together with the other eventx data.
  *
- * @version         $Id: TipEventsXmlDataSource.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Events

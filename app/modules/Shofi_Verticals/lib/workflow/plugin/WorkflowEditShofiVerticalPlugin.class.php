@@ -4,7 +4,7 @@
  * This plugin takes care of editing shofi verticals.
  *
  * @author Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
- * @version $Id: WorkflowEditShofiVerticalPlugin.class.php 1058 2012-03-22 19:08:10Z tschmitt $
+ * @version $Id$
  * @package Shofi_Verticals
  * @subpackage Workflow/Plugin
  */

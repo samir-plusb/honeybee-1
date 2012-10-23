@@ -5,7 +5,7 @@
  * We are not extending the BaseXmlParser class here, because we will want to refactor that one first,
  * before baking in the old interface all over the place.
  *
- * @version         $Id: MoviesXmlParser.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Movies
@@ -13,6 +13,14 @@
  */
 class MoviesXmlParser implements IXmlParser
 {
+    protected $screeningProvider;
+
+    public function __construct($screeningsFilePath)
+    {
+        $this->screeningProvider = new MovieScreeningsProvider();
+        $this->screeningProvider->load($screeningsFilePath);
+    }
+
     // ---------------------------------- <IXmlParser IMPL> --------------------------------------
 
     public function parseXml($xmlSource)
@@ -40,7 +48,26 @@ class MoviesXmlParser implements IXmlParser
         $data = array();
         foreach ($xpath->query('//FILM') as $movieNode)
         {
-            $data[] = $this->transformMovieNode($movieNode);
+            $currentRow = $this->transformMovieNode($movieNode);
+            $screenings = $this->screeningProvider->getScreeningsForMovie($currentRow['id']);
+            $currentRow['screenings'] = $screenings ? $screenings : array();
+
+            $movieVersions = array();
+            foreach ($currentRow['screenings'] as $screening)
+            {
+                if (isset($screening['version']) && ! in_array($screening['version'], $movieVersions))
+                {
+                    $movieVersions[] = $screening['version'];
+                }
+            }
+            if (! empty($movieVersions)) 
+            {
+                $currentRow['title'] = implode(' ', array(
+                    preg_replace('/\s*\(OV\)\s*/i', '', $currentRow['title']),
+                    ' ('.implode(' / ', $movieVersions).')'
+                ));
+            }
+            $data[] = $currentRow;
         }
         return $data;
     }
@@ -67,7 +94,7 @@ class MoviesXmlParser implements IXmlParser
             }
         }
 
-        $rentalNode = $movieNode->getElementsByTagName('NEUSTART')->item(0);
+        $rentalNode = $movieNode->getElementsByTagName('VERLEIH')->item(0);
         $genreNode = $movieNode->getElementsByTagName('GENRE')->item(0);
         $fskNode = $movieNode->getElementsByTagName('FSK')->item(0);
         $releaseNode = $movieNode->getElementsByTagName('NEUSTART')->item(0);
@@ -77,20 +104,24 @@ class MoviesXmlParser implements IXmlParser
         $durationNode = $movieNode->getElementsByTagName('LAENGE')->item(0);
         $mediaNode = $movieNode->getElementsByTagName('BILDER')->item(0);
         $countryNode = $movieNode->getElementsByTagName('LAND')->item(0);
+        $sublineNode = $movieNode->getElementsByTagName('Subline')->item(0);
+        $urlNode = $movieNode->getElementsByTagName('URL')->item(0);
 
         return array(
             'id' => $movieNode->getAttribute('ID'),
-            'title' => $titelNode->nodeValue,
+            'title' => trim($titelNode->nodeValue),
+            'subline' => $sublineNode ? trim($sublineNode->nodeValue) : NULL,
             'teaser' => $teaserNode->nodeValue,
+            'website' => $urlNode ? trim($urlNode->nodeValue) : NULL, 
             'director' => $directors,
             'actors' => $actors,
-            'rental' => $rentalNode ? $rentalNode->nodeValue : NULL,
-            'genre' => $genreNode ? $genreNode->nodeValue : NULL,
+            'rental' => $rentalNode ? trim($rentalNode->nodeValue) : NULL,
+            'genre' => $genreNode ? trim($genreNode->nodeValue) : NULL,
             'fsk' => $fskNode ? $fskNode->nodeValue : NULL,
             'release_date' => $releaseNode ? $releaseNode->nodeValue : NULL,
             'year' => $yearNode ? $yearNode->nodeValue : NULL,
             'duration' => $durationNode ? $durationNode->nodeValue : NULL,
-            'country' => $countryNode ? $countryNode->nodeValue : NULL,
+            'country' => $countryNode ? trim($countryNode->nodeValue) : NULL,
             'media' => $mediaNode ? $this->transformMediaNode($mediaNode) : array()
         );
     }
@@ -125,6 +156,26 @@ class MoviesXmlParser implements IXmlParser
                 'width' => $posterImageNode->getAttribute('WIDTH'),
                 'height' => $posterImageNode->getAttribute('HEIGHT'),
                 'src' => $posterImageNode->nodeValue
+            );
+        }
+        $poster600ImageNodes = $mediaNode->getElementsByTagName('PLAKAT600');
+        if (0 < $poster600ImageNodes->length)
+        {
+            $poster600ImageNode = $poster600ImageNodes->item(0);
+            $images['poster600'] = array(
+                'width' => $poster600ImageNode->getAttribute('WIDTH'),
+                'height' => $poster600ImageNode->getAttribute('HEIGHT'),
+                'src' => $poster600ImageNode->nodeValue
+            );
+        }
+        $hdImageNodes = $mediaNode->getElementsByTagName('HD_PIC');
+        if (0 < $hdImageNodes->length)
+        {
+            $hdImageNode = $hdImageNodes->item(0);
+            $images['hdPic'] = array(
+                'width' => $hdImageNode->getAttribute('WIDTH'),
+                'height' => $hdImageNode->getAttribute('HEIGHT'),
+                'src' => $hdImageNode->nodeValue
             );
         }
         return $images;
@@ -201,5 +252,3 @@ class MoviesXmlParser implements IXmlParser
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
 }
-
-?>

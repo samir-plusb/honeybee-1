@@ -3,7 +3,7 @@
 /**
  * The ShofiCoreItem holds the common data for shofi locations.
  *
- * @version $Id: ShofiWorkflowItem.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Shofi

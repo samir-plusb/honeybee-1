@@ -4,7 +4,7 @@
  * The HotelDataSourceConfig class is a concrete implementation of the DataSourceConfig base class.
  * It serves as the main config object for the HotelDataSource class.
  *
- * @version         $Id: HotelDataSourceConfig.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Shofi

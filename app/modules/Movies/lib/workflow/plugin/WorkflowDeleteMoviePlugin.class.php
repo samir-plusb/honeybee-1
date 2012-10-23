@@ -4,7 +4,7 @@
  * This plugin takes care of marking movies as deleted.
  *
  * @author tay
- * @version $Id: WorkflowDeleteMoviePlugin.class.php 1058 2012-03-22 19:08:10Z tschmitt $
+ * @version $Id$
  * @package Movies
  * @subpackage Workflow/Plugin
  */

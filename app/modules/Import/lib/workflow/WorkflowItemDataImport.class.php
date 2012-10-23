@@ -88,24 +88,16 @@ abstract class WorkflowItemDataImport extends BaseDataImport
      */
     protected function createWorkflowItem($identifier, array $importData, array $itemData = array())
     {
-        $itemData['identifier'] = $identifier;
+        if (! empty($identifier))
+        {
+            $itemData['identifier'] = $identifier;
+        }
         $workflowItem = $this->workflowService->createWorkflowItem($itemData);
         $workflowItem->setMasterRecord(
             $workflowItem->createMasterRecord($importData)
         );
-
-        if ($this->notifyEnabled())
-        {
-            try
-            {
-                $this->workflowService->notifyWorkflowItemCreated($workflowItem);
-            }
-            catch (Exception $e)
-            {
-                $this->workflowService->deleteWorkflowItem($workflowItem, TRUE);
-                throw $e;
-            }
-        }
+        $this->workflowService->storeWorkflowItem($workflowItem);
+        
         return $workflowItem;
     }
 

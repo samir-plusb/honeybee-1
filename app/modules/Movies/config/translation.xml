@@ -18,6 +18,10 @@
                             <ae:parameter name="actions">Aktionen</ae:parameter>
                             <ae:parameter name="edit">Bearbeiten</ae:parameter>
                             <ae:parameter name="promote">Publizieren</ae:parameter>
+                            <ae:parameter name="release_date">Startdatum</ae:parameter>
+                            <ae:parameter name="subline">Subline</ae:parameter>
+                            <ae:parameter name="hdpic">HDPic</ae:parameter>
+                            <ae:parameter name="poster">Poster</ae:parameter>
                             <ae:parameter name="delete">Löschen</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>

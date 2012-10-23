@@ -4,7 +4,7 @@
  * The ShofiVerticalsJsonDataRecord class is a concrete implementation of the ShofiVerticalsDataRecord base class.
  * It provides handling for mapping data coming from the json-verticals-catalog into the local vertical record format.
  *
- * @version         $Id: ShofiVerticalsJsonDataRecord.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Shofi_Verticals

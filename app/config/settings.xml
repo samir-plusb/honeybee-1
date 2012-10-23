@@ -236,6 +236,7 @@
         </settings>
         <settings prefix="curl.">
             <setting name="proxy">proxy:3128</setting>
+            <setting name="timeout">300</setting>
         </settings>
     </ae:configuration>
 

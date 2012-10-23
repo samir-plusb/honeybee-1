@@ -4,7 +4,7 @@
  * The TipEventsArticleProvider class provides access to article data contained by the artikel-export.xml file,
  * which is currently delivered together with the other eventx data.
  *
- * @version         $Id: TipEventsArticleProvider.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Events
@@ -105,6 +105,7 @@ class TipEventsArticleProvider
         {
             $articleData = $this->parseArticleNode($xpath, $articleNode);
             $key = $articleNode->getAttribute('key');
+                        
             $assetUri = FALSE;
             if (! empty($articleData['bildURL']))
             {

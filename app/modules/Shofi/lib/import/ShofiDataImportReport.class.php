@@ -20,6 +20,8 @@ class ShofiDataImportReport
 
     protected $updateCounter = 0;
 
+    protected $matchCounter = 0;
+
     protected $newSourceCategories = array();
 
     protected $unmappedSourceCategories = array();
@@ -53,6 +55,21 @@ class ShofiDataImportReport
             sprintf("Created a new (shofi) workflow item with id: %s and name: %s",
                 $shofiItem->getIdentifier(), 
                 $shofiItem->getCoreItem()->getName()
+            ),
+            self::INFO
+        );
+    }
+
+    public function onItemMatched(ShofiWorkflowItem $shofiItem, ShofiWorkflowItem $matchedItem, $distance)
+    {
+        $this->matchCounter++;
+        $this->addIncident(
+            sprintf(
+                "An incoming place called '%s' matched against an existing item '%s', id: %s, with a distance of %s meters.",
+                $shofiItem->getCoreItem()->getName(),
+                $matchedItem->getCoreItem()->getName(),
+                $matchedItem->getIdentifier(),
+                $distance
             ),
             self::INFO
         );
@@ -100,6 +117,11 @@ class ShofiDataImportReport
     public function getItemsUpdatedCount()
     {
         return $this->updateCounter;
+    }
+
+    public function getItemsMatchedCount()
+    {
+        return $this->matchCounter;
     }
 
     public function getNewSourceCategories()

@@ -43,7 +43,7 @@
         $endAt = $startAt + $pagingRange;
     }
 ?>
-<nav class="pagination">
+<nav class="pagination well">
     <ul>
 <?php
     if ($hasPrev)

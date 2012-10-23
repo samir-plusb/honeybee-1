@@ -3,7 +3,7 @@
 /**
  * The ShofiVerticalsMasterRecord holds the main data of a ShofiCategory.
  *
- * @version $Id: ShofiVerticalsMasterRecord.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Shofi_Verticals

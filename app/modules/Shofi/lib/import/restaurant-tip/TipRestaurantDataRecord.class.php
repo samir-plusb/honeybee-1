@@ -4,7 +4,7 @@
  * The TheaterDataRecord class is a concrete implementation of the ShofiDataRecord base class.
  * It provides handling for movies/theater xml data.
  *
- * @version         $Id: TheaterDataRecord.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Shofi
@@ -90,22 +90,19 @@ class TipRestaurantDataRecord extends ShofiDataRecord
             ))
         );
 
+        $attributes = $this->mapAttributes($data);
+
         $coreItem = ShofiCoreItem::fromArray($commonData);
         $salesItem = ShofiSalesItem::fromArray(array());
         $detailItem = ShofiDetailItem::fromArray(array(
             'text' => $data['Online_Ausgabe::Online_Text'],
+            'teaser' => $this->extractTeaserText($data['Online_Ausgabe::Online_Text']),
             'openingTimes' => $this->parseOpeningTimes($data['gastronomie::Öffnungszeiten']),
-            'attributes' => $this->prepareAttributes($data)
+            'attributes' => $attributes,
+            'attachments' => $this->processAttachments($data['MDB::ID_MDB']),
+            'keywords' => $this->mapKeywords($data, $attributes)
         ));
 
-        $categorySource = $data['gastronomie::Orts_Typ'];
-        if (array_key_exists('gastronomie::Küchenrichtung', $data))
-        {
-            $sourceValue = trim($data['gastronomie::Orts_Typ']);
-            $categorySource .= empty($sourceValue) ? '' : ('/' . $data['gastronomie::Küchenrichtung']);
-        }
-        $categorySource = rtrim($categorySource, "/");
-        $categorySource = empty($categorySource) ? 'empty' : $categorySource;
         return array_merge(
             $commonData,
             array(
@@ -113,12 +110,44 @@ class TipRestaurantDataRecord extends ShofiDataRecord
                 self::PROP_CORE_ITEM => $coreItem,
                 self::PROP_DETAIL_ITEM => $detailItem,
                 self::PROP_SALES_ITEM => $salesItem,
-                self::PROP_CATEGORY_SRC => 'restaurants-tip:' . $categorySource
+                self::PROP_CATEGORY_SRC => $this->mapCategorySource($data)
             )
         );
     }
 
-    protected function prepareAttributes(array $data)
+    protected function extractTeaserText($text)
+    {
+        $sentences = preg_split('/\.\s+/is', $text);
+        if (0 < count($sentences))
+        {
+            if (! (substr($sentences[0], -1) === '.'))
+            {
+                $sentences[0] .= '.';
+            }
+            return $sentences[0];
+        }
+        return NULL;
+    }
+
+    protected function mapCategorySource(array $data)
+    {
+        $categorySource = trim($data['gastronomie::Orts_Typ']);
+        if (isset($data['gastronomie::Küchenrichtung']))
+        {
+            $val = trim($data['gastronomie::Küchenrichtung']);
+            if (! empty($val))
+            {
+                $categorySource .= empty($categorySource) ? 
+                    '' : ('/' . trim($data['gastronomie::Küchenrichtung']));
+            }
+        }
+        $categorySource = rtrim($categorySource, "/");
+        $categorySource = empty($categorySource) ? 'empty' : $categorySource;
+
+        return 'restaurants-tip:' . $categorySource;
+    }
+
+    protected function mapAttributes(array $data)
     {
         $attributes = array();
         $drinkPrices = $this->parsePricesList($data['gastronomie::Preise_Getränke']);
@@ -126,37 +155,31 @@ class TipRestaurantDataRecord extends ShofiDataRecord
         {
             $attributes[] =  array('name' => 'Getränkepreise', 'values' => $drinkPrices);
         }
-
         $foodPrices = $this->parsePricesList($data['gastronomie::Preise_Speisen']);
         if (! empty($foodPrices))
         {
             $attributes[] =  array('name' => 'Essenspreise', 'values' => $foodPrices);
         }
-
         $publicTransports = $this->parseCommaSeparatedValues($data['MDB::Aus_Fahrverbindung']);
         if (! empty($publicTransports))
         {
             $attributes[] =  array('name' => 'Fahrverbindungen', 'values' => $publicTransports);
         }
-
         $nightlyTransports = $this->parseCommaSeparatedValues($data['MDB::Nachtfahrverbindungen']);
         if (! empty($nightlyTransports))
         {
             $attributes[] =  array('name' => 'nächt. Fahrverbindungen', 'values' => $nightlyTransports);
         }
-
         $rooms = $this->parseCommaSeparatedValues($data['gastronomie::Räumlichkeiten']);
         if (! empty($rooms))
         {
             $attributes[] =  array('name' => 'Räumlichkeiten', 'values' => $rooms);
         }
-
         $smoking = $this->parseCommaSeparatedValues($data['gastronomie::Raucher']);
         if (! empty($smoking))
         {
             $attributes[] =  array('name' => 'Rauchen', 'values' => $smoking);
         }
-
         $insideSeats = trim($data['gastronomie::Plätze_innen']);
         if (! empty($insideSeats))
         {
@@ -167,19 +190,80 @@ class TipRestaurantDataRecord extends ShofiDataRecord
         {
             $attributes[] =  array('name' => 'Sitzplätze aussen', 'values' => array($outsideSeats));
         }
-
         $creditCards = $this->parseCommaSeparatedValues($data['gastronomie::Kreditkarten']);
         if (! empty($creditCards))
         {
-            $attributes[] =  array('name' => 'Kreditkarten', 'values' => array($creditCards));
+            $attributes[] =  array('name' => 'Kreditkarten', 'values' => $creditCards);
         }
-
         if (isset($data['gastronomie::Küchenrichtung']))
         {
             $attributes[] = array('name' => 'Küchenrichtung', 'values' => array($data['gastronomie::Küchenrichtung']));
         }
 
+        if (isset($data['gastronomie::Öffnungszeiten']))
+        {
+            $attributes[] = array('name' => 'Öffnungszeiten', 'values' => array($data['gastronomie::Öffnungszeiten']));
+        }
         return $attributes;
+    }
+
+    protected function mapKeywords(array $data, array $attributes)
+    {
+        $keywords = array();
+        if (isset($data['gastronomie::Küchenrichtung']))
+        {
+            $val = trim($data['gastronomie::Küchenrichtung']);
+            if (! empty($val))
+            {
+                $keywords[] = "Küche: " . strtolower($data['gastronomie::Küchenrichtung']);
+            }
+        }
+        $rooms = $this->parseCommaSeparatedValues($data['gastronomie::Räumlichkeiten']);
+        if (! empty($rooms))
+        {
+            foreach ($rooms as $val)
+            {
+                $val = strtolower($val);
+                if (FALSE !== strpos($val, 'kinderfreundlich'))
+                {
+                    $keywords[] = 'kinderfreundlich';
+                }
+                elseif (FALSE !== strpos($val, 'behindertengerecht'))
+                {
+                    $keywords[] = 'behindertengerecht';
+                }
+            }
+        }
+
+        return $keywords;
+    }
+
+    protected function parsePricesList($pricesString)
+    {
+        $prices = array();
+        $matches = array();
+        if (preg_match_all('=(.*€),\s=isU', $pricesString, $matches))
+        {
+            foreach ($matches[1] as $price)
+            {
+                $prices[] = str_replace(',', '.', $price);
+            }
+        }
+        return $prices;
+    }
+
+    protected function parseCommaSeparatedValues($valueString)
+    {
+        $values = array();
+        $parts = explode(',', $valueString);
+        foreach ($parts as $value)
+        {
+            if (! empty($value))
+            {
+                $values[] = $value;
+            }
+        }
+        return $values;
     }
 
     protected function parseOpeningTimes($openinigTimesString)
@@ -210,33 +294,61 @@ class TipRestaurantDataRecord extends ShofiDataRecord
         return $openingTimes;
     }
 
-    protected function parsePricesList($pricesString)
+    protected function processAttachments($importIdentifier)
     {
-        $prices = array();
-        $matches = array();
-        if (preg_match_all('=(.*€),\s=isU', $pricesString, $matches))
-        {
-            foreach ($matches[1] as $price)
-            {
-                $prices[] = str_replace(',', '.', $price);
-            }
-        }
-        return $prices;
-    }
+        $copyrightProvider = new TipAssetsCopyrightProvider(
+            realpath(
+                AgaviConfig::get('shofi.tip_import_dir') . DIRECTORY_SEPARATOR . 'fotografen.txt'
+            )
+        );
+        
+        $assetIds = array();
+        $baseDirectory = realpath(AgaviConfig::get('shofi.tip_import_dir') .
+            DIRECTORY_SEPARATOR . $importIdentifier . DIRECTORY_SEPARATOR);
 
-    protected function parseCommaSeparatedValues($valueString)
-    {
-        $values = array();
-        $parts = explode(',', $valueString);
-        foreach ($parts as $value)
+        if (! $baseDirectory)
         {
-            if (! empty($value))
+            return $assetIds;
+        }
+        $assetPattern = '(?:(?:(\d+)_(.*).(jpg|JPG|png|PNG))|(?:(.*)_(\d+).(jpg|JPG|png|PNG)))';
+        $assetService = ProjectAssetService::getInstance();
+        $imagine = new Imagine\Gd\Imagine();
+        $iterator = new ProjectDirectoryRegexpIterator($baseDirectory, $assetPattern);
+        foreach ($iterator as $file)
+        {
+            try
             {
-                $values[] = $value;
+                $asset = $assetService->put('file://'.$file, array(), FALSE);
+                $image = $imagine->open($asset->getFullPath());
+                $size = $image->getSize();
+                $nameParts = explode('_', $asset->getName());
+                $acronym = '';
+                if (2 === count($nameParts))
+                {
+                    if (preg_match('~\d+~is', $nameParts[0]))
+                    {
+                        $acronym = $nameParts[1];
+                    }
+                    else
+                    {
+                        $acronym = $nameParts[0];
+                    }
+                }
+                $metaData = array(
+                    'filename' => $asset->getFullName(),
+                    'width' => $size->getWidth(),
+                    'height' => $size->getHeight(),
+                    'copyright' => $copyrightProvider->resolveAcronym($acronym)
+                );
+                $assetService->update($asset, $metaData);
+                $assetIds[] = $asset->getIdentifier();
+            }
+            catch(Exception $e)
+            {
+                echo("[".__METHOD__."] Error while procssing attachment, " . $e->getMessage());
+                continue;
             }
         }
-        return $values;
+        return $assetIds;
     }
 }
-
-?>

@@ -3,7 +3,7 @@
 /**
  * The MoviesWorkflowItem extends the WorkflowItem and serves as the aggregate root for all aggregated movie data objects.
  *
- * @version $Id: MoviesWorkflowItem.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Movies
@@ -21,10 +21,18 @@ class MoviesWorkflowItem extends WorkflowItem
         return 'movies';
     }
 
+    public function getIdentifierPrefix()
+    {
+        return 'movie-';
+    }
+
     protected function getMasterRecordImplementor()
     {
         return "MoviesMasterRecord";
     }
-}
 
-?>
+    protected function getSlugPattern()
+    {
+        return '<masterRecord.title>-<identifier>';
+    }
+}

@@ -4,7 +4,7 @@
  * The GdocHotelDataRecord class is a concrete implementation of the ShofiDataRecord base class.
  * It provides handling for hotel data coming from a gdocs spreadsheet.
  *
- * @version         $Id: GdocHotelDataRecord.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Shofi
@@ -93,39 +93,13 @@ class GdocHotelDataRecord extends ShofiDataRecord
             ))
         );
 
-        $attributeNames = array(
-            'stars', 'stars-plus', 'leisure', 'furniture', 
-            'interior', 'pay-method', 'location'
-        );
-        $attributes = array();
-        foreach ($attributeNames as $attribute)
-        {
-            $values = array();
-            foreach (explode("¦", $data[$attribute]) as $value)
-            {
-                $value = trim($value);
-                if (! empty($value))
-                {
-                    $values[] = $value;
-                }
-            }
-            if (! empty($values))
-            {
-                $attributes[] = array('name' => $attribute, 'values' => $values);
-            }
-        }
-        $keywords = array();
-        if (isset($data['stars']) && ($starCount = mb_substr_count($data['stars'], '*')))
-        {
-            $keywords[] = $starCount . '-Sterne';
-        }
         $coreItem = ShofiCoreItem::fromArray($commonData);
         $salesItem = ShofiSalesItem::fromArray(array());
         $detailItem = ShofiDetailItem::fromArray(array(
-            'text' => $data['booking-info'] . PHP_EOL . $data['check-in-out'],
-            'teaser' => $data['description'],
-            'keywords' => $keywords,
-            'attributes' => $attributes,
+            'text' => $data['description'],
+            'teaser' => $this->extractTeaserText($data['description']),
+            'keywords' => $this->mapKeywords($data),
+            'attributes' => $this->mapAttributes($data),
             'attachments' => $this->processAttachments($data['images'])
         ));
 
@@ -142,13 +116,108 @@ class GdocHotelDataRecord extends ShofiDataRecord
         );
     }
 
+    protected function extractTeaserText($text)
+    {
+        $sentences = preg_split('/\.\s+/is', $text);
+        if (0 < count($sentences))
+        {
+            if (! (substr($sentences[0], -1) === '.'))
+            {
+                $sentences[0] .= '.';
+            }
+            return $sentences[0];
+        }
+        return NULL;
+    }
+
+    protected function mapKeywords(array $data)
+    {
+        static $keyowrdWhitelist = array(
+            'gay-friendly', 'wellness', 'restaurant', 
+            'pkw-parkplatz', 'garage', 'bus-parkplatz', 'designhotel'
+        );
+        $keywords = array();
+        if (($classification = $this->mapClassification($data, FALSE)))
+        {
+            $keywords[] = $classification;
+        }
+        if (isset($data['furniture']))
+        {
+            foreach (explode("¦", $data['furniture']) as $value)
+            {
+                $matchVal = strtolower(trim($value));
+                if (in_array($matchVal, $keyowrdWhitelist))
+                {
+                    $keywords[] = trim($value);
+                }
+            }
+        }
+        return $keywords;
+    }
+
+    protected function mapClassification(array $data, $extras = TRUE)
+    {
+        $basicClass = isset($data['stars']) ? $data['stars'] : '';
+        $extraClass = isset($data['stars-plus']) ? $data['stars-plus'] : '';
+        $classification = NULL;
+        if (! empty($basicClass))
+        {
+            $stars = mb_substr_count($basicClass, '*');
+            $suffix = (1 == $stars) ? 'Stern' : 'Sterne';
+            if (! $extras)
+            {
+                $extraClass = '';
+            }
+            $classification = trim(sprintf('%s-%s %s', $stars, $suffix, $extraClass));
+        }
+        return $classification;
+    }
+
+    protected function mapAttributes(array $data)
+    {
+        static $attributeNames = array(
+            'leisure' => 'Freizeitangebote', 
+            'furniture' => 'Hausausstattung', 
+            'interior' => 'Zimmerausstattung', 
+            'pay-method' => 'Akzeptierte Zahlungsarten', 
+            'location' => 'Lage des Hotels',
+            'booking-info' => 'Reservierungsinfo',
+            'check-in-out' => 'Anreise / Abreise'
+        );
+        $attributes = array();
+        foreach ($attributeNames as $attributeName => $translatedName)
+        {
+            if (! isset($data[$attributeName]))
+            {
+                continue;
+            }
+            $values = array();
+            foreach (explode("¦", $data[$attributeName]) as $value)
+            {
+                $value = trim($value);
+                if (! empty($value))
+                {
+                    $values[] = $value;
+                }
+            }
+            if (! empty($values))
+            {
+                $attributes[] = array('name' => $translatedName, 'values' => $values);
+            }
+        }
+        if (($classification = $this->mapClassification($data)))
+        {
+            $attributes[] = array('name' => "Klassifizierung", 'values' => array($classification));
+        }
+        return $attributes;
+    }
+
     protected function processAttachments($attachments)
     {
         static $baseUrl = 'http://hotel.berlin.de';
         
         $assetService = ProjectAssetService::getInstance();
         $imagine = new Imagine\Gd\Imagine();
-
         $assetIds = array();
         foreach (explode("¦", $attachments) as $imageUri)
         {
@@ -179,5 +248,3 @@ class GdocHotelDataRecord extends ShofiDataRecord
         return $assetIds;
     }
 }
-
-?>

@@ -23,6 +23,7 @@
                             <ae:parameter name="owner">Besitzer</ae:parameter>
                             <ae:parameter name="actions">Aktionen</ae:parameter>
                             <ae:parameter name="edit">Bearbeiten</ae:parameter>
+                            <ae:parameter name="mark_deduplciated">Als 'nicht dupliziert' markieren</ae:parameter>
                             <ae:parameter name="promote">Publizieren</ae:parameter>
                             <ae:parameter name="assign_category">Kategorie zuweisen</ae:parameter>
                             <ae:parameter name="delete">Löschen</ae:parameter>

@@ -5,7 +5,7 @@
  * Basically it can be broken to the following relationships:
  * EventsMasterRecord -has-a-> EventSchedule -has-many-> EventLocation -has-many-> EventAppointment
  *
- * @version $Id: EventsMasterRecord.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Events
@@ -471,7 +471,7 @@ class EventsMasterRecord extends MasterRecord
     /**
      * Sets the event's archive entry.
      */
-    protected function setArchive($archive)
+    public function setArchive($archive)
     {
         if ($archive instanceof EventsArchiveEntry)
         {
@@ -488,7 +488,7 @@ class EventsMasterRecord extends MasterRecord
      *
      * @var array $articles Either a list containing EventsArticle instances or hydratable arrays, may be mixed together.
      */
-    protected function setArticles(array $articles)
+    public function setArticles(array $articles)
     {
         $this->articles = array();
         foreach ($articles as $article)
@@ -509,7 +509,7 @@ class EventsMasterRecord extends MasterRecord
      *
      * @var mixed $eventSchedule Either a EventsSchedule instance or hydratable array.
      */
-    protected function setEventSchedule($eventSchedule)
+    public function setEventSchedule($eventSchedule)
     {
         if ($eventSchedule instanceof EventsSchedule)
         {

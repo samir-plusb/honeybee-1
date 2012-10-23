@@ -3,7 +3,7 @@
 /**
  * The EventsAppointment class reflects the structure of one of an event's appointments.
  *
- * @version $Id: EventsAppointment.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package Events

@@ -4,7 +4,7 @@
  * The IAssetInfo interface defines an api for exposing file based information
  * extended by any kind of optional metadata.
  *
- * @version         $Id: IAssetInfo.iface.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

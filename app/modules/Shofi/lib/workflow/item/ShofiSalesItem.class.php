@@ -3,7 +3,7 @@
 /**
  * The ShofiSalesItem holds data that reflect the sales requirements towards shofi location attributes.
  *
- * @version $Id: ShofiWorkflowItem.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Shofi

@@ -4,7 +4,7 @@
  * The TipFrontendEventExport class is responseable for exporting Tip-frontend related events
  * to the correct consumers in the right structure.
  *
- * @version         $Id: TipFrontendEventExport.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Events
@@ -53,11 +53,14 @@ class TipFrontendEventExport
         if ('events-tip' === $source)
         {
             $frontendEvent = $this->eventFactory->createFromObject($eventItem);
-            $this->frontendRepo->save($frontendEvent);
-
-            if ($updateRelated)
+            if ($frontendEvent->hasAppointments())
             {
-                $this->exportRelatedEntities($eventItem);
+                $this->frontendRepo->save($frontendEvent);
+    
+                if ($updateRelated)
+                {
+                    $this->exportRelatedEntities($eventItem);
+                }                
             }
         }
     }

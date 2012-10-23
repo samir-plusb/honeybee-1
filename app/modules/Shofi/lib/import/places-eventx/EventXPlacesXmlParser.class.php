@@ -5,7 +5,7 @@
  * We are not extending the BaseXmlParser class here, because we will want to refactor that one first,
  * before baking in the old interface all over the place.
  *
- * @version         $Id: EventXPlacesXmlParser.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi

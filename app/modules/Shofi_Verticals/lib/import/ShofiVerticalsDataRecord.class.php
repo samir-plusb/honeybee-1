@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version         $Id: ShofiVerticalsDataRecord.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Shofi_Verticals

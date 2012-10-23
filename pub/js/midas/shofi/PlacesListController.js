@@ -43,11 +43,6 @@ midas.shofi.PlacesListController = midas.list.ListController.extend({
         return this.ajaxCurry(url, { detailItem: detailItem }, 'post');
     },
 
-    resolveConflict: function(is_batch, data_container)
-    {
-        
-    },
-
     createResolveConflictBatch: function(items, category)
     {
         var batch = new midas.list.ActionBatch();
@@ -66,4 +61,24 @@ midas.shofi.PlacesListController = midas.list.ListController.extend({
         var detailItem = { category: category.id };
         return this.ajaxCurry(url, { detailItem: detailItem }, 'post');
     },
+
+    markDeduplicated: function(is_batch, data_container)
+    {
+        if (! is_batch)
+        {
+            alert("Orte zu deduplizieren wird nur über die Stapelverarbeitung unterstützt.");
+            return;
+        }
+        
+        var url = this.options.dedup_url;
+        var batch = new midas.list.ActionBatch();
+        var items = this.getSelectedItems();
+        for(i = 0; i < items.length; i++)
+        {
+            batch.addAction(new midas.list.Action(
+                midas.core.Request.curry(url, { item_id: items[i].data.identifier}, 'post')
+            ));
+        }
+        batch.run();
+    }
 });

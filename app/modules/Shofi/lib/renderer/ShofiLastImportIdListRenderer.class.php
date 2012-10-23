@@ -5,21 +5,22 @@ class ShofiLastImportIdListRenderer extends ShofiTranslationListRenderer
     public function renderValue($value, $fieldname, array $data = array())
     {
         $lastImportSource = NULL;
-        $lastImportId = FALSE;
+        $lastImportSources = array();
+		$primarySource = $data['data']['masterRecord']['source'];
+
         if (is_array($value))
         {
-            $lastImportId = array_pop($value);
-        }
-
-        if ($lastImportId)
-        {
-            $parts = explode(':', $lastImportId);
-            if (2 === count($parts))
+            foreach ($value as $lastImportId)
             {
-                $lastImportSource = $parts[0];
+                $parts = explode(':', $lastImportId);
+                if (2 === count($parts) && $parts[0] != $primarySource)
+                {
+					
+                    $lastImportSources[] = parent::renderValue($parts[0], $fieldname, $data);
+                }
             }
         }
 
-        return parent::renderValue($lastImportSource, $fieldname, $data);
+        return implode(', ', $lastImportSources);
     }
 }

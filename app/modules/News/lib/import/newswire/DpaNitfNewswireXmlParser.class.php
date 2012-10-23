@@ -4,7 +4,7 @@
  * The DpaNitfNewswireXmlParser class is a concrete implementation of the BaseXmlParser base class.
  * It provides parsing of the dpa(neswire)-nitf xml format.
  *
- * @version         $Id: $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         News

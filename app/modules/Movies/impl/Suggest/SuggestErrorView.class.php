@@ -4,7 +4,7 @@
  * The Movies_Suggest_SuggestErrorView class handles the presentation logic for our
  * Movies/Suggest actions's error data.
  *
- * @version         $Id: Movies_Suggest_SuggestErrorView.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Movies

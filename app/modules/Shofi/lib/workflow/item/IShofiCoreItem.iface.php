@@ -3,7 +3,7 @@
 /**
  * The IShofiCoreItem interface defines the structure exposed by the shofi sales context.
  *
- * @version $Id: ShofiWorkflowItem.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Shofi

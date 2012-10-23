@@ -2,7 +2,7 @@
 
 /**
  *
- * @version $Id: MoviesWorkflowService.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Movies
@@ -22,10 +22,16 @@ class MoviesWorkflowService extends BaseWorkflowService
         return self::$instance;
     }
 
+    public function findItemByImportIdentifier($importIdentifier)
+    {
+        $listConfig = ListConfig::fromArray(AgaviConfig::get('movies.list_config'));
+        $moviesFinder = MoviesFinder::create($listConfig);
+        
+        return $moviesFinder->findItemByImportIdentifier($importIdentifier);
+    }
+
     protected function getWorkflowItemImplementor()
     {
         return self::ITEM_IMPLEMENTOR;
     }
 }
-
-?>

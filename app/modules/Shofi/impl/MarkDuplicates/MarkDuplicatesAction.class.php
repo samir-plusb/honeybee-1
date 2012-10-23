@@ -4,12 +4,13 @@ class Shofi_MarkDuplicatesAction extends ShofiBaseAction
 {
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
-        $categoryIdentifier = $parameters->getParameter('category', NULL);
         $categoryService = ShofiCategoriesWorkflowService::getInstance();
-
+        $placeMatcher = new ShofiPlaceMatcher();
         $workflowService = ShofiWorkflowService::getInstance();
         $finder = ShofiFinder::create(ListConfig::fromArray(AgaviConfig::get('shofi.list_config')));
+
         $listStateParameters = array('limit' => 2500, 'offset' => 0);
+        $categoryIdentifier = $parameters->getParameter('category', NULL);
         if ($categoryIdentifier)
         {
             $listStateParameters['filter'] = array('detailItem.category' => $categoryIdentifier);
@@ -24,41 +25,39 @@ class Shofi_MarkDuplicatesAction extends ShofiBaseAction
             echo "Matched " . $entriesProcessed . " places for duplicates till now ..." . PHP_EOL;
             foreach ($result->getItems() as $item)
             {
+                $entriesProcessed++;
                 $categoryId = $item->getDetailItem()->getCategory();
-                if (! $categoryId)
+                if (! $categoryId || $item->hasAttribute('potential_dups'))
                 {
                     continue;
                 }
                 $categoryItem = $categoryService->fetchWorkflowItemById($categoryId);
                 if (! $categoryItem)
                 {
-                    // this should not happen, perhaps write an error log
+                    // this should/can not happen, perhaps write an error log just in case
                     continue;
                 }
-                $dupMarker = 'potential_dups_' . strtolower($categoryItem->getMasterRecord()->getName());
-                $markedEntries = 0;
-                $potentialDups = $finder->findPotentialDuplicates($item)->getItems();
-                foreach ($potentialDups as $potentialDup)
+
+                $potentialDupsGroup = array();
+                foreach ($placeMatcher->match($item) as $potentialDup)
                 {
                     if ($categoryId === $potentialDup->getDetailItem()->getCategory())
                     {
-                        $markedEntries++;
-                        $potentialDup->setAttribute('conflict_state', $dupMarker);
-                        $workflowService->storeWorkflowItem($potentialDup);
+                        $potentialDupsGroup[$potentialDup->getIdentifier()] = $potentialDup;
+                        $entriesAffected++;
                     }
                 }
-                if (0 < $markedEntries)
+                if (0 < count($potentialDupsGroup))
                 {
-                    $item->setAttribute('conflict_state', $dupMarker);
-                    $workflowService->storeWorkflowItem($item);
+                    $potentialDupsGroup[$item->getIdentifier()] = $item;
                     $entriesAffected++;
+                    foreach ($potentialDupsGroup as $potentialMatch)
+                    {
+                        $potentialMatch->setAttribute('group_leader', $item->getIdentifier());
+                        $potentialMatch->setAttribute('potential_dups', array_keys($potentialDupsGroup));
+                        $workflowService->storeWorkflowItem($potentialMatch);
+                    }
                 }
-                else if ($item->getAttribute('conflict_state', FALSE))
-                {
-                    $item->removeAttribute('conflict_state');
-                    $workflowService->storeWorkflowItem($item);
-                }
-                $entriesProcessed++;
             }
 
             $listState->setOffset($listState->getOffset() + $listState->getLimit());

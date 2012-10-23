@@ -52,7 +52,7 @@
                 <ae:parameter name="clientSideController">
                     <ae:parameter name="implementor">CategoriesListController</ae:parameter>
                     <ae:parameter name="options">
-                        <ae:parameter name="find_duplicates_route">shofi.list</ae:parameter>
+                        <ae:parameter name="find_duplicates_route">shofi.view_duplicates</ae:parameter>
                         <!-- urls can be either absolut urls or agavi route names. -->
                         <ae:parameter name="vertical_batch">
                             <ae:parameter name="post_url">@see Shofi/ListAction::prepareListConfig</ae:parameter>

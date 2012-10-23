@@ -4,7 +4,7 @@
  * The AssetFile is a concrete implementation of the IAssetFile interface.
  * It exposes a coarse grained api for moving and deleting files.
  * 
- * @version         $Id: AssetFile.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

@@ -4,6 +4,8 @@ class Events_ExportAction extends EventsBaseAction
 {
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
+		$tipFeExport = new TipFrontendEventExport();
+		
         $finder = EventsFinder::create(ListConfig::fromArray(
             AgaviConfig::get('events.list_config')
         ));
@@ -11,19 +13,22 @@ class Events_ExportAction extends EventsBaseAction
             'limit' => 5000,
             'offset' => 0
         ));
+
+        $currentTimestamp = time();
+
         $entriesProcessed = 0;
         while (($result = $finder->find($listState)) && 0 < $result->getItemsCount())
         {
             $this->printMemUsage();
-            echo "Exported " . $entriesProcessed . " Events ..." . PHP_EOL;
             foreach ($result->getItems() as $item)
             {
-				// export Events here ...
+                $tipFeExport->export($item);
             }
             $listState->setOffset(
                 $listState->getOffset() + $listState->getLimit()
             );
             $entriesProcessed += $listState->getLimit();
+            echo "Exported " . $entriesProcessed . " Events ..." . PHP_EOL;
         }
         return 'Success';
     }

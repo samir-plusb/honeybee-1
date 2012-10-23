@@ -4,7 +4,7 @@
  * This plugin takes care of editing shofi categories.
  *
  * @author Thorsten Schmitt-Rink <thorstenn.schmitt-rink@berlinonline.de>
- * @version $Id: WorkflowEditShofiCategoryPlugin.class.php 1058 2012-03-22 19:08:10Z tschmitt $
+ * @version $Id$
  * @package Shofi_Categories
  * @subpackage Workflow/Plugin
  */

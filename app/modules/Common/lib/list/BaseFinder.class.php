@@ -24,40 +24,62 @@ abstract class BaseFinder implements IFinder
         $this->workflowService = $workflowService;
     }
 
-    public function query(Elastica_Query_Abstract $query = NULL, Elastica_Filter_Abstract $filter = NULL, $offset = 0, $limit = 1000)
+    public function findItemByImportIdentifier($importIdentifier)
+    {
+        $listState = ListState::fromArray(array(
+            'offset' => 0,
+            'limit' => 1, 
+            'filter' => array('attributes.import_ids' => $importIdentifier)
+        ));
+        $result = $this->find($listState);
+        $resultItems = $result->getItems();
+        if (1 < $result->getTotalCount())
+        {
+            // @todo The same import-identifier more than once. This shouldn't happen. How to handle?
+        }
+
+        return (0 < $result->getTotalCount()) ? $resultItems[0] : NULL;
+    }
+
+    public function query(Elastica_Query_Abstract $query = NULL, Elastica_Filter_Abstract $filter = NULL, $offset = 0, $limit = 1000, array $sort = NULL)
     {
         $query = Elastica_Query::create($query);
         $query->setLimit($limit);
-        $query->setFrom(0);
+        $query->setFrom($offset);
+        if ($sort)
+        {
+            $query->setSort($sort);
+        }
         if ($filter)
         {
             $query->setFilter($filter);
         }
-        $esType = $this->esIndex->getType(
-            $this->getIndexType()
-        );
-        return $this->hydrateResult(
-            $esType->search($query)
-        );
+        $esType = $this->esIndex->getType($this->getIndexType());
+        return $this->hydrateResult($esType->search($query));
     }
 
-    public function findByIds(array $ids)
+    public function findByIds(array $ids, $offset = 0, $limit = 1000)
     {
         $esType = $this->esIndex->getType(
             $this->getIndexType()
         );
-        /*
-        return $this->hydrateDocuments(
-            $esType->getDocuments($ids)
-        );
-        */
         $query = Elastica_Query::create(NULL);
-        $filter = new Elastica_Filter_Ids($this->getIndexType(), $ids);
-        $query->setFilter($filter);
-        $query->setLimit(1000);
-        return $this->hydrateResult(
-            $esType->search($query)
+        $idsFilter = new Elastica_Filter_Ids($this->getIndexType(), $ids);
+        $notDeletedFilter = new Elastica_Filter_Not(
+            new Elastica_Filter_Term(
+                array('attributes.marked_deleted' => TRUE)
+            )
         );
+
+        $andContainer = new Elastica_Filter_And();
+        $andContainer->addFilter($idsFilter);
+        $andContainer->addFilter($notDeletedFilter);
+
+        $query->setFilter($andContainer);
+        $query->setFrom($offset);
+        $query->setLimit($limit);
+
+        return $this->hydrateResult($esType->search($query));
     }
 	
 	public function ignoreDeletedItems($ignore = TRUE)
@@ -115,6 +137,11 @@ abstract class BaseFinder implements IFinder
         return $this->countQuery(
             $queryBuilder->build($listState)
         );
+    }
+
+    public function getListConfig()
+    {
+        return $this->listConfig;
     }
 
     protected function countQuery(Elastica_Query $query)

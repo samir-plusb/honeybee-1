@@ -5,7 +5,7 @@
  * It holds the originally imported unmodified data as provided by the shofi import
  * and is used as the primary datasource for the shofi editing process.
  *
- * @version $Id: ShofiMasterRecord.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Shofi

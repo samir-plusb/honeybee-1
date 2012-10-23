@@ -2,7 +2,7 @@
 
 /**
  *
- * @version $Id: ShofiCategoriesWorkflowService.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Shofi_Categories
@@ -27,5 +27,3 @@ class ShofiCategoriesWorkflowService extends BaseWorkflowService
         return self::ITEM_IMPLEMENTOR;
     }
 }
-
-?>

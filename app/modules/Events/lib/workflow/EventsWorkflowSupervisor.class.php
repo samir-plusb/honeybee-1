@@ -3,7 +3,7 @@
 /**
  * The EventsWorkflowSupervisor ovverides the general WorkflowSupervisor to hook in the correct database.
  *
- * @version         $Id: EventsWorkflowSupervisor.class.php 1009 2012-03-02 19:01:55Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Events

@@ -4,7 +4,7 @@
  * The ProjectAssetService is a concrete implementation of the IAssetService interface.
  * It exposes a coarse grained crud api for managing assets.
  *
- * @version         $Id: ProjectAssetService.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset

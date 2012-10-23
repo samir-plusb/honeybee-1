@@ -4,7 +4,7 @@
  * The Shofi_Config_ConfigErrorView class handles the presentation logic for our
  * Shofi/Config actions's error data.
  *
- * @version         $Id: Shofi_Config_ConfigErrorView.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi

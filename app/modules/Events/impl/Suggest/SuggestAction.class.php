@@ -3,7 +3,7 @@
 /**
  * The Events_SuggestAction class is responseable for delivering movie suggests (autocomplete).
  *
- * @version         $Id: Events_SuggestAction.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Events

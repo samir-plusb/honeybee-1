@@ -56,6 +56,7 @@ class Import_RunAction extends ImportBaseAction
             }
             catch(Exception $e)
             {
+                throw $e;
                 /* @todo better exception handling */
                 $this->setAttribute('errors', array($e->getMessage()));
                 $this->logError("An unexpected error occured during import: " . $e->getMessage());

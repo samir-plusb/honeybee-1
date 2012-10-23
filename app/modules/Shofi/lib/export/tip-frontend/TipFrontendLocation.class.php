@@ -4,7 +4,7 @@
  * The TipFrontendLocation class is represents the structure of ShofiWorkflowItems
  * from the view of the TipEvent-frontend.
  *
- * @version         $Id: TipFrontendLocation.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Events

@@ -42,6 +42,9 @@
                 }
             }
         },
+        "exportId": {
+            "type": "integer"
+        },
         "attributes": {
             "type": "object",
             "dynamic": true
@@ -74,13 +77,11 @@
                     "include_in_all": false,
                     "properties": {
                         "user": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "date": {
                             "type": "date",
-                            "format": "date_time_no_millis",
-                            "store": true
+                            "format": "date_time_no_millis"
                         }
                     }
                 },
@@ -88,55 +89,53 @@
                     "include_in_all": false,
                     "properties": {
                         "user": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "date": {
                             "type": "date",
-                            "format": "date_time_no_millis",
-                            "store": true
+                            "format": "date_time_no_millis"
                         }
                     }
                 },
                 "source": {
                     "type": "string",
-                    "index": "not_analyzed",
-                    "store": true
+                    "index": "not_analyzed"
                 },
                 "origin": {
                     "type": "string",
-                    "index": "not_analyzed",
-                    "store": true
+                    "index": "not_analyzed"
                 },
                 "title": {
                     "type": "multi_field",
                     "fields": {
                         "title": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "raw": {
                             "type": "string",
-                            "index": "not_analyzed",
-                            "store": true
+                            "index": "not_analyzed"
                         }
                     }
                 },
                 "teaser": {
+                    "type": "string"
+                },
+                "subline": {
+                    "type": "string"
+                },
+                "website": {
                     "type": "string",
-                    "store": true
+                    "index": "not_analyzed"
                 },
                 "director": {
                     "type": "multi_field",
                     "fields": {
                         "director": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "raw": {
                             "type": "string",
-                            "index": "not_analyzed",
-                            "store": true
+                            "index": "not_analyzed"
                         }
                     }
                 },
@@ -144,13 +143,11 @@
                     "type": "multi_field",
                     "fields": {
                         "actors": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "raw": {
                             "type": "string",
-                            "index": "not_analyzed",
-                            "store": true
+                            "index": "not_analyzed"
                         }
                     }
                 },
@@ -158,35 +155,29 @@
                     "type": "multi_field",
                     "fields": {
                         "genre": {
-                            "type": "string",
-                            "store": true
+                            "type": "string"
                         },
                         "raw": {
                             "type": "string",
-                            "index": "not_analyzed",
-                            "store": true
+                            "index": "not_analyzed"
                         }
                     }
                 },
                 "rental": {
                     "type": "string",
-                    "index": "not_analyzed",
-                    "store": true
+                    "index": "not_analyzed"
                 },
                 "fsk": {
                     "type": "string",
-                    "index": "not_analyzed",
-                    "store": true
+                    "index": "not_analyzed"
                 },
                 "country": {
                     "type": "string",
-                    "index": "not_analyzed",
-                    "store": true
+                    "index": "not_analyzed"
                 },
                 "duration": {
                     "type": "string",
-                    "index": "not_analyzed",
-                    "store": true
+                    "index": "not_analyzed"
                 },
                 "year": {
                     "type": "string",
@@ -195,36 +186,46 @@
                 },
                 "releaseDate": {
                     "type": "date",
-                    "format": "yyyy-MM-dd",
-                    "store": true
+                    "format": "yyyy-MM-dd"
+                },
+                "media": {
+                    "properties": {
+                        "images": {
+                            "type": "object",
+                            "dynamic": true
+                        },
+                        "galleries": {
+                            "type": "object",
+                            "dynamic": true
+                        },
+                        "trailers": {
+                            "type": "object",
+                            "dynamic": true
+                        }
+                    }
                 },
                 "screenings": {
                     "include_in_all": false,
                     "properties": {
                         "theaterId": {
                             "type": "string",
-                            "store": true,
                             "index": "not_analyzed"
                         },
                         "screenId": {
                             "type": "string",
-                            "store": true,
                             "index": "not_analyzed"
                         },
                         "version": {
                             "type": "string",
-                            "store": true,
                             "index": "not_analyzed"
                         },
                         "date": {
                             "type": "date",
-                            "format": "dd.MM.YYYY",
-                            "store": true
+                            "format": "dd.MM.YYYY"
                         },
                         "time": {
                             "type": "date",
-                            "format": "HH:mm",
-                            "store": true
+                            "format": "HH:mm"
                         }
                     }
                 }

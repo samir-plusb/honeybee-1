@@ -4,7 +4,7 @@
  * The WkgDataRecord class is a concrete implementation of the ShofiDataRecord base class.
  * It provides handling for wkg xml data.
  *
- * @version         $Id: WkgDataRecord.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.Schmitt-rink@berlinonline.de>
  * @package         Shofi

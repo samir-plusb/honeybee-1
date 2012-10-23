@@ -67,7 +67,7 @@ Navigation:
 Editing:
     Holds form for editing the current shofi place's detailItem. (All form values are nested here.)
 ############################################################################################### -->
-            <div class="span8 editing">
+            <div class="span8 editing well">
                 <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $escape($ticketId); ?>" />
                 <div class="row-fluid">
                     <div class="span12">
@@ -112,13 +112,13 @@ Editing:
                                     <div class="span6">
                                         <h3>Schlagworte</h3>
                                         <section class="widget-tags-list widget-keywords"
-                                                  data-tags-list-options='<?php echo $keywordsWidgetOptions; ?>'>
+                                                  data-tags-list-options="<?php echo $keywordsWidgetOptions; ?>">
                                         </section>
                                     </div>
                                     <div class="span6">
                                         <h3>interne Schlagworte</h3>
                                         <section class="widget-tags-list widget-internal-keywords"
-                                                  data-tags-list-options='<?php echo $internalKeywordsWidgetOptions; ?>'>
+                                                  data-tags-list-options="<?php echo $internalKeywordsWidgetOptions; ?>">
                                         </section>
                                     </div>
                                 </div>
@@ -129,13 +129,13 @@ Editing:
                                     <div class="span6">
                                         <h3>Primärbranche</h3>
                                         <section class="widget-tags-list widget-category"
-                                                 data-tags-list-options='<?php echo $categoryWidgetOptions; ?>'>
+                                                 data-tags-list-options="<?php echo $categoryWidgetOptions; ?>">
                                         </section>
                                     </div>
                                     <div class="span6">
                                         <h3>Weitere Branchen</h3>
                                         <section class="widget-tags-list widget-additional-categories"
-                                                  data-tags-list-options='<?php echo $categoriesWidgetOptions; ?>'>
+                                                  data-tags-list-options="<?php echo $categoriesWidgetOptions; ?>">
                                         </section>
                                     </div>
                                 </div>
@@ -143,20 +143,20 @@ Editing:
 <!-- **tab: detailItem.openingTimes -->
                             <div class="tab-pane well" id="tab-3">
                                 <section class="widget-time-table widget-opening-times row-fluid "
-                                         data-time-table-options='<?php echo $openingTimesWidgetOptions; ?>'>
+                                         data-time-table-options="<?php echo $openingTimesWidgetOptions; ?>">
                                 </section>
                             </div>
 <!-- **tab: detailItem.attributes -->
                             <div class="tab-pane well" id="tab-4">
                                 <section class="widget-key-values-list widget-attributes"
-                                         data-key-values-list-options='<?php echo $attrbuteWidgetOptions; ?>'>
+                                         data-key-values-list-options="<?php echo $attrbuteWidgetOptions; ?>">
                                 </section>
                             </div>
 <!-- **tab: detailItem.attachments -->
                             <div class="tab-pane well" id="tab-5">
                                 <div class="row-fluid">
                                     <section class="widget-asset-list widget-detail-attachments"
-                                             data-asset-list-options='<?php echo $assetListOptions; ?>'>
+                                             data-asset-list-options="<?php echo $assetListOptions; ?>">
                                     </section>
                                 </div>
                             </div>
@@ -164,7 +164,7 @@ Editing:
                             <div class="tab-pane well" id="tab-6">
                                 <div class="row-fluid">
                                     <section class="widget-embed-code video-embed-code-widget"
-                                             data-embed-code-widget-options='<?php echo $videoEmbedCodeWidgetOpts; ?>'>
+                                             data-embed-code-widget-options="<?php echo $videoEmbedCodeWidgetOpts; ?>">
                                     </section>
                                 </div>
                             </div>

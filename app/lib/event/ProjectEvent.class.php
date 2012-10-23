@@ -4,7 +4,7 @@
  * ProjectEvent is a simple DTO that holds event related information
  * and is used by the ProjectEventProxy class to publish events.
  *
- * @version $Id: ProjectEvent.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Project

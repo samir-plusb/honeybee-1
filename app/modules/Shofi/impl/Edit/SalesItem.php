@@ -62,9 +62,9 @@ Navigation:
 Editing:
     Holds form for editing the current shofi place's salesItem. (All form values are nested here.)
 ############################################################################################### -->
-			<div class="span8 editing">
+			<div class="span8 editing well">
                 <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $escape($ticketId); ?>" />
-				<div class="row-fluid ">
+				<div class="row-fluid">
 					<div class="span12">
 <!-- salesItem data -->
 						<div class="page-header" style="margin-top:0">

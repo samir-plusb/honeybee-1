@@ -2,6 +2,8 @@
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
     <ae:configuration>
         <settings prefix="movies.">
+            <setting name="telavision_dir">%core.app_dir%/../data/catalogs/movies/telavision</setting>
+
             <setting name="connections">
                 <ae:parameters>
                     <ae:parameter name="couchdb">Movies.Write</ae:parameter>
@@ -30,22 +32,24 @@
                             <ae:parameter name="valuefield">masterRecord.title</ae:parameter>
                             <ae:parameter name="sortfield">masterRecord.title.raw</ae:parameter>
                         </ae:parameter>
+                        <ae:parameter name="release_date">
+                            <ae:parameter name="valuefield">masterRecord.releaseDate</ae:parameter>
+                            <ae:parameter name="sortfield">masterRecord.releaseDate</ae:parameter>
+                        </ae:parameter>
                         <ae:parameter name="genre">
                             <ae:parameter name="valuefield">masterRecord.genre</ae:parameter>
                             <ae:parameter name="sortfield">masterRecord.genre.raw</ae:parameter>
                         </ae:parameter>
-                        <ae:parameter name="country">
-                            <ae:parameter name="valuefield">masterRecord.country</ae:parameter>
-                            <ae:parameter name="sortfield">masterRecord.country</ae:parameter>
+                        <ae:parameter name="subline">
+                            <ae:parameter name="valuefield">masterRecord.subline</ae:parameter>
                         </ae:parameter>
-                        <ae:parameter name="fsk">
-                            <ae:parameter name="valuefield">masterRecord.fsk</ae:parameter>
-                            <ae:parameter name="sortfield">masterRecord.fsk</ae:parameter>
+                        <ae:parameter name="poster">
+                            <ae:parameter name="valuefield">masterRecord.media.images.poster600</ae:parameter>
+                            <ae:parameter name="renderer">MoviesAssetRenderer</ae:parameter>
                         </ae:parameter>
-                        <ae:parameter name="owner">
-                            <ae:parameter name="valuefield">currentState.owner</ae:parameter>
-                            <ae:parameter name="sortfield">currentState.owner</ae:parameter>
-                            <ae:parameter name="renderer">TicketOwnerListValueRenderer</ae:parameter>
+                        <ae:parameter name="hdpic">
+                            <ae:parameter name="valuefield">masterRecord.media.images.hdPic</ae:parameter>
+                            <ae:parameter name="renderer">MoviesAssetRenderer</ae:parameter>
                         </ae:parameter>
                     </ae:parameters>
                 </ae:parameter>

@@ -4,7 +4,7 @@
  * The TipEventsXmlDataSource class is a concrete implementation of the BaseDataSource base class
  * and provides an interface to traverse event records that are currently available for import.
  *
- * @version         $Id: TipEventsXmlDataSource.class.php 1299 2012-06-12 16:09:14Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Events
@@ -60,6 +60,8 @@ class TipEventsXmlDataSource extends BaseDataSource
      */
     protected function init()
     {
+        $this->archives = array();
+
         $this->cwd = $this->fetchWorkingDirectoryPath();
         $this->deleteDirectory($this->cwd, FALSE);
 
@@ -67,6 +69,7 @@ class TipEventsXmlDataSource extends BaseDataSource
         $this->files = $fileSettings['settings'];
 
         $this->loadNextArchive();
+	echo "Memory-Usage: " . memory_get_usage(TRUE) . "\n";
     }
 
     /**
@@ -77,7 +80,7 @@ class TipEventsXmlDataSource extends BaseDataSource
      */
     protected function getCurrentOrigin()
     {
-        return basename(current($this->files));
+        return basename(current($this->archives)).'/'.basename(current($this->files));
     }
 
     // ---------------------------------------------
@@ -93,6 +96,7 @@ class TipEventsXmlDataSource extends BaseDataSource
      */
     protected function forwardCursor()
     {
+
         if (! $this->archives->valid())
         {
             return FALSE;
@@ -125,19 +129,21 @@ class TipEventsXmlDataSource extends BaseDataSource
      */
     protected function loadNextFile()
     {
-        // rewind selecta, means reset sursor and data
+        // rewind selecta, means reset cursor and data
         $this->cursor = 0;
         $this->data = array();
 
         $next = each($this->files);
         if (FALSE === $next)
         {
+            echo "End of file for the current archive " . $this->archives->current() . PHP_EOL;
             $this->markArchiveAsImported($this->archives->current());
             $this->deleteDirectory($this->cwd, FALSE);
 
             return FALSE;
         }
 
+		echo "Memory-Usage load " . $next['value'] . ": " . memory_get_usage(TRUE) . "\n";
         $file = realpath($next['value']);
         if (! $file)
         {
@@ -151,6 +157,10 @@ class TipEventsXmlDataSource extends BaseDataSource
             $this->parser->setFilePoolProvider(
                 $this->createFilePoolProviderFor($file)
             );
+
+            // We need some live loggin here.
+            echo PHP_EOL . 'Starting to parse ' . $file . PHP_EOL;
+
             $this->data = $this->parser->parseXml($file);
         }
         catch(XmlParserException $e)
@@ -182,6 +192,10 @@ class TipEventsXmlDataSource extends BaseDataSource
      */
     protected function loadNextArchive()
     {
+
+        // Reset files-array to set internal cursor to the begin of the array
+        reset($this->files);
+
         if (($nextArchive = $this->forwardArchiveIterator()))
         {
             if (! $this->extractArchive($nextArchive))
@@ -192,7 +206,12 @@ class TipEventsXmlDataSource extends BaseDataSource
             $this->parser = $this->createParser();
             if (! $this->loadNextFile())
             {
+                echo "Could not load, forgive the toad...." . PHP_EOL;
                 return $this->loadNextArchive();
+            }
+            else
+            {
+                return TRUE;
             }
         }
         else
@@ -210,9 +229,13 @@ class TipEventsXmlDataSource extends BaseDataSource
     {
         if (! $this->archives)
         {
-            $this->archives = new TipEventsArchiveIterator($this->cwd, '_evt_imported');
+            //$this->archives = new TipEventsArchiveIterator($this->cwd, '_evt_imported');
+            $this->archives = new TipEventsArchiveSortingIterator($this->cwd, '_evt_imported');
         }
-        $this->archives->next(); // after construction this call moves the cursor to the first valid element.
+        else
+        {
+            $this->archives->next(); // after construction this call moves the cursor to the first valid element.
+        }
 
         return $this->archives->current();
     }
@@ -225,6 +248,9 @@ class TipEventsXmlDataSource extends BaseDataSource
     protected function extractArchive($archivePath)
     {
         $archive = new ZipArchive();
+
+        echo PHP_EOL . PHP_EOL . 'Trying to extract archive ' . basename($archivePath) . PHP_EOL;
+
         if (TRUE === $archive->open($archivePath))
         {
             if (! $archive->extractTo($this->cwd))

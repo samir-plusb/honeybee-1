@@ -3,7 +3,7 @@
 /**
  * The EventsFinder is responseable for finding Events and provides several methods to do so.
  *
- * @version         $Id: EventsFinder.class.php 1086 2012-04-18 21:29:31Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Events

@@ -4,7 +4,7 @@
  * The EventsSchedule class reflects the structure of an event
  * taking place at different locations on different times.
  *
- * @version $Id: EventsSchedule.class.php -1   $
+ * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Events

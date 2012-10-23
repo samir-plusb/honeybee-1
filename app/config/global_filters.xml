@@ -8,7 +8,6 @@
                 <ae:parameter name="output_types">
                     <ae:parameter>html</ae:parameter>
                 </ae:parameter>
-
                 <ae:parameter name="pack_scripts">off</ae:parameter>
                 <ae:parameter name="js_cache">%core.app_dir%/../pub/js/_cache/</ae:parameter>
                 <ae:parameter name="css_cache">%core.app_dir%/../pub/css/_cache/</ae:parameter>
@@ -57,7 +56,6 @@
                 <ae:parameter name="output_types">
                     <ae:parameter>html</ae:parameter>
                 </ae:parameter>
-
                 <ae:parameter name="pack_scripts">on</ae:parameter>
                 <!-- @todo we porbally would want to a dedicated testing/cache/ directory here. -->
                 <ae:parameter name="js_cache">%core.app_dir%/../pub/js/_cache/</ae:parameter>
@@ -66,4 +64,18 @@
 
         </filters>
     </ae:configuration>
-</ae:configurations>
+
+    <ae:configuration context="web" environment="tip.production">
+        <filters>
+            <filter name="ScriptFilter" class="ProjectScriptFilter">
+                <ae:parameter name="output_types">
+                    <ae:parameter>html</ae:parameter>
+                </ae:parameter>
+                <ae:parameter name="pack_scripts">on</ae:parameter>
+                <!-- @todo we porbally would want to a dedicated testing/cache/ directory here. -->
+                <ae:parameter name="js_cache">%core.app_dir%/../pub/js/_cache/</ae:parameter>
+                <ae:parameter name="css_cache">%core.app_dir%/../pub/css/_cache/</ae:parameter>
+            </filter>
+        </filters>
+    </ae:configuration>
+</ae:configurations> 

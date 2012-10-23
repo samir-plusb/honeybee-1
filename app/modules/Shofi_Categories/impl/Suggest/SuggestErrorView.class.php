@@ -4,7 +4,7 @@
  * The Shofi_Categories_Suggest_SuggestErrorView class handles the presentation logic for our
  * Shofi_Categories/Suggest actions's error data.
  *
- * @version         $Id: Shofi_Categories_Suggest_SuggestErrorView.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi_Categories

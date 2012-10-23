@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version         $Id: ShofiDataRecord.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  * @package         Shofi
@@ -179,5 +179,3 @@ abstract class ShofiDataRecord extends BaseDataRecord implements IShofiEntity
          return $this->getSource() . ':' . $identifier;
     }
 }
-
-?>

@@ -6,6 +6,8 @@ midas.list.ListItemModel = midas.core.BaseObject.extend({
 
     display_data: null,
 
+    css_classes: null,
+
     ticket: null,
 
     selected: null,
@@ -17,6 +19,7 @@ midas.list.ListItemModel = midas.core.BaseObject.extend({
         this.data = item_data.data;
         this.ticket = item_data.ticket;
         this.display_data = item_data.display_data;
+        this.css_classes = item_data.css_classes ? item_data.css_classes.join(" ") : "";
         this.selected = ko.observable(false);
     }
 });

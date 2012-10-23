@@ -1,6 +1,30 @@
+html,
 body
 {
-    padding-top: 95px;
+  height: 100%;
+}
+
+html
+{
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cdcdcd), to(#ffffff)); 
+  background: -webkit-linear-gradient(top, #cdcdcd, #ffffff); 
+  background: -moz-linear-gradient(top, #cdcdcd, #ffffff); 
+  background: -ms-linear-gradient(top, #cdcdcd, #ffffff);
+  background: -o-linear-gradient(top, #cdcdcd, #ffffff);
+  background-attachment: fixed;
+}
+
+body
+{
+  background: none;
+}
+
+.wrapper
+{
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -34px;
 }
 
 .navbar .brand:hover
@@ -315,4 +339,47 @@ dd {
 
 .dl-horizontal dd {
   margin-left: 60px;
+}
+
+.footer, 
+.push 
+{
+    padding: 7px 20px;
+    height: 20px;
+}
+
+.footer
+{
+    background-color: rgba(44, 44, 44, 0.6);
+    background-image: -moz-linear-gradient(center top , rgba(51, 51, 51, 0.6), rgba(34, 34, 34, 0.6));
+    background-repeat: repeat-x;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25), 0px -1px 0px rgba(0, 0, 0, 0.1) inset;
+}
+
+.footer p
+{
+    color: #cdcdcd;
+}
+
+.editing .page-header,
+.section-screenings .page-header
+{
+  border-bottom: 1px solid black;
+}
+
+.movie-galleries-list,
+.movie-galleries-list ul,
+.movie-images-list
+{
+  margin: 0;
+}
+
+.controller-edit
+{
+  margin-top: 95px;
+}
+
+.container-vertical-item table
+{
+  background: rgb(251, 251, 251);
 }

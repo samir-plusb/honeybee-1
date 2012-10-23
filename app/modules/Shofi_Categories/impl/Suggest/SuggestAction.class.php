@@ -3,7 +3,7 @@
 /**
  * The Shofi_Categories_SuggestAction class is responseable for delivering shofi category suggests (autocomplete).
  *
- * @version         $Id: Shofi_Categories_SuggestAction.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi_Categories

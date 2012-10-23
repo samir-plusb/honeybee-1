@@ -4,7 +4,7 @@
  * The Shofi_Config_ConfigSuccessView class handles the presentation logic for our
  * Shofi/Config actions's success data.
  *
- * @version         $Id: Import_ImperiaSuccessView.class.php -1   $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi
@@ -59,13 +59,14 @@ class Shofi_Config_ConfigSuccessView extends ShofiBaseView
                                 'value' => $category->getIdentifier()
                             );
                             $cleanCategoryIds[$idx] = $category->getIdentifier();
-                            break;
                         }
                     }
                 }
-                ksort($categoryAutocompleteValues);
-                ksort($cleanCategoryIds);
             }
+            ksort($categoryAutocompleteValues);
+            $categoryAutocompleteValues = array_values($categoryAutocompleteValues);
+            ksort($cleanCategoryIds);
+            $cleanCategoryIds = array_values($cleanCategoryIds);
             $categoryTagEntries[$extCategory] = $categoryAutocompleteValues;
             // $macther->setMatchesFor($extCategory, $cleanCategoryIds);
         }

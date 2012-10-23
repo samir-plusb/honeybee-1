@@ -3,7 +3,7 @@
 /**
  * The ShofiCategoriesFinder is responseable for finding shofi-categories and provides several methods to do so.
  *
- * @version         $Id: ShofiCategoriesFinder.class.php 1086 2012-04-18 21:29:31Z tschmitt $
+ * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Shofi_Categories
@@ -58,6 +58,28 @@ class ShofiCategoriesFinder extends BaseFinder
             $facets[$catIdentifer]['count'] = $categoryFacet['count'];
         }
         return $facets;
+    }
+
+    public function findCategoryByName($name)
+    {
+        $categoryNameEqual = new Elastica_Filter_Term(array(
+            'masterRecord.name.raw' => $name
+        ));
+        $notDeleted = new Elastica_Filter_Not(
+            new Elastica_Filter_Term(array('attributes.marked_deleted' => TRUE))
+        );
+
+        $andContainer = new Elastica_Filter_And();
+        $andContainer->addFilter($categoryNameEqual);
+        $andContainer->addFilter($notDeleted);
+
+        $query = Elastica_Query::create($andContainer);
+        $esType = $this->esIndex->getType($this->getIndexType());
+
+        $result = $this->hydrateResult($esType->search($query->setLimit(1)));
+
+        $items = $result->getItems();
+        return (0 < $result->getTotalCount()) ? $items[0] : NULL;
     }
 
     public function getCategoriesByNames(array $categoryNames)
