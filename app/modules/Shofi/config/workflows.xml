@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <workflow name="shofi_places">
+            <description>
+                This workflow defines the process structure for editing/refining created/imported shofi places.
+            </description>
+            <start_at>edit_place</start_at>
+            <steps>
+
+                <step name="edit_place">
+                    <description>Manually edit a shofi place and create content-item(s) from it.</description>
+                    <plugin type="EditPlace">
+                        <gates>
+                            <gate_step label="delete this place" name="delete">delete_place</gate_step>
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="delete_place">
+                    <description>
+                        Marks a given shofi place as deleted.
+                        During a configurable time period the item(place) can then be recovered,
+                        before being removed by the system's maintenance.
+                    </description>
+                    <plugin type="DeletePlace">
+                        <gates>
+                            <gate_end name="trash" />
+                        </gates>
+                    </plugin>
+                </step>
+
+            </steps>
+        </workflow>
+    </ae:configuration>
+</ae:configurations>

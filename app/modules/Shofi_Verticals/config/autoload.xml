@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+
+        <!-- Agavi -->
+        <autoload name="ShofiVerticalsBaseAction">%core.module_dir%/Shofi_Verticals/lib/agavi/action/ShofiVerticalsBaseAction.class.php</autoload>
+        <autoload name="ShofiVerticalsBaseView">%core.module_dir%/Shofi_Verticals/lib/agavi/view/ShofiVerticalsBaseView.class.php</autoload>
+        <autoload name="ShofiVerticalItemValidator">%core.module_dir%/Shofi_Verticals/lib/agavi/validator/ShofiVerticalItemValidator.class.php</autoload>
+        <!-- /Agavi -->
+
+
+        <!-- Import Integration -->
+        <autoload name="ShofiVerticalsDataRecord">%core.module_dir%/Shofi_Verticals/lib/import/ShofiVerticalsDataRecord.class.php</autoload>
+
+        <autoload name="ShofiVerticalsJsonDataSource">%core.module_dir%/Shofi_Verticals/lib/import/json/ShofiVerticalsJsonDataSource.class.php</autoload>
+        <autoload name="ShofiVerticalsJsonDataSourceConfig">%core.module_dir%/Shofi_Verticals/lib/import/json/ShofiVerticalsJsonDataSourceConfig.class.php</autoload>
+        <autoload name="ShofiVerticalsJsonDataRecord">%core.module_dir%/Shofi_Verticals/lib/import/json/ShofiVerticalsJsonDataRecord.class.php</autoload>
+
+
+        <autoload name="ShofiVerticalsDataImport">%core.module_dir%/Shofi_Verticals/lib/import/ShofiVerticalsDataImport.class.php</autoload>
+        <autoload name="ShofiVerticalsDataImportConfig">%core.module_dir%/Shofi_Verticals/lib/import/ShofiVerticalsDataImportConfig.class.php</autoload>
+        <autoload name="ShofiVerticalsWorkflowService">%core.module_dir%/Shofi_Verticals/lib/ShofiVerticalsWorkflowService.class.php</autoload>
+        <!-- /Import Integration -->
+
+
+        <!-- Workflow Integration -->
+        <!-- Item -->
+        <autoload name="ShofiVerticalsWorkflowItem">%core.module_dir%/Shofi_Verticals/lib/workflow/item/ShofiVerticalsWorkflowItem.class.php</autoload>
+        <autoload name="ShofiVerticalsMasterRecord">%core.module_dir%/Shofi_Verticals/lib/workflow/item/ShofiVerticalsMasterRecord.class.php</autoload>
+        <autoload name="ShofiVerticalsWorkflowSupervisor">%core.module_dir%/Shofi_Verticals/lib/workflow/ShofiVerticalsWorkflowSupervisor.class.php</autoload>
+        <autoload name="WorkflowEditShofiVerticalPlugin">%core.module_dir%/Shofi_Verticals/lib/workflow/plugin/WorkflowEditShofiVerticalPlugin.class.php</autoload>
+        <autoload name="WorkflowDeleteShofiVerticalPlugin">%core.module_dir%/Shofi_Verticals/lib/workflow/plugin/WorkflowDeleteShofiVerticalPlugin.class.php</autoload>
+        <!-- /Workflow Integration -->
+
+        <autoload name="ShofiVerticalsFinder">%core.module_dir%/Shofi_Verticals/lib/ShofiVerticalsFinder.class.php</autoload>
+    </ae:configuration>
+</ae:configurations>

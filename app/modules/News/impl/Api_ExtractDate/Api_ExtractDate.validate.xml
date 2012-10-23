@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+	parent="%core.module_dir%/News/config/validators.xml"
+>
+
+    <ae:configuration>
+
+        <validators>
+            <validator class="string" name="invalid_geo_text" required="true">
+                <arguments>
+                    <argument>date_text</argument>
+                </arguments>
+                <errors>
+                    <error>You must supply a valid geo_text parameter.</error>
+                    <error for="max">The given geo_text is too long.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="max">1024</ae:parameter>
+                </ae:parameters>
+            </validator>
+        </validators>
+
+    </ae:configuration>
+
+</ae:configurations>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ae:configuration>
+        <!-- Agavi -->
+        <autoload name="WorkflowBaseAction">%core.module_dir%/Workflow/lib/agavi/action/WorkflowBaseAction.class.php</autoload>
+        <autoload name="WorkflowBaseView">%core.module_dir%/Workflow/lib/agavi/view/WorkflowBaseView.class.php</autoload>
+        <autoload name="WorkflowTicketValidator">%core.module_dir%/Workflow/lib/agavi/validator/WorkflowTicketValidator.class.php</autoload>
+        <autoload name="WorkflowSupervisorValidator">%core.module_dir%/Workflow/lib/agavi/validator/WorkflowSupervisorValidator.class.php</autoload>
+        <autoload name="WorkflowConfigHandler">%core.module_dir%/Workflow/lib/agavi/config_handler/WorkflowConfigHandler.class.php</autoload>
+        <!-- /Agavi -->
+
+        <!-- Plugin -->
+        <autoload name="IWorkflowPlugin">%core.module_dir%/Workflow/lib/plugin/IWorkflowPlugin.iface.php</autoload>
+        <autoload name="WorkflowBasePlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowBasePlugin.class.php</autoload>
+        <autoload name="WorkflowBaseInteractivePlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowBaseInteractivePlugin.class.php</autoload>
+        <autoload name="WorkflowNullPlugin">%core.module_dir%/Workflow/lib/plugin/WorkflowNullPlugin.class.php</autoload>
+        <autoload name="IWorkflowPluginResult">%core.module_dir%/Workflow/lib/plugin/IWorkflowPluginResult.iface.php</autoload>
+        <autoload name="WorkflowPluginResult">%core.module_dir%/Workflow/lib/plugin/WorkflowPluginResult.class.php</autoload>
+        <autoload name="WorkflowInteractivePluginResult">%core.module_dir%/Workflow/lib/plugin/WorkflowInteractivePluginResult.class.php</autoload>
+        <!-- /Plugin -->
+
+        <autoload name="WorkflowException">%core.module_dir%/Workflow/lib/WorkflowException.class.php</autoload>
+        <autoload name="WorkflowHandler">%core.module_dir%/Workflow/lib/WorkflowHandler.class.php</autoload>
+
+        <!-- Item -->
+        <autoload name="IMasterRecord">%core.module_dir%/Workflow/lib/item/IMasterRecord.iface.php</autoload>
+        <autoload name="MasterRecord">%core.module_dir%/Workflow/lib/item/MasterRecord.class.php</autoload>
+        <autoload name="IWorkflowItem">%core.module_dir%/Workflow/lib/item/IWorkflowItem.iface.php</autoload>
+        <autoload name="WorkflowItem">%core.module_dir%/Workflow/lib/item/WorkflowItem.class.php</autoload>
+        <autoload name="WorkflowItemStore">%core.module_dir%/Workflow/lib/item/WorkflowItemStore.class.php</autoload>
+        <!-- /Item -->
+
+        <!-- Ticket -->
+        <autoload name="WorkflowTicket">%core.module_dir%/Workflow/lib/ticket/WorkflowTicket.class.php</autoload>
+        <autoload name="WorkflowTicketStore">%core.module_dir%/Workflow/lib/ticket/WorkflowTicketStore.class.php</autoload>
+        <!-- /Ticket -->
+
+        <autoload name="WorkflowSupervisor">%core.module_dir%/Workflow/lib/WorkflowSupervisor.class.php</autoload>
+        <autoload name="WorkflowSupervisorFactory">%core.module_dir%/Workflow/lib/WorkflowSupervisorFactory.class.php</autoload>
+    </ae:configuration>
+</ae:configurations>

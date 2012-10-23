@@ -1,0 +1,20 @@
+<h3>
+    <span data-bind="text: labels.search"></span> 
+    <a href="#" style="font-size: 10pt;"
+       data-bind="text: labels.filter, click: showFilterDialog, visible: has_filter_dialog"></a>
+</h3>
+<form class="form-inline jsb-searchbox" method="GET"
+      data-bind="attr: { action: search_url }, submit: search">
+    <div class="control-group input-prepend">
+        <label for="input_search_phrase" class="control-label add-on icon-search">&#8203;</label>
+        <input type="text" class="input-medium" name="search_phrase" id="input_search_phrase"
+               data-bind='value: search_phrase, attr: { placeholder: labels.placeholder }, valueUpdate: "afterkeydown"' />
+    </div>
+    <input type="hidden" name="sorting[field]" 
+           data-bind="value: sort_field" />
+    <input type="hidden" name="sorting[direction]" 
+           data-bind="value: sort_direction" />
+    <input type="hidden" name="offset" value="0" />
+    <a class="reset-search"
+        data-bind="attr: { href: options.filter_url }, visible: has_search_phrase, click: resetSearchPhrase">×</a>
+</form>

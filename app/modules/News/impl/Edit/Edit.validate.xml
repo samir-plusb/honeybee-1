@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    parent="%core.module_dir%/Workflow/config/validators.xml"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <ae:configuration>
+        <validators>
+
+            <validator class="WorkflowTicketValidator" name="invalid_ticket" required="true" translation_domain="news.errors">
+                <arguments>
+                    <argument>ticket</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid data given.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="type">news</ae:parameter>
+                </ae:parameters>
+            </validator>
+
+        </validators>
+
+        <validators method="read">
+
+            <xi:include href="%core.module_dir%/News/impl/List/List.validate.xml"
+                        xpointer="xmlns(v=http://agavi.org/agavi/config/parts/validators/1.1) xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/ae:configuration/v:validators/*)">
+            </xi:include>
+
+        </validators>
+
+        <validators method="write">
+
+            <validator class="string" name="invalid_id" required="true" translation_domain="news.errors">
+                <arguments base="content_item">
+                    <argument>identifier</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid identifier given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_parent_id" required="true" translation_domain="news.errors">
+                <arguments base="content_item">
+                    <argument>parentIdentifier</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid parentIdentifier given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_publisher" required="true" translation_domain="news.errors">
+                <arguments base="content_item">
+                    <argument>publisher</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid parentIdentifier given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_category" required="true" translation_domain="news.errors">
+                <arguments base="content_item">
+                    <argument>category</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid category given.</error>
+                </errors>
+            </validator>
+
+            <validator class="number" name="invalid_priority" required="true" translation_domain="news.errors">
+                <arguments base="content_item">
+                    <argument>priority</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid priority given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_tags" required="false" translation_domain="news.errors">
+                <arguments base="content_item[tags][]" />
+                <errors>
+                    <error>Invalid tags data given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_title" required="true" translation_domain="news.errors">
+                <arguments base="content_item">
+                    <argument>title</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid title given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_teaser" required="false" translation_domain="news.errors">
+                <arguments base="content_item">
+                    <argument>teaser</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid teaser given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_text" required="true" translation_domain="news.errors">
+                <arguments base="content_item">
+                    <argument>text</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid text given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_source" required="false" translation_domain="news.errors">
+                <arguments base="content_item">
+                    <argument>source</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid source given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_url" required="false" translation_domain="news.errors">
+                <arguments base="content_item">
+                    <argument>url</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid url given.</error>
+                </errors>
+            </validator>
+
+            <validator class="number" name="invalid_location_relevance" required="false" translation_domain="news.errors">
+                <arguments base="content_item[location]">
+                    <argument>relevance</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-relevance given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_name" required="false" translation_domain="news.errors">
+                <arguments base="content_item[location]">
+                    <argument>name</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-name given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_locationdetail" required="false" translation_domain="news.errors">
+                <arguments base="content_item[location]">
+                        <argument>locationdetail</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid locationdetail given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_street" required="false" translation_domain="news.errors">
+                <arguments base="content_item[location]">
+                    <argument>street</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-street given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_uzip" required="false" translation_domain="news.errors">
+                <arguments base="content_item[location]">
+                    <argument>postalCode</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-postalcode given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_adistrict" required="false" translation_domain="news.errors">
+                <arguments base="content_item[location]">
+                    <argument>administrativeDistrict</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid administrative-district given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_district" required="false" translation_domain="news.errors">
+                <arguments base="content_item[location]">
+                    <argument>district</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid district given.</error>
+                </errors>
+            </validator>
+
+             <validator class="string" name="invalid_location_neighborhood" required="false" translation_domain="news.errors">
+                <arguments base="content_item[location]">
+                    <argument>neighborhood</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid district given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_latitude" required="false" translation_domain="news.errors">
+                <arguments base="content_item[location][coordinates]">
+                    <argument>lat</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-latitude given.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_location_longitude" required="false" translation_domain="news.errors">
+                <arguments base="content_item[location][coordinates]">
+                    <argument>lon</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid location-longitude given.</error>
+                </errors>
+            </validator>
+
+            <validator class="number" name="invalid_date_isevent" required="false" translation_domain="news.errors">
+                <arguments base="content_item[date]">
+                    <argument>isevent</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid is-event flag given.</error>
+                </errors>
+            </validator>
+
+            <validator class="datetime" name="invalid_date_from" required="false" translation_domain="news.errors">
+                <arguments base="content_item[date]">
+                    <argument>from</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid date-from data given.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="formats">dd.MM.yyyy</ae:parameter>
+                    <ae:parameter name="cast_to">
+                        <ae:parameters>
+                            <ae:parameter name="type">date</ae:parameter>
+                            <ae:parameter name="format">yyyy-MM-dd</ae:parameter>
+                        </ae:parameters>
+                    </ae:parameter>
+                </ae:parameters>
+            </validator>
+
+            <validator class="datetime" name="invalid_date_till" required="false" translation_domain="news.errors">
+                <arguments base="content_item[date]">
+                    <argument>till</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid date-till data given.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="formats">dd.MM.yyyy</ae:parameter>
+                    <ae:parameter name="cast_to">
+                        <ae:parameters>
+                            <ae:parameter name="type">date</ae:parameter>
+                            <ae:parameter name="format">yyyy-MM-dd</ae:parameter>
+                        </ae:parameters>
+                    </ae:parameter>
+                </ae:parameters>
+            </validator>
+
+        </validators>
+    </ae:configuration>
+</ae:configurations>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" parent="%core.system_config_dir%/autoload.xml">
+    <ae:configuration>
+        <autoloads>
+            <!-- Agavi -->
+            <autoload name="AssetBaseAction">%core.module_dir%/Asset/lib/agavi/action/AssetBaseAction.class.php</autoload>
+            <autoload name="AssetBaseView">%core.module_dir%/Asset/lib/agavi/view/AssetBaseView.class.php</autoload>
+            <autoload name="AssetResourceValidator">%core.module_dir%/Asset/lib/agavi/validator/AssetResourceValidator.class.php</autoload>
+            <autoload name="AssetInfoValidator">%core.module_dir%/Asset/lib/agavi/validator/AssetInfoValidator.class.php</autoload>
+            <!-- /Agavi -->
+
+            <!-- Service -->
+            <autoload name="IAssetService">%core.module_dir%/Asset/lib/service/IAssetService.iface.php</autoload>
+            <autoload name="ProjectAssetService">%core.module_dir%/Asset/lib/service/ProjectAssetService.class.php</autoload>
+            <autoload name="AssetIdSequence">%core.module_dir%/Asset/lib/service/AssetIdSequence.class.php</autoload>
+            <autoload name="IdSequenceId">%core.module_dir%/Asset/lib/service/IdSequenceId.class.php</autoload>
+            <autoload name="IAssetInfo">%core.module_dir%/Asset/lib/asset_info/IAssetInfo.iface.php</autoload>
+            <autoload name="ProjectAssetInfo">%core.module_dir%/Asset/lib/asset_info/ProjectAssetInfo.class.php</autoload>
+            <autoload name="IAssetFile">%core.module_dir%/Asset/lib/asset_info/IAssetFile.iface.php</autoload>
+            <autoload name="AssetFile">%core.module_dir%/Asset/lib/asset_info/AssetFile.class.php</autoload>
+            <!-- /Service -->
+
+            <!-- Setup -->
+            <autoload name="AssetDatabaseSetup">%core.module_dir%/Asset/lib/setup/AssetDatabaseSetup.class.php</autoload>
+            <!-- /Setup -->
+        </autoloads>
+    </ae:configuration>
+</ae:configurations>

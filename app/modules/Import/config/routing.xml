@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
+    <ae:configuration context="console">
+        <routes>
+            <route pattern="import." module="Import">
+                <route pattern="run" action="Run" method="write" />
+                <route pattern="fixtures" action="Fixtures" method="write" />
+            </route>
+        </routes>
+    </ae:configuration>
+    <ae:configuration context="web">
+        <routes>
+            <route pattern="/imperia" action="TriggerImperia" />
+        </routes>
+    </ae:configuration>
+</ae:configurations>

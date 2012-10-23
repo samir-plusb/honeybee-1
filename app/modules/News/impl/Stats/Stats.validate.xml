@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+	xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
+	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+	parent="%core.module_dir%/News/config/validators.xml">
+
+    <ae:configuration>
+
+        <validators>
+            <validator class="number" name="invalid_days_back" required="false" translation_domain="news.errors">
+                <arguments>
+                    <argument>days_back</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="min">1</ae:parameter>
+                    <ae:parameter name="max">20</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error>Invalid days_back parameter.</error>
+                </errors>
+            </validator>
+
+            <validator class="inarray" name="invalid_district" required="false" translation_domain="news.errors">
+                <arguments>
+                    <argument>district</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="values">
+                        Charlottenburg,Friedrichshain,Hellersdorf,Hohenschönhausen,Köpenick,Kreuzberg,Lichtenberg,Marzahn,Mitte,Neukölln,Pankow,Prenzlauer Berg,Reinickendorf,Schöneberg,Spandau,Steglitz,Tempelhof,Tiergarten,Treptow,Wedding,Weißensee,Wilmersdorf,Zehlendorf
+                    </ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error>Invalid days_back parameter.</error>
+                </errors>
+            </validator>
+        </validators>
+
+    </ae:configuration>
+
+</ae:configurations>

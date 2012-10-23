@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    xmlns:annotations_1_0="http://agavi.org/agavi/config/global/annotations/1.0" 
+    xmlns:types_1_0="http://agavi.org/agavi/config/global/types/1.0"
+    xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://agavi.org/agavi/config/global/envelope/1.1 workflows.xsd ">
+    <ae:configuration>
+        <workflow name="Sample">
+            <description></description>
+            <steps start="first">
+                <step id="first" name="">
+                    <plugin>MatchAndDecide</plugin>
+                    <ae:parameter>
+                    </ae:parameter>
+                    <roles>
+                        <read>any</read>
+                        <write>any</write>
+                    </roles>
+                    <gates>
+                        <gate ref="second">Zweiter Schritt</gate>
+                        <gate ref="otherWay">Anderer Weg</gate>
+                    </gates>
+                </step>
+            </steps>
+        </workflow>
+    </ae:configuration>
+</ae:configurations>

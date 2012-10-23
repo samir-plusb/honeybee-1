@@ -1,0 +1,561 @@
+/**
+ * @section Variables
+ *
+ * @desc    Global variables that define some basic look and feel params. Gather them here and
+ *          they'll be easy to change for the whole project with one modification.
+ */
+/* 100% - @editing_section_left_col */
+/* 100% - @editing_section_width */
+/**
+ * @section Forms
+ *
+ * @desc    Defines the basic styling for all forms used inside the project.
+ */
+label {
+  display: block;
+  font-size: 0.9em;
+  margin-bottom: 0.3em;
+  text-shadow: 0 0.05em 0 #FFFFFF;
+}
+textarea, input, select {
+  border: 1px solid #CCCCCC;
+}
+input, select, textarea {
+  box-shadow: 0 0.05em 0 #FFFFFF;
+  font-family: Georgia, Garamond, serif;
+  font-size: 1.2em;
+  padding: 0.1em;
+}
+select {
+  height: 1.5em;
+}
+.input-full, .input-left {
+  margin-top: 1em;
+  overflow: hidden;
+}
+.input-full {
+  position: relative;
+}
+.input-full textarea, .input-full input, .input-full select {
+  display: block;
+  width: 100%;
+}
+.input-left {
+  float: left;
+  margin-right: 1em;
+}
+/**
+ * @section Commons
+ *
+ * @desc    Common style definitions that do not depend on the document structure
+ *          and are therefore broadly reusable.
+ */
+.action-button-list {
+  overflow: hidden;
+  padding: 1em;
+  position: relative;
+}
+.action-button-list li {
+  float: left;
+  list-style: none outside none;
+  margin-right: 1em;
+  position: relative;
+}
+.action-button-list li a {
+  color: #000000;
+  display: block;
+  font-size: 0.9em;
+  padding: 0.3em 1em;
+  text-decoration: none;
+}
+.action-button-list li a:active {
+  outline: none;
+}
+.action-button-list li:last-child {
+  margin-right: 0;
+}
+.action-button-list li .info-small {
+  background-color: #FF0000;
+  border: 0.05em solid rgba(0, 0, 0, 0.3);
+  border-radius: 2px 2px 2px 2px;
+  color: #FFFFFF;
+  font-family: arial;
+  font-size: 0.8em;
+  position: absolute;
+  padding: 0.1em;
+  top: -5px;
+  right: -5px;
+}
+.action-button-list li.inactive {
+  opacity: 0.3;
+}
+.action-button-list li.inactive:hover a {
+  color: #000000;
+  cursor: default;
+  text-shadow: 0 0.05em 0 rgba(255, 255, 255, 0.7);
+}
+.topmenu-container {
+  position: fixed;
+  top: 40px;
+  z-index: 150;
+  height: 61px;
+  width: 60%;
+  transition: top 0.2s;
+  -moz-transition: top 0.2s;
+  /* Firefox 4 */
+
+  -webkit-transition: top 0.2s;
+  /* Safari and Chrome */
+
+  -o-transition: top 0.2s;
+  /* Opera */
+
+  background: url("../images/bg-grey-slightlydarker.png") repeat scroll 0 0 transparent;
+}
+.decent {
+  opacity: 0.4;
+  top: 3px;
+}
+.decent:hover {
+  opacity: 1;
+  top: 40px;
+}
+.import-menu {
+  right: 0;
+  width: 40%;
+}
+/* General styling for content panels. */
+.content-panel {
+  background: none repeat scroll 0 0 #F9F9F9;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0 5px 3px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1em;
+  margin-left: 1em;
+  padding: 1.9em 1em 1em 1em;
+  position: relative;
+}
+.content-panel .legend, .content-panel legend {
+  border-bottom: 1px solid #CCCCCC;
+  box-shadow: 0 0.05em 0 #FFFFFF;
+  display: block;
+  font-size: 0.9em;
+  padding: 0.5em 1em;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
+/**
+ * @section EditItemSuccess
+ *
+ * @desc    Holds the styles for the /Items/EditSuccess template.
+ */
+body {
+  background: url("../images/bg-grey-slightlydarker.png");
+  color: #333333;
+  font-family: "Lucida Grande", Arial, sans-serif;
+}
+/* Header styles, hence page-title and individual, user dedicated data. */
+header {
+  background-color: #222222;
+  background-image: -moz-linear-gradient(center top, #333333, #222222);
+  background-repeat: repeat-x;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+  color: #ffffff;
+  height: 40px;
+  left: 0;
+  overflow: visible;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 200;
+  padding-left: 1em;
+  margin-bottom: 40px;
+}
+header h1 {
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: bold;
+}
+header h1 a {
+  color: #FFFFFF;
+  display: block;
+  float: left;
+  font-size: 20px;
+  font-weight: 200;
+  line-height: 1;
+  margin-left: -20px;
+  padding: 8px 20px 12px;
+  text-decoration: none;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+header .personal-info {
+  padding: 1em;
+  position: absolute;
+  font-size: 10pt;
+  right: 0;
+  top: 0;
+}
+header .personal-info h2 {
+  display: none;
+}
+header .personal-info p {
+  float: left;
+  margin-right: 2em;
+}
+header .personal-info a {
+  color: #FFFFFF;
+  font-weight: bold;
+}
+header .personal-info a.logout {
+  text-decoration: none;
+  font-weight: normal;
+  font-size: 12pt;
+  margin: -2px 7px;
+  float: right;
+  display: block;
+  color: #BFBFBF;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+header .personal-info a.logout:hover {
+  text-decoration: underline;
+}
+.slide-panel {
+  padding-top: 100px;
+}
+/* The main form section of the edit success markup. */
+.document-editing {
+  float: left;
+  position: relative;
+  width: 60%;
+  z-index: 100;
+  /* content item editing form */
+
+}
+.document-editing h2 {
+  display: none;
+}
+.document-editing form .editor {
+  margin-bottom: 1em;
+}
+.document-editing form .tags {
+  clear: both;
+}
+.document-editing form .tags .tagHandlerContainer {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border: 1px solid #CCCCCC;
+  box-shadow: 0 0.05em 0 #FFFFFF;
+  font-family: "EB Garamond", Garamond, serif;
+  min-height: 0;
+  background-color: #ffffff;
+}
+.document-editing form .tags .tagHandlerContainer li {
+  padding: 5px 10px;
+  margin: 3px 5px 0 0;
+  overflow: hidden;
+  height: auto;
+  font-weight: bold;
+  background: url("../images/ui-bg_gloss-wave_50_6eac2c_500x100.png") repeat-x scroll 50% 50% #6eac2c;
+}
+.document-editing form .tags .tagHandlerContainer li.tagInput {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  background: none;
+}
+.document-editing form .tags .tagHandlerContainer li.tagInput input {
+  font-size: 1.2em;
+  border: none;
+  background: none;
+}
+.document-editing form .tags .tagHandlerContainer.ui-state-error {
+  background-color: none;
+}
+.document-editing form .title {
+  border-top: 1px solid #CCCCCC;
+  padding-top: 1em;
+}
+.document-editing form .extra-data-left {
+  float: left;
+  width: 60%;
+}
+.document-editing form .extra-data-right {
+  float: left;
+  width: 40%;
+}
+.document-editing.preview .main-data.content-panel,
+.document-editing.preview .extra-data-left.content-panel,
+.document-editing.preview .extra-data-right.content-panel,
+.document-editing.preview .main-data .content-panel,
+.document-editing.preview .extra-data-left .content-panel,
+.document-editing.preview .extra-data-right .content-panel {
+  background: #e3efd7;
+}
+/* Styles that go with the import item data. */
+.document-data {
+  width: 40%;
+  position: fixed;
+  right: 0;
+  top: 100px;
+  bottom: 1em;
+  z-index: 1;
+}
+.document-data h2 {
+  display: none;
+}
+.document-data .import-data-layoutbox {
+  position: relative;
+  height: 100%;
+}
+.document-data .import-data-layoutbox .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #bbbbbb;
+  opacity: 0.5;
+}
+.document-data .import-data-layoutbox .item-meta-data {
+  height: 118px;
+}
+.document-data .import-data-layoutbox .item-meta-data dl {
+  font-size: 11pt;
+}
+.document-data .import-data-layoutbox .item-meta-data dl dt {
+  font-weight: bold;
+  padding: 5px 0;
+}
+.document-data .import-data-layoutbox .item-meta-data dl dt:first-child {
+  margin-top: 10px;
+}
+.document-data .import-data-layoutbox .item-meta-data dl dd {
+  float: left;
+  margin: -20px 0 20px 120px;
+  width: 80%;
+}
+.document-data .content-panel {
+  margin-right: 1em;
+}
+.document-data .item-content {
+  position: absolute;
+  right: 0;
+  left: 0;
+  margin-bottom: 0;
+  bottom: 0;
+  top: 185px;
+}
+.document-data .item-content .ui-tabs-panel {
+  bottom: 10px;
+  left: 5px;
+  position: absolute;
+  right: 5px;
+  top: 80px;
+}
+.document-data .item-content .input-full {
+  height: 100%;
+  min-height: 20px;
+  margin: 0;
+}
+.document-data .item-content .input-full textarea {
+  height: 100%;
+}
+.content-items {
+  position: absolute;
+}
+.content-items .content-panel {
+  width: 19em;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+.content-items .content-panel ul {
+  overflow: hidden;
+}
+.content-items .content-panel .content-item {
+  border-bottom: 1px solid #cccccc;
+  box-shadow: 0px 1px 0px #ffffff;
+  font-size: 0.83em;
+  cursor: pointer;
+  display: block;
+  list-style-type: none;
+  margin: 0;
+  padding: 5px 10px 5px 10px;
+  /* @todo em pls thx */
+
+  position: relative;
+}
+.content-items .content-panel .content-item h3 {
+  color: #000000;
+  display: block;
+  font-size: 0.9em;
+  font-weight: bold;
+  width: 75%;
+}
+.content-items .content-panel .content-item p {
+  font-size: 0.9em;
+  margin-top: 0.6em;
+}
+.content-items .content-panel .content-item .ui-state-active {
+  border: none;
+}
+.content-items .content-panel .content-item .date {
+  font-size: 0.85em;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-weight: normal;
+}
+.content-items .content-panel .content-item:last-child {
+  border-bottom: none;
+}
+.content-items .content-panel .content-item:hover {
+  background: url("../images/ui-bg_gloss-wave_50_6eac2c_500x100.png") repeat-x scroll 50% 50% #6eac2c;
+  color: #ffffff;
+}
+.validation-hint {
+  position: fixed;
+  left: 25%;
+  width: 8em;
+  z-index: 500;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0.3em 0.3em 0.5em 0.4em rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.7);
+}
+.validation-hint h4 {
+  height: 100%;
+  width: 100%;
+  font-size: 100pt;
+  color: red;
+  opacity: 0.8;
+  text-align: center;
+  opacity: 0.8;
+}
+.validation-hint p {
+  text-align: center;
+  font-weight: bold;
+  font-size: 15pt;
+  position: absolute;
+}
+.validation-hint.top {
+  top: 118px;
+  padding-bottom: 50px;
+}
+.validation-hint.top h4 {
+  margin-top: -15px;
+}
+.validation-hint.top p {
+  bottom: 0;
+}
+.validation-hint.bottom {
+  bottom: 1em;
+  padding-top: 15px;
+}
+.validation-hint.bottom h4 {
+  margin-bottom: 15px;
+}
+.validation-hint.bottom p {
+  top: 0;
+}
+#input_date_isevent {
+  width: 20px;
+}
+.jsb-routing {
+  display: none;
+}
+em.bold {
+  font-weight: bold;
+  display: block;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+.item-isevent label {
+  width: 95%;
+  float: left;
+  margin: 0 0 1em 2em;
+}
+.item-isevent input {
+  position: absolute;
+  left: 0;
+  margin: 0;
+}
+
+/* custom stuff port to less */
+#edit-gui-busy-overlay
+{
+    width: 100%;
+    height:100%;
+    position: fixed;
+    background: rgba(223, 223, 223, 0.1) url('../images/ajax-loader-large.gif') no-repeat center;
+    z-index: 30000;
+    text-align:center;
+    display: none;
+}
+
+.localize-icon
+{
+    float: right;
+    cursor: pointer;
+}
+
+#geo-busy-overlay
+{
+    position: absolute;
+    background: rgba(223, 223, 223, 0.5) url('../images/ajax-loader-large.gif') no-repeat center;
+    background-size: 20%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.tagInputField
+{
+    border: none;
+    outline: 0;
+}
+
+.ui-state-error
+{
+    color: #232323;
+}
+
+.geo-list li
+{
+    padding: 10px;
+}
+
+.geo-list li:hover
+{
+    cursor: pointer;
+    background-color: #efefef;
+}
+
+.nearby-list
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nearby-list li
+{
+    padding: 10px 0;
+    border-bottom: 1px solid #ababab;
+}
+
+.nearby-list li:last-child
+{
+    border-bottom: none;
+}
+
+.asset-list-tab
+{
+    display: none;
+}

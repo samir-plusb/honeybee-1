@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/translation/1.0">
+    <ae:configuration>
+
+        <translators default_domain="news.errors">
+            <translator domain="workflow">
+                <message_translator class="AgaviSimpleTranslator">
+
+                    <ae:parameter name="errors">
+                        <ae:parameter name="de">
+                            <ae:parameter name="invalid_rev_title">Ungültige Revision</ae:parameter>
+                            <ae:parameter name="invalid_rev_text">Dieser Eintrag wurde zwischenzeitlich geändert und ist nicht mehr aktuell. Bitte laden sie Seite neu.</ae:parameter>
+                            <ae:parameter name="release_ticket_error_text">Beim Versuch das Ticket freizugeben trat ein Fehler auf. Bitte versuchen sie es noch einmal.</ae:parameter>
+                            <ae:parameter name="release_ticket_db_error">Datenbank Fehler</ae:parameter>
+                            <ae:parameter name="release_ticket_unex_error">Unerwarteter Fehler</ae:parameter>
+                            <ae:parameter name="ticket_not_avail">Ticket bereits vergeben</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+
+                </message_translator>
+
+            </translator>
+        </translators>
+
+    </ae:configuration>
+
+</ae:configurations>

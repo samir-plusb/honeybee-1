@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DOCTYPE nitf PUBLIC "-//IPTC-NAA//DTD NITF-XML 3.0//EN" "nitf.dtd" -->
+<nitf>
+<head>
+<title>Ungarische Praktikanten in Ministerien</title>
+<meta name="origin" content="dpa - Deutsche Presse-Agentur GmbH"/>
+<meta name="copyright" content="dpa-info.com GmbH"/>
+<meta name="generator" content="CoreMedia"/>
+<meta name="variant" content="14340419-1315279609955-1"/>
+<tobject>
+<tobject.subject tobject.subject.refnum="00000000" tobject.subject.code="NIL" />
+</tobject>
+<docdata>
+<evloc iso-cc="HUN"/>
+<doc-id regsrc="dpa-infocom" id-string="32302206:1315282828000"/>
+<urgency ed-urg="4"/>
+<fixture fix-id="/regioline/berlinbrandenburg/"/>
+<date.issue norm="20110906T062028+0200"/>
+<doc-scope scope="vm"/>
+<key-list>
+<keyword key="Brandenburg/Verwaltung/Ungarn/"/>
+</key-list>
+</docdata>
+</head>
+<body>
+<body.head>
+<hedline><hl1>Ungarische Praktikanten in Ministerien</hl1></hedline>
+<byline></byline>
+</body.head>
+<body.content><p>Potsdam (dpa/bb ) - Ungarische Akademiker absolvieren seit Montag ein Praktikum in Brandenburgs Landesverwaltung. Der viermonatige Aufenthalt der 21 jungen Frauen und Männer wurde mit einem Einführungsseminar im Finanzministerium begonnen, wie die Behörde am Montagabend mitteilte. Die Praktikanten arbeiten teilweise bereits in der ungarischen Verwaltung oder wollen aus der freien Wirtschaft dorthin wechseln. In Brandenburg werden sie ihr Praktikum in verschiedenen Ministerien und Behörden absolvieren. Der Aufenthalt dient auch der Vertiefung der Zusammenarbeit der Behörden in Europa.</p>
+</body.content>
+<body.end/>
+</body>
+</nitf>

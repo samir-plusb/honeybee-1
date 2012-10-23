@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <workflow name="shofi_verticals">
+            <description>
+                This workflow defines the process structure for editing/refining created/imported shofi verticals
+            </description>
+            <start_at>edit_vertical</start_at>
+            <steps>
+
+                <step name="edit_vertical">
+                    <description>Manually edit a shofi verticals.</description>
+                    <plugin type="EditShofiVertical">
+                        <gates>
+                            <gate_step label="delete this vertical" name="delete">delete_vertical</gate_step>
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="delete_vertical">
+                    <description>
+                        Marks a given shofi vertical as deleted.
+                    </description>
+                    <plugin type="DeleteShofiVertical">
+                        <gates>
+                            <gate_end name="trash" />
+                        </gates>
+                    </plugin>
+                </step>
+
+            </steps>
+        </workflow>
+    </ae:configuration>
+</ae:configurations>

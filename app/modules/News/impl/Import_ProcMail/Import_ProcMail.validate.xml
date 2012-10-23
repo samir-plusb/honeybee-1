@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" parent="%core.module_dir%/Import/config/validators.xml">
+	<ae:configuration>
+		<validators>
+
+            <validator class="ImportMailValidator" method="write">
+                <arguments>
+                    <argument>stdin_buffer_filepath</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="source">files</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error>Missing mail data, but a valid raw mime mail string is required.</error>
+                    <error for="invalid_data">The format of the given mail data is not as expected.</error>
+                    <error for="missing_data">Missing mail content, was it correctly passed to stdin?</error>
+                </errors>
+            </validator>
+
+		</validators>
+	</ae:configuration>
+
+    <ae:configuration environment="testing.*">
+		<validators>
+
+            <validator class="ImportMailValidator" method="write">
+                <arguments>
+                    <argument>testmail</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="source">files</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error>Invalid mail data given.</error>
+                </errors>
+            </validator>
+
+		</validators>
+	</ae:configuration>
+</ae:configurations>

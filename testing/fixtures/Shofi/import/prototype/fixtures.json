@@ -1,0 +1,61 @@
+[
+    {
+        "Master":{
+            "FirstName":"",
+            "LastName":"",
+            "CompanyName":"Grunewald Bad",
+            "Name":"Grunewald Bad",
+            "Email":"",
+            "Phone":"030-8917890",
+            "Mobile":"",
+            "Fax":"",
+            "Location":{
+                "Street":"Delbr\u00fcckstr.",
+                "HouseNo":"4 A",
+                "Zip":"14193",
+                "City":"4 A",
+                "Latitude":52.487039,
+                "Longitude":13.275468,
+                "Districts":{
+                    "District":null,
+                    "AdministrativeDistrict":null,
+                    "Neighborhood":null
+                }
+            }
+        },
+        "Sales":{
+            "Product":null,
+            "ExpirationDate":null,
+            "Teaser":null,
+            "Text":null
+        },
+        "Detail":{
+            "Teaser":null,
+            "Text":null,
+            "OpeningTimes":[]
+        },
+        "Source":{
+            "ListingId":"1544750760"
+        },
+        "id":"4f1439bfb4fc475f0b020000"
+    },
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"K\u00f6nigshaus","Name":"K\u00f6nigshaus","Email":"","Phone":"030-4045551","Mobile":"","Fax":"","Location":{"Street":"Hohefeldstr.","HouseNo":"39","Zip":"13467","City":"39","Latitude":52.623575,"Longitude":13.302425,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1545279290"},"id":"4f1439bfb4fc475f0b030000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Steuerb\u00fcro Heilig","Name":"Steuerb\u00fcro Heilig","Email":"","Phone":"","Mobile":"","Fax":"030-35389501","Location":{"Street":"","HouseNo":"","Zip":"13595","City":"","Latitude":0,"Longitude":0,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1545337570"},"id":"4f1439bfb4fc475f0b040000"},
+    {"Master":{"FirstName":"Heinrich Fumi Uno Prof.","LastName":"K\u00f6bberling","CompanyName":"","Name":"Heinrich Fumi Uno Prof. K\u00f6bberling","Email":"","Phone":"030-44044226","Mobile":"","Fax":"","Location":{"Street":"","HouseNo":"","Zip":"","City":"","Latitude":0,"Longitude":0,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1546008600"},"id":"4f1439bfb4fc475f0b050000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Tischlerei Wendenschlo\u00df GmbH","Name":"Tischlerei Wendenschlo\u00df GmbH","Email":"","Phone":"030-53011273","Mobile":"","Fax":"","Location":{"Street":"Wilhelminenhofstr.","HouseNo":"83 -85","Zip":"12459","City":"83 -85","Latitude":0,"Longitude":0,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1546634070"},"id":"4f1439bfb4fc475f0b060000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Himmlische Event GmbH","Name":"Himmlische Event GmbH","Email":"","Phone":"","Mobile":"","Fax":"030-27016122","Location":{"Street":"Attilastr.","HouseNo":"52 -58","Zip":"12105","City":"52 -58","Latitude":0,"Longitude":0,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1546694490"},"id":"4f1439bfb4fc475f0b070000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Euro Inter Finanz Holding GmbH","Name":"Euro Inter Finanz Holding GmbH","Email":"","Phone":"","Mobile":"","Fax":"030-26348731","Location":{"Street":"Kantstr.","HouseNo":"99","Zip":"10627","City":"99","Latitude":52.506719,"Longitude":13.301703,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1547517550"},"id":"4f1439bfb4fc475f0b080000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Sostana GmbH Inh. Prof.Dr. Klaus-Dieter Wernecke","Name":"Sostana GmbH Inh. Prof.Dr. Klaus-Dieter Wernecke","Email":"","Phone":"030-50158763","Mobile":"","Fax":"","Location":{"Street":"Wildensteiner Str.","HouseNo":"27","Zip":"10318","City":"27","Latitude":52.478342,"Longitude":13.521253,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1547534740"},"id":"4f1439bfb4fc475f0b090000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Buchhandlung Tepper","Name":"Buchhandlung Tepper","Email":"","Phone":"","Mobile":"","Fax":"0800-8377373","Location":{"Street":"Erasmusstr.","HouseNo":"14","Zip":"10553","City":"14","Latitude":0,"Longitude":0,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1548150010"},"id":"4f1439bfb4fc475f0b0a0000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Fischer Zahnarztpraxis Dr.Dr. Peter Paul u. Dr. Christina","Name":"Fischer Zahnarztpraxis Dr.Dr. Peter Paul u. Dr. Christina","Email":"","Phone":"","Mobile":"","Fax":"030-88914423","Location":{"Street":"Kurf\u00fcrstendamm","HouseNo":"37","Zip":"10719","City":"37","Latitude":52.50225,"Longitude":13.323042,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1548207990"},"id":"4f1439bfb4fc475f0b0b0000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Lohm\u00fcller Kurt Immobilien","Name":"Lohm\u00fcller Kurt Immobilien","Email":"","Phone":"030-8835021","Mobile":"","Fax":"","Location":{"Street":"Kurf\u00fcrstendamm","HouseNo":"199","Zip":"10719","City":"199","Latitude":0,"Longitude":0,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1548739990"},"id":"4f1439bfb4fc475f0b0c0000"},
+    {"Master":{"FirstName":"Birgit","LastName":"Nickel","CompanyName":"","Name":"Birgit Nickel","Email":"","Phone":"030-51653002","Mobile":"","Fax":"","Location":{"Street":"Widosteig","HouseNo":"17","Zip":"12524","City":"17","Latitude":52.413687,"Longitude":13.540523,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1549035070"},"id":"4f1439bfb4fc475f0b0d0000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Blank & Hehl GmbH","Name":"Blank & Hehl GmbH","Email":"","Phone":"","Mobile":"","Fax":"030-6237092","Location":{"Street":"Lahnstr.","HouseNo":"74","Zip":"12055","City":"74","Latitude":52.468105,"Longitude":13.445724,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1549093870"},"id":"4f1439bfb4fc475f0b0e0000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Tagesgruppe von wegen","Name":"Tagesgruppe von wegen","Email":"","Phone":"030-56045900","Mobile":"","Fax":"","Location":{"Street":"Peter-Huchel-Str.","HouseNo":"39","Zip":"12619","City":"39","Latitude":52.524716,"Longitude":13.593693,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1549348170"},"id":"4f1439bfb4fc475f0b0f0000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Atlantic Bearing & Spare Parts GmbH","Name":"Atlantic Bearing & Spare Parts GmbH","Email":"","Phone":"","Mobile":"","Fax":"030-54376397","Location":{"Street":"Wolfener Str.","HouseNo":"32 -34","Zip":"12681","City":"32 -34","Latitude":0,"Longitude":0,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1555433010"},"id":"4f1439bfb4fc475f0b100000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"SIMO Heizungs- L\u00fcftungs- u. Sanit\u00e4r- Gro\u00dfhandels GmbH","Name":"SIMO Heizungs- L\u00fcftungs- u. Sanit\u00e4r- Gro\u00dfhandels GmbH","Email":"","Phone":"","Mobile":"","Fax":"030-47481603","Location":{"Street":"Berliner Str.","HouseNo":"13","Zip":"13127","City":"13","Latitude":52.598904,"Longitude":13.433129,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1555472830"},"id":"4f1439bfb4fc475f0b110000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Die Brandenburgs Werbeagentur GmbH","Name":"Die Brandenburgs Werbeagentur GmbH","Email":"","Phone":"030-809710","Mobile":"","Fax":"","Location":{"Street":"Hubertusallee","HouseNo":"37","Zip":"14193","City":"37","Latitude":52.488257,"Longitude":13.284521,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1555710180"},"id":"4f1439bfb4fc475f0b120000"},
+    {"Master":{"FirstName":"Holger Dr.","LastName":"Schmitz","CompanyName":"","Name":"Holger Dr. Schmitz","Email":"","Phone":"030-25816298","Mobile":"","Fax":"","Location":{"Street":"Oranienburger Str.","HouseNo":"34","Zip":"10117","City":"34","Latitude":52.524911,"Longitude":13.393191,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1556665090"},"id":"4f1439bfb4fc475f0b130000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"DEVK-Generalagentur Hans-Peter Suhr","Name":"DEVK-Generalagentur Hans-Peter Suhr","Email":"","Phone":"","Mobile":"","Fax":"030-99400367","Location":{"Street":"","HouseNo":"","Zip":"12627","City":"","Latitude":52.53754,"Longitude":13.613985,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1556854990"},"id":"4f1439bfb4fc475f0b140000"},
+    {"Master":{"FirstName":"","LastName":"","CompanyName":"Pingel Automobil GmbH","Name":"Pingel Automobil GmbH","Email":"","Phone":"","Mobile":"","Fax":"030-8547337","Location":{"Street":"Wexstr.","HouseNo":"27","Zip":"10715","City":"27","Latitude":0,"Longitude":0,"Districts":{"District":null,"AdministrativeDistrict":null,"Neighborhood":null}}},"Sales":{"Product":null,"ExpirationDate":null,"Teaser":null,"Text":null},"Detail":{"Teaser":null,"Text":null,"OpeningTimes":[]},"Source":{"ListingId":"1557431230"},"id":"4f1439bfb4fc475f0b150000"}
+]

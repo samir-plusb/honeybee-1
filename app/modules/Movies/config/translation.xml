@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/translation/1.0">
+    <ae:configuration>
+
+        <translators default_domain="movies.errors">
+            <translator domain="movies">
+                <message_translator class="AgaviSimpleTranslator">
+
+                    <ae:parameter name="list">
+                        <ae:parameter name="de">
+                            <ae:parameter name="created">Erstellt</ae:parameter>
+                            <ae:parameter name="title">Titel</ae:parameter>
+                            <ae:parameter name="genre">Genre</ae:parameter>
+                            <ae:parameter name="year">Jahr</ae:parameter>
+                            <ae:parameter name="fsk">FSK</ae:parameter>
+                            <ae:parameter name="country">Land</ae:parameter>
+                            <ae:parameter name="owner">Besitzer</ae:parameter>
+                            <ae:parameter name="actions">Aktionen</ae:parameter>
+                            <ae:parameter name="edit">Bearbeiten</ae:parameter>
+                            <ae:parameter name="promote">Publizieren</ae:parameter>
+                            <ae:parameter name="release_date">Startdatum</ae:parameter>
+                            <ae:parameter name="subline">Subline</ae:parameter>
+                            <ae:parameter name="hdpic">HDPic</ae:parameter>
+                            <ae:parameter name="poster">Poster</ae:parameter>
+                            <ae:parameter name="delete">Löschen</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+
+                    <ae:parameter name="errors">
+                        <ae:parameter name="de">
+                            <ae:parameter name="storage_error">Das speichern der Filmdaten schlug fehl.</ae:parameter>
+                            <ae:parameter name="export_error">Während der Datenverarbeitung trat ein unerwarteter Fehler auf.</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+
+                </message_translator>
+
+            </translator>
+        </translators>
+
+    </ae:configuration>
+
+</ae:configurations>

@@ -1,0 +1,29 @@
+{
+    "index_analyzer": "default",
+    "search_analyzer": "default",
+    "dynamic" : false,
+    "_source": {
+        "enabled": true
+    },
+    "properties": {
+        "blocked": {
+            "type": "boolean"
+        },
+        "ts": {
+            "type": "date",
+            "format": "date_time_no_millis"
+        },
+        "workflow": {
+            "type": "string"
+        },
+        "result": {
+            "type": "object",
+            "dynamic": false,
+            "properties": {
+                "state": {
+                    "type": "short"
+                }
+            }
+        }
+    }
+}

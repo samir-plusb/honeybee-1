@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" parent="%core.module_dir%/Asset/config/validators.xml">
+    <ae:configuration>
+        <validators>
+            
+            <validator class="AssetInfoValidator" name="invalid_asset_id" required="true">
+                <arguments>
+                    <argument>aid</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="export">asset</ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error>No valid asset id given.</error>
+                    <error for="non_existant">The given asset id does not exist.</error>
+                </errors>
+            </validator>
+
+            <validator class="ProjectArrayValidator" name="invalid_meta_data" required="false">
+                <arguments>
+                    <argument>metaData</argument>
+                </arguments>
+                <errors>
+                    <error>No valid asset meta data given.</error>
+                </errors>
+            </validator>
+            
+        </validators>
+    </ae:configuration>
+</ae:configurations>

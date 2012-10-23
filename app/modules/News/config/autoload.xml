@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <!-- Agavi -->
+        <autoload name="NewsBaseAction">%core.module_dir%/News/lib/agavi/action/NewsBaseAction.class.php</autoload>
+        <autoload name="NewsListBaseAction">%core.module_dir%/News/lib/agavi/action/NewsListBaseAction.class.php</autoload>
+        <autoload name="NewsBaseView">%core.module_dir%/News/lib/agavi/view/NewsBaseView.class.php</autoload>
+        <autoload name="BrowseNewsBaseView">%core.module_dir%/News/lib/agavi/view/BrowseNewsBaseView.class.php</autoload>
+        <autoload name="ImperiaJsonValidator">%core.module_dir%/News/lib/agavi/validator/ImperiaJsonValidator.class.php</autoload>
+        <autoload name="ImportMailValidator">%core.module_dir%/News/lib/agavi/validator/ImportMailValidator.class.php</autoload>
+        <!-- /Agavi -->
+
+        <autoload name="NewsStatisticProvider">%core.module_dir%/News/lib/NewsStatisticProvider.class.php</autoload>
+        <autoload name="NewsFinder">%core.module_dir%/News/lib/NewsFinder.class.php</autoload>
+
+        <!-- API -->
+        <autoload name="FrontendApiClient">%core.module_dir%/News/lib/api/FrontendApiClient.class.php</autoload>
+        <autoload name="FrontendApiClientException">%core.module_dir%/News/lib/api/FrontendApiClientException.class.php</autoload>
+        <!-- /API -->
+
+        <!-- Import Integration -->
+        <!-- Imperia -->
+        <autoload name="ImperiaDataSourceConfig">%core.module_dir%/News/lib/import/imperia/ImperiaDataSourceConfig.class.php</autoload>
+        <autoload name="ImperiaDataSource">%core.module_dir%/News/lib/import/imperia/ImperiaDataSource.class.php</autoload>
+        <autoload name="ImperiaDataRecord">%core.module_dir%/News/lib/import/imperia/ImperiaDataRecord.class.php</autoload>
+        <autoload name="PoliceReportDataRecord">%core.module_dir%/News/lib/import/imperia/PoliceReportDataRecord.class.php</autoload>
+        <autoload name="ImperiaXmlParser">%core.module_dir%/News/lib/import/imperia/ImperiaXmlParser.class.php</autoload>
+        <!-- /Imperia -->
+
+        <!-- Newswire -->
+        <autoload name="NewswireDataSource">%core.module_dir%/News/lib/import/newswire/NewswireDataSource.class.php</autoload>
+        <autoload name="NewswireDataSourceConfig">%core.module_dir%/News/lib/import/newswire/NewswireDataSourceConfig.class.php</autoload>
+        <autoload name="NewswireDataRecord">%core.module_dir%/News/lib/import/newswire/NewswireDataRecord.class.php</autoload>
+        <autoload name="DpaNitfNewswireDataRecord">%core.module_dir%/News/lib/import/newswire/DpaNitfNewswireDataRecord.class.php</autoload>
+        <autoload name="NitfNewswireDataRecord">%core.module_dir%/News/lib/import/newswire/NitfNewswireDataRecord.class.php</autoload>
+        <autoload name="NitfNewswireXmlParser">%core.module_dir%/News/lib/import/newswire/NitfNewswireXmlParser.class.php</autoload>
+        <autoload name="DpaNitfNewswireXmlParser">%core.module_dir%/News/lib/import/newswire/DpaNitfNewswireXmlParser.class.php</autoload>
+        <!-- /Newswire -->
+
+        <!-- Rss -->
+        <autoload name="RssDataSourceConfig">%core.module_dir%/News/lib/import/rss/RssDataSourceConfig.class.php</autoload>
+        <autoload name="RssDataSource">%core.module_dir%/News/lib/import/rss/RssDataSource.class.php</autoload>
+        <autoload name="RssDataRecord">%core.module_dir%/News/lib/import/rss/RssDataRecord.class.php</autoload>
+        <!-- /Rss -->
+
+        <!-- Mail -->
+        <autoload name="ImapDataSourceConfig">%core.module_dir%/News/lib/import/mail/ImapDataSourceConfig.class.php</autoload>
+        <autoload name="ImapDataSource">%core.module_dir%/News/lib/import/mail/ImapDataSource.class.php</autoload>
+        <autoload name="ImapDataRecord">%core.module_dir%/News/lib/import/mail/ImapDataRecord.class.php</autoload>
+        <!-- /Mail -->
+
+        <!-- Import-Workflow-Adaper -->
+        <autoload name="NewsWorkflowService">%core.module_dir%/News/lib/import/workflow/NewsWorkflowService.class.php</autoload>
+        <autoload name="NewsDataImport">%core.module_dir%/News/lib/import/workflow/NewsDataImport.class.php</autoload>
+        <autoload name="NewsDataImportConfig">%core.module_dir%/News/lib/import/workflow/NewsDataImportConfig.class.php</autoload>
+        <!-- /Import-Workflow-Adapter -->
+        <!-- /Import Integration -->
+
+
+        <!-- Workflow Integration -->
+        <autoload name="INewsEntity">%core.module_dir%/News/lib/INewsEntity.iface.php</autoload>
+        <autoload name="NewsDataRecord">%core.module_dir%/News/lib/import/NewsDataRecord.class.php</autoload>
+
+        <!-- Item -->
+        <autoload name="IContentItem">%core.module_dir%/News/lib/workflow/item/IContentItem.iface.php</autoload>
+        <autoload name="ContentItem">%core.module_dir%/News/lib/workflow/item/ContentItem.class.php</autoload>
+        <autoload name="NewsMasterRecord">%core.module_dir%/News/lib/workflow/item/NewsMasterRecord.class.php</autoload>
+        <autoload name="NewsWorkflowItem">%core.module_dir%/News/lib/workflow/item/NewsWorkflowItem.class.php</autoload>
+        <!-- /Item -->
+
+        <!-- Plugins -->
+        <autoload name="WorkflowRefineNewsPlugin">%core.module_dir%/News/lib/workflow/plugin/WorkflowRefineNewsPlugin.class.php</autoload>
+        <autoload name="WorkflowPublishNewsPlugin">%core.module_dir%/News/lib/workflow/plugin/WorkflowPublishNewsPlugin.class.php</autoload>
+        <autoload name="WorkflowDeleteNewsPlugin">%core.module_dir%/News/lib/workflow/plugin/WorkflowDeleteNewsPlugin.class.php</autoload>
+        <!-- /Plugins -->
+
+        <autoload name="NewsWorkflowSupervisor">%core.module_dir%/News/lib/workflow/NewsWorkflowSupervisor.class.php</autoload>
+        <!-- /Workflow Integration -->
+
+        <autoload name="NewsDatabaseSetup">%core.module_dir%/News/lib/setup/couchdb/NewsDatabaseSetup.class.php</autoload>
+        <autoload name="NewsIndexSetup">%core.module_dir%/News/lib/setup/elasticsearch/NewsIndexSetup.class.php</autoload>
+    </ae:configuration>
+</ae:configurations>

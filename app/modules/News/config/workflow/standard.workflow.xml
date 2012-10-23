@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <workflow name="news">
+            <description>
+                This workflow defines the process structure for editing/refining imported news-content and turning into usable news.
+                All content related data is composed by an entity named workflow which holds the impor-item and all related content-items.
+                Each step of this workflow acts on the workflow-item that is aggregated by the ticket, which is passed in.
+            </description>
+            <start_at>refine_news</start_at>
+            <steps>
+
+                <step name="refine_news">
+                    <description>Manually refine an incoming import-item and create content-item(s) from it.</description>
+                    <plugin type="RefineNews">
+                        <gates>
+                            <gate_step label="publish this newsitem" name="publish">publish_news</gate_step>
+                            <gate_step label="delete this newsitem" name="delete">delete_news</gate_step>
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="publish_news">
+                    <description>
+                        Publish a given newsitem,
+                        hence export it to various external subscribers.
+                    </description>
+                    <plugin type="PublishNews">
+                        <gates>
+                            <gate_step name="demote">edit_news</gate_step>
+                            <gate_step label="delete this newsitem" name="delete">delete_news</gate_step>
+                            <gate_end name="archiv" />
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="edit_news">
+                    <description>
+                        Edit an exisiting newsitem (correction etc.)
+                    </description>
+                    <plugin type="RefineNews">
+                        <gates>
+                            <gate_step label="publish this newsitem" name="publish">publish_news</gate_step>
+                            <gate_step label="delete this newsitem" name="delete">delete_news</gate_step>
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="delete_news">
+                    <description>
+                        Marks a given newsitem as deleted.
+                        During a configurable time period the item can then be recovered,
+                        before being removed by the system's maintenance.
+                    </description>
+                    <plugin type="DeleteNews">
+                        <gates>
+                            <gate_end name="trash" />
+                        </gates>
+                    </plugin>
+                </step>
+
+            </steps>
+        </workflow>
+    </ae:configuration>
+</ae:configurations>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0"
+    xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    <ae:configuration>
+        <dataimports>
+
+            <dataimport name="events" class="EventsDataImport">
+                <description>Imports eventx data records in form of workflow items.</description>
+                <datasources>
+                    <datasource>events-tip</datasource>
+                </datasources>
+                <settings>
+                    <setting name="notify">true</setting>
+                </settings>
+            </dataimport>
+
+        </dataimports>
+    </ae:configuration>
+</ae:configurations>

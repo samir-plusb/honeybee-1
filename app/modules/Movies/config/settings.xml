@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
+    <ae:configuration>
+        <settings prefix="movies.">
+            <setting name="telavision_dir">%core.app_dir%/../data/catalogs/movies/telavision</setting>
+
+            <setting name="connections">
+                <ae:parameters>
+                    <ae:parameter name="couchdb">Movies.Write</ae:parameter>
+                    <ae:parameter name="elasticsearch">Movies.Read</ae:parameter>
+                    <ae:parameter name="frontend">Movies.Frontend</ae:parameter>
+                </ae:parameters>
+            </setting>
+
+            <!-- list integration {@see IListConfig} -->
+            <setting name="list_config">
+                <!-- common list params -->
+                <ae:parameter name="defaultLimit">15</ae:parameter>
+                <ae:parameter name="translationDomain">movies.list</ae:parameter>
+                <ae:parameter name="pagingRange">9</ae:parameter>
+                <ae:parameter name="routeName">movies.list</ae:parameter>
+                <ae:parameter name="typeKey">movies</ae:parameter>
+                <ae:parameter name="suggestField">masterRecord.name</ae:parameter>
+
+                <!--
+                    define which list data shall be displayed
+                    the names are fully qualified paths referring to values inside the list data
+                -->
+                <ae:parameter name="fields">
+                    <ae:parameters>
+                        <ae:parameter name="title">
+                            <ae:parameter name="valuefield">masterRecord.title</ae:parameter>
+                            <ae:parameter name="sortfield">masterRecord.title.raw</ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="release_date">
+                            <ae:parameter name="valuefield">masterRecord.releaseDate</ae:parameter>
+                            <ae:parameter name="sortfield">masterRecord.releaseDate</ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="genre">
+                            <ae:parameter name="valuefield">masterRecord.genre</ae:parameter>
+                            <ae:parameter name="sortfield">masterRecord.genre.raw</ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="subline">
+                            <ae:parameter name="valuefield">masterRecord.subline</ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="poster">
+                            <ae:parameter name="valuefield">masterRecord.media.images.poster600</ae:parameter>
+                            <ae:parameter name="renderer">MoviesAssetRenderer</ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="hdpic">
+                            <ae:parameter name="valuefield">masterRecord.media.images.hdPic</ae:parameter>
+                            <ae:parameter name="renderer">MoviesAssetRenderer</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameters>
+                </ae:parameter>
+
+                <!-- define our clientside controller along with some options -->
+                <ae:parameter name="clientSideController">
+                    <ae:parameter name="implementor">MoviesListController</ae:parameter>
+                    <ae:parameter name="options">
+                    </ae:parameter>
+                </ae:parameter>
+
+                <!--
+                    define the actions that are available for the list items and batch processing:
+                    - you can choose to delegate actions to the workflow handler or the configured client-side controller
+                    - actions are assigned using a simple invocation syntax refering to either the workflow handler or controller.
+                    - whereas the workflow handler only provides a proceed and a run method, 
+                      by changing the controller implementation you can easily pluck in new actions by extending the base controller.
+                    by convention the first two parameters of your controller's action callbacks should always be "is_batch" and "item".
+                -->
+                <ae:parameter name="itemActions">
+                    <ae:parameters>
+                        <ae:parameter name="edit">ctrl.run(is_batch, item)</ae:parameter>
+                        <ae:parameter name="delete">ctrl.proceed(is_batch, item, 'delete')</ae:parameter>
+                    </ae:parameters>
+                </ae:parameter>
+
+                <ae:parameter name="batchActions">
+                    <ae:parameters>
+                        <ae:parameter name="delete">ctrl.proceed(is_batch, null, 'delete')</ae:parameter>
+                    </ae:parameters>
+                </ae:parameter>
+            </setting>
+        </settings>
+    </ae:configuration>
+</ae:configurations>

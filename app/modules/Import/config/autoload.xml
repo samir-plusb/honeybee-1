@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" parent="%core.system_config_dir%/autoload.xml">
+    <ae:configuration>
+        <autoloads>
+            <!-- Agavi -->
+            <autoload name="ImportBaseAction">%core.module_dir%/Import/lib/agavi/action/ImportBaseAction.class.php</autoload>
+            <autoload name="ImportBaseView">%core.module_dir%/Import/lib/agavi/view/ImportBaseView.class.php</autoload>
+            <autoload name="ImportValidator">%core.module_dir%/Import/lib/agavi/validator/ImportValidator.class.php</autoload>
+            <!-- /Agavi -->
+
+            <!-- Config -->
+            <autoload name="IUriContainer">%core.module_dir%/Import/lib/config/IUriContainer.iface.php</autoload>
+            <autoload name="IConfig">%core.module_dir%/Import/lib/config/IConfig.iface.php</autoload>
+            <autoload name="BaseConfig">%core.module_dir%/Import/lib/config/BaseConfig.class.php</autoload>
+            <autoload name="SimpleConfig">%core.module_dir%/Import/lib/config/SimpleConfig.class.php</autoload>
+            <autoload name="ResourceBasedConfig">%core.module_dir%/Import/lib/config/ResourceBasedConfig.class.php</autoload>
+            <autoload name="AgaviXmlConfig">%core.module_dir%/Import/lib/config/AgaviXmlConfig.class.php</autoload>
+            <autoload name="ConfigException">%core.module_dir%/Import/lib/config/ConfigException.class.php</autoload>
+            <!-- /Config -->
+
+            <!-- DataSource -->
+            <autoload name="DataSourceConfig">%core.module_dir%/Import/lib/datasource/DataSourceConfig.class.php</autoload>
+            <autoload name="IDataSource">%core.module_dir%/Import/lib/datasource/IDataSource.iface.php</autoload>
+            <autoload name="ArrayDataSourceConfig">%core.module_dir%/Import/lib/datasource/ArrayDataSourceConfig.class.php</autoload>
+            <autoload name="ArrayDataSource">%core.module_dir%/Import/lib/datasource/ArrayDataSource.class.php</autoload>
+            <autoload name="BaseDataSource">%core.module_dir%/Import/lib/datasource/BaseDataSource.class.php</autoload>
+            <autoload name="DataSourceException">%core.module_dir%/Import/lib/datasource/DataSourceException.class.php</autoload>
+            <!-- /DataSource -->
+
+            <!-- DataRecord -->
+            <autoload name="IDataRecord">%core.module_dir%/Import/lib/datarecord/IDataRecord.iface.php</autoload>
+            <autoload name="DataRecordConfig">%core.module_dir%/Import/lib/datarecord/DataRecordConfig.class.php</autoload>
+            <autoload name="BaseDataRecord">%core.module_dir%/Import/lib/datarecord/BaseDataRecord.class.php</autoload>
+            <autoload name="XmlDataRecord">%core.module_dir%/Import/lib/datarecord/XmlDataRecord.class.php</autoload>
+            <autoload name="DataRecordException">%core.module_dir%/Import/lib/datarecord/DataRecordException.class.php</autoload>
+            <autoload name="RecordValidationResult">%core.module_dir%/Import/lib/datarecord/RecordValidationResult.class.php</autoload>
+            <autoload name="IRecordValidationResult">%core.module_dir%/Import/lib/datarecord/IRecordValidationResult.iface.php</autoload>
+            <!-- /DataRecord -->
+
+            <!-- DataImport -->
+            <autoload name="DataImportConfig">%core.module_dir%/Import/lib/dataimport/DataImportConfig.class.php</autoload>
+            <autoload name="CouchDbDataImportConfig">%core.module_dir%/Import/lib/dataimport/CouchDbDataImportConfig.class.php</autoload>
+            <autoload name="IDataImportReport">%core.module_dir%/Import/lib/dataimport/IDataImportReport.iface.php</autoload>
+            <autoload name="DataImportReport">%core.module_dir%/Import/lib/dataimport/DataImportReport.class.php</autoload>
+            <autoload name="IDataImport">%core.module_dir%/Import/lib/dataimport/IDataImport.iface.php</autoload>
+            <autoload name="BaseDataImport">%core.module_dir%/Import/lib/dataimport/BaseDataImport.class.php</autoload>
+            <autoload name="CouchDbDataImport">%core.module_dir%/Import/lib/dataimport/CouchDbDataImport.class.php</autoload>
+            <autoload name="DataImportException">%core.module_dir%/Import/lib/dataimport/DataImportException.class.php</autoload>
+            <!-- /DataImport -->
+
+            <!-- Factory-->
+            <autoload name="IImportFactory">%core.module_dir%/Import/lib/factory/IImportFactory.iface.php</autoload>
+            <autoload name="IImportFactoryConfig">%core.module_dir%/Import/lib/factory/IImportFactoryConfig.iface.php</autoload>
+            <autoload name="ImportFactoryConfig">%core.module_dir%/Import/lib/factory/ImportFactoryConfig.class.php</autoload>
+            <autoload name="DataSourcesFactoryConfig">%core.module_dir%/Import/lib/factory/DataSourcesFactoryConfig.class.php</autoload>
+            <autoload name="DataImportsFactoryConfig">%core.module_dir%/Import/lib/factory/DataImportsFactoryConfig.class.php</autoload>
+            <autoload name="ImportFactory">%core.module_dir%/Import/lib/factory/ImportFactory.class.php</autoload>
+            <autoload name="ImportFactoryException">%core.module_dir%/Import/lib/factory/ImportFactoryException.class.php</autoload>
+            <!-- /Factory -->
+
+
+            <!-- Mailparse (from global vendor libs include path) -->
+            <autoload name="MimeMailParser">Mail/mailparse.php</autoload>
+            <autoload name="MimeMailParser_attachment">Mail/attachment.class.php</autoload>
+            <!-- /Mailparse -->
+
+            <!-- Parser -->
+            <autoload name="ProjectMailParser">%core.module_dir%/Import/lib/parser/mail/ProjectMailParser.class.php</autoload>
+            <autoload name="IXmlParser">%core.module_dir%/Import/lib/parser/xml/IXmlParser.iface.php</autoload>
+            <autoload name="XmlParserException">%core.module_dir%/Import/lib/parser/xml/XmlParserException.class.php</autoload>
+            <autoload name="BaseXmlParser">%core.module_dir%/Import/lib/parser/xml/BaseXmlParser.class.php</autoload>
+            <autoload name="IFeedParser">%core.module_dir%/Import/lib/parser/feed/IFeedParser.iface.php</autoload>
+            <autoload name="BaseFeedParser">%core.module_dir%/Import/lib/parser/feed/BaseFeedParser.class.php</autoload>
+            <autoload name="BaseFeedItem">%core.module_dir%/Import/lib/parser/feed/BaseFeedItem.class.php</autoload>
+            <autoload name="RssFeedParser">%core.module_dir%/Import/lib/parser/feed/RssFeedParser.class.php</autoload>
+            <autoload name="RssFeedItem">%core.module_dir%/Import/lib/parser/feed/RssFeedItem.class.php</autoload>
+            <autoload name="AtomFeedParser">%core.module_dir%/Import/lib/parser/feed/AtomFeedParser.class.php</autoload>
+            <autoload name="AtomFeedItem">%core.module_dir%/Import/lib/parser/feed/AtomFeedItem.class.php</autoload>
+            <!-- Parser -->
+
+            <!-- Workflow Integration -->
+            <autoload name="IWorkflowService">%core.module_dir%/Import/lib/workflow/IWorkflowService.iface.php</autoload>
+            <autoload name="BaseWorkflowService">%core.module_dir%/Import/lib/workflow/BaseWorkflowService.class.php</autoload>
+            <autoload name="WorkflowItemDataImport">%core.module_dir%/Import/lib/workflow/WorkflowItemDataImport.class.php</autoload>
+            <autoload name="WorkflowItemDataImportConfig">%core.module_dir%/Import/lib/workflow/WorkflowItemDataImportConfig.class.php</autoload>
+            <!-- /Workflow Integration -->
+
+            <!-- Testing -->
+            <autoload name="ImportConfigBaseTestCase">%core.module_dir%/Import/lib/testing/ImportConfigBaseTestCase.class.php</autoload>
+            <autoload name="DataSourceBaseTestCase">%core.module_dir%/Import/lib/testing/DataSourceBaseTestCase.class.php</autoload>
+            <autoload name="DataRecordBaseTestCase">%core.module_dir%/Import/lib/testing/DataRecordBaseTestCase.class.php</autoload>
+            <autoload name="IDataImportBaseTestCase">%core.module_dir%/Import/lib/testing/IDataImportBaseTestCase.class.php</autoload>
+            <!-- Testing -->
+        </autoloads>
+    </ae:configuration>
+</ae:configurations>
