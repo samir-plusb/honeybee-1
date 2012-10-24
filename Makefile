@@ -31,12 +31,12 @@ cc:
 	@echo "pub/css/_cache cleared"
 	@make generate-autoloads
 
-install: install-vendor cc
+install: install-vendor install-node-deps cc
 
 tail-logs:
 	@tail -f app/log/*.log
 
-update: update-vendor cc
+update: update-vendor update-node-deps cc
 
 generate-autoloads:
 
@@ -56,6 +56,14 @@ update-vendor: install-vendor
 	@svn revert -R vendor/agavi/agavi/ || true
 	@php -d allow_url_fopen=1 bin/composer.phar update
 	@bin/apply_patches
+
+install-node-deps: install-composer
+
+	@npm install
+
+update-node-deps: install-node-deps
+
+	@npm update
 
 .PHONY: help
 
