@@ -37,7 +37,7 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
         $this->setupHtml($parameters);
 
         // set the title
-        $this->setAttribute('_title', $this->translationManager->_('Welcome to the ContentWorker web frontend.'));
+        $this->setAttribute('_title', $this->translationManager->_('Welcome to the Honeybee web frontend.'));
 
         $this->setBreadcrumb();
     }
@@ -62,7 +62,7 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
             json_encode(
                 array(
                     'result' => 'error',
-                    'message' => 'Welcome to the ContentWorker JSON API.'
+                    'message' => 'Welcome to the Honeybee JSON API.'
                 )
             )
         );
@@ -78,7 +78,7 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $msg = 'Welcome to the ContentWorker CLI Interface.' . PHP_EOL;
+        $msg = 'Welcome to the Honeybee CLI Interface.' . PHP_EOL;
 
         $this->getResponse()->setContent($msg);
     }

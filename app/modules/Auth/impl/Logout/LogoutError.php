@@ -1,1 +1,1 @@
-<p>This is the ContentWorker's logout success page.</p>
+<p>This is the Honeybee logout success page.</p>
