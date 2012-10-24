@@ -46,7 +46,7 @@
         <echo message="Generating the clientside API documentation."/>
         <run command="/bin/rm -rf etc/integration/build/api/clientside" dir="${project.directory}"/>
         <run command="/bin/mkdir -p etc/integration/build/api/clientside" dir="${project.directory}"/>
-        <run command="bin/jsdoc.sh pub/js/midas/* pub/js/midas/items/edit/*" dir="${project.directory}"/>
+        <run command="bin/jsdoc pub/js/midas/*" dir="${project.directory}"/>
     </target>
 
     <target name="js-xunit" description="Running client side tests with xunit output." depends="cc">
