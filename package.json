@@ -11,7 +11,8 @@
         "uglify-js": "1.3.x",
         "less-watcher": "1.1.x",
         "watcher_lib": "1.1.x",
-        "optimist": "0.3.x"
+        "optimist": "0.3.x",
+        "ndoc": "2.0.x"
     },
     "engine": "node >= 0.8.x"
 }

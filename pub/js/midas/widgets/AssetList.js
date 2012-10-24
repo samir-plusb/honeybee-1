@@ -1,8 +1,8 @@
+/**
+ * midas.widgets
+ **/
 midas.widgets.AssetList = midas.widgets.Widget.extend({
     
-    // #########################
-    // #     property defs     #
-    // #########################
     log_prefix: "AssetList",
 
     assets: null,
@@ -24,9 +24,6 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
         this.parent(element, options);
     },
 
-    // #################################
-    // #     widget implementation     #
-    // #################################
     getTemplate: function()
     {
         return 'js/midas/templates/AssetList.html';
@@ -479,9 +476,6 @@ midas.widgets.AssetList.FileUploader = midas.core.BaseObject.extend({
 });
 
 
-// #####################
-// #     constants     #
-// #####################
 midas.widgets.AssetList.DEFAULT_OPTIONS = {
     autobind: true,
     fieldname: '',

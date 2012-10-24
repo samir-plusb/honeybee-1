@@ -35,17 +35,18 @@ class ProjectScriptPacker
     protected function compressScript($source, $type)
     {
         $outfile = tempnam(sys_get_temp_dir(), 'compress.'.$type);
-        $dev_dir = dirname(AgaviConfig::get('core.app_dir')) . DIRECTORY_SEPARATOR . 'dev';
-        $jar = sprintf('%s/yuicompressor-2.4.6/build/yuicompressor-2.4.6.jar', $dev_dir);
+        $vendorDir = dirname(AgaviConfig::get('core.app_dir')) . DIRECTORY_SEPARATOR . 'vendor';
+        $yuiJarPath = $vendorDir . DIRECTORY_SEPARATOR . 'heartsentwined' .
+            DIRECTORY_SEPARATOR . 'yuicompressor' . DIRECTORY_SEPARATOR . 'yuicompressor.jar';
 
-        if (! file_exists($jar))
+        if (! file_exists($yuiJarPath))
         {
-            throw new Exception('YUICompressor binary cannot be found in "'.$jar.'".');
+            throw new Exception('YUICompressor binary cannot be found in "'.$yuiJarPath.'".');
         }
 
         $cmd = sprintf(
             'java -Xmx256M -jar %s --charset %s --type %s -o %s',
-            $jar,
+            $yuiJarPath,
             escapeshellarg('utf-8'),
             $type,
             escapeshellarg($outfile)
@@ -58,7 +59,6 @@ class ProjectScriptPacker
 
         fwrite($handle, $source);
         pclose($handle);
-
         $contents = file_get_contents($outfile);
         unlink($outfile);
 

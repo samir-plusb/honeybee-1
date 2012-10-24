@@ -79,7 +79,8 @@
         "zerkalica/phpcs": "dev-master",
         "PhpDebugToolbar/php-debug-toolbar": "1.5.*",
         "jquery/jquery": "1.7.2",
-        "twitter/bootstrap": "2.1.1"
+        "twitter/bootstrap": "2.1.1",
+        "heartsentwined/yuicompressor": "2.4.7"
     },
     "autoload": {
         "classmap": [ "app/lib/" ]

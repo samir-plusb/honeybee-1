@@ -1,5 +1,5 @@
 {
-    "hash": "bea28fa663082900b39535468b7300d7",
+    "hash": "bbfa78e84786ddd11ba713a2fa69d000",
     "packages": [
         {
             "name": "PhpDebugToolbar/php-debug-toolbar",
@@ -44,6 +44,33 @@
                     "php/Craur.class.php"
                 ]
             }
+        },
+        {
+            "name": "heartsentwined/yuicompressor",
+            "version": "2.4.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/heartsentwined/yuicompressor",
+                "reference": "2.4.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/heartsentwined/yuicompressor/zipball/2.4.7",
+                "reference": "2.4.7",
+                "shasum": ""
+            },
+            "time": "2012-09-02 11:05:33",
+            "type": "library",
+            "installation-source": "dist",
+            "description": "YUI Compressor is a popular CSS and JS minifier.",
+            "homepage": "https://github.com/heartsentwined/yuicompressor",
+            "keywords": [
+                "css",
+                "JS",
+                "compressor",
+                "minifier",
+                "yui"
+            ]
         },
         {
             "name": "imagine/Imagine",
