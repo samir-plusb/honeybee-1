@@ -58,12 +58,6 @@
             <autoload name="ImportFactoryException">%core.module_dir%/Import/lib/factory/ImportFactoryException.class.php</autoload>
             <!-- /Factory -->
 
-
-            <!-- Mailparse (from global vendor libs include path) -->
-            <autoload name="MimeMailParser">Mail/mailparse.php</autoload>
-            <autoload name="MimeMailParser_attachment">Mail/attachment.class.php</autoload>
-            <!-- /Mailparse -->
-
             <!-- Parser -->
             <autoload name="ProjectMailParser">%core.module_dir%/Import/lib/parser/mail/ProjectMailParser.class.php</autoload>
             <autoload name="IXmlParser">%core.module_dir%/Import/lib/parser/xml/IXmlParser.iface.php</autoload>

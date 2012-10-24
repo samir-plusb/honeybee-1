@@ -67,6 +67,9 @@
             <autoload name="ProjectCurl">%core.lib_dir%/http/ProjectCurl.class.php</autoload>
             <!-- /Http -->
             
+            <autoload name="MimeMailParser">%core.lib_dir%/mail/mailparse.php</autoload>
+            <autoload name="MimeMailParser_attachment">%core.lib_dir%/mail/attachment.class.php</autoload>
+
             <autoload name="BaseExportDocumentFactory">%core.lib_dir%/BaseExportDocumentFactory.class.php</autoload>
             <autoload name="ProjectIdSequenceMap">%core.lib_dir%/data_object/ProjectIdSequenceMap.class.php</autoload>
             <autoload name="ProjectIdSequence">%core.lib_dir%/data_object/ProjectIdSequence.class.php</autoload>
