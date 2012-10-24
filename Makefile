@@ -5,6 +5,9 @@ help:
 	@echo "  tail-logs - tail all application logs."
 	@echo "  install - initially setup a vanilla checkout."
 	@echo "  update - update the working copy and vendor libs."
+	@echo "  test - run php test suites."
+	@echo "  js-specs - run vows scenarios with spec output."
+	@echo "  js-xunit - run vows scenarios with xunit output."
 	@echo "Hidden targets:"
 	@echo "  install-composer - install composer"
 	@echo "  install-vendor - install dependencies in vendor folder."
@@ -80,6 +83,19 @@ update-node-deps: install-node-deps
 
 	@npm update
 
+test:
+
+	@nice bin/test --configuration testing/config/phpunit.xml
+
+js-specs:
+
+	@bin/test-js --spec
+
+js-xunit:
+
+	@/bin/rm -rf etc/integration/build/logs/clientside.xml
+	@/bin/mkdir -p etc/integration/build/logs
+	@bin/test-js --xunit | cat > etc/integration/build/logs/clientside.xml
 
 .PHONY: help
 

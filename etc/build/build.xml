@@ -14,7 +14,7 @@
         common targets 
     -->
     <target name="cc" description="Alias for 'make cc'.">
-        <echo message="Redirecting to make..." />
+        <echo message="Redirecting to 'make cc'..." />
         <run command="make cc" dir="${project.directory}"/>
     </target>
 
@@ -28,8 +28,8 @@
     </target>
 
     <target name="test" description="Alias for 'make test'.">
-        <echo message="Redirecting to make..." />
-        <run command="nice bin/test --configuration testing/config/phpunit.xml" dir="${project.directory}" />
+        <echo message="Redirecting to 'make test'..." />
+        <run command="make test" dir="${project.directory}" />
     </target>
 
     <target name="phpdoc" description="Generate API documentation using PHPDocumentor." depends="cc">
@@ -49,16 +49,9 @@
         <run command="bin/jsdoc pub/js/midas/*" dir="${project.directory}"/>
     </target>
 
-    <target name="js-xunit" description="Running client side tests with xunit output." depends="cc">
-        <echo message="Running client side tests with xunit output."/>
-        <run command="/bin/rm -rf etc/integration/build/logs/clientside.xml" dir="${project.directory}"/>
-        <run command="/bin/mkdir -p etc/integration/build/logs" dir="${project.directory}"/>
-        <run command="bin/test-js --xunit | cat > etc/integration/build/logs/clientside.xml" dir="${project.directory}"/>
-    </target>
-
-    <target name="js-spec" description="Running client side tests with spec output." depends="cc">
-        <echo message="Running client side tests with spec output."/>
-        <run command="bin/test-js --spec" dir="${project.directory}"/>
+    <target name="js-xunit" description="Alias for 'make js-xunit'." depends="cc">
+        <echo message="Redirecting to 'make js-xunit'..."/>
+        <run command="make js-xunit" dir="${project.directory}"/>
     </target>
 
     <target name="compile-css" description="Compile our less code into real css.">
