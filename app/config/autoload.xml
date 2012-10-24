@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.1" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1" xmlns:xi="http://www.w3.org/2001/XInclude" parent="%core.system_config_dir%/autoload.xml">
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" parent="%core.system_config_dir%/autoload.xml">
 
     <ae:configuration>
         <autoloads>
-            <!-- Zend (can be removed when agavi delivers integration) -->
-            <autoload name="Zend_Acl">%core.app_dir%/../libs/Zend/Acl.php</autoload>
-            <autoload name="Zend_Acl_Assert_Interface">%core.app_dir%/../libs/Zend/Acl/Assert/Interface.php</autoload>
-            <autoload name="Zend_Acl_Resource_Interface">%core.app_dir%/../libs/Zend/Acl/Resource/Interface.php</autoload>
-            <autoload name="Zend_Acl_Role_Interface">%core.app_dir%/../libs/Zend/Acl/Role/Interface.php</autoload>
-            <!-- /Zend -->
-
-            <!-- Craur -->
-            <autoload name="Craur">%core.app_dir%/../libs/Craur/php/Craur.class.php</autoload>
-            <!-- /Craur -->
-
             <!-- Agavi Integration -->
             <autoload name="ProjectBaseAction">%core.lib_dir%/agavi/action/ProjectBaseAction.class.php</autoload>
             <autoload name="ProjectBaseModel">%core.lib_dir%/agavi/model/ProjectBaseModel.class.php</autoload>
@@ -81,56 +70,51 @@
             <autoload name="BaseExportDocumentFactory">%core.lib_dir%/BaseExportDocumentFactory.class.php</autoload>
             <autoload name="ProjectIdSequenceMap">%core.lib_dir%/data_object/ProjectIdSequenceMap.class.php</autoload>
             <autoload name="ProjectIdSequence">%core.lib_dir%/data_object/ProjectIdSequence.class.php</autoload>
-
-            <xi:include href="%core.app_dir%/../libs/PhpDebugToolbar/lib/agavi/autoload.xml"
-                xpointer="xmlns(a=http://agavi.org/agavi/config/parts/autoload/1.0) xpointer(//a:autoload)">
-            </xi:include>
-
         </autoloads>
     </ae:configuration>
 
     <xi:include href="%core.app_dir%/modules/Common/config/autoload.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>
 
     <xi:include href="%core.app_dir%/modules/Auth/config/autoload.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>
 
     <xi:include href="%core.app_dir%/modules/Asset/config/autoload.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>
 
     <xi:include href="%core.app_dir%/modules/Import/config/autoload.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>
 
     <xi:include href="%core.app_dir%/modules/Workflow/config/autoload.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>
 
     <xi:include href="%core.app_dir%/modules/News/config/autoload.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>
 
     <xi:include href="%core.app_dir%/modules/Shofi/config/autoload.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>
 
     <xi:include href="%core.app_dir%/modules/Shofi_Categories/config/autoload.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>
 
     <xi:include href="%core.app_dir%/modules/Shofi_Verticals/config/autoload.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>
 
     <xi:include href="%core.app_dir%/modules/Movies/config/autoload.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>
 
     <xi:include href="%core.app_dir%/modules/Events/config/autoload.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/*)">
+        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>
 
 </ae:configurations>

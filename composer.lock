@@ -1,6 +1,23 @@
 {
-    "hash": "14352c0f707774ec29fe12724e988c07",
+    "hash": "bea28fa663082900b39535468b7300d7",
     "packages": [
+        {
+            "name": "PhpDebugToolbar/php-debug-toolbar",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DracoBlue/PhpDebugToolbar.git",
+                "reference": "8f829a838dc6dee69dbbc4a4af28295bf07abd0a"
+            },
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "classmap": [
+                    "lib/agavi/",
+                    "PhpDebugToolbar.class.php"
+                ]
+            }
+        },
         {
             "name": "agavi/agavi",
             "version": "1.0.7",
@@ -666,6 +683,31 @@
                 }
             ],
             "description": "Zendframework 1 Zend_Acl"
+        },
+        {
+            "name": "zerkalica/phpcs",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/zerkalica/PHP_CodeSniffer.git",
+                "reference": "49b3b7f9d27d1f8fed7b46cf7959c71166ed2e1a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/zerkalica/PHP_CodeSniffer/zipball/49b3b7f9d27d1f8fed7b46cf7959c71166ed2e1a",
+                "reference": "49b3b7f9d27d1f8fed7b46cf7959c71166ed2e1a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "1350419716",
+            "bin": [
+                "scripts/phpcs"
+            ],
+            "type": "library",
+            "installation-source": "source",
+            "description": "Unofficial version of PHP_CodeSniffer to be handled with Composer"
         }
     ],
     "packages-dev": null,
@@ -674,6 +716,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "zend/acl": 20
+        "zend/acl": 20,
+        "zerkalica/phpcs": 20
     }
 }

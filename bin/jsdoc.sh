@@ -1,7 +1,6 @@
 #/bin/bash
 
 BASEDIR=`readlink -f "$( dirname $0 )/.."`
-AGAVI_SOURCE_DIRECTORY="${BASEDIR}/libs/agavi"
 LOCAL_CONFIG_SH="${BASEDIR}/etc/local/local.config.sh"
 
 if [ -f $LOCAL_CONFIG_SH ] ; then

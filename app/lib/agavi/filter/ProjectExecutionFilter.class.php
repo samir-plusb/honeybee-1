@@ -2,6 +2,7 @@
 
 /**
  * The ProjectExecutionFilter class registers view executions for the ProjectScriptFilter.
+ * We will probally switch to using pulq pretty soon.
  *
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -9,7 +10,7 @@
  * @package         Project
  * @subpackage      Agavi/Filter
  */
-class ProjectExecutionFilter extends AgaviExecutionFilter
+class ProjectExecutionFilter extends PhpDebugToolbarAgaviExecutionFilter
 {
     protected function executeView(AgaviExecutionContainer $container)
     {
@@ -25,5 +26,3 @@ class ProjectExecutionFilter extends AgaviExecutionFilter
     }
 
 }
-
-?>

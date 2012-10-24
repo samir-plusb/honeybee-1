@@ -30,12 +30,15 @@
         {
             "type": "package",
             "package": {
-                "name": "twitter/bootstrap",
-                "version": "2.1.1",
+                "name": "PhpDebugToolbar/php-debug-toolbar",
+                "version": "1.5.0",
                 "source": {
-                    "url": "https://github.com/twitter/bootstrap.git",
+                    "url": "https://github.com/DracoBlue/PhpDebugToolbar.git",
                     "type": "git",
-                    "reference": "c52368d3c5984b28e6a71e5e1240afdd788fc2e6"
+                    "reference": "8f829a838dc6dee69dbbc4a4af28295bf07abd0a"
+                },
+                "autoload": {
+                    "classmap": ["lib/agavi/", "PhpDebugToolbar.class.php"]
                 }
             }
         },
@@ -49,20 +52,34 @@
                     "type": "file"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "twitter/bootstrap",
+                "version": "2.1.1",
+                "source": {
+                    "url": "https://github.com/twitter/bootstrap.git",
+                    "type": "git",
+                    "reference": "c52368d3c5984b28e6a71e5e1240afdd788fc2e6"
+                }
+            }
         }
     ],
     "require": {
         "php": ">=5.3",
         "agavi/agavi": "1.0.*",
         "twig/twig": "1.*",
-        "jquery/jquery": "1.7.2",
-        "twitter/bootstrap": "2.1.1",
         "craur/craur": "1.6.*",
         "ruflin/Elastica": "0.19.8.0",
         "phpunit/phpunit": "3.7.*",
         "zend/acl": "dev-master",
         "imagine/Imagine": "0.3.*",
-        "phing/phing": "2.4.*"
+        "phing/phing": "2.4.12",
+        "zerkalica/phpcs": "dev-master",
+        "PhpDebugToolbar/php-debug-toolbar": "1.5.*",
+        "jquery/jquery": "1.7.2",
+        "twitter/bootstrap": "2.1.1"
     },
     "autoload": {
         "classmap": [ "app/lib/" ]

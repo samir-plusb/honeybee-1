@@ -1,0 +1,258 @@
+[2012-10-24 00:51:10,625][WARN ][bootstrap                ] jvm uses the client vm, make sure to run `java` with the server vm for best performance by adding `-server` to the command line
+[2012-10-24 00:51:10,632][INFO ][node                     ] [Bora] {0.18.4}[2251]: initializing ...
+[2012-10-24 00:51:10,666][INFO ][plugins                  ] [Bora] loaded [river-couchdb, lang-javascript, analysis-icu], sites []
+[2012-10-24 00:51:12,103][INFO ][node                     ] [Bora] {0.18.4}[2251]: initialized
+[2012-10-24 00:51:12,103][INFO ][node                     ] [Bora] {0.18.4}[2251]: starting ...
+[2012-10-24 00:51:12,186][INFO ][transport                ] [Bora] bound_address {inet[/0:0:0:0:0:0:0:0:9300]}, publish_address {inet[/10.0.2.15:9300]}
+[2012-10-24 00:51:15,223][INFO ][cluster.service          ] [Bora] new_master [Bora][G2glW5fFTS6di1k7HfdVjQ][inet[/10.0.2.15:9300]], reason: zen-disco-join (elected_as_master)
+[2012-10-24 00:51:15,255][INFO ][discovery                ] [Bora] midas.hildegard/G2glW5fFTS6di1k7HfdVjQ
+[2012-10-24 00:51:15,269][INFO ][gateway                  ] [Bora] recovered [0] indices into cluster_state
+[2012-10-24 00:51:15,273][INFO ][http                     ] [Bora] bound_address {inet[/0:0:0:0:0:0:0:0:9200]}, publish_address {inet[/10.0.2.15:9200]}
+[2012-10-24 00:51:15,275][INFO ][node                     ] [Bora] {0.18.4}[2251]: started
+[2012-10-24 00:51:15,936][INFO ][cluster.metadata         ] [Bora] [midas_shofi] creating index, cause [api], shards [2]/[1], mappings []
+[2012-10-24 00:51:16,209][INFO ][cluster.metadata         ] [Bora] [midas_shofi] create_mapping [shofi-ticket]
+[2012-10-24 00:51:16,249][INFO ][cluster.metadata         ] [Bora] [midas_shofi] create_mapping [shofi-place]
+[2012-10-24 00:51:16,268][INFO ][cluster.metadata         ] [Bora] [midas_shofi] create_mapping [shofi-category]
+[2012-10-24 00:51:16,288][INFO ][cluster.metadata         ] [Bora] [midas_shofi] create_mapping [shofi-vertical]
+[2012-10-24 00:51:16,322][INFO ][cluster.metadata         ] [Bora] [_river] creating index, cause [auto(index api)], shards [1]/[1], mappings []
+[2012-10-24 00:51:16,450][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [places_river] (dynamic)
+[2012-10-24 00:51:16,523][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [categories_river] (dynamic)
+[2012-10-24 00:51:16,537][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [tickets_river] (dynamic)
+[2012-10-24 00:51:16,566][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [vertical_river] (dynamic)
+[2012-10-24 00:51:16,710][INFO ][river.couchdb            ] [Bora] [couchdb][places_river] starting couchdb stream: host [localhost], port [5984], filter [null], db [midas_shofi], indexing to [midas_shofi]/[midas_shofi]
+[2012-10-24 00:51:16,741][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [places_river] (dynamic)
+[2012-10-24 00:51:16,758][INFO ][river.couchdb            ] [Bora] [couchdb][categories_river] starting couchdb stream: host [localhost], port [5984], filter [null], db [midas_shofi], indexing to [midas_shofi]/[midas_shofi]
+[2012-10-24 00:51:16,778][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [categories_river] (dynamic)
+[2012-10-24 00:51:16,787][WARN ][river                    ] [Bora] ignoring river [couchdb][places_river] creation, already exists
+[2012-10-24 00:51:16,790][INFO ][river.couchdb            ] [Bora] [couchdb][vertical_river] starting couchdb stream: host [localhost], port [5984], filter [null], db [midas_shofi], indexing to [midas_shofi]/[midas_shofi]
+[2012-10-24 00:51:16,824][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [vertical_river] (dynamic)
+[2012-10-24 00:51:16,860][INFO ][river.couchdb            ] [Bora] [couchdb][tickets_river] starting couchdb stream: host [localhost], port [5984], filter [null], db [midas_shofi], indexing to [midas_shofi]/[midas_shofi]
+[2012-10-24 00:51:16,890][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [tickets_river] (dynamic)
+[2012-10-24 00:51:16,896][WARN ][river                    ] [Bora] ignoring river [couchdb][categories_river] creation, already exists
+[2012-10-24 00:51:16,897][WARN ][river                    ] [Bora] ignoring river [couchdb][tickets_river] creation, already exists
+[2012-10-24 00:51:16,897][WARN ][river                    ] [Bora] ignoring river [couchdb][places_river] creation, already exists
+[2012-10-24 00:51:16,897][WARN ][river                    ] [Bora] ignoring river [couchdb][places_river] creation, already exists
+[2012-10-24 00:51:16,897][WARN ][river                    ] [Bora] ignoring river [couchdb][categories_river] creation, already exists
+[2012-10-24 00:51:17,157][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [tickets_river] (dynamic)
+[2012-10-24 00:51:17,185][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [categories_river] (dynamic)
+[2012-10-24 00:51:17,348][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [places_river] (dynamic)
+[2012-10-24 00:51:17,429][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [vertical_river] (dynamic)
+[2012-10-24 00:51:17,878][INFO ][cluster.metadata         ] [Bora] [midas_shofi] update_mapping [shofi-place] (dynamic)
+[2012-10-24 00:59:47,655][INFO ][cluster.metadata         ] [Bora] [midas_assets] creating index, cause [api], shards [2]/[1], mappings []
+[2012-10-24 00:59:47,709][INFO ][cluster.metadata         ] [Bora] [midas_assets] create_mapping [asset]
+[2012-10-24 00:59:47,721][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [assets_river] (dynamic)
+[2012-10-24 00:59:47,745][INFO ][river.couchdb            ] [Bora] [couchdb][assets_river] starting couchdb stream: host [localhost], port [5984], filter [null], db [midas_assets], indexing to [midas_assets]/[midas_assets]
+[2012-10-24 00:59:47,756][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [assets_river] (dynamic)
+[2012-10-24 00:59:47,783][DEBUG][action.bulk              ] [Bora] [midas_assets][1] failed to bulk item (index) index {[midas_assets][asset][2], source[{"_rev":"1-c9ec25993ce3b37dc91f185b058805ff","extension":"jpg","_id":"2","lastModified":{"date":"2012-10-22T14:35:39+0200","user":"system"},"created":{"date":"2012-10-22T14:35:39+0200","user":"system"},"name":"pic_10002_37700","origin":"file:///home/vagrant/projects/branch_21/app/../data/catalogs/movies/telavision/images/pic_10002_37700.jpg","fullName":"pic_10002_37700.jpg","type":"ProjectAssetInfo","mimeType":false,"metaData":[],"size":false}]}
+org.elasticsearch.index.mapper.MapperParsingException: Failed to parse [size]
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:308)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.serializeValue(ObjectMapper.java:577)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.parse(ObjectMapper.java:443)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:475)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:416)
+	at org.elasticsearch.index.shard.service.InternalIndexShard.prepareIndex(InternalIndexShard.java:302)
+	at org.elasticsearch.action.bulk.TransportShardBulkAction.shardOperationOnPrimary(TransportShardBulkAction.java:136)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction.performOnPrimary(TransportShardReplicationOperationAction.java:487)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction$1.run(TransportShardReplicationOperationAction.java:400)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:679)
+Caused by: org.elasticsearch.common.jackson.JsonParseException: Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@120ab60; line: 1, column: 447]
+	at org.elasticsearch.common.jackson.JsonParser._constructError(JsonParser.java:1432)
+	at org.elasticsearch.common.jackson.impl.JsonParserMinimalBase._reportError(JsonParserMinimalBase.java:385)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase._parseNumericValue(JsonParserBase.java:763)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase.getIntValue(JsonParserBase.java:618)
+	at org.elasticsearch.common.xcontent.json.JsonXContentParser.doIntValue(JsonXContentParser.java:102)
+	at org.elasticsearch.common.xcontent.support.AbstractXContentParser.intValue(AbstractXContentParser.java:60)
+	at org.elasticsearch.index.mapper.core.IntegerFieldMapper.parseCreateField(IntegerFieldMapper.java:231)
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:295)
+	... 11 more
+[2012-10-24 00:59:47,784][DEBUG][action.bulk              ] [Bora] [midas_assets][0] failed to bulk item (index) index {[midas_assets][asset][1], source[{"_rev":"1-dff5a6d408a035ba2d9b7cb5ea958d49","extension":"jpg","_id":"1","lastModified":{"date":"2012-10-22T14:35:39+0200","user":"system"},"created":{"date":"2012-10-22T14:35:39+0200","user":"system"},"name":"pic_10002_37699","origin":"file:///home/vagrant/projects/branch_21/app/../data/catalogs/movies/telavision/images/pic_10002_37699.jpg","fullName":"pic_10002_37699.jpg","type":"ProjectAssetInfo","mimeType":false,"metaData":[],"size":false}]}
+org.elasticsearch.index.mapper.MapperParsingException: Failed to parse [size]
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:308)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.serializeValue(ObjectMapper.java:577)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.parse(ObjectMapper.java:443)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:475)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:416)
+	at org.elasticsearch.index.shard.service.InternalIndexShard.prepareIndex(InternalIndexShard.java:302)
+	at org.elasticsearch.action.bulk.TransportShardBulkAction.shardOperationOnPrimary(TransportShardBulkAction.java:136)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction.performOnPrimary(TransportShardReplicationOperationAction.java:487)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction$1.run(TransportShardReplicationOperationAction.java:400)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:679)
+Caused by: org.elasticsearch.common.jackson.JsonParseException: Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@5b5df0; line: 1, column: 447]
+	at org.elasticsearch.common.jackson.JsonParser._constructError(JsonParser.java:1432)
+	at org.elasticsearch.common.jackson.impl.JsonParserMinimalBase._reportError(JsonParserMinimalBase.java:385)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase._parseNumericValue(JsonParserBase.java:763)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase.getIntValue(JsonParserBase.java:618)
+	at org.elasticsearch.common.xcontent.json.JsonXContentParser.doIntValue(JsonXContentParser.java:102)
+	at org.elasticsearch.common.xcontent.support.AbstractXContentParser.intValue(AbstractXContentParser.java:60)
+	at org.elasticsearch.index.mapper.core.IntegerFieldMapper.parseCreateField(IntegerFieldMapper.java:231)
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:295)
+	... 11 more
+[2012-10-24 00:59:47,790][DEBUG][action.bulk              ] [Bora] [midas_assets][0] failed to bulk item (index) index {[midas_assets][asset][3], source[{"_rev":"1-8deae7ff6f6ed9654501f8cdd1128af1","extension":"jpg","_id":"3","lastModified":{"date":"2012-10-22T14:35:39+0200","user":"system"},"created":{"date":"2012-10-22T14:35:39+0200","user":"system"},"name":"pic_10234_7","origin":"file:///home/vagrant/projects/branch_21/app/../data/catalogs/movies/telavision/images/pic_10234_7.jpg","fullName":"pic_10234_7.jpg","type":"ProjectAssetInfo","mimeType":false,"metaData":[],"size":false}]}
+org.elasticsearch.index.mapper.MapperParsingException: Failed to parse [size]
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:308)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.serializeValue(ObjectMapper.java:577)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.parse(ObjectMapper.java:443)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:475)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:416)
+	at org.elasticsearch.index.shard.service.InternalIndexShard.prepareIndex(InternalIndexShard.java:302)
+	at org.elasticsearch.action.bulk.TransportShardBulkAction.shardOperationOnPrimary(TransportShardBulkAction.java:136)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction.performOnPrimary(TransportShardReplicationOperationAction.java:487)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction$1.run(TransportShardReplicationOperationAction.java:400)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:679)
+Caused by: org.elasticsearch.common.jackson.JsonParseException: Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@1558d62; line: 1, column: 435]
+	at org.elasticsearch.common.jackson.JsonParser._constructError(JsonParser.java:1432)
+	at org.elasticsearch.common.jackson.impl.JsonParserMinimalBase._reportError(JsonParserMinimalBase.java:385)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase._parseNumericValue(JsonParserBase.java:763)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase.getIntValue(JsonParserBase.java:618)
+	at org.elasticsearch.common.xcontent.json.JsonXContentParser.doIntValue(JsonXContentParser.java:102)
+	at org.elasticsearch.common.xcontent.support.AbstractXContentParser.intValue(AbstractXContentParser.java:60)
+	at org.elasticsearch.index.mapper.core.IntegerFieldMapper.parseCreateField(IntegerFieldMapper.java:231)
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:295)
+	... 11 more
+[2012-10-24 00:59:47,795][WARN ][river.couchdb            ] [Bora] [couchdb][assets_river] failed to executefailure in bulk execution:
+[0]: index [midas_assets], type [asset], id [1], message [MapperParsingException[Failed to parse [size]]; nested: JsonParseException[Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@5b5df0; line: 1, column: 447]]; ]
+[1]: index [midas_assets], type [asset], id [2], message [MapperParsingException[Failed to parse [size]]; nested: JsonParseException[Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@120ab60; line: 1, column: 447]]; ]
+[2]: index [midas_assets], type [asset], id [3], message [MapperParsingException[Failed to parse [size]]; nested: JsonParseException[Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@1558d62; line: 1, column: 435]]; ]
+[2012-10-24 00:59:47,796][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [assets_river] (dynamic)
+[2012-10-24 01:01:38,529][INFO ][cluster.metadata         ] [Bora] [_river] deleting index
+[2012-10-24 01:01:38,530][INFO ][river.couchdb            ] [Bora] [couchdb][assets_river] closing couchdb stream river
+[2012-10-24 01:01:38,534][INFO ][river.couchdb            ] [Bora] [couchdb][places_river] closing couchdb stream river
+[2012-10-24 01:01:38,534][INFO ][river.couchdb            ] [Bora] [couchdb][tickets_river] closing couchdb stream river
+[2012-10-24 01:01:38,534][INFO ][river.couchdb            ] [Bora] [couchdb][vertical_river] closing couchdb stream river
+[2012-10-24 01:01:38,535][INFO ][river.couchdb            ] [Bora] [couchdb][categories_river] closing couchdb stream river
+[2012-10-24 01:01:38,541][INFO ][cluster.metadata         ] [Bora] [midas_shofi] deleting index
+[2012-10-24 01:01:38,551][INFO ][cluster.metadata         ] [Bora] [midas_assets] deleting index
+[2012-10-24 01:04:49,152][INFO ][cluster.metadata         ] [Bora] [midas_assets] creating index, cause [api], shards [2]/[1], mappings []
+[2012-10-24 01:04:49,200][INFO ][cluster.metadata         ] [Bora] [midas_assets] create_mapping [asset]
+[2012-10-24 01:04:49,226][INFO ][cluster.metadata         ] [Bora] [_river] creating index, cause [auto(index api)], shards [1]/[1], mappings []
+[2012-10-24 01:04:49,257][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [assets_river] (dynamic)
+[2012-10-24 01:04:49,263][INFO ][river.couchdb            ] [Bora] [couchdb][assets_river] starting couchdb stream: host [localhost], port [5984], filter [null], db [midas_assets], indexing to [midas_assets]/[midas_assets]
+[2012-10-24 01:04:49,276][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [assets_river] (dynamic)
+[2012-10-24 01:04:49,304][DEBUG][action.bulk              ] [Bora] [midas_assets][1] failed to bulk item (index) index {[midas_assets][asset][2], source[{"_rev":"1-c9ec25993ce3b37dc91f185b058805ff","extension":"jpg","_id":"2","lastModified":{"date":"2012-10-22T14:35:39+0200","user":"system"},"created":{"date":"2012-10-22T14:35:39+0200","user":"system"},"name":"pic_10002_37700","origin":"file:///home/vagrant/projects/branch_21/app/../data/catalogs/movies/telavision/images/pic_10002_37700.jpg","fullName":"pic_10002_37700.jpg","type":"ProjectAssetInfo","mimeType":false,"metaData":[],"size":false}]}
+org.elasticsearch.index.mapper.MapperParsingException: Failed to parse [size]
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:308)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.serializeValue(ObjectMapper.java:577)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.parse(ObjectMapper.java:443)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:475)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:416)
+	at org.elasticsearch.index.shard.service.InternalIndexShard.prepareIndex(InternalIndexShard.java:302)
+	at org.elasticsearch.action.bulk.TransportShardBulkAction.shardOperationOnPrimary(TransportShardBulkAction.java:136)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction.performOnPrimary(TransportShardReplicationOperationAction.java:487)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction$1.run(TransportShardReplicationOperationAction.java:400)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:679)
+Caused by: org.elasticsearch.common.jackson.JsonParseException: Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@b587e9; line: 1, column: 447]
+	at org.elasticsearch.common.jackson.JsonParser._constructError(JsonParser.java:1432)
+	at org.elasticsearch.common.jackson.impl.JsonParserMinimalBase._reportError(JsonParserMinimalBase.java:385)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase._parseNumericValue(JsonParserBase.java:763)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase.getIntValue(JsonParserBase.java:618)
+	at org.elasticsearch.common.xcontent.json.JsonXContentParser.doIntValue(JsonXContentParser.java:102)
+	at org.elasticsearch.common.xcontent.support.AbstractXContentParser.intValue(AbstractXContentParser.java:60)
+	at org.elasticsearch.index.mapper.core.IntegerFieldMapper.parseCreateField(IntegerFieldMapper.java:231)
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:295)
+	... 11 more
+[2012-10-24 01:04:49,306][DEBUG][action.bulk              ] [Bora] [midas_assets][0] failed to bulk item (index) index {[midas_assets][asset][1], source[{"_rev":"1-dff5a6d408a035ba2d9b7cb5ea958d49","extension":"jpg","_id":"1","lastModified":{"date":"2012-10-22T14:35:39+0200","user":"system"},"created":{"date":"2012-10-22T14:35:39+0200","user":"system"},"name":"pic_10002_37699","origin":"file:///home/vagrant/projects/branch_21/app/../data/catalogs/movies/telavision/images/pic_10002_37699.jpg","fullName":"pic_10002_37699.jpg","type":"ProjectAssetInfo","mimeType":false,"metaData":[],"size":false}]}
+org.elasticsearch.index.mapper.MapperParsingException: Failed to parse [size]
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:308)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.serializeValue(ObjectMapper.java:577)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.parse(ObjectMapper.java:443)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:475)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:416)
+	at org.elasticsearch.index.shard.service.InternalIndexShard.prepareIndex(InternalIndexShard.java:302)
+	at org.elasticsearch.action.bulk.TransportShardBulkAction.shardOperationOnPrimary(TransportShardBulkAction.java:136)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction.performOnPrimary(TransportShardReplicationOperationAction.java:487)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction$1.run(TransportShardReplicationOperationAction.java:400)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:679)
+Caused by: org.elasticsearch.common.jackson.JsonParseException: Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@1edd56f; line: 1, column: 447]
+	at org.elasticsearch.common.jackson.JsonParser._constructError(JsonParser.java:1432)
+	at org.elasticsearch.common.jackson.impl.JsonParserMinimalBase._reportError(JsonParserMinimalBase.java:385)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase._parseNumericValue(JsonParserBase.java:763)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase.getIntValue(JsonParserBase.java:618)
+	at org.elasticsearch.common.xcontent.json.JsonXContentParser.doIntValue(JsonXContentParser.java:102)
+	at org.elasticsearch.common.xcontent.support.AbstractXContentParser.intValue(AbstractXContentParser.java:60)
+	at org.elasticsearch.index.mapper.core.IntegerFieldMapper.parseCreateField(IntegerFieldMapper.java:231)
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:295)
+	... 11 more
+[2012-10-24 01:04:49,307][DEBUG][action.bulk              ] [Bora] [midas_assets][0] failed to bulk item (index) index {[midas_assets][asset][3], source[{"_rev":"1-8deae7ff6f6ed9654501f8cdd1128af1","extension":"jpg","_id":"3","lastModified":{"date":"2012-10-22T14:35:39+0200","user":"system"},"created":{"date":"2012-10-22T14:35:39+0200","user":"system"},"name":"pic_10234_7","origin":"file:///home/vagrant/projects/branch_21/app/../data/catalogs/movies/telavision/images/pic_10234_7.jpg","fullName":"pic_10234_7.jpg","type":"ProjectAssetInfo","mimeType":false,"metaData":[],"size":false}]}
+org.elasticsearch.index.mapper.MapperParsingException: Failed to parse [size]
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:308)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.serializeValue(ObjectMapper.java:577)
+	at org.elasticsearch.index.mapper.object.ObjectMapper.parse(ObjectMapper.java:443)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:475)
+	at org.elasticsearch.index.mapper.DocumentMapper.parse(DocumentMapper.java:416)
+	at org.elasticsearch.index.shard.service.InternalIndexShard.prepareIndex(InternalIndexShard.java:302)
+	at org.elasticsearch.action.bulk.TransportShardBulkAction.shardOperationOnPrimary(TransportShardBulkAction.java:136)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction.performOnPrimary(TransportShardReplicationOperationAction.java:487)
+	at org.elasticsearch.action.support.replication.TransportShardReplicationOperationAction$AsyncShardOperationAction$1.run(TransportShardReplicationOperationAction.java:400)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:679)
+Caused by: org.elasticsearch.common.jackson.JsonParseException: Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@157a7ec; line: 1, column: 435]
+	at org.elasticsearch.common.jackson.JsonParser._constructError(JsonParser.java:1432)
+	at org.elasticsearch.common.jackson.impl.JsonParserMinimalBase._reportError(JsonParserMinimalBase.java:385)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase._parseNumericValue(JsonParserBase.java:763)
+	at org.elasticsearch.common.jackson.impl.JsonParserBase.getIntValue(JsonParserBase.java:618)
+	at org.elasticsearch.common.xcontent.json.JsonXContentParser.doIntValue(JsonXContentParser.java:102)
+	at org.elasticsearch.common.xcontent.support.AbstractXContentParser.intValue(AbstractXContentParser.java:60)
+	at org.elasticsearch.index.mapper.core.IntegerFieldMapper.parseCreateField(IntegerFieldMapper.java:231)
+	at org.elasticsearch.index.mapper.core.AbstractFieldMapper.parse(AbstractFieldMapper.java:295)
+	... 11 more
+[2012-10-24 01:04:49,310][WARN ][river.couchdb            ] [Bora] [couchdb][assets_river] failed to executefailure in bulk execution:
+[0]: index [midas_assets], type [asset], id [1], message [MapperParsingException[Failed to parse [size]]; nested: JsonParseException[Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@1edd56f; line: 1, column: 447]]; ]
+[1]: index [midas_assets], type [asset], id [2], message [MapperParsingException[Failed to parse [size]]; nested: JsonParseException[Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@b587e9; line: 1, column: 447]]; ]
+[2]: index [midas_assets], type [asset], id [3], message [MapperParsingException[Failed to parse [size]]; nested: JsonParseException[Current token (VALUE_FALSE) not numeric, can not use numeric value accessors
+ at [Source: [B@157a7ec; line: 1, column: 435]]; ]
+[2012-10-24 01:04:49,311][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [assets_river] (dynamic)
+[2012-10-24 01:38:15,186][INFO ][cluster.metadata         ] [Bora] [midas_shofi] creating index, cause [api], shards [2]/[1], mappings []
+[2012-10-24 01:38:15,226][INFO ][cluster.metadata         ] [Bora] [midas_shofi] create_mapping [shofi-ticket]
+[2012-10-24 01:38:15,240][INFO ][cluster.metadata         ] [Bora] [midas_shofi] create_mapping [shofi-place]
+[2012-10-24 01:38:15,254][INFO ][cluster.metadata         ] [Bora] [midas_shofi] create_mapping [shofi-category]
+[2012-10-24 01:38:15,272][INFO ][cluster.metadata         ] [Bora] [midas_shofi] create_mapping [shofi-vertical]
+[2012-10-24 01:38:15,280][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [places_river] (dynamic)
+[2012-10-24 01:38:15,287][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [categories_river] (dynamic)
+[2012-10-24 01:38:15,297][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [tickets_river] (dynamic)
+[2012-10-24 01:38:15,306][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [vertical_river] (dynamic)
+[2012-10-24 01:38:15,322][INFO ][river.couchdb            ] [Bora] [couchdb][places_river] starting couchdb stream: host [localhost], port [5984], filter [null], db [midas_shofi], indexing to [midas_shofi]/[midas_shofi]
+[2012-10-24 01:38:15,348][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [places_river] (dynamic)
+[2012-10-24 01:38:15,376][INFO ][river.couchdb            ] [Bora] [couchdb][categories_river] starting couchdb stream: host [localhost], port [5984], filter [null], db [midas_shofi], indexing to [midas_shofi]/[midas_shofi]
+[2012-10-24 01:38:15,403][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [categories_river] (dynamic)
+[2012-10-24 01:38:15,407][WARN ][river                    ] [Bora] ignoring river [couchdb][categories_river] creation, already exists
+[2012-10-24 01:38:15,410][INFO ][river.couchdb            ] [Bora] [couchdb][tickets_river] starting couchdb stream: host [localhost], port [5984], filter [null], db [midas_shofi], indexing to [midas_shofi]/[midas_shofi]
+[2012-10-24 01:38:15,425][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [tickets_river] (dynamic)
+[2012-10-24 01:38:15,431][WARN ][river                    ] [Bora] ignoring river [couchdb][tickets_river] creation, already exists
+[2012-10-24 01:38:15,433][INFO ][river.couchdb            ] [Bora] [couchdb][vertical_river] starting couchdb stream: host [localhost], port [5984], filter [null], db [midas_shofi], indexing to [midas_shofi]/[midas_shofi]
+[2012-10-24 01:38:15,455][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [vertical_river] (dynamic)
+[2012-10-24 01:38:15,460][WARN ][river                    ] [Bora] ignoring river [couchdb][categories_river] creation, already exists
+[2012-10-24 01:38:15,579][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [places_river] (dynamic)
+[2012-10-24 01:38:15,621][INFO ][cluster.metadata         ] [Bora] [midas_shofi] update_mapping [shofi-place] (dynamic)
+[2012-10-24 01:38:15,744][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [categories_river] (dynamic)
+[2012-10-24 01:38:15,803][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [vertical_river] (dynamic)
+[2012-10-24 01:38:15,859][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [tickets_river] (dynamic)
+[2012-10-24 02:00:40,611][INFO ][cluster.metadata         ] [Bora] [midas_movies] creating index, cause [api], shards [2]/[1], mappings []
+[2012-10-24 02:00:40,665][INFO ][cluster.metadata         ] [Bora] [midas_movies] create_mapping [movie]
+[2012-10-24 02:00:40,671][INFO ][cluster.metadata         ] [Bora] [midas_movies] create_mapping [ticket]
+[2012-10-24 02:00:40,686][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [movies_river] (dynamic)
+[2012-10-24 02:00:40,697][INFO ][river.couchdb            ] [Bora] [couchdb][movies_river] starting couchdb stream: host [localhost], port [5984], filter [null], db [midas_movies], indexing to [midas_movies]/[midas_movies]
+[2012-10-24 02:00:40,730][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [movies_river] (dynamic)
+[2012-10-24 02:00:40,760][INFO ][cluster.metadata         ] [Bora] [_river] update_mapping [movies_river] (dynamic)
+[2012-10-24 02:00:40,773][INFO ][cluster.metadata         ] [Bora] [midas_movies] update_mapping [movie] (dynamic)

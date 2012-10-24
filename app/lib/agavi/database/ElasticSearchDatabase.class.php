@@ -27,8 +27,6 @@ class ElasticSearchDatabase extends AgaviDatabase
 
     protected function connect()
     {
-        $this->registerAutoload();
-
         try
         {
             $this->connection = new Elastica_Client(
@@ -89,27 +87,6 @@ class ElasticSearchDatabase extends AgaviDatabase
             throw new AgaviDatabaseException('Setup class does not implement IDatabaseSetup: '.$setupClass);
         }
         $indexSetup->setup();
-    }
-
-    protected function registerAutoload()
-    {
-        $libDir = realpath(
-            $this->getParameter(
-                'libdir',
-                AgaviConfig::get('project.libs') . DIRECTORY_SEPARATOR . 'Elastica' . DIRECTORY_SEPARATOR . 'lib'
-            )
-        );
-
-        spl_autoload_register(function($class) use ($libDir)
-        {
-            $fileName = str_replace('_', DIRECTORY_SEPARATOR, $class . '.php');
-            $filePath = $libDir . DIRECTORY_SEPARATOR . $fileName;
-
-            if (file_exists($filePath))
-            {
-                require $filePath;
-            }
-        });
     }
 }
 

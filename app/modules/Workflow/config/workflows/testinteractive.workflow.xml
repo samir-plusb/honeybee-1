@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+<ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
     <ae:configuration>
         <workflow name="test_interactive">
             <description>This workflow is for testing interactive workflows.</description>

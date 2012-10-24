@@ -7,19 +7,19 @@
     <property userProperty="true" override="true" file="${project.directory.etc}/build/build.properties" />
 	<taskdef name="run" classname="BoPhingRunTask" classpath="${project.directory}/dev/phing"/>
 
-    <target name="cc" description="Clear the config cache.">
-        <echo message="Clearing the config cache." />
-        <run command="bin/clear-cache.sh" dir="${project.directory}"/>
+    <target name="cc" description="Alias for 'make cc'.">
+        <echo message="Redirecting to make..." />
+        <run command="make cc" dir="${project.directory}"/>
     </target>
 
     <target name="phpcs" description="Run the php codesniffer.">
         <echo message="Running the php codesniffer (phpcs)." />
         <run command="mkdir -p ${project.directory}/etc/integration/build/logs/" dir="${project.directory}" />
-        <run command="nice bin/phpcs --report=checkstyle --report-file=${project.directory}/etc/integration/build/logs/checkstyle.xml --standard=dev/lint/CodingStandard/BerlinOnline/ruleset.xml --ignore='app/cache*,*Success.php,*Input.php,*Error.php,app/templates/*' ${project.directory}/app" dir="${project.directory}" />
+        <run command="nice vendor/bin/phpcs --report=checkstyle --report-file=${project.directory}/etc/integration/build/logs/checkstyle.xml --standard=dev/lint/CodingStandard/BerlinOnline/ruleset.xml --ignore='app/cache*,*Success.php,*Input.php,*Error.php,app/templates/*' ${project.directory}/app" dir="${project.directory}" />
     </target>
 
-    <target name="test" description="Run the project's testsuite.">
-        <echo message="Running the project's testsuite." />
+    <target name="test" description="Alias for 'make test'.">
+        <echo message="Redirecting to make..." />
         <run command="nice bin/test --configuration testing/config/phpunit.xml" dir="${project.directory}" />
     </target>
 

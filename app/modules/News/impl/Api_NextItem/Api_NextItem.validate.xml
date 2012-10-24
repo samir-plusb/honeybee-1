@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations
-    xmlns="http://agavi.org/agavi/config/parts/validators/1.1"
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     parent="%core.module_dir%/News/config/validators.xml"
     xmlns:xi="http://www.w3.org/2001/XInclude">
 
@@ -9,7 +9,7 @@
 
         <validators>
             <xi:include href="%core.module_dir%/News/impl/List/List.validate.xml"
-                        xpointer="xmlns(v=http://agavi.org/agavi/config/parts/validators/1.1) xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1) xpointer(/ae:configurations/ae:configuration/v:validators/*)">
+                        xpointer="xmlns(v=http://agavi.org/agavi/config/parts/validators/1.0) xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/ae:configuration/v:validators/*)">
             </xi:include>
 
             <validator class="string" name="invalid_item_id" required="true" translation_domain="news.errors">

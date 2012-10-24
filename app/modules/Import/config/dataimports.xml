@@ -5,37 +5,37 @@
 <ae:configurations
     xmlns="http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0"
     xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <ae:configuration>
         <dataimports>
             <xi:include href="%core.app_dir%/modules/News/config/import/dataimports.xml"
-            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
             xmlns(dd=http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0)
             xpointer(//ae:configurations/ae:configuration/dd:dataimports/*)">
             </xi:include>
 
              <xi:include href="%core.app_dir%/modules/Shofi/config/dataimports.xml"
-            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
             xmlns(dd=http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0)
             xpointer(//ae:configurations/ae:configuration/dd:dataimports/*)">
             </xi:include>
 
             <xi:include href="%core.app_dir%/modules/Shofi_Verticals/config/dataimports.xml"
-            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
             xmlns(dd=http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0)
             xpointer(//ae:configurations/ae:configuration/dd:dataimports/*)">
             </xi:include>
 
             <xi:include href="%core.app_dir%/modules/Movies/config/dataimports.xml"
-            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
             xmlns(dd=http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0)
             xpointer(//ae:configurations/ae:configuration/dd:dataimports/*)">
             </xi:include>
 
             <xi:include href="%core.app_dir%/modules/Events/config/dataimports.xml"
-            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.1)
+            xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
             xmlns(dd=http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0)
             xpointer(//ae:configurations/ae:configuration/dd:dataimports/*)">
             </xi:include>

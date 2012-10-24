@@ -2,7 +2,7 @@
 <ae:configurations
     xmlns="http://berlinonline.de/schemas/midas/config/datasource/definition/1.0"
     xmlns:env="http://berlinonline.de/schemas/midas/config/envelope/definition/1.0"
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.1">
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
 
     <ae:configuration>
         <datasources>
