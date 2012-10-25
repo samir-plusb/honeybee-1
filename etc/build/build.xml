@@ -11,57 +11,8 @@
 	<taskdef name="run" classname="BoPhingRunTask" classpath="${project.directory}/app/lib/phing"/>
 
     <!-- 
-        common targets 
-    -->
-    <target name="cc" description="Alias for 'make cc'.">
-        <echo message="Redirecting to 'make cc'..." />
-        <run command="make cc" dir="${project.directory}"/>
-    </target>
-
-    <!-- 
         serverside app development targets 
     -->
-    <target name="phpcs" description="Run the php codesniffer.">
-        <echo message="Running the php codesniffer (phpcs)." />
-        <run command="mkdir -p ${project.directory}/etc/integration/build/logs/" dir="${project.directory}" />
-        <run command="nice vendor/bin/phpcs --report=checkstyle --report-file=${project.directory}/etc/integration/build/logs/checkstyle.xml --standard=etc/coding-standards/BerlinOnline/ruleset.xml --ignore='app/cache*,*Success.php,*Input.php,*Error.php,app/templates/*' ${project.directory}/app" dir="${project.directory}" />
-    </target>
 
-    <target name="test" description="Alias for 'make test'.">
-        <echo message="Redirecting to 'make test'..." />
-        <run command="make test" dir="${project.directory}" />
-    </target>
-
-    <target name="phpdoc" description="Generate API documentation using PHPDocumentor." depends="cc">
-        <echo message="Generating the API documentation using PHPDocumentor."/>
-        <run command="/bin/rm -rf etc/integration/build/api/serverside" dir="${project.directory}"/>
-        <run command="/bin/mkdir -p etc/integration/build/api/serverside" dir="${project.directory}"/>
-        <run command="nice bin/phpdoc -c ${project.directory}/app/config/docblox.xml" dir="${project.directory}" />
-    </target>
-
-    <!-- 
-        clientside app development targets (styles and scripts) 
-    -->
-    <target name="jsdoc" description="Generate Clientside API documentation using jsdoc-toolkit." depends="cc">
-        <echo message="Generating the clientside API documentation."/>
-        <run command="/bin/rm -rf etc/integration/build/api/clientside" dir="${project.directory}"/>
-        <run command="/bin/mkdir -p etc/integration/build/api/clientside" dir="${project.directory}"/>
-        <run command="bin/jsdoc pub/js/midas/*" dir="${project.directory}"/>
-    </target>
-
-    <target name="js-xunit" description="Alias for 'make js-xunit'." depends="cc">
-        <echo message="Redirecting to 'make js-xunit'..."/>
-        <run command="make js-xunit" dir="${project.directory}"/>
-    </target>
-
-    <target name="compile-css" description="Compile our less code into real css.">
-        <echo message="Compiling less syntax into real css."/>
-        <run command="bin/lessc -d pub/less" dir="${project.directory}" />
-    </target>
-
-    <target name="watch-css" description="Watch our css code for changes and recompile when they occur.">
-        <echo message="Precompiling once and starting less file watcher."/>
-        <run command="bin/lessc -d pub/less -watch" dir="${project.directory}" />
-    </target>
 
 </project>
