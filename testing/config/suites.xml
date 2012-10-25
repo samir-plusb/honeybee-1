@@ -11,7 +11,7 @@
                     <testfile>unit/lib/event/ProjectEventProxyTest.php</testfile>
                 </testfiles>
             </suite>
-<!--
+
             <suite name="Import">
                 <testfiles>
                     <!-- IImportFactory - Unit Tests -->
