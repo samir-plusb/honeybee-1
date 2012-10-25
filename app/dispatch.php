@@ -12,12 +12,6 @@ $vendorDir = $rootDir . '/vendor';
 require $vendorDir . '/autoload.php';
 require $rootDir . '/app/config.php';
 
-if (isset($testingEnabled))
-{
-    require $rootDir . '/testing/config.php';
-    require $vendorDir . '/agavi/agavi/src/testing.php';
-}
-
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to our environment config provider.           |
 // +---------------------------------------------------------------------------+
