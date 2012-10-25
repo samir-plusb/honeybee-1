@@ -5,11 +5,6 @@
 // +---------------------------------------------------------------------------+
 $rootDir = dirname(dirname(__FILE__));
 
-// set the include path for supporting the legacy 'libs' directory.
-// @todo should be migrated soon.
-$libsDir = $rootDir . '/libs';
-set_include_path($libsDir.PATH_SEPARATOR.get_include_path());
-
 // make generated files group writeable for easy switch between web/console
 umask(02);
 
