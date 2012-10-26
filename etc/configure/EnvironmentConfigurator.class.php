@@ -230,7 +230,7 @@ cw_path="`dirname $0`/.."
 cw_path="`readlink -f \${cw_path}`"
 
 # Nodejs libraries:
-export PATH="${cw_path}/node_modules/.bin:$PATH"
+export PATH="\${cw_path}/node_modules/.bin:\$PATH"
 SH_CODE;
     }
 
