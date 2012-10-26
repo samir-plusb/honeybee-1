@@ -1,5 +1,5 @@
 {
-    "hash": "141e8acd3364b821874c1b22bfb666b3",
+    "hash": "6f7035cd4479f933a1f2ddc85f573863",
     "packages": [
         {
             "name": "PhpDebugToolbar/php-debug-toolbar",
@@ -406,73 +406,6 @@
             ]
         },
         {
-            "name": "phpdocumentor/phpdocumentor",
-            "version": "v2.0.0a10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpDocumentor/phpDocumentor2",
-                "reference": "v2.0.0a10"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/phpDocumentor/phpDocumentor2/zipball/v2.0.0a10",
-                "reference": "v2.0.0a10",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3",
-                "cilex/cilex": "dev-master",
-                "dflydev/markdown": "1.0.*",
-                "nikic/php-parser": "dev-master",
-                "symfony/event-dispatcher": "2.1.*@stable",
-                "zendframework/zend-stdlib": "2.*",
-                "zendframework/zend-config": "2.*",
-                "zendframework/zend-locale": "2.*",
-                "zendframework/zend-servicemanager": "2.*",
-                "zendframework/zend-translator": "2.*",
-                "phpdocumentor/graphviz": "1.*",
-                "phpdocumentor/fileset": "1.0.0-beta2",
-                "phpdocumentor/reflection-docblock": "1.0.*",
-                "phpdocumentor/plugin-twig": "1.*",
-                "phpdocumentor/template-responsive": "1.*",
-                "phpdocumentor/template-new-black": "1.*",
-                "phpdocumentor/template-zend": "1.*",
-                "phpdocumentor/template-old-ocean": "1.*",
-                "phpdocumentor/template-checkstyle": "1.*"
-            },
-            "require-dev": {
-                "behat/behat": ">=2.4@stable",
-                "phpunit/phpunit": "3.7.*@stable",
-                "mockery/mockery": ">=0.7.0@stable"
-            },
-            "time": "2012-09-28 14:10:45",
-            "bin": [
-                "bin/phpdoc.php"
-            ],
-            "type": "library",
-            "installation-source": "source",
-            "autoload": {
-                "psr-0": {
-                    "phpDocumentor": [
-                        "src/",
-                        "tests/unit/"
-                    ]
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Documentation Generator for PHP",
-            "homepage": "http://www.phpdoc.org",
-            "keywords": [
-                "documentation",
-                "phpdoc",
-                "api",
-                "application",
-                "dga"
-            ]
-        },
-        {
             "name": "phpdocumentor/plugin-twig",
             "version": "1.0.0",
             "source": {
@@ -805,7 +738,6 @@
                 "ext-dom": "*",
                 "ext-xdebug": ">=2.0.5"
             },
-            "time": "1350668319",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -832,7 +764,8 @@
                 "testing",
                 "coverage",
                 "xunit"
-            ]
+            ],
+            "time": "1350668319"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -851,7 +784,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1350290255",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -877,7 +809,8 @@
             "keywords": [
                 "filesystem",
                 "iterator"
-            ]
+            ],
+            "time": "1350290255"
         },
         {
             "name": "phpunit/php-text-template",
@@ -896,7 +829,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1350290684",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -921,7 +853,8 @@
             "homepage": "https://github.com/sebastianbergmann/php-text-template/",
             "keywords": [
                 "template"
-            ]
+            ],
+            "time": "1350290684"
         },
         {
             "name": "phpunit/php-timer",
@@ -940,7 +873,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1350290346",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -965,7 +897,8 @@
             "homepage": "https://github.com/sebastianbergmann/php-timer/",
             "keywords": [
                 "timer"
-            ]
+            ],
+            "time": "1350290346"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -985,7 +918,6 @@
                 "ext-tokenizer": "*",
                 "php": ">=5.3.3"
             },
-            "time": "1350290650",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -1010,7 +942,8 @@
             "homepage": "https://github.com/sebastianbergmann/php-token-stream/",
             "keywords": [
                 "tokenizer"
-            ]
+            ],
+            "time": "1350290650"
         },
         {
             "name": "phpunit/phpunit",
@@ -1045,7 +978,6 @@
                 "ext-tokenizer": "*",
                 "phpunit/php-invoker": ">=1.1.0"
             },
-            "time": "1350879414",
             "bin": [
                 "composer/bin/phpunit"
             ],
@@ -1081,7 +1013,8 @@
                 "testing",
                 "phpunit",
                 "xunit"
-            ]
+            ],
+            "time": "1350879414"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1104,7 +1037,6 @@
             "suggest": {
                 "ext-soap": "*"
             },
-            "time": "1350337609",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -1130,7 +1062,8 @@
             "keywords": [
                 "mock",
                 "xunit"
-            ]
+            ],
+            "time": "1350337609"
         },
         {
             "name": "pimple/pimple",
@@ -1220,6 +1153,26 @@
             ]
         },
         {
+            "name": "shrink/phpdocumentor",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:shrink/phpDocumentor2.git",
+                "reference": "5634ded6c438413f6ea49d9b79aea9bcf22298f9"
+            },
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "phpDocumentor": [
+                        "src/",
+                        "tests/unit/"
+                    ]
+                }
+            },
+            "time": "1351107857"
+        },
+        {
             "name": "symfony/console",
             "version": "2.1.x-dev",
             "target-dir": "Symfony/Component/Console",
@@ -1268,17 +1221,17 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "2.1.x-dev",
+            "version": "v2.1.2",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher",
-                "reference": "fb273317c0505ba657aa3d727530d36ae671fb82"
+                "reference": "v2.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/EventDispatcher/zipball/fb273317c0505ba657aa3d727530d36ae671fb82",
-                "reference": "fb273317c0505ba657aa3d727530d36ae671fb82",
+                "url": "https://github.com/symfony/EventDispatcher/zipball/v2.1.2",
+                "reference": "v2.1.2",
                 "shasum": ""
             },
             "require": {
@@ -1291,14 +1244,14 @@
                 "symfony/dependency-injection": "2.1.*",
                 "symfony/http-kernel": "2.1.*"
             },
-            "time": "1349363877",
+            "time": "2012-09-10 03:53:42",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\EventDispatcher": ""
@@ -1432,7 +1385,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1351093287",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1459,7 +1411,8 @@
                 }
             ],
             "description": "Symfony Yaml Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "1351093287"
         },
         {
             "name": "twig/twig",
@@ -1478,7 +1431,6 @@
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "1350737598",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1508,7 +1460,8 @@
             "homepage": "http://twig.sensiolabs.org",
             "keywords": [
                 "templating"
-            ]
+            ],
+            "time": "1350737598"
         },
         {
             "name": "twitter/bootstrap",
@@ -1535,7 +1488,6 @@
                 "reference": "146c11738a74efffe265d233296fefb55b8a149a",
                 "shasum": ""
             },
-            "time": "1348764284",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -1552,7 +1504,8 @@
                     "homepage": "http://framework.zend.com/"
                 }
             ],
-            "description": "Zendframework 1 Zend_Acl"
+            "description": "Zendframework 1 Zend_Acl",
+            "time": "1348764284"
         },
         {
             "name": "zendframework/zendframework",
@@ -1709,6 +1662,11 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "zend/acl": 20,
-        "zerkalica/phpcs": 20
+        "zerkalica/phpcs": 20,
+        "cilex/cilex": 20,
+        "nikic/php-parser": 20,
+        "symfony/event-dispatcher": 0,
+        "phpdocumentor/fileset": 10,
+        "shrink/phpdocumentor": 20
     }
 }

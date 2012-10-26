@@ -51,7 +51,7 @@ cc:
 
 install: install-vendor install-node-deps cc
 
-	@bin/configure-env --init
+	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
 
 
 tail-logs:
@@ -84,8 +84,6 @@ update-vendor: install-vendor
 	@svn revert -R vendor/agavi/agavi/ || true
 	@php -d allow_url_fopen=1 bin/composer.phar update
 	@bin/apply_patches
-	@rm -rf vendor/phpdocumentor/phpdocumentor/data/templates/*
-	@ln -s ${PROJECT_ROOT}/data/templates/* vendor/phpdocumentor/phpdocumentor/data/templates/
 
 
 install-node-deps: install-composer

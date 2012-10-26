@@ -64,10 +64,25 @@
                     "reference": "c52368d3c5984b28e6a71e5e1240afdd788fc2e6"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "shrink/phpdocumentor",
+                "version": "dev-master",
+                "source": {
+                    "url": "git@github.com:shrink/phpDocumentor2.git",
+                    "type": "git",
+                    "reference": "5634ded6c438413f6ea49d9b79aea9bcf22298f9"
+                },
+                "autoload": {
+                    "phpDocumentor": ["src/", "tests/unit/"]
+                }
+            }
         }
     ],
     "require": {
-        "php": ">=5.3",
+        "php": ">=5.3.3",
         "agavi/agavi": "1.0.*",
         "twig/twig": "1.*",
         "craur/craur": "1.6.*",
@@ -81,14 +96,30 @@
         "jquery/jquery": "1.7.2",
         "twitter/bootstrap": "2.1.1",
         "heartsentwined/yuicompressor": "2.4.7",
-        "phpdocumentor/phpdocumentor": "dev-master"
+
+        "cilex/cilex": "dev-master",
+        "dflydev/markdown": "1.0.*",
+        "nikic/php-parser": "dev-master",
+        "symfony/event-dispatcher": "2.1.*@stable",
+        "zendframework/zend-stdlib": "2.*",
+        "zendframework/zend-config": "2.*",
+        "zendframework/zend-locale": "2.*",
+        "zendframework/zend-servicemanager": "2.*",
+        "zendframework/zend-translator": "2.*",
+        "phpdocumentor/graphviz": "1.*",
+        "phpdocumentor/fileset": "1.0.0-beta2",
+        "phpdocumentor/reflection-docblock": "1.0.*",
+        "phpdocumentor/plugin-twig":"1.*",
+        "phpdocumentor/template-responsive": "1.*",
+        "phpdocumentor/template-new-black": "1.*",
+        "phpdocumentor/template-zend": "1.*",
+        "phpdocumentor/template-old-ocean": "1.*",
+        "phpdocumentor/template-checkstyle": "1.*",
+
+        "shrink/phpdocumentor": "dev-master"
     },
     "minimum-stability": "dev",
     "autoload": {
         "classmap": [ "app/lib/" ]
-    },
-    "scripts": {
-        "post-install-cmd": "Dat0r\\Composer\\PhpDocumentorInstallScript::fixAssets",
-        "post-update-cmd": "Dat0r\\Composer\\PhpDocumentorInstallScript::fixAssets"
     }
 }
