@@ -30,6 +30,27 @@ class ProjectResourcePacker
         $this->outputType = $outputType;
     }
 
+    public static function sortedGlob($from, $glob = '*')
+    {
+        $files = glob($from.DIRECTORY_SEPARATOR.$glob);
+        $indexFile = $from.DIRECTORY_SEPARATOR.'.index';
+
+        if (! file_exists($indexFile))
+        {
+            return $files;
+        }
+        $sortedFiles = array();
+        foreach (file($indexFile) as $fileName)
+        {
+            $filePath = $from.DIRECTORY_SEPARATOR.trim($fileName);
+            if (in_array($filePath, $files))
+            {
+                $sortedFiles[] = $filePath;
+            }
+        }
+        return $sortedFiles;
+    }
+
     public function pack()
     {
         foreach($this->modules[$this->outputType] as $module)
@@ -51,19 +72,20 @@ class ProjectResourcePacker
         $directories = array('scripts', 'styles', 'binaries');
         foreach ($directories as $directory)
         {
-            if (!is_dir($sourceDir))
+            if (! is_dir($sourceDir))
             {
                 throw new Exception($sourceDir . ' is not a directory. Please move the file into on of the resource subdirectories.');
             }
 
-            if (!$this->config->isPackingEnabled())
+            $sDir = $sourceDir.DIRECTORY_SEPARATOR.$directory;
+            $tDir = $targetDir.DIRECTORY_SEPARATOR.$directory;
+
+            if (! $this->config->isPackingEnabled())
             {
-                $this->copyResources($sourceDir, $targetDir);
+                $this->copyResources($sDir, $tDir);
                 continue;
             }
 
-            $sDir = $sourceDir.DIRECTORY_SEPARATOR.$directory;
-            $tDir = $targetDir.DIRECTORY_SEPARATOR.$directory;
             switch ($directory)
             {
                 case 'scripts':
@@ -81,7 +103,7 @@ class ProjectResourcePacker
 
     protected function getFileExtension($type)
     {
-        if (!array_key_exists($type, static::$types))
+        if (! array_key_exists($type, static::$types))
         {
             throw new Exception('Unknown MIME type: ' . $type);
         }
@@ -123,10 +145,10 @@ class ProjectResourcePacker
     protected function packScripts($from, $to)
     {
         $uglifyPath = str_replace('/', DIRECTORY_SEPARATOR, AgaviConfig::get('core.app_dir').'/../node_modules/.bin/uglifyjs');
-        $scriptFiles = glob($from.DIRECTORY_SEPARATOR.'*');
+        $scriptFiles = self::sortedGlob($from);
         $outputPath = $to . DIRECTORY_SEPARATOR . 'combined.js';
         
-        if (!$this->checkForOutdatedPacking($scriptFiles, $outputPath))
+        if (! $this->checkForOutdatedPacking($scriptFiles, $outputPath))
         {
             return;
         }
@@ -145,10 +167,10 @@ class ProjectResourcePacker
     protected function packStyles($from, $to)
     {
         $lesscPath = str_replace('/', DIRECTORY_SEPARATOR, AgaviConfig::get('core.app_dir').'/../node_modules/.bin/lessc');
-        $styleFiles = glob($from.DIRECTORY_SEPARATOR.'*');
+        $styleFiles = self::sortedGlob($from);
         $outputPath = $to . DIRECTORY_SEPARATOR . 'combined.css';
         
-        if (!$this->checkForOutdatedPacking($styleFiles, $outputPath))
+        if (! $this->checkForOutdatedPacking($styleFiles, $outputPath))
         {
             return;
         }
@@ -179,16 +201,22 @@ class ProjectResourcePacker
     protected function copyResources($from, $to)
     {
         $this->ensureDirectoryExists($to);
-        $files = glob($from.DIRECTORY_SEPARATOR.'*');
+        $files = self::sortedGlob($from);
         foreach($files as $file)
         {
             $this->recursiveCopy($file, $to.DIRECTORY_SEPARATOR.basename($file));
+        }
+
+        $indexFile = $from.DIRECTORY_SEPARATOR.'.index';
+        if (file_exists($indexFile))
+        {
+            copy($indexFile, $to.DIRECTORY_SEPARATOR.'.index');
         }
     }
 
     protected function recursiveCopy($from, $to)
     {
-        if(!is_dir($from) )
+        if(! is_dir($from) )
         {
             if (file_exists($to) && filemtime($from) > filemtime($to))
             {
@@ -196,7 +224,7 @@ class ProjectResourcePacker
             }
 
             $this->ensureDirectoryExists(dirname($to));
-            
+
             return copy($from, $to);
         }
 
@@ -232,7 +260,7 @@ class ProjectResourcePacker
     protected function ensureDirectoryExists($path)
     {
         $success = true;
-        if (!is_dir($path))
+        if (! is_dir($path))
         {
             $success = mkdir($path, 0777, true);
         }

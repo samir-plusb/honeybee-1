@@ -119,7 +119,9 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
         
         $cacheDir = $this->config->getCacheDir();
 
-        $files = glob($cacheDir.DIRECTORY_SEPARATOR.'_global'.DIRECTORY_SEPARATOR.$subdirectory.DIRECTORY_SEPARATOR.'*');
+        $files = ProjectResourcePacker::sortedGlob(
+            $cacheDir.DIRECTORY_SEPARATOR.'_global'.DIRECTORY_SEPARATOR.$subdirectory
+        );
 
         foreach(static::$modules[$this->curOutputType] as $module)
         {
@@ -127,12 +129,13 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
                 . DIRECTORY_SEPARATOR
                 . $module
                 . DIRECTORY_SEPARATOR
-                . $subdirectory
-                . DIRECTORY_SEPARATOR
-                . '*';
-            $files = array_merge($files, glob($moduleCachePath));
-        }
+                . $subdirectory;
 
+            $files = array_merge(
+                $files, 
+                ProjectResourcePacker::sortedGlob($moduleCachePath)
+            );
+        }
         $urls = array();
 
         foreach($files as $file)
