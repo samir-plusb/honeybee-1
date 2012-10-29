@@ -1,5 +1,5 @@
 {
-    "hash": "6f7035cd4479f933a1f2ddc85f573863",
+    "hash": "0690c6fce5567f5634dfd857ebd9fd72",
     "packages": [
         {
             "name": "PhpDebugToolbar/php-debug-toolbar",
@@ -163,6 +163,17 @@
             ]
         },
         {
+            "name": "fortawesome/font-awesome",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FortAwesome/Font-Awesome.git",
+                "reference": "0ad5e104960bb6051d4ec49abf42be4b74678e48"
+            },
+            "type": "library",
+            "installation-source": "source"
+        },
+        {
             "name": "heartsentwined/yuicompressor",
             "version": "2.4.7",
             "source": {
@@ -265,7 +276,6 @@
             "require": {
                 "php": ">=5.2"
             },
-            "time": "1347054121",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -285,7 +295,8 @@
             "keywords": [
                 "php",
                 "parser"
-            ]
+            ],
+            "time": "1347054121"
         },
         {
             "name": "phing/phing",
@@ -1082,7 +1093,6 @@
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "1347278988",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1109,7 +1119,8 @@
             "keywords": [
                 "dependency injection",
                 "container"
-            ]
+            ],
+            "time": "1347278988"
         },
         {
             "name": "ruflin/Elastica",
@@ -1190,7 +1201,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1350916632",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1217,7 +1227,8 @@
                 }
             ],
             "description": "Symfony Console Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "1350916632"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1291,7 +1302,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1350717030",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1318,7 +1328,8 @@
                 }
             ],
             "description": "Symfony Finder Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "1350717030"
         },
         {
             "name": "symfony/process",
@@ -1338,7 +1349,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1350717030",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1365,7 +1375,8 @@
                 }
             ],
             "description": "Symfony Process Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "1350717030"
         },
         {
             "name": "symfony/yaml",
@@ -1420,17 +1431,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "61393dc9fb8982110048624aa573aec4aee0b465"
+                "reference": "0505c2fefd5eaa81c628b0cf8a9b8a2bc612321c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/zipball/61393dc9fb8982110048624aa573aec4aee0b465",
-                "reference": "61393dc9fb8982110048624aa573aec4aee0b465",
+                "url": "https://github.com/fabpot/Twig/zipball/0505c2fefd5eaa81c628b0cf8a9b8a2bc612321c",
+                "reference": "0505c2fefd5eaa81c628b0cf8a9b8a2bc612321c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
+            "time": "1351434618",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1460,8 +1472,7 @@
             "homepage": "http://twig.sensiolabs.org",
             "keywords": [
                 "templating"
-            ],
-            "time": "1350737598"
+            ]
         },
         {
             "name": "twitter/bootstrap",

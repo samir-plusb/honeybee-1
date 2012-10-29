@@ -8,8 +8,8 @@
      ############################################################################################### -->
 <header class="navbar navbar-fixed-top" data-scrollspy="scrollspy">
   <div class="navbar-inner">
-    <div class="container-fluid" style="width: auto;">
-      <a class="brand icon-wrench" href="<?php echo $ro->gen('index'); ?>" title="Midas 2.1 - Kalliope"> Midas 2.1</a>
+    <div class="container-fluid upper-bar" style="width: auto;">
+      <a class="brand icon-wrench" href="<?php echo $ro->gen('index'); ?>" title="Honeybee 3.0 - Kalliope"> Honeybee</a>
 <?php
     if ($us->isAuthenticated())
     {
@@ -49,9 +49,9 @@
           </ul>
         </li>
       </ul>
-      <ul class="nav pull-right">
+      <ul class="nav pull-right user-stats">
         <li id="fat-menu" class="dropdown">
-          <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-user"></span> <?php echo $us->getAttribute('login'); ?><b class="caret"></b></a>
+          <p class="pull-left">Du bist angemeldet als: </p> <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-user"></span> <?php echo $us->getAttribute('login'); ?><b class="caret"></b></a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
             <li><a href="<?php echo $ro->gen('auth.logout'); ?>" title="Sitzung beenden"><span class="icon-signout"></span> abmelden</a></li>
           </ul>

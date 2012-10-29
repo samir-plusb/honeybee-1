@@ -12,10 +12,11 @@
 
             <autoload name="ProjectLanguageRoutingCallback">%core.lib_dir%/agavi/routing/ProjectLanguageRoutingCallback.class.php</autoload>
 
-            <autoload name="ProjectScriptFilter">%core.lib_dir%/agavi/filter/ProjectScriptFilter.class.php</autoload>
             <autoload name="ProjectExecutionFilter">%core.lib_dir%/agavi/filter/ProjectExecutionFilter.class.php</autoload>
-            <autoload name="ProjectScriptFilterConfig">%core.lib_dir%/agavi/filter/ProjectScriptFilterConfig.class.php</autoload>
-            <autoload name="ProjectScriptsConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectScriptsConfigHandler.class.php</autoload>
+            <autoload name="ProjectResourcePacker">%core.lib_dir%/agavi/filter/ProjectResourcePacker.class.php</autoload>
+            <autoload name="ProjectResourceFilter">%core.lib_dir%/agavi/filter/ProjectResourceFilter.class.php</autoload>
+            <autoload name="ProjectResourceFilterConfig">%core.lib_dir%/agavi/filter/ProjectResourceFilterConfig.class.php</autoload>
+
             <autoload name="ProjectAclConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectAclConfigHandler.class.php</autoload>
 
             <autoload name="ElasticSearchDatabase">%core.lib_dir%/agavi/database/ElasticSearchDatabase.class.php</autoload>
@@ -47,10 +48,6 @@
             <autoload name="BaseCouchDatabaseSetup">%core.lib_dir%/database/couchdb/BaseCouchDatabaseSetup.class.php</autoload>
             <autoload name="ElasticSearchIndexSetup">%core.lib_dir%/database/ElasticSearchIndexSetup.class.php</autoload>
             <!-- /Database -->
-
-            <!-- Deployment -->
-            <autoload name="ProjectScriptPacker">%core.lib_dir%/deployment/ProjectScriptPacker.class.php</autoload>
-            <!-- /Deployment -->
 
             <!-- Iterator -->
             <autoload name="ProjectDirectoryRegexpIterator">%core.lib_dir%/iterator/ProjectDirectoryRegexpIterator.class.php</autoload>

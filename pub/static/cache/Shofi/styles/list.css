@@ -1,0 +1,362 @@
+/**
+ * Layout common
+ */
+.list-data
+{
+    position: static;
+}
+
+.container-batch
+{
+    margin-top: 95px;
+}
+
+.container-batch h3
+{
+    margin: 0px 0px 5px 0px;
+    line-height: 32px;
+}
+
+.hidden
+{
+    display: none;
+}
+
+.input-prepend input
+{
+    float: left;
+}
+
+/**
+ * Topbar: searchfield and logout
+ */
+form.search-form
+{
+    position: relative;
+    padding: 5px;
+    margin: 0 3em 0 0;
+}
+
+.search-widget form
+{
+    position: relative;
+}
+
+.reset-search
+{
+    position: absolute;
+    position: absolute;
+    right: 7px;
+    color: #404040;
+    opacity:0.4;
+    font-size: 23px;
+    font-weight: bold;
+    background: none;
+    top: 2px;
+}
+
+.reset-search:hover
+{
+    text-decoration: none;
+    color: #000000;
+}
+
+.modal-search-filter
+{
+    max-height: 900px;
+}
+
+.logout
+{
+    font-size: 12pt;
+    margin-top: 10px;
+}
+
+/**
+ * Search info-box
+ */
+.search-message-box
+{
+    margin: 16px 0 0 0;
+    position: static;
+}
+
+.search-message
+{
+    margin: 0;
+    line-height: 0;
+}
+
+.search-message p
+{
+    margin: 0;
+}
+
+.container-batch
+{
+    border: 1px solid #efefef;
+    background-color: rgba(253, 253, 253, 0.9);
+}
+
+/**
+ * Pagination
+ */
+ .pagination
+ {
+    border: 1px solid #efefef;
+    background-color: rgba(253, 253, 253, 0.2);
+ }
+
+ .pagination ul
+ {
+    background-color: rgb(253, 253, 253);
+ }
+
+ .pagination .active a,
+ .pagination .active span
+ {
+     background-color: rgba(141, 192, 219, 0.25);
+ }
+
+.pagination:first-child
+{
+    margin-top: 0;
+}
+
+.pagination span
+{
+    background-color: transparent;
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    float: left;
+    line-height: 34px;
+    color: #0069D6;
+    font-weight: inherit;
+    padding: 0 14px;
+    display: block;
+}
+
+.pagination .disabled span
+{
+    color: #BFBFBF;
+}
+
+
+/**
+ * Table - Columns definition
+ */
+.list-data table.table-bordered
+{
+    margin-bottom: 0;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05) inset;
+    border: 1px solid #efefef;
+    background-color: rgba(253, 253, 253, 0.9);
+}
+
+.table-striped tbody tr:nth-child(2n+1) td, 
+.table-striped tbody tr:nth-child(2n+1) th 
+{
+    background-color: rgba(249, 249, 249, 0.9);
+}
+
+table thead
+{
+    border-top: none;
+}
+
+table caption
+{
+    text-indent: -30000px;
+    height: 0;
+}
+
+.col-title
+{
+    min-width: 25em;
+}
+
+.col-source,
+.col-category
+{
+    width: 23em;
+}
+
+.col-created
+{
+    width: 13em;
+}
+
+.col-state
+{
+    width: 9em;
+}
+
+.col-priority
+{
+    width: 5em;
+}
+
+.col-actions
+{
+    width: 7em;
+}
+
+/**
+ * Table - Header definition
+ */
+td.data-header,
+th.data-header
+{
+    padding: 0;
+}
+
+th.header-actions 
+{ 
+    min-width:115px;
+}
+
+.sortable:hover
+{
+    background-color: rgba(141, 192, 219, 0.25);
+}
+
+.desc a,
+.sorted.asc a:hover,
+.sortable a:hover
+{
+    background-repeat: no-repeat;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAKCAYAAABi8KSDAAAABHNCSVQICAgIfAhkiAAAAERJREFUGJVj/P//PwOxgIlolaQqZmFgYGBIT08n6JaZM2cyMsEYhBSiOAOXBmRxJlwSWA34//8/Bk5LS/uPTZyRZuEMAJxMNOg7UzKkAAAAAElFTkSuQmCC);
+    background-position: right center;
+}
+
+.asc a,
+.sorted.desc a:hover
+{
+    background-repeat: no-repeat;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAKCAMAAABVLlSxAAAABGdBTUEAANbY1E9YMgAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAGUExURWZmZv///3NLWagAAAACdFJOU/8A5bcwSgAAAClJREFUeNpiYEQABgw2EsnAwABjMzBAOAxQJojDAGMCOQx4zYQAgAADABS+AFbcZZc4AAAAAElFTkSuQmCC);
+    background-position: right center;
+}
+
+.sorted a
+{
+    background-color: rgba(141, 192, 219, 0.25);
+    color: rgb(0, 85, 128);
+    text-decoration: underline;
+}
+
+.data-header a,
+.data-header span
+{
+    display: block;
+    padding: 10px 20px 9px 10px;
+}
+
+.data-header span
+{
+    color: #404040;
+}
+
+/**
+ * Table - Content defintion
+ */
+.table-striped tbody tr:nth-child(2n+1):hover td
+{
+    background: #F9F9F9;
+}
+
+.table-striped tbody tr:nth-child(2n):hover td
+{
+    background: none;
+}
+
+.list-data table td
+{
+    vertical-align: middle;
+}
+
+.list-data table .title
+{
+    font-size: 14px;
+}
+
+.list-data tfoot tr td
+{
+    font-weight: bold;
+}
+
+.list-data .item-owner
+{
+    float: right;
+}
+
+.dialog-modal-overlay
+{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(123, 123, 123, 0.4);
+    z-index: 20000;
+}
+
+form.delete-item
+{
+    margin: 0;
+}
+
+#confirm-delete-dialog
+{
+    z-index: 20001;
+}
+
+#advancedSearchModal
+{
+    max-height: 600px;
+}
+
+.jsb-searchbox .btn
+{
+    margin-top: 0;
+}
+
+.release-ticket
+{
+    cursor: pointer;
+}
+
+/*
+ * Grouping entries inside the list (used for duplicate editing)
+ */
+.table-striped tbody .group-start:first-child td
+{
+  border-top: 3px solid #16337f;
+}
+
+.table-striped tbody .group-end td
+{
+  border-bottom: 3px solid #16337f;
+}
+
+.table-striped tbody .grouped td:first-child
+{
+  border-left: 3px solid #16337f;
+}
+
+.table-striped tbody .grouped td:last-child
+{
+  border-right: 3px solid #16337f;
+}
+/*
+.table-striped tbody .grouped:nth-child(2n+1) td,
+.table-striped tbody .grouped:nth-child(2n+1):hover td
+{
+  background-color: #a3c0e6;
+}
+
+.table-striped tbody .grouped:nth-child(2n) td,
+.table-striped tbody .grouped:nth-child(2n):hover td
+{
+  background-color: #e8ebff;
+}
+*/

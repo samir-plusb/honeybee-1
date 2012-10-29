@@ -15,14 +15,12 @@ class ProjectExecutionFilter extends PhpDebugToolbarAgaviExecutionFilter
     protected function executeView(AgaviExecutionContainer $container)
     {
         $viewResult = parent::executeView($container);
-        $outputType = $container->getOutputType()->getName();
-        ProjectScriptFilter::addView(
-            $container->getViewModuleName(),
-            $container->getActionName(),
-            $container->getViewName(),
-            $outputType
+
+        ProjectResourceFilter::addModule(
+            $container->getViewModuleName(), 
+            $container->getOutputType()->getName()
         );
+
         return $viewResult;
     }
-
 }

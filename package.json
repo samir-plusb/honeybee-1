@@ -11,7 +11,10 @@
         "less-watcher": "1.1.x",
         "watcher_lib": "1.1.x",
         "optimist": "0.3.x",
-        "ndoc": "2.0.x"
+        "ndoc": "2.0.x",
+        "connect": "2.6.x",
+        "recess": "1.1.x",
+        "jshint": "0.9.x"
     },
     "engine": "node >= 0.8.x"
 }

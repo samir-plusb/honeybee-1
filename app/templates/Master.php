@@ -9,8 +9,11 @@ $dir = (($locale->getCharacterOrientation() == 'right-to-left') ? 'rtl' : 'ltr')
         <title><?php echo htmlspecialchars($t['_title']); ?></title>
         <base href="<?php echo $ro->getBaseHref(); ?>" id="base_href"/>
         <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+
         <!-- GoogleMaps code -->
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+        <!-- %%STYLESHEETS%% -->
     </head>
     <body>
         <?php echo $slots['header']; ?>
@@ -20,5 +23,7 @@ $dir = (($locale->getCharacterOrientation() == 'right-to-left') ? 'rtl' : 'ltr')
         <footer class="footer container-fluid">
             <p>Copyright &#169;2012 <a href="http://www.berlinonline.de">BerlinOnline</a></p>
         </footer>
+
+        <!-- %%JAVASCRIPTS%% -->
     </body>
 </html>
