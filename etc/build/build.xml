@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="Honeybee" basedir="." default="cc">
-
     <!-- 
         project property definitions
     -->
     <property name="project.directory" value="${application.startdir}" />
     <property name="project.directory.etc" value="${application.startdir}/etc" />
 
-    <property userProperty="true" override="true" file="${project.directory.etc}/build/build.properties" />
 	<taskdef name="run" classname="BoPhingRunTask" classpath="${project.directory}/app/lib/phing"/>
-
     <!-- 
-        serverside app development targets 
+        Define custom tasks below as needed, they will be callable via bin/agavi [taskname].
     -->
 
-
+    <!-- Task template
+    <target name="custom-task" description="Task description goes here.">
+        <echo message="Tell the world what we are about to do."/>
+        <run command="echo 'Yay this is an echo task run from ${project.directory}.'" dir="${project.directory}" />
+    </target>
+    -->
 </project>
