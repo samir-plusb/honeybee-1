@@ -95,6 +95,7 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
 
         foreach($this->getCachedAssetUrls('scripts') as $url)
         {
+
             $tags .= sprintf('<script type="text/javascript" src="%s"></script>'.PHP_EOL, $url);
         }
 

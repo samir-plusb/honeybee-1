@@ -8,7 +8,7 @@
                 <ae:parameter name="output_types">
                     <ae:parameter>html</ae:parameter>
                 </ae:parameter>
-                <ae:parameter name="combine_scripts">off</ae:parameter>
+                <ae:parameter name="combine_scripts">on</ae:parameter>
                 <ae:parameter name="compress_scripts">off</ae:parameter>
                 <ae:parameter name="cache_dir">%core.app_dir%/../pub/static/cache/</ae:parameter>
                 <ae:parameter name="use_caching">false</ae:parameter>

@@ -33,22 +33,42 @@ class ProjectResourcePacker
     public static function sortedGlob($from, $glob = '*')
     {
         $files = glob($from.DIRECTORY_SEPARATOR.$glob);
+        $sortedFiles = array();
         $indexFile = $from.DIRECTORY_SEPARATOR.'.index';
 
-        if (! file_exists($indexFile))
+        if (file_exists($indexFile))
         {
-            return $files;
-        }
-        $sortedFiles = array();
-        foreach (file($indexFile) as $fileName)
-        {
-            $filePath = $from.DIRECTORY_SEPARATOR.trim($fileName);
-            if (in_array($filePath, $files))
+            foreach (file($indexFile) as $fileName)
             {
-                $sortedFiles[] = $filePath;
+                $filePath = $from.DIRECTORY_SEPARATOR.trim($fileName);
+                if (in_array($filePath, $files))
+                {
+                    $sortedFiles[] = $filePath;
+                }
             }
         }
-        return $sortedFiles;
+        else
+        {
+            $sortedFiles = $files;
+        }
+        
+        $filesToLoad = array();
+        foreach ($sortedFiles as $file)
+        {
+            if (is_dir($file))
+            {
+                $filesToLoad = array_merge(
+                    $filesToLoad,
+                    self::sortedGlob($file, $glob)
+                );
+            }
+            else
+            {
+                $filesToLoad[] = $file;
+            }
+        }
+
+        return $filesToLoad;
     }
 
     public function pack()
@@ -204,7 +224,14 @@ class ProjectResourcePacker
         $files = self::sortedGlob($from);
         foreach($files as $file)
         {
-            $this->recursiveCopy($file, $to.DIRECTORY_SEPARATOR.basename($file));
+            $targetPath = str_replace($from, $to, $file);
+            $this->recursiveCopy($file, $targetPath);
+
+            $indexFile = dirname($file).DIRECTORY_SEPARATOR.'.index';
+            if (file_exists($indexFile))
+            {
+                $this->recursiveCopy($indexFile, str_replace($from, $to, $indexFile));
+            }
         }
 
         $indexFile = $from.DIRECTORY_SEPARATOR.'.index';

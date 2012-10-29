@@ -1,0 +1,23 @@
+<ul data-bind="foreach: tags" class="tagslist-list tagslist-inline">
+    <li class="btn btn-info tagslist-tag" data-bind="css: { disabled: $parent.disabled }">
+          <span class="label-display" data-bind="text: $data.label" /> 
+          <i data-bind="click: function(data) { if (! $parent.disabled()) { $parent.removeTag(data); } }" class="icon-remove icon-white"></i>
+    </li>
+</ul>
+<input type="input" class="tagslist-input"
+       data-bind='value: current_tag,
+                  valueUpdate: "afterkeydown",
+                  hasfocus: has_focus,
+                  event: { keypress: onInput },
+                  enable: ! disabled(),
+                  attr: { placeholder: disabled_text }' />
+<input type="hidden" value=""
+       data-bind="attr: { name: fieldname }" />
+<ul class="tagslist-value-list" style="display: none;"
+    data-bind="foreach: tags">
+  <li class="tagslist-value">
+      <input type="hidden"
+             data-bind="attr: { name: $parent.fieldname() },
+                        value: $data.value" />
+  </li>
+</ul>
