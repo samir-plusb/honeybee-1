@@ -4,7 +4,6 @@
     "author": "Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>",
     "version": "0.0.1",
     "dependencies": {
-        "zombie": "2.0.x",
         "vows": "0.6.x",
         "kyuri": "0.2.x",
         "coffee-script": "1.4.x",

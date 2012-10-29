@@ -57,9 +57,10 @@ class EnvironmentConfigurator
         $config_filepath = $this->getConfigFilePath();
         $config_settings = array();
 
-        if (is_readable($config_filepath))
+        $config_dir = dirname($config_filepath);
+        if (! is_dir($config_dir))
         {
-            $config_settings = include $config_filepath;
+            mkdir($config_dir, 0775, TRUE);
         }
 
         $this->generateConfig($config);
