@@ -24,7 +24,7 @@ body
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -34px;
+    margin: 0 auto -38px;
 }
 
 .navbar .brand:hover
@@ -345,7 +345,7 @@ dd {
 .push 
 {
     padding: 7px 20px;
-    height: 20px;
+    height: 23px;
 }
 
 .footer

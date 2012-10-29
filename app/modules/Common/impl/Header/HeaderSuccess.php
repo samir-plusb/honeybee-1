@@ -9,7 +9,7 @@
 <header class="navbar navbar-fixed-top" data-scrollspy="scrollspy">
   <div class="navbar-inner">
     <div class="container-fluid upper-bar" style="width: auto;">
-      <a class="brand icon-wrench" href="<?php echo $ro->gen('index'); ?>" title="Honeybee 3.0 - Kalliope"> Honeybee</a>
+      <a class="brand icon-wrench" href="<?php echo $ro->gen('index'); ?>" title="Honeybee 3.0 - Erato"> Honeybee</a>
 <?php
     if ($us->isAuthenticated())
     {
