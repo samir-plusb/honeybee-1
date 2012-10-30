@@ -11,8 +11,8 @@ require $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'dispatch
 if (! strstr(ProjectEnvironmentConfig::getEnvironment(), 'live'))
 {
     PhpDebugToolbar::start(array(
-        'js_location' => 'static/libs/PhpDebugToolbar/PhpDebugToolbar.js',
-        'css_location' => 'static/libs/PhpDebugToolbar/PhpDebugToolbar.css'
+        'js_location' => 'static/PhpDebugToolbar/PhpDebugToolbar.js',
+        'css_location' => 'static/PhpDebugToolbar/PhpDebugToolbar.css'
     ));
 }
 
