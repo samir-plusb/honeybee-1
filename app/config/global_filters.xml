@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/filters/1.0">
-
     <ae:configuration context="web">
         <filters>
-
             <filter name="ResourceFilter" class="ProjectResourceFilter">
                 <ae:parameter name="output_types">
                     <ae:parameter>html</ae:parameter>
                 </ae:parameter>
+                <ae:parameter name="base_dir">%core.app_dir%/../pub/static/</ae:parameter>
+                <!-- 
+                defines whether the deploy or the cache directory is used. 
+                use true for development and false for production. 
+                make sure to deploy and commit your latest scripts: `make deploy-resources`
+                -->
+                <ae:parameter name="use_caching">true</ae:parameter>
                 <ae:parameter name="combine_scripts">on</ae:parameter>
                 <ae:parameter name="compress_scripts">on</ae:parameter>
-                <ae:parameter name="cache_dir">%core.app_dir%/../pub/static/cache/</ae:parameter>
-                <ae:parameter name="use_caching">false</ae:parameter>
             </filter>
 
             <filter name="FormPopulationFilter" class="AgaviFormPopulationFilter">
@@ -38,43 +41,22 @@
                 </ae:parameter>
                 <ae:parameter name="savexml_options">LIBXML_NOEMPTYTAG</ae:parameter>
             </filter>
-            <!-- <filter name="TidyFilter" class="AgaviTidyFilter">
-                    <ae:parameter name="tidy_options">
-                            <ae:parameter name="output-xhtml">true</ae:parameter>
-                            <ae:parameter name="numeric-entities">true</ae:parameter>
-                    </ae:parameter>
-                    <ae:parameter name="tidy_encoding">utf8</ae:parameter>
-            </filter> -->
-
-        </filters>
-    </ae:configuration>
-
-    <ae:configuration environment="testing.*">
-        <filters>
-
-            <filter name="ScriptFilter" class="ProjectScriptFilter">
-                <ae:parameter name="output_types">
-                    <ae:parameter>html</ae:parameter>
-                </ae:parameter>
-                <ae:parameter name="pack_scripts">on</ae:parameter>
-                <!-- @todo we porbally would want to a dedicated testing/cache/ directory here. -->
-                <ae:parameter name="js_cache">%core.app_dir%/../pub/js/_cache/</ae:parameter>
-                <ae:parameter name="css_cache">%core.app_dir%/../pub/css/_cache/</ae:parameter>
-            </filter>
-
         </filters>
     </ae:configuration>
 
     <ae:configuration context="web" environment="tip.production">
         <filters>
-            <filter name="ScriptFilter" class="ProjectScriptFilter">
+            <filter name="ResourceFilter" class="ProjectResourceFilter">
                 <ae:parameter name="output_types">
                     <ae:parameter>html</ae:parameter>
                 </ae:parameter>
-                <ae:parameter name="pack_scripts">on</ae:parameter>
-                <!-- @todo we porbally would want to a dedicated testing/cache/ directory here. -->
-                <ae:parameter name="js_cache">%core.app_dir%/../pub/js/_cache/</ae:parameter>
-                <ae:parameter name="css_cache">%core.app_dir%/../pub/css/_cache/</ae:parameter>
+                <ae:parameter name="base_dir">%core.app_dir%/../pub/static/</ae:parameter>
+                <!-- 
+                defines whether the deploy or the cache directory is used. 
+                use true for development and false for production. 
+                make sure to deploy and commit your latest scripts: `make deploy-resources`
+                -->
+                <ae:parameter name="use_caching">false</ae:parameter>
             </filter>
         </filters>
     </ae:configuration>

@@ -66,14 +66,17 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
         }
 
         $this->curOutputType = $response->getOutputType()->getName();
-        if (!$this->config->isOutputTypeSupported($this->curOutputType))
+        if (! $this->config->isOutputTypeSupported($this->curOutputType))
         {
             // ot not supported, log to info or debug?
             return FALSE;
         }
 
-        $packer = new ProjectResourcePacker(self::$modules, $this->curOutputType, $this->config);
-        $packer->pack();
+        if ($this->config->isCachingEnabled())
+        {
+            $packer = new ProjectResourcePacker(self::$modules, $this->curOutputType, $this->config);
+            $packer->pack();
+        }
 
         $styleTags = $this->getStyleTags();
         $scriptTags = $this->getScriptTags();
@@ -116,17 +119,27 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
 
     protected function getCachedAssetUrls($subdirectory)
     {
-        $cacheBaseUrl = AgaviContext::getInstance()->getRouting()->getBaseHref() . 'static/cache/';
-        
-        $cacheDir = $this->config->getCacheDir();
+        $baseDir = $this->config->getBaseDir();
+        $pubDir = $this->config->getPubDir();
+        $relativeBasePath = str_replace($pubDir, '', $baseDir);
+        $baseUrl = AgaviContext::getInstance()->getRouting()->getBaseHref() . $relativeBasePath;
+        $resourceBaseUrl = 
+            $this->config->isCachingEnabled() 
+            ? $baseUrl . '/cache/'
+            : $baseUrl . '/deploy/';
 
+        $resourcesBaseDir = 
+            $this->config->isCachingEnabled() 
+            ? $this->config->getCacheDir()
+            : $this->config->getDeployDir();
+        
         $files = ProjectResourcePacker::sortedGlob(
-            $cacheDir.DIRECTORY_SEPARATOR.'_global'.DIRECTORY_SEPARATOR.$subdirectory
+            $resourcesBaseDir.DIRECTORY_SEPARATOR.'_global'.DIRECTORY_SEPARATOR.$subdirectory
         );
 
         foreach(static::$modules[$this->curOutputType] as $module)
         {
-            $moduleCachePath = $cacheDir
+            $moduleCachePath = $resourcesBaseDir
                 . DIRECTORY_SEPARATOR
                 . $module
                 . DIRECTORY_SEPARATOR
@@ -141,7 +154,7 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
 
         foreach($files as $file)
         {
-            $urls[] = $cacheBaseUrl . str_replace($cacheDir.DIRECTORY_SEPARATOR, '', $file);
+            $urls[] = $resourceBaseUrl.str_replace($resourcesBaseDir.DIRECTORY_SEPARATOR, '', $file);
         }
 
         return $urls;
@@ -154,63 +167,7 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
      */
     public function getConfig()
     {
+        var_dump("asdasd");exit;
         return $this->config;
     }
-
-
-    /**
-     * Takes a list of stylesheets and adjusts all relative filesystem paths
-     * to still work when the affected style defionitions are moved to another fs-location.
-     *
-     * @param array $scripts
-     *
-     * @return array
-     */
-    protected function adjustRelativeCssPaths(array $cssFiles)
-    {
-        $pubDir = $this->config->get(ProjectResourceFilterConfig::CFG_PUB_DIR);
-        $cacheDir = realpath($this->config->getCssCacheDir()) . DIRECTORY_SEPARATOR;
-        $cacheRelPath = substr(str_replace($pubDir, '', $cacheDir), 1);
-        $stylesheets = array();
-        foreach ($cssFiles as $cssFile)
-        {
-            $replaceCallback = function (array $matches) use ($pubDir, $cssFile, $cacheRelPath)
-            {
-                $dirName = dirname($cssFile) . DIRECTORY_SEPARATOR;
-                $srcRelpath = str_replace($pubDir, '', $dirName);
-                $srcDepth = count(explode(DIRECTORY_SEPARATOR, $srcRelpath)) - 1;
-                $cacheDepth = count(explode(DIRECTORY_SEPARATOR, $cacheRelPath)) - 1;
-                $newPath = '';
-
-                if ($srcDepth < $cacheDepth)
-                {
-                    for ($i = $cacheDepth - $srcDepth; $i > 0; $i--)
-                    {
-                        $newPath .= '../';
-                    }
-                }
-
-                $newPath .= $matches[1];
-                if ($srcDepth > $cacheDepth)
-                {
-                    for ($i = $srcDepth - $cacheDepth; $i > 0; $i--)
-                    {
-                        $newPath = substr($newPath, strpos($newPath, '../'));
-                    }
-                }
-                return sprintf("url('%s')", $newPath);
-            };
-
-            $adjustedCss = preg_replace_callback(
-                '#url\([\'"](?!http|/|data)(.*?)[\'"]\)#i',
-                $replaceCallback,
-                file_get_contents($pubDir . DIRECTORY_SEPARATOR . $cssFile)
-            );
-            $tmpPath = tempnam(sys_get_temp_dir(), 'css_');
-            file_put_contents($tmpPath, $adjustedCss);
-            $stylesheets[] = $tmpPath;
-        }
-        return $stylesheets;
-    }
-
 }

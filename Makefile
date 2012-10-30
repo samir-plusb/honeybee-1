@@ -75,6 +75,13 @@ twitter-bootstrap:
 	@export PATH="${PROJECT_ROOT}/node_modules/.bin/:$(PATH)"; cd vendor/twitter/bootstrap; make
 
 
+deploy-resources:
+
+	@if [ ! -d pub/static/deploy ]; then mkdir pub/static/deploy; fi
+	@rm -rf pub/static/deploy/*
+	@php bin/deploy_resources.php
+
+
 install-composer: 
 
 	@if [ -d vendor/agavi/agavi/ ]; then svn revert -R vendor/agavi/agavi/; fi

@@ -1,0 +1,202 @@
+
+
+/* /home/vagrant/projects/honeybee/app/modules/Shofi_Verticals/resources/styles/shofi.css */
+
+/**
+ * #################
+ * #   Edit Common     #
+ * #################
+ */
+.form-horizontal select
+{
+  width: 220px;
+  background-color: white;
+  border: 1px solid #CCC;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+.form-horizontal select
+{
+  height: 28px;
+  line-height: 28px;
+}
+
+.container-detail-item .tab-pane .controls
+{
+  margin-left: 0;
+}
+
+.label 
+{
+  padding: 1px 4px 2px;
+  font-size: 10.998px;
+  font-weight: bold;
+  line-height: 13px;
+  color: white;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.editing
+{
+  position: relative;
+}
+
+.page-header h2 a
+{
+  font-size: 11pt;
+  margin-left: 10px;
+}
+
+.widget-location-widget .page-header
+{
+  height: 37px;
+}
+
+.widget-location-widget h2 img
+{
+  margin-left: 10px;
+  margin-bottom: -5px;
+}
+
+/**
+ * Category Editing
+ */
+
+.places-list-container
+{
+  position: relative;
+  height: 405px;
+  overflow: scroll;
+}
+
+.top-category-select .controls
+{
+  padding: 4px;
+}
+
+/**
+ * AssetList Widget
+ */
+
+.drag-enabled .widget-asset-list
+{
+  background-color: rgba(223, 223, 223, 0.8);
+  border-radius: 5px;
+}
+
+.widget-asset-list dl
+{
+  margin-bottom: 10px;
+}
+
+.widget-asset-list .asset-list
+{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 50px;
+}
+
+.widget-asset-list .asset-item
+{
+  float: left;
+  width: 180px;
+  height: 315px;
+  margin-left: 25px;
+  margin-bottom: 25px;
+}
+
+.widget-asset-list .asset-item .thumbnail
+{
+  border-color: #ababab;
+  position: relative;
+}
+
+.widget-asset-list .asset-item h5
+{
+  height: 20px;
+  overflow: hidden;
+  padding: 5px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.widget-asset-list .asset-item img
+{
+  width: 180px;
+  height: 120px;
+}
+
+.widget-asset-list li.sortable-placeholder {
+    background: none repeat scroll 0 0 transparent;
+    border: 1px dashed #CCCCCC;
+    height:120px;
+    width:160px;
+}
+
+.widget-verticals-images
+{
+  min-height: 50px;
+  min-width: 100px;
+}
+
+.thumbnail > canvas {
+  display: block;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 120px;
+  width: 180px;
+}
+
+.clipboard-widget
+{
+  position: relative;
+  overflow: hidden;
+}
+
+.container-alerts .alert
+{
+  position: relative;
+}
+
+.container-alerts .alert .close
+{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.controller-edit .navigation
+{
+  position: fixed;
+}
+
+.controller-edit .editing
+{
+  margin-left: 350px;
+}
+
+.container-category-item .clipboard-widget
+{
+  margin-bottom: 10px;
+}
+
+.container-category-item .clipboard-widget a
+{
+  padding: 5px;
+}
+
+form.modal-body
+{
+  max-height: 1000px;
+}

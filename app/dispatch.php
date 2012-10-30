@@ -26,4 +26,6 @@ ProjectEnvironmentConfig::load(FALSE);
 
 // @todo Atm this is needed to support routes that rely on the $_SERVER var for their source attribute.
 $_SERVER['AGAVI_ENVIRONMENT'] = ProjectEnvironmentConfig::toEnvString();
+
 Agavi::bootstrap($_SERVER['AGAVI_ENVIRONMENT']);
+AgaviConfig::set('core.default_context', $default_context);

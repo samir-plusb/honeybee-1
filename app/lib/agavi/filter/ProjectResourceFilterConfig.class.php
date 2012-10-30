@@ -18,18 +18,23 @@ class ProjectResourceFilterConfig
 
     const CFG_OUTPUT_TYPES = 'output_types';
 
-    const CFG_CACHE_DIR = 'cache_dir';
-
-    const CFG_SCRIPT_SETTINGS = 'script_settings';
+    /**
+     * Represents a setting that holds a path that we use as the base,
+     * when building our cache and deploy directory paths.
+     */
+    const CFG_BASE_DIR = 'base_dir';
 
     const CFG_PUB_DIR = 'pub_dir';
+
+    const CACHE_DIR = 'cache';
+
+    const DEPLOY_DIR = 'deploy';
 
     protected static $supportedSettings = array(
         self::CFG_ENABLE_COMBINE,
         self::CFG_ENABLE_CACHING,
         self::CFG_ENABLE_COMPRESS,
-        self::CFG_CACHE_DIR,
-        self::CFG_SCRIPT_SETTINGS,
+        self::CFG_BASE_DIR,
         self::CFG_OUTPUT_TYPES,
         self::CFG_PUB_DIR
     );
@@ -57,9 +62,24 @@ class ProjectResourceFilterConfig
         return isset($this->settings[$settingName]) ? $this->settings[$settingName] : $default;
     }
 
+    public function getBaseDir()
+    {
+        return $this->get(self::CFG_BASE_DIR);
+    }
+
     public function getCacheDir()
     {
-        return $this->get(self::CFG_CACHE_DIR);
+        return $this->get(self::CFG_BASE_DIR) . DIRECTORY_SEPARATOR . self::CACHE_DIR;
+    }
+
+    public function getDeployDir()
+    {
+        return $this->get(self::CFG_BASE_DIR) . DIRECTORY_SEPARATOR . self::DEPLOY_DIR;
+    }
+
+    public function getPubDir()
+    {
+        return $this->get(self::CFG_PUB_DIR);
     }
 
     public function getSupportedOutputTypes()
@@ -92,7 +112,7 @@ class ProjectResourceFilterConfig
     protected function hydrateParameters(array $parameters)
     {
         $required = array(
-            self::CFG_CACHE_DIR,
+            self::CFG_BASE_DIR,
             self::CFG_OUTPUT_TYPES
         );
 
@@ -107,11 +127,11 @@ class ProjectResourceFilterConfig
         }
 
 
-        $cacheDir = realpath($parameters[self::CFG_CACHE_DIR]);
-        if (! is_writable($cacheDir))
+        $baseDir = realpath($parameters[self::CFG_BASE_DIR]);
+        if (! is_writable($baseDir))
         {
             throw new AgaviConfigurationException(
-                "The given cache directory '$cacheDir' is not writeable!"
+                "The given base directory '$baseDir' is not writeable!"
             );
         }
 
@@ -125,12 +145,18 @@ class ProjectResourceFilterConfig
             $this->settings[self::CFG_OUTPUT_TYPES] = $outputTypes;
         }
 
-        $this->settings[self::CFG_CACHE_DIR] = $cacheDir;
+        $this->settings[self::CFG_BASE_DIR] = $baseDir;
 
         $this->settings[self::CFG_ENABLE_COMBINE] = (
             isset($parameters[self::CFG_ENABLE_COMBINE])
             &&
             TRUE === $parameters[self::CFG_ENABLE_COMBINE]
+        );
+
+        $this->settings[self::CFG_ENABLE_CACHING] = (
+            isset($parameters[self::CFG_ENABLE_CACHING])
+            &&
+            TRUE === $parameters[self::CFG_ENABLE_CACHING]
         );
 
         $this->settings[self::CFG_PUB_DIR] = realpath(
