@@ -108,7 +108,6 @@
         "jquery/jquery": "1.7.2",
         "twitter/bootstrap": "2.1.1",
         "fortawesome/font-awesome": "2.0.0",
-        "heartsentwined/yuicompressor": "2.4.7",
 
         "cilex/cilex": "dev-master",
         "dflydev/markdown": "1.0.*",

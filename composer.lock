@@ -1,5 +1,5 @@
 {
-    "hash": "0690c6fce5567f5634dfd857ebd9fd72",
+    "hash": "6558c8478e766e8d3b65eadd7d5249d6",
     "packages": [
         {
             "name": "PhpDebugToolbar/php-debug-toolbar",
@@ -172,33 +172,6 @@
             },
             "type": "library",
             "installation-source": "source"
-        },
-        {
-            "name": "heartsentwined/yuicompressor",
-            "version": "2.4.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/heartsentwined/yuicompressor",
-                "reference": "2.4.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/heartsentwined/yuicompressor/zipball/2.4.7",
-                "reference": "2.4.7",
-                "shasum": ""
-            },
-            "time": "2012-09-02 11:05:33",
-            "type": "library",
-            "installation-source": "dist",
-            "description": "YUI Compressor is a popular CSS and JS minifier.",
-            "homepage": "https://github.com/heartsentwined/yuicompressor",
-            "keywords": [
-                "css",
-                "JS",
-                "compressor",
-                "minifier",
-                "yui"
-            ]
         },
         {
             "name": "imagine/Imagine",
@@ -731,12 +704,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "52fe0780d05429ea028af923393486bf2c544f8f"
+                "reference": "9b991860e5cc85a17702fea0cc7dbe1784d5271b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/sebastianbergmann/php-code-coverage/zipball/52fe0780d05429ea028af923393486bf2c544f8f",
-                "reference": "52fe0780d05429ea028af923393486bf2c544f8f",
+                "url": "https://github.com/sebastianbergmann/php-code-coverage/zipball/9b991860e5cc85a17702fea0cc7dbe1784d5271b",
+                "reference": "9b991860e5cc85a17702fea0cc7dbe1784d5271b",
                 "shasum": ""
             },
             "require": {
@@ -749,6 +722,7 @@
                 "ext-dom": "*",
                 "ext-xdebug": ">=2.0.5"
             },
+            "time": "1351548406",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -775,8 +749,7 @@
                 "testing",
                 "coverage",
                 "xunit"
-            ],
-            "time": "1350668319"
+            ]
         },
         {
             "name": "phpunit/php-file-iterator",
