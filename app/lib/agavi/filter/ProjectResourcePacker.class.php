@@ -76,14 +76,18 @@ class ProjectResourcePacker
         foreach($this->modules[$this->outputType] as $module)
         {
             $sourceDir = $this->getResourceDirectoryForModule($module);
-            $targetDir = $this->config->getCacheDir() . DIRECTORY_SEPARATOR . $module;
+            $resourceBaseDir = $this->config->isCachingEnabled()
+                ? $this->config->getCacheDir()
+                : $this->config->getDeployDir();
+
+            $targetDir = $resourceBaseDir.DIRECTORY_SEPARATOR.$module;
             
             $this->moveResources($sourceDir, $targetDir);
         }
 
         $this->moveResources(
             AgaviConfig::get('core.app_dir').DIRECTORY_SEPARATOR.'resources',
-            $this->config->getCacheDir().DIRECTORY_SEPARATOR.'_global'
+            $resourceBaseDir.DIRECTORY_SEPARATOR.'_global'
         );
     }
 

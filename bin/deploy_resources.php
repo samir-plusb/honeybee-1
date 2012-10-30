@@ -40,11 +40,9 @@ $packer = new ProjectResourcePacker(
     'html', 
     new ProjectResourceFilterConfig(array(
         ProjectResourceFilterConfig::CFG_OUTPUT_TYPES => array('html'),
-        ProjectResourceFilterConfig::CFG_CACHE_DIR => str_replace(
-            '/', DIRECTORY_SEPARATOR, 
-            $rootDir.'/pub/static/deploy'
+        ProjectResourceFilterConfig::CFG_BASE_DIR => str_replace(
+            '/', DIRECTORY_SEPARATOR, $rootDir.'/pub/static'
         ),
-        ProjectResourceFilterConfig::CFG_ENABLE_CACHING => TRUE,
         ProjectResourceFilterConfig::CFG_ENABLE_COMBINE => TRUE,
         ProjectResourceFilterConfig::CFG_ENABLE_COMPRESS => TRUE
     ))
