@@ -25,7 +25,7 @@
     <form action="<?php echo $ro->gen(NULL); ?>" method="post" data-bind="submit: onFormSubmit">
         <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $escape($ticketId); ?>" />
         <div class="row-fluid" >
-            <div class="span5 well">
+            <div class="span6 well">
                 <h2>Leuchtturm bearbeiten</h2>
                 <div class="control-group ">
                     <label for="Name">Name</label>
