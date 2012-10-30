@@ -72,7 +72,6 @@ twitter-bootstrap:
 	@cp vendor/fortawesome/font-awesome/less/font-awesome.less vendor/twitter/bootstrap/less/
 	@sed -i 's/@import "sprites.less"/@import "font-awesome.less"/g' vendor/twitter/bootstrap/less/bootstrap.less
 	@sed -i 's/..\/font\/fontawesome-webfont/..\/binaries\/fontawesome-webfont/g' vendor/twitter/bootstrap/less/font-awesome.less
-
 	@export PATH="${PROJECT_ROOT}/node_modules/.bin/:$(PATH)"; cd vendor/twitter/bootstrap; make
 
 
