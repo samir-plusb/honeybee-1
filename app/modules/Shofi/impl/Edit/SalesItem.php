@@ -32,7 +32,7 @@
 Navigation:
     Holds the various views available for the editing shofi places.
 ############################################################################################### -->
-			<section class="span3 well navigation" style="padding:8px 0">
+			<section class="span3 well navigation">
                 <ul class="nav nav-list">
                     <li class="nav-header">Daten bearbeiten</li>
                     <li><a href="<?php echo $ro->gen(null, array('_page' => 'CoreItem')); ?>"><i class="icon-edit"></i> Stammdaten</a></li>
@@ -51,6 +51,9 @@ Navigation:
     }
 ?>
                 </ul>
+                <div class="well">
+                    <input type="submit" value="Speichern" class="btn btn-primary" />
+                </div>
             </section>
 			<script type="text/javascript">
 				function nope(){
@@ -148,10 +151,6 @@ Editing:
                             </div>
                         </div>
                     </div>
-<!-- form action buttons -->
-					<div class="form-actions ">
-						<input type="submit" value="Speichern" class="btn btn-primary" />
-					</div>
 				</div>
 			</div>
 		</div>

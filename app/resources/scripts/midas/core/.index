@@ -8,3 +8,4 @@ BaseController.js
 BaseView.js
 CommandTriggerList.js
 Request.js
+EditController.js

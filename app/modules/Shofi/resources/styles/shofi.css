@@ -172,6 +172,16 @@
   right: 5px;
 }
 
+.controller-edit .navigation
+{
+  position: fixed;
+}
+
+.controller-edit .editing
+{
+  margin-left: 350px;
+}
+
 .container-category-item .clipboard-widget
 {
   margin-bottom: 10px;
@@ -180,4 +190,9 @@
 .container-category-item .clipboard-widget a
 {
   padding: 5px;
+}
+
+form.modal-body
+{
+  max-height: 1000px;
 }

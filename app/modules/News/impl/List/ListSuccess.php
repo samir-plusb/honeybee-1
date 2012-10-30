@@ -7,30 +7,7 @@
     $sortField = $sorting['field'];
 ?>
 
-<!-- ###############################################################################################
-    Midas Header:
-        Presents common information for the current session
-        and holds the list's search box.
-     ############################################################################################### -->
-<header class="navbar navbar-fixed-top" data-scrollspy="scrollspy">
-	<div class="navbar-inner">
-		<div class="container-fluid">
-			<h2 class="left">
-                <a href="<?php echo $ro->gen('index'); ?>" class="brand">Midas 2.0</a>
-            </h2>
-            <a class="pull-right logout icon-signout" href="<?php echo $ro->gen('auth.logout'); ?>"> Logout</a>
-            <form class="jsb-searchbox search-form pull-right" action="<?php echo $ro->gen(NULL); ?>" method="GET">
-                <input type="hidden" value="<?php echo htmlspecialchars(json_encode(array('foo' => 'bar'))); ?>" class="jsb-searchbox-config" />
-                <input type="text" class="input-medium search-query" name="search_phrase" value="<?php echo $searchPhrase ? $searchPhrase : '' ?>" placeholder="Suche" />
-                <input type="hidden" name="sorting[field]" value="<?php echo $sortField; ?>" />
-                <input type="hidden" name="sorting[direction]" value="<?php echo $sortDirection; ?>" />
-                <input type="hidden" name="offset" value="0" />
-                <a href="<?php echo $ro->gen(NULL); ?>" class="<?php echo $searchPhrase ? '' : 'hidden' ?> reset-search">×</a>
-            </form>
-		</div>
-	</div>
-</header>
-<div style="margin-top: 60px;"></div>
+<div style="margin-top: 25px;"></div>
 
 <!-- ###############################################################################################
     Searchinfo-Box Section:

@@ -31,7 +31,7 @@
 Navigation:
     Holds the various views available for the editing shofi places.
 ############################################################################################### -->
-            <section class="span3 well navigation" style="padding:8px 0">
+            <section class="span3 well navigation">
                 <ul class="nav nav-list">
                     <li class="nav-header">Daten bearbeiten</li>
                     <li class="active"><a href="<?php echo $ro->gen(null, array('_page' => 'CoreItem')); ?>"><i class="icon-edit"></i> Stammdaten</a></li>
@@ -50,6 +50,9 @@ Navigation:
     }
 ?>
                 </ul>
+                <div class="well">
+                    <input type="submit" value="Speichern" class="btn btn-primary" />
+                </div>
             </section>
             <script type="text/javascript">
                 function nope(){
@@ -61,7 +64,7 @@ Navigation:
 Editing:
     Holds form for editing the current shofi place's coreItem. (All form values are nested here.)
 ############################################################################################### -->
-            <section class="span6 editing well">
+            <section class="span8 editing well">
                 <input type="hidden" name="ticket" class="ticket-identifier" value="<?php echo $escape($ticketId); ?>" />
 <!-- coreItem meta data -->
                 <div class="page-header" style="margin-top:0">
@@ -76,7 +79,7 @@ Editing:
                 </div>
                 <div class="control-group">
                     <label class="control-label">Eintrag verstecken?</label>
-                    <div class="controls">
+                    <div class="controls hide-entry">
                         <input type="hidden" name="attributes[isHidden]" value="0" />
                         <input type="checkbox" name="attributes[isHidden]" value="1" <?php echo $isHidden ? 'checked="checked"' : ''; ?>/>
                         <p class="help-block">Du kannst diesen Eintrag verstecken,<br /> so dass er nicht auf unseren Webseiten angezeigt wird.</p>
@@ -149,13 +152,6 @@ Editing:
 <!-- coreItem.location data -->
                 <section class="widget-location-widget" data-location-widget-options="<?php echo $locationWidgetOpts; ?>">
                 </section>
-<!-- form action buttons -->
-                <div class="form-actions well">
-                    <input type="submit" value="Speichern" class="btn btn-primary" />
-                </div>
-            </section>
-            <section class="span4">
-
             </section>
         </div>
     </form>

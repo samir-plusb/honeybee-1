@@ -37,7 +37,7 @@ Navigation:
     @todo Pull up over form for the semantic's sake, best would an own top level section.
     Holds the various views available for the editing shofi places.
 ############################################################################################### -->
-            <section class="span3 well navigation" style="padding:8px 0">
+            <section class="span3 well navigation">
                 <ul class="nav nav-list">
                     <li class="nav-header">Daten bearbeiten</li>
                     <li><a href="<?php echo $ro->gen(null, array('_page' => 'CoreItem')); ?>"><i class="icon-edit"></i> Stammdaten</a></li>
@@ -56,6 +56,9 @@ Navigation:
     }
 ?>
                 </ul>
+                <div class="well">
+                    <input type="submit" value="Speichern" class="btn btn-primary" />
+                </div>
             </section>
             <script type="text/javascript">
                 function nope(){
@@ -107,8 +110,8 @@ Editing:
                         </div>
                         <div class="tab-content">
 <!-- **tab: detailItem.keywords -->
-                            <div class="tab-pane well active" id="tab-1">
-                                <div class="row-fluid">
+                            <div class="tab-pane active row-fluid" id="tab-1">
+                                <div class="well">
                                     <div class="span6">
                                         <h3>Schlagworte</h3>
                                         <section class="widget-tags-list widget-keywords"
@@ -124,8 +127,8 @@ Editing:
                                 </div>
                             </div>
 <!-- **tab: detailItem.categories -->
-                            <div class="tab-pane well" id="tab-2">
-                                <div class="row-fluid">
+                            <div class="tab-pane row-fluid" id="tab-2">
+                                <div class="well">
                                     <div class="span6">
                                         <h3>Primärbranche</h3>
                                         <section class="widget-tags-list widget-category"
@@ -141,8 +144,8 @@ Editing:
                                 </div>
                             </div>
 <!-- **tab: detailItem.openingTimes -->
-                            <div class="tab-pane well" id="tab-3">
-                                <section class="widget-time-table widget-opening-times row-fluid "
+                            <div class="tab-pane" id="tab-3">
+                                <section class="widget-time-table widget-opening-times"
                                          data-time-table-options="<?php echo $openingTimesWidgetOptions; ?>">
                                 </section>
                             </div>
@@ -167,14 +170,6 @@ Editing:
                                              data-embed-code-widget-options="<?php echo $videoEmbedCodeWidgetOpts; ?>">
                                     </section>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-<!-- form action buttons -->
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="form-actions ">
-                                <input type="submit" value="Speichern" class="btn btn-primary" />
                             </div>
                         </div>
                     </div>

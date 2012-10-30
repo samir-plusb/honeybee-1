@@ -1,19 +1,4 @@
-<!-- ###############################################################################################
-    Midas Header:
-        Presents common information for the current session.
-     ############################################################################################### -->
-<header class="navbar navbar-fixed-top" data-scrollspy="scrollspy">
-	<div class="navbar-inner">
-		<div class="container-fluid">
-			<h2 class="left">
-                <a href="<?php echo $ro->gen('index'); ?>" class="brand">Midas 2.0</a>
-            </h2>
-            <a class="pull-right logout icon-signout" href="<?php echo $ro->gen('auth.logout'); ?>"> Logout</a>
-		</div>
-	</div>
-</header>
-
-<div class="container-fluid">
+<div class="container-fluid" style="margin-top: 10px;">
 	<div class="row-fluid stats-wrapper">
         <div class="span12">
             <h1><?php echo $tm->_('Statistische Angaben zu den Bezirken', 'default.ui') ?></h1>

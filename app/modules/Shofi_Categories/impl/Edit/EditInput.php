@@ -86,7 +86,7 @@
 ?>
                         </fieldset>
                     </section>
-                    <section class="span3 well">
+                    <section class="span4 well">
                         <h2>Alle Datensätze</h2>
                         <div class="well places places-list-container">
                             <ul id="placesList">
@@ -106,7 +106,7 @@
                 </div>
             </div>
             <div class="row-fluid">
-                <div class="span8 well">
+                <div class="span12 well">
                     <section>
                         <h2>Kategorisierung und Sucheinstellungen</h2>
                         <section class="tabbable">
@@ -190,7 +190,7 @@
                                     </section>
                                     <p class="help-block">
                                         Schlagworte oder "Verzeichnisbildende Schlagworte" sind solche Schlagworte,
-                                        die Du vergeben kannst, damit diese Kategorie zu Übersichtsseiten zusammengestellt werden kann.
+                                        die Du vergeben kannst, damit diese Kategorie zu Übersichtsseiten zusammengestellt werden kann.<br />
                                         Ein Redakteur kann zum Beispiel ein Schlagwort "Eiscreme" verwenden, um ein
                                         Themenspecial rund um "Eiscreme" auf Berlin.de mit Shofi-Einträgen zu ergänzen.
                                     </p>

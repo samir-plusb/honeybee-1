@@ -1,8 +1,8 @@
 <?php
     $errors = isset($t['errors']) ? $t['errors'] : array();
 ?>
-<div class="container" style="margin-top: 10em;">
-    <form class="well" action="<?php echo $ro->gen(NULL); ?>" method="post">
+<div class="container wrapper">
+    <form class="well" action="<?php echo $ro->gen(NULL); ?>" method="post" style="margin-top: 20%;">
         <fieldset>
             <legend><?php echo $tm->_('Sign in using your company account','auth.ui') ?>:</legend>
 <?php

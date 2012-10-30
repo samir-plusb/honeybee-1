@@ -23,6 +23,7 @@ class News_Stats_StatsSuccessView extends NewsBaseView
     {
         $this->setupHtml($parameters);
         $this->setAttribute('_title', 'News Stats');
+        $this->setBreadcrumb();
     }
 
     /**
@@ -39,6 +40,22 @@ class News_Stats_StatsSuccessView extends NewsBaseView
             array('state' => 'ok', 'data' => $this->getAttribute('statistics'))
         ));
     }
-}
 
-?>
+    protected function setBreadcrumb()
+    {
+        $routing = $this->getContext()->getRouting();
+        $breadcrumbs = $this->getContext()->getUser()->getAttribute('breadcrumbs', 'midas.breadcrumbs', array());
+        if (1 <= count($breadcrumbs))
+        {
+            array_splice($breadcrumbs, 1);
+        }
+        $breadcrumbs = array(array(
+            'text' => 'Statistik',
+            'link' => $routing->gen('news.stats'),
+            'info' => 'Lokalnachrichten - Statistik',
+            'icon' => 'icon-graph'
+        ));
+        
+        $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'midas.breadcrumbs');
+    }
+}

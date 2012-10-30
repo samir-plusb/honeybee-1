@@ -30,7 +30,7 @@
     </div>
 </div>
 
-<div class="modal modal-search-filter" style="display: none">
+<div class="modal modal-search-filter" style="display: none; margin-top: -325px;">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">×</a>
         <h3>Erweiterte Suche</h3>

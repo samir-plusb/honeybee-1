@@ -32,6 +32,16 @@ body
   text-decoration: underline;
 }
 
+.navigation
+{
+  padding: 0px;
+}
+
+.navigation .well
+{
+  margin-bottom: 0px;
+}
+
 .logout
 {
     font-size: 12pt;
@@ -379,7 +389,41 @@ dd {
   margin-top: 95px;
 }
 
+.controller-edit .hide-entry
+{
+  margin-top: 8px;
+}
+
+.controller-edit .hide-entry input
+{
+  float: left;
+  margin-right: 20px;
+}
+
+.controller-edit .control-group input,
+.tagslist-input,
+input.typeahead
+{
+  height: 22px;
+}
+
+.form-horizontal .input-medium,
+.input-medium
+{
+  width: 120px;
+}
+
+.widget-location-widget
+{
+  overflow: hidden;
+}
+
 .container-vertical-item table
 {
   background: rgb(251, 251, 251);
+}
+
+.container .input-prepend input
+{
+  float: none;
 }
