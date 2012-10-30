@@ -94,7 +94,7 @@ class ProjectResourcePacker
         {
             if (! is_dir($sourceDir))
             {
-                throw new Exception($sourceDir . ' is not a directory. Please move the file into on of the resource subdirectories.');
+                continue;
             }
 
             $sDir = $sourceDir.DIRECTORY_SEPARATOR.$directory;
