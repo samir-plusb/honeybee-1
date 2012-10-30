@@ -51,6 +51,7 @@ cc:
 install: install-vendor install-node-deps cc
 
 	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
+	@make twitter-bootstrap
 
 
 update: update-vendor update-node-deps cc
