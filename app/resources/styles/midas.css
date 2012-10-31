@@ -427,3 +427,12 @@ input.typeahead
 {
   float: none;
 }
+
+.user-stats .dropdown a.dropdown-toggle
+{
+  margin: 0px 3px;
+}
+
+.user-stats img
+{
+}

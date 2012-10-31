@@ -51,10 +51,14 @@
       </ul>
       <ul class="nav pull-right user-stats">
         <li id="fat-menu" class="dropdown">
-          <p class="pull-left">Du bist angemeldet als: </p> <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown"><span class="icon-user"></span> <?php echo $us->getAttribute('login'); ?><b class="caret"></b></a>
+          <p>Du bist angemeldet als:</p>
+          <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">
+            <?php echo $us->getAttribute('login'); ?><b class="caret"></b>
+          </a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
             <li><a href="<?php echo $ro->gen('auth.logout'); ?>" title="Sitzung beenden"><span class="icon-signout"></span> abmelden</a></li>
           </ul>
+          <img class="avatar-image" src="<?php echo $t['avatar_url']; ?>" /> 
         </li>
       </ul>
     </div>

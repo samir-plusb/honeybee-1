@@ -44,6 +44,7 @@
             <setting name="use_translation">true</setting>
             <setting name="auth_provider">LdapAuthProvider</setting>
             <setting name="test_bootstrap_tpl">%core.app_dir%/../testing/TestCaseMethod.tpl</setting>
+            <setting name="gravatar_url_tpl">http://www.gravatar.com/avatar/{EMAIL_HASH}?s=41</setting>
         </settings>
 
         <settings prefix="ldap.">
@@ -305,7 +306,7 @@
                             <ae:parameter name="acl_role">news-editor</ae:parameter>
                             <ae:parameter name="login">shrink0r</ae:parameter>
                             <ae:parameter name="name">General Gaff</ae:parameter>
-                            <ae:parameter name="email">general@null.ly</ae:parameter>
+                            <ae:parameter name="email">Thorsten.Schmitt-Rink@berlinonline.de</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
                 </ae:parameters>
@@ -343,7 +344,7 @@
                             <ae:parameter name="acl_role">news-editor</ae:parameter>
                             <ae:parameter name="login">general</ae:parameter>
                             <ae:parameter name="name">General Gaff</ae:parameter>
-                            <ae:parameter name="email">general@null.ly</ae:parameter>
+                            <ae:parameter name="email">schmittrink@gmail.com</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
                 </ae:parameters>
