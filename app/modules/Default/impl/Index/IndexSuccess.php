@@ -1,7 +1,7 @@
 <div class="container-fluid wrapper">
 	<div class="row-fluid">
         <div class="span12">
-            <h1>Willkommen in Honeybee (Erato)</h1>
+            <h1>Willkommen im Honeybee CMF</h1>
             <hr />
             <ul class="dl-horizontal">
                 <li><b class="label">Datum</b>  <?php echo date('d.m.Y'); ?></li>

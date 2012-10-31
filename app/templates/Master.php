@@ -21,7 +21,7 @@ $dir = (($locale->getCharacterOrientation() == 'right-to-left') ? 'rtl' : 'ltr')
         <?php echo $inner; ?>
 
         <footer class="footer container-fluid">
-            <p>Copyright &#169;2012 <a href="http://www.berlinonline.de">BerlinOnline</a></p>
+            <p>Copyright &#169;2012 <a href="http://www.berlinonline.de">BerlinOnline</a> - Honeybee v3.0 Erato</p>
         </footer>
 
         <!-- %%JAVASCRIPTS%% -->
