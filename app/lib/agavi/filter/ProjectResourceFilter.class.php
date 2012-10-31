@@ -154,20 +154,10 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
 
         foreach($files as $file)
         {
+            $file .= '?cb='.filemtime($file);
             $urls[] = $resourceBaseUrl.str_replace($resourcesBaseDir.DIRECTORY_SEPARATOR, '', $file);
         }
 
         return $urls;
-    }
-
-    /**
-     * Returns our config object.
-     *
-     * @return ProjectResourceFilterConfig
-     */
-    public function getConfig()
-    {
-        var_dump("asdasd");exit;
-        return $this->config;
     }
 }
