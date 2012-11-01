@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+    <ae:configuration>
+        <workflow name="movies">
+            <description>
+                This workflow defines the process structure for editing/refining created/imported movies.
+            </description>
+            <start_at>edit_movie</start_at>
+            <steps>
+
+                <step name="edit_movie">
+                    <description>Manually edit a movie.</description>
+                    <plugin type="EditMovie">
+                        <gates>
+                            <gate_step label="delete this movie" name="delete">delete_movie</gate_step>
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="delete_movie">
+                    <description>
+                        Marks a given movie as deleted.
+                        During a configurable time period the item(place) can then be recovered,
+                        before being removed by the system's maintenance.
+                    </description>
+                    <plugin type="DeleteMovie">
+                        <gates>
+                            <gate_end name="trash" />
+                        </gates>
+                    </plugin>
+                </step>
+
+            </steps>
+        </workflow>
+    </ae:configuration>
+</ae:configurations>

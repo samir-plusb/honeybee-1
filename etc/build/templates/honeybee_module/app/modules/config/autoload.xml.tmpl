@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+    <ae:configuration>
+
+        <!-- Agavi -->
+        <autoload name="%%PROJECT_PREFIX%%%%MODULE_NAME%%BaseAction">%core.module_dir%/%%MODULE_NAME%%/lib/base/%%PROJECT_PREFIX%%%%MODULE_NAME%%BaseAction.class.php</autoload>
+        <autoload name="%%PROJECT_PREFIX%%%%MODULE_NAME%%BaseView">%core.module_dir%/%%MODULE_NAME%%/lib/base/%%PROJECT_PREFIX%%%%MODULE_NAME%%BaseView.class.php</autoload>
+        <autoload name="%%PROJECT_PREFIX%%%%MODULE_NAME%%DocumentValidator">%core.module_dir%/%%MODULE_NAME%%/lib/base/%%PROJECT_PREFIX%%%%MODULE_NAME%%DocumentValidator.class.php</autoload>
+        <!-- /Agavi -->
+        
+
+        <!-- Import Integration -->
+        <autoload name="%%MODULE_NAME%%Document">%core.module_dir%/%%MODULE_NAME%%/lib/data_object/%%MODULE_NAME%%Document.class.php</autoload>
+        <autoload name="MoviesDataRecord">%core.module_dir%/Movies/lib/import/MoviesDataRecord.class.php</autoload>
+        <autoload name="MoviesDataImport">%core.module_dir%/Movies/lib/import/MoviesDataImport.class.php</autoload>
+        <autoload name="MoviesDataImportConfig">%core.module_dir%/Movies/lib/import/MoviesDataImportConfig.class.php</autoload>
+
+        <!-- Movie Xml Import -->
+        <autoload name="ScreeningXmlParser">%core.module_dir%/Movies/lib/import/xml/ScreeningXmlParser.class.php</autoload>
+        <autoload name="MoviesXmlParser">%core.module_dir%/Movies/lib/import/xml/MoviesXmlParser.class.php</autoload>
+        <autoload name="MovieScreeningsProvider">%core.module_dir%/Movies/lib/import/xml/MovieScreeningsProvider.class.php</autoload>
+        <autoload name="MoviesXmlDataSource">%core.module_dir%/Movies/lib/import/xml/MoviesXmlDataSource.class.php</autoload>
+        <autoload name="MoviesXmlDataSourceConfig">%core.module_dir%/Movies/lib/import/xml/MoviesXmlDataSourceConfig.class.php</autoload>
+        <autoload name="MoviesXmlDataRecord">%core.module_dir%/Movies/lib/import/xml/MoviesXmlDataRecord.class.php</autoload>
+        <!-- /Import Integration -->
+
+        <autoload name="FrontendMovieDocument">%core.module_dir%/Movies/lib/export/FrontendMovieDocument.class.php</autoload>
+        <autoload name="FrontendMovieFactory">%core.module_dir%/Movies/lib/export/FrontendMovieFactory.class.php</autoload>
+        <autoload name="MoviesFrontendExport">%core.module_dir%/Movies/lib/export/MoviesFrontendExport.class.php</autoload>
+        <autoload name="FrontendTheaterDocument">%core.module_dir%/Movies/lib/export/FrontendTheaterDocument.class.php</autoload>
+        <autoload name="FrontendTheaterFactory">%core.module_dir%/Movies/lib/export/FrontendTheaterFactory.class.php</autoload>
+        <autoload name="FrontendMovieAssetFactory">%core.module_dir%/Movies/lib/export/FrontendMovieAssetFactory.class.php</autoload>
+        <autoload name="FrontendMovieAssetDocument">%core.module_dir%/Movies/lib/export/FrontendMovieAssetDocument.class.php</autoload>
+        <autoload name="FrontendTheaterAssetFactory">%core.module_dir%/Movies/lib/export/FrontendTheaterAssetFactory.class.php</autoload>
+        
+        <autoload name="MoviesAssetRenderer">%core.module_dir%/Movies/lib/renderer/MoviesAssetRenderer.class.php</autoload>
+
+        <!-- Workflow Integration -->
+        <!-- Item -->
+        <autoload name="MoviesWorkflowItem">%core.module_dir%/Movies/lib/workflow/item/MoviesWorkflowItem.class.php</autoload>
+        <autoload name="MoviesMasterRecord">%core.module_dir%/Movies/lib/workflow/item/MoviesMasterRecord.class.php</autoload>
+        <!-- Shared -->
+        <autoload name="MoviesWorkflowService">%core.module_dir%/Movies/lib/MoviesWorkflowService.class.php</autoload>
+        <autoload name="MoviesWorkflowSupervisor">%core.module_dir%/Movies/lib/workflow/MoviesWorkflowSupervisor.class.php</autoload>
+        <!-- Plugins -->
+        <autoload name="WorkflowEditMoviePlugin">%core.module_dir%/Movies/lib/workflow/plugin/WorkflowEditMoviePlugin.class.php</autoload>
+        <autoload name="WorkflowDeleteMoviePlugin">%core.module_dir%/Movies/lib/workflow/plugin/WorkflowDeleteMoviePlugin.class.php</autoload>
+        <!-- /Workflow Integration -->
+
+        <autoload name="MoviesDatabaseSetup">%core.module_dir%/Movies/lib/setup/couchdb/MoviesDatabaseSetup.class.php</autoload>
+        
+        <autoload name="MoviesFinder">%core.module_dir%/Movies/lib/MoviesFinder.class.php</autoload>
+    </ae:configuration>
+</ae:configurations>

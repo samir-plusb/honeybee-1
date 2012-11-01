@@ -5,6 +5,8 @@
     -->
     <property name="project.directory" value="${application.startdir}" />
     <property name="project.directory.etc" value="${application.startdir}/etc" />
+    <property userProperty="true" override="true" file="${project.directory.etc}/build/build.properties" />
+    <property name="module.directory.impl" value="impl" />
 
 	<taskdef name="run" classname="BoPhingRunTask" classpath="${project.directory}/app/lib/phing"/>
     <!-- 
@@ -17,4 +19,66 @@
         <run command="echo 'Yay this is an echo task run from ${project.directory}.'" dir="${project.directory}" />
     </target>
     -->
+
+    <target name="honeybee-module-wizard" depends="project-locate" description="Creates a honeybee module.">
+        <!-- Determine module name. -->
+        <agavi.input property="module.name" message="Module name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
+        <property userProperty="true" name="module.name.input" value="${module.name}" override="true" />
+        <agavi.transform-string-to-identifier property="module.name" string="${module.name}" />
+        <if>
+            <not>
+                <equals arg1="${module.name}" arg2="${module.name.input}" />
+            </not>
+            <then>
+                <echo message="Module name ${module.name.input} is not a valid identifier; ${module.name} will be used instead" level="warning" />
+            </then>
+        </if>
+
+        <property userProperty="true" name="module.directory" value="${project.directory}/${project.directory.app.modules}/${module.name}" override="true" />
+
+        <agavi.check-module property="module.available" path="${module.directory}" />
+        <fail if="module.available" message="Module ${module.name} already exists at ${module.directory}" />
+
+        <!-- Create directory structure. -->
+        <mkdir dir="${module.directory}" />
+        <mkdir dir="${module.directory}/${module.directory.impl}" />
+        <mkdir dir="${module.directory}/${module.directory.config}" />
+        <mkdir dir="${module.directory}/${module.directory.lib}" />
+
+        <!-- Create library. -->
+        <agavi.select-path property="template.path" path="${templates.directory.app.modules.lib}">
+            <from path="${templates.directory}" />
+        </agavi.select-path>
+        <copy todir="${module.directory}/${module.directory.lib}">
+            <mapper type="regexp" from="^(.+[\\\/])?(.+)\.tmpl$" to="\1/${project.prefix}${module.name}\2" />
+            <fileset dir="${template.path}">
+                <include name="**/*.tmpl" />
+            </fileset>
+            <filterchain>
+                <replacetokens begintoken="%%" endtoken="%%">
+                    <token key="PROJECT_LOCATION" value="${project.directory}" />
+                    <token key="PROJECT_PREFIX" value="${project.prefix}" />
+                    <token key="MODULE_NAME" value="${module.name}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+
+        <!-- Copy configuration. -->
+        <agavi.select-path property="template.path" path="${templates.directory.app.modules.config}">
+            <from path="${templates.directory}" />
+        </agavi.select-path>
+        <copy todir="${module.directory}/${module.directory.config}">
+            <mapper type="glob" from="*.xml.tmpl" to="*.xml" />
+            <fileset dir="${template.path}">
+                <include name="**/*.xml.tmpl" />
+            </fileset>
+            <filterchain>
+                <replacetokens begintoken="%%" endtoken="%%">
+                    <token key="PROJECT_LOCATION" value="${project.directory}" />
+                    <token key="PROJECT_PREFIX" value="${project.prefix}" />
+                    <token key="MODULE_NAME" value="${module.name}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
 </project>

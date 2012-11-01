@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+    parent="%core.module_dir%/Movies/config/validators.xml">
+    <ae:configuration>
+        <validators>
+            <validator class="WorkflowTicketValidator" name="invalid_ticket" required="false" translation_domain="movies.errors">
+                <arguments>
+                    <argument>ticket</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid data given.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="type">movies</ae:parameter>
+                </ae:parameters>
+            </validator>
+        </validators>
+
+        <validators method="write">
+            <validator class="ProjectArrayValidator" name="invalid_attributes" required="false" translation_domain="movies.errors">
+                <arguments>
+                    <argument>attributes</argument>
+                </arguments>
+            </validator>
+
+            <validator class="MovieItemValidator" name="invalid_movie_item" required="false">
+                <arguments>
+                    <argument>movie</argument>
+                </arguments>
+            </validator>
+        </validators>
+    </ae:configuration>
+</ae:configurations>
