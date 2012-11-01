@@ -3,14 +3,14 @@
     <ae:configuration>
         <handlers>
 
-            <handler pattern="*/dataimports.xml" class="AgaviReturnArrayConfigHandler">
+            <handler pattern="*/dataimports.xml" class="ProjectDataImportConfigHandler">
                 <validation>%core.app_dir%/modules/Import/config/xsd/dataimport.xsd</validation>
                 <ae:parameters>
                     <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0</ae:parameter>
                 </ae:parameters>
             </handler>
             
-            <handler pattern="*/datasources.xml" class="AgaviReturnArrayConfigHandler">
+            <handler pattern="*/datasources.xml" class="ProjectDataSourceConfigHandler">
                 <validation>%core.app_dir%/modules/Import/config/xsd/datasource.xsd</validation>
                 <ae:parameters>
                     <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/midas/config/datasource/definition/1.0</ae:parameter>

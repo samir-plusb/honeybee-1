@@ -17,6 +17,9 @@
             <autoload name="ProjectResourceFilter">%core.lib_dir%/agavi/filter/ProjectResourceFilter.class.php</autoload>
             <autoload name="ProjectResourceFilterConfig">%core.lib_dir%/agavi/filter/ProjectResourceFilterConfig.class.php</autoload>
 
+            <autoload name="ProjectDataImportConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectDataImportConfigHandler.class.php</autoload>
+            <autoload name="ProjectDataSourceConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectDataSourceConfigHandler.class.php</autoload>
+            <autoload name="ProjectBaseConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectBaseConfigHandler.class.php</autoload>
             <autoload name="ProjectAclConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectAclConfigHandler.class.php</autoload>
 
             <autoload name="ElasticSearchDatabase">%core.lib_dir%/agavi/database/ElasticSearchDatabase.class.php</autoload>
