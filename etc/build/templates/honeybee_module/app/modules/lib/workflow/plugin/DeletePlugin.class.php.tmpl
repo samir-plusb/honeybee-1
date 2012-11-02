@@ -1,16 +1,14 @@
 <?php
 
 /**
- * This plugin takes care of marking movies as deleted.
+ * This plugin takes care of marking %%MODULE_NAME%% as deleted.
  *
- * @author tay
- * @version $Id$
- * @package Movies
+ * @package %%MODULE_NAME%%
  * @subpackage Workflow/Plugin
  */
-class WorkflowDeleteMoviePlugin extends WorkflowBasePlugin
+class Workflow%%MODULE_NAME%%DeletePlugin extends WorkflowBasePlugin
 {
-    const PLUGIN_ID = 'movies_delete';
+    const PLUGIN_ID = '%%MODULE_PREFIX%%_delete';
 
     const GATE_TRASH = 'trash';
 
@@ -19,24 +17,20 @@ class WorkflowDeleteMoviePlugin extends WorkflowBasePlugin
         return self::PLUGIN_ID;
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see WorkflowBasePlugin::process()
-     */
     protected function doProcess()
     {
         $result = new WorkflowPluginResult();
 
         try
         {
-            $workflowService = MoviesWorkflowService::getInstance();
+            $workflowService = %%MODULE_NAME%%Service::getInstance();
             $workflowItem = $workflowService->fetchWorkflowItemById($this->ticket->getItem());
             $workflowService->deleteWorkflowItem($workflowItem);
 
             $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
             $result->setGate(self::GATE_TRASH);
             $this->logInfo(sprintf(
-                "Successfully moved (movies)item: %s to the trash",
+                "Successfully moved item: %s to the trash",
                 $workflowItem->getIdentifier()
             ));
             // @todo sync deletion to frontend here ...            
@@ -47,7 +41,7 @@ class WorkflowDeleteMoviePlugin extends WorkflowBasePlugin
             $result->setMessage($e->getMessage());
 
             $this->logError(sprintf(
-                "An error occured while deleting movie: %s from the database\n
+                "An error occured while deleting: %s from the database\n
                 The couchdb client threw the following exception: \n%s",
                 $workflowItem->getIdentifier(),
                 $e->getMessage()
@@ -69,5 +63,3 @@ class WorkflowDeleteMoviePlugin extends WorkflowBasePlugin
         return TRUE;
     }
 }
-
-?>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations 
+    xmlns="http://agavi.org/agavi/config/parts/databases/1.0" 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+    <ae:configuration>
+        <databases default="%%MODULE_PREFIX%%.Write">
+
+            <database name="%%MODULE_NAME%%.Write" class="CouchDbDatabase">
+                <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
+                <ae:parameter name="database">%%DB_PREFIX%%_%%MODULE_PREFIX%%</ae:parameter>
+                <ae:parameter name="setup">true</ae:parameter>
+                <ae:parameter name="scripts_dir">%core.modules_dir%/%%MODULE_NAME%%/config/couchdb/</ae:parameter>
+            </database>
+
+            <database name="%%MODULE_NAME%%.Read" class="ElasticSearchDatabase">
+                <ae:parameter name="host">127.0.0.1</ae:parameter>
+                <ae:parameter name="port">9200</ae:parameter>
+                <ae:parameter name="transport">Http</ae:parameter>
+                <ae:parameter name="index">%%DB_PREFIX%%_%%MODULE_PREFIX%%</ae:parameter>
+                <ae:parameter name="setup">true</ae:parameter>
+                <ae:parameter name="mappings_dir">%core.modules_dir%/%%MODULE_NAME%%/config/elasticsearch/</ae:parameter>
+            </database>
+
+        </databases>
+    </ae:configuration>
+</ae:configurations>

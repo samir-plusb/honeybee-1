@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Provide couch database connection handle
  *
@@ -25,12 +26,14 @@ class CouchDatabase extends AgaviDatabase
     protected function connect()
     {
         $couchUri = $this->getParameter('url', ExtendedCouchDbClient::DEFAULT_URL);
+
         try
         {
             $this->connection = new ExtendedCouchDbClient(
                 $couchUri,
                 $this->getParameter('database', NULL),
-                $this->getParameter('options', NULL));
+                $this->getParameter('options', NULL)
+            );
         }
         catch (CouchdbClientException $e)
         {
@@ -56,14 +59,16 @@ class CouchDatabase extends AgaviDatabase
      *
      * @throws AgaviDatabaseException
      */
-    protected function setDatabase()
+    protected function initDatabase()
     {
-        $this->resource = $this->getParameter('database', NULL);
         if (! $this->hasParameter('database'))
         {
-            return;
+            throw new AgaviDatabaseException(
+                "Database name required but missing in given configuration."
+            );
         }
 
+        $this->resource = $this->getParameter('database');
         if (FALSE === $this->connection->getDatabase($this->resource))
         {
             try
@@ -77,11 +82,10 @@ class CouchDatabase extends AgaviDatabase
 
             if ($this->hasParameter('setup'))
             {
-                $this->setupDatabase($this->getParameter('setup'));
+                $this->setupDatabase();
             }
         }
     }
-
 
     /**
      * prepare database for use using the class defined in the parameter 'setup'
@@ -89,11 +93,12 @@ class CouchDatabase extends AgaviDatabase
      * The setup class must implement the interface ICouchDatabaseSetup
      *
      * @see ICouchDatabaseSetup
-     * @param string $class name of class that implements ICouchDatabaseSetup
      * @throws AgaviDatabaseException
      */
-    protected function setupDatabase($class)
+    protected function setupDatabase()
     {
+        $class = $this->getParameter('setup');
+
         if (! class_exists($class))
         {
             throw new AgaviDatabaseException('Setup class does not exists: '.$class);
@@ -101,14 +106,13 @@ class CouchDatabase extends AgaviDatabase
         $setup = new $class();
         if ($setup instanceof IDatabaseSetup)
         {
-            $setup->setup();
+            $setup->setup($this);
         }
         else
         {
             throw new AgaviDatabaseException('Setup class does not implement ICouchDatabaseSetup: '.$class);
         }
     }
-
 
     /**
      * uses parameters 'user' and 'password' for user authentification
@@ -135,5 +139,3 @@ class CouchDatabase extends AgaviDatabase
 
     }
 }
-
-?>

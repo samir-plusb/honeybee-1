@@ -1,0 +1,1868 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project version="2.0.0a10" title="Honeybee">
+  <file path="validator/ProjectArrayValidator.class.php" hash="6229866eeafd8a618f32eef3c73be18a" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\AgaviValidator</extends>
+      <name>ProjectArrayValidator</name>
+      <full_name>\ProjectArrayValidator</full_name>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="5" package="Default">
+        <name>validate</name>
+        <full_name>validate</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file validator/ProjectArrayValidator.class.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ProjectArrayValidator</error>
+      <error line="5" code="50010">No DocBlock was found for method validate()</error>
+    </parse_markers>
+  </file>
+  <file path="database/CouchDatabase.class.php" hash="5a509dbea0805d7dae79bbec344c7243" package="Default">
+    <class final="false" abstract="false" namespace="global" line="11" package="Project\Agavi/Database">
+      <extends>\AgaviDatabase</extends>
+      <name>CouchDatabase</name>
+      <full_name>\CouchDatabase</full_name>
+      <docblock line="2">
+        <description><![CDATA[Provide couch database connection handle]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="2" name="author" description="tay"/>
+        <tag line="2" name="version" description="$Id$"/>
+        <tag line="2" name="since" description="10.10.2011"/>
+        <tag line="2" name="package" description="Project"/>
+        <tag line="2" name="subpackage" description="Agavi/Database"/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="18" namespace="global" package="Default">
+        <name>$connection</name>
+        <default><![CDATA[]]></default>
+        <docblock line="13">
+          <description><![CDATA[our database access handle instance]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="13" name="var" description="" type="\ExtendedCouchDbClient">
+            <type by_reference="false">\ExtendedCouchDbClient</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="25" package="Project\Agavi/Database">
+        <name>connect</name>
+        <full_name>connect</full_name>
+        <docblock line="20">
+          <description><![CDATA[uses parameter 'url' for connection the couch database]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="20" name="see" description="\global\AgaviDatabase::connect()" refers="\global\AgaviDatabase::connect()"/>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="48" package="Project\Agavi/Database">
+        <name>shutdown</name>
+        <full_name>shutdown</full_name>
+        <docblock line="44">
+          <description><![CDATA[(non-PHPdoc)]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="44" name="see" description="\global\AgaviDatabase::shutdown()" refers="\global\AgaviDatabase::shutdown()"/>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="59" package="Project\Agavi/Database">
+        <name>setDatabase</name>
+        <full_name>setDatabase</full_name>
+        <docblock line="53">
+          <description><![CDATA[uses parameter 'database' for setup a default database and the parameter 'setup' to initialize the
+freshly generated database]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="53" name="throws" description="" type="\AgaviDatabaseException">
+            <type by_reference="false">\AgaviDatabaseException</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="95" package="Project\Agavi/Database">
+        <name>setupDatabase</name>
+        <full_name>setupDatabase</full_name>
+        <docblock line="86">
+          <description><![CDATA[prepare database for use using the class defined in the parameter 'setup']]></description>
+          <long-description><![CDATA[<p>The setup class must implement the interface ICouchDatabaseSetup</p>]]></long-description>
+          <tag line="86" name="see" description="\global\ICouchDatabaseSetup" refers="\global\ICouchDatabaseSetup"/>
+          <tag line="86" name="param" description="name of class that implements ICouchDatabaseSetup" type="string" variable="$class">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="86" name="throws" description="" type="\AgaviDatabaseException">
+            <type by_reference="false">\AgaviDatabaseException</type>
+          </tag>
+        </docblock>
+        <argument line="95">
+          <name>$class</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="118" package="Project\Agavi/Database">
+        <name>login</name>
+        <full_name>login</full_name>
+        <docblock line="113">
+          <description><![CDATA[uses parameters 'user' and 'password' for user authentification]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="113" name="throws" description="" type="\AgaviDatabaseException">
+            <type by_reference="false">\AgaviDatabaseException</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file database/CouchDatabase.class.php</error>
+    </parse_markers>
+  </file>
+  <file path="database/ElasticSearchDatabase.class.php" hash="490e5760f4a4ee16f604eb95913530c8" package="Default">
+    <class final="false" abstract="false" namespace="global" line="11" package="Project\Agavi/Database">
+      <extends>\AgaviDatabase</extends>
+      <name>ElasticSearchDatabase</name>
+      <full_name>\ElasticSearchDatabase</full_name>
+      <docblock line="2">
+        <description><![CDATA[Provide elastic search database connection handle]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="2" name="author" description="tay"/>
+        <tag line="2" name="version" description="$Id$"/>
+        <tag line="2" name="since" description="10.10.2011"/>
+        <tag line="2" name="package" description="Project"/>
+        <tag line="2" name="subpackage" description="Agavi/Database"/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="18" namespace="global" package="Default">
+        <name>$connection</name>
+        <default><![CDATA[]]></default>
+        <docblock line="13">
+          <description><![CDATA[The client used to talk to elastic search.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="13" name="var" description="" type="\Elastica_Client">
+            <type by_reference="false">\Elastica_Client</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="26" namespace="global" package="Default">
+        <name>$resource</name>
+        <default><![CDATA[]]></default>
+        <docblock line="20">
+          <description><![CDATA[The elastic search index that is considered as our 'connection'
+which stands for the resource this class works on.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="20" name="var" description="" type="\Elastica_Index">
+            <type by_reference="false">\Elastica_Index</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="28" package="Project\Agavi/Database">
+        <name>connect</name>
+        <full_name>connect</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="65" package="Project\Agavi/Database">
+        <name>shutdown</name>
+        <full_name>shutdown</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="71" package="Project\Agavi/Database">
+        <name>createIndex</name>
+        <full_name>createIndex</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file database/ElasticSearchDatabase.class.php</error>
+      <error line="28" code="50010">No DocBlock was found for method connect()</error>
+      <error line="65" code="50010">No DocBlock was found for method shutdown()</error>
+      <error line="71" code="50010">No DocBlock was found for method createIndex()</error>
+    </parse_markers>
+  </file>
+  <file path="database/IDatabaseSetup.iface.php" hash="46cc99574c55f275cdaab2a789dc9276" package="Default">
+    <interface namespace="global" line="12" package="Project\Agavi/Database">
+      <name>IDatabaseSetup</name>
+      <full_name>\IDatabaseSetup</full_name>
+      <docblock line="3">
+        <description><![CDATA[The IDatabaseSetup interface is responseable for setting up databases for usage.]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="3" name="version" description="$Id$"/>
+        <tag line="3" name="copyright" description="BerlinOnline Stadtportal GmbH &amp; Co. KG"/>
+        <tag line="3" name="author" description="Tom Anheyer"/>
+        <tag line="3" name="package" description="Project"/>
+        <tag line="3" name="subpackage" description="Agavi/Database"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="20" package="Project\Agavi/Database">
+        <name>setup</name>
+        <full_name>setup</full_name>
+        <docblock line="14">
+          <description><![CDATA[Setup everything required to provide the functionality exposed by our module.]]></description>
+          <long-description><![CDATA[<p>In this case setup a couchdb database and view for our asset idsequence.</p>]]></long-description>
+          <tag line="14" name="param" description="" type="boolean" variable="$tearDownFirst">
+            <type by_reference="false">boolean</type>
+          </tag>
+        </docblock>
+        <argument line="20">
+          <name>$tearDownFirst</name>
+          <default><![CDATA[FALSE]]></default>
+          <type/>
+        </argument>
+      </method>
+    </interface>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file database/IDatabaseSetup.iface.php</error>
+    </parse_markers>
+  </file>
+  <file path="user/assertions/UserIsItemOwnerAssertion.class.php" hash="c3356935e4869dc4941049df5abf1a44" package="Default">
+    <class final="false" abstract="false" namespace="global" line="12" package="Project\Agavi/User">
+      <extends/>
+      <implements>\Zend_Acl_Assert_Interface</implements>
+      <name>UserIsItemOwnerAssertion</name>
+      <full_name>\UserIsItemOwnerAssertion</full_name>
+      <docblock line="2">
+        <description><![CDATA[The UserIsItemOwnerAssertion is responseable for asserting that a the current user owns
+a given workflow item resource.]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="2" name="version" description="$Id$"/>
+        <tag line="2" name="copyright" description="BerlinOnline Stadtportal GmbH &amp; Co. KG"/>
+        <tag line="2" name="author" description="Thorsten Schmitt-Rink &lt;tschmittrink@gmail.com&gt;"/>
+        <tag line="2" name="package" description="Project"/>
+        <tag line="2" name="subpackage" description="Agavi/User"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="27" package="Project\Agavi/User">
+        <name>assert</name>
+        <full_name>assert</full_name>
+        <docblock line="14">
+          <description><![CDATA[Assert that a the given ProjectZendAcelUser ($role) owns the given WorkflowItem ($resource).]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="14" name="param" description="" type="\Zend_Acl" variable="$acl">
+            <type by_reference="false">\Zend_Acl</type>
+          </tag>
+          <tag line="14" name="param" description="" type="\Zend_Acl_Role_Interface" variable="$role">
+            <type by_reference="false">\Zend_Acl_Role_Interface</type>
+          </tag>
+          <tag line="14" name="param" description="" type="\Zend_Acl_Resource_Interface" variable="$resource">
+            <type by_reference="false">\Zend_Acl_Resource_Interface</type>
+          </tag>
+          <tag line="14" name="param" description="" type="string" variable="$privilege">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="14" name="return" description="Returns true if the given role owns the provided resource." type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+          <tag line="14" name="SuppressWarnings" description="(PHPMD.UnusedFormalParameter)"/>
+          <tag line="14" name="codingStandardsIgnoreStart" description=""/>
+        </docblock>
+        <argument line="27">
+          <name>$acl</name>
+          <default><![CDATA[]]></default>
+          <type>\Zend_Acl</type>
+        </argument>
+        <argument line="27">
+          <name>$role</name>
+          <default><![CDATA[NULL]]></default>
+          <type>\Zend_Acl_Role_Interface</type>
+        </argument>
+        <argument line="27">
+          <name>$resource</name>
+          <default><![CDATA[NULL]]></default>
+          <type>\Zend_Acl_Resource_Interface</type>
+        </argument>
+        <argument line="27">
+          <name>$privilege</name>
+          <default><![CDATA[NULL]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file user/assertions/UserIsItemOwnerAssertion.class.php</error>
+    </parse_markers>
+  </file>
+  <file path="user/ProjectZendAclSecurityUser.class.php" hash="f99106a00dee26f3f9a5f88dde24aa2c" package="Default">
+    <include line="22" type="Include" package="Default">
+      <name/>
+    </include>
+    <class final="false" abstract="false" namespace="global" line="12" package="Project\Agavi/User">
+      <extends>\AgaviSecurityUser</extends>
+      <implements>\Zend_Acl_Role_Interface</implements>
+      <name>ProjectZendAclSecurityUser</name>
+      <full_name>\ProjectZendAclSecurityUser</full_name>
+      <docblock line="3">
+        <description><![CDATA[The ProjectZendAclSecurityUser is responseable for detecting required scripts and deploying them for your view.]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="3" name="version" description="$Id$"/>
+        <tag line="3" name="copyright" description="BerlinOnline Stadtportal GmbH &amp; Co. KG"/>
+        <tag line="3" name="author" description="Thorsten Schmitt-Rink &lt;thorsten.schmitt-rink@berlinonline.de&gt;"/>
+        <tag line="3" name="package" description="Project"/>
+        <tag line="3" name="subpackage" description="Agavi/User"/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="14" namespace="global" package="Default">
+        <name>$zendAcl</name>
+        <default><![CDATA[]]></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="16" namespace="global" package="Default">
+        <name>$accessConfig</name>
+        <default><![CDATA[]]></default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="18" package="Project\Agavi/User">
+        <name>initialize</name>
+        <full_name>initialize</full_name>
+        <argument line="18">
+          <name>$context</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviContext</type>
+        </argument>
+        <argument line="18">
+          <name>$parameters</name>
+          <default><![CDATA[array()]]></default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="28" package="Project\Agavi/User">
+        <name>createZendAcl</name>
+        <full_name>createZendAcl</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="66" package="Project\Agavi/User">
+        <name>mapExternalRoleToDomain</name>
+        <full_name>mapExternalRoleToDomain</full_name>
+        <argument line="66">
+          <name>$origin</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="66">
+          <name>$role</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="76" package="Project\Agavi/User">
+        <name>getZendAcl</name>
+        <full_name>getZendAcl</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="81" package="Project\Agavi/User">
+        <name>isAllowed</name>
+        <full_name>isAllowed</full_name>
+        <argument line="81">
+          <name>$resource</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="81">
+          <name>$operation</name>
+          <default><![CDATA[NULL]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="87" package="Project\Agavi/User">
+        <name>hasRole</name>
+        <full_name>hasRole</full_name>
+        <argument line="87">
+          <name>$role</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="93" package="Project\Agavi/User">
+        <name>getRoleId</name>
+        <full_name>getRoleId</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="108" package="Project\Agavi/User">
+        <name>hasCredential</name>
+        <full_name>hasCredential</full_name>
+        <docblock line="102">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="102" name="param" description="" type="mixed" variable="$credential">
+            <type by_reference="false">mixed</type>
+          </tag>
+          <tag line="102" name="return" description="" type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+          <tag line="102" name="SuppressWarnings" description="(PHPMD.UnusedLocalVariable)"/>
+        </docblock>
+        <argument line="108">
+          <name>$credential</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="142" package="Project\Agavi/User">
+        <name>createAssertion</name>
+        <full_name>createAssertion</full_name>
+        <argument line="142">
+          <name>$typeKey</name>
+          <default><![CDATA[NULL]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file user/ProjectZendAclSecurityUser.class.php</error>
+      <error line="14" code="50018">No DocBlock was found for property $zendAcl</error>
+      <error line="16" code="50018">No DocBlock was found for property $accessConfig</error>
+      <error line="18" code="50010">No DocBlock was found for method initialize()</error>
+      <error line="28" code="50010">No DocBlock was found for method createZendAcl()</error>
+      <error line="66" code="50010">No DocBlock was found for method mapExternalRoleToDomain()</error>
+      <error line="76" code="50010">No DocBlock was found for method getZendAcl()</error>
+      <error line="81" code="50010">No DocBlock was found for method isAllowed()</error>
+      <error line="87" code="50010">No DocBlock was found for method hasRole()</error>
+      <error line="93" code="50010">No DocBlock was found for method getRoleId()</error>
+      <error line="102" code="50012">No short description for method hasCredential()</error>
+      <error line="142" code="50010">No DocBlock was found for method createAssertion()</error>
+    </parse_markers>
+  </file>
+  <file path="view/ProjectBaseView.class.php" hash="10c89c0fb17f6f4473b2e9f055923795" package="Default">
+    <class final="false" abstract="false" namespace="global" line="14" package="Project\Agavi/View">
+      <extends>\AgaviView</extends>
+      <name>ProjectBaseView</name>
+      <full_name>\ProjectBaseView</full_name>
+      <docblock line="3">
+        <description><![CDATA[The ProjectBaseView serves as the base view to all views implemented inside of this project.]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="3" name="version" description="$Id$"/>
+        <tag line="3" name="copyright" description="BerlinOnline Stadtportal GmbH &amp; Co. KG"/>
+        <tag line="3" name="author" description="Thorsten Schmitt-Rink &lt;tschmittrink@gmail.com&gt;"/>
+        <tag line="3" name="package" description="Project"/>
+        <tag line="3" name="subpackage" description="Agavi/View"/>
+        <tag line="3" name="SuppressWarnings" description="(PHPMD.NumberOfChildren)"/>
+      </docblock>
+      <constant namespace="global" line="41" package="Project\Agavi/View">
+        <name>DEFAULT_SLOT_LAYOUT_NAME</name>
+        <full_name>DEFAULT_SLOT_LAYOUT_NAME</full_name>
+        <value><![CDATA['slot']]></value>
+        <docblock line="38">
+          <description><![CDATA[Name of the default layout to use for slots.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </constant>
+      <property final="false" static="false" visibility="protected" line="48" namespace="global" package="Default">
+        <name>$routing</name>
+        <default><![CDATA[]]></default>
+        <docblock line="43">
+          <description><![CDATA[Holds a reference to the current routing object.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="43" name="var" description="" type="\AgaviRouting">
+            <type by_reference="false">\AgaviRouting</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="55" namespace="global" package="Default">
+        <name>$request</name>
+        <default><![CDATA[]]></default>
+        <docblock line="50">
+          <description><![CDATA[Holds a reference to the current request object.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="50" name="var" description="" type="\AgaviRequest">
+            <type by_reference="false">\AgaviRequest</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="62" namespace="global" package="Default">
+        <name>$translationManager</name>
+        <default><![CDATA[]]></default>
+        <docblock line="57">
+          <description><![CDATA[Holds a reference to the translation manager.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="57" name="var" description="" type="\AgaviTranslationManager">
+            <type by_reference="false">\AgaviTranslationManager</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="69" namespace="global" package="Default">
+        <name>$user</name>
+        <default><![CDATA[]]></default>
+        <docblock line="64">
+          <description><![CDATA[Holds a reference to the user for the current session.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="64" name="var" description="" type="\AgaviUser">
+            <type by_reference="false">\AgaviUser</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="76" package="Project\Agavi/View">
+        <name>initialize</name>
+        <full_name>initialize</full_name>
+        <docblock line="71">
+          <description><![CDATA[Initialize the view thereby setting up our members.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="71" name="param" description="" type="\AgaviExecutionContainer" variable="$container">
+            <type by_reference="false">\AgaviExecutionContainer</type>
+          </tag>
+        </docblock>
+        <argument line="76">
+          <name>$container</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviExecutionContainer</type>
+        </argument>
+      </method>
+      <method final="true" abstract="false" static="false" visibility="public" namespace="global" line="95" package="Project\Agavi/View">
+        <name>execute</name>
+        <full_name>execute</full_name>
+        <docblock line="86">
+          <description><![CDATA[If no output type specfic execute* method could be found on our current
+concrete implemenation, then we will throw an exception letting the dev know.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="86" name="param" description="" type="\AgaviRequestDataHolder" variable="$parameters">
+            <type by_reference="false">\AgaviRequestDataHolder</type>
+          </tag>
+          <tag line="86" name="SuppressWarnings" description="(PHPMD.UnusedFormalParameter)"/>
+          <tag line="86" name="codingStandardsIgnoreStart" description=""/>
+        </docblock>
+        <argument line="95">
+          <name>$parameters</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviRequestDataHolder</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="111" package="Project\Agavi/View">
+        <name>executeHtml</name>
+        <full_name>executeHtml</full_name>
+        <docblock line="100">
+          <description><![CDATA[If this method is called someone has missed to provide html view support
+for the current action.]]></description>
+          <long-description><![CDATA[<p>Let them know ^^</p>]]></long-description>
+          <tag line="100" name="param" description="" type="\AgaviRequestDataHolder" variable="$parameters">
+            <type by_reference="false">\AgaviRequestDataHolder</type>
+          </tag>
+          <tag line="100" name="SuppressWarnings" description="(PHPMD.UnusedFormalParameter)"/>
+          <tag line="100" name="codingStandardsIgnoreStart" description=""/>
+        </docblock>
+        <argument line="111">
+          <name>$parameters</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviRequestDataHolder</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="125" package="Project\Agavi/View">
+        <name>executeJson</name>
+        <full_name>executeJson</full_name>
+        <docblock line="116">
+          <description><![CDATA[If this method is called someone has missed to provide json view support
+for the current action.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="116" name="param" description="" type="\AgaviRequestDataHolder" variable="$parameters">
+            <type by_reference="false">\AgaviRequestDataHolder</type>
+          </tag>
+          <tag line="116" name="SuppressWarnings" description="(PHPMD.UnusedFormalParameter)"/>
+          <tag line="116" name="codingStandardsIgnoreStart" description=""/>
+        </docblock>
+        <argument line="125">
+          <name>$parameters</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviRequestDataHolder</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="139" package="Project\Agavi/View">
+        <name>executeText</name>
+        <full_name>executeText</full_name>
+        <docblock line="130">
+          <description><![CDATA[If this method is called someone has missed to provide text(console) view support
+for the current action.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="130" name="param" description="" type="\AgaviRequestDataHolder" variable="$parameters">
+            <type by_reference="false">\AgaviRequestDataHolder</type>
+          </tag>
+          <tag line="130" name="SuppressWarnings" description="(PHPMD.UnusedFormalParameter)"/>
+          <tag line="130" name="codingStandardsIgnoreStart" description=""/>
+        </docblock>
+        <argument line="139">
+          <name>$parameters</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviRequestDataHolder</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="153" package="Project\Agavi/View">
+        <name>setupHtml</name>
+        <full_name>setupHtml</full_name>
+        <docblock line="144">
+          <description><![CDATA[Convenience method for setting up the correct html layout.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="144" name="param" description="" type="\AgaviRequestDataHolder" variable="$parameters">
+            <type by_reference="false">\AgaviRequestDataHolder</type>
+          </tag>
+          <tag line="144" name="param" description="" type="string" variable="$layoutName">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="144" name="SuppressWarnings" description="(PHPMD.UnusedFormalParameter)"/>
+          <tag line="144" name="codingStandardsIgnoreStart" description=""/>
+        </docblock>
+        <argument line="153">
+          <name>$parameters</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviRequestDataHolder</type>
+        </argument>
+        <argument line="153">
+          <name>$layoutName</name>
+          <default><![CDATA[NULL]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="174" package="Project\Agavi/View">
+        <name>throwOutputPutTypeNotImplementedException</name>
+        <full_name>throwOutputPutTypeNotImplementedException</full_name>
+        <docblock line="168">
+          <description><![CDATA[Convenience method for throwing an exception saying,
+that the current output type is not implemented for this view instance.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="168" name="throws" description="" type="\AgaviViewException">
+            <type by_reference="false">\AgaviViewException</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="201" package="Project\Agavi/View">
+        <name>getErrorMessages</name>
+        <full_name>getErrorMessages</full_name>
+        <docblock line="196">
+          <description><![CDATA[Return any reported validation error messages from our validation manager.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="196" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file view/ProjectBaseView.class.php</error>
+    </parse_markers>
+  </file>
+  <file path="model/ProjectBaseModel.class.php" hash="a7ef2291c2ac53ecf2951bb6ac0eac6c" package="Default">
+    <class final="false" abstract="false" namespace="global" line="12" package="Project\Agavi/Model">
+      <extends>\AgaviModel</extends>
+      <name>ProjectBaseModel</name>
+      <full_name>\ProjectBaseModel</full_name>
+      <docblock line="3">
+        <description><![CDATA[The ProjectBaseModel serves as the base model to all models implemented inside of this project.]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="3" name="version" description="$Id$"/>
+        <tag line="3" name="copyright" description="BerlinOnline Stadtportal GmbH &amp; Co. KG"/>
+        <tag line="3" name="author" description="Thorsten Schmitt-Rink &lt;tschmittrink@gmail.com&gt;"/>
+        <tag line="3" name="package" description="Project"/>
+        <tag line="3" name="subpackage" description="Agavi/Model"/>
+      </docblock>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file model/ProjectBaseModel.class.php</error>
+    </parse_markers>
+  </file>
+  <file path="action/ProjectBaseAction.class.php" hash="449ada5ed7bc9bca8a4712424fe60238" package="Default">
+    <class final="false" abstract="false" namespace="global" line="12" package="Project\Agavi/Action">
+      <extends>\AgaviAction</extends>
+      <name>ProjectBaseAction</name>
+      <full_name>\ProjectBaseAction</full_name>
+      <docblock line="3">
+        <description><![CDATA[The ProjectBaseAction serves as the base action to all actions implemented inside of this project.]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="3" name="version" description="$Id$"/>
+        <tag line="3" name="copyright" description="BerlinOnline Stadtportal GmbH &amp; Co. KG"/>
+        <tag line="3" name="author" description="Thorsten Schmitt-Rink &lt;tschmittrink@gmail.com&gt;"/>
+        <tag line="3" name="package" description="Project"/>
+        <tag line="3" name="subpackage" description="Agavi/Action"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="22" package="Project\Agavi/Action">
+        <name>addError</name>
+        <full_name>addError</full_name>
+        <docblock line="14">
+          <description><![CDATA[add a validation error out of the action]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="14" name="param" description="argument name" type="string" variable="$argument">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="14" name="param" description="error message" type="string" variable="$message">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="14" name="param" description="" type="int" variable="$severity">
+            <type by_reference="false">int</type>
+          </tag>
+          <tag line="14" name="return" description="the generated error" type="\AgaviValidationIncident">
+            <type by_reference="false">\AgaviValidationIncident</type>
+          </tag>
+        </docblock>
+        <argument line="22">
+          <name>$argument</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="22">
+          <name>$message</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="22">
+          <name>$severity</name>
+          <default><![CDATA[\AgaviValidator::ERROR]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="41" package="Project\Agavi/Action">
+        <name>handleError</name>
+        <full_name>handleError</full_name>
+        <docblock line="32">
+          <description><![CDATA[Default error handling for all methods]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="32" name="param" description="" type="\AgaviRequestDataHolder" variable="$parameters">
+            <type by_reference="false">\AgaviRequestDataHolder</type>
+          </tag>
+          <tag line="32" name="return" description="(modulename, viewname)" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="32" name="SuppressWarnings" description="(PHPMD.UnusedFormalParameter)"/>
+          <tag line="32" name="codingStandardsIgnoreStart" description=""/>
+        </docblock>
+        <argument line="41">
+          <name>$parameters</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviRequestDataHolder</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="66" package="Project\Agavi/Action">
+        <name>handleReadError</name>
+        <full_name>handleReadError</full_name>
+        <docblock line="60">
+          <description><![CDATA[Default error handling for method Read (GET Requests)]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="60" name="param" description="" type="\AgaviRequestDataHolder" variable="$parameters">
+            <type by_reference="false">\AgaviRequestDataHolder</type>
+          </tag>
+          <tag line="60" name="return" description="(modulename, viewname)" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="66">
+          <name>$parameters</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviRequestDataHolder</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="78" package="Project\Agavi/Action">
+        <name>handleWriteError</name>
+        <full_name>handleWriteError</full_name>
+        <docblock line="72">
+          <description><![CDATA[Default error handling for method Write (POST Requests)]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="72" name="param" description="" type="\AgaviRequestDataHolder" variable="$parameters">
+            <type by_reference="false">\AgaviRequestDataHolder</type>
+          </tag>
+          <tag line="72" name="return" description="(modulename, viewname)" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="78">
+          <name>$parameters</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviRequestDataHolder</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="84" package="Project\Agavi/Action">
+        <name>logError</name>
+        <full_name>logError</full_name>
+        <argument line="84">
+          <name>$msg</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="93" package="Project\Agavi/Action">
+        <name>logInfo</name>
+        <full_name>logInfo</full_name>
+        <argument line="93">
+          <name>$msg</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="102" package="Project\Agavi/Action">
+        <name>isSecure</name>
+        <full_name>isSecure</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file action/ProjectBaseAction.class.php</error>
+      <error line="84" code="50010">No DocBlock was found for method logError()</error>
+      <error line="93" code="50010">No DocBlock was found for method logInfo()</error>
+      <error line="102" code="50010">No DocBlock was found for method isSecure()</error>
+    </parse_markers>
+  </file>
+  <file path="filter/ProjectResourceFilterConfig.class.php" hash="55bfd944e187f381e7bf480cfd596f15" package="Default">
+    <class final="false" abstract="false" namespace="global" line="11" package="Project\Agavi/Filter">
+      <extends/>
+      <name>ProjectResourceFilterConfig</name>
+      <full_name>\ProjectResourceFilterConfig</full_name>
+      <docblock line="3">
+        <description><![CDATA[The ProjectResourceFilterConfig provides access to the resource filter settings.]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="3" name="copyright" description="BerlinOnline Stadtportal GmbH &amp; Co. KG"/>
+        <tag line="3" name="author" description="Thorsten Schmitt-Rink &lt;tschmittrink@gmail.com&gt;"/>
+        <tag line="3" name="package" description="Project"/>
+        <tag line="3" name="subpackage" description="Agavi/Filter"/>
+      </docblock>
+      <constant namespace="global" line="13" package="Project\Agavi/Filter">
+        <name>CFG_ENABLE_COMBINE</name>
+        <full_name>CFG_ENABLE_COMBINE</full_name>
+        <value><![CDATA['combine_scripts']]></value>
+      </constant>
+      <constant namespace="global" line="15" package="Project\Agavi/Filter">
+        <name>CFG_ENABLE_CACHING</name>
+        <full_name>CFG_ENABLE_CACHING</full_name>
+        <value><![CDATA['use_caching']]></value>
+      </constant>
+      <constant namespace="global" line="17" package="Project\Agavi/Filter">
+        <name>CFG_ENABLE_COMPRESS</name>
+        <full_name>CFG_ENABLE_COMPRESS</full_name>
+        <value><![CDATA['compress_scripts']]></value>
+      </constant>
+      <constant namespace="global" line="19" package="Project\Agavi/Filter">
+        <name>CFG_OUTPUT_TYPES</name>
+        <full_name>CFG_OUTPUT_TYPES</full_name>
+        <value><![CDATA['output_types']]></value>
+      </constant>
+      <constant namespace="global" line="25" package="Project\Agavi/Filter">
+        <name>CFG_BASE_DIR</name>
+        <full_name>CFG_BASE_DIR</full_name>
+        <value><![CDATA['base_dir']]></value>
+        <docblock line="21">
+          <description><![CDATA[Represents a setting that holds a path that we use as the base,
+when building our cache and deploy directory paths.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </constant>
+      <constant namespace="global" line="27" package="Project\Agavi/Filter">
+        <name>CFG_PUB_DIR</name>
+        <full_name>CFG_PUB_DIR</full_name>
+        <value><![CDATA['pub_dir']]></value>
+      </constant>
+      <constant namespace="global" line="29" package="Project\Agavi/Filter">
+        <name>CACHE_DIR</name>
+        <full_name>CACHE_DIR</full_name>
+        <value><![CDATA['cache']]></value>
+      </constant>
+      <constant namespace="global" line="31" package="Project\Agavi/Filter">
+        <name>DEPLOY_DIR</name>
+        <full_name>DEPLOY_DIR</full_name>
+        <value><![CDATA['deploy']]></value>
+      </constant>
+      <property final="false" static="true" visibility="protected" line="33" namespace="global" package="Default">
+        <name>$supportedSettings</name>
+        <default><![CDATA[array(self::CFG_ENABLE_COMBINE, self::CFG_ENABLE_CACHING, self::CFG_ENABLE_COMPRESS, self::CFG_BASE_DIR, self::CFG_OUTPUT_TYPES, self::CFG_PUB_DIR)]]></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="42" namespace="global" package="Default">
+        <name>$settings</name>
+        <default><![CDATA[array()]]></default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="44" package="Project\Agavi/Filter">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <argument line="44">
+          <name>$parameters</name>
+          <default><![CDATA[array()]]></default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="49" package="Project\Agavi/Filter">
+        <name>get</name>
+        <full_name>get</full_name>
+        <argument line="49">
+          <name>$settingName</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="49">
+          <name>$default</name>
+          <default><![CDATA[NULL]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="65" package="Project\Agavi/Filter">
+        <name>getBaseDir</name>
+        <full_name>getBaseDir</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="70" package="Project\Agavi/Filter">
+        <name>getCacheDir</name>
+        <full_name>getCacheDir</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="75" package="Project\Agavi/Filter">
+        <name>getDeployDir</name>
+        <full_name>getDeployDir</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="80" package="Project\Agavi/Filter">
+        <name>getPubDir</name>
+        <full_name>getPubDir</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="85" package="Project\Agavi/Filter">
+        <name>getSupportedOutputTypes</name>
+        <full_name>getSupportedOutputTypes</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="90" package="Project\Agavi/Filter">
+        <name>isOutputTypeSupported</name>
+        <full_name>isOutputTypeSupported</full_name>
+        <argument line="90">
+          <name>$outputType</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="102" package="Project\Agavi/Filter">
+        <name>isPackingEnabled</name>
+        <full_name>isPackingEnabled</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="107" package="Project\Agavi/Filter">
+        <name>isCachingEnabled</name>
+        <full_name>isCachingEnabled</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="112" package="Project\Agavi/Filter">
+        <name>hydrateParameters</name>
+        <full_name>hydrateParameters</full_name>
+        <argument line="112">
+          <name>$parameters</name>
+          <default><![CDATA[]]></default>
+          <type>array</type>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file filter/ProjectResourceFilterConfig.class.php</error>
+      <error line="33" code="50018">No DocBlock was found for property $supportedSettings</error>
+      <error line="42" code="50018">No DocBlock was found for property $settings</error>
+      <error line="44" code="50010">No DocBlock was found for method __construct()</error>
+      <error line="49" code="50010">No DocBlock was found for method get()</error>
+      <error line="65" code="50010">No DocBlock was found for method getBaseDir()</error>
+      <error line="70" code="50010">No DocBlock was found for method getCacheDir()</error>
+      <error line="75" code="50010">No DocBlock was found for method getDeployDir()</error>
+      <error line="80" code="50010">No DocBlock was found for method getPubDir()</error>
+      <error line="85" code="50010">No DocBlock was found for method getSupportedOutputTypes()</error>
+      <error line="90" code="50010">No DocBlock was found for method isOutputTypeSupported()</error>
+      <error line="102" code="50010">No DocBlock was found for method isPackingEnabled()</error>
+      <error line="107" code="50010">No DocBlock was found for method isCachingEnabled()</error>
+      <error line="112" code="50010">No DocBlock was found for method hydrateParameters()</error>
+    </parse_markers>
+  </file>
+  <file path="filter/ProjectResourceFilter.class.php" hash="6978e78eaaf7ba220eb1ffd5d3454b93" package="Default">
+    <class final="false" abstract="false" namespace="global" line="13" package="Project\Agavi/Filter">
+      <extends>\AgaviFilter</extends>
+      <implements>\AgaviIGlobalFilter</implements>
+      <name>ProjectResourceFilter</name>
+      <full_name>\ProjectResourceFilter</full_name>
+      <docblock line="3">
+        <description><![CDATA[The ProjectResourceFilter is responseable for detecting required scripts and deploying them for your view.]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="3" name="copyright" description="BerlinOnline Stadtportal GmbH &amp; Co. KG"/>
+        <tag line="3" name="author" description="Thorsten Schmitt-Rink &lt;tschmittrink@gmail.com&gt;"/>
+        <tag line="3" name="package" description="Project"/>
+        <tag line="3" name="subpackage" description="Agavi/Filter"/>
+        <tag line="3" name="SuppressWarnings" description="(PHPMD.TooManyMethods)"/>
+      </docblock>
+      <property final="false" static="true" visibility="protected" line="29" namespace="global" package="Default">
+        <name>$modules</name>
+        <default><![CDATA[array()]]></default>
+        <docblock line="24">
+          <description><![CDATA[Hold the list of modules that have been used in the current request.]]></description>
+          <long-description><![CDATA[<p>Grouped by output_type.</p>]]></long-description>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="36" namespace="global" package="Default">
+        <name>$config</name>
+        <default><![CDATA[]]></default>
+        <docblock line="31">
+          <description><![CDATA[Holds our config object.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="31" name="var" description="" type="\ProjectResourceFilterConfig">
+            <type by_reference="false">\ProjectResourceFilterConfig</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="15" package="Project\Agavi/Filter">
+        <name>addModule</name>
+        <full_name>addModule</full_name>
+        <argument line="15">
+          <name>$moduleName</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="15">
+          <name>$outputType</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="44" package="Project\Agavi/Filter">
+        <name>initialize</name>
+        <full_name>initialize</full_name>
+        <docblock line="38">
+          <description><![CDATA[Initialize the model, hence setup our config.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="38" name="param" description="" type="\AgaviContext" variable="$context">
+            <type by_reference="false">\AgaviContext</type>
+          </tag>
+          <tag line="38" name="param" description="" type="array" variable="$parameters">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="44">
+          <name>$context</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviContext</type>
+        </argument>
+        <argument line="44">
+          <name>$parameters</name>
+          <default><![CDATA[array()]]></default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="57" package="Project\Agavi/Filter">
+        <name>execute</name>
+        <full_name>execute</full_name>
+        <docblock line="51">
+          <description><![CDATA[Add the scripts for all executed html views.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="51" name="param" description="A FilterChain instance." type="\AgaviFilterChain" variable="$filterChain">
+            <type by_reference="false">\AgaviFilterChain</type>
+          </tag>
+          <tag line="51" name="param" description="The current execution container." type="\AgaviExecutionContainer" variable="$container">
+            <type by_reference="false">\AgaviExecutionContainer</type>
+          </tag>
+        </docblock>
+        <argument line="57">
+          <name>$filterChain</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviFilterChain</type>
+        </argument>
+        <argument line="57">
+          <name>$container</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviExecutionContainer</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="95" package="Project\Agavi/Filter">
+        <name>getScriptTags</name>
+        <full_name>getScriptTags</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="108" package="Project\Agavi/Filter">
+        <name>getStyleTags</name>
+        <full_name>getStyleTags</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="120" package="Project\Agavi/Filter">
+        <name>getCachedAssetUrls</name>
+        <full_name>getCachedAssetUrls</full_name>
+        <argument line="120">
+          <name>$subdirectory</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file filter/ProjectResourceFilter.class.php</error>
+      <error line="15" code="50010">No DocBlock was found for method addModule()</error>
+      <error line="95" code="50010">No DocBlock was found for method getScriptTags()</error>
+      <error line="108" code="50010">No DocBlock was found for method getStyleTags()</error>
+      <error line="120" code="50010">No DocBlock was found for method getCachedAssetUrls()</error>
+    </parse_markers>
+  </file>
+  <file path="filter/ProjectExecutionFilter.class.php" hash="4db77509f922b1d2e7e22189e28a7db5" package="Default">
+    <class final="false" abstract="false" namespace="global" line="13" package="Project\Agavi/Filter">
+      <extends>\PhpDebugToolbarAgaviExecutionFilter</extends>
+      <name>ProjectExecutionFilter</name>
+      <full_name>\ProjectExecutionFilter</full_name>
+      <docblock line="3">
+        <description><![CDATA[The ProjectExecutionFilter class registers view executions for the ProjectScriptFilter.]]></description>
+        <long-description><![CDATA[<p>We will probally switch to using pulq pretty soon.</p>]]></long-description>
+        <tag line="3" name="version" description="$Id$"/>
+        <tag line="3" name="copyright" description="BerlinOnline Stadtportal GmbH &amp; Co. KG"/>
+        <tag line="3" name="author" description="Thorsten Schmitt-Rink &lt;tschmittrink@gmail.com&gt;"/>
+        <tag line="3" name="package" description="Project"/>
+        <tag line="3" name="subpackage" description="Agavi/Filter"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="15" package="Project\Agavi/Filter">
+        <name>executeView</name>
+        <full_name>executeView</full_name>
+        <argument line="15">
+          <name>$container</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviExecutionContainer</type>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file filter/ProjectExecutionFilter.class.php</error>
+      <error line="15" code="50010">No DocBlock was found for method executeView()</error>
+    </parse_markers>
+  </file>
+  <file path="filter/ProjectResourcePacker.class.php" hash="6710c7de9f213b464979b3a1ad981852" package="Default">
+    <class final="false" abstract="false" namespace="global" line="11" package="Project\Agavi/Filter">
+      <extends/>
+      <name>ProjectResourcePacker</name>
+      <full_name>\ProjectResourcePacker</full_name>
+      <docblock line="3">
+        <description><![CDATA[The ProjectResourcePacker packs an compresses js and css scripts.]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="3" name="copyright" description="BerlinOnline Stadtportal GmbH &amp; Co. KG"/>
+        <tag line="3" name="author" description="Thorsten Schmitt-Rink &lt;tschmittrink@gmail.com&gt;"/>
+        <tag line="3" name="package" description="Project"/>
+        <tag line="3" name="subpackage" description="Agavi/Filter"/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="13" namespace="global" package="Default">
+        <name>$config</name>
+        <default><![CDATA[]]></default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="15" namespace="global" package="Default">
+        <name>$modules</name>
+        <default><![CDATA[]]></default>
+      </property>
+      <property final="false" static="true" visibility="protected" line="17" namespace="global" package="Default">
+        <name>$types</name>
+        <default><![CDATA[array('scripts' => array('extension' => 'js'), 'styles' => array('extension' => 'css'))]]></default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="26" package="Project\Agavi/Filter">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <argument line="26">
+          <name>$modules</name>
+          <default><![CDATA[]]></default>
+          <type>array</type>
+        </argument>
+        <argument line="26">
+          <name>$outputType</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="26">
+          <name>$config</name>
+          <default><![CDATA[]]></default>
+          <type>\ProjectResourceFilterConfig</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="33" package="Project\Agavi/Filter">
+        <name>sortedGlob</name>
+        <full_name>sortedGlob</full_name>
+        <argument line="33">
+          <name>$from</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="33">
+          <name>$glob</name>
+          <default><![CDATA['*']]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="74" package="Project\Agavi/Filter">
+        <name>pack</name>
+        <full_name>pack</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="94" package="Project\Agavi/Filter">
+        <name>moveResources</name>
+        <full_name>moveResources</full_name>
+        <argument line="94">
+          <name>$sourceDir</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="94">
+          <name>$targetDir</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="128" package="Project\Agavi/Filter">
+        <name>getFileExtension</name>
+        <full_name>getFileExtension</full_name>
+        <argument line="128">
+          <name>$type</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="138" package="Project\Agavi/Filter">
+        <name>getResourceDirectoryForModule</name>
+        <full_name>getResourceDirectoryForModule</full_name>
+        <argument line="138">
+          <name>$module</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="149" package="Project\Agavi/Filter">
+        <name>checkForOutdatedPacking</name>
+        <full_name>checkForOutdatedPacking</full_name>
+        <argument line="149">
+          <name>$sourceFiles</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="149">
+          <name>$targetFile</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="169" package="Project\Agavi/Filter">
+        <name>packScripts</name>
+        <full_name>packScripts</full_name>
+        <argument line="169">
+          <name>$from</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="169">
+          <name>$to</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="191" package="Project\Agavi/Filter">
+        <name>packStyles</name>
+        <full_name>packStyles</full_name>
+        <argument line="191">
+          <name>$from</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="191">
+          <name>$to</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="225" package="Project\Agavi/Filter">
+        <name>copyResources</name>
+        <full_name>copyResources</full_name>
+        <argument line="225">
+          <name>$from</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="225">
+          <name>$to</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="248" package="Project\Agavi/Filter">
+        <name>recursiveCopy</name>
+        <full_name>recursiveCopy</full_name>
+        <argument line="248">
+          <name>$from</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="248">
+          <name>$to</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="279" package="Project\Agavi/Filter">
+        <name>concatParts</name>
+        <full_name>concatParts</full_name>
+        <argument line="279">
+          <name>$parts</name>
+          <default><![CDATA[]]></default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="291" package="Project\Agavi/Filter">
+        <name>ensureDirectoryExists</name>
+        <full_name>ensureDirectoryExists</full_name>
+        <argument line="291">
+          <name>$path</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file filter/ProjectResourcePacker.class.php</error>
+      <error line="13" code="50018">No DocBlock was found for property $config</error>
+      <error line="15" code="50018">No DocBlock was found for property $modules</error>
+      <error line="17" code="50018">No DocBlock was found for property $types</error>
+      <error line="26" code="50010">No DocBlock was found for method __construct()</error>
+      <error line="33" code="50010">No DocBlock was found for method sortedGlob()</error>
+      <error line="74" code="50010">No DocBlock was found for method pack()</error>
+      <error line="94" code="50010">No DocBlock was found for method moveResources()</error>
+      <error line="128" code="50010">No DocBlock was found for method getFileExtension()</error>
+      <error line="138" code="50010">No DocBlock was found for method getResourceDirectoryForModule()</error>
+      <error line="149" code="50010">No DocBlock was found for method checkForOutdatedPacking()</error>
+      <error line="169" code="50010">No DocBlock was found for method packScripts()</error>
+      <error line="191" code="50010">No DocBlock was found for method packStyles()</error>
+      <error line="225" code="50010">No DocBlock was found for method copyResources()</error>
+      <error line="248" code="50010">No DocBlock was found for method recursiveCopy()</error>
+      <error line="279" code="50010">No DocBlock was found for method concatParts()</error>
+      <error line="291" code="50010">No DocBlock was found for method ensureDirectoryExists()</error>
+    </parse_markers>
+  </file>
+  <file path="routing/ProjectLanguageRoutingCallback.class.php" hash="00e4e8a4f09c23051568b70ee70b9560" package="Default">
+    <class final="false" abstract="false" namespace="global" line="14" package="Project\Agavi/Routing">
+      <extends>\AgaviRoutingCallback</extends>
+      <name>ProjectLanguageRoutingCallback</name>
+      <full_name>\ProjectLanguageRoutingCallback</full_name>
+      <docblock line="3">
+        <description><![CDATA[The ProjectLanguageRoutingCallbacck response to locale information
+matched inside a url and applies the corresponding settings to our agavi env.]]></description>
+        <long-description><![CDATA[<p>It is also responseable for correctly providing i18n data for url generation.</p>]]></long-description>
+        <tag line="3" name="version" description="$Id$"/>
+        <tag line="3" name="copyright" description="BerlinOnline Stadtportal GmbH &amp; Co. KG"/>
+        <tag line="3" name="author" description="Thorsten Schmitt-Rink &lt;tschmittrink@gmail.com&gt;"/>
+        <tag line="3" name="package" description="Project"/>
+        <tag line="3" name="subpackage" description="Agavi/Routing"/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="21" namespace="global" package="Default">
+        <name>$availableLocales</name>
+        <default><![CDATA[array()]]></default>
+        <docblock line="16">
+          <description><![CDATA[An array containing locales that are available to use.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="16" name="var" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="30" package="Project\Agavi/Routing">
+        <name>initialize</name>
+        <full_name>initialize</full_name>
+        <docblock line="23">
+          <description><![CDATA[Initialize this ProjectLanguageRoutingCallback instance.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="23" name="param" description="" type="\AgaviContext" variable="$context">
+            <type by_reference="false">\AgaviContext</type>
+          </tag>
+          <tag line="23" name="param" description="" type="array" variable="$route">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="30">
+          <name>$context</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviContext</type>
+        </argument>
+        <argument line="30">
+          <name>$route</name>
+          <default><![CDATA[]]></default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="53" package="Project\Agavi/Routing">
+        <name>onMatched</name>
+        <full_name>onMatched</full_name>
+        <docblock line="41">
+          <description><![CDATA[Routing callback that is invoked when the root we are applied to matches (routing runtime).]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="41" name="param" description="" type="array" variable="$parameters">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="41" name="param" description="" type="\AgaviExecutionContainer" variable="$container">
+            <type by_reference="false">\AgaviExecutionContainer</type>
+          </tag>
+          <tag line="41" name="return" description="" type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+          <tag line="41" name="SuppressWarnings" description="(PHPMD.UnusedFormalParameter)"/>
+          <tag line="41" name="SuppressWarnings" description="(PHPMD.UnusedLocalVariable)"/>
+          <tag line="41" name="codingStandardsIgnoreStart" description=""/>
+        </docblock>
+        <argument line="53">
+          <name>$parameters</name>
+          <default><![CDATA[]]></default>
+          <type>array</type>
+        </argument>
+        <argument line="53">
+          <name>$container</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviExecutionContainer</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="88" package="Project\Agavi/Routing">
+        <name>onNotMatched</name>
+        <full_name>onNotMatched</full_name>
+        <docblock line="76">
+          <description><![CDATA[Routing callback that is invoked when the root we are applied to does not match (routing runtime).]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="76" name="param" description="" type="array" variable="$parameters">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="76" name="param" description="" type="\AgaviExecutionContainer" variable="$container">
+            <type by_reference="false">\AgaviExecutionContainer</type>
+          </tag>
+          <tag line="76" name="return" description="" type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+          <tag line="76" name="SuppressWarnings" description="(PHPMD.UnusedFormalParameter)"/>
+          <tag line="76" name="SuppressWarnings" description="(PHPMD.UnusedLocalVariable)"/>
+          <tag line="76" name="codingStandardsIgnoreStart" description=""/>
+        </docblock>
+        <argument line="88">
+          <name>$container</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviExecutionContainer</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="152" package="Project\Agavi/Routing">
+        <name>onGenerate</name>
+        <full_name>onGenerate</full_name>
+        <docblock line="141">
+          <description><![CDATA[Routing callback that is invoked when the root we are applied to does not match (routing runtime).]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="141" name="param" description="" type="array" variable="$parameters">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="141" name="param" description="" type="\AgaviExecutionContainer" variable="$container">
+            <type by_reference="false">\AgaviExecutionContainer</type>
+          </tag>
+          <tag line="141" name="return" description="" type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+          <tag line="141" name="SuppressWarnings" description="(PHPMD.UnusedFormalParameter)"/>
+          <tag line="141" name="codingStandardsIgnoreStart" description=""/>
+        </docblock>
+        <argument line="152">
+          <name>$defaultParameters</name>
+          <default><![CDATA[]]></default>
+          <type>array</type>
+        </argument>
+        <argument line="152">
+          <name>$userParameters</name>
+          <default><![CDATA[]]></default>
+          <type>array</type>
+        </argument>
+        <argument line="152">
+          <name>$options</name>
+          <default><![CDATA[]]></default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="179" package="Project\Agavi/Routing">
+        <name>getShortestLocaleIdentifier</name>
+        <full_name>getShortestLocaleIdentifier</full_name>
+        <docblock line="170">
+          <description><![CDATA[Resolve a given locale identifier to its corresponding short identifier.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="170" name="staticvar" description="string $localeMap"/>
+          <tag line="170" name="param" description="" type="string" variable="$localeIdentifier">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="170" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="179">
+          <name>$localeIdentifier</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="protected" namespace="global" line="208" package="Project\Agavi/Routing">
+        <name>parseAcceptLanguage</name>
+        <full_name>parseAcceptLanguage</full_name>
+        <docblock line="201">
+          <description><![CDATA[Parses the value of a http accept-language header into an array of identifiers.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="201" name="param" description="" type="string" variable="$acceptLanguage">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="201" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="208">
+          <name>$acceptLanguage</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file routing/ProjectLanguageRoutingCallback.class.php</error>
+      <error line="76" code="50014">Name of argument $container does not match with the DocBlock's name $parameters in onNotMatched()</error>
+      <error line="76" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $container in onNotMatched()</error>
+      <notice line="76" code="50013">Parameter $parameters could not be found in onNotMatched()</notice>
+      <error line="141" code="50014">Name of argument $defaultParameters does not match with the DocBlock's name $parameters in onGenerate()</error>
+      <error line="141" code="50014">Name of argument $userParameters does not match with the DocBlock's name $container in onGenerate()</error>
+      <error line="141" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $userParameters in onGenerate()</error>
+      <error line="141" code="50015">Argument $options is missing from the Docblock of onGenerate()</error>
+      <notice line="141" code="50013">Parameter $parameters could not be found in onGenerate()</notice>
+      <notice line="141" code="50013">Parameter $container could not be found in onGenerate()</notice>
+    </parse_markers>
+  </file>
+  <file path="config_handler/ProjectDataImportConfigHandler.class.php" hash="e98d6877c773f019b0044dace0b11498" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\ProjectBaseConfigHandler</extends>
+      <name>ProjectDataImportConfigHandler</name>
+      <full_name>\ProjectDataImportConfigHandler</full_name>
+      <constant namespace="global" line="8" package="Default">
+        <name>XML_NAMESPACE</name>
+        <full_name>XML_NAMESPACE</full_name>
+        <value><![CDATA['http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0']]></value>
+        <docblock line="5">
+          <description><![CDATA[Holds the name of the data_import document schema namespace.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </constant>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="24" package="Default">
+        <name>execute</name>
+        <full_name>execute</full_name>
+        <docblock line="10">
+          <description><![CDATA[Execute this configuration handler.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="10" name="param" description="An absolute filesystem path to a configuration file." type="string" variable="$document">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="10" name="param" description="An optional context in which we are currently running." type="string" variable="">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="10" name="return" description="Data to be written to a cache file." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="10" name="throws" description="If a requested configuration&#10;                                            file does not exist or is not&#10;                                            readable." type="\&lt;b&gt;AgaviUnreadableException&lt;/b&gt;">
+            <type by_reference="false">\&lt;b&gt;AgaviUnreadableException&lt;/b&gt;</type>
+          </tag>
+          <tag line="10" name="throws" description="If a requested configuration file is&#10;                                       improperly formatted." type="\&lt;b&gt;AgaviParseException&lt;/b&gt;">
+            <type by_reference="false">\&lt;b&gt;AgaviParseException&lt;/b&gt;</type>
+          </tag>
+        </docblock>
+        <argument line="24">
+          <name>$document</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomDocument</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="53" package="Default">
+        <name>parseImportDefinitions</name>
+        <full_name>parseImportDefinitions</full_name>
+        <docblock line="46">
+          <description><![CDATA[Parse the given dataimports node and return the corresponding array representation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="46" name="param" description="" type="\AgaviXmlConfigDomElement" variable="$dataImportsElement">
+            <type by_reference="false">\AgaviXmlConfigDomElement</type>
+          </tag>
+          <tag line="46" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="53">
+          <name>$dataImportsElement</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomElement</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="66" package="Default">
+        <name>parseImportDefinition</name>
+        <full_name>parseImportDefinition</full_name>
+        <argument line="66">
+          <name>$dataImportElement</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomElement</type>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file config_handler/ProjectDataImportConfigHandler.class.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ProjectDataImportConfigHandler</error>
+      <error line="10" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $document in execute()</error>
+      <notice line="10" code="50013">Parameter  could not be found in execute()</notice>
+      <error line="66" code="50010">No DocBlock was found for method parseImportDefinition()</error>
+    </parse_markers>
+  </file>
+  <file path="config_handler/ProjectDataSourceConfigHandler.class.php" hash="a163103a8a3f3266471d2ee080bf7396" package="Default">
+    <class final="false" abstract="false" namespace="global" line="3" package="Default">
+      <extends>\ProjectBaseConfigHandler</extends>
+      <name>ProjectDataSourceConfigHandler</name>
+      <full_name>\ProjectDataSourceConfigHandler</full_name>
+      <constant namespace="global" line="8" package="Default">
+        <name>XML_NAMESPACE</name>
+        <full_name>XML_NAMESPACE</full_name>
+        <value><![CDATA['http://berlinonline.de/schemas/midas/config/datasource/definition/1.0']]></value>
+        <docblock line="5">
+          <description><![CDATA[Holds the name of the data_source document schema namespace.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </constant>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="24" package="Default">
+        <name>execute</name>
+        <full_name>execute</full_name>
+        <docblock line="10">
+          <description><![CDATA[Execute this configuration handler.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="10" name="param" description="An absolute filesystem path to a configuration file." type="string" variable="$document">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="10" name="param" description="An optional context in which we are currently running." type="string" variable="">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="10" name="return" description="Data to be written to a cache file." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="10" name="throws" description="If a requested configuration&#10;                                            file does not exist or is not&#10;                                            readable." type="\&lt;b&gt;AgaviUnreadableException&lt;/b&gt;">
+            <type by_reference="false">\&lt;b&gt;AgaviUnreadableException&lt;/b&gt;</type>
+          </tag>
+          <tag line="10" name="throws" description="If a requested configuration file is&#10;                                       improperly formatted." type="\&lt;b&gt;AgaviParseException&lt;/b&gt;">
+            <type by_reference="false">\&lt;b&gt;AgaviParseException&lt;/b&gt;</type>
+          </tag>
+        </docblock>
+        <argument line="24">
+          <name>$document</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomDocument</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="54" package="Default">
+        <name>parseSourceDefinitions</name>
+        <full_name>parseSourceDefinitions</full_name>
+        <docblock line="47">
+          <description><![CDATA[Parse the given datasources node and return the corresponding array representation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="47" name="param" description="" type="\AgaviXmlConfigDomElement" variable="$dataSourcesElement">
+            <type by_reference="false">\AgaviXmlConfigDomElement</type>
+          </tag>
+          <tag line="47" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="54">
+          <name>$dataSourcesElement</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomElement</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="67" package="Default">
+        <name>parseSourceDefinition</name>
+        <full_name>parseSourceDefinition</full_name>
+        <argument line="67">
+          <name>$dataSourceElement</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomElement</type>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file config_handler/ProjectDataSourceConfigHandler.class.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ProjectDataSourceConfigHandler</error>
+      <error line="10" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $document in execute()</error>
+      <notice line="10" code="50013">Parameter  could not be found in execute()</notice>
+      <error line="67" code="50010">No DocBlock was found for method parseSourceDefinition()</error>
+    </parse_markers>
+  </file>
+  <file path="config_handler/ProjectAclConfigHandler.class.php" hash="6e6373df35b00e79dc2a0944f363ece2" package="Default">
+    <class final="false" abstract="false" namespace="global" line="11" package="Project\Agavi/ConfigHandler">
+      <extends>\AgaviXmlConfigHandler</extends>
+      <name>ProjectAclConfigHandler</name>
+      <full_name>\ProjectAclConfigHandler</full_name>
+      <docblock line="3">
+        <description><![CDATA[ProjectAclConfigHandler parses configuration files that follow the midas access_control markup.]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="3" name="version" description="$Id$"/>
+        <tag line="3" name="author" description="Thorsten Schmitt-Rink"/>
+        <tag line="3" name="package" description="Project"/>
+        <tag line="3" name="subpackage" description="Agavi/ConfigHandler"/>
+      </docblock>
+      <constant namespace="global" line="16" package="Project\Agavi/ConfigHandler">
+        <name>XML_NAMESPACE</name>
+        <full_name>XML_NAMESPACE</full_name>
+        <value><![CDATA['http://berlinonline.de/schemas/midas/config/access_control/1.0']]></value>
+        <docblock line="13">
+          <description><![CDATA[Holds the name of the access_control document schema namespace.]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </constant>
+      <property final="false" static="false" visibility="protected" line="23" namespace="global" package="Default">
+        <name>$externalRoles</name>
+        <default><![CDATA[]]></default>
+        <docblock line="18">
+          <description><![CDATA[An assoc array that maps external roles/groups/whatever to local domain roles.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="18" name="var" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="30" namespace="global" package="Default">
+        <name>$resourceActions</name>
+        <default><![CDATA[]]></default>
+        <docblock line="25">
+          <description><![CDATA[An assoc array that maps actions to resource types.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="25" name="var" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="46" package="Project\Agavi/ConfigHandler">
+        <name>execute</name>
+        <full_name>execute</full_name>
+        <docblock line="32">
+          <description><![CDATA[Execute this configuration handler.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="32" name="param" description="An absolute filesystem path to a configuration file." type="string" variable="$document">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="32" name="param" description="An optional context in which we are currently running." type="string" variable="">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="32" name="return" description="Data to be written to a cache file." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="32" name="throws" description="If a requested configuration&#10;                                            file does not exist or is not&#10;                                            readable." type="\&lt;b&gt;AgaviUnreadableException&lt;/b&gt;">
+            <type by_reference="false">\&lt;b&gt;AgaviUnreadableException&lt;/b&gt;</type>
+          </tag>
+          <tag line="32" name="throws" description="If a requested configuration file is&#10;                                       improperly formatted." type="\&lt;b&gt;AgaviParseException&lt;/b&gt;">
+            <type by_reference="false">\&lt;b&gt;AgaviParseException&lt;/b&gt;</type>
+          </tag>
+        </docblock>
+        <argument line="46">
+          <name>$document</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomDocument</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="89" package="Project\Agavi/ConfigHandler">
+        <name>parseRecources</name>
+        <full_name>parseRecources</full_name>
+        <docblock line="82">
+          <description><![CDATA[Parse the given resources node and return the corresponding array representation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="82" name="param" description="" type="\AgaviXmlConfigDomElement" variable="$resourcesElement">
+            <type by_reference="false">\AgaviXmlConfigDomElement</type>
+          </tag>
+          <tag line="82" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="89">
+          <name>$resourcesElement</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomElement</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="123" package="Project\Agavi/ConfigHandler">
+        <name>addResourceAction</name>
+        <full_name>addResourceAction</full_name>
+        <docblock line="117">
+          <description><![CDATA[Register a the given action as available for the given resource type.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="117" name="param" description="" type="string" variable="$action">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="117" name="param" description="" type="string" variable="$resourceId">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="123">
+          <name>$action</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="123">
+          <name>$resourceId</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="135" package="Project\Agavi/ConfigHandler">
+        <name>parseRoles</name>
+        <full_name>parseRoles</full_name>
+        <docblock line="128">
+          <description><![CDATA[Parse the given roles node and return the corresponding array representation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="128" name="param" description="" type="\AgaviXmlConfigDomElement" variable="$rolesElement">
+            <type by_reference="false">\AgaviXmlConfigDomElement</type>
+          </tag>
+          <tag line="128" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="135">
+          <name>$rolesElement</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomElement</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="188" package="Project\Agavi/ConfigHandler">
+        <name>addExternalRole</name>
+        <full_name>addExternalRole</full_name>
+        <docblock line="182">
+          <description><![CDATA[Register a mapping from the given external role to the given domain role.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="182" name="param" description="" type="string" variable="$externalRole">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="182" name="param" description="" type="string" variable="$domainRole">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="188">
+          <name>$externalRole</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="188">
+          <name>$domainRole</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="200" package="Project\Agavi/ConfigHandler">
+        <name>parseRoleMembers</name>
+        <full_name>parseRoleMembers</full_name>
+        <docblock line="193">
+          <description><![CDATA[Parse the given members node and return the corresponding array representation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="193" name="param" description="" type="\AgaviXmlConfigDomElement" variable="$membersElement">
+            <type by_reference="false">\AgaviXmlConfigDomElement</type>
+          </tag>
+          <tag line="193" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="200">
+          <name>$membersElement</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomElement</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="220" package="Project\Agavi/ConfigHandler">
+        <name>parseRoleAcl</name>
+        <full_name>parseRoleAcl</full_name>
+        <docblock line="213">
+          <description><![CDATA[Parse the given acl node and return the corresponding array representation.]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="213" name="param" description="" type="\AgaviXmlConfigDomElement" variable="$aclElement">
+            <type by_reference="false">\AgaviXmlConfigDomElement</type>
+          </tag>
+          <tag line="213" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="220">
+          <name>$aclElement</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomElement</type>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file config_handler/ProjectAclConfigHandler.class.php</error>
+      <error line="32" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $document in execute()</error>
+      <notice line="32" code="50013">Parameter  could not be found in execute()</notice>
+    </parse_markers>
+  </file>
+  <file path="config_handler/ProjectBaseConfigHandler.class.php" hash="9ec6c2c91825ce39628498db4c9eced4" package="Default">
+    <class final="true" abstract="true" namespace="global" line="3" package="Default">
+      <extends>\AgaviXmlConfigHandler</extends>
+      <name>ProjectBaseConfigHandler</name>
+      <full_name>\ProjectBaseConfigHandler</full_name>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="global" line="5" package="Default">
+        <name>parseSettings</name>
+        <full_name>parseSettings</full_name>
+        <argument line="5">
+          <name>$settingsParent</name>
+          <default><![CDATA[]]></default>
+          <type>\AgaviXmlConfigDomElement</type>
+        </argument>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file config_handler/ProjectBaseConfigHandler.class.php</error>
+      <error line="3" code="50000">No DocBlock was found for \ProjectBaseConfigHandler</error>
+      <error line="5" code="50010">No DocBlock was found for method parseSettings()</error>
+    </parse_markers>
+  </file>
+  <package name="Default" full_name="Default"/>
+  <package name="Project" full_name="Project">
+    <package name="Agavi/Action" full_name="Project\Agavi/Action"/>
+    <package name="Agavi/ConfigHandler" full_name="Project\Agavi/ConfigHandler"/>
+    <package name="Agavi/Database" full_name="Project\Agavi/Database"/>
+    <package name="Agavi/Filter" full_name="Project\Agavi/Filter"/>
+    <package name="Agavi/Model" full_name="Project\Agavi/Model"/>
+    <package name="Agavi/Routing" full_name="Project\Agavi/Routing"/>
+    <package name="Agavi/User" full_name="Project\Agavi/User"/>
+    <package name="Agavi/View" full_name="Project\Agavi/View"/>
+  </package>
+  <namespace name="global" full_name="global"/>
+  <marker count="0">todo</marker>
+  <marker count="0">fixme</marker>
+  <deprecated count="0"/>
+</project>

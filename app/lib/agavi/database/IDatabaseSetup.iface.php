@@ -17,5 +17,5 @@ interface IDatabaseSetup
      *
      * @param       boolean $tearDownFirst
      */
-    public function setup($tearDownFirst = FALSE);
+    public function execute(AgaviDatabase $database, $tearDownFirst = FALSE);
 }

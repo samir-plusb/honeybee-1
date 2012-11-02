@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
+<ae:configurations 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+    xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
     <ae:configuration>
-        <settings prefix="movies.">
-            <setting name="telavision_dir">%core.app_dir%/../data/catalogs/movies/telavision</setting>
+        <settings prefix="%%MODULE_PREFIX%%.">
 
             <setting name="connections">
                 <ae:parameters>
-                    <ae:parameter name="couchdb">Movies.Write</ae:parameter>
-                    <ae:parameter name="elasticsearch">Movies.Read</ae:parameter>
-                    <ae:parameter name="frontend">Movies.Frontend</ae:parameter>
+                    <ae:parameter name="couchdb">%%MODULE_NAME%%.Write</ae:parameter>
+                    <ae:parameter name="elasticsearch">%%MODULE_NAME%%.Read</ae:parameter>
+                    <ae:parameter name="frontend">%%MODULE_NAME%%.Frontend</ae:parameter>
                 </ae:parameters>
             </setting>
 
@@ -16,48 +17,29 @@
             <setting name="list_config">
                 <!-- common list params -->
                 <ae:parameter name="defaultLimit">15</ae:parameter>
-                <ae:parameter name="translationDomain">movies.list</ae:parameter>
+                <ae:parameter name="translationDomain">%%MODULE_PREFIX%%.list</ae:parameter>
                 <ae:parameter name="pagingRange">9</ae:parameter>
-                <ae:parameter name="routeName">movies.list</ae:parameter>
-                <ae:parameter name="typeKey">movies</ae:parameter>
-                <ae:parameter name="suggestField">masterRecord.name</ae:parameter>
+                <ae:parameter name="routeName">%%MODULE_PREFIX%%.list</ae:parameter>
+                <ae:parameter name="typeKey">%%MODULE_PREFIX%%</ae:parameter>
+                <ae:parameter name="suggestField">
+                    <!-- enter your desire field for autosuggests here. 
+                     @todo generate from dat0r meta-data. -->                    
+                </ae:parameter>
 
                 <!--
                     define which list data shall be displayed
                     the names are fully qualified paths referring to values inside the list data
                 -->
                 <ae:parameter name="fields">
-                    <ae:parameters>
-                        <ae:parameter name="title">
-                            <ae:parameter name="valuefield">masterRecord.title</ae:parameter>
-                            <ae:parameter name="sortfield">masterRecord.title.raw</ae:parameter>
-                        </ae:parameter>
-                        <ae:parameter name="release_date">
-                            <ae:parameter name="valuefield">masterRecord.releaseDate</ae:parameter>
-                            <ae:parameter name="sortfield">masterRecord.releaseDate</ae:parameter>
-                        </ae:parameter>
-                        <ae:parameter name="genre">
-                            <ae:parameter name="valuefield">masterRecord.genre</ae:parameter>
-                            <ae:parameter name="sortfield">masterRecord.genre.raw</ae:parameter>
-                        </ae:parameter>
-                        <ae:parameter name="subline">
-                            <ae:parameter name="valuefield">masterRecord.subline</ae:parameter>
-                        </ae:parameter>
-                        <ae:parameter name="poster">
-                            <ae:parameter name="valuefield">masterRecord.media.images.poster600</ae:parameter>
-                            <ae:parameter name="renderer">MoviesAssetRenderer</ae:parameter>
-                        </ae:parameter>
-                        <ae:parameter name="hdpic">
-                            <ae:parameter name="valuefield">masterRecord.media.images.hdPic</ae:parameter>
-                            <ae:parameter name="renderer">MoviesAssetRenderer</ae:parameter>
-                        </ae:parameter>
-                    </ae:parameters>
+                    <!-- enter your desired list fields. 
+                     @todo generate from dat0r meta-data. -->
                 </ae:parameter>
 
                 <!-- define our clientside controller along with some options -->
                 <ae:parameter name="clientSideController">
-                    <ae:parameter name="implementor">MoviesListController</ae:parameter>
+                    <ae:parameter name="implementor">%%MODULE_NAME%%ListController</ae:parameter>
                     <ae:parameter name="options">
+                        <!-- custom options to pass to the controller go here. -->
                     </ae:parameter>
                 </ae:parameter>
 
@@ -82,6 +64,7 @@
                     </ae:parameters>
                 </ae:parameter>
             </setting>
+            
         </settings>
     </ae:configuration>
 </ae:configurations>

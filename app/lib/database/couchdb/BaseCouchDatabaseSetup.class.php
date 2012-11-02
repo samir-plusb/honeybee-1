@@ -1,11 +1,7 @@
 <?php
 
 /**
- * The BaseCouchDatabaseSetup is responseable for setting up a couchdb datbase for usage.
- *
- * Subclasses must implement getSourceDirectory()
- *
- * The setup() method is the working horse.
+ * The CouchDbDatabaseSetup is responseable for setting up a couchdb datbase for usage.
  *
  * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
@@ -13,29 +9,33 @@
  * @package Project
  * @subpackage Database/CouchDb
  */
-abstract class BaseCouchDatabaseSetup implements IDatabaseSetup
+class CouchDbDatabaseSetup implements IDatabaseSetup
 {
-    /**
-     * our connection to our database
-     *
-     * @var ExtendedCouchDbClient
-     */
-    protected $client;
+    protected $database;
 
     /**
      * Setup everything required to provide the functionality exposed by our module.
      * In this case setup a couchdb database and view for our asset idsequence.
      *
+     * @param AgaviDatabase $database
      * @param boolean $tearDownFirst optional drop database first; defaults to FALSE
      */
-    public function setup($tearDownFirst = FALSE)
+    public function execute(AgaviDatabase $database, $tearDownFirst = FALSE)
     {
+        $this->database = $database;
+
+        if (! ($this->database instanceof CouchDbDatabase))
+        {
+            throw new AgaviDatabaseException("Only CouchDbDatabase instances accepted.");
+        }
+
         if (TRUE === $tearDownFirst)
         {
             $this->tearDown();
         }
+
         $this->createDatabase();
-            $this->initViews();
+        $this->initViews();
     }
 
     /**
@@ -51,8 +51,10 @@ abstract class BaseCouchDatabaseSetup implements IDatabaseSetup
      *
      * @return string
      */
-    abstract public function getSourceDirectory();
-
+    public function getSourceDirectory()
+    {
+        return $this->database->getParameter('view_src_dir');
+    }
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
 
@@ -80,23 +82,12 @@ abstract class BaseCouchDatabaseSetup implements IDatabaseSetup
         return trim($funcString);
     }
 
-
-    /**
-     * setup couch connection client
-     *
-     * @param ExtendedCouchDbClient $client
-     */
-    protected final function setDatabase(ExtendedCouchDbClient $client)
-    {
-        $this->client = $client;
-    }
-
     /**
      * @return ExtendedCouchDbClient
      */
-    protected final function getDatabase()
+    protected final function getClient()
     {
-        return $this->client;
+        return $this->database->getConnection();
     }
 
     /**
@@ -104,7 +95,7 @@ abstract class BaseCouchDatabaseSetup implements IDatabaseSetup
      */
     protected function createDatabase()
     {
-        return $this->getDatabase()->createDatabase(NULL);
+        return $this->getClient()->createDatabase(NULL);
     }
 
     /**
@@ -112,7 +103,7 @@ abstract class BaseCouchDatabaseSetup implements IDatabaseSetup
      */
     protected function deleteDatabase()
     {
-        return $this->getDatabase()->deleteDatabase(NULL);
+        return $this->getClient()->deleteDatabase(NULL);
     }
 
     /**
@@ -129,6 +120,12 @@ abstract class BaseCouchDatabaseSetup implements IDatabaseSetup
      */
     protected function initViews()
     {
+        if (! is_dir($this->getSourceDirectory()))
+        {
+            error_log("Database view src-directory does not exist.");
+            return;
+        }
+
         $glob = glob($this->getSourceDirectory().'/*.{map,reduce,filters}.js',GLOB_BRACE);
         if (! is_array($glob))
         {
@@ -158,13 +155,13 @@ abstract class BaseCouchDatabaseSetup implements IDatabaseSetup
 
         foreach ($docs as $docid => $doc)
         {
-            $stat = $this->getDatabase()->getDesignDocument(NULL, $docid);
+            $stat = $this->getClient()->getDesignDocument(NULL, $docid);
             if (isset($stat['_rev']))
             {
                 $doc['_rev'] = $stat['_rev'];
             }
 
-            $stat = $this->getDatabase()->createDesignDocument(NULL, $docid, $doc);
+            $stat = $this->getClient()->createDesignDocument(NULL, $docid, $doc);
             $loggerManager = AgaviContext::getInstance()->getLoggerManager();
             if (isset($stat['ok']))
             {
@@ -173,7 +170,7 @@ abstract class BaseCouchDatabaseSetup implements IDatabaseSetup
                         sprintf(
                             '[%s] Successfully saved %s _design/%s',
                             get_class($this),
-                            $this->getDatabase()->getDatabaseName(),
+                            $this->getClient()->getDatabaseName(),
                             $docid
                         ),
                         AgaviLogger::INFO
@@ -199,8 +196,5 @@ abstract class BaseCouchDatabaseSetup implements IDatabaseSetup
         }
     }
 
-
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
-
-?>

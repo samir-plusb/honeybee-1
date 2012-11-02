@@ -7,19 +7,14 @@
     <property name="project.directory.etc" value="${application.startdir}/etc" />
     <property userProperty="true" override="true" file="${project.directory.etc}/build/build.properties" />
     <property name="module.directory.impl" value="impl" />
+    <property name="module.directory.resources" value="resources" />
 
 	<taskdef name="run" classname="BoPhingRunTask" classpath="${project.directory}/app/lib/phing"/>
+
     <!-- 
-        Define custom tasks below as needed, they will be callable via bin/agavi [taskname].
+        Custom module wizward target that builds full stack honeybee modules along with 
+        framework boilerplate and default implementations.
     -->
-
-    <!-- Task template
-    <target name="custom-task" description="Task description goes here.">
-        <echo message="Tell the world what we are about to do."/>
-        <run command="echo 'Yay this is an echo task run from ${project.directory}.'" dir="${project.directory}" />
-    </target>
-    -->
-
     <target name="honeybee-module-wizard" depends="project-locate" description="Creates a honeybee module.">
         <!-- Determine module name. -->
         <agavi.input property="module.name" message="Module name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
@@ -33,7 +28,8 @@
                 <echo message="Module name ${module.name.input} is not a valid identifier; ${module.name} will be used instead" level="warning" />
             </then>
         </if>
-
+        <!-- @todo need a real impl for building module prefixes -->
+        <php expression="strtolower('${module.name}')" returnProperty="module.prefix"/>
         <property userProperty="true" name="module.directory" value="${project.directory}/${project.directory.app.modules}/${module.name}" override="true" />
 
         <agavi.check-module property="module.available" path="${module.directory}" />
@@ -44,18 +40,43 @@
         <mkdir dir="${module.directory}/${module.directory.impl}" />
         <mkdir dir="${module.directory}/${module.directory.config}" />
         <mkdir dir="${module.directory}/${module.directory.lib}" />
+        <mkdir dir="${module.directory}/${module.directory.resources}" />
+        <mkdir dir="${module.directory}/${module.directory.lib}/export" />
+        <mkdir dir="${module.directory}/${module.directory.lib}/renderer" />
+        <mkdir dir="${module.directory}/${module.directory.lib}/data_object" />
 
         <!-- Create library. -->
-        <agavi.select-path property="template.path" path="${templates.directory.app.modules.lib}">
+        <agavi.select-path property="template.path" type="directory" path="${templates.directory.app.modules.lib}">
             <from path="${templates.directory}" />
         </agavi.select-path>
         <copy todir="${module.directory}/${module.directory.lib}">
-            <mapper type="regexp" from="^(.+[\\\/])?(.+)\.tmpl$" to="\1/${project.prefix}${module.name}\2" />
+            <mapper type="regexp" from="^(.+[\\\/])?(.+)\.tmpl$" to="\1/${module.name}\2" />
+            <fileset dir="${template.path}">
+                <include name="**/*.tmpl" />
+                <exclude name="**/workflow/plugin/*.tmpl" />
+            </fileset>
+            <filterchain>
+                <replacetokens begintoken="%%" endtoken="%%">
+                    <token key="MODULE_PREFIX" value="${module.prefix}" />
+                    <token key="PROJECT_LOCATION" value="${project.directory}" />
+                    <token key="PROJECT_PREFIX" value="${project.prefix}" />
+                    <token key="MODULE_NAME" value="${module.name}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+
+        <!-- Special naming convention for workflow plugins (should get rid of that). -->
+        <agavi.select-path property="template.path" type="directory" path="${templates.directory.app.modules.lib}/workflow/plugin">
+            <from path="${templates.directory}" />
+        </agavi.select-path>
+        <copy todir="${module.directory}/${module.directory.lib}/workflow/plugin">
+            <mapper type="regexp" from="^(.+[\\\/])?(.+)\.tmpl$" to="\1/Workflow${module.name}\2" />
             <fileset dir="${template.path}">
                 <include name="**/*.tmpl" />
             </fileset>
             <filterchain>
                 <replacetokens begintoken="%%" endtoken="%%">
+                    <token key="MODULE_PREFIX" value="${module.prefix}" />
                     <token key="PROJECT_LOCATION" value="${project.directory}" />
                     <token key="PROJECT_PREFIX" value="${project.prefix}" />
                     <token key="MODULE_NAME" value="${module.name}" />
@@ -74,6 +95,76 @@
             </fileset>
             <filterchain>
                 <replacetokens begintoken="%%" endtoken="%%">
+                    <token key="DB_PREFIX" value="${project.db_prefix}" />
+                    <token key="MODULE_PREFIX" value="${module.prefix}" />
+                    <token key="PROJECT_LOCATION" value="${project.directory}" />
+                    <token key="PROJECT_PREFIX" value="${project.prefix}" />
+                    <token key="MODULE_NAME" value="${module.name}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+        <agavi.select-path property="template.path" path="${templates.directory.app.modules.config}/couchdb">
+            <from path="${templates.directory}" />
+        </agavi.select-path>
+        <copy todir="${module.directory}/${module.directory.config}/couchdb">
+            <mapper type="regexp" from="^(.+[\\\/])?(.+)\.tmpl$" to="\1/${module.prefix}\2" />
+            <fileset dir="${template.path}">
+                <include name="**/*.js.tmpl" />
+            </fileset>
+            <filterchain>
+                <replacetokens begintoken="%%" endtoken="%%">
+                    <token key="DB_PREFIX" value="${project.db_prefix}" />
+                    <token key="MODULE_PREFIX" value="${module.prefix}" />
+                    <token key="PROJECT_LOCATION" value="${project.directory}" />
+                    <token key="PROJECT_PREFIX" value="${project.prefix}" />
+                    <token key="MODULE_NAME" value="${module.name}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+        <agavi.select-path property="template.path" path="${templates.directory.app.modules.config}/elasticsearch">
+            <from path="${templates.directory}" />
+        </agavi.select-path>
+         <copy todir="${module.directory}/${module.directory.config}/elasticsearch">
+            <mapper type="glob" from="*.tmpl" to="*" />
+            <fileset dir="${template.path}">
+                <include name="**/*.tmpl" />
+            </fileset>
+            <filterchain>
+                <replacetokens begintoken="%%" endtoken="%%">
+                    <token key="DB_PREFIX" value="${project.db_prefix}" />
+                    <token key="MODULE_PREFIX" value="${module.prefix}" />
+                    <token key="PROJECT_LOCATION" value="${project.directory}" />
+                    <token key="PROJECT_PREFIX" value="${project.prefix}" />
+                    <token key="MODULE_NAME" value="${module.name}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+
+        <!-- Copy script resources. -->
+        <agavi.select-path property="template.path" type="directory" path="${templates.directory.app.modules}/resources">
+            <from path="${templates.directory}" />
+        </agavi.select-path>
+        <copy todir="${module.directory}/${module.directory.resources}">
+            <mapper type="regexp" from="^(.+[\\\/])?(.+)\.tmpl$" to="\1/${module.prefix}\2" />
+            <fileset dir="${template.path}">
+                <include name="**/*.js.tmpl" />
+            </fileset>
+            <filterchain>
+                <replacetokens begintoken="%%" endtoken="%%">
+                    <token key="MODULE_PREFIX" value="${module.prefix}" />
+                    <token key="PROJECT_LOCATION" value="${project.directory}" />
+                    <token key="PROJECT_PREFIX" value="${project.prefix}" />
+                    <token key="MODULE_NAME" value="${module.name}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+
+        <!-- Copy script resources. -->
+        <copy toDir="${module.directory}/${module.directory.resources}/scripts/" 
+              file="${template.path}/scripts/.index">
+            <filterchain>
+                <replacetokens begintoken="%%" endtoken="%%">
+                    <token key="MODULE_PREFIX" value="${module.prefix}" />
                     <token key="PROJECT_LOCATION" value="${project.directory}" />
                     <token key="PROJECT_PREFIX" value="${project.prefix}" />
                     <token key="MODULE_NAME" value="${module.name}" />

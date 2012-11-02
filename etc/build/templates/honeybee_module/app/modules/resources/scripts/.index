@@ -1,4 +1,3 @@
-movies.js
-MoviesListController.js
-init.js
-
+%%MODULE_PREFIX%%.namespace.js
+%%MODULE_PREFIX%%.ListController.js
+%%MODULE_PREFIX%%.init.js

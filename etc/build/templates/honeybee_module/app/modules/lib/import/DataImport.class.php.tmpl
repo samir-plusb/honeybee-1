@@ -1,27 +1,25 @@
 <?php
 
 /**
- * The MoviesDataImport is responseable for importing movie data to the domain's workflow.
+ * The %%MODULE_NAME%%DataImport is responseable for importing %%MODULE_NAME%% data to the domain's workflow.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
- * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
- * @package         Movies
+ * @package         %%MODULE_NAME%%
  * @subpackage      Import
  */
-class MoviesDataImport extends WorkflowItemDataImport
+class %%MODULE_NAME%%DataImport extends WorkflowItemDataImport
 {
     protected $idSequence;
 
     protected function init(IDataSource $dataSource)
     {
         parent::init($dataSource);
-        $this->idSequence = new ProjectIdSequence('movies');
+        $this->idSequence = new ProjectIdSequence('%%MODULE_PREFIX%%');
     }
 
     protected function getWorkflowService()
     {
-        return MoviesWorkflowService::getInstance();
+        return %%MODULE_NAME%%WorkflowService::getInstance();
     }
 
     protected function processRecord()
@@ -32,7 +30,7 @@ class MoviesDataImport extends WorkflowItemDataImport
 
         $workflowItem = $this->workflowService->findItemByImportIdentifier($record->getImportIdentifier());
         echo "Import Id: " . $record->getImportIdentifier() . PHP_EOL;
-        if ($workflowItem instanceof MoviesWorkflowItem)
+        if ($workflowItem instanceof %%MODULE_NAME%%WorkflowItem)
         {
             $this->updateWorkflowItem($workflowItem, $importData);
         }
@@ -49,9 +47,9 @@ class MoviesDataImport extends WorkflowItemDataImport
         $this->workflowService->storeWorkflowItem($workflowItem);
     }
 
-    protected function registerImportIdentifier(MoviesWorkflowItem $movieItem, $importIdentifier)
+    protected function registerImportIdentifier(%%MODULE_NAME%%WorkflowItem $workflowItem, $importIdentifier)
     {
-        $previousImportIds = $movieItem->getAttribute('import_ids', array());
+        $previousImportIds = $workflowItem->getAttribute('import_ids', array());
         if (! in_array($importIdentifier, $previousImportIds))
         {
             $previousImportIds[] = $importIdentifier;
@@ -61,6 +59,6 @@ class MoviesDataImport extends WorkflowItemDataImport
             // should not happen, 
             // we are trying to re-register an import identifier, that we require to be unique.
         }
-        $movieItem->setAttribute('import_ids', $previousImportIds);
+        $workflowItem->setAttribute('import_ids', $previousImportIds);
     }
 }

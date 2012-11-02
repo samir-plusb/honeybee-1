@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * The %%MODULE_NAME%%Finder is responseable for finding movies and provides several methods to do so.
+ *
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @package         %%MODULE_NAME%%
+ * @subpackage      Repository
+ */
+class MoviesFinder extends BaseFinder
+{
+    const INDEX_TYPE = '%%MODULE_PREFIX%%';
+
+    public static function create(IListConfig $listConfig)
+    {
+        return new self(
+            AgaviContext::getInstance()->getDatabaseManager()->getDatabase(
+                self::getElasticSearchDatabaseName()
+            )->getResource(),
+            $listConfig,
+            MoviesWorkflowService::getInstance()
+        );
+    }
+
+    public static function getElasticSearchDatabaseName()
+    {
+        $connections = AgaviConfig::get('%%MODULE_PREFIX%%.connections');
+        return $connections['elasticsearch'];
+    }
+
+    protected function getIndexType()
+    {
+        return self::INDEX_TYPE;
+    }
+}

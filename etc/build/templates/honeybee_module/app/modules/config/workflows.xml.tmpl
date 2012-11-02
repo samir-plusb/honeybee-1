@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+<ae:configurations 
+    xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
     <ae:configuration>
-        <workflow name="movies">
+        <workflow name="%%MODULE_PREFIX%%">
             <description>
-                This workflow defines the process structure for editing/refining created/imported movies.
+                This workflow defines the process structure for editing/refining created/imported %%MODULE_NAME%%.
             </description>
-            <start_at>edit_movie</start_at>
+            <start_at>edit_%%MODULE_PREFIX%%</start_at>
             <steps>
 
-                <step name="edit_movie">
-                    <description>Manually edit a movie.</description>
-                    <plugin type="EditMovie">
+                <step name="edit_%%MODULE_PREFIX%%">
+                    <description>Manually edit a %%MODULE_NAME%%.</description>
+                    <plugin type="%%MODULE_NAME%%Edit">
                         <gates>
-                            <gate_step label="delete this movie" name="delete">delete_movie</gate_step>
+                            <gate_step label="delete this %%MODULE_NAME%%" name="delete">delete_%%MODULE_PREFIX%%</gate_step>
                         </gates>
                     </plugin>
                 </step>
 
-                <step name="delete_movie">
+                <step name="delete_%%MODULE_PREFIX%%">
                     <description>
-                        Marks a given movie as deleted.
+                        Marks a given %%MODULE_NAME%% as deleted.
                         During a configurable time period the item(place) can then be recovered,
                         before being removed by the system's maintenance.
                     </description>
-                    <plugin type="DeleteMovie">
+                    <plugin type="%%MODULE_NAME%%Delete">
                         <gates>
                             <gate_end name="trash" />
                         </gates>

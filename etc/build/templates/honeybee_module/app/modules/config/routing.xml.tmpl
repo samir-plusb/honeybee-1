@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
-
+<ae:configurations 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+    xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
     <ae:configuration context="web">
         <routes>
             <route name=".list" pattern="/list" action="List" method="read" />
@@ -11,8 +12,7 @@
 
     <ae:configuration context="console">
         <routes>
-            <route pattern="movies.export" module="Movies" action="Export" method="write" />
+            <route pattern="%%MODULE_PREFIX%%.export" module="%%MODULE_NAME%%" action="Export" method="write" />
         </routes>
     </ae:configuration>
-
 </ae:configurations>

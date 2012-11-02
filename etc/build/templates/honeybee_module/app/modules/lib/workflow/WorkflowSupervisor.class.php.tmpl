@@ -1,12 +1,12 @@
 <?php
 
 /**
- * The MoviesWorkflowSupervisor ovverides the general WorkflowSupervisor to hook in the correct database.
+ * The %%MODULE_NAME%%WorkflowSupervisor ovverides the general WorkflowSupervisor to hook in the correct database.
  *
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Movies
+ * @package         %%MODULE_NAME%%
  * @subpackage      Workflow
  */
 class MoviesWorkflowSupervisor extends WorkflowSupervisor
@@ -30,9 +30,7 @@ class MoviesWorkflowSupervisor extends WorkflowSupervisor
 
     public static function getCouchDbDatabasename()
     {
-        $connections = AgaviConfig::get('movies.connections');
+        $connections = AgaviConfig::get('%%MODULE_PREFIX%%.connections');
         return $connections['couchdb'];
     }
 }
-
-?>
