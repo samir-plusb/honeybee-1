@@ -9,7 +9,7 @@
  * @package         Movies
  * @subpackage      Setup
  */
-class MoviesDatabaseSetup extends BaseCouchDatabaseSetup
+class MoviesDatabaseSetup extends CouchDbDatabaseSetup
 {
     /**
      * Create a new AssetModuleSetup instance.

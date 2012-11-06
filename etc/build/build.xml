@@ -16,7 +16,7 @@
         framework boilerplate and default implementations.
     -->
     <target name="honeybee-module-wizard" depends="project-locate" description="Creates a honeybee module.">
-        <!-- Determine module name. -->
+        <!--# Setup/Prompt Properties #-->
         <agavi.input property="module.name" message="Module name" promptCharacter=":" failIfEmpty="true" ignoreIfSet="true" />
         <property userProperty="true" name="module.name.input" value="${module.name}" override="true" />
         <agavi.transform-string-to-identifier property="module.name" string="${module.name}" />
@@ -31,11 +31,10 @@
         <!-- @todo need a real impl for building module prefixes -->
         <php expression="strtolower('${module.name}')" returnProperty="module.prefix"/>
         <property userProperty="true" name="module.directory" value="${project.directory}/${project.directory.app.modules}/${module.name}" override="true" />
-
         <agavi.check-module property="module.available" path="${module.directory}" />
         <fail if="module.available" message="Module ${module.name} already exists at ${module.directory}" />
 
-        <!-- Create directory structure. -->
+        <!--# Create Directories #-->
         <mkdir dir="${module.directory}" />
         <mkdir dir="${module.directory}/${module.directory.impl}" />
         <mkdir dir="${module.directory}/${module.directory.config}" />
@@ -45,7 +44,7 @@
         <mkdir dir="${module.directory}/${module.directory.lib}/renderer" />
         <mkdir dir="${module.directory}/${module.directory.lib}/data_object" />
 
-        <!-- Create library. -->
+        <!--# Create Library #-->
         <agavi.select-path property="template.path" type="directory" path="${templates.directory.app.modules.lib}">
             <from path="${templates.directory}" />
         </agavi.select-path>
@@ -64,7 +63,6 @@
                 </replacetokens>
             </filterchain>
         </copy>
-
         <!-- Special naming convention for workflow plugins (should get rid of that). -->
         <agavi.select-path property="template.path" type="directory" path="${templates.directory.app.modules.lib}/workflow/plugin">
             <from path="${templates.directory}" />
@@ -84,10 +82,11 @@
             </filterchain>
         </copy>
 
-        <!-- Copy configuration. -->
+        <!--# Copy Configuration #-->
         <agavi.select-path property="template.path" path="${templates.directory.app.modules.config}">
             <from path="${templates.directory}" />
         </agavi.select-path>
+        <!-- Start with xml files ... -->
         <copy todir="${module.directory}/${module.directory.config}">
             <mapper type="glob" from="*.xml.tmpl" to="*.xml" />
             <fileset dir="${template.path}">
@@ -103,31 +102,12 @@
                 </replacetokens>
             </filterchain>
         </copy>
-        <agavi.select-path property="template.path" path="${templates.directory.app.modules.config}/couchdb">
-            <from path="${templates.directory}" />
-        </agavi.select-path>
-        <copy todir="${module.directory}/${module.directory.config}/couchdb">
+        <!-- ... then copy the couchdb and elasticsearch cfg files. -->
+        <copy todir="${module.directory}/${module.directory.config}">
             <mapper type="regexp" from="^(.+[\\\/])?(.+)\.tmpl$" to="\1/${module.prefix}\2" />
             <fileset dir="${template.path}">
                 <include name="**/*.js.tmpl" />
-            </fileset>
-            <filterchain>
-                <replacetokens begintoken="%%" endtoken="%%">
-                    <token key="DB_PREFIX" value="${project.db_prefix}" />
-                    <token key="MODULE_PREFIX" value="${module.prefix}" />
-                    <token key="PROJECT_LOCATION" value="${project.directory}" />
-                    <token key="PROJECT_PREFIX" value="${project.prefix}" />
-                    <token key="MODULE_NAME" value="${module.name}" />
-                </replacetokens>
-            </filterchain>
-        </copy>
-        <agavi.select-path property="template.path" path="${templates.directory.app.modules.config}/elasticsearch">
-            <from path="${templates.directory}" />
-        </agavi.select-path>
-         <copy todir="${module.directory}/${module.directory.config}/elasticsearch">
-            <mapper type="glob" from="*.tmpl" to="*" />
-            <fileset dir="${template.path}">
-                <include name="**/*.tmpl" />
+                <include name="**/*.json.tmpl" />
             </fileset>
             <filterchain>
                 <replacetokens begintoken="%%" endtoken="%%">
@@ -140,7 +120,7 @@
             </filterchain>
         </copy>
 
-        <!-- Copy script resources. -->
+        <!--# Copy Script Resources #-->
         <agavi.select-path property="template.path" type="directory" path="${templates.directory.app.modules}/resources">
             <from path="${templates.directory}" />
         </agavi.select-path>
@@ -158,8 +138,6 @@
                 </replacetokens>
             </filterchain>
         </copy>
-
-        <!-- Copy script resources. -->
         <copy toDir="${module.directory}/${module.directory.resources}/scripts/" 
               file="${template.path}/scripts/.index">
             <filterchain>

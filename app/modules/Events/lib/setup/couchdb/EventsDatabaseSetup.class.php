@@ -9,7 +9,7 @@
  * @package         Events
  * @subpackage      Setup
  */
-class EventsDatabaseSetup extends BaseCouchDatabaseSetup
+class EventsDatabaseSetup extends CouchDbDatabaseSetup
 {
     /**
      * Create a new AssetModuleSetup instance.

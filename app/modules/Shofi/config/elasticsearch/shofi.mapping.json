@@ -5,9 +5,6 @@
     "_source": {
         "enabled": true
     },
-    "_parent": {
-        "type": "shofi-ticket"
-    },
     "properties" : {
         "id": {
             "type": "string",

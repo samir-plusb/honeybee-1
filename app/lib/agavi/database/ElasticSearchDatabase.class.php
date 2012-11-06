@@ -3,13 +3,19 @@
  * Provide elastic search database connection handle
  *
  * @author tay
- * @version $Id$
- * @since 10.10.2011
  * @package Project
  * @subpackage Agavi/Database
  */
 class ElasticSearchDatabase extends AgaviDatabase
 {
+    const DEFAULT_SETUP = 'ElasticSearchDatabaseSetup';
+
+    const DEFAULT_PORT = 9200;
+
+    const DEFAULT_HOST = 'localhost';
+
+    const DEFAULT_TRANSPORT = 'Http';
+
     /**
      * The client used to talk to elastic search.
      *
@@ -29,15 +35,29 @@ class ElasticSearchDatabase extends AgaviDatabase
     {
         try
         {
+            $indexName = $this->getParameter('index');
+            if (! $indexName)
+            {
+                throw new AgaviDatabaseException(
+                    "Missing required index param in current configuration."
+                );
+            }
+
+            if (! $this->hasParameter('mapping_dir'))
+            {
+                throw new AgaviDatabaseException(
+                    "Missing required mapping_dir param in current configuration."
+                );
+            }
+
             $this->connection = new Elastica_Client(
                 array(
-                    'host'      => $this->getParameter('host', 'localhost'),
-                    'port'      => $this->getParameter('port', 9200),
-                    'transport' => $this->getParameter('transport', 'Http')
+                    'host'      => $this->getParameter('host', self::DEFAULT_HOST),
+                    'port'      => $this->getParameter('port', self::DEFAULT_PORT),
+                    'transport' => $this->getParameter('transport', self::DEFAULT_TRANSPORT)
                 )
             );
-            $indexDef = $this->getParameter('index', array());
-            $indexName = isset($indexDef['name']) ? $indexDef['name'] : NULL;
+
             $this->resource = $this->connection->getIndex($indexName);
         }
         catch (Exception $e)
@@ -70,24 +90,29 @@ class ElasticSearchDatabase extends AgaviDatabase
 
     protected function createIndex()
     {
-        $indexDef = $this->getParameter('index', array());
-        if (! isset($indexDef['setup_class']))
+        $indexName = $this->getParameter('index');
+        if (! $this->getParameter('setup', FALSE))
         {
             $this->resource->create();
             return;
         }
-        $setupClass = $indexDef['setup_class'];
-        if (! class_exists($setupClass))
+
+        $setupImplementor = $this->getParameter('setup_class', self::DEFAULT_SETUP);
+        if (! class_exists($setupImplementor))
         {
-            throw new AgaviDatabaseException("Setup class '$setupClass' can not be found.");
+            throw new AgaviDatabaseException(
+                "Setup class '$setupImplementor' can not be found."
+            );
         }
-        $indexSetup = new $setupClass($this->getName());
-        if (! ($indexSetup instanceof IDatabaseSetup))
+
+        $setup = new $setupImplementor();
+        if (! ($setup instanceof IDatabaseSetup))
         {
-            throw new AgaviDatabaseException('Setup class does not implement IDatabaseSetup: '.$setupClass);
+            throw new AgaviDatabaseException(
+                "Setup class does not implement IDatabaseSetup: $setupImplementor"
+            );
         }
-        $indexSetup->setup();
+
+        $setup->execute($this);
     }
 }
-
-?>

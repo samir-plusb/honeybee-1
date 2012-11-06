@@ -9,7 +9,7 @@
  * @package         Workflow
  * @subpackage      Setup
  */
-class NewsDatabaseSetup extends BaseCouchDatabaseSetup
+class NewsDatabaseSetup extends CouchDbDatabaseSetup
 {
     /**
      * Create a new AssetModuleSetup instance.

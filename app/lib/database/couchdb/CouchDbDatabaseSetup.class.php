@@ -53,7 +53,7 @@ class CouchDbDatabaseSetup implements IDatabaseSetup
      */
     public function getSourceDirectory()
     {
-        return $this->database->getParameter('view_src_dir');
+        return $this->database->getParameter('script_dir');
     }
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
@@ -122,11 +122,11 @@ class CouchDbDatabaseSetup implements IDatabaseSetup
     {
         if (! is_dir($this->getSourceDirectory()))
         {
-            error_log("Database view src-directory does not exist.");
+            error_log("Database view src-directory does not exist " . $this->getSourceDirectory());
             return;
         }
 
-        $glob = glob($this->getSourceDirectory().'/*.{map,reduce,filters}.js',GLOB_BRACE);
+        $glob = glob($this->getSourceDirectory().'/*.{map,reduce,filters}.js', GLOB_BRACE);
         if (! is_array($glob))
         {
             return;
@@ -135,6 +135,7 @@ class CouchDbDatabaseSetup implements IDatabaseSetup
         $docs = array();
         foreach ($glob as $fname)
         {
+            var_dump($fname);
             // match all documents like:
             // * DesignDoc.Method.map.js
             // * DesignDoc.Method.reduce.js
