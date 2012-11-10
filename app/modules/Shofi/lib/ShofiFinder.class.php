@@ -10,7 +10,7 @@
  */
 class ShofiFinder extends BaseFinder
 {
-    const INDEX_TYPE = 'shofi-place'; // @todo rename into: 'shofi-place'
+    const INDEX_TYPE = 'shofi'; // @todo rename into: 'shofi-place'
 
     public static function create(IListConfig $listConfig)
     {

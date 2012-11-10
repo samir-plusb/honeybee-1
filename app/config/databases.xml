@@ -54,7 +54,7 @@
                 <ae:parameter name="mapping_dir">%core.modules_dir%/Shofi/config/elasticsearch</ae:parameter>
                 <ae:parameter name="setup">true</ae:parameter>
                 <ae:parameter name="river">
-                    <ae:parameter name="couch_db">midas_news</ae:parameter>
+                    <ae:parameter name="couch_db">midas_shofi</ae:parameter>
                 </ae:parameter>
             </database>
 

@@ -162,7 +162,7 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
         );
 
         $this->database->getConnection()->request(
-            sprintf("_river/%s", $typeName),
+            sprintf("_river/%s/_meta", $typeName),
             Elastica_Request::PUT,
             $riverSettings
         );
@@ -184,8 +184,10 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
         {
             throw new AgaviDatabaseException("Only one river definition per module allowed.");
         }
+        
         $riverScriptFile = $riverFiles[0];
         $typeName = str_replace('.river.js', '', basename($riverScriptFile));
+
         $this->database->getConnection()->request(
             sprintf("_river/%s", $typeName), 
             Elastica_Request::DELETE

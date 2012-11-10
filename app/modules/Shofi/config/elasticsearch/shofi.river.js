@@ -1,6 +1,6 @@
 if ('ShofiWorkflowItem' === ctx.doc.type) 
 { 
-	ctx._type = 'shofi-place'; 
+	ctx._type = 'shofi'; 
 } 
 else 
 { 

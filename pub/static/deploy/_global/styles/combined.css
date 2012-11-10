@@ -7636,7 +7636,7 @@ body
 .container-alerts
 {
   position: fixed;
-  top: 40px;
+  top: 45px;
   right: 20px;
   width: 30%;
   z-index: 10000;
@@ -7991,4 +7991,14 @@ input.typeahead
 .container .input-prepend input
 {
   float: none;
+}
+
+.user-stats .dropdown a.dropdown-toggle
+{
+  outline: none;
+  margin: 0px 3px;
+}
+
+.user-stats .dropdown img
+{
 }

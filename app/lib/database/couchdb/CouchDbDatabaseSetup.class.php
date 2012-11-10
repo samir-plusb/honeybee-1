@@ -135,7 +135,6 @@ class CouchDbDatabaseSetup implements IDatabaseSetup
         $docs = array();
         foreach ($glob as $fname)
         {
-            var_dump($fname);
             // match all documents like:
             // * DesignDoc.Method.map.js
             // * DesignDoc.Method.reduce.js
