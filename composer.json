@@ -93,6 +93,7 @@
         "jquery/jquery": "1.7.2",
         "twitter/bootstrap": "2.1.1",
         "fortawesome/font-awesome": "2.0.0",
+        "berlinonline/Dat0r": "dev-master",
         "phpdocumentor/phpdocumentor": "dev-master"
     },
     "minimum-stability": "dev",

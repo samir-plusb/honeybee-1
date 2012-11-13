@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/factories/1.0">
-
+<ae:configurations 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+    xmlns="http://agavi.org/agavi/config/parts/factories/1.0">
     <ae:configuration>
-
         <controller class="AgaviController" />
 
         <database_manager class="AgaviDatabaseManager" />
@@ -36,7 +36,6 @@
         <translation_manager class="AgaviTranslationManager" />
 
         <validation_manager class="AgaviValidationManager" />
-
     </ae:configuration>
 
     <ae:configuration context="web" environment="st.development.*">
@@ -44,7 +43,6 @@
     </ae:configuration>
 
     <ae:configuration context="console">
-
         <request class="AgaviConsoleRequest">
             <ae:parameter name="read_stdin">on</ae:parameter>
             <ae:parameter name="stdin_file_name">stdin_buffer_filepath</ae:parameter>
@@ -55,11 +53,9 @@
         <routing class="AgaviConsoleRouting" />
 
         <user class="ProjectZendAclSecurityUser" />
-
     </ae:configuration>
 
     <ae:configuration context="web" environment="testing.*">
-
         <request class="AgaviWebRequest">
 			<!-- static values for unit tests -->
             <ae:parameter name="sources">
@@ -70,7 +66,5 @@
                 <ae:parameter name="SERVER_PROTOCOL">HTTP/1.1</ae:parameter>
             </ae:parameter>
         </request>
-
     </ae:configuration>
-
 </ae:configurations>

@@ -6,8 +6,6 @@
  * - supressing output
  *
  * @author Thorsten Schmitt-Rink
- * @version $Id$
- *
  */
 class BoPhingRunTask extends Task
 {

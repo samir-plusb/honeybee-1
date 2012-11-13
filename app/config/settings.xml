@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/settings/1.0"
-                   xmlns:xi="http://www.w3.org/2001/XInclude">
-    <!--
-    ####################
-    DEFAULT
-    ####################
-    -->
+<ae:configurations 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+    xmlns="http://agavi.org/agavi/config/parts/settings/1.0"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
     <ae:configuration>
         <system_actions>
             <system_action name="default">
@@ -378,24 +375,9 @@
         </settings>
     </ae:configuration>
 
-    <xi:include href="%core.module_dir%/Shofi/config/settings.xml"
+    <xi:include href="%core.app_dir%/config/includes/settings.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
-    </xi:include>
-
-    <xi:include href="%core.module_dir%/Shofi_Categories/config/settings.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
-    </xi:include>
-
-    <xi:include href="%core.module_dir%/Shofi_Verticals/config/settings.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
-    </xi:include>
-
-    <xi:include href="%core.module_dir%/Movies/config/settings.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
-    </xi:include>
-
-    <xi:include href="%core.module_dir%/Events/config/settings.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
+        <xi:fallback />
     </xi:include>
 
 </ae:configurations>

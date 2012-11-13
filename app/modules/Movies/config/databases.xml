@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations 
+    xmlns="http://agavi.org/agavi/config/parts/databases/1.0" 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+    <ae:configuration>
+        <databases default="Movies.Read">
+            <database name="Movies.Write" class="CouchDbDatabase">
+                <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
+                <ae:parameter name="database">midas_movies</ae:parameter>
+                <ae:parameter name="setup">true</ae:parameter>
+            </database>
+            <database name="Movies.Read" class="ElasticSearchDatabase">
+                <ae:parameter name="host">127.0.0.1</ae:parameter>
+                <ae:parameter name="port">9200</ae:parameter>
+                <ae:parameter name="transport">Http</ae:parameter>
+                <ae:parameter name="index">midas_movies</ae:parameter>
+                <ae:parameter name="setup">true</ae:parameter>
+            </database>
+            <database name="Movies.Frontend" class="CouchDbDatabase">
+                <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
+                <ae:parameter name="database">midas_fe_movies</ae:parameter>
+            </database>
+        </databases>
+    </ae:configuration>
+
+    <ae:configuration environment="testing.*">
+        <databases default="Movies.Read">
+            <database name="Movies.Write" class="CouchDbDatabase">
+                <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
+                <ae:parameter name="database">testing-midas_movies</ae:parameter>
+                <ae:parameter name="setup">true</ae:parameter>
+            </database>
+            <database name="Movies.Read" class="ElasticSearchDatabase">
+                <ae:parameter name="host">127.0.0.1</ae:parameter>
+                <ae:parameter name="port">9200</ae:parameter>
+                <ae:parameter name="transport">Http</ae:parameter>
+                <ae:parameter name="index">testing-midas_movies</ae:parameter>
+                <ae:parameter name="setup">true</ae:parameter>
+            </database>
+            <database name="Movies.Frontend" class="CouchDbDatabase">
+                <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
+                <ae:parameter name="database">testing-midas_fe_movies</ae:parameter>
+            </database>
+        </databases>
+    </ae:configuration>
+</ae:configurations>

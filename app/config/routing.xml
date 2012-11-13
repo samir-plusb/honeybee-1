@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
-
+<ae:configurations 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+    xmlns="http://agavi.org/agavi/config/parts/routing/1.0" 
+    xmlns:xi="http://www.w3.org/2001/XInclude">
     <ae:configuration context="web">
         <routes>
             <!-- matches "/de" or "/en" at the beginning of the URL and uses either value to set the locale,
@@ -18,7 +20,6 @@
                     <ignore>locale</ignore>
                 </ignores>
             </route>
-
             <!--
                 If the HTTP Accept: header contains "application/json"
                 (i.e. if you do an XMLHTTPRequest with one of the usual JS frameworks),
@@ -32,138 +33,30 @@
 
             <route name="disabled" pattern="^/disabled$" module="Disabled" action="Index" />
 
-            <route name="asset" pattern="^/asset" module="Asset">
-                <xi:include
-                    href="%core.app_dir%/modules/Asset/config/routing.xml"
-                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-                        xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                        xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
-            </route>
-
-            <route pattern="^/import" module="Import">
-                <xi:include
-                    href="%core.app_dir%/modules/Import/config/routing.xml"
-                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-                        xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                        xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
-            </route>
-
-            <route name="workflow" pattern="^/workflow" module="Workflow">
-                <xi:include
-                    href="%core.app_dir%/modules/Workflow/config/routing.xml"
-                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-                        xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                        xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
-            </route>
-
-            <route name="news" pattern="^/news" module="News">
-                <xi:include
-                    href="%core.app_dir%/modules/News/config/routing.xml"
-                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-                        xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                        xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
-            </route>
-
-            <route name="shofi" pattern="^/shofi/places" module="Shofi">
-                <xi:include
-                    href="%core.app_dir%/modules/Shofi/config/routing.xml"
-                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-                        xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                        xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
-            </route>
-
-            <route name="shofi_categories" pattern="^/shofi/categories" module="Shofi_Categories">
-                <xi:include
-                    href="%core.app_dir%/modules/Shofi_Categories/config/routing.xml"
-                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-                        xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                        xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
-            </route>
-
-            <route name="shofi_verticals" pattern="^/shofi/verticals" module="Shofi_Verticals">
-                <xi:include
-                    href="%core.app_dir%/modules/Shofi_Verticals/config/routing.xml"
-                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-                        xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                        xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
-            </route>
-
-            <route name="movies" pattern="^/movies" module="Movies">
-                <xi:include
-                    href="%core.app_dir%/modules/Movies/config/routing.xml"
-                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-                        xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                        xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
-            </route>
-
-            <route name="events" pattern="^/events" module="Events">
-                <xi:include
-                    href="%core.app_dir%/modules/Events/config/routing.xml"
-                    xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-                        xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                        xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
-            </route>
-
-            <route name="auth" pattern="^/auth" module="Auth">
-                <route name=".logout" pattern="^/logout" action="Logout"/>
-            </route>
+            <xi:include 
+                href="%core.app_dir%/config/includes/routing.xml"
+                xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
+                xpointer(//ae:configuration[@context='web']/r:routes/r:route)/">
+                <xi:fallback />
+            </xi:include>
 
             <!-- The last route in case the input URL is just "/". -->
             <route name="index" pattern="^/$" module="%actions.default_module%" action="%actions.default_action%" />
-
-        <!--
-            If no route matched here, the 404 action will be used.
-            You could change that behavior by setting the last route above to use an empty pattern.
-        -->
+            <!--
+                If no route matched here, the 404 action will be used.
+                You could change that behavior by setting the last route above to use an empty pattern.
+            -->
         </routes>
     </ae:configuration>
 
-    <xi:include
-        href="%core.app_dir%/modules/Import/config/routing.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
-    </xi:include>
-
-    <xi:include
-        href="%core.app_dir%/modules/Asset/config/routing.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
-    </xi:include>
-
-    <xi:include
-        href="%core.app_dir%/modules/Events/config/routing.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
-    </xi:include>
-
-    <xi:include
-        href="%core.app_dir%/modules/News/config/routing.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
-    </xi:include>
-
-    <xi:include
-        href="%core.app_dir%/modules/Workflow/config/routing.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
-    </xi:include>
-
-    <xi:include
-        href="%core.app_dir%/modules/Shofi/config/routing.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
-    </xi:include>
-
-    <xi:include
-        href="%core.app_dir%/modules/Shofi_Categories/config/routing.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
-    </xi:include>
-
-    <xi:include
-        href="%core.app_dir%/modules/Movies/config/routing.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0)
-            xpointer(/ae:configurations/ae:configuration[@context='console'])/">
-    </xi:include>
-
+    <ae:configuration context="console">
+        <routes>
+            <xi:include 
+                href="%core.app_dir%/config/includes/routing.xml"
+                xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
+                xpointer(//ae:configuration[@context='console']/r:routes/r:route)/">
+                <xi:fallback />
+            </xi:include>
+        </routes>
+    </ae:configuration>
 </ae:configurations>

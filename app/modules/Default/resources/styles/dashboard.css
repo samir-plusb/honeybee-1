@@ -69,5 +69,6 @@ ul.dl-horizontal b.label
 {
     margin-top: 5em;
     border: 1px solid #efefef;
-    background-color: rgba(253, 253, 253, 0.2);
+    width: 25em;
+    background-color: rgba(253, 253, 253, 0.6);
 }

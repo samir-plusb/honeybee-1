@@ -1,6 +1,6 @@
 <?php
 
-$default_context = 
+$default_context = // @todo do we really need/want this stunt?
     preg_match('/\/binaries/i', $_SERVER['QUERY_STRING'])
     ? 'web_binaries'
     : 'web';

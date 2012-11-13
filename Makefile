@@ -48,6 +48,12 @@ cc:
 	@make generate-autoloads
 
 
+config: cc
+
+	-rm app/config/includes/*.xml
+	@php bin/include_configs.php
+
+
 install: install-vendor install-node-deps cc
 
 	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
@@ -121,6 +127,7 @@ phpcs:
 	@/bin/mkdir -p etc/integration/build/logs
 	-@vendor/bin/phpcs --report=checkstyle --report-file=${PROJECT_ROOT}/etc/integration/build/logs/checkstyle.xml --standard=${PROJECT_ROOT}/etc/coding-standards/BerlinOnline/ruleset.xml --ignore='app/cache*,*Success.php,*Input.php,*Error.php,app/templates/*' ${PROJECT_ROOT}/app
 
+
 phpdoc:
 
 	@/bin/mkdir -p etc/integration/docs/serverside/
@@ -153,6 +160,20 @@ lessc:
 lessw: lessc
 
 	@bin/lessc -d pub/less -watch
+
+
+module:
+
+	@bin/agavi honeybee-module-wizard
+	make config
+
+
+module-code:
+
+	@bin/agavi module-list
+	@read -p "Enter Module Name:" module; \
+    dator_dir=app/modules/$$module/config/dat0r; \
+	vendor/bin/dat0r.console generate $$dator_dir/codegen.ini $$dator_dir/module.xml gen+dep
 
 
 .PHONY: help

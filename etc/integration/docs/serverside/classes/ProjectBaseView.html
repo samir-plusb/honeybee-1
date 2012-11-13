@@ -1,0 +1,348 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Honeybee » \ProjectBaseView</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Honeybee</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/Project.html"><i class="icon-folder-open"></i> Project</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">96</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method_execute" title="execute :: If no output type specfic execute* method could be found on our current
+concrete implemenation, then we will throw an exception letting the dev know."><span class="description">If no output type specfic execute* method could be found on our current
+concrete implemenation, then we will throw an exception letting the dev know.</span><pre>execute()</pre></a></li>
+<li class="method public "><a href="#method_executeHtml" title="executeHtml :: If this method is called someone has missed to provide html view support
+for the current action."><span class="description">If this method is called someone has missed to provide html view support
+for the current action.</span><pre>executeHtml()</pre></a></li>
+<li class="method public "><a href="#method_executeJson" title="executeJson :: If this method is called someone has missed to provide json view support
+for the current action."><span class="description">If this method is called someone has missed to provide json view support
+for the current action.</span><pre>executeJson()</pre></a></li>
+<li class="method public "><a href="#method_executeText" title="executeText :: If this method is called someone has missed to provide text(console) view support
+for the current action."><span class="description">If this method is called someone has missed to provide text(console) view support
+for the current action.</span><pre>executeText()</pre></a></li>
+<li class="method public "><a href="#method_initialize" title="initialize :: Initialize the view thereby setting up our members."><span class="description">Initialize the view thereby setting up our members.</span><pre>initialize()</pre></a></li>
+<li class="method public "><a href="#method_setupHtml" title="setupHtml :: Convenience method for setting up the correct html layout."><span class="description">Convenience method for setting up the correct html layout.</span><pre>setupHtml()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="method protected "><a href="#method_getErrorMessages" title="getErrorMessages :: Return any reported validation error messages from our validation manager."><span class="description">Return any reported validation error messages from our validation manager.</span><pre>getErrorMessages()</pre></a></li>
+<li class="method protected "><a href="#method_throwOutputPutTypeNotImplementedException" title="throwOutputPutTypeNotImplementedException :: Convenience method for throwing an exception saying,
+that the current output type is not implemented for this view instance."><span class="description">Convenience method for throwing an exception saying,
+that the current output type is not implemented for this view instance.</span><pre>throwOutputPutTypeNotImplementedException()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected "><a href="#property_request" title="$request :: Holds a reference to the current request object."><span class="description"></span><pre>$request</pre></a></li>
+<li class="property protected "><a href="#property_routing" title="$routing :: Holds a reference to the current routing object."><span class="description"></span><pre>$routing</pre></a></li>
+<li class="property protected "><a href="#property_translationManager" title="$translationManager :: Holds a reference to the translation manager."><span class="description"></span><pre>$translationManager</pre></a></li>
+<li class="property protected "><a href="#property_user" title="$user :: Holds a reference to the user for the current session."><span class="description"></span><pre>$user</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants
+                    <ul><li class="constant  "><a href="#constant_DEFAULT_SLOT_LAYOUT_NAME" title="DEFAULT_SLOT_LAYOUT_NAME :: Name of the default layout to use for slots."><span class="description">Name of the default layout to use for slots.</span><pre>DEFAULT_SLOT_LAYOUT_NAME</pre></a></li></ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\ProjectBaseView"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ProjectBaseView.html">ProjectBaseView</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">The ProjectBaseView serves as the base view to all views implemented inside of this project.</p>
+<div class="details">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>version</th>
+<td>$Id$</td>
+</tr>
+<tr>
+<th>copyright</th>
+<td>BerlinOnline Stadtportal GmbH & Co. KG</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="mailto:tschmittrink@gmail.com">Thorsten Schmitt-Rink</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Project.Agavi.View.html">Project</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Agavi/View</td>
+</tr>
+<tr>
+<th>SuppressWarnings</th>
+<td>(PHPMD.NumberOfChildren)</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method_execute"></a><div class="element clickable method public method_execute" data-toggle="collapse" data-target=".method_execute .collapse">
+<h2>If no output type specfic execute* method could be found on our current
+concrete implemenation, then we will throw an exception letting the dev know.</h2>
+<pre>execute(\AgaviRequestDataHolder $parameters) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>SuppressWarnings</th>
+<td>(PHPMD.UnusedFormalParameter)</td>
+</tr>
+<tr>
+<th>codingStandardsIgnoreStart</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$parameters</h4>
+<code>\AgaviRequestDataHolder</code>
+</div>
+</div></div>
+</div>
+<a id="method_executeHtml"></a><div class="element clickable method public method_executeHtml" data-toggle="collapse" data-target=".method_executeHtml .collapse">
+<h2>If this method is called someone has missed to provide html view support
+for the current action.</h2>
+<pre>executeHtml(\AgaviRequestDataHolder $parameters) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Let them know ^^</p></div>
+<table class="table table-bordered">
+<tr>
+<th>SuppressWarnings</th>
+<td>(PHPMD.UnusedFormalParameter)</td>
+</tr>
+<tr>
+<th>codingStandardsIgnoreStart</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$parameters</h4>
+<code>\AgaviRequestDataHolder</code>
+</div>
+</div></div>
+</div>
+<a id="method_executeJson"></a><div class="element clickable method public method_executeJson" data-toggle="collapse" data-target=".method_executeJson .collapse">
+<h2>If this method is called someone has missed to provide json view support
+for the current action.</h2>
+<pre>executeJson(\AgaviRequestDataHolder $parameters) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>SuppressWarnings</th>
+<td>(PHPMD.UnusedFormalParameter)</td>
+</tr>
+<tr>
+<th>codingStandardsIgnoreStart</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$parameters</h4>
+<code>\AgaviRequestDataHolder</code>
+</div>
+</div></div>
+</div>
+<a id="method_executeText"></a><div class="element clickable method public method_executeText" data-toggle="collapse" data-target=".method_executeText .collapse">
+<h2>If this method is called someone has missed to provide text(console) view support
+for the current action.</h2>
+<pre>executeText(\AgaviRequestDataHolder $parameters) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>SuppressWarnings</th>
+<td>(PHPMD.UnusedFormalParameter)</td>
+</tr>
+<tr>
+<th>codingStandardsIgnoreStart</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$parameters</h4>
+<code>\AgaviRequestDataHolder</code>
+</div>
+</div></div>
+</div>
+<a id="method_initialize"></a><div class="element clickable method public method_initialize" data-toggle="collapse" data-target=".method_initialize .collapse">
+<h2>Initialize the view thereby setting up our members.</h2>
+<pre>initialize(\AgaviExecutionContainer $container) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$container</h4>
+<code>\AgaviExecutionContainer</code>
+</div>
+</div></div>
+</div>
+<a id="method_setupHtml"></a><div class="element clickable method public method_setupHtml" data-toggle="collapse" data-target=".method_setupHtml .collapse">
+<h2>Convenience method for setting up the correct html layout.</h2>
+<pre>setupHtml(\AgaviRequestDataHolder $parameters, string $layoutName) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>SuppressWarnings</th>
+<td>(PHPMD.UnusedFormalParameter)</td>
+</tr>
+<tr>
+<th>codingStandardsIgnoreStart</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$parameters</h4>
+<code>\AgaviRequestDataHolder</code>
+</div>
+<div class="subelement argument">
+<h4>$layoutName</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a id="method_getErrorMessages"></a><div class="element clickable method protected method_getErrorMessages" data-toggle="collapse" data-target=".method_getErrorMessages .collapse">
+<h2>Return any reported validation error messages from our validation manager.</h2>
+<pre>getErrorMessages() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a id="method_throwOutputPutTypeNotImplementedException"></a><div class="element clickable method protected method_throwOutputPutTypeNotImplementedException" data-toggle="collapse" data-target=".method_throwOutputPutTypeNotImplementedException .collapse">
+<h2>Convenience method for throwing an exception saying,
+that the current output type is not implemented for this view instance.</h2>
+<pre>throwOutputPutTypeNotImplementedException() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code>\AgaviViewException</code></th>
+<td></td>
+</tr></table>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_request"> </a><div class="element clickable property protected property_request" data-toggle="collapse" data-target=".property_request .collapse">
+<h2></h2>
+<pre>$request : \AgaviRequest</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_routing"> </a><div class="element clickable property protected property_routing" data-toggle="collapse" data-target=".property_routing .collapse">
+<h2></h2>
+<pre>$routing : \AgaviRouting</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_translationManager"> </a><div class="element clickable property protected property_translationManager" data-toggle="collapse" data-target=".property_translationManager .collapse">
+<h2></h2>
+<pre>$translationManager : \AgaviTranslationManager</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_user"> </a><div class="element clickable property protected property_user" data-toggle="collapse" data-target=".property_user .collapse">
+<h2></h2>
+<pre>$user : \AgaviUser</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a id="constant_DEFAULT_SLOT_LAYOUT_NAME"> </a><div class="element clickable constant  constant_DEFAULT_SLOT_LAYOUT_NAME" data-toggle="collapse" data-target=".constant_DEFAULT_SLOT_LAYOUT_NAME .collapse">
+<h2>Name of the default layout to use for slots.</h2>
+<pre>DEFAULT_SLOT_LAYOUT_NAME </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2012-11-10T21:22:47Z.<br></footer></div>
+</div>
+</body>
+</html>

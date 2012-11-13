@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/logging/1.0">
+<ae:configurations 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+    xmlns="http://agavi.org/agavi/config/parts/logging/1.0">
     <ae:configuration>
-
         <loggers default="app">
             <!-- logs only DEBUG messages -->
             <logger name="app" class="AgaviLogger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG">
@@ -28,8 +29,8 @@
 
         <appenders>
             <!--
-                    Debug logs are rotated in a 7 day (AgaviRotatingFileLoggerAppender default) cycle
-                    Use 'cycle' parameter to alter the cycle.
+                Debug logs are rotated in a 7 day (AgaviRotatingFileLoggerAppender default) cycle
+                Use 'cycle' parameter to alter the cycle.
             -->
             <appender name="ApplicationLogAppender" class="AgaviRotatingFileLoggerAppender" layout="DateTimeLayout">
                 <ae:parameters>
@@ -60,6 +61,5 @@
         <layouts>
             <layout name="DateTimeLayout" class="AgaviTimestampLoggerLayout"/>
         </layouts>
-
     </ae:configuration>
 </ae:configurations>

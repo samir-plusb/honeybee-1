@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/output_types/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
-    <!-- the sandbox. we can put anything in here. very useful for sharing stuff inside the document using XIncludes -->
+<ae:configurations 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+    xmlns="http://agavi.org/agavi/config/parts/output_types/1.0" 
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <!-- 
+        the sandbox. we can put anything in here. very useful for sharing stuff inside the document using XIncludes 
+    -->
     <ae:sandbox>
         <layers>
             <layer name="content" />
@@ -9,7 +14,6 @@
 
     <ae:configuration context="web">
         <output_types default="html">
-
             <output_type name="html">
                 <renderers default="php">
                     <renderer name="php" class="AgaviPhpRenderer">
@@ -68,5 +72,4 @@
             <output_type name="text" />
         </output_types>
     </ae:configuration>
-
 </ae:configurations>
