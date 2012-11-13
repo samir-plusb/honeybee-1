@@ -4,9 +4,6 @@ class DefaultConfigGenerator
 {
     public function generate($name, array $filesToInclude)
     {
-        $configIncludeDir = AgaviConfig::get('core.config_dir') . DIRECTORY_SEPARATOR . 
-            'includes' . DIRECTORY_SEPARATOR;
-
         $document = $this->createDocument($name);
         $root = $document->documentElement;
 
@@ -16,9 +13,7 @@ class DefaultConfigGenerator
             $root->appendChild($include);
         }
 
-        $includeFile = $configIncludeDir.$name.'.xml';
-        $document->formatOutput = TRUE;
-        $document->save($includeFile);
+        $this->writeConfigFile($document, $name);
     }
 
     protected function createDocument($name)
@@ -52,5 +47,13 @@ class DefaultConfigGenerator
         );
 
         return $include;
+    }
+
+    protected function writeConfigFile(DOMDocument $document, $name)
+    {
+        $configIncludeDir = AgaviConfig::get('core.config_dir') . DIRECTORY_SEPARATOR . 
+            'includes' . DIRECTORY_SEPARATOR;
+        $document->formatOutput = TRUE;
+        $document->save($configIncludeDir.$name.'.xml');
     }
 }

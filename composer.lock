@@ -1,5 +1,5 @@
 {
-    "hash": "a4055798ac63682816e67f62cfc6256a",
+    "hash": "03307e341bc3f4658704213afe5ae17d",
     "packages": [
         {
             "name": "PhpDebugToolbar/php-debug-toolbar",
@@ -211,6 +211,18 @@
             ]
         },
         {
+            "name": "farhadi/html5sortable",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/farhadi/html5sortable.git",
+                "reference": "b90b6baac95cdc0df1ec1682b7181ff94b1f7820"
+            },
+            "type": "library",
+            "installation-source": "source",
+            "time": "1344017627"
+        },
+        {
             "name": "fortawesome/font-awesome",
             "version": "2.0.0",
             "source": {
@@ -269,11 +281,47 @@
             ]
         },
         {
-            "name": "jquery/jquery",
-            "version": "1.7.2",
+            "name": "jquery/easing",
+            "version": "1.3",
             "dist": {
                 "type": "file",
-                "url": "http://code.jquery.com/jquery-1.7.2.js",
+                "url": "http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.3.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library",
+            "installation-source": "dist"
+        },
+        {
+            "name": "jquery/jquery",
+            "version": "1.8.2",
+            "dist": {
+                "type": "file",
+                "url": "http://code.jquery.com/jquery-1.8.2.min.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library",
+            "installation-source": "dist"
+        },
+        {
+            "name": "kineticjs/kineticjs",
+            "version": "4.0.5",
+            "dist": {
+                "type": "file",
+                "url": "http://kineticjs.com/download/v4.0.5/kinetic-v4.0.5.min.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library",
+            "installation-source": "dist"
+        },
+        {
+            "name": "knockoutjs/knockoutjs",
+            "version": "2.2.0",
+            "dist": {
+                "type": "file",
+                "url": "http://cloud.github.com/downloads/SteveSanderson/knockout/knockout-2.2.0.js",
                 "reference": null,
                 "shasum": null
             },
@@ -1172,17 +1220,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Pimple.git",
-                "reference": "b9f27b8dc18c08f00627dec02359b46a24791dc3"
+                "reference": "86df0604a10c5faf20b466ae6a0b762cc6ed0a35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Pimple/zipball/b9f27b8dc18c08f00627dec02359b46a24791dc3",
-                "reference": "b9f27b8dc18c08f00627dec02359b46a24791dc3",
+                "url": "https://github.com/fabpot/Pimple/archive/86df0604a10c5faf20b466ae6a0b762cc6ed0a35.zip",
+                "reference": "86df0604a10c5faf20b466ae6a0b762cc6ed0a35",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
+            "time": "1352622754",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1209,8 +1258,7 @@
             "keywords": [
                 "dependency injection",
                 "container"
-            ],
-            "time": "1347278988"
+            ]
         },
         {
             "name": "ruflin/Elastica",
@@ -1455,18 +1503,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml",
-                "reference": "1b1b0b47b07713e726081e4e01f99fa713c2346e"
+                "reference": "bed4fddc24392513e01b32a78d600b1272ed9a6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Yaml/archive/1b1b0b47b07713e726081e4e01f99fa713c2346e.zip",
-                "reference": "1b1b0b47b07713e726081e4e01f99fa713c2346e",
+                "url": "https://github.com/symfony/Yaml/archive/bed4fddc24392513e01b32a78d600b1272ed9a6c.zip",
+                "reference": "bed4fddc24392513e01b32a78d600b1272ed9a6c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1352466606",
+            "time": "1352815684",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1501,18 +1549,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "1a10ea2fbb2291142b4ee03665591c0762315204"
+                "reference": "b16765ce8f8edd227c6c90dba489326001fd348a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/1a10ea2fbb2291142b4ee03665591c0762315204.zip",
-                "reference": "1a10ea2fbb2291142b4ee03665591c0762315204",
+                "url": "https://github.com/fabpot/Twig/archive/b16765ce8f8edd227c6c90dba489326001fd348a.zip",
+                "reference": "b16765ce8f8edd227c6c90dba489326001fd348a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "1352366711",
+            "time": "1352654530",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1554,6 +1602,18 @@
             },
             "type": "library",
             "installation-source": "source"
+        },
+        {
+            "name": "underscorejs/underscorejs",
+            "version": "1.4.2",
+            "dist": {
+                "type": "file",
+                "url": "http://underscorejs.org/underscore-min.js",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library",
+            "installation-source": "dist"
         },
         {
             "name": "zend/acl",
@@ -1744,6 +1804,7 @@
     "stability-flags": {
         "zend/acl": 20,
         "zerkalica/phpcs": 20,
+        "farhadi/html5sortable": 20,
         "berlinonline/dat0r": 20,
         "phpdocumentor/phpdocumentor": 20
     }

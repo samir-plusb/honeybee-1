@@ -23,10 +23,8 @@ class ConfigurationScanner
 
             if($check->check()) 
             {
-                $configPath = $file->getPathname() . str_replace(
-                    '/', DIRECTORY_SEPARATOR, '/config/'
-                );
-                foreach (glob($configPath . '*.xml') as $configFile)
+                $configPath = $file->getPathname().str_replace('/', DIRECTORY_SEPARATOR, '/config/');
+                foreach (glob($configPath.'*.xml') as $configFile)
                 {
                     $name = str_replace('.xml', '', basename($configFile));
                     if (in_array($name, self::$supportedConfigs))

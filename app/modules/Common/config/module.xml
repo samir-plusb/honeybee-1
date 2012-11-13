@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations xmlns="http://agavi.org/agavi/config/parts/module/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+<ae:configurations 
+    xmlns="http://agavi.org/agavi/config/parts/module/1.0" 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
     <ae:configuration>
-
         <module enabled="true">
             <settings>
                 <setting name="title">Common</setting>
                 <setting name="version">1.0</setting>
-
                 <!-- nicer filesystem structure -->
                 <setting name="agavi.action.path">%core.module_dir%/${moduleName}/impl/${actionName}/${actionName}Action.class.php</setting>
                 <setting name="agavi.cache.path">%core.module_dir%/${moduleName}/impl/${actionName}/${actionName}.cache.xml</setting>
@@ -16,6 +16,5 @@
                 <setting name="agavi.view.name">${actionName}/${actionName}${viewName}</setting>
             </settings>
         </module>
-
     </ae:configuration>
 </ae:configurations>

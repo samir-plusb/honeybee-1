@@ -1,7 +1,9 @@
-<ae:configurations xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" parent="%core.system_config_dir%/autoload.xml">
+<ae:configurations 
+    xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+    parent="%core.system_config_dir%/autoload.xml">
     <ae:configuration>
         <autoloads>
-            <!-- Agavi -->
             <autoload name="CommonBaseAction">%core.module_dir%/Common/lib/agavi/action/CommonBaseAction.class.php</autoload>
             <autoload name="CommonBaseView">%core.module_dir%/Common/lib/agavi/view/CommonBaseView.class.php</autoload>
             <autoload name="ListConfigValidator">%core.module_dir%/Common/lib/agavi/validator/ListConfigValidator.class.php</autoload>
@@ -21,7 +23,6 @@
             <autoload name="IListValueRenderer">%core.module_dir%/Common/lib/renderer/IListValueRenderer.iface.php</autoload>
             <autoload name="TicketOwnerListValueRenderer">%core.module_dir%/Common/lib/renderer/TicketOwnerListValueRenderer.class.php</autoload>
             <autoload name="DefaultListValueRenderer">%core.module_dir%/Common/lib/renderer/DefaultListValueRenderer.class.php</autoload>
-            <!-- /Agavi -->
         </autoloads>
     </ae:configuration>
 </ae:configurations>
