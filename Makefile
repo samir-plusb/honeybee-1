@@ -2,23 +2,29 @@ PROJECT_ROOT=`pwd`
 
 help:
 
-	@echo "Common targets:"
+	@echo "COMMON"
 	@echo "  cc - clear the cache directories and set file perms+mode."
 	@echo "  tail-logs - tail all application logs."
 	@echo "  install - initially setup a vanilla checkout."
 	@echo "  update - update the working copy and vendor libs."
-	@echo "Development targets:"
-	@echo "  PHP"
+	@echo ""
+	@echo "DEVELOPMENT"
+	@echo "  Scafolding"
+	@echo "    module - Create and integrate a new module."
+	@echo "    module-code - Generate code for a certain module."
+	@echo "    config - Generate includes for all modules."
+	@echo "  Php"
 	@echo "    test - run php test suites."
 	@echo "    phpcs - run the php code-sniffer and publish report."
-	@echo "  Scripts"
+	@echo "  Scripts:"
 	@echo "    js-specs - run vows scenarios with spec output to test the project's js code."
 	@echo "    js-xunit - run vows scenarios with xunit output to test the project's js code."
 	@echo "    js-docs - generate api doc for the project's js code."
-	@echo "  Styles"
+	@echo "  Styles:"
 	@echo "    lessc - compile less files to css directory."
 	@echo "    lessw - compile less files to css directory and watch less files for changes to then auto-compile."
-	@echo "Internal targets:"
+	@echo ""
+	@echo "INTERNAL"
 	@echo "  install-composer - install composer"
 	@echo "  install-vendor - install dependencies in vendor folder."
 	@echo "  update-vendor - update dependencies in vendor folder."
@@ -50,7 +56,7 @@ cc:
 
 config: cc
 
-	-rm app/config/includes/*.xml
+	-@rm app/config/includes/*.xml
 	@php bin/include_configs.php
 
 
@@ -176,7 +182,7 @@ module-code:
 	vendor/bin/dat0r.console generate $$dator_dir/codegen.ini $$dator_dir/module.xml gen+dep
 
 
-.PHONY: help
+.PHONY: help module module-code lessw lessc jsdoc js-xunit js-specs phpdoc phpcs test twitter-bootstrap cc config install update
 
 # vim: ts=4:sw=4:noexpandtab!:
 #
