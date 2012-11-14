@@ -1,6 +1,6 @@
 <?php
 
-class Movies_Edit_EditErrorView extends MoviesBaseView
+class %%MODULE_NAME%%_Edit_EditErrorView extends %%MODULE_NAME%%BaseView
 {
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
@@ -10,8 +10,7 @@ class Movies_Edit_EditErrorView extends MoviesBaseView
                 'errors' => $this->getAttribute('errors', array())
             )
         );
+        
         $this->getResponse()->setContent(json_encode($data));
     }
 }
-
-?>

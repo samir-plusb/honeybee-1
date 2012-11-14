@@ -5,6 +5,11 @@
     parent="%core.module_dir%/%%MODULE_NAME%%/config/validators.xml">
     <ae:configuration>
         <validators>
+            <validator class="string" name="invalid_phrase" required="true">
+                <arguments>
+                    <argument>search_phrase</argument>
+                </arguments>
+            </validator>
         </validators>
     </ae:configuration>
 </ae:configurations>

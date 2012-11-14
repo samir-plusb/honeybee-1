@@ -1,16 +1,15 @@
 <?php
 
 /**
- * The Movies_Suggest_SuggestErrorView class handles the presentation logic for our
- * Movies/Suggest actions's error data.
+ * The %%MODULE_NAME%%_Suggest_SuggestErrorView class handles the presentation logic for our
+ * %%MODULE_NAME%%/Suggest actions's error data.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Movies
+ * @package         %%MODULE_NAME%%
  * @subpackage      Mvc
  */
-class Movies_Suggest_SuggestErrorView extends MoviesBaseView
+class %%MODULE_NAME%%_Suggest_SuggestErrorView extends %%MODULE_NAME%%BaseView
 {
     /**
      * Handle presentation logic for json.
@@ -23,12 +22,10 @@ class Movies_Suggest_SuggestErrorView extends MoviesBaseView
     public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $data = array(
-            'state'     => 'error',
+            'state' => 'error',
             'errors' => $this->getAttribute('error_messages'),
             'data' => array()
         );
         $this->getResponse()->setContent(json_encode($data));
     }
 }
-
-?>

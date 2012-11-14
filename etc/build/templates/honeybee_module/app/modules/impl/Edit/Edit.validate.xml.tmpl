@@ -2,16 +2,18 @@
 <ae:configurations
     xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
-    parent="%core.module_dir%/Movies/config/validators.xml">
+    parent="%core.module_dir%/%%MODULE_NAME%%/config/validators.xml">
     <ae:configuration>
         <validators>
+        <!-- @todo use document validator as soon as available. -->
+        </validators>
 
-            <validator class="string" name="invalid_phrase" required="true">
+        <validators method="write">
+            <validator class="%%MODULE_NAME%%ItemValidator" name="invalid_%%MODULE_PREFIX%%_item" required="false">
                 <arguments>
-                    <argument>search_phrase</argument>
+                    <argument>%%MODULE_PREFIX%%</argument>
                 </arguments>
             </validator>
-
         </validators>
     </ae:configuration>
 </ae:configurations>

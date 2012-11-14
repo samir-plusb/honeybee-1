@@ -1,16 +1,15 @@
 <?php
 
 /**
- * The Movies_List_ListErrorView class handles the presentation logic for our
- * Movies/List actions's error data.
+ * The %%MODULE_NAME%%_List_ListErrorView class handles the presentation logic for our
+ * %%MODULE_NAME%%/List actions's error data.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Movies
+ * @package         %%MODULE_NAME%%
  * @subpackage      Mvc
  */
-class Movies_List_ListErrorView extends MoviesBaseView
+class %%MODULE_NAME%%_List_ListErrorView extends %%MODULE_NAME%%BaseView
 {
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
@@ -34,5 +33,3 @@ class Movies_List_ListErrorView extends MoviesBaseView
         $this->getResponse()->setContent(json_encode($data));
     }
 }
-
-?>

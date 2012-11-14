@@ -1,16 +1,15 @@
 <?php
 
 /**
- * The Movies_List_ListSuccessView class handles the presentation logic for our
- * Movies/List actions's success data.
+ * The %%MODULE_NAME%%_List_ListSuccessView class handles the presentation logic for our
+ * %%MODULE_NAME%%/List actions's success data.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Movies
+ * @package         %%MODULE_NAME%%
  * @subpackage      Mvc
  */
-class Movies_List_ListSuccessView extends MoviesBaseView
+class %%MODULE_NAME%%_List_ListSuccessView extends MoviesBaseView
 {
     /**
      * Handle presentation logic for the web (html).
@@ -24,18 +23,14 @@ class Movies_List_ListSuccessView extends MoviesBaseView
     {
         $this->setupHtml($parameters);
 
-        $this->setAttribute('_title', 'Midas - Filme: Liste');
-
+        $this->setAttribute('_title', 'Honeybee - %%MODULE_NAME%%: Liste');
         $this->getLayer('content')->setSlot(
             'list',
             $this->createSlotContainer('Common', 'List', array(
                 'config' => $this->getAttribute('config'),
                 'state' => $this->getAttribute('state')
-            )),
-            NULL,
-            'read'
+            )), NULL, 'read'
         );
-
         $this->setBreadcrumb();
     }
 
@@ -46,9 +41,9 @@ class Movies_List_ListSuccessView extends MoviesBaseView
         $page = round($listState->getOffset() / $listState->getLimit()) + 1;
 
         $moduleCrumb = array(
-            'text' => 'Filme',
-            'link' => $routing->gen('movies.list'),
-            'info' => 'Filme - Listenansicht (Anfang)',
+            'text' => '%%MODULE_NAME%%',
+            'link' => $routing->gen('%%MODULE_PREFIX%%.list'),
+            'info' => '%%MODULE_NAME%% - Listenansicht (Anfang)',
             'icon' => 'icon-list'
         );
 
@@ -69,7 +64,7 @@ class Movies_List_ListSuccessView extends MoviesBaseView
         {
             $breadcrumbs = array(array(
                 'text' => 'Liste',
-                'link' => $routing->gen('movies.list', $routeParams),
+                'link' => $routing->gen('%%MODULE_PREFIX%%.list', $routeParams),
                 'info' => 'Listenansicht (Seite ' . $page . ')',
                 'icon' => 'icon-list'
             ));
@@ -79,7 +74,7 @@ class Movies_List_ListSuccessView extends MoviesBaseView
             $routeParams['search_phrase'] = $listState->getSearch();
             $breadcrumbs[] = array(
                 'text' => 'Suche',
-                'link' => $routing->gen('movies.list', $routeParams),
+                'link' => $routing->gen('%%MODULE_PREFIX%%.list', $routeParams),
                 'info' => 'Suche nach: ' . $listState->getSearch() . ' (Seite ' . $page . ')',
                 'icon' => 'icon-search'
             );
@@ -89,7 +84,7 @@ class Movies_List_ListSuccessView extends MoviesBaseView
             $routeParams['filter'] = $listState->getFilter();
             $breadcrumbs[] = array(
                 'text' => 'Erweiterte Suche',
-                'link' => $routing->gen('movies.list', $routeParams),
+                'link' => $routing->gen('%%MODULE_PREFIX%%.list', $routeParams),
                 'info' => 'Erweiterte Suche (Seite ' . $page. ')',
                 'icon' => 'icon-search'
             );

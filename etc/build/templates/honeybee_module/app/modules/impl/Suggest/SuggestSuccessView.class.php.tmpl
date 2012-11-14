@@ -1,16 +1,15 @@
 <?php
 
 /**
- * The Movies_Suggest_SuggestSuccessView class handles the presentation logic for our
- * Movies/Suggest actions's success data.
+ * The %%MODULE_NAME%%_Suggest_SuggestSuccessView class handles the presentation logic for our
+ * %%MODULE_NAME%%/Suggest actions's success data.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Movies
+ * @package         %%MODULE_NAME%%
  * @subpackage      Mvc
  */
-class Movies_Suggest_SuggestSuccessView extends MoviesBaseView
+class %%MODULE_NAME%%_Suggest_SuggestSuccessView extends %%MODULE_NAME%%BaseView
 {
     /**
      * Handle presentation logic for json.
@@ -23,12 +22,11 @@ class Movies_Suggest_SuggestSuccessView extends MoviesBaseView
     public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $data = array(
-            'state'     => 'ok',
+            'state' => 'ok',
             'messages' => array(),
             'data' => $this->getAttribute('state')->getData()
         );
+        
         $this->getResponse()->setContent(htmlspecialchars_decode(json_encode($data)));
     }
 }
-
-?>

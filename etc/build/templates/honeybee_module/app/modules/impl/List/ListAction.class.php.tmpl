@@ -1,15 +1,14 @@
 <?php
 
 /**
- * The Movies_ListAction class is responseable for delivering movies to consumers.
+ * The %%MODULE_NAME%%_ListAction class is responseable for delivering %%MODULE_NAME%% to consumers.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Movies
+ * @package         %%MODULE_NAME%%
  * @subpackage      Mvc
  */
-class Movies_ListAction extends MoviesBaseAction
+class %%MODULE_NAME%%_ListAction extends %%MODULE_NAME%%BaseAction
 {
     /**
      * The alias of the default field used to sort our list data.
@@ -31,7 +30,7 @@ class Movies_ListAction extends MoviesBaseAction
     public function executeRead(AgaviRequestDataHolder $parameters)
     {
         $listConfig = ListConfig::fromArray(
-            AgaviConfig::get('movies.list_config')
+            AgaviConfig::get('%%MODULE_PREFIX%%.list_config')
         );
         $listState = ListState::fromArray(array(
             'offset' => $parameters->getParameter('offset', 0),
@@ -42,7 +41,7 @@ class Movies_ListAction extends MoviesBaseAction
             'filter' => $parameters->getParameter('filter', array())
         ));
 
-        $finder = MoviesFinder::create($listConfig);
+        $finder = %%MODULE_NAME%%Finder::create($listConfig);
         $result = $finder->find($listState);
         $listState->setTotalCount($result->getTotalCount());
         $listState->setData(
@@ -110,5 +109,3 @@ class Movies_ListAction extends MoviesBaseAction
         return $listData;
     }
 }
-
-?>
