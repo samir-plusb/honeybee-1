@@ -58,6 +58,7 @@ config: cc
 
 	-@rm app/config/includes/*.xml
 	@php bin/include_configs.php
+	@make cc
 
 
 install: install-vendor install-node-deps cc

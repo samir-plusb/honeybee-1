@@ -160,5 +160,24 @@
                 </replacetokens>
             </filterchain>
         </copy>
+
+        <!--# Create default actions (List, Edit, Suggest and Export) #-->
+        <agavi.select-path property="template.path" type="directory" path="${templates.directory.app.modules}/impl">
+            <from path="${templates.directory}" />
+        </agavi.select-path>
+        <copy todir="${module.directory}/${module.directory.impl}">
+            <mapper type="regexp" from="^(.+[\\\/])?(.+)\.tmpl$" to="\1\2" />
+            <fileset dir="${template.path}">
+                <include name="**/*.tmpl" />
+            </fileset>
+            <filterchain>
+                <replacetokens begintoken="%%" endtoken="%%">
+                    <token key="MODULE_PREFIX" value="${module.prefix}" />
+                    <token key="PROJECT_LOCATION" value="${project.directory}" />
+                    <token key="PROJECT_PREFIX" value="${project.prefix}" />
+                    <token key="MODULE_NAME" value="${module.name}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
     </target>
 </project>
