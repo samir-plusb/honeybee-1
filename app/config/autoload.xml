@@ -56,13 +56,6 @@
             <autoload name="ProjectDirectoryRegexpIterator">%core.lib_dir%/iterator/ProjectDirectoryRegexpIterator.class.php</autoload>
             <!-- /Iterator -->
 
-            <!-- Event -->
-            <autoload name="IEvent">%core.lib_dir%/event/IEvent.iface.php</autoload>
-            <autoload name="IEventProxy">%core.lib_dir%/event/IEventProxy.iface.php</autoload>
-            <autoload name="ProjectEventProxy">%core.lib_dir%/event/ProjectEventProxy.class.php</autoload>
-            <autoload name="ProjectEvent">%core.lib_dir%/event/ProjectEvent.class.php</autoload>
-            <!-- /Event -->
-
             <!-- Http -->
             <autoload name="ProjectCurl">%core.lib_dir%/http/ProjectCurl.class.php</autoload>
             <!-- /Http -->

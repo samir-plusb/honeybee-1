@@ -7,7 +7,6 @@
  * !INFO! The currentState property reflects the workflow-item's ticket's state and is updated each time
  * the item's ticket is stored.
  *
- * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package Workflow
