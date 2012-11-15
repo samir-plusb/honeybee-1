@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Domain\%%MODULE_NAME%%\%%MODULE_NAME%%Module;
+
 /**
  * The base view from which all %%MODULE_NAME%% views inherit from.
  *
@@ -9,5 +11,8 @@
  */
 class %%MODULE_NAME%%BaseView extends ProjectBaseView
 {
-
+    protected function getModule()
+    {
+        return %%MODULE_NAME%%Module::getInstance();
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-class RoutingConfigGenerator extends DefaultConfigGenerator
+class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
 {
     public function generate($name, array $filesToInclude)
     {

@@ -1,14 +1,14 @@
 <?php
 
-$default_context = // @todo do we really need/want this stunt?
+$default_context = // @todo do we really need/want this magic/stunt?
     preg_match('/\/binaries/i', $_SERVER['QUERY_STRING'])
     ? 'web_binaries'
     : 'web';
 
-$rootDir = dirname(dirname(__FILE__));
-require $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'dispatch.php';
+$rootDir = dirname(__DIR__);
+require $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
-if (! strstr(ProjectEnvironmentConfig::getEnvironment(), 'live'))
+if (FALSE !== strstr(ProjectEnvironmentConfig::getEnvironment(), 'dev'))
 {
     PhpDebugToolbar::start(array(
         'js_location' => 'static/PhpDebugToolbar/PhpDebugToolbar.js',

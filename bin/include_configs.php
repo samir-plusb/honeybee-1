@@ -2,7 +2,7 @@
 
 $rootDir = dirname(dirname(__FILE__));
 $default_context = 'web';
-require  $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'dispatch.php';
+require  $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 // bootstrap the agavi build env, so we can use the autoloader code
 // and have the AgaviModuleCheck class available.
 require(
@@ -16,16 +16,24 @@ AgaviBuild::bootstrap();
 $scanner = new ConfigurationScanner();
 foreach ($scanner->scan() as $name => $files)
 {
-    if ('routing' !== $name)
+    $generator = NULL;
+
+    switch ($name)
     {
-        $generator = new DefaultConfigGenerator();
-        $generator->generate($name, $files);
+        case 'routing':
+            $generator = new RoutingXmlConfigGenerator();
+            break;
+            
+        case 'dat0r';
+            $generator = new Dat0rAutoloadGenerator();
+            break;
+
+        default:
+            $generator = new DefaultXmlConfigGenerator();
+            break;
     }
-    else
-    {
-        $generator = new RoutingConfigGenerator();
-        $generator->generate($name, $files);
-    }
+
+    $generator->generate($name, $files);
 }
 
 exit(0);

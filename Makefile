@@ -56,7 +56,7 @@ cc:
 
 config: cc
 
-	-@rm app/config/includes/*.xml
+	-@rm app/config/includes/*
 	@php bin/include_configs.php
 	@make cc
 
@@ -179,8 +179,9 @@ module-code:
 
 	@bin/agavi module-list
 	@read -p "Enter Module Name:" module; \
-    dator_dir=app/modules/$$module/config/dat0r; \
-	vendor/bin/dat0r.console generate $$dator_dir/codegen.ini $$dator_dir/module.xml gen+dep
+    	dator_dir=app/modules/$$module/config/dat0r; \
+		vendor/bin/dat0r.console generate $$dator_dir/codegen.ini $$dator_dir/module.xml gen+dep
+	@make config
 
 
 .PHONY: help module module-code lessw lessc jsdoc js-xunit js-specs phpdoc phpcs test twitter-bootstrap cc config install update

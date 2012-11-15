@@ -1,6 +1,6 @@
 <?php
 
-class DefaultConfigGenerator
+class DefaultXmlConfigGenerator implements IConfigGenerator
 {
     public function generate($name, array $filesToInclude)
     {

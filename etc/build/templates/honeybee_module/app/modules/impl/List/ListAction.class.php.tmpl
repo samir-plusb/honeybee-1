@@ -11,16 +11,6 @@
 class %%MODULE_NAME%%_ListAction extends %%MODULE_NAME%%BaseAction
 {
     /**
-     * The alias of the default field used to sort our list data.
-     */
-    const DEFAULT_SORT_FIELD = 'title';
-
-    /**
-     * The default direction used to sort our list data.
-     */
-    const DEFAULT_SORT_DIRECTION = 'asc';
-
-    /**
      * Execute the write logic for this action, hence run the import.
      *
      * @param       AgaviRequestDataHolder $parameters
@@ -29,32 +19,10 @@ class %%MODULE_NAME%%_ListAction extends %%MODULE_NAME%%BaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters)
     {
-        $listConfig = ListConfig::fromArray(
-            AgaviConfig::get('%%MODULE_PREFIX%%.list_config')
-        );
-        $listState = ListState::fromArray(array(
-            'offset' => $parameters->getParameter('offset', 0),
-            'limit' => $parameters->getParameter('limit', $listConfig->getDefaultLimit()),
-            'sortDirection' => $parameters->getParameter('sorting[direction]', self::DEFAULT_SORT_DIRECTION),
-            'sortField' => $parameters->getParameter('sorting[field]', self::DEFAULT_SORT_FIELD),
-            'search' => $parameters->getParameter('search_phrase'),
-            'filter' => $parameters->getParameter('filter', array())
-        ));
+        $module = $this->getModule();
 
-        $finder = %%MODULE_NAME%%Finder::create($listConfig);
-        $result = $finder->find($listState);
-        $listState->setTotalCount($result->getTotalCount());
-        $listState->setData(
-            $this->prepareListData(
-                $result->getItems(), 
-                $finder->getWorkflowService()
-            )
-        );
-        $listState->freeze();
+        // @todo Use repository to fetch data. Then have the view prepare it.
 
-        $routing = $this->getContext()->getRouting();
-        $this->setAttribute('config', $listConfig);
-        $this->setAttribute('state', $listState);
         $this->setAttribute('user', $this->getContext()->getUser()->getAttribute('login'));
 
         return 'Success';
@@ -74,38 +42,9 @@ class %%MODULE_NAME%%_ListAction extends %%MODULE_NAME%%BaseAction
         {
             $errors[implode(', ', array_values($errMsg['errors']))] = $errMsg['message'];
         }
-        $this->setAttribute('error_messages', $errors);
-        return 'Error';
-    }
 
-    protected function prepareListData(array $items, IWorkflowService $workflowService)
-    {
-        $listData = array();
-        $ticketStore = $workflowService->getWorkflowSupervisor()->getWorkflowTicketStore();
-        /* @var $workflowItem IWorkflowItem */
-        foreach ($items as $workflowItem)
-        {
-            $workflowItemData = $workflowItem->toArray();
-            // @todo This findOne query is a potential bottle neck and does not scale!
-            // Better: Use the read connection instead of the write connection here.
-            // Even Better: Collect all tickets id's and fetch the data in one query.
-            $ticket = $ticketStore->fetchByIdentifier(
-                $workflowItem->getTicketId()
-            );
-            if (! $ticket)
-            {
-                error_log(__METHOD__ . " - Missing ticket for (movie)workflow item: " . $workflowItem->getIdentifier());
-                continue;
-            }
-            $ticketData = array(
-                'id' => $ticket->getIdentifier(),
-                'rev' => $ticket->getRevision()
-            );
-            $listData[] = array(
-                'data' => $workflowItemData,
-                'ticket' => $ticketData
-            );
-        }
-        return $listData;
+        $this->setAttribute('error_messages', $errors);
+
+        return 'Error';
     }
 }

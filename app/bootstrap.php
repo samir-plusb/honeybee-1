@@ -1,16 +1,11 @@
 <?php
 
 // +---------------------------------------------------------------------------+
-// | Initialize some common directory vars and set our include path.           |
+// | Require and hence setup the agavi configuration.                          |
 // +---------------------------------------------------------------------------+
 $rootDir = dirname(dirname(__FILE__));
-
-// make generated files group writeable for easy switch between web/console
-umask(02);
-
-$vendorDir = $rootDir . '/vendor';
-require $vendorDir . '/autoload.php';
 require $rootDir . '/app/config.php';
+umask(02); // make generated files group writeable for easy switch between web/console
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to our environment config provider.           |
@@ -26,6 +21,5 @@ ProjectEnvironmentConfig::load(FALSE);
 
 // @todo Atm this is needed to support routes that rely on the $_SERVER var for their source attribute.
 $_SERVER['AGAVI_ENVIRONMENT'] = ProjectEnvironmentConfig::toEnvString();
-
 Agavi::bootstrap($_SERVER['AGAVI_ENVIRONMENT']);
 AgaviConfig::set('core.default_context', $default_context);

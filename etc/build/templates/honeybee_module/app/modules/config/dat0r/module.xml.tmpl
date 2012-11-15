@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!--
-Enter your module definition here.
--->
-<module name="YourModule" namespace="Target\Namespace">
+<module name="%%MODULE_NAME%%" namespace="Honeybee\Domain">
     <description>
-        Enter module description here.
+        Holds the structure definition for %%MODULE_NAME%% documents.
     </description>
+    <options>
+        <option name="prefix">%%MODULE_PREFIX%%</option>
+        <option name="baseModule">\HoneybeeModule</option>
+        <option name="baseDocument">\HoneybeeDocument</option>
+    </options>
     <fields>
-        <!-- your field defintions go here.
+         <!-- your field defintions go here.
         <field name="title" type="text">
             <description>Holds an article's title.</description>
         </field> -->

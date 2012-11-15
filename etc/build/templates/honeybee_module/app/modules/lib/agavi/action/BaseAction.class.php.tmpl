@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Domain\%%MODULE_NAME%%\%%MODULE_NAME%%Module;
+
 /**
  * The base action from which all %%MODULE_NAME%% actions inherit from.
  *
@@ -9,5 +11,8 @@
  */
 class %%MODULE_NAME%%BaseAction extends ProjectBaseAction
 {
-
+    protected function getModule()
+    {
+        return %%MODULE_NAME%%Module::getInstance();
+    }
 }

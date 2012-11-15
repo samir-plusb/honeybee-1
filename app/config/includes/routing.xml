@@ -32,6 +32,9 @@
       <route name="news" pattern="^/news" module="News">
         <xi:include href="../../modules/News/config/routing.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0) xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
       </route>
+      <route name="article" pattern="^/article" module="Article">
+        <xi:include href="../../modules/Article/config/routing.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0) xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"/>
+      </route>
     </routes>
   </ae:configuration>
   <ae:configuration context="console">
@@ -45,5 +48,6 @@
     <xi:include href="../../modules/Events/config/routing.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/ae:configuration[@context='console'])/"/>
     <xi:include href="../../modules/Auth/config/routing.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/ae:configuration[@context='console'])/"/>
     <xi:include href="../../modules/News/config/routing.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/ae:configuration[@context='console'])/"/>
+    <xi:include href="../../modules/Article/config/routing.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/ae:configuration[@context='console'])/"/>
   </ae:configuration>
 </ae:configurations>

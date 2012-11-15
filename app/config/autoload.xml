@@ -6,25 +6,28 @@
     parent="%core.system_config_dir%/autoload.xml">
     <ae:configuration>
         <autoloads>
-            <!-- Extending Agavi -->
+            <!-- 
+                Extending Agavi
+            -->
+            <!-- mvc base classes -->
             <autoload name="ProjectBaseAction">%core.lib_dir%/agavi/action/ProjectBaseAction.class.php</autoload>
             <autoload name="ProjectBaseModel">%core.lib_dir%/agavi/model/ProjectBaseModel.class.php</autoload>
             <autoload name="ProjectBaseView">%core.lib_dir%/agavi/view/ProjectBaseView.class.php</autoload>
-
+            <!-- validators -->
             <autoload name="ProjectArrayValidator">%core.lib_dir%/agavi/validator/ProjectArrayValidator.class.php</autoload>
-
+            <!-- routing stuff -->
             <autoload name="ProjectLanguageRoutingCallback">%core.lib_dir%/agavi/routing/ProjectLanguageRoutingCallback.class.php</autoload>
-
+            <!-- filter stuff - basically all about handling resources (scripts, styles, binaries) -->
             <autoload name="ProjectExecutionFilter">%core.lib_dir%/agavi/filter/ProjectExecutionFilter.class.php</autoload>
             <autoload name="ProjectResourcePacker">%core.lib_dir%/agavi/filter/ProjectResourcePacker.class.php</autoload>
             <autoload name="ProjectResourceFilter">%core.lib_dir%/agavi/filter/ProjectResourceFilter.class.php</autoload>
             <autoload name="ProjectResourceFilterConfig">%core.lib_dir%/agavi/filter/ProjectResourceFilterConfig.class.php</autoload>
-
+            <!-- config handlers -->
             <autoload name="ProjectDataImportConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectDataImportConfigHandler.class.php</autoload>
             <autoload name="ProjectDataSourceConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectDataSourceConfigHandler.class.php</autoload>
             <autoload name="ProjectBaseConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectBaseConfigHandler.class.php</autoload>
             <autoload name="ProjectAclConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectAclConfigHandler.class.php</autoload>
-
+            <!-- database stuff -->
             <autoload name="ElasticSearchDatabase">%core.lib_dir%/agavi/database/ElasticSearchDatabase.class.php</autoload>
             <autoload name="CouchDbDatabase">%core.lib_dir%/agavi/database/CouchDbDatabase.class.php</autoload>
             <autoload name="IDatabaseSetup">%core.lib_dir%/agavi/database/IDatabaseSetup.iface.php</autoload>
@@ -32,48 +35,41 @@
             <autoload name="CouchdbClientException">%core.lib_dir%/agavi/database/CouchdbClientException.class.php</autoload>
             <autoload name="CouchDbDatabaseSetup">%core.lib_dir%/agavi/database/CouchDbDatabaseSetup.class.php</autoload>
             <autoload name="ElasticSearchDatabaseSetup">%core.lib_dir%/agavi/database/ElasticSearchDatabaseSetup.class.php</autoload>
-
+            <!-- user (access) -->
             <autoload name="ProjectZendAclSecurityUser">%core.lib_dir%/agavi/user/ProjectZendAclSecurityUser.class.php</autoload>
             <autoload name="UserIsItemOwnerAssertion">%core.lib_dir%/agavi/user/assertions/UserIsItemOwnerAssertion.class.php</autoload>
-            <!-- /Extending Agavi -->
-
-            <!-- DataObject -->
-            <autoload name="IComparable">%core.lib_dir%/data_object/IComparable.iface.php</autoload>
-            <autoload name="IDataObject">%core.lib_dir%/data_object/IDataObject.iface.php</autoload>
-            <autoload name="IFreezable">%core.lib_dir%/data_object/IFreezable.iface.php</autoload>
-            <autoload name="FreezableDataObject">%core.lib_dir%/data_object/FreezableDataObject.class.php</autoload>
-            <autoload name="BaseDataObject">%core.lib_dir%/data_object/BaseDataObject.class.php</autoload>
-            <autoload name="IDocument">%core.lib_dir%/data_object/IDocument.iface.php</autoload>
-            <autoload name="BaseDocument">%core.lib_dir%/data_object/BaseDocument.class.php</autoload>
-            <autoload name="IDocumentStore">%core.lib_dir%/data_object/IDocumentStore.iface.php</autoload>
-            <autoload name="CouchDocumentStore">%core.lib_dir%/data_object/CouchDocumentStore.class.php</autoload>
-            <autoload name="IItemLocation">%core.lib_dir%/data_object/IItemLocation.iface.php</autoload>
-            <autoload name="ItemLocation">%core.lib_dir%/data_object/ItemLocation.class.php</autoload>
-            <autoload name="GeoPoint">%core.lib_dir%/data_object/GeoPoint.class.php</autoload>
-            <!-- /DataObject -->
-
-            <!-- Iterator -->
-            <autoload name="ProjectDirectoryRegexpIterator">%core.lib_dir%/iterator/ProjectDirectoryRegexpIterator.class.php</autoload>
-            <!-- /Iterator -->
-
-            <!-- Http -->
-            <autoload name="ProjectCurl">%core.lib_dir%/http/ProjectCurl.class.php</autoload>
-            <!-- /Http -->
             
-            <!-- Mail -->
+            <!--
+                Extending Dat0r
+            -->
+            <autoload name="HoneybeeModule">%core.lib_dir%/dat0r/HoneybeeModule.class.php</autoload>
+            <autoload name="HoneybeeDocument">%core.lib_dir%/dat0r/HoneybeeDocument.class.php</autoload>
+
+            <!-- 
+                Iterator 
+            -->
+            <autoload name="ProjectDirectoryRegexpIterator">%core.lib_dir%/iterator/ProjectDirectoryRegexpIterator.class.php</autoload>
+            
+            <!-- 
+                Http 
+            -->
+            <autoload name="ProjectCurl">%core.lib_dir%/http/ProjectCurl.class.php</autoload>
+            
+            <!-- 
+                Mail - third party library from: http://code.google.com/p/php-mime-mail-parser/ 
+            -->
             <autoload name="MimeMailParser">%core.lib_dir%/mail/mailparse.php</autoload>
             <autoload name="MimeMailParser_attachment">%core.lib_dir%/mail/attachment.class.php</autoload>
-            <!-- /Mail -->
             
-            <autoload name="BaseExportDocumentFactory">%core.lib_dir%/BaseExportDocumentFactory.class.php</autoload>
-            <autoload name="ProjectIdSequenceMap">%core.lib_dir%/data_object/ProjectIdSequenceMap.class.php</autoload>
-            <autoload name="ProjectIdSequence">%core.lib_dir%/data_object/ProjectIdSequence.class.php</autoload>
-
-            <!-- Config -->
+            <!-- 
+                Config (Generation)
+            -->
             <autoload name="ConfigurationScanner">%core.lib_dir%/config/ConfigurationScanner.class.php</autoload>
-            <autoload name="DefaultConfigGenerator">%core.lib_dir%/config/DefaultConfigGenerator.class.php</autoload>
-            <autoload name="RoutingConfigGenerator">%core.lib_dir%/config/RoutingConfigGenerator.class.php</autoload>
-            <!-- /Config -->
+            <autoload name="DefaultXmlConfigGenerator">%core.lib_dir%/config/DefaultXmlConfigGenerator.class.php</autoload>
+            <autoload name="RoutingXmlConfigGenerator">%core.lib_dir%/config/RoutingXmlConfigGenerator.class.php</autoload>
+            <autoload name="Dat0rAutoloadGenerator">%core.lib_dir%/config/Dat0rAutoloadGenerator.class.php</autoload>
+            <autoload name="IConfigGenerator">%core.lib_dir%/config/IConfigGenerator.iface.php</autoload>
+            
         </autoloads>
     </ae:configuration>
     

@@ -32,9 +32,14 @@
 require(dirname(__DIR__) . '/vendor/autoload.php');
 require(dirname(__DIR__) . '/vendor/agavi/agavi/src/agavi.php');
 
-AgaviConfig::set('core.agavi_dir', dirname(__DIR__) . '/vendor/agavi/agavi/src/');
 AgaviConfig::set('core.app_dir', __DIR__);
 AgaviConfig::set('core.modules_dir', __DIR__ . DIRECTORY_SEPARATOR . 'modules');
+AgaviConfig::set(
+    'core.agavi_dir', 
+    dirname(__DIR__) . str_replace(
+        '/', DIRECTORY_SEPARATOR, '/vendor/agavi/agavi/src/'
+    )
+);
 
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the directory where cache files will be    |
@@ -59,3 +64,14 @@ AgaviConfig::set('core.modules_dir', __DIR__ . DIRECTORY_SEPARATOR . 'modules');
 // +---------------------------------------------------------------------------+
 
 date_default_timezone_set('Europe/Berlin');
+
+$dat0rDomainAutoload = __DIR__ . str_replace(
+    '/',
+    DIRECTORY_SEPARATOR,
+    '/config/includes/autoload.php'
+);
+
+if (is_readable($dat0rDomainAutoload))
+{
+    require $dat0rDomainAutoload;
+}
