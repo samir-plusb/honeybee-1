@@ -54,23 +54,47 @@ class GenericRepository implements IRepository
 
     public function write($data)
     {
-        $result = NULL;
+        $result = FALSE;
 
-        if (is_array($data))
+        // @todo we need to communicate errors nice and transparently somehow.
+        // maybe return a a result/report object.
+        if ($this->mayWrite($data))
         {
-            $result = $this->storage->writeMany($data);
-        }
-        else if ($data instanceof HoneybeeDocument)
-        {
-            $result = $this->storage->writeOne($data);
-        }
-        else
-        {
-            throw new InvalidArgumentException(
-                "The given data type is not supported by the repositories write method."
-            );
+            if (is_array($data))
+            {
+                $result = $this->storage->writeMany($data);
+            }
+            else
+            {
+                $result = $this->storage->writeOne($data);
+            }
         }
 
         return $result;
+    }
+
+    // @todo maybe we should ony allow documents that have been retrieved by 'read'
+    // to be stored and start to track them when they are exposed as a 'read' result.
+    // something like: if (in_array($document->getIdentifier(), $this->trackedIdentifiers))
+    private function mayWrite($data)
+    {
+        $mayWrite = TRUE;
+
+        if (is_array($data))
+        {
+            foreach ($data as $document)
+            {
+                if (! ($data instanceof HoneybeeDocument))
+                {
+                    $mayWrite = FALSE;
+                }
+            }
+        }
+        else if (! ($data instanceof HoneybeeDocument))
+        {
+            $mayWrite = FALSE;
+        }
+
+        return $mayWrite;
     }
 }
