@@ -1,41 +1,64 @@
-<!-- BEGIN <?php echo htmlspecialchars(__FILE__) ?> -->
-<div class="container" style="margin-top: 40px">
-	<div class="content">
-		<div class="page-header">
-			<h1><?php echo htmlspecialchars($t['_title']); ?></h1>
-		</div>
-		<div class="row error">
-<?php if (! empty($t['url'])) : ?>
-			<p class="url">
-				URL: <?php echo htmlspecialchars($t['url'])?>
-			</p>
-<?php endif ?>
-<?php if (! empty($t['_module'])) : ?>
-			<div class="module">
-				<?php echo htmlspecialchars($tm->_('Module').": ".$t['_module'])?>
-			</div>
-			<div class="action">
-				<?php echo htmlspecialchars($tm->_('Action').": ".$t['_action'])?>
-			</div>
-<?php endif ?>
-			<div class="messages">
+<div class="container-fluid wrapper">
+	<div class="row-fluid">
+        <div class="span12">
+            <h1>404 - Not Found</h1>
+            <hr />
+<?php 
+	if (! empty($t['url']))
+	{
+?>
+            <p>
+            	Unterhalb der Url: <b><?php echo htmlspecialchars($t['url'])?></b> ist keine Resource verf&uuml;gbar. 
+            </p>
+<?php 
+	}
+?>
+            <hr />
+        </div>
+	</div>
+	<div class="info-box well">
+		<h4>Details:</h4>
 <?php
+	if (empty($t['errors']) && empty($t['_module']))
+	{
+?>
+		<p>Die Url hat keine der definierten Routen getroffen.</p>
+<?php
+	}
+
 	if (! empty($t['errors']) && is_array($t['errors']))
 	{
-		echo '<dl>';
+?>
+		<dl>
+<?php
 		foreach ($t['errors'] as $error)
 		{
 			if ($error instanceof AgaviValidationError)
 			{
-				echo '<dt>'.htmlspecialchars(implode(', ',$error->getFields())).'</dt>';
-				echo '<dd>'.htmlspecialchars($error->getMessage()).'</dd>';
+?>
+			<dt><?php echo htmlspecialchars(implode(', ',$error->getFields())); ?></dt>
+			<dd><?php echo htmlspecialchars($error->getMessage()); ?></dd>
+<?php
 			}
 		}
-		echo '</dl>';
+?>
+		</dl>
+<?php
+	}
+	
+	if (! empty($t['_module']))
+	{
+?>
+		<p>
+			Die Url trifft zu, doch die resultierende "Module/Action" Kombination konnte nicht geladen werden.
+		</p>
+        <p>
+        	Module: <b><?php echo htmlspecialchars($t['_module']); ?></b>
+        	Action: <b><?php echo htmlspecialchars($t['_action']); ?></b>
+        </p>
+<?php
 	}
 ?>
-			</div>
-		</div>
-	</div>
+    </div>
+    <div class="push"></div>
 </div>
-<!-- END <?php echo htmlspecialchars(__FILE__) ?> -->
