@@ -42,7 +42,8 @@ p.tip-paragraph
     font-size: 12pt;
 }
 
-ul.dl-horizontal
+ul.dl-horizontal,
+.status-message
 {
     list-style: none;
     margin: 0;

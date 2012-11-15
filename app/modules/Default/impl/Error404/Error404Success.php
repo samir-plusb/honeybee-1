@@ -7,8 +7,8 @@
 	if (! empty($t['url']))
 	{
 ?>
-            <p>
-            	Unterhalb der Url: <b><?php echo htmlspecialchars($t['url'])?></b> ist keine Resource verf&uuml;gbar. 
+            <p class="status-message">
+            	Unterhalb der Url: <i><?php echo htmlspecialchars($t['url'])?></i> ist keine Resource verf&uuml;gbar. 
             </p>
 <?php 
 	}
