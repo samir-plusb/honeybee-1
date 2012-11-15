@@ -64,14 +64,3 @@ AgaviConfig::set(
 // +---------------------------------------------------------------------------+
 
 date_default_timezone_set('Europe/Berlin');
-
-$dat0rDomainAutoload = __DIR__ . str_replace(
-    '/',
-    DIRECTORY_SEPARATOR,
-    '/config/includes/autoload.php'
-);
-
-if (is_readable($dat0rDomainAutoload))
-{
-    require $dat0rDomainAutoload;
-}
