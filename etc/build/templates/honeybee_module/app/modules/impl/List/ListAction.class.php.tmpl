@@ -20,9 +20,14 @@ class %%MODULE_NAME%%_ListAction extends %%MODULE_NAME%%BaseAction
     public function executeRead(AgaviRequestDataHolder $parameters)
     {
         $module = $this->getModule();
+        $repository = $module->getRepository();
+        $documents = $repository->find(
+            $parameters->getParameter('query', NULL)
+        );
 
         // @todo Use repository to fetch data. Then have the view prepare it.
 
+        $this->setAttribute('documents', $documents);
         $this->setAttribute('user', $this->getContext()->getUser()->getAttribute('login'));
 
         return 'Success';

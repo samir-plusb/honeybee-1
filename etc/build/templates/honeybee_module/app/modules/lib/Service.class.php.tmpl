@@ -3,33 +3,8 @@
 /**
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @package %%MODULE_NAME%%
- * @subpackage Service
  */
-class %%MODULE_NAME%%WorkflowService extends BaseWorkflowService
+class %%MODULE_NAME%%Service extends BaseService
 {
-    const ITEM_IMPLEMENTOR = '%%MODULE_NAME%%Document';
-
-    private static $instance;
-
-    public static function getInstance()
-    {
-        if (NULL === self::$instance)
-        {
-            self::$instance = new %%MODULE_NAME%%Service('%%MODULE_PREFIX%%');
-        }
-        return self::$instance;
-    }
-
-    public function findItemByImportIdentifier($importIdentifier)
-    {
-        $listConfig = ListConfig::fromArray(AgaviConfig::get('%%MODULE_PREFIX%%.list_config'));
-        $moviesFinder = %%MODULE_NAME%%Finder::create($listConfig);
-        
-        return $moviesFinder->findItemByImportIdentifier($importIdentifier);
-    }
-
-    protected function getWorkflowItemImplementor()
-    {
-        return self::ITEM_IMPLEMENTOR;
-    }
+    
 }

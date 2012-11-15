@@ -44,6 +44,19 @@
             -->
             <autoload name="HoneybeeModule">%core.lib_dir%/dat0r/HoneybeeModule.class.php</autoload>
             <autoload name="HoneybeeDocument">%core.lib_dir%/dat0r/HoneybeeDocument.class.php</autoload>
+            <autoload name="HoneybeeModuleFactory">%core.lib_dir%/dat0r/HoneybeeModuleFactory.class.php</autoload>
+            
+            <!-- 
+                Repository/Service - Domain Data Access
+            -->
+            <autoload name="IRepository">%core.lib_dir%/repository/IRepository.iface.php</autoload>
+            <autoload name="GenericRepository">%core.lib_dir%/repository/GenericRepository.class.php</autoload>
+            <autoload name="IFinder">%core.lib_dir%/repository/IFinder.iface.php</autoload>
+            <autoload name="ElasticSearchFinder">%core.lib_dir%/repository/ElasticSearchFinder.class.php</autoload>
+            <autoload name="IStorage">%core.lib_dir%/repository/IStorage.iface.php</autoload>
+            <autoload name="CouchDbStorage">%core.lib_dir%/repository/CouchDbStorage.class.php</autoload>
+            <autoload name="IService">%core.lib_dir%/repository/IService.iface.php</autoload>
+            <autoload name="BaseService">%core.lib_dir%/repository/BaseService.class.php</autoload>
 
             <!-- 
                 Iterator 

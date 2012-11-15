@@ -9,16 +9,11 @@
             <autoload name="ListConfigValidator">%core.module_dir%/Common/lib/agavi/validator/ListConfigValidator.class.php</autoload>
             <autoload name="ListStateValidator">%core.module_dir%/Common/lib/agavi/validator/ListStateValidator.class.php</autoload>
 
-            <autoload name="IFinder">%core.module_dir%/Common/lib/list/IFinder.iface.php</autoload>
             <autoload name="IListConfig">%core.module_dir%/Common/lib/list/IListConfig.iface.php</autoload>
             <autoload name="IListState">%core.module_dir%/Common/lib/list/IListState.iface.php</autoload>
             <autoload name="ListConfig">%core.module_dir%/Common/lib/list/ListConfig.class.php</autoload>
             <autoload name="ListField">%core.module_dir%/Common/lib/list/ListField.class.php</autoload>
             <autoload name="ListState">%core.module_dir%/Common/lib/list/ListState.class.php</autoload>
-            <autoload name="BaseFinder">%core.module_dir%/Common/lib/list/BaseFinder.class.php</autoload>
-            <autoload name="IQueryBuilder">%core.module_dir%/Common/lib/list/IQueryBuilder.iface.php</autoload>
-            <autoload name="QueryBuilder">%core.module_dir%/Common/lib/list/QueryBuilder.class.php</autoload>
-            <autoload name="FinderResult">%core.module_dir%/Common/lib/list/FinderResult.class.php</autoload>
 
             <autoload name="IListValueRenderer">%core.module_dir%/Common/lib/renderer/IListValueRenderer.iface.php</autoload>
             <autoload name="TicketOwnerListValueRenderer">%core.module_dir%/Common/lib/renderer/TicketOwnerListValueRenderer.class.php</autoload>

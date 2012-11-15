@@ -7,29 +7,7 @@
  * @package         %%MODULE_NAME%%
  * @subpackage      Repository
  */
-class %%MODULE_NAME%%Finder extends BaseFinder
+class %%MODULE_NAME%%Finder extends ElasticSearchFinder
 {
-    const INDEX_TYPE = '%%MODULE_PREFIX%%';
-
-    public static function create(IListConfig $listConfig)
-    {
-        return new self(
-            AgaviContext::getInstance()->getDatabaseManager()->getDatabase(
-                self::getElasticSearchDatabaseName()
-            )->getResource(),
-            $listConfig,
-            MoviesWorkflowService::getInstance()
-        );
-    }
-
-    public static function getElasticSearchDatabaseName()
-    {
-        $connections = AgaviConfig::get('%%MODULE_PREFIX%%.connections');
-        return $connections['elasticsearch'];
-    }
-
-    protected function getIndexType()
-    {
-        return self::INDEX_TYPE;
-    }
+    
 }
