@@ -4,18 +4,12 @@
 // | Require and hence setup the agavi configuration.                          |
 // +---------------------------------------------------------------------------+
 $rootDir = dirname(dirname(__FILE__));
-require $rootDir . str_replace(
-    '/',
-    DIRECTORY_SEPARATOR,
-    '/app/config.php'
-);
+require $rootDir . str_replace('/', DIRECTORY_SEPARATOR, '/app/config.php');
 
 // +---------------------------------------------------------------------------+
 // | Register our dat0r domain packages to the autoloader.                     |
 // +---------------------------------------------------------------------------+
-$dat0rAutoloading = $rootDir . str_replace(
-    '/',
-    DIRECTORY_SEPARATOR,
+$dat0rAutoloading = $rootDir . str_replace('/', DIRECTORY_SEPARATOR,
     '/app/config/includes/autoload.php'
 );
 if (is_readable($dat0rAutoloading))
