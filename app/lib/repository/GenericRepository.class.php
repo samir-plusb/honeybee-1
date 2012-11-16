@@ -2,11 +2,18 @@
 
 class GenericRepository implements IRepository
 {
+    private $module;
+
     private $finder;
 
     private $storage;
 
-    public function __construct(IFinder $finder, IStorage $storage)
+    public function __construct(HoneybeeModule $module)
+    {
+        $this->module = $module;
+    }
+
+    public function initialize(IFinder $finder = NULL, IStorage $storage = NULL)
     {
         $this->finder = $finder;
         $this->storage = $storage;
@@ -30,7 +37,7 @@ class GenericRepository implements IRepository
         {
             if (($document = $this->finder->findOne($query)))
             {
-                $documents[] = $this->finder->findOne($query);
+                $documents[] = $document;
             }
         }
         else if ($query)
@@ -45,38 +52,61 @@ class GenericRepository implements IRepository
         return $documents;
     }
 
+    // @todo Use the finder (read connection) here.
     public function read($identifier)
     {
-        return is_array($identifier) 
-            ? $this->storage->readMany($identifier)
-            : $this->storage->readOne($identifier);
+        $documents = array();
+
+        if (is_array($identifier))
+        {
+            foreach ($identifier as $curIdentifier)
+            {
+                if (($data = $this->storage->read($curIdentifier)))
+                {
+                    $documents[] = $this->module->createDocument($data);
+                }
+            }
+        }
+        else if (($data = $this->storage->read($identifier)))
+        {
+            $documents[] = $this->module->createDocument($data);
+        }
+        
+        return $documents;
     }
 
     public function write($data)
     {
-        $result = FALSE;
-
         // @todo we need to communicate errors nice and transparently somehow.
         // maybe return a a result/report object.
-        if ($this->mayWrite($data))
+        $errors = array();
+
+        try
         {
-            if (is_array($data))
+            if ($this->mayWrite($data))
             {
-                $result = $this->storage->writeMany($data);
-            }
-            else
-            {
-                $result = $this->storage->writeOne($data);
+                if (is_array($data))
+                {
+                    $errors = $this->storage->writeMany($data);
+                }
+                else
+                {
+                    $this->storage->writeOne($data);
+                }
             }
         }
+        catch (Exception $e)
+        {
+            $errors[] = $e->getMessage();
+        }
 
-        return $result;
+        return $errors;
     }
 
     // @todo maybe we should ony allow documents that have been retrieved by 'read'
     // to be stored and start to track them when they are exposed as a 'read' result.
     // something like: if (in_array($document->getIdentifier(), $this->trackedIdentifiers))
-    private function mayWrite($data)
+    protected function mayWrite($data)
     {
         $mayWrite = TRUE;
 
@@ -84,7 +114,7 @@ class GenericRepository implements IRepository
         {
             foreach ($data as $document)
             {
-                if (! ($data instanceof HoneybeeDocument))
+                if (! ($document instanceof HoneybeeDocument))
                 {
                     $mayWrite = FALSE;
                 }

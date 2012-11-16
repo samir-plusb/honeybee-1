@@ -6,8 +6,11 @@ class HoneybeeModuleFactory
     {
         $finder = self::createFinder($module);
         $storage = self::createStorage($module);
+        
+        $repository = new GenericRepository($module);
+        $repository->initialize($finder, $storage);
 
-        return new GenericRepository($finder, $storage);
+        return $repository;
     }
 
     protected static function createFinder(HoneybeeModule $module)

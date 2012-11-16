@@ -2,9 +2,7 @@
 
 interface IStorage
 {
-    public function readOne($identifier, $revision = NULL);
-
-    public function readMany(array $identifiers, array $revisions = array());
+    public function read($identifier, $revision = NULL);
 
     public function writeOne(HoneybeeDocument $document);
 

@@ -1,6 +1,7 @@
 <?php
 
 use Dat0r\Core\Runtime\Module\RootModule;
+use Dat0r\Core\Runtime\Field\TextField;
 
 /**
  * @todo We might want to merge the module settings.xml options,
@@ -44,5 +45,21 @@ abstract class HoneybeeModule extends RootModule
     {
         $settingName = $this->getOption('prefix') . '.finder';
         return AgaviConfig::get($settingName, 'ElasticSearchFinder');
+    }
+
+    /**
+     * Returns the default fields that are initially added to a module upon creation.
+     *
+     * @return array A list of IField implemenations.
+     */
+    protected function getDefaultFields()
+    {
+        return array_merge(
+            parent::getDefaultFields(),
+            array(
+                TextField::create('identifier'),
+                TextField::create('revision')
+            )
+        );
     }
 }
