@@ -191,7 +191,7 @@ class CouchDbStorage implements IStorage
     }
 
     /**
-     * Turn the given document into an array representation,
+     * Turn the given document into an array representation, 
      * that can directly be passed to couchdb as is.
      * Basically this means mapping the document's id and rev fields,
      * to couch's id and rev fields and making sure that the self::DOC_IDENTIFIER
@@ -228,7 +228,7 @@ class CouchDbStorage implements IStorage
 
     /**
      * Turn the given (couchdb result)array into an array representation
-     * that can directly be passed to an HoneybeeDocument's fromArray method as is.
+     * that can directly be passed to an HoneybeeDocument's create method as is.
      * Basically this means mapping the couch's id and rev fields,
      * to the document's id and rev fields and making sure that the self::DOC_IDENTIFIER field is removed.
      *

@@ -7,9 +7,9 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         %%MODULE_NAME%%
- * @subpackage      Mvc
+ * @subpackage      List
  */
-class %%MODULE_NAME%%_List_ListSuccessView extends MoviesBaseView
+class %%MODULE_NAME%%_List_ListSuccessView extends %%MODULE_NAME%%BaseView
 {
     /**
      * Handle presentation logic for the web (html).
@@ -22,8 +22,10 @@ class %%MODULE_NAME%%_List_ListSuccessView extends MoviesBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
+        $module = $this->getAttribute('module');
 
-        $this->setAttribute('_title', 'Honeybee - %%MODULE_NAME%%: Liste');
+        $this->setAttribute('_title', sprintf('Honeybee - %s: Liste', $module->getName()));
+
         $this->getLayer('content')->setSlot(
             'list',
             $this->createSlotContainer('Common', 'List', array(
@@ -31,19 +33,23 @@ class %%MODULE_NAME%%_List_ListSuccessView extends MoviesBaseView
                 'state' => $this->getAttribute('state')
             )), NULL, 'read'
         );
+
         $this->setBreadcrumb();
     }
 
     protected function setBreadcrumb()
     {
-        $routing = $this->getContext()->getRouting();
         $listState = $this->getAttribute('state');
+        $module = $this->getAttribute('module');
+
+        $listRouteName = sprintf('%s.list', $module->getOption('prefix'));
         $page = round($listState->getOffset() / $listState->getLimit()) + 1;
+        $routing = $this->getContext()->getRouting();
 
         $moduleCrumb = array(
-            'text' => '%%MODULE_NAME%%',
-            'link' => $routing->gen('%%MODULE_PREFIX%%.list'),
-            'info' => '%%MODULE_NAME%% - Listenansicht (Anfang)',
+            'text' => $module->getName(),
+            'link' => $routing->gen($listRouteName),
+            'info' => sprintf('%s - Listenansicht (Anfang)', $module->getName()),
             'icon' => 'icon-list'
         );
 
@@ -52,6 +58,7 @@ class %%MODULE_NAME%%_List_ListSuccessView extends MoviesBaseView
         {
             array_splice($breadcrumbs, 1);
         }
+
         $routeParams = array(
             'offset' =>  $listState->getOffset(),
             'limit' => $listState->getLimit(),
@@ -60,11 +67,12 @@ class %%MODULE_NAME%%_List_ListSuccessView extends MoviesBaseView
                 'direction' => $listState->getSortDirection()
             )
         );
+
         if (! $listState->hasSearch() && ! $listState->hasFilter())
         {
             $breadcrumbs = array(array(
                 'text' => 'Liste',
-                'link' => $routing->gen('%%MODULE_PREFIX%%.list', $routeParams),
+                'link' => $routing->gen($listRouteName, $routeParams),
                 'info' => 'Listenansicht (Seite ' . $page . ')',
                 'icon' => 'icon-list'
             ));
@@ -74,7 +82,7 @@ class %%MODULE_NAME%%_List_ListSuccessView extends MoviesBaseView
             $routeParams['search_phrase'] = $listState->getSearch();
             $breadcrumbs[] = array(
                 'text' => 'Suche',
-                'link' => $routing->gen('%%MODULE_PREFIX%%.list', $routeParams),
+                'link' => $routing->gen($listRouteName, $routeParams),
                 'info' => 'Suche nach: ' . $listState->getSearch() . ' (Seite ' . $page . ')',
                 'icon' => 'icon-search'
             );
@@ -84,11 +92,12 @@ class %%MODULE_NAME%%_List_ListSuccessView extends MoviesBaseView
             $routeParams['filter'] = $listState->getFilter();
             $breadcrumbs[] = array(
                 'text' => 'Erweiterte Suche',
-                'link' => $routing->gen('%%MODULE_PREFIX%%.list', $routeParams),
+                'link' => $routing->gen($listRouteName, $routeParams),
                 'info' => 'Erweiterte Suche (Seite ' . $page. ')',
                 'icon' => 'icon-search'
             );
         }
+
         $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'midas.breadcrumbs');
         $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'midas.breadcrumbs');
     }

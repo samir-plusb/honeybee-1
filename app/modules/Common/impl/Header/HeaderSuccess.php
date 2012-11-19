@@ -58,7 +58,14 @@
           <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
             <li><a href="<?php echo $ro->gen('auth.logout'); ?>" title="Sitzung beenden"><span class="icon-signout"></span> abmelden</a></li>
           </ul>
+<?php
+  if (isset($t['avatar_url']))
+  {
+?>
           <img class="avatar-image img-rounded" src="<?php echo $t['avatar_url']; ?>" /> 
+<?php
+  }
+?>
         </li>
       </ul>
     </div>

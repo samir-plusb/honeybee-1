@@ -2,33 +2,129 @@
 
 class ListStateValidator extends AgaviValidator
 {
+    protected static $childArgValidators = array(
+        'offset' => array('class' => 'AgaviNumberValidator'),
+        'limit' => array('class' => 'AgaviNumberValidator'),
+        'search' => array('class' => 'AgaviStringValidator'),
+        'filter' => array('class' => 'ProjectArrayValidator'),
+        'field' => array(
+            'class' => 'AgaviStringValidator',
+            'base' => 'sorting'
+        ),
+        'direction' => array(
+            'class' => 'AgaviInarrayValidator',
+            'base' => 'sorting',
+            'values' => array('asc', 'desc')
+        )
+    );
+
     protected function validate()
     {
-        $state = $this->getData($this->getArgument());
+        $argument = $this->getArgument();
+        $success = TRUE;
+        $state = NULL;
 
-        if (is_array($state))
+        if ($argument && ($state = $this->getData($this->getArgument())))
         {
-            $state = ListState::fromArray($state);
+            if (! $state instanceof IListState)
+            {
+                $this->throwError('type');
+                $success = FALSE;
+            }
+            // @todo add support for passing strings as a state,
+            // thereby using a given string as a key to look up persisted list states.
+            // this is useful for stuff like custom user filters etc.
         }
-        elseif (! $state instanceof IListState)
+        
+        if (! $state || ! $success)
         {
-            $this->throwError('type');
-            return FALSE;
+            if (($success = $this->validateChildArguments()))
+            {
+                $state = ListState::create($this->getChildArgumentsData());
+            }
         }
 
-        if ($this->validateListStateInstance($state))
+        if ($state && $success)
         {
-            $this->export($this->getArgument(), $state);
-            return TRUE;
+            $this->export($state, 'state');
         }
-        return FALSE;
+
+        return $success;
     }
 
-    protected function validateListStateInstance(IListState $listState)
+    protected function validateChildArguments()
     {
-        // @todo validate all important parameters
-        return TRUE;
+        $success = TRUE;
+
+        foreach ($this->createChildValidators() as $childValidator)
+        {
+            $childValidator->setParentContainer($this->getParentContainer());
+            if (AgaviValidator::SILENT < $childValidator->execute($this->validationParameters))
+            {
+                $this->throwError($childValidator->getArgument());
+                $success = FALSE;
+            }
+        }
+
+        return $success;
+    }
+
+    protected function createChildValidators()
+    {
+        $validators = array();
+
+        foreach (self::$childArgValidators as $argument => $validatorDef)
+        {
+            $validator = new $validatorDef['class'];
+
+            $validatorDef['required'] = isset($validatorDef['required']) 
+                ? $validatorDef['required'] 
+                : FALSE;
+
+            $validatorDef['name'] = sprintf(
+                '_invalid_list_%s', isset($validatorDef['base']) 
+                    ? $validatorDef['base'].'_'.$argument 
+                    : $argument
+            );
+
+            $validator->initialize(
+                $this->getContext(), 
+                array_merge($this->getParameters(), $validatorDef),
+                array($argument)
+            );
+
+            $validators[] = $validator;
+        }
+
+        return $validators;
+    }
+
+    protected function getChildArgumentsData()
+    {
+        $data = array();
+
+        foreach (self::$childArgValidators as $argument => $validatorDef)
+        {
+            $childArgument = isset($validatorDef['base']) ? $validatorDef['base'] : $argument;
+            if (! isset($data[$childArgument]))
+            {
+                if (NULL !== ($value = $this->getData($childArgument)))
+                {
+                    $data[$childArgument] = $value;
+                }
+            }
+        }
+        // atm we need to map the incoming sorting structure, to the ListState's prop names.
+        $sorting = isset($data['sorting']) ? $data['sorting'] : array();
+        if (isset($sorting['direction']))
+        {
+            $data['sortDirection'] = $sorting['direction'];
+        }
+        if (isset($sorting['field']))
+        {
+            $data['sortField'] = $sorting['field'];
+        }
+
+        return $data;
     }
 }
-
-?>

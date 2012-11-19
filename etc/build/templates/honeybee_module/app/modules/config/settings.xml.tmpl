@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    This file holds the (gui) settings for the %%MODULE_NAME%% module.
+    Stuff in here will be used to satisfy configuring view behaviour, 
+    for example the list view and the edit view.
+    Settings that are tightly coupled to the structure or core-domain belong into the module.xml
+    and shall be accessed via the corresponding (honeybee) module instance.
+-->
 <ae:configurations 
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
     xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
     <ae:configuration>
         <settings prefix="%%MODULE_PREFIX%%.">
-
-            <setting name="connections">
-                <ae:parameters>
-                    <ae:parameter name="couchdb">%%MODULE_NAME%%.Write</ae:parameter>
-                    <ae:parameter name="elasticsearch">%%MODULE_NAME%%.Read</ae:parameter>
-                    <ae:parameter name="frontend">%%MODULE_NAME%%.Frontend</ae:parameter>
-                </ae:parameters>
-            </setting>
-
             <!-- list integration {@see IListConfig} -->
             <setting name="list_config">
                 <!-- common list params -->
@@ -21,19 +19,19 @@
                 <ae:parameter name="pagingRange">9</ae:parameter>
                 <ae:parameter name="routeName">%%MODULE_PREFIX%%.list</ae:parameter>
                 <ae:parameter name="typeKey">%%MODULE_PREFIX%%</ae:parameter>
-                <ae:parameter name="suggestField">
-                    <!-- enter your desire field for autosuggests here. 
-                     @todo generate from dat0r meta-data. -->                    
-                </ae:parameter>
+                <!-- enter your desire field for autosuggests here. 
+                <ae:parameter name="suggestField">title</ae:parameter> -->
 
                 <!--
                     define which list data shall be displayed
                     the names are fully qualified paths referring to values inside the list data
-                -->
+                
                 <ae:parameter name="fields">
-                    <!-- enter your desired list fields. 
-                     @todo generate from dat0r meta-data. -->
-                </ae:parameter>
+                    <ae:parameter name="title">
+                        <ae:parameter name="valuefield">title</ae:parameter>
+                        <ae:parameter name="sortfield">title.raw</ae:parameter>
+                    </ae:parameter> 
+                </ae:parameter> -->
 
                 <!-- define our clientside controller along with some options -->
                 <ae:parameter name="clientSideController">

@@ -7,13 +7,14 @@
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         %%MODULE_NAME%%
- * @subpackage      Mvc
+ * @subpackage      List
  */
 class %%MODULE_NAME%%_List_ListErrorView extends %%MODULE_NAME%%BaseView
 {
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
         $this->setupHtml($parameters);
+        $this->setBreadcrumb();
     }
 
     /**
@@ -26,10 +27,31 @@ class %%MODULE_NAME%%_List_ListErrorView extends %%MODULE_NAME%%BaseView
      */
     public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $data = array(
-            'ok'     => FALSE,
-            'errors' => $this->getErrorMessages()
-        );
+        $data = array('ok' => FALSE, 'errors' => $this->getErrorMessages());
         $this->getResponse()->setContent(json_encode($data));
+    }
+
+    protected function setBreadcrumb()
+    {
+        $module = $this->getAttribute('module');
+        $listRouteName = sprintf('%s.list', $module->getOption('prefix'));
+        $routing = $this->getContext()->getRouting();
+
+        $moduleCrumb = array(
+            'text' => $module->getName(),
+            'link' => $routing->gen($listRouteName),
+            'info' => sprintf('%s - Listenansicht (Anfang)', $module->getName()),
+            'icon' => 'icon-list'
+        );
+
+        $breadcrumbs = array(array(
+            'text' => 'Liste - Fehler',
+            'link' => $routing->gen($listRouteName),
+            'info' => 'Fehlerhafte parameter',
+            'icon' => 'icon-thumbs-down'
+        ));
+
+        $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'midas.breadcrumbs');
+        $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'midas.breadcrumbs');
     }
 }

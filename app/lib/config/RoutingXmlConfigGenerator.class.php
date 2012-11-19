@@ -51,11 +51,31 @@ class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
     protected function createWebRouting(DOMDocument $document, $configFile)
     {
         $moduleName = $this->extractModuleNameFromPath($configFile);
+        $moduleDefinition = str_replace('/', DIRECTORY_SEPARATOR,
+             AgaviConfig::get('core.modules_dir').'/'.$moduleName.'/config/dat0r/module.xml'
+        );
 
         $moduleRoute = $document->createElement('route');
         $moduleRoute->setAttribute('name', strtolower($moduleName));
         $moduleRoute->setAttribute('pattern', '^/' . strtolower($moduleName));
         $moduleRoute->setAttribute('module', $moduleName);
+        
+        if (file_exists($moduleDefinition))
+        {
+            $callbacks = $document->createElement('callbacks');
+            $callback = $document->createElement('callback');
+            $callback->setAttribute('class', 'HoneybeeModuleRoutingCallback');
+            $callbacks->appendChild($callback);
+
+            $parameter = $document->createElement(
+                'ae:parameter', 
+                sprintf('Honeybee\\Domain\\%1$s\\%1$sModule', $moduleName)
+            );
+            $parameter->setAttribute('name', 'implementor');
+
+            $moduleRoute->appendChild($parameter);
+            $moduleRoute->appendChild($callbacks);
+        }
 
         $webInclude = $document->createElement('xi:include');
         $webInclude->setAttribute('href', str_replace(
@@ -67,6 +87,7 @@ class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
             'xpointer',
             "xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0) xpointer(//ae:configuration[@context='web']/r:routes/r:route)/"
         );
+
         $moduleRoute->appendChild($webInclude);
         
         return $moduleRoute;

@@ -24,9 +24,5 @@ class Common_Header_HeaderSuccessView extends CommonBaseView
         {
             $this->setAttribute('avatar_url', $url);
         }
-        else
-        {
-            $this->setAttribute('avatar_url', 'need-default-image');
-        }
     }
 }

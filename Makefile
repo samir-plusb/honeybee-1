@@ -172,7 +172,7 @@ lessw: lessc
 module:
 
 	@bin/agavi honeybee-module-wizard
-	make config
+	@make config
 
 
 module-code:

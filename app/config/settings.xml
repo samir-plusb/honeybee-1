@@ -293,6 +293,9 @@
     </ae:configuration>
 
     <ae:configuration environment="development-vagrant">
+        <settings prefix="curl.">
+            <setting name="timeout">2</setting>
+        </settings>
         <settings>
             <setting name="auth_provider">SimpleAuthProvider</setting>
             <setting name="simple_logins">

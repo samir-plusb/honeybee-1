@@ -1,6 +1,6 @@
 <?php
 
-class ListConfig extends FreezableDataObject implements IListConfig
+class ListConfig implements IListConfig
 {
     protected $clientSideController;
 
@@ -22,16 +22,9 @@ class ListConfig extends FreezableDataObject implements IListConfig
 
     protected $suggestField = '_all';
 
-    public static function fromArray(array $data = array())
+    public static function create(array $data = array())
     {
-        return new self($data);
-    }
-
-    public function __construct(array $data = array())
-    {
-        parent::__construct($data);
-
-        $this->freeze();
+        return empty($data) ? new static : new static($data);
     }
 
     public function getTypeKey()
@@ -98,11 +91,9 @@ class ListConfig extends FreezableDataObject implements IListConfig
 
     protected function setFields(array $fields)
     {
-        $this->breakWhenFrozen();
-
         foreach ($fields as $fieldname => $fieldParams)
         {
-            $this->fields[$fieldname] = ListField::fromArray(array_merge(
+            $this->fields[$fieldname] = ListField::create(array_merge(
                 array('name' => $fieldname),
                 $fieldParams
             ));
@@ -118,6 +109,32 @@ class ListConfig extends FreezableDataObject implements IListConfig
     {
         $this->defaultLimit = (int)$limit;
     }
-}
 
-?>
+    protected function __construct(array $data = array())
+    {
+        if (! empty($data))
+        {
+            $this->hydrate($data);
+        }
+    }
+
+    protected function hydrate(array $data)
+    {
+        foreach (array_keys(get_class_vars(get_class($this))) as $prop)
+        {
+
+            if (array_key_exists($prop, $data))
+            {
+                $setter = 'set'.ucfirst($prop);
+                if (is_callable(array($this, $setter)))
+                {
+                    $this->$setter($data[$prop]);
+                }
+                else
+                {
+                    $this->$prop = $data[$prop];
+                }
+            }
+        }
+    }
+}

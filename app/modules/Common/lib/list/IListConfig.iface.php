@@ -1,8 +1,7 @@
 <?php
 
-interface IListConfig extends IDataObject
+interface IListConfig
 {
-    // returns the typeKey (news, shofi ...) for the module from which's context the config has been created for.
     public function getTypeKey();
 
     public function getSuggestField();
@@ -23,5 +22,3 @@ interface IListConfig extends IDataObject
 
     public function getFields();
 }
-
-?>

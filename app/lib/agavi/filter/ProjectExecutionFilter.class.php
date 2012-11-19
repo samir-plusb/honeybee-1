@@ -10,7 +10,7 @@
  * @package         Project
  * @subpackage      Agavi/Filter
  */
-class ProjectExecutionFilter extends PhpDebugToolbarAgaviExecutionFilter
+class ProjectExecutionFilter extends AgaviExecutionFilter
 {
     protected function executeView(AgaviExecutionContainer $container)
     {

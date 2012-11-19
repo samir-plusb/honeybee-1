@@ -31,22 +31,24 @@ class GenericRepository implements IRepository
     
     public function find($query = NULL, $limit = 0, $offset = 0)
     {
-        $documents = array();
+        $documents = new HoneybeeDocumentCollection();
 
         if ($query && 1 === $limit)
         {
-            if (($document = $this->finder->findOne($query)))
+            if (($data = $this->finder->findOne($query)))
             {
-                $documents[] = $document;
+                $documents->add(
+                    $this->module->createDocument($data)
+                );
             }
         }
         else if ($query)
         {
-            $documents = $this->finder->findMany($query, $limit, $offset);
+            $data = $this->finder->findMany($query, $limit, $offset);
         }
         else
         {
-            $documents = $this->finder->findAll($limit, $offset);
+            $data = $this->finder->findAll($limit, $offset);
         }
 
         return $documents;
@@ -55,7 +57,7 @@ class GenericRepository implements IRepository
     // @todo Use the finder (read connection) here.
     public function read($identifier)
     {
-        $documents = array();
+        $documents = new HoneybeeDocumentCollection();
 
         if (is_array($identifier))
         {
@@ -63,13 +65,17 @@ class GenericRepository implements IRepository
             {
                 if (($data = $this->storage->read($curIdentifier)))
                 {
-                    $documents[] = $this->module->createDocument($data);
+                    $documents->add(
+                        $this->module->createDocument($data)
+                    );
                 }
             }
         }
         else if (($data = $this->storage->read($identifier)))
         {
-            $documents[] = $this->module->createDocument($data);
+            $documents[] = $documents->add(
+                $this->module->createDocument($data)
+            );
         }
         
         return $documents;

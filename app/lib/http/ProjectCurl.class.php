@@ -15,7 +15,7 @@ class ProjectCurl
     /**
      * The default timeout to use for curl handles created by this class.
      */
-    const DEFAULT_TIMEOUT = 30;
+    const DEFAULT_TIMEOUT = 10;
 
     /**
      * Create a standard curl handle,

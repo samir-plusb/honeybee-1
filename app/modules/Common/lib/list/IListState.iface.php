@@ -1,6 +1,6 @@
 <?php
 
-interface IListState extends IDataObject
+interface IListState
 {
     const MODE_SUGGEST = 'suggest';
 
@@ -48,5 +48,3 @@ interface IListState extends IDataObject
 
     public function getSearchMode();
 }
-
-?>

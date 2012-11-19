@@ -1,55 +1,15 @@
 <?php
 
 /**
- * The %%MODULE_NAME%%_ListAction class is responseable for delivering %%MODULE_NAME%% to consumers.
+ * The %%MODULE_NAME%%_ListAction class is responseable 
+ * for delivering %%MODULE_NAME%% list-resources to consumers.
  *
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         %%MODULE_NAME%%
- * @subpackage      Mvc
+ * @subpackage      List
  */
-class %%MODULE_NAME%%_ListAction extends %%MODULE_NAME%%BaseAction
+class %%MODULE_NAME%%_ListAction extends BaseListAction
 {
-    /**
-     * Execute the write logic for this action, hence run the import.
-     *
-     * @param       AgaviRequestDataHolder $parameters
-     *
-     * @return      string The name of the view to execute.
-     */
-    public function executeRead(AgaviRequestDataHolder $parameters)
-    {
-        $module = $this->getModule();
-        $repository = $module->getRepository();
-        $documents = $repository->find(
-            $parameters->getParameter('query', NULL)
-        );
 
-        // @todo Use repository to fetch data. Then have the view prepare it.
-
-        $this->setAttribute('documents', $documents);
-        $this->setAttribute('user', $this->getContext()->getUser()->getAttribute('login'));
-
-        return 'Success';
-    }
-
-    /**
-     * Handles validation errors that occur for any our derivates.
-     *
-     * @param AgaviRequestDataHolder $parameters
-     *
-     * @return string The name of the view to invoke.
-     */
-    public function handleReadError(AgaviRequestDataHolder $parameters)
-    {
-        $errors = array();
-        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
-        {
-            $errors[implode(', ', array_values($errMsg['errors']))] = $errMsg['message'];
-        }
-
-        $this->setAttribute('error_messages', $errors);
-
-        return 'Error';
-    }
 }

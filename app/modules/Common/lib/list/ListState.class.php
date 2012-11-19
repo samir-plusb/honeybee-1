@@ -1,12 +1,12 @@
 <?php
 
-class ListState extends FreezableDataObject implements IListState
+class ListState implements IListState
 {
     protected $data = array();
 
     protected $totalCount = NULL;
 
-    protected $limit = 0;
+    protected $limit = 10;
 
     protected $offset = 0;
 
@@ -20,14 +20,13 @@ class ListState extends FreezableDataObject implements IListState
 
     protected $searchMode = self::MODE_SEARCH;
 
-    public static function fromArray(array $data = array())
+    public static function create(array $data = array())
     {
-        return new ListState($data);
+        return empty($data) ? new static : new static($data);
     }
 
     public function setData(array $data)
     {
-        $this->breakWhenFrozen();
         $this->data = $data;
     }
 
@@ -38,8 +37,7 @@ class ListState extends FreezableDataObject implements IListState
 
     public function setTotalCount($totalCount)
     {
-        $this->breakWhenFrozen();
-        $this->totalCount = (int) $totalCount;
+        $this->totalCount = (int)$totalCount;
     }
 
     public function getTotalCount()
@@ -49,8 +47,7 @@ class ListState extends FreezableDataObject implements IListState
 
     public function setLimit($limit)
     {
-        $this->breakWhenFrozen();
-        $this->limit = $limit;
+        $this->limit = (int)$limit;
     }
 
     public function getLimit()
@@ -65,8 +62,7 @@ class ListState extends FreezableDataObject implements IListState
 
     public function setOffset($offset)
     {
-        $this->breakWhenFrozen();
-        $this->offset = $offset;
+        $this->offset = (int)$offset;
     }
 
     public function getOffset()
@@ -81,7 +77,6 @@ class ListState extends FreezableDataObject implements IListState
 
     public function setSearch($search)
     {
-        $this->breakWhenFrozen();
         $this->search = $search;
     }
 
@@ -97,7 +92,6 @@ class ListState extends FreezableDataObject implements IListState
 
     public function setFilter(array $filter)
     {
-        $this->breakWhenFrozen();
         $this->filter = $filter;
     }
 
@@ -113,7 +107,6 @@ class ListState extends FreezableDataObject implements IListState
 
     public function setSortDirection($direction)
     {
-        $this->breakWhenFrozen();
         $this->sortDirection = $direction;
     }
 
@@ -124,7 +117,6 @@ class ListState extends FreezableDataObject implements IListState
 
     public function setSortField($field)
     {
-        $this->breakWhenFrozen();
         $this->sortField = $field;
     }
 
@@ -135,7 +127,6 @@ class ListState extends FreezableDataObject implements IListState
 
     public function setSearchMode($searchMode)
     {
-        $this->breakWhenFrozen();
         $this->searchMode = $searchMode;
     }
 
@@ -143,6 +134,31 @@ class ListState extends FreezableDataObject implements IListState
     {
         return $this->searchMode;
     }
-}
 
-?>
+    protected function __construct(array $data = array())
+    {
+        if (! empty($data))
+        {
+            $this->hydrate($data);
+        }
+    }
+
+    protected function hydrate(array $data)
+    {
+        foreach (array_keys(get_class_vars(get_class($this))) as $prop)
+        {
+            if (array_key_exists($prop, $data))
+            {
+                $setter = 'set'.ucfirst($prop);
+                if (is_callable(array($this, $setter)))
+                {
+                    $this->$setter($data[$prop]);
+                }
+                else
+                {
+                    $this->$prop = $data[$prop];
+                }
+            }
+        }
+    }
+}
