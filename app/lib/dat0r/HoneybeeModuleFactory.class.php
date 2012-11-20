@@ -65,6 +65,9 @@ class HoneybeeModuleFactory
             );
         }
 
+        // create query builder and initialize service with it.
+        // $service->initialize($queryBuilder);
+
         return $service;
 
 

@@ -19,6 +19,9 @@
                 <ae:parameter name="index">%%DB_PREFIX%%_%%MODULE_PREFIX%%</ae:parameter>
                 <ae:parameter name="setup">true</ae:parameter>
                 <ae:parameter name="mapping_dir">%core.modules_dir%/%%MODULE_NAME%%/config/elasticsearch/</ae:parameter>
+                <ae:parameter name="river">
+                    <ae:parameter name="couch_db">%%DB_PREFIX%%_%%MODULE_PREFIX%%</ae:parameter>
+                </ae:parameter>
             </database>
 
         </databases>
