@@ -180,7 +180,8 @@
                 </replacetokens>
             </filterchain>
         </copy>
-        
+
+        <!--# Initially generate dat0r classes #-->
         <run command="vendor/bin/dat0r.console generate ${module.directory}/config/dat0r/codegen.ini ${module.directory}/config/dat0r/module.xml gen+dep" dir="${project.directory}" />
     </target>
 </project>

@@ -11,6 +11,18 @@ abstract class HoneybeeModule extends RootModule
 {
     private $repository;
 
+    private $service;
+
+    public function getService()
+    {
+        if (NULL === $this->service)
+        {
+            $this->service = HoneybeeModuleFactory::createService($this);
+        }
+
+        return $this->service;
+    }
+
     public function getRepository()
     {
         if (NULL === $this->repository)
@@ -35,15 +47,32 @@ abstract class HoneybeeModule extends RootModule
         return sprintf('%s.%s', $this->getName(), $type);
     }
 
+    public function getServiceImplementor()
+    {
+        $defaultService = sprintf('%sService', $this->getName());
+        $settingName = $this->getOption('prefix') . '.service';
+
+        return AgaviConfig::get($settingName, $defaultService);
+    }
+
+    public function getRepositoryImplementor()
+    {
+        $settingName = $this->getOption('prefix') . '.repository';
+
+        return AgaviConfig::get($settingName, 'GenericRepository');
+    }
+
     public function getStorageImplementor()
     {
         $settingName = $this->getOption('prefix') . '.storage';
+
         return AgaviConfig::get($settingName, 'CouchDbStorage');
     }
 
     public function getFinderImplementor()
     {
         $settingName = $this->getOption('prefix') . '.finder';
+        
         return AgaviConfig::get($settingName, 'ElasticSearchFinder');
     }
 

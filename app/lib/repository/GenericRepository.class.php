@@ -45,6 +45,8 @@ class GenericRepository implements IRepository
         else if ($query)
         {
             $data = $this->finder->findMany($query, $limit, $offset);
+
+            var_dump(__METHOD__, $data);exit;
         }
         else
         {

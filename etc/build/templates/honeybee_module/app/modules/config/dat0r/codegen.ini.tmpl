@@ -7,3 +7,9 @@ deployDir=../../lib/dat0r/
 ; Tell whether we want generated code to completely moved or just copied 
 ; from our cache to the deploy dir. Valid values are 'copy' or 'move'.
 deployMethod=move
+
+[plugins]
+ElasticSearchIndexGeneratorPlugin=../../../../../ElasticSearchIndexGeneratorPlugin.class.php
+
+[ElasticSearchIndexGeneratorPlugin]
+deployPath=../elasticsearch/%%MODULE_PREFIX%%.mapping.json

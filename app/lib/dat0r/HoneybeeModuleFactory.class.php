@@ -1,16 +1,73 @@
 <?php
 
+// @todo maybe we should rename the create methods into get methods 
+// and pool the instances inside the factory, so we can remove the getRepository and getService
+// methods from the module.
 class HoneybeeModuleFactory
 {
     public static function createRepository(HoneybeeModule $module)
     {
+        $implementor = $module->getRepositoryImplementor();
+
+        if (! class_exists($implementor))
+        {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "Unable to load repository class %s for module %s.", 
+                    $implementor, $module->getName()
+                )
+            );
+        }
+
         $finder = self::createFinder($module);
         $storage = self::createStorage($module);
         
-        $repository = new GenericRepository($module);
+        $repository = new $implementor($module);
+
+        if (! $repository instanceof IRepository)
+        {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "The given repository %s for module %s must implement the IRepository interface.",
+                    $implementor, $module->getName()
+                )
+            );
+        }
+
         $repository->initialize($finder, $storage);
 
         return $repository;
+    }
+
+    public static function createService(HoneybeeModule $module)
+    {
+        $implementor = $module->getServiceImplementor();
+
+        if (! class_exists($implementor))
+        {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "Unable to load service class %s for module %s.", 
+                    $implementor, $module->getName()
+                )
+            );
+        }
+
+        $service = new $implementor($module);
+
+        if (! $service instanceof IService)
+        {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "The given service %s for module %s must implement the IService interface.",
+                    $implementor, $module->getName()
+                )
+            );
+        }
+
+        return $service;
+
+
     }
 
     protected static function createFinder(HoneybeeModule $module)

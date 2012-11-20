@@ -19,19 +19,20 @@ class BaseListAction extends ProjectBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters)
     {
+        $module = $this->getModule();
+        $service = $module->getService();
+
         $listConfig = $this->createListConfig();
         $listState = $parameters->getParameter('state');
 
-        $listData = $this->prepareListData(
-            $this->fetchDocuments($listConfig, $listState)
-        );
+        $data = $service->fetchListData($listConfig, $listState);
 
-        $listState->setTotalCount($listData['totalCount']);
-        $listState->setData($listData['data']);
+        $listState->setTotalCount($data['totalCount']);
+        $listState->setData($data['documents']->toArray());
 
         $this->setAttribute('config', $listConfig);
         $this->setAttribute('state', $listState);
-        $this->setAttribute('module', $this->getModule());
+        $this->setAttribute('module', $module);
 
         return 'Success';
     }
@@ -56,29 +57,6 @@ class BaseListAction extends ProjectBaseAction
         $this->setAttribute('error_messages', $errors);
 
         return 'Error';
-    }
-
-    protected function fetchDocuments(IListConfig $config, IListState $state)
-    {
-        // @todo build query from list state and pass to the repo's find method.
-        return $this->getModule()->getRepository()->read(array(
-            'article-e9260f2f896732c15308e1df6d000e7a',
-            'article-e9260f2f896732c15308e1df6d004a6e'
-        ));
-    }
-
-    // @todo switch from collection to finder result,
-    // thereby adding real 'totalCount' support.
-    protected function prepareListData(HoneybeeDocumentCollection $documents)
-    {
-        $listData = array();
-
-        foreach ($documents as $document)
-        {
-            $listData[] = array('data' => $document->toArray(), 'ticket' => array());
-        }
-
-        return array('data' => $listData, 'totalCount' => count($listData));
     }
 
     protected function createListConfig()
