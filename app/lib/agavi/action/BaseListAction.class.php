@@ -28,7 +28,9 @@ class BaseListAction extends ProjectBaseAction
         $data = $service->fetchListData($listConfig, $listState);
 
         $listState->setTotalCount($data['totalCount']);
-        $listState->setData($data['documents']->toArray());
+        $listState->setData(
+            $this->prepareListData($data['documents'])
+        );
 
         $this->setAttribute('config', $listConfig);
         $this->setAttribute('state', $listState);
@@ -95,5 +97,20 @@ class BaseListAction extends ProjectBaseAction
             '%s.list_config', 
             $this->getModule()->getOption('prefix')
         );
+    }
+
+    protected function prepareListData(HoneybeeDocumentCollection $documents)
+    {
+        $data = array();
+
+        foreach ($documents as $document)
+        {
+            $data[] = array(
+                'data' => $document->toArray(),
+                'ticket' => array()
+            );
+        }
+
+        return $data;
     }
 }

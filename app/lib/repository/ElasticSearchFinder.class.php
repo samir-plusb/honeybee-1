@@ -2,6 +2,16 @@
 
 class ElasticSearchFinder implements IFinder
 {
+    const ELASTIC_ID = '_id';
+
+    const ELASTIC_REV = '_rev';
+
+    const DOC_IDENTIFIER = 'identifier';
+
+    const DOC_REVISION = 'revision';
+
+    const DOC_IMPLEMENTOR = 'type';
+
     private $database;
 
     private $type;
@@ -26,7 +36,7 @@ class ElasticSearchFinder implements IFinder
         $source = $this->getQuerySource();
         $result = $source->search($query);
 
-        // @todo Hydrate result into document.
+        // @todo Convert result into document.
         return $document;
     }
 
@@ -37,15 +47,12 @@ class ElasticSearchFinder implements IFinder
             $query = Elastica_Query::create($query);
         }
 
-        // @todo maybe add some more convenience 'round query creation.
-
         $query->setLimit($limit)->setFrom($offset);
 
         $source = $this->getQuerySource();
-        $result = $source->search($query);
-
-        // @todo Introduce a finder result or document collection...
-        return $result;
+        $resultSet = $source->search($query);
+        
+        return $this->convertResultSetToArray($resultSet);
     }
 
     public function findAll($limit = 0, $offset = 0)
@@ -54,10 +61,9 @@ class ElasticSearchFinder implements IFinder
         $query->setLimit($limit)->setFrom($offset);
 
         $source = $this->getQuerySource();
-        $result = $source->search($query);
+        $resultSet = $source->search($query);
 
-        // @todo Introduce a finder result or document collection...
-        return $result;
+        return $this->convertResultSetToArray($resultSet);
     }
 
     protected function getDatabase()
@@ -70,5 +76,49 @@ class ElasticSearchFinder implements IFinder
         $index = $this->getDatabase()->getResource();
 
         return ($this->type) ? $index->getType($this->type) : $index;
+    }
+
+    protected function convertResultSetToArray(Elastica_ResultSet $resultSet)
+    {
+        $data = array();
+
+        foreach ($resultSet->getResults() as $result)
+        {
+            $hit = $result->getHit();
+            $data[] = $this->mapElasticSearchDataToDomain($hit['_source']);
+        }
+
+        return array(
+            'data' => $data,
+            'totalCount' => $resultSet->getTotalHits()
+        );
+    }
+
+    protected function mapElasticSearchDataToDomain(array $data)
+    {
+        $docType = isset($data[self::DOC_IMPLEMENTOR]) ? $data[self::DOC_IMPLEMENTOR] : FALSE;
+
+        if (! $docType || ! class_exists($docType, TRUE))
+        {
+            throw new Exception(
+                "Invalid or corrupt type information within document data."
+            );
+        }
+
+        unset($data[self::DOC_IMPLEMENTOR]);
+
+        if (isset($data[self::ELASTIC_ID]))
+        {
+            $data[self::DOC_IDENTIFIER] = $data[self::ELASTIC_ID];
+            unset($data[self::ELASTIC_ID]);
+        }
+
+        if (isset($data[self::ELASTIC_REV]))
+        {
+            $data[self::DOC_REVISION] = $data[self::ELASTIC_REV];
+            unset($data[self::ELASTIC_REV]);
+        }
+
+        return $data;
     }
 }

@@ -32,28 +32,32 @@ class GenericRepository implements IRepository
     public function find($query = NULL, $limit = 0, $offset = 0)
     {
         $documents = new HoneybeeDocumentCollection();
+        $result = NULL;
 
         if ($query && 1 === $limit)
         {
-            if (($data = $this->finder->findOne($query)))
-            {
-                $documents->add(
-                    $this->module->createDocument($data)
-                );
-            }
+            $result = $this->finder->findOne($query);
         }
         else if ($query)
         {
-            $data = $this->finder->findMany($query, $limit, $offset);
-
-            var_dump(__METHOD__, $data);exit;
+            $result = $this->finder->findMany($query, $limit, $offset);
         }
         else
         {
-            $data = $this->finder->findAll($limit, $offset);
+            $result = $this->finder->findAll($limit, $offset);
         }
 
-        return $documents;
+        foreach ($result['data'] as $documentData)
+        {
+            $documents->add(
+                $this->module->createDocument($documentData)
+            );
+        }
+
+        return array(
+            'documents' => $documents,
+            'totalCount' => $result['totalCount']
+        );
     }
 
     // @todo Use the finder (read connection) here.
