@@ -21,7 +21,7 @@ abstract class BaseService implements IService
         $query = $this->buildListQuery($config, $state);
         $limit = $state->hasLimit() ? $state->getLimit() : 0;
         $offset = $state->hasOffset() ? $state->getOffset() : 0;
-
+        
         return $this->module->getRepository()->find($query, $limit, $offset);
     }
 
