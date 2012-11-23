@@ -50,7 +50,6 @@ class GenericRepository implements IRepository
         );
     }
 
-    // @todo Use the finder (read connection) here.
     public function read($identifier)
     {
         $documents = new HoneybeeDocumentCollection();
@@ -79,54 +78,23 @@ class GenericRepository implements IRepository
 
     public function write($data)
     {
-        // @todo we need to communicate errors nice and transparently somehow.
-        // maybe return a a result/report object.
         $errors = array();
 
-        try
+        if ($data instanceof HoneybeeDocument)
         {
-            if ($this->mayWrite($data))
-            {
-                if (is_array($data))
-                {
-                    $errors = $this->storage->writeMany($data);
-                }
-                else
-                {
-                    $this->storage->writeOne($data);
-                }
-            }
+            $this->storage->writeOne($data);
         }
-        catch (Exception $e)
+        else if ($data instanceof HoneybeeDocumentCollection)
         {
-            $errors[] = $e->getMessage();
+            $errors = $this->storage->writeMany($data);
+        }
+        else
+        {
+            throw new InvalidArgumentException(
+                "Only HoneybeeDocument and HoneybeeDocumentCollection allowed as $data argument."
+            );
         }
 
         return $errors;
-    }
-
-    // @todo maybe we should ony allow documents that have been retrieved by 'read'
-    // to be stored and start to track them when they are exposed as a 'read' result.
-    // something like: if (in_array($document->getIdentifier(), $this->trackedIdentifiers))
-    protected function mayWrite($data)
-    {
-        $mayWrite = TRUE;
-
-        if (is_array($data))
-        {
-            foreach ($data as $document)
-            {
-                if (! ($document instanceof HoneybeeDocument))
-                {
-                    $mayWrite = FALSE;
-                }
-            }
-        }
-        else if (! ($data instanceof HoneybeeDocument))
-        {
-            $mayWrite = FALSE;
-        }
-
-        return $mayWrite;
     }
 }
