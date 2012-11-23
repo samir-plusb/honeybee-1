@@ -64,7 +64,7 @@ class Common_PaginateAction extends CommonBaseAction
         );
         if ($listState->hasSearch())
         {
-            $attributes['search_phrase'] = $listState->getSearch();
+            $attributes['search'] = $listState->getSearch();
         }
         else if ($listState->hasFilter())
         {

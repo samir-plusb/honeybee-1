@@ -1,5 +1,5 @@
 <?php
-    $searchPhrase = isset($t['search_phrase']) ? $t['search_phrase'] : FALSE;
+    $searchPhrase = isset($t['search']) ? $t['search'] : FALSE;
     $isFiltered = $t['is_filtered'];
     $filter = isset($t['filter']) ? $t['filter'] : FALSE;
     $limit = $t['limit'];
@@ -130,7 +130,7 @@
         );
         if ($searchPhrase)
         {
-            $routingData['search_phrase'] = $searchPhrase;
+            $routingData['search'] = $searchPhrase;
         }
         elseif ($isFiltered)
         {

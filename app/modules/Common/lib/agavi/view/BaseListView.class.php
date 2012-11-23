@@ -58,9 +58,9 @@ abstract class BaseListView extends ProjectbaseView
             )
         );
 
-        if ($this->hasAttribute('search_phrase'))
+        if ($this->hasAttribute('search'))
         {
-            $listParams['search_phrase'] = $this->getAttribute('search_phrase');
+            $listParams['search'] = $this->getAttribute('search');
         }
 
         $this->getLayer('content')->setSlot(

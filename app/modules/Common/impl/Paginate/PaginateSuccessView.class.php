@@ -33,7 +33,7 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
         $currentOffset = $this->getAttribute('offset');
         $currentPage = (int)floor($currentOffset / $limit);
         $lastPage = $this->getAttribute('last_page');
-        $searchPhrase = $this->getAttribute('search_phrase', FALSE);
+        $search = $this->getAttribute('search', FALSE);
         $filter = $this->getAttribute('filter', FALSE);
         $sorting = $this->getAttribute('sorting', FALSE);
         $pageLinksData = array(
@@ -66,9 +66,9 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
         $urls = array();
         foreach ($pageLinksData as $name => $pageLinkData)
         {
-            if ($searchPhrase)
+            if ($search)
             {
-                $pageLinkData['search_phrase'] = $searchPhrase;
+                $pageLinkData['search'] = $search;
             } 
             else if ($filter)
             {

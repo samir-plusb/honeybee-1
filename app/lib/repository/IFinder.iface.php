@@ -2,9 +2,7 @@
 
 interface IFinder
 {
-    public function findOne($query);
+    public function find($query, $limit = 0, $offset = 0);
 
-    public function findMany($query, $limit = 0, $offset = 0);
-
-    public function findAll($limit = 0, $offset = 0);
+    public function fetchAll($limit = 0, $offset = 0);
 }

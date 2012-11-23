@@ -66,7 +66,7 @@ class Common_ListAction extends CommonBaseAction
         ));
         if ($listState->hasSearch())
         {
-            $this->setAttribute('search_phrase', $listState->getSearch());
+            $this->setAttribute('search', $listState->getSearch());
         }
 
         return 'Success';

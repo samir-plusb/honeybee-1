@@ -19,7 +19,7 @@
     $prevLink = $t['links']['previous_page'];
     $nextLink = $t['links']['next_page'];
 
-    $searchPhrase = isset($t['search_phrase']) ? $t['search_phrase'] : FALSE;
+    $searchPhrase = isset($t['search']) ? $t['search'] : FALSE;
     $filter = isset($t['filter']) ? $t['filter'] : FALSE;
     $sorting = isset($t['sorting']) ? $t['sorting'] : FALSE;
 
@@ -129,7 +129,7 @@
         );
         if ($searchPhrase)
         {
-            $routeData['search_phrase'] = $searchPhrase;
+            $routeData['search'] = $searchPhrase;
         }
         else if ($filter)
         {

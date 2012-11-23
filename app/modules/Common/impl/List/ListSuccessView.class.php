@@ -24,7 +24,7 @@ class Common_List_ListSuccessView extends CommonBaseView
         $listState = $parameters->getParameter('state');
         $routing = $this->getContext()->getRouting();
         $searchWidgetOpts = array(
-            'search_phrase' => $listState->getSearch(),
+            'search' => $listState->getSearch(),
             'limit' => $listState->getLimit(),
             'sort_field' => $listState->getSortField(),
             'sort_direction' => $listState->getSortDirection(),

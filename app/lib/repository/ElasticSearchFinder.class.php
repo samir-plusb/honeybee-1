@@ -22,25 +22,7 @@ class ElasticSearchFinder implements IFinder
         $this->type = $type;
     }
 
-    public function findOne($query)
-    {
-        $document = NULL;
-
-        if (! $query instanceof Elastica_Query)
-        {
-            $query = Elastica_Query::create($query);
-        }
-        
-        $query->setLimit(1);
-
-        $source = $this->getQuerySource();
-        $result = $source->search($query);
-
-        // @todo Convert result into document.
-        return $document;
-    }
-
-    public function findMany($query, $limit = 0, $offset = 0)
+    public function find($query, $limit = 0, $offset = 0)
     {
         if (! $query instanceof Elastica_Query)
         {
@@ -55,7 +37,7 @@ class ElasticSearchFinder implements IFinder
         return $this->convertResultSetToArray($resultSet);
     }
 
-    public function findAll($limit = 0, $offset = 0)
+    public function fetchAll($limit = 0, $offset = 0)
     {
         $query = Elastica_Query::create(NULL);
         $query->setLimit($limit)->setFrom($offset);
