@@ -16,9 +16,9 @@ midas.widgets.SearchWidget = midas.widgets.Widget.extend({
 
     sort_field: null,
 
-    search_phrase: null,
+    search: null,
 
-    has_search_phrase: null,
+    has_search: null,
 
     has_filter_dialog: null,
 
@@ -64,22 +64,22 @@ midas.widgets.SearchWidget = midas.widgets.Widget.extend({
             placeholder: ko.observable(this.options.labels.placeholder),
             filter: ko.observable(this.options.labels.filter)
         };
-        this.search_phrase = ko.observable(this.options.search_phrase || '');
+        this.search = ko.observable(this.options.search || '');
         this.sort_direction = ko.observable(this.options.sort_direction);
         this.sort_field = ko.observable(this.options.sort_field);
         this.search_url = ko.observable(this.options.search_url);
         this.has_filter_dialog = ko.observable(this.filter_dialog.length === 1);
         var that = this;
-        this.has_search_phrase = ko.computed(function()
+        this.has_search = ko.computed(function()
         {
-            return that.search_phrase().length > 0;
+            return that.search().length > 0;
         });
     },
 
     // ##################################
     // #     knockoutjs bound funcs     #
     // ##################################
-    search: function()
+    doSearch: function()
     {
         return true;
     },
@@ -92,7 +92,7 @@ midas.widgets.SearchWidget = midas.widgets.Widget.extend({
 
     resetSearchPhrase: function()
     {
-        this.search_phrase('');
+        this.search('');
         this.form.find('.search-query').focus();
     }
 });
@@ -104,7 +104,7 @@ midas.widgets.SearchWidget.DEFAULT_OPTIONS = {
     autobind: true,
     search_url: window.location.href,
     filter_url: '',
-    search_phrase: '',
+    search: '',
     sort_direction: 'desc',
     sort_field: 'identifier',
     labels: {

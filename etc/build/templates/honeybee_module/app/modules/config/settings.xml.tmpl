@@ -62,7 +62,65 @@
                     </ae:parameters>
                 </ae:parameter>
             </setting>
-            
+
+            <!-- 
+                Holds the definition of the edit template.
+                Templates are separated into tabs.
+                Each tab can holds an arbitary number of number of rows; at least one.
+                Each row is made up of 1-4 columns, whereas two columns is the most common usage.
+                Every column is assigned several fields that are vertically stacked inside.
+                An example for defining a custom input template is displayed below.
+                Just uncomment and adjust to kick off custom templating.
+            -->
+            <!--
+            <setting name="input_template">
+                <ae:parameter name="tabs">
+                    <ae:parameter name="content">
+                        <ae:parameter name="rows">
+                            <ae:parameter> 
+                                <ae:parameter name="groups"> 
+                                    <ae:parameter name="main">
+                                        <ae:parameter>firstname</ae:parameter>
+                                        <ae:parameter>lastname</ae:parameter>
+                                        <ae:parameter>birthday</ae:parameter>
+                                        <ae:parameter>email</ae:parameter>
+                                        <ae:parameter>website</ae:parameter>
+                                        <ae:parameter>telefon</ae:parameter>
+                                        <ae:parameter>fax</ae:parameter>
+                                    </ae:parameter>
+                                    <ae:parameter name="media">
+                                        <ae:parameter>image</ae:parameter>
+                                        <ae:parameter>description</ae:parameter>
+                                    </ae:parameter>
+                                </ae:parameter>
+                            </ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+                </ae:parameter>
+            </setting>
+            -->
+
+            <!-- 
+            You may provide custom widgets here, but not override 'hardwired'
+            widget implementations such as the one for the reference field.
+            <setting name="input_widgets">
+                <ae:parameter name="keywords">
+                    <ae:parameter name="type">widget-tags-list</ae:parameter>
+                    <ae:parameter name="options">
+                        <ae:parameter name="autobind">TRUE</ae:parameter>
+                        <ae:parameter name="fieldname">keywords</ae:parameter>
+                    </ae:parameter>
+                </ae:parameter>
+            </setting>
+            -->
+
+            <!-- Custom renderer configuration
+            <setting name="rendering_config">
+                <ae:parameter name="image">
+                    <ae:parameter name="input">ImageFieldInputRenderer</ae:parameter>
+                </ae:parameter>
+            </setting>
+            -->
         </settings>
     </ae:configuration>
 </ae:configurations>

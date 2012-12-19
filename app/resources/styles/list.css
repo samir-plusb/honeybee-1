@@ -353,6 +353,13 @@ form.delete-item
 {
   border-right: 3px solid #16337f;
 }
+
+td.actions
+{
+    width: 150px;
+    text-align: center;;
+}
+
 /*
 .table-striped tbody .grouped:nth-child(2n+1) td,
 .table-striped tbody .grouped:nth-child(2n+1):hover td

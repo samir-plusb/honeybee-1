@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/ContentWorker/!svn/ver/1612/releases/1.2-Klio/app/modules/Asset/impl/Aoi
+END
+Aoi.validate.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/ContentWorker/!svn/ver/1612/releases/1.2-Klio/app/modules/Asset/impl/Aoi/Aoi.validate.xml
+END
+AoiAction.class.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/ContentWorker/!svn/ver/1612/releases/1.2-Klio/app/modules/Asset/impl/Aoi/AoiAction.class.php
+END
+AoiSuccessView.class.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/ContentWorker/!svn/ver/1612/releases/1.2-Klio/app/modules/Asset/impl/Aoi/AoiSuccessView.class.php
+END

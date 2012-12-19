@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Common_List_ListErrorView class handles News/List error data presentation.
+ * The Common_List_ListErrorView class handles Common/List error data presentation.
  *
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG

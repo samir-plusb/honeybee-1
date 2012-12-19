@@ -35,8 +35,18 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
+        $routing = $this->getContext()->getRouting();
+        $service = new HoneybeeModuleService();
 
-        // set the title
+        $modules = array();
+        foreach ($service->getModules() as $module)
+        {
+            $modules[$module->getName()] = array(
+                'list_link' => $routing->gen($module->getOption('prefix') . '.list')
+            );
+        }
+
+        $this->setAttribute('modules', $modules);
         $this->setAttribute('_title', $this->translationManager->_('Welcome to the Honeybee web frontend.'));
 
         $this->setBreadcrumb();

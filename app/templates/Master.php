@@ -15,6 +15,7 @@
         <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
         <!-- GoogleMaps code - @todo get this sucker oughta here! -->
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript" src="static/ckeditor/ckeditor.js"></script>
         <!-- %%STYLESHEETS%% -->
     </head>
     <body>

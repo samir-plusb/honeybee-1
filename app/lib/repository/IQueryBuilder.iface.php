@@ -2,5 +2,5 @@
 
 interface IQueryBuilder
 {
-    public function build(IListConfig $listConfig, IListState $listState);
+    public function build(array $specification);
 }

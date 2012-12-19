@@ -24,9 +24,9 @@ class %%MODULE_NAME%%_Suggest_SuggestSuccessView extends %%MODULE_NAME%%BaseView
         $data = array(
             'state' => 'ok',
             'messages' => array(),
-            'data' => $this->getAttribute('state')->getData()
+            'data' => $this->getAttribute('data')
         );
         
-        $this->getResponse()->setContent(htmlspecialchars_decode(json_encode($data)));
+        $this->getResponse()->setContent(json_encode($data));
     }
 }

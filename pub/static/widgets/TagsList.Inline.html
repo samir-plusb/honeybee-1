@@ -4,7 +4,7 @@
           <i data-bind="click: function(data) { if (! $parent.disabled()) { $parent.removeTag(data); } }" class="icon-remove icon-white"></i>
     </li>
 </ul>
-<input type="input" class="tagslist-input"
+<input type="text" class="tagslist-input"
        data-bind='value: current_tag,
                   valueUpdate: "afterkeydown",
                   hasfocus: has_focus,

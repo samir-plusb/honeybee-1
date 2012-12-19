@@ -23,6 +23,15 @@
             <!-- Setup -->
             <autoload name="AssetDatabaseSetup">%core.module_dir%/Asset/lib/setup/AssetDatabaseSetup.class.php</autoload>
             <!-- /Setup -->
+
+            <autoload name="BaseDataObject">%core.module_dir%/Asset/lib/data_object/BaseDataObject.class.php</autoload>
+            <autoload name="BaseDocument">%core.module_dir%/Asset/lib/data_object/BaseDocument.class.php</autoload>
+            <autoload name="CouchDocumentStore">%core.module_dir%/Asset/lib/data_object/CouchDocumentStore.class.php</autoload>
+            <autoload name="FreezableDataObject">%core.module_dir%/Asset/lib/data_object/FreezableDataObject.class.php</autoload>
+            <autoload name="IComparable">%core.module_dir%/Asset/lib/data_object/IComparable.iface.php</autoload>
+            <autoload name="IDataObject">%core.module_dir%/Asset/lib/data_object/IDataObject.iface.php</autoload>
+            <autoload name="IDocument">%core.module_dir%/Asset/lib/data_object/IDocument.iface.php</autoload>
+            <autoload name="IDocumentStore">%core.module_dir%/Asset/lib/data_object/IDocumentStore.iface.php</autoload>
         </autoloads>
     </ae:configuration>
 </ae:configurations>

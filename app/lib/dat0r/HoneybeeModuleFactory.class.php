@@ -65,13 +65,7 @@ class HoneybeeModuleFactory
             );
         }
 
-        // @todo make service more configurable allowing to define 
-        // for example the query builder to use.
-        $service->initialize(new ElasticaQueryBulder());
-
         return $service;
-
-
     }
 
     protected static function createFinder(HoneybeeModule $module)

@@ -52,8 +52,12 @@ midas.list.ActionBatch = midas.core.BaseObject.extend({
     {
         if (0 === this.queue.length)
         {
-            this.progress_dialog.twodal('hide');
-            this.fire('complete');
+            var that = this;
+            setTimeout(function()
+            {
+                that.fire('complete');
+                that.progress_dialog.twodal('hide');
+            }, 1500);
             return;
         }
         this.queue.shift()();

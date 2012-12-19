@@ -1,0 +1,33 @@
+<?php
+
+class Asset_AoiAction extends AssetBaseAction
+{
+    public function executeRead(AgaviRequestDataHolder $parameters) // 
+    {
+        $asset = $parameters->getParameter(
+            AssetInfoValidator::DEFAULT_EXPORT
+        );
+
+        $detector = new Face_Detector(
+            dirname(AgaviConfig::get('core.app_dir')) .
+            '/libs/php-facedetection/detection.dat'
+        );
+
+        $aoi = array();
+        if ($detector->face_detect($asset->getFullPath()))
+        {
+            $faceDims = $detector->getFace();
+
+            $aoi = array(
+                $faceDims['x'], 
+                $faceDims['y'], 
+                $faceDims['x'] + $faceDims['w'],
+                $faceDims['y'] + $faceDims['w']
+            );
+        }
+        
+        $this->setAttribute('aoi', $aoi);
+
+        return 'Success';
+    }
+}

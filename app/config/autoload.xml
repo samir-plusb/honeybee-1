@@ -12,10 +12,14 @@
             <!-- mvc base classes -->
             <autoload name="ProjectBaseAction">%core.lib_dir%/agavi/action/ProjectBaseAction.class.php</autoload>
             <autoload name="BaseListAction">%core.lib_dir%/agavi/action/BaseListAction.class.php</autoload>
+            <autoload name="BaseEditAction">%core.lib_dir%/agavi/action/BaseEditAction.class.php</autoload>
+            <autoload name="BaseSuggestAction">%core.lib_dir%/agavi/action/BaseSuggestAction.class.php</autoload>
             <autoload name="ProjectBaseModel">%core.lib_dir%/agavi/model/ProjectBaseModel.class.php</autoload>
             <autoload name="ProjectBaseView">%core.lib_dir%/agavi/view/ProjectBaseView.class.php</autoload>
+            <autoload name="BaseEditInputView">%core.lib_dir%/agavi/view/BaseEditInputView.class.php</autoload>
             <!-- validators -->
             <autoload name="ProjectArrayValidator">%core.lib_dir%/agavi/validator/ProjectArrayValidator.class.php</autoload>
+            <autoload name="HoneybeeDocumentValidator">%core.lib_dir%/agavi/validator/HoneybeeDocumentValidator.class.php</autoload>
             <!-- routing stuff -->
             <autoload name="ProjectLanguageRoutingCallback">%core.lib_dir%/agavi/routing/ProjectLanguageRoutingCallback.class.php</autoload>
             <autoload name="HoneybeeModuleRoutingCallback">%core.lib_dir%/agavi/routing/HoneybeeModuleRoutingCallback.class.php</autoload>
@@ -47,9 +51,11 @@
             -->
             <autoload name="HoneybeeModule">%core.lib_dir%/dat0r/HoneybeeModule.class.php</autoload>
             <autoload name="HoneybeeDocument">%core.lib_dir%/dat0r/HoneybeeDocument.class.php</autoload>
-            <autoload name="HoneybeeModuleFactory">%core.lib_dir%/dat0r/HoneybeeModuleFactory.class.php</autoload>
             <autoload name="HoneybeeDocumentCollection">%core.lib_dir%/dat0r/HoneybeeDocumentCollection.class.php</autoload>
-            
+            <autoload name="HoneybeeModuleFactory">%core.lib_dir%/dat0r/HoneybeeModuleFactory.class.php</autoload>
+            <autoload name="HoneybeeModuleService">%core.lib_dir%/dat0r/HoneybeeModuleService.class.php</autoload>
+            <autoload name="HoneybeeRelationManager">%core.lib_dir%/dat0r/HoneybeeRelationManager.class.php</autoload>
+
             <!-- 
                 Repository/Service - Domain Data Access
             -->
@@ -62,7 +68,26 @@
             <autoload name="IService">%core.lib_dir%/repository/IService.iface.php</autoload>
             <autoload name="BaseService">%core.lib_dir%/repository/BaseService.class.php</autoload>
             <autoload name="IQueryBuilder">%core.lib_dir%/repository/IQueryBuilder.iface.php</autoload>
-            <autoload name="ElasticaQueryBulder">%core.lib_dir%/repository/ElasticaQueryBulder.class.php</autoload>
+            <autoload name="ElasticaQueryBuilder">%core.lib_dir%/repository/ElasticaQueryBuilder.class.php</autoload>
+            <autoload name="SuggestQueryBuilder">%core.lib_dir%/repository/SuggestQueryBuilder.class.php</autoload>
+            
+            <!-- 
+                Rendering
+            -->
+            <autoload name="IRenderer">%core.lib_dir%/renderer/IRenderer.iface.php</autoload>
+            <autoload name="DocumentRenderer">%core.lib_dir%/renderer/document/DocumentRenderer.class.php</autoload>
+            <autoload name="FieldRenderer">%core.lib_dir%/renderer/field/FieldRenderer.class.php</autoload>
+            <autoload name="TextareaFieldInputRenderer">%core.lib_dir%/renderer/field/Input/TextareaFieldInputRenderer.class.php</autoload>
+            <autoload name="FieldRendererFactory">%core.lib_dir%/renderer/field/FieldRendererFactory.class.php</autoload>
+            <autoload name="FieldInputRenderer">%core.lib_dir%/renderer/field/Input/FieldInputRenderer.class.php</autoload>
+            <autoload name="ReferenceFieldInputRenderer">%core.lib_dir%/renderer/field/Input/ReferenceFieldInputRenderer.class.php</autoload>
+            <autoload name="DocumentInputRenderer">%core.lib_dir%/renderer/document/Input/DocumentInputRenderer.class.php</autoload>
+            <autoload name="TextCollectionFieldInputRenderer">%core.lib_dir%/renderer/field/Input/TextCollectionFieldInputRenderer.class.php</autoload>
+            <autoload name="ImageFieldInputRenderer">%core.lib_dir%/renderer/field/Input/ImageFieldInputRenderer.class.php</autoload>
+            <autoload name="KeyValuesCollectionFieldInputRenderer">%core.lib_dir%/renderer/field/Input/KeyValuesCollectionFieldInputRenderer.class.php</autoload>
+            <autoload name="DateFieldInputRenderer">%core.lib_dir%/renderer/field/Input/DateFieldInputRenderer.class.php</autoload>
+            <autoload name="LocationInputRenderer">%core.lib_dir%/renderer/field/Input/LocationInputRenderer.class.php</autoload>
+            <autoload name="KoReadOnlyFieldInputRenderer">%core.lib_dir%/renderer/field/Input/KoReadOnlyFieldInputRenderer.class.php</autoload>
 
             <!-- 
                 Iterator 
@@ -80,6 +105,9 @@
             <autoload name="MimeMailParser">%core.lib_dir%/mail/mailparse.php</autoload>
             <autoload name="MimeMailParser_attachment">%core.lib_dir%/mail/attachment.class.php</autoload>
             
+            <!-- third party face detection lib -->
+            <autoload name="Face_Detector">%core.lib_dir%/php-facedetection/FaceDetector.php</autoload>
+
             <!-- 
                 Config (Generation)
             -->

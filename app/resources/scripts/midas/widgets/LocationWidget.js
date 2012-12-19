@@ -17,6 +17,8 @@ midas.widgets.LocationWidget = midas.widgets.Widget.extend({
     location: null,
 
     is_processing: null,
+
+    fieldname: null,
     // </knockout_props>
 
     init: function(element, options)
@@ -47,6 +49,7 @@ midas.widgets.LocationWidget = midas.widgets.Widget.extend({
     {
         this.found_locations = ko.observableArray([]);
         this.is_processing = ko.observable(false);
+        this.fieldname = ko.observable(this.options.fieldname);
         this.location = new midas.widgets.LocationWidget.Location(
             this.options.location || {}
         );
@@ -98,24 +101,24 @@ midas.widgets.LocationWidget = midas.widgets.Widget.extend({
         this.hideSelectLocationDialog();
         this.location.longitude(location.longitude());
         this.location.latitude(location.latitude());
-        this.location.postal_code(location.postal_code());
+        this.location.zipcode(location.zipcode());
         this.location.neighborhood(location.neighborhood());
         this.location.district(location.district());
         this.location.administrative_district(
             location.administrative_district()
         );
-        if (! this.location.street())
+
+        if (location.street())
         {
-            this.location.street(location.street());
+           // this.location.street(location.street());
         }
-        if (! this.location.city())
+        if (location.housenumber())
         {
-            this.location.city(location.city());
+            //this.location.housenumber(location.housenumber());
         }
-        if (! this.location.housenumber())
-        {
-            this.location.housenumber(location.housenumber());
-        }
+
+        this.location.city(location.city());
+
         this.renderLocationOnMap();
     },
 
@@ -152,14 +155,54 @@ midas.widgets.LocationWidget = midas.widgets.Widget.extend({
             position: latlng,
             title: this.location.name()
         });
-        var myOptions = {
+
+        var map = new google.maps.Map(this.map_canvas[0], {
             zoom: 16,
             center: latlng,
             sensor:false,
             mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(this.map_canvas[0], myOptions);
+        });
         marker.setMap(map);
+
+        var geocoder = new google.maps.Geocoder();
+
+        var that = this;
+        google.maps.event.addListener(map, 'click', function(event) {
+            marker.setPosition(event.latLng);
+            that.is_processing(true);
+            geocoder.geocode({'latLng': event.latLng}, function(results, status) 
+            {
+                if (status == google.maps.GeocoderStatus.OK) 
+                {
+                    if (results[0]) 
+                    {
+                        var components = results[0]['address_components'];
+                        var data = {};
+                        for (var i = 0; i < components.length; i++)
+                        {
+                            var type = components[i].types[0];
+                            data[type] = components[i].long_name;
+                        }
+
+                        that.onLocationSelected(
+                            midas.widgets.LocationWidget.Location.createFromServiceResp({
+                                street: data.route,
+                                housenumber: data.street_name,
+                                uzip: data.postal_code,
+                                city: data.locality,
+                                latitude: event.latLng.lat(),
+                                longitude: event.latLng.lng()
+                            })
+                        );
+                        that.is_processing(false);
+                    }
+                } 
+                else 
+                {
+                    alert("Geocoder failed due to: " + status);
+                }
+            });
+        });
     }
 });
 
@@ -182,7 +225,7 @@ midas.widgets.LocationWidget.Location = midas.core.BaseObject.extend({
 
     details: null,
 
-    postal_code: null,
+    zipcode: null,
 
     city: null,
 
@@ -203,7 +246,7 @@ midas.widgets.LocationWidget.Location = midas.core.BaseObject.extend({
         this.housenumber = ko.observable(l.housenumber || '');
         this.details = ko.observable(l.details || '');
         this.city = ko.observable(l.city || '');
-        this.postal_code = ko.observable(l.postalCode || '');
+        this.zipcode = ko.observable(l.postalCode || l.zipcode || '');
         this.administrative_district = ko.observable(l.administrativeDistrict || '');
         this.district = ko.observable(l.district || '');
         this.neighborhood = ko.observable(l.neighborhood || '');
@@ -214,14 +257,14 @@ midas.widgets.LocationWidget.Location = midas.core.BaseObject.extend({
         }
         else
         {
-            this.longitude = ko.observable('');
-            this.latitude = ko.observable('');
+            this.longitude = ko.observable(l.lon || '');
+            this.latitude = ko.observable(l.lat || '');
         }
     },
 
     values: function()
     {
-        var fields = ['street', 'housenumber', 'city', 'postal_code'];
+        var fields = ['street', 'housenumber', 'city', 'zipcode'];
         var values = {};
         for (var i = 0; i < fields.length; i++)
         {
@@ -242,7 +285,9 @@ midas.widgets.LocationWidget.Location.createFromServiceResp = function(location)
         administrativeDistrict: location['administrative district'] || null,
         neighborhood: location.neighborhood || null,
         postalCode: location.uzip || null,
-        street: location.street || null
+        street: location.street || null,
+        city: location.city || null,
+        housenumber: location.housenumber || null
     };
     if (location.latitude && location.longitude)
     {

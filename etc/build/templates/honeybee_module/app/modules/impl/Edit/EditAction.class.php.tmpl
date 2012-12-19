@@ -1,54 +1,15 @@
 <?php
 
-class %%MODULE_NAME%%_EditAction extends %%MODULE_NAME%%BaseAction
+/**
+ * The %%MODULE_NAME%%_EditAction class is responseable 
+ * for handling %%MODULE_NAME%% editing intents.
+ *
+ * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
+ * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
+ * @package         %%MODULE_NAME%%
+ * @subpackage      List
+ */
+class %%MODULE_NAME%%_EditAction extends BaseEditAction
 {
-    public function executeRead(AgaviRequestDataHolder $parameters)
-    {
-        $this->setAttribute('item', $parameters->getParameter('item'));
-        // The plugin result is passed on to any underlying (plugin)actions via attribute value.
-        // All actions that are called from a workflow plugin must set the gate,
-        // state and message on the injected result object.
-        // If we have no pluginResult set and our container does not have a 'is_workflow_container' set to true,
-        // then we have not been invoked from workflow execution.
-        // Depending on the action's semantics and eventuell assumptions concerning out execution context,
-        // we should either termininate with an exception or switch the logic.
-        $this->setContainerPluginState();
-
-        return 'Input';
-    }
-
-    public function executeWrite(AgaviRequestDataHolder $parameters)
-    {
-        $view = 'Success';
-        $errors = array();
-        try
-        {
-            $item = $parameters->getParameter('item');
-            // @todo persist item
-            $this->setAttribute('item', $item);
-            $this->setContainerPluginState();
-        }
-        catch(Exception $e)
-        {
-            $errors[] = $e->getMessage();
-            $view = 'Error';
-        }
-
-        $this->setAttribute('errors', $errors);
-
-        return $view;
-    }
-
-    protected function setContainerPluginState()
-    {
-        $pluginResult = $this->getContainer()->getAttribute(
-            WorkflowBaseInteractivePlugin::ATTR_RESULT,
-            WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
-        );
-        
-        if ($pluginResult)
-        {
-            $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
-        }
-    }
+    
 }

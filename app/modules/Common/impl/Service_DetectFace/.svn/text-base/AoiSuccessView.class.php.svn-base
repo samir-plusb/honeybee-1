@@ -1,0 +1,14 @@
+<?php
+
+class Asset_Aoi_AoiSuccessView extends AssetBaseView
+{
+    public function executeJson(AgaviRequestDataHolder $requestData)
+    {
+        $this->getResponse()->setContent(
+            json_encode(array(
+                'aoi' => $this->getAttribute('aoi'),
+                'status' => 'ok'
+            ))
+        );
+    }
+}

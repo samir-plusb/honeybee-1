@@ -28,17 +28,26 @@ class ElasticSearchIndexGeneratorPlugin
             "_source" => array("enabled" => TRUE)
         );
 
-        $properties = array();
+        $properties = array(
+            'identifier' => array(
+                'type' => 'string',
+                'index' => 'not_analyzed'
+            ),
+            'revision' => array(
+                'type' => 'string',
+                'index' => 'not_analyzed'
+            )
+        );
         foreach ($moduleDefinition->getFields() as $name => $field)
         {
             $handlerFunc = sprintf('map%s', ucfirst($field['type']));
 
             if (is_callable(array($this, $handlerFunc)))
             {
-                $properties[$name] = $this->$handlerFunc($name, $field);
+                $properties[$name] = $this->$handlerFunc($name, $field, $moduleDefinition);
             }
         }
-        $indexDefinition['properties'] = $properties;
+        $indexDefinition['properties'] = (object)$properties;
 
         $deployPath = $this->options['deployPath'];
         if (0 !== strpos($deployPath, DIRECTORY_SEPARATOR))
@@ -52,7 +61,7 @@ class ElasticSearchIndexGeneratorPlugin
         file_put_contents($deployPath, $jsonString);
     }
 
-    protected function mapText($fieldName, array $field)
+    protected function mapText($fieldName, array $field, $moduleDefinition)
     {
         $esType = self::$typeMap[$field['type']];
 
@@ -65,18 +74,44 @@ class ElasticSearchIndexGeneratorPlugin
         ));
     }
 
-    protected function mapInteger($fieldName, $fieldDef)
+    protected function mapInteger($fieldName, array $field, $moduleDefinition)
     {   
         $esType = self::$typeMap[$field['type']];
 
         return array('type' => $esType);
     }
 
-    protected function mapAggregate($fieldName, $fieldDef)
+    protected function mapAggregate($fieldName, array $field, $moduleDefinition)
     {
+        $parts = explode('\\', $field['options']['aggregate_module']);
+        $aggregateName = str_replace('Module' , '', array_pop($parts));
+        $aggregates = $moduleDefinition->getAggregates();
+
+        if (! isset($aggregates[$aggregateName]))
+        {
+            throw new Exception(
+                "Unable to find aggregate definition for $aggregateName."
+            );
+        }
+
+        $properties = array();
+        $aggregateDef = $aggregates[$aggregateName];
+        foreach ($aggregateDef->getFields() as $fieldname => $aggregateField)
+        {
+            $handlerFunc = sprintf('map%s', ucfirst($aggregateField['type']));
+            if (is_callable(array($this, $handlerFunc)))
+            {
+                $properties[$fieldname] = $this->$handlerFunc(
+                    $fieldname, 
+                    $aggregateField, 
+                    $aggregateDef
+                );
+            }
+        }
+
         $esType = self::$typeMap[$field['type']];
-        var_dump($fieldDef);
-        throw new Exception("Generating index for aggregates not supported yet!");
+
+        return array('type' => $esType, 'properties' => (object)$properties);
     }
 
     // copy & paste from here:

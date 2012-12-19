@@ -79,7 +79,7 @@ class %%MODULE_NAME%%_List_ListSuccessView extends %%MODULE_NAME%%BaseView
         }
         else if ($listState->hasSearch())
         {
-            $routeParams['search_phrase'] = $listState->getSearch();
+            $routeParams['search'] = $listState->getSearch();
             $breadcrumbs[] = array(
                 'text' => 'Suche',
                 'link' => $routing->gen($listRouteName, $routeParams),

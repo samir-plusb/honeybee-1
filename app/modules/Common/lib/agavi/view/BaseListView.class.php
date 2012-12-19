@@ -35,7 +35,7 @@ abstract class BaseListView extends ProjectbaseView
     public function setupHtml(AgaviRequestDataHolder $parameters, $layoutName = NULL)
     {
         parent::setupHtml($parameters, $layoutName);
-        $this->setAttribute('_title', 'Midas - News Stream');
+        $this->setAttribute('_title', 'Honeybee 3.0');
     }
 
     protected function createListSlot(AgaviRequestDataHolder $parameters, array $listData)

@@ -51,6 +51,12 @@ class Common_ListAction extends CommonBaseAction
                 'type' => $listConfig->getTypeKey(), 
                 'ticket' => '{TICKET}'
             )))),
+            'edit' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.edit', $listConfig->getTypeKey()))
+            )),
+            'delete' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.delete', $listConfig->getTypeKey()))
+            )),
             'proceed' => urldecode(htmlspecialchars_decode($routing->gen('workflow.proceed', array(
                 'type' => $listConfig->getTypeKey(), 
                 'ticket' => '{TICKET}'

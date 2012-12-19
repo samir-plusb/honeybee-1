@@ -17,14 +17,14 @@ midas.widgets.KeyValuesList = midas.widgets.Widget.extend({
 
         if (this.options.data)
         {
-            for (var i = 0; i < this.options.data.length; i++)
+            for (var key in this.options.data)
             {
-                var cur_data = this.options.data[i];
+                var cur_values = this.options.data[key];
                 this.keyvalues_pairs.push(
                     new midas.widgets.KeyValuesList.KeyValuesPair(
                         this.fieldname(),
-                        cur_data.name,
-                        cur_data.values
+                        key,
+                        cur_values
                     )
                 );
             }
@@ -246,6 +246,7 @@ midas.widgets.KeyValuesList.TPL = ''
 +'        </tr>'
 +'    </tbody>'
 +'</table>'
++'<input type="hidden" value="" data-bind="attr: { name: fieldname() }" />'
 +'<ul class="key-values-list-valuelist" style="display: none" ' // ** hidden values section **
 +'    data-bind="foreach: keyvalues_pairs">'
 +'    <div class="key-values-list-proplist" '

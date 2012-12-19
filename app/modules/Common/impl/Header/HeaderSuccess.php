@@ -6,48 +6,33 @@
         Presents common information for the current session
         and holds the list's search box.
      ############################################################################################### -->
-<header class="navbar navbar-fixed-top" data-scrollspy="scrollspy">
+<header class="navbar navbar-inverse navbar-fixed-top" data-scrollspy="scrollspy">
   <div class="navbar-inner">
     <div class="container-fluid upper-bar" style="width: auto;">
-      <a class="brand icon-wrench" href="<?php echo $ro->gen('index'); ?>" title="Honeybee 3.0 - Erato"> Honeybee</a>
+      <a class="brand" href="<?php echo $ro->gen('index'); ?>" title="Honeybee 3.0 - Erato"> <span class="icon-wrench"> Honeybee</span></a>
 <?php
     if ($us->isAuthenticated())
     {
 ?>
       <ul class="nav" role="navigation">
+<?php
+      foreach ($t['modules'] as $moduleName => $module)
+      {
+?>
         <li class="dropdown">
-          <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Nachrichten <b class="caret"></b></a>
+          <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><?php echo $tm->_($moduleName, 'modules.labels'); ?> <b class="caret"></b></a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-            <li><a tabindex="-1" href="<?php echo $ro->gen('news.list'); ?>"><span class="icon-list"></span> &Uuml;bersicht</a></li>
-            <li><a tabindex="-1" href="<?php echo $ro->gen('news.stats'); ?>"><span class="icon-bar-chart"></span> Statistik</a></li>
+            <li>
+              <a tabindex="-1" href="<?php echo $module['create_link']; ?>"><span class="icon-edit"></span> Neuer Eintrag</a>
+            </li>
+            <li>
+              <a tabindex="-1" href="<?php echo $module['list_link']; ?>"><span class="icon-list"></span> &Uuml;bersicht</a>
+            </li>
           </ul>
         </li>
-        <li class="dropdown">
-          <a href="#" id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">Orte <b class="caret"></b></a>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
-            <li><a tabindex="-1" href="<?php echo $ro->gen('shofi.list'); ?>"><span class="icon-list"></span> &Uuml;bersicht</a></li>
-            <li><a tabindex="-1" href="<?php echo $ro->gen('shofi.config'); ?>"><span class="icon-list-alt"></span> Branchen Matching</a></li>
-            <li class="divider"></li>
-            <li><a tabindex="-1" href="<?php echo $ro->gen('shofi_categories.list'); ?>"><span class="icon-list"></span> Branchen</a></li>
-            <li><a tabindex="-1" href="<?php echo $ro->gen('shofi_verticals.list'); ?>"><span class="icon-list"></span> Leuchtt&uuml;rme</a></li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav">
-        <li id="fat-menu" class="dropdown">
-          <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Veranstaltungen <b class="caret"></b></a>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-            <li><a tabindex="-1" href="<?php echo $ro->gen('events.list'); ?>"><span class="icon-list"></span> &Uuml;bersicht</a></li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav">
-        <li id="fat-menu" class="dropdown">
-          <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Filme <b class="caret"></b></a>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-            <li><a tabindex="-1" href="<?php echo $ro->gen('movies.list'); ?>"><span class="icon-list"></span> &Uuml;bersicht</a></li>
-          </ul>
-        </li>
+<?php
+      }
+?>
       </ul>
       <ul class="nav pull-right user-stats">
         <li id="fat-menu" class="dropdown">

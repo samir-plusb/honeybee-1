@@ -6,15 +6,21 @@
         <databases default="Assets.Read">
             <database name="Assets.Write" class="CouchDbDatabase">
                 <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
-                <ae:parameter name="database">midas_assets</ae:parameter>
+                <ae:parameter name="database">honeybee_asset</ae:parameter>
                 <ae:parameter name="setup">true</ae:parameter>
+                <ae:parameter name="setup_class">AssetDatabaseSetup</ae:parameter>
+                <ae:parameter name="scripts_dir">%core.modules_dir%/Asset/config/couchdb/</ae:parameter>
             </database>
             <database name="Assets.Read" class="ElasticSearchDatabase">
                 <ae:parameter name="host">127.0.0.1</ae:parameter>
                 <ae:parameter name="port">9200</ae:parameter>
                 <ae:parameter name="transport">Http</ae:parameter>
-                <ae:parameter name="index">midas_assets</ae:parameter>
+                <ae:parameter name="index">honeybee_asset</ae:parameter>
                 <ae:parameter name="setup">true</ae:parameter>
+                <ae:parameter name="mapping_dir">%core.modules_dir%/Asset/config/elasticsearch/</ae:parameter>
+                <ae:parameter name="river">
+                    <ae:parameter name="couch_db">honeybee_asset</ae:parameter>
+                </ae:parameter>
             </database>
         </databases>
     </ae:configuration>
@@ -23,15 +29,21 @@
         <databases default="Assets.Read">
             <database name="Assets.Write" class="CouchDbDatabase">
                 <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
-                <ae:parameter name="database">testing-midas_assets</ae:parameter>
+                <ae:parameter name="database">honeybee_asset_testing</ae:parameter>
                 <ae:parameter name="setup">true</ae:parameter>
+                <ae:parameter name="setup_class">AssetDatabaseSetup</ae:parameter>
+                <ae:parameter name="scripts_dir">%core.modules_dir%/Asset/config/couchdb/</ae:parameter>
             </database>
             <database name="Assets.Read" class="ElasticSearchDatabase">
                 <ae:parameter name="host">127.0.0.1</ae:parameter>
                 <ae:parameter name="port">9200</ae:parameter>
                 <ae:parameter name="transport">Http</ae:parameter>
-                <ae:parameter name="index">testing-midas_assets</ae:parameter>
+                <ae:parameter name="index">honeybee_asset_testing</ae:parameter>
                 <ae:parameter name="setup">true</ae:parameter>
+                <ae:parameter name="mapping_dir">%core.modules_dir%/Asset/config/elasticsearch/</ae:parameter>
+                <ae:parameter name="river">
+                    <ae:parameter name="couch_db">honeybee_asset_testing</ae:parameter>
+                </ae:parameter>
             </database>
         </databases>
     </ae:configuration>

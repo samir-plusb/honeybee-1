@@ -1,8 +1,10 @@
-if ('Honeybee\\Domain\\%%MODULE_NAME%%\\%%MODULE_NAME%%Document' === ctx.doc.type) 
-{ 
+var idParts = ctx.doc._id.split('-');
+
+if (idParts.length > 1 && idParts[0] == '%%MODULE_PREFIX%%') 
+{
     ctx._type = '%%MODULE_PREFIX%%';
 } 
 else 
-{ 
-    ctx.ignore = true; 
+{
+    ctx.ignore = true;
 }

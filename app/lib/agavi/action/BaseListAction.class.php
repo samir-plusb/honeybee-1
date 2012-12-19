@@ -22,7 +22,7 @@ class BaseListAction extends ProjectBaseAction
         $module = $this->getModule();
         $service = $module->getService();
 
-        $listConfig = $this->createListConfig();
+        $listConfig = ListConfig::create($this->buildListConfig());
         $listState = $parameters->getParameter('state');
 
         $data = $service->fetchListData($listConfig, $listState);
@@ -61,7 +61,7 @@ class BaseListAction extends ProjectBaseAction
         return 'Error';
     }
 
-    protected function createListConfig()
+    protected function buildListConfig()
     {
         $settingsKey = $this->buildListConfigKey();
         $listSettings = AgaviConfig::get($settingsKey, array());
@@ -87,8 +87,9 @@ class BaseListAction extends ProjectBaseAction
         {
             $listSettings['suggestField'] = $fields[0]->getName();
         }
+        $routing = $this->getContext()->getRouting();
 
-        return ListConfig::create($listSettings);
+        return $listSettings;
     }
 
     protected function buildListConfigKey()

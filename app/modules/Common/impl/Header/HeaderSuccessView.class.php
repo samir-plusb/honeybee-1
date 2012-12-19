@@ -24,5 +24,19 @@ class Common_Header_HeaderSuccessView extends CommonBaseView
         {
             $this->setAttribute('avatar_url', $url);
         }
+
+        $routing = $this->getContext()->getRouting();
+        $service = new HoneybeeModuleService();
+
+        $modules = array();
+        foreach ($service->getModules() as $module)
+        {
+            $modules[$module->getName()] = array(
+                'list_link' => $routing->gen($module->getOption('prefix') . '.list'),
+                'create_link' => $routing->gen($module->getOption('prefix') . '.edit')
+            );
+        }
+
+        $this->setAttribute('modules', $modules);
     }
 }

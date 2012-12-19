@@ -13,6 +13,7 @@ help:
 	@echo "    module - Create and integrate a new module."
 	@echo "    module-code - Generate code for a certain module."
 	@echo "    config - Generate includes for all modules."
+	@echo "    deploy-resources - Generate and deploy js css and assets."
 	@echo "  Php"
 	@echo "    test - run php test suites."
 	@echo "    phpcs - run the php code-sniffer and publish report."
@@ -67,7 +68,7 @@ install: install-vendor install-node-deps cc
 	@make twitter-bootstrap
 
 
-update: update-vendor update-node-deps cc
+update: update-composer update-vendor update-node-deps cc
 
 
 tail-logs:
@@ -98,9 +99,13 @@ deploy-resources:
 install-composer: 
 
 	@if [ -d vendor/agavi/agavi/ ]; then svn revert -R vendor/agavi/agavi/; fi
-	@if [ ! -f bin/composer.phar ]; then curl -s http://getcomposer.org/installer | php -n -d allow_url_fopen=1 -d date.timezone="Europe/Berlin" -- --install-dir=./bin; fi
+	@if [ ! -f bin/composer.phar ]; then curl -s http://getcomposer.org/installer | php -d allow_url_fopen=1 -d date.timezone="Europe/Berlin" -- --install-dir=./bin; fi
 	@bin/apply_patches
 	
+
+update-composer:
+	@bin/composer.phar self-update
+
 
 install-vendor: install-composer
 
@@ -114,7 +119,7 @@ update-vendor: install-vendor
 	@bin/apply_patches
 
 
-install-node-deps: install-composer
+install-node-deps:
 
 	@npm install
 
@@ -182,6 +187,7 @@ module-code:
     	dator_dir=app/modules/$$module/config/dat0r; \
 		vendor/bin/dat0r.console generate $$dator_dir/codegen.ini $$dator_dir/module.xml gen+dep
 	@make config
+	@curl -XDELETE localhost:9200/_all
 
 
 .PHONY: help module module-code lessw lessc jsdoc js-xunit js-specs phpdoc phpcs test twitter-bootstrap cc config install update

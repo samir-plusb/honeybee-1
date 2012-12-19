@@ -33,6 +33,10 @@
         </section>
         <section style="margin-left: 20px; border-left: 1px solid #ababab; padding-left: 20px; height: 65px;" class="pull-left">
             <h3>Stapelverarbeitung</h3>
+<?php
+    if (1 < count($batchActions))
+    {
+?>
             <div class="btn-group dropdown">
                 <button class="btn midas-action midas-action-<?php echo $batchActionNames[0]; ?>"
                         data-bind="click: function(item, event) { var is_batch = true; <?php echo $batchActions[0]; ?> },
@@ -45,8 +49,8 @@
                 <ul class="dropdown-menu">
 <?php
 
-    for ($i = 1; $i < count($batchActions); $i++)
-    {
+        for ($i = 1; $i < count($batchActions); $i++)
+        {
 ?>
                     <li>
                         <a class="midas-action midas-action-<?php echo $batchActionNames[$i]; ?>"
@@ -54,10 +58,23 @@
                                       enable: has_selection"><?php echo $tm->_($batchActionNames[$i], $translationDomain); ?></a>
                     </li>
 <?php
-    }
+        }
 ?>
                 </ul>
             </div>
+<?php
+    }
+    else
+    {
+?>
+            <button class="btn midas-action midas-action-<?php echo $batchActionNames[0]; ?>"
+                        data-bind="click: function(item, event) { var is_batch = true; <?php echo $batchActions[0]; ?> },
+                               enable: has_selection">
+                <?php echo $tm->_($batchActionNames[0], $translationDomain); ?>
+            </button>
+<?php
+    }
+?>
         </section>
         <section style="margin-left: 20px; border-left: 1px solid #ababab; padding-left: 20px; height: 65px;" class="pull-left">
             <h3>Kreation</h3>
@@ -172,7 +189,7 @@
 <?php
         }
 ?>
-                    <td>
+                    <td class="actions">
                         <div class="btn-group dropdown">
                             <button class="btn btn-primary midas-action midas-action-<?php echo $itemActions[0]; ?>"
                                     data-bind="click: function(item, event) { var is_batch = false; <?php echo '$parent.'.$itemActions[0]; ?> }">

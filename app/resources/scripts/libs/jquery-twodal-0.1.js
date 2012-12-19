@@ -48,28 +48,38 @@
         init: function(options) {
             // merge given options with our default options.
             options = $.merge(options || {}, OPTS_DEFAULT);
-            this.find(EVT_TARGET_SELECTOR).each(function(idx, trigger)
+            if (0 < this.length)
             {
-                trigger = $(trigger);
-                var evt_name = trigger.attr(EVT_ATTR_NAME);
-                if (evt_name)
+                this.find(EVT_TARGET_SELECTOR).each(function(idx, trigger)
                 {
-                    trigger.click(function(evt)
+                    trigger = $(trigger);
+                    var evt_name = trigger.attr(EVT_ATTR_NAME);
+
+                    if (evt_name && trigger.length === 1)
                     {
-                        evt.preventDefault();
-                        var evt_map = options.events;
-                        if ('function' == typeof evt_map[evt_name])
+                        trigger.click(function(evt)
                         {
-                            evt_map[evt_name]();
-                        }
-                    });
-                }
-            });
-            this.modal({
-                show: options.show,
-                backdrop: options.backdrop,
-                keyboard: options.keyboard
-            });
+                            evt.preventDefault();
+                            var evt_map = options.events;
+                            if ('function' == typeof evt_map[evt_name])
+                            {
+                                evt_map[evt_name]();
+                            }
+                        });
+                    }
+                });
+                this.modal({
+                    show: options.show,
+                    backdrop: options.backdrop,
+                    keyboard: options.keyboard
+                });
+
+                this.on('show', options.onshow || function(){});
+                this.on('shown', options.onshown || function(){});
+                this.on('hide', options.onhide || function(){});
+                this.on('hidden', options.onhidden || function(){});
+            }
+
             return this;
         },
 

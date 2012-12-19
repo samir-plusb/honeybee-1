@@ -1,75 +1,36 @@
-<div class="page-header" style="margin-top:0">
-    <h2>Adressdaten <a href="#" title="Adressdaten an Lokalisierungsdienst übergeben"
-                       data-bind="click: localize, visible: !is_processing()">
-        <span class="localize icon-refresh"> lokalisieren</span>
-    </a><img src="static/cache/_global/binaries/loading-small.gif" title="Adressdaten werden lokalisiert" 
-             data-bind="visible: is_processing" />
-   </h2>
+<div style="height: 50px; margin-bottom: 0; position: relative;">
+    <button style="position: absolute; right: 10px; top: 10px;" class="btn btn-primary" 
+            data-bind="click: localize, visible: !is_processing()">Verorten</button>
+    <img src="static/deploy/_global/binaries/loading-small.gif" title="Adressdaten werden lokalisiert" 
+         data-bind="visible: is_processing" style="position: absolute; top: 14px; right: 10px;" />
+</div>
+
+ <div style="float: left; width: 100%; height: 200px; position: relative; margin-bottom: 20px;">
+    <div class="map-canvas" style="height: 100%; position: absolute; left: 0; top: 0px; right: 0;"></div>
 </div>
 
 <div class="control-group">
-    <label class="control-label">Ortsname</label>
+    <label class="control-label">Straße, Hnr.</label>
     <div class="controls">
-        <input type="input" name="coreItem[location][name]" data-bind="value: location.name" />
-        <p class="help-block">Fülle dies aus, wenn dieser Ort zu einem übergeorneten Ort gehört, zum Beispiel: Kulurbrauerrei, Alexa</p>
+        <input type="text" class="span8" data-bind="value: location.street, attr: { name: fieldname() + '[street]' }" />
+        <input type="text" class="span3" data-bind="value: location.housenumber, attr: { name: fieldname() + '[housenumber]' }" />
     </div>
 </div>
 <div class="control-group">
-    <label class="control-label">Straße, Hausnummer</label>
+    <label class="control-label">PLZ</label>
     <div class="controls">
-        <input type="input" name="coreItem[location][street]" data-bind="value: location.street" />
-        <input type="input" name="coreItem[location][housenumber]" class="span2" data-bind="value: location.housenumber" />
+        <input type="text" class="span11" data-bind="value: location.zipcode, attr: { name: fieldname() + '[zipcode]' }" />
     </div>
 </div>
-<div style="width: 100%; height: 285px;">
-
-    <div style="float: left; overflow: hidden;">
-        <div class="control-group" style="position: relative;">
-            <label class="control-label">Zusätzliche Ortsangabe</label>
-            <div class="controls">
-                <input type="input" name="coreItem[location][details]" data-bind="value: location.details" />
-                <p class="help-block">Zum Beispiel: Haus 3</p>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label">Postleitzahl</label>
-            <div class="controls">
-                <input type="input" name="coreItem[location][postalCode]" data-bind="value: location.postal_code" />
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Stadt</label>
-            <div class="controls">
-                <input type="input" name="coreItem[location][city]" data-bind="value: location.city" />
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Verwaltungsbezirk</label>
-            <div class="controls">
-                <input type="input" name="coreItem[location][administrativeDistrict]" readonly="readonly" data-bind="value: location.administrative_district" />
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Altbezirk</label>
-            <div class="controls">
-                <input type="input" name="coreItem[location][district]" readonly="readonly" data-bind="value: location.district" />
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Stadtteil</label>
-            <div class="controls">
-                <input type="input" name="coreItem[location][neighborhood]" readonly="readonly" data-bind="value: location.neighborhood" />
-            </div>
-        </div>
-    </div>
-    <div style="float: left; width: 25%; height: 100%; position: relative;">
-        <div class="map-canvas" style="height: 100%; width:400px; position: absolute; left: 10px; top: 0px"></div>
+<div class="control-group">
+    <label class="control-label">Stadt</label>
+    <div class="controls">
+        <input type="text" class="span11" data-bind="value: location.city, attr: { name: fieldname() + '[city]' }" />
     </div>
 </div>
-
-<input type="hidden" name="coreItem[location][coordinates][lon]" data-bind="value: location.longitude" />
-<input type="hidden" name="coreItem[location][coordinates][lat]" data-bind="value: location.latitude" />
+        
+<input type="hidden" data-bind="value: location.longitude, attr: { name: fieldname() + '[lon]' }" />
+<input type="hidden" data-bind="value: location.latitude, attr: { name: fieldname() + '[lat]' }" />
 
 <div class="modal dialog-select-location" style="display:none">
     <div class="modal-header">
@@ -81,11 +42,10 @@
             <li>
                 <a href="#" data-bind="click: function(data) { $parent.onLocationSelected(data); }"><span data-bind="text: $data.street"> </span>
                 <span data-bind="text: $data.housenumber()"></span>
-                <span data-bind="text: $data.postal_code()">, </span>
+                <span data-bind="text: $data.zipcode()">, </span>
                 <span data-bind="text: $data.neighborhood"></span></a>
             </li>
         </ul>
     </div>
-    <div class="modal-footer">
-    </div>
+    <div class="modal-footer"></div>
 </div>

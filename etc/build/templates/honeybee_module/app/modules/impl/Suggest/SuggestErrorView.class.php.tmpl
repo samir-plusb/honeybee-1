@@ -23,9 +23,10 @@ class %%MODULE_NAME%%_Suggest_SuggestErrorView extends %%MODULE_NAME%%BaseView
     {
         $data = array(
             'state' => 'error',
-            'errors' => $this->getAttribute('error_messages'),
+            'errors' => $this->getAttribute('errors'),
             'data' => array()
         );
+
         $this->getResponse()->setContent(json_encode($data));
     }
 }

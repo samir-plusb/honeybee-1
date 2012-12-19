@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+    parent="%core.config_dir%/validators.xml">
+    <ae:configuration>
+        <validators>
+            <validator class="string" name="invalid_street" required="false">
+                <arguments>
+                    <argument>street</argument>
+                </arguments>
+                <errors>
+                    <error>You must supply a valid street parameter.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_housenumber" required="false">
+                <arguments>
+                    <argument>housenumber</argument>
+                </arguments>
+                <errors>
+                    <error>You must supply a valid housenumber parameter.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_postal_code" required="false">
+                <arguments>
+                    <argument>postal_code</argument>
+                </arguments>
+                <errors>
+                    <error>You must supply a valid postal_code parameter.</error>
+                </errors>
+            </validator>
+
+            <validator class="string" name="invalid_city" required="false">
+                <arguments>
+                    <argument>city</argument>
+                </arguments>
+                <errors>
+                    <error>You must supply a valid city parameter.</error>
+                </errors>
+            </validator>
+
+        </validators>
+    </ae:configuration>
+</ae:configurations>

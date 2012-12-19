@@ -1,6 +1,6 @@
 
 
-/* /home/vagrant/projects/honeybee/app/modules/Default/resources/styles/dashboard.css */
+/* /home/vagrant/projects/honeybee-showcase/app/modules/Default/resources/styles/dashboard.css */
 
 /**
  * Layout common
@@ -46,7 +46,8 @@ p.tip-paragraph
     font-size: 12pt;
 }
 
-ul.dl-horizontal
+ul.dl-horizontal,
+.status-message
 {
     list-style: none;
     margin: 0;
@@ -73,5 +74,6 @@ ul.dl-horizontal b.label
 {
     margin-top: 5em;
     border: 1px solid #efefef;
-    background-color: rgba(253, 253, 253, 0.2);
+    width: 25em;
+    background-color: rgba(253, 253, 253, 0.6);
 }

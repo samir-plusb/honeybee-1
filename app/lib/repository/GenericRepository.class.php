@@ -49,7 +49,8 @@ class GenericRepository implements IRepository
             'totalCount' => $result['totalCount']
         );
     }
-
+    
+    // @todo add a get method to the finder and use it instead of the storage here.
     public function read($identifier)
     {
         $documents = new HoneybeeDocumentCollection();
@@ -68,7 +69,7 @@ class GenericRepository implements IRepository
         }
         else if (($data = $this->storage->read($identifier)))
         {
-            $documents[] = $documents->add(
+            $documents->add(
                 $this->module->createDocument($data)
             );
         }
@@ -87,6 +88,24 @@ class GenericRepository implements IRepository
         else if ($data instanceof HoneybeeDocumentCollection)
         {
             $errors = $this->storage->writeMany($data);
+        }
+        else
+        {
+            throw new InvalidArgumentException(
+                "Only HoneybeeDocument and HoneybeeDocumentCollection allowed as $data argument."
+            );
+        }
+
+        return $errors;
+    }
+
+    public function delete($data)
+    {
+        $errors = array();
+
+        if ($data instanceof HoneybeeDocument)
+        {
+            $this->storage->delete($data);
         }
         else
         {

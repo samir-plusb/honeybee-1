@@ -93,7 +93,6 @@ midas.widgets.TagsList = midas.widgets.Widget.extend({
     {
         this.disabled(true);
         this.disabled_text(text);
-        console.log(text);
     },
 
     busyEnd: function()
@@ -191,8 +190,9 @@ midas.widgets.TagsList = midas.widgets.Widget.extend({
             that.currently_valid = {};
             for (var i = 0; i < data.length; i++)
             {
-                that.currently_valid[data[i].name] = data[i].identifier;
+                that.currently_valid[data[i][that.options.autocomplete_display_prop]] = data[i][that.options.autocomplete_value_prop];
             }
+
             typeahead.process(data);
         });
     },

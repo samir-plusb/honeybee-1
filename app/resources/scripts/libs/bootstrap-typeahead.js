@@ -112,7 +112,7 @@
       })
 
       items = this.sorter(items)
-
+      
       if (!items.length) {
         return this.shown ? this.hide() : this
       }

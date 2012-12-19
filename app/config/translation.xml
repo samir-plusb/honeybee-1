@@ -29,6 +29,25 @@
        </translators>
     </ae:configuration>
 
+    <ae:configuration>
+        <translators default_domain="modules.labels">
+            <translator domain="modules">
+                <message_translator class="AgaviSimpleTranslator">
+                
+                     <ae:parameter name="labels">
+                        <ae:parameter name="de">
+                            <ae:parameter name="Organization">Institutionen</ae:parameter>
+                            <ae:parameter name="Person">Personen</ae:parameter>
+                            <ae:parameter name="Category">Kategorien</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+
+                </message_translator>
+            </translator>
+        </translators>
+    </ae:configuration>
+
+
     <xi:include href="%core.app_dir%/config/includes/translation.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>

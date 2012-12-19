@@ -12,15 +12,40 @@
         </div>
 	</div>
     <div class="info-box well">
+<?php
+    if (empty($t['modules']))
+    {
+?>
+        <p class="info-paragraph">Diese Honeybee Instanz verwaltet bisher noch keine Daten.</p>
+<?php
+    }
+    else
+    {
+?>
         <p class="info-paragraph">
-            Derzeit verwaltet Honeybee für dich Daten zu <a href="<?php echo $ro->gen('news.list') ?>">Nachrichten</a>, 
-            <a href="<?php echo $ro->gen('shofi.list'); ?>">Orten</a>, 
-            <a href="<?php echo $ro->gen('events.list'); ?>">Veranstaltungen</a> und 
-            <a href="<?php echo $ro->gen('movies.list'); ?>">Filmen</a>.
+            Derzeit verwaltet Honeybee für dich Daten zu 
+<?php
+        $count = 0;
+        foreach ($t['modules'] as $moduleName => $module)
+        {
+?>
+            <a href="<?php echo $module['list_link']; ?>"><?php echo $tm->_($moduleName, 'modules.labels'); ?></a>
+<?php
+            if ((count($t['modules']) - 1) !== $count)
+            {
+                echo ", ";
+            }
+
+            $count++;
+        }
+?>
         </p>
         <p class="tip-paragraph">
-            Die Aufklappmenus in der oberen Leiste geben dir Zugriff auf die Funktionalitäten der einzelnen Resourcen. 
+            Die Aufklappmenus in der oberen Leiste geben dir Zugriff auf die Funktionen der einzelnen Resourcen. 
         </p>
+<?php
+    }
+?>
     </div>
     <div class="push"></div>
 </div>

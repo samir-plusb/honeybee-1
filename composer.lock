@@ -1,5 +1,5 @@
 {
-    "hash": "03307e341bc3f4658704213afe5ae17d",
+    "hash": "7345d132577724869b08feff1b59715a",
     "packages": [
         {
             "name": "PhpDebugToolbar/php-debug-toolbar",
@@ -35,12 +35,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/berlinonline/Dat0r",
-                "reference": "08311a03c3cc0cea02a8dd543441a29ef1fffade"
+                "reference": "02d70866f4ddcf10806132e6797e5cbe706dedf9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/berlinonline/Dat0r/archive/08311a03c3cc0cea02a8dd543441a29ef1fffade.zip",
-                "reference": "08311a03c3cc0cea02a8dd543441a29ef1fffade",
+                "url": "https://github.com/berlinonline/Dat0r/archive/02d70866f4ddcf10806132e6797e5cbe706dedf9.zip",
+                "reference": "02d70866f4ddcf10806132e6797e5cbe706dedf9",
                 "shasum": ""
             },
             "require": {
@@ -50,7 +50,7 @@
                 "symfony/console": "2.1.*",
                 "phpdocumentor/phpdocumentor": "dev-master"
             },
-            "time": "1351196598",
+            "time": "2012-12-07 19:24:26",
             "bin": [
                 "bin/dat0r.make",
                 "bin/dat0r.console"
@@ -62,6 +62,7 @@
                     "Dat0r": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -83,20 +84,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Cilex/Cilex",
-                "reference": "1a4cb7a2e4b03b77bbb52dd08c034c12e26b3d4c"
+                "reference": "0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Cilex/Cilex/zipball/1a4cb7a2e4b03b77bbb52dd08c034c12e26b3d4c",
-                "reference": "1a4cb7a2e4b03b77bbb52dd08c034c12e26b3d4c",
+                "url": "https://github.com/Cilex/Cilex/archive/0.1.zip",
+                "reference": "0.1",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2",
                 "pimple/pimple": "1.0.*",
                 "symfony/console": "2.1.*",
                 "symfony/process": "2.1.*",
-                "symfony/finder": "2.1.*"
+                "symfony/finder": "2.1.*",
+                "php": ">=5.3.3"
             },
             "require-dev": {
                 "symfony/validator": "2.1.*"
@@ -106,7 +107,7 @@
                 "symfony/yaml": ">=1.0.0",
                 "symfony/validator": ">=1.0.0"
             },
-            "time": "1347541340",
+            "time": "2012-11-21 21:07:20",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -119,6 +120,7 @@
                     "Cilex": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -168,7 +170,7 @@
             "require": {
                 "php": ">=5.3"
             },
-            "time": "1342369887",
+            "time": "2012-07-15 16:31:27",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -220,7 +222,7 @@
             },
             "type": "library",
             "installation-source": "source",
-            "time": "1344017627"
+            "time": "2012-08-03 18:13:47"
         },
         {
             "name": "fortawesome/font-awesome",
@@ -334,18 +336,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser",
-                "reference": "b0c8787406a586a609551c14c77a831d6c64dd2b"
+                "reference": "v0.9.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/nikic/PHP-Parser/archive/b0c8787406a586a609551c14c77a831d6c64dd2b.zip",
-                "reference": "b0c8787406a586a609551c14c77a831d6c64dd2b",
+                "url": "https://github.com/nikic/PHP-Parser/archive/v0.9.3.zip",
+                "reference": "v0.9.3",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
             },
-            "time": "1352229150",
+            "time": "2012-11-22 18:54:05",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -353,6 +355,7 @@
                     "PHPParser": "lib/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -491,41 +494,42 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/phpDocumentor2",
-                "reference": "2.0.0a11"
+                "reference": "0f1f530c494a5c343436beeec4e1845e08e3be74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/phpDocumentor/phpDocumentor2/archive/2.0.0a11.zip",
-                "reference": "2.0.0a11",
+                "url": "https://github.com/phpDocumentor/phpDocumentor2/archive/0f1f530c494a5c343436beeec4e1845e08e3be74.zip",
+                "reference": "0f1f530c494a5c343436beeec4e1845e08e3be74",
                 "shasum": ""
             },
             "require": {
                 "dflydev/markdown": "1.0.*",
-                "phpdocumentor/graphviz": "1.*",
                 "phpdocumentor/template-responsive": "1.*",
                 "phpdocumentor/template-new-black": "1.*",
                 "php": ">=5.3.3",
                 "nikic/php-parser": "dev-master",
                 "zendframework/zend-stdlib": "2.*",
                 "zendframework/zend-config": "2.*",
-                "zendframework/zend-locale": "2.*",
-                "zendframework/zend-translator": "2.*",
                 "phpdocumentor/fileset": "1.0.0-beta2",
                 "zendframework/zend-servicemanager": "2.*",
                 "phpdocumentor/template-zend": "1.*",
-                "phpdocumentor/reflection-docblock": "1.0.*",
                 "phpdocumentor/plugin-twig": "1.*",
                 "phpdocumentor/template-old-ocean": "1.*",
                 "phpdocumentor/template-checkstyle": "1.*",
                 "cilex/cilex": "dev-master",
-                "symfony/event-dispatcher": "2.1.*@stable"
+                "symfony/event-dispatcher": "2.1.*@stable",
+                "zendframework/zend-i18n": "2.*",
+                "phpdocumentor/graphviz": "1.*@beta",
+                "phpdocumentor/reflection": "0.1.*",
+                "phpdocumentor/reflection-docblock": "2.0.0a1",
+                "phpdocumentor/unified-asset-installer": "1.*@beta"
             },
             "require-dev": {
                 "behat/behat": ">=2.4@stable",
                 "mockery/mockery": ">=0.7.0@stable",
                 "phpunit/phpunit": "3.7.*@stable"
             },
-            "time": "1352540142",
+            "time": "2012-12-08 16:22:36",
             "bin": [
                 "bin/phpdoc.php"
             ],
@@ -539,6 +543,7 @@
                     ]
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -592,24 +597,76 @@
             ]
         },
         {
-            "name": "phpdocumentor/reflection-docblock",
-            "version": "1.0.3",
+            "name": "phpdocumentor/reflection",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/phpDocumentor/ReflectionDocBlock",
-                "reference": "1.0.3"
+                "url": "https://github.com/phpDocumentor/Reflection",
+                "reference": "0.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/phpDocumentor/ReflectionDocBlock/zipball/1.0.3",
-                "reference": "1.0.3",
+                "url": "https://github.com/phpDocumentor/Reflection/archive/0.1.1.zip",
+                "reference": "0.1.1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "nikic/php-parser": "dev-master",
+                "phpdocumentor/reflection-docblock": "2.0.0a1"
+            },
+            "require-dev": {
+                "behat/behat": ">=2.4@stable",
+                "phpunit/phpunit": "3.7.*@stable",
+                "mockery/mockery": ">=0.7.0@stable"
+            },
+            "time": "2012-12-02 14:29:26",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "phpDocumentor": [
+                        "src/",
+                        "tests/unit/",
+                        "tests/mocks/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Reflection library to do Static Analysis for PHP Projects",
+            "homepage": "http://www.phpdoc.org",
+            "keywords": [
+                "phpdoc",
+                "reflection",
+                "static analysis",
+                "phpDocumentor"
+            ]
+        },
+        {
+            "name": "phpdocumentor/reflection-docblock",
+            "version": "2.0.0a1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpDocumentor/ReflectionDocBlock",
+                "reference": "2.0.0a1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/phpDocumentor/ReflectionDocBlock/archive/2.0.0a1.zip",
+                "reference": "2.0.0a1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "dflydev/markdown": "1.0.*"
             },
-            "time": "2012-11-03 21:14:43",
+            "require-dev": {
+                "phpunit/phpunit": "*@stable"
+            },
+            "time": "2012-11-27 17:52:28",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -619,6 +676,7 @@
                     ]
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -869,12 +927,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "6dde73e75521a7561fcd72ea9eb9a5bf92066337"
+                "reference": "c6242a9faf0498faffb32a26660f29dd9f1abeff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/sebastianbergmann/php-code-coverage/zipball/6dde73e75521a7561fcd72ea9eb9a5bf92066337",
-                "reference": "6dde73e75521a7561fcd72ea9eb9a5bf92066337",
+                "url": "https://github.com/sebastianbergmann/php-code-coverage/archive/c6242a9faf0498faffb32a26660f29dd9f1abeff.zip",
+                "reference": "c6242a9faf0498faffb32a26660f29dd9f1abeff",
                 "shasum": ""
             },
             "require": {
@@ -887,7 +945,7 @@
                 "ext-dom": "*",
                 "ext-xdebug": ">=2.0.5"
             },
-            "time": "1351706748",
+            "time": "2012-12-04 12:01:38",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -895,6 +953,7 @@
                     "PHP/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 ""
             ],
@@ -959,7 +1018,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "1350290255"
+            "time": "2012-10-15 08:37:35"
         },
         {
             "name": "phpunit/php-text-template",
@@ -978,7 +1037,7 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1351707328",
+            "time": "2012-10-31 18:15:28",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -1047,7 +1106,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "1350290346"
+            "time": "2012-10-15 08:39:06"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -1092,7 +1151,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "1350290650"
+            "time": "2012-10-15 08:44:10"
         },
         {
             "name": "phpunit/phpunit",
@@ -1100,12 +1159,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/sebastianbergmann/phpunit.git",
-                "reference": "7dd9e91f3b0759a0b776b970f68517e3490e745c"
+                "reference": "4f6db8ee4888290a22e2dcea8bc50e184218b0fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/sebastianbergmann/phpunit/archive/7dd9e91f3b0759a0b776b970f68517e3490e745c.zip",
-                "reference": "7dd9e91f3b0759a0b776b970f68517e3490e745c",
+                "url": "https://github.com/sebastianbergmann/phpunit/archive/4f6db8ee4888290a22e2dcea8bc50e184218b0fa.zip",
+                "reference": "4f6db8ee4888290a22e2dcea8bc50e184218b0fa",
                 "shasum": ""
             },
             "require": {
@@ -1118,8 +1177,8 @@
                 "phpunit/php-text-template": ">=1.1.1",
                 "phpunit/php-code-coverage": ">=1.2.1",
                 "phpunit/php-timer": ">=1.0.2",
-                "phpunit/phpunit-mock-objects": ">=1.2.0",
-                "symfony/yaml": ">=2.1.0"
+                "symfony/yaml": ">=2.1.0",
+                "phpunit/phpunit-mock-objects": ">=1.2.0,<1.3.0"
             },
             "suggest": {
                 "ext-json": "*",
@@ -1127,7 +1186,7 @@
                 "ext-tokenizer": "*",
                 "phpunit/php-invoker": ">=1.1.0"
             },
-            "time": "1352565765",
+            "time": "2012-12-10 14:50:38",
             "bin": [
                 "composer/bin/phpunit"
             ],
@@ -1143,6 +1202,7 @@
                     "PHPUnit/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "",
                 "../../symfony/yaml/"
@@ -1186,7 +1246,7 @@
             "suggest": {
                 "ext-soap": "*"
             },
-            "time": "1352112007",
+            "time": "2012-11-05 10:40:07",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -1231,7 +1291,7 @@
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "1352622754",
+            "time": "2012-11-11 08:32:34",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1308,30 +1368,26 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console",
-                "reference": "528b030bd94d74b06735c9da9fd9495db0567800"
+                "reference": "97b59d231f9129ba95df8417feb78b65bb1c6f98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Console/archive/528b030bd94d74b06735c9da9fd9495db0567800.zip",
-                "reference": "528b030bd94d74b06735c9da9fd9495db0567800",
+                "url": "https://github.com/symfony/Console/archive/97b59d231f9129ba95df8417feb78b65bb1c6f98.zip",
+                "reference": "97b59d231f9129ba95df8417feb78b65bb1c6f98",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1352451171",
+            "time": "2012-12-06 10:00:55",
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1-dev"
-                }
-            },
             "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\Console": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1355,12 +1411,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher",
-                "reference": "b5b6807bcc192f3a1c4fba7ef48466ebbd3c4485"
+                "reference": "df9bde91f8f6fa7fb40996edf30e632cfc606b4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/EventDispatcher/archive/b5b6807bcc192f3a1c4fba7ef48466ebbd3c4485.zip",
-                "reference": "b5b6807bcc192f3a1c4fba7ef48466ebbd3c4485",
+                "url": "https://github.com/symfony/EventDispatcher/archive/df9bde91f8f6fa7fb40996edf30e632cfc606b4a.zip",
+                "reference": "df9bde91f8f6fa7fb40996edf30e632cfc606b4a",
                 "shasum": ""
             },
             "require": {
@@ -1373,19 +1429,15 @@
                 "symfony/dependency-injection": "2.1.*",
                 "symfony/http-kernel": "2.1.*"
             },
-            "time": "1352368308",
+            "time": "2012-12-06 10:00:55",
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1-dev"
-                }
-            },
             "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\EventDispatcher": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1409,30 +1461,26 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder",
-                "reference": "24e814560125249010dd08717f4d17079c061e98"
+                "reference": "d9cc0a82455be6a49ffbfe2fb014da78d0b8c354"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Finder/archive/24e814560125249010dd08717f4d17079c061e98.zip",
-                "reference": "24e814560125249010dd08717f4d17079c061e98",
+                "url": "https://github.com/symfony/Finder/archive/d9cc0a82455be6a49ffbfe2fb014da78d0b8c354.zip",
+                "reference": "d9cc0a82455be6a49ffbfe2fb014da78d0b8c354",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1352368308",
+            "time": "2012-12-10 12:46:54",
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1-dev"
-                }
-            },
             "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\Finder": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1456,30 +1504,26 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process",
-                "reference": "5437d5f85a089d227337a8be4a46d160b60e1ab1"
+                "reference": "058ae5038a9623fa64b120a2d10ba81f1ade05c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Process/archive/5437d5f85a089d227337a8be4a46d160b60e1ab1.zip",
-                "reference": "5437d5f85a089d227337a8be4a46d160b60e1ab1",
+                "url": "https://github.com/symfony/Process/archive/058ae5038a9623fa64b120a2d10ba81f1ade05c7.zip",
+                "reference": "058ae5038a9623fa64b120a2d10ba81f1ade05c7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1352368308",
+            "time": "2012-12-06 10:00:55",
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1-dev"
-                }
-            },
             "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\Process": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1514,7 +1558,7 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1352815684",
+            "time": "2012-11-13 14:08:04",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1549,22 +1593,22 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "b16765ce8f8edd227c6c90dba489326001fd348a"
+                "reference": "de5aaf2c1d43baafde255a042f5c7cf6122ea3ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/b16765ce8f8edd227c6c90dba489326001fd348a.zip",
-                "reference": "b16765ce8f8edd227c6c90dba489326001fd348a",
+                "url": "https://github.com/fabpot/Twig/archive/de5aaf2c1d43baafde255a042f5c7cf6122ea3ce.zip",
+                "reference": "de5aaf2c1d43baafde255a042f5c7cf6122ea3ce",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "1352654530",
+            "time": "2012-12-10 14:12:12",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.11-dev"
+                    "dev-master": "1.12-dev"
                 }
             },
             "installation-source": "source",
@@ -1573,6 +1617,7 @@
                     "Twig_": "lib/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3"
             ],
@@ -1646,20 +1691,20 @@
                 }
             ],
             "description": "Zendframework 1 Zend_Acl",
-            "time": "1348764284"
+            "time": "2012-09-27 16:44:44"
         },
         {
             "name": "zendframework/zendframework",
-            "version": "2.0.0beta4",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "release-2.0.0beta4"
+                "reference": "129b6284889457becff29bb548771ea657e4b348"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/zipball/release-2.0.0beta4",
-                "reference": "release-2.0.0beta4",
+                "url": "https://github.com/zendframework/zf2/archive/129b6284889457becff29bb548771ea657e4b348.zip",
+                "reference": "129b6284889457becff29bb548771ea657e4b348",
                 "shasum": ""
             },
             "require": {
@@ -1667,102 +1712,86 @@
             },
             "replace": {
                 "zendframework/zend-acl": "self.version",
-                "zendframework/zend-amf": "self.version",
                 "zendframework/zend-authentication": "self.version",
                 "zendframework/zend-barcode": "self.version",
                 "zendframework/zend-cache": "self.version",
                 "zendframework/zend-captcha": "self.version",
-                "zendframework/zend-cloud": "self.version",
                 "zendframework/zend-code": "self.version",
                 "zendframework/zend-config": "self.version",
                 "zendframework/zend-console": "self.version",
                 "zendframework/zend-crypt": "self.version",
-                "zendframework/zend-currency": "self.version",
-                "zendframework/zend-date": "self.version",
                 "zendframework/zend-db": "self.version",
                 "zendframework/zend-di": "self.version",
-                "zendframework/zend-docbook": "self.version",
-                "zendframework/zend-dojo": "self.version",
                 "zendframework/zend-dom": "self.version",
+                "zendframework/zend-escaper": "self.version",
                 "zendframework/zend-eventmanager": "self.version",
                 "zendframework/zend-feed": "self.version",
                 "zendframework/zend-file": "self.version",
                 "zendframework/zend-filter": "self.version",
                 "zendframework/zend-form": "self.version",
-                "zendframework/zend-gdata": "self.version",
                 "zendframework/zend-http": "self.version",
-                "zendframework/zend-infocard": "self.version",
+                "zendframework/zend-i18n": "self.version",
                 "zendframework/zend-inputfilter": "self.version",
                 "zendframework/zend-json": "self.version",
                 "zendframework/zend-ldap": "self.version",
                 "zendframework/zend-loader": "self.version",
-                "zendframework/zend-locale": "self.version",
                 "zendframework/zend-log": "self.version",
                 "zendframework/zend-mail": "self.version",
                 "zendframework/zend-markup": "self.version",
                 "zendframework/zend-math": "self.version",
-                "zendframework/zend-measure": "self.version",
                 "zendframework/zend-memory": "self.version",
                 "zendframework/zend-mime": "self.version",
                 "zendframework/zend-modulemanager": "self.version",
                 "zendframework/zend-mvc": "self.version",
                 "zendframework/zend-navigation": "self.version",
-                "zendframework/zend-oauth": "self.version",
-                "zendframework/zend-openid": "self.version",
                 "zendframework/zend-paginator": "self.version",
-                "zendframework/zend-pdf": "self.version",
                 "zendframework/zend-progressbar": "self.version",
-                "zendframework/zend-queue": "self.version",
-                "zendframework/zend-rest": "self.version",
-                "zendframework/zend-search-lucene": "self.version",
                 "zendframework/zend-serializer": "self.version",
                 "zendframework/zend-server": "self.version",
-                "zendframework/zend-service-agilezen": "self.version",
-                "zendframework/zend-service-akismet": "self.version",
-                "zendframework/zend-service-amazon": "self.version",
-                "zendframework/zend-service-audioscrobbler": "self.version",
-                "zendframework/zend-service-delicious": "self.version",
-                "zendframework/zend-service-developergarden": "self.version",
-                "zendframework/zend-service-flickr": "self.version",
-                "zendframework/zend-service-gogrid": "self.version",
-                "zendframework/zend-service-livedocx": "self.version",
-                "zendframework/zend-service-nirvanix": "self.version",
-                "zendframework/zend-service-rackspace": "self.version",
-                "zendframework/zend-service-recaptcha": "self.version",
-                "zendframework/zend-service-slideshare": "self.version",
-                "zendframework/zend-service-strikeiron": "self.version",
-                "zendframework/zend-service-technorati": "self.version",
-                "zendframework/zend-service-twitter": "self.version",
-                "zendframework/zend-service-windowsazure": "self.version",
-                "zendframework/zend-service-yahoo": "self.version",
                 "zendframework/zend-servicemanager": "self.version",
                 "zendframework/zend-session": "self.version",
                 "zendframework/zend-soap": "self.version",
                 "zendframework/zend-stdlib": "self.version",
                 "zendframework/zend-tag": "self.version",
-                "zendframework/zend-test": "self.version",
                 "zendframework/zend-text": "self.version",
-                "zendframework/zend-timesync": "self.version",
-                "zendframework/zend-translator": "self.version",
                 "zendframework/zend-uri": "self.version",
                 "zendframework/zend-validator": "self.version",
                 "zendframework/zend-view": "self.version",
-                "zendframework/zend-wildfire": "self.version",
                 "zendframework/zend-xmlrpc": "self.version"
             },
-            "time": "2012-05-22 14:00:45",
+            "require-dev": {
+                "doctrine/common": ">=2.1",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "suggest": {
+                "doctrine/common": "Doctrine\\Common >=2.1 for annotation features",
+                "ext-intl": "ext/intl for i18n features",
+                "pecl-weakref": "Implementation of weak references for Zend\\Stdlib\\CallbackHandler",
+                "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
+                "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
+            },
+            "time": "2012-12-05 14:42:33",
+            "bin": [
+                "bin/classmap_generator.php"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0-dev"
+                    "dev-master": "2.0-dev",
+                    "dev-develop": "2.1-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
-                    "Zend": "library/"
+                    "Zend\\": "library/",
+                    "ZendTest\\": "tests/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
             "description": "Zend Framework 2",
             "homepage": "http://framework.zend.com/",
             "keywords": [
@@ -1787,7 +1816,7 @@
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "1352236784",
+            "time": "2012-11-06 21:19:44",
             "bin": [
                 "scripts/phpcs"
             ],

@@ -13,6 +13,10 @@ midas.core.EditController = midas.core.BaseObject.extend({
 
     // <knockout_properties>
     alerts: null,
+
+    identifier: null,
+
+    revision: null,
     // </knockout_properties>
 
     init: function(element, options)
@@ -38,19 +42,32 @@ midas.core.EditController = midas.core.BaseObject.extend({
 
     onFormSubmit: function()
     {
-        var that = this,
-        form = this.element.find('form'),
+        var that = this;
+        var form = this.element.find('form');
+        var post_url = form.attr('action');
+        // make sure all ckeditor values are correctly populated.
+        // this is workaround for values sometimes not being updated for whatever reason ...
+        $('textarea.ckeditor').each(function () {
+            var textarea = $(this);
+            textarea.val(
+                CKEDITOR.instances[textarea.attr('id')].getData()
+            );
+        });
+
+        if (this.identifier())
+        {
+            post_url += 'id=' + this.identifier();
+        }
+
         handleResponse = function(resp_data)
         {
             if (! resp_data || ! resp_data.state)
             {
                 throw "Unexpected response data structure received from midas backend (places save).";
             }
+
             if ('ok' === resp_data.state)
             {
-                var ticket_id_el = that.element.find('.ticket-identifier').first();
-                var cur_ticket_id = ticket_id_el.val();
-                ticket_id_el.val(resp_data.data.ticket_id);
                 that.addAlerts(
                     resp_data.messages || [ ],
                     'success'
@@ -59,11 +76,11 @@ midas.core.EditController = midas.core.BaseObject.extend({
                     resp_data.errors || [ ],
                     'error'
                 );
-                if (! cur_ticket_id)
-                {
-                    // @todo consistent url append
-                    window.location.href += '?ticket='+resp_data.data.ticket_id;
-                }
+
+                that.identifier(resp_data.data.identifier);
+                that.revision(resp_data.data.revision);
+
+                // @todo history.pushState nice 2 have here
             }
             else if('error' === resp_data.state)
             {
@@ -73,8 +90,9 @@ midas.core.EditController = midas.core.BaseObject.extend({
                 );
             }
         };
+
         midas.core.Request.curry(
-            form.attr('action'), 
+            post_url,
             form.serialize(), 
             'post'
         )(handleResponse, handleResponse);
@@ -146,29 +164,32 @@ midas.core.EditController = midas.core.BaseObject.extend({
     initKnockoutProperties: function()
     {
         this.alerts = ko.observableArray([ ]);
+        this.identifier = ko.observable(this.options.identifier || "");
+        this.revision = ko.observable(this.options.revision || "");
     },
 
     registerWidgets: function()
     {
         var that = this;
-        for (var i = 0; i < this.options.widgets.length; i++)
+
+        $('.honeybee-widget').each(function(idx, element)
         {
-            var widget_def = this.options.widgets[i];
-            var widget = midas.widgets.Widget.factory(
-                widget_def.selector, 
-                widget_def.type 
-                // @todo support namespaces within the "type" value by parsing the latter,
-                // thereby introducing some kind of syntax that allows one to provide a namespace.
-            );
-            this.widgets[widget.name] = widget;
-            widget.on('notify::info', function(message)
+            var type_key;
+
+            $.each($(element).attr('class').split(' '), function(index, css_class)
             {
-                that.addAlert({
-                    'type': 'success',
-                    'message': message
-                });
+                css_class = css_class.trim();
+                if (css_class.match(/^widget-/))
+                {
+                    type_key = css_class.replace('widget-', '');
+                } 
             });
-        }
+
+            if (type_key)
+            {
+                midas.widgets.Widget.factory(element, type_key);
+            }
+        });
     }
 });
 

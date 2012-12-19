@@ -13,6 +13,17 @@ abstract class HoneybeeModule extends RootModule
 
     private $service;
 
+    public function createDocument(array $data = array())
+    {
+        if (! empty($data))
+        {
+            $references = HoneybeeRelationManager::loadReferences($this, $data);
+            $data = array_merge($data, $references);
+        }
+        
+        return parent::createDocument($data);
+    }
+
     public function getService()
     {
         if (NULL === $this->service)

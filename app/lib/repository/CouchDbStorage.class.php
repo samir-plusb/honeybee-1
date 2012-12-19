@@ -50,7 +50,13 @@ class CouchDbStorage implements IStorage
      */
     public function read($identifier, $revision = NULL)
     {
+        $identifier = trim($identifier); // just in case
         $data = NULL;
+
+        if (empty($identifier))
+        {
+            return $data;
+        }
 
         try
         {
@@ -112,6 +118,12 @@ class CouchDbStorage implements IStorage
         return $this->storeBulkData(
             $this->prepareBulkData($documents)
         );
+    }
+
+    public function delete(HoneybeeDocument $document)
+    {
+        $couchDb = $this->getDatabase()->getConnection();
+        $couchDb->deleteDoc(NULL, $document->getIdentifier(), $document->getRevision());
     }
 
     protected function prepareBulkData(array $documents)
@@ -207,7 +219,7 @@ class CouchDbStorage implements IStorage
 
         $data[self::DOC_IMPLEMENTOR] = get_class($document);
 
-        if (isset($data[self::DOC_IDENTIFIER]))
+        if (isset($data[self::DOC_IDENTIFIER]) && ! empty($data[self::DOC_IDENTIFIER]))
         {
             $data[self::COUCH_ID] = $data[self::DOC_IDENTIFIER];
             unset($data[self::DOC_IDENTIFIER]);
@@ -217,7 +229,7 @@ class CouchDbStorage implements IStorage
             $data[self::COUCH_ID] = $this->nextUuid($document);
         }
 
-        if (isset($data[self::DOC_REVISION]))
+        if (isset($data[self::DOC_REVISION]) && ! empty($data[self::DOC_REVISION]))
         {
             $data[self::COUCH_REV] = $data[self::DOC_REVISION];
             unset($data[self::DOC_REVISION]);

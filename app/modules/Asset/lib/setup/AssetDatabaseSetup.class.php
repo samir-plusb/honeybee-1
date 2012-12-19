@@ -11,31 +11,13 @@
  */
 class AssetDatabaseSetup extends CouchDbDatabaseSetup
 {
-    /**
-     * Create a new AssetModuleSetup instance.
-     */
-    public function __construct()
+    public function execute(AgaviDatabase $database, $tearDownFirst = FALSE)
     {
-        $this->setDatabase(
-            AgaviContext::getInstance()->getDatabaseConnection('Assets.Write')
-        );
-    }
-
-    /**
-     * get the source directory for map and reduce javascript files
-     */
-    public function getSourceDirectory()
-    {
-        return __DIR__.'/views';
-    }
-
-    public function setup($tearDownFirst = FALSE)
-    {
-        parent::setup($tearDownFirst);
+        parent::execute($database, $tearDownFirst);
 
         error_log("SETTING UP THE ASSET DATABASE(teardown: $tearDownFirst)");
 
-        $documentStore = new CouchDocumentStore($this->getDatabase());
+        $documentStore = new CouchDocumentStore($database->getConnection());
         $documentStore->save(
             IdSequenceId::fromArray(array(
                 'identifier' => AssetIdSequence::COUCHDB_DOCID,
@@ -44,5 +26,3 @@ class AssetDatabaseSetup extends CouchDbDatabaseSetup
         ));
     }
 }
-
-?>

@@ -9,7 +9,7 @@
  * @package         Common
  * @subpackage      Agavi/View
  *
- * @SuppressWarnings(PHPMD.NumberOfChildren) The News module seems to have alot of views. ^^
+ * @SuppressWarnings(PHPMD.NumberOfChildren) 
  */
 class CommonBaseView extends ProjectBaseView
 {

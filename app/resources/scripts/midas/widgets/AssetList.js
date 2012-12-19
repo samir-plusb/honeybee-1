@@ -19,6 +19,12 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
 
     start_active: null,
 
+    aoi_scan_active: null,
+
+    cur_aoi_request: null,
+
+    popover_pos: null,
+
     init: function(element, options)
     {
         this.parent(element, options);
@@ -32,11 +38,15 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
     initGui: function()
     {
         this.parent();
+
+        this.initUploader();
+        this.initDialog();
+
         var that = this;
         this.ichie = window.IchieJs.create({
             main_container: this.element.find('.ichiejs-main-stage')[0],
-            width: 500,
-            height: 385,
+            width: 600,
+            height: 338,
             onSelectionChanged: function(selection)
             {
                 var asset;
@@ -49,6 +59,8 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
         this.element.find('ul').sortable().bind('sortupdate', function() {
             console.log('Yay, we\'ve a new sorting!');
         });;
+
+        this.element.find('.asset-item').popover();
     },
 
     initKnockoutProperties: function()
@@ -56,7 +68,9 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
         this.fieldname = ko.observable(this.options.fieldname);
         this.aoi_enabled = ko.observable(false);
         this.start_active = ko.observable(false);
-        this.area_of_interest = ko.observableArray([0, 0, 0, 0]);
+        this.aoi_scan_active = ko.observable(false);
+        this.area_of_interest = ko.observableArray([]);
+        this.popover_pos = ko.observable(this.options.popover_pos || 'top');
         var assets = this.options.assets || [];
         this.assets = ko.observableArray([]);
         for (var i = 0; i < assets.length; i++)
@@ -65,21 +79,21 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
                 new midas.widgets.AssetList.Asset(assets[i])
             );
         }
-
-        this.initUploader();
-        this.initDialog();
+        this.assets.push({dropzone: true});
     },
 
     initUploader: function()
     {
         var that = this;
         this.uploader = new midas.widgets.AssetList.FileUploader({
-            drop_target: this.element.find('.asset-list').first(),
+            drop_target: this.element.find('.dropzone').first(),
             put_url: this.options.put_url
         });
         this.uploader.on('upload::start', function(asset)
         {
-            that.assets.push(asset);
+            that.element.find('.asset-item').popover('destroy');
+            that.assets.splice(that.assets().length - 1, 0, asset);
+            that.element.find('.asset-item').popover();
             if (that.options.max <= that.assets().length)
             {
                 that.uploader.enabled = false;
@@ -107,6 +121,10 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
         this.dialog = $('.modal-edit-asset').first().twodal({
             backdrop: true,
             show: false,
+            onhidden: function()
+            {
+
+            },
             events: {
                 onstoredata: function()
                 {
@@ -135,6 +153,8 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
         this.dialog.twodal('promptVal', '.input-caption', asset.caption());
         this.dialog.twodal('promptVal', '.input-copyright', asset.copyright());
         this.dialog.twodal('promptVal', '.input-copyright-url', asset.copyright_url());
+
+        this.area_of_interest(asset.aoi || [0, 0, 20, 20]);
 
         var that = this;
         this.ichie.launch(asset.url(), function(){
@@ -171,15 +191,52 @@ midas.widgets.AssetList = midas.widgets.Widget.extend({
 
     onDeleteClicked: function(asset)
     {
+        this.element.find('.asset-item').popover('destroy');
         this.assets.remove(asset);
+        this.element.find('.asset-item').popover();
+
         if (this.options.max > this.assets().length)
         {
             this.uploader.enabled = true;
         }
     },
 
+    runFaceDetection: function()
+    {
+        asset = this.dialog.data('cur_asset') || asset;
+        var that = this;
+        this.aoi_scan_active(true);
+
+        var req = midas.core.Request.curry(this.options.aoi_url+'?aid='+asset.id());
+        this.cur_aoi_request = req(
+            function(resp)
+            {
+                that.aoi_scan_active(false);
+                var aoi = resp.aoi;
+                that.ichie.setSelection({
+                    left: aoi[0],
+                    top: aoi[1],
+                    right: aoi[2],
+                    bottom: aoi[3]
+                });
+            }, function(err)
+            {
+                that.aoi_scan_active(false);
+            }
+        );
+    },
+
+    abortFaceDetection: function()
+    {
+        if (this.cur_aoi_request)
+        {
+            this.cur_aoi_request.abort();
+        }
+    },
+
     storeMetaData: function(asset, meta_data)
     {
+        var that = this;
         var updateData = {
             aid: asset.id(),
             metaData: meta_data
@@ -239,6 +296,16 @@ midas.widgets.AssetList.Asset = midas.core.BaseObject.extend({
 
     copyright_url_txt: null,
 
+    popover_content: null,
+
+    width: null,
+
+    height: null,
+
+    x: null,
+
+    y: null,
+
     aoi: null,
 
     aoi_enabled: null,
@@ -258,6 +325,7 @@ midas.widgets.AssetList.Asset = midas.core.BaseObject.extend({
 
     setAoi: function(aoi)
     {
+        this.aoi = null;
         if ($.isArray(aoi))
         {
             this.aoi = [];
@@ -270,16 +338,42 @@ midas.widgets.AssetList.Asset = midas.core.BaseObject.extend({
 
     initKnockoutProperties: function(data)
     {
+        var that = this;
+
         this.id = ko.observable(data.id || '');
         this.is_loading = ko.observable(false);
         this.url = ko.observable(data.url);
         this.name = ko.observable(data.name);
         this.caption = ko.observable(data.caption || '');
+        var cell_width = 140;
+        var cell_height = 130;
+        var width = data.width || cell_width;
+        var height = data.height || cell_height;
+        var ratio = width / height;
+
+        if (ratio > 1 && width > cell_width)
+        {
+            width = cell_width;
+            height = width / ratio;
+        }
+        else if(ratio <= 1 && height > cell_height)
+        {
+            height = cell_height;
+            width = ratio * height;
+        }
+
+        this.height = ko.observable(height);
+        this.width = ko.observable(width);
+        this.x = ko.observable(
+            Math.floor((cell_width - width) / 2)
+        );
+        this.y = ko.observable(
+            Math.floor((cell_height - height) / 2)
+        );
 
         this.aoi_enabled = ko.observable(!!data.aoi);
         this.progress = ko.observable(0);
-
-        var that = this;
+        
         this.caption_txt = ko.computed(function()
         {
             return 0 === that.caption().length ? ' - ' : that.caption();
@@ -297,6 +391,13 @@ midas.widgets.AssetList.Asset = midas.core.BaseObject.extend({
         this.has_id = ko.computed(function()
         {
             return !! that.id();
+        });
+
+        this.popover_content = ko.computed(function()
+        {
+            return '<p><b>Titel</b> ' + that.caption_txt() + 
+                '</p><p><b>Copyright</b> ' + that.copyright_txt() +
+                '</p><p><b>Copyright Url</b> ' + that.copyright_url_txt()
         });
     }
 });
@@ -365,7 +466,7 @@ midas.widgets.AssetList.FileUploader = midas.core.BaseObject.extend({
     }, 
                                                                                                                                                                        
     dragDropped: function(evt) 
-    {                             
+    {                            
         $(document.body).removeClass('drag-enabled');
         if (this.enabled)
         {
@@ -442,36 +543,43 @@ midas.widgets.AssetList.FileUploader = midas.core.BaseObject.extend({
     {
         var that = this;
 
-        var fd = new FormData();
-        fd.append("asset", file);
-        var asset = new midas.widgets.AssetList.Asset({
-            name: file.name,
-            url: result
-        });
-
-        xhr = new XMLHttpRequest();
-        xhr.onload = function(evt)
+        var img = new Image;
+        img.onload = function() 
         {
-            if (xhr.status == 200) 
-            {  
-                var json = JSON.parse(xhr.responseText);
-                that.fire('upload::complete', [ asset, json.data ]);
-                that.shiftQueue();
-            }
+            var fd = new FormData();
+            fd.append("asset", file);
+            var asset = new midas.widgets.AssetList.Asset({
+                name: file.name,
+                url: result,
+                width: img.width,
+                height: img.height
+            });
+
+            xhr = new XMLHttpRequest();
+            xhr.onload = function(evt)
+            {
+                if (xhr.status == 200) 
+                {  
+                    var json = JSON.parse(xhr.responseText);
+                    that.fire('upload::complete', [ asset, json.data ]);
+                    that.shiftQueue();
+                }
+            };
+            xhr.upload.addEventListener("progress", function(evt)
+            {
+                if (evt.lengthComputable)
+                {                                                                                                                                                 
+                    that.fire('upload::progress', [ asset, (evt.loaded / evt.total) ]);                                                                                                
+                }
+            }, false);
+
+            that.fire('upload::start', [ asset ]);  
+
+            xhr.open('post', that.put_url, true);
+            xhr.setRequestHeader("Accept", "application/json");                                                                                                 
+            xhr.send(fd);
         };
-        xhr.upload.addEventListener("progress", function(evt)
-        {
-            if (evt.lengthComputable)
-            {                                                                                                                                                 
-                that.fire('upload::progress', [ asset, (evt.loaded / evt.total) ]);                                                                                                
-            }
-        }, false)
-
-        this.fire('upload::start', [ asset ]);  
-
-        xhr.open('post', this.put_url, true);
-        xhr.setRequestHeader("Accept", "application/json");                                                                                                 
-        xhr.send(fd);
+        img.src = result;
     }
 });
 

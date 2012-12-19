@@ -6,9 +6,7 @@ class %%MODULE_NAME%%_Edit_EditErrorView extends %%MODULE_NAME%%BaseView
     {
         $data = array(
             'state' => 'error',
-            'data' => array(
-                'errors' => $this->getAttribute('errors', array())
-            )
+            'errors' => $this->getAttribute('errors', array())
         );
         
         $this->getResponse()->setContent(json_encode($data));

@@ -67,11 +67,11 @@ midas.list.ListController = midas.core.BaseObject.extend({
             batch.addAction(new midas.list.Action(
                 this.workflow_handler.proceed(item.ticket, gate)
             ));
-            batch.on('complete', function()
-            {
-                window.location.href = window.location.href;
-            });
         }
+        batch.on('complete', function()
+        {
+            window.location.href = window.location.href;
+        });
         return batch;
     },
 
@@ -82,16 +82,20 @@ midas.list.ListController = midas.core.BaseObject.extend({
             // no batch support for editing/plugin execution
             return;
         }
-        var checkout = this.workflow_handler.checkout(data.ticket);
+
+        var edit_link = this.options.workflow_urls.edit + '?id='+data.data.identifier;
+        window.location.href = edit_link;
+        /* @todo integrate/consider ticket data
+        var checkout = this.workflow_handler.checkout(data);
         var that = this;
-        var ticket = data.ticket;
-        checkout(function()
+        checkout(function(ticket)
         {
             that.workflow_handler.run(ticket);
         }, function()
         {
             alert("Datensatz konnte nicht geöffnet werden, da er bereits bearbeitet wird.");
         });
+*/
     },
 
     releaseTicket: function(data)
@@ -110,6 +114,43 @@ midas.list.ListController = midas.core.BaseObject.extend({
     getSelectedItems: function()
     {
         return this.viewmodel.selected_items();
+    },
+
+    deleteItem: function(is_batch, data_container)
+    {
+        var that = this;
+
+        this.confirm_dialog.show(function()
+        {
+            that.confirm_dialog.hide();
+            that.createDeleteBatch(
+                (true === is_batch) ? that.getSelectedItems() : [ data_container ]
+            ).run();
+        });
+    },
+
+    createDeleteBatch: function(items)
+    {
+        var batch = new midas.list.ActionBatch();
+
+        for (var i = 0; i < items.length; i++)
+        {
+            var item = items[i];
+            batch.addAction(new midas.list.Action(
+                midas.core.Request.curry(
+                    this.options.workflow_urls.delete, 
+                    { id: item.data.identifier }, 
+                    'post'
+                )
+            ));
+        }
+
+        batch.on('complete', function()
+        {
+            window.location.href = window.location.href;
+        });
+
+        return batch;
     },
 
     /**

@@ -1,19 +1,6 @@
 <?php
 
-class %%MODULE_NAME%%DocumentValidator extends AgaviValidator
+class %%MODULE_NAME%%DocumentValidator extends HoneybeeDocumentValidator
 {
-    protected function validate()
-    {
-        /**
-         * @todo implement against dat0r validation.
-         */
-        $data = $this->getData($this->getArgument());
-
-        if (is_array($data))
-        {
-            $this->export($data, $this->getArgument());
-            return TRUE;
-        }
-        return FALSE;
-    }
+    
 }
