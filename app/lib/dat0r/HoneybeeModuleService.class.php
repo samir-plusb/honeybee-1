@@ -18,7 +18,7 @@ class HoneybeeModuleService
                     '', 
                     $file->getPathname()
                 );
-                // @todo refactor hardcoded namespace to be appropiately deynamic.
+                // @todo refactor hardcoded namespace to be appropiately dynamic.
                 $implementor = sprintf('Honeybee\\Domain\\%1$s\\%1$sModule', $moduleName);
                 $factory = array($implementor, 'getInstance');
 
