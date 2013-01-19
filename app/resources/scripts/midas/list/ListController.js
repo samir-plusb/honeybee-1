@@ -32,10 +32,10 @@ midas.list.ListController = midas.core.BaseObject.extend({
         this.confirm_dialog = new midas.list.ListController.ConfirmDialog('.dialog-confirm');
     },
 
-    proceed: function(is_batch, data, gate, confirm)
+    proceed: function(is_batch, data, gate, confirm_text)
     {
         var that = this;
-        confirm = (undefined === confirm) ? true : confirm;
+        confirm_text = (undefined === confirm_text) ? false : confirm_text;
         var proceed = function()
         {
             that.createProceedBatch(
@@ -44,8 +44,9 @@ midas.list.ListController = midas.core.BaseObject.extend({
             ).run();
         };
 
-        if (confirm)
+        if (confirm_text)
         {
+            this.confirm_dialog.confirm_prompt.find('.prompt-text').html(confirm_text);
             this.confirm_dialog.show(function()
             {
                 that.confirm_dialog.hide();
@@ -61,17 +62,34 @@ midas.list.ListController = midas.core.BaseObject.extend({
     createProceedBatch: function(items, gate)
     {
         var batch = new midas.list.ActionBatch();
+        var has_errors = false;
         for (var i = 0; i < items.length; i++)
         {
             var item = items[i];
+            
             batch.addAction(new midas.list.Action(
-                this.workflow_handler.proceed(item.ticket, gate)
+                this.workflow_handler.proceed(item, gate)
             ));
         }
-        batch.on('complete', function()
+
+        batch.on('success', function()
         {
+            console.log("yay batch item succeeded.");
+        }).on('error', function(err)
+        {
+            has_errors = true;
+            console.log("noes batch item failed.", err);
+        }).on('complete', function()
+        {
+            if (has_errors)
+            {
+                // do something to communicate the errors.
+                alert("Weird stuff is happening causing errors!");
+            }
+
             window.location.href = window.location.href;
         });
+
         return batch;
     },
 
@@ -83,7 +101,7 @@ midas.list.ListController = midas.core.BaseObject.extend({
             return;
         }
 
-        var edit_link = this.options.workflow_urls.edit + '?id='+data.data.identifier;
+        var edit_link = this.options.workflow_urls.run + '?id='+data.data.identifier;
         window.location.href = edit_link;
         /* @todo integrate/consider ticket data
         var checkout = this.workflow_handler.checkout(data);
@@ -114,43 +132,6 @@ midas.list.ListController = midas.core.BaseObject.extend({
     getSelectedItems: function()
     {
         return this.viewmodel.selected_items();
-    },
-
-    deleteItem: function(is_batch, data_container)
-    {
-        var that = this;
-
-        this.confirm_dialog.show(function()
-        {
-            that.confirm_dialog.hide();
-            that.createDeleteBatch(
-                (true === is_batch) ? that.getSelectedItems() : [ data_container ]
-            ).run();
-        });
-    },
-
-    createDeleteBatch: function(items)
-    {
-        var batch = new midas.list.ActionBatch();
-
-        for (var i = 0; i < items.length; i++)
-        {
-            var item = items[i];
-            batch.addAction(new midas.list.Action(
-                midas.core.Request.curry(
-                    this.options.workflow_urls.delete, 
-                    { id: item.data.identifier }, 
-                    'post'
-                )
-            ));
-        }
-
-        batch.on('complete', function()
-        {
-            window.location.href = window.location.href;
-        });
-
-        return batch;
     },
 
     /**
@@ -185,11 +166,10 @@ midas.list.ListController.ConfirmDialog = midas.core.BaseObject.extend({
 
     confirm_prompt: null,
 
-    init: function(element, categories_uri)
+    init: function(element)
     {
         this.parent();
         var that = this;
-        this.categories_uri = categories_uri;
         this.confirm_prompt = $(element).twodal({
             show: false,
             backdrop: true,

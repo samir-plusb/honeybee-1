@@ -9,11 +9,12 @@
 
 html
 {
-    background: url('../binaries/dashboard_bg.jpg') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    background: url('../binaries/dashboard_bg.jpg') no-repeat bottom right fixed;
+}
+
+html.error-page
+{
+    background: url('../binaries/recovery.jpg') no-repeat bottom right fixed;
 }
 
 body
@@ -25,8 +26,7 @@ body
 h1
 {
     font-size: 30px;
-    text-shadow: 1px 1px 1px #454545;
-    color: white;
+    color: #555555;
     margin-bottom: 1em;
     margin-top: 70px;
 }
@@ -48,7 +48,6 @@ ul.dl-horizontal,
     list-style: none;
     margin: 0;
     overflow: hidden;
-    text-shadow: 1px 1px 1px #454545;
     color: white;
 }
 
@@ -56,20 +55,16 @@ ul.dl-horizontal li
 {
     float: left;
     margin-right: 1em;
+    color: #555555;
 }
 
 ul.dl-horizontal b.label
 {
-    color: #4674A6;
-    text-shadow: 1px 1px 1px #efefef;
-    background: white;
-    font-weight: normal;
 }
 
 .info-box
 {
     margin-top: 5em;
-    border: 1px solid #efefef;
     width: 25em;
     background-color: rgba(253, 253, 253, 0.6);
 }

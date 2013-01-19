@@ -18,7 +18,7 @@
 
     <xs:complexType name="ResourceCollectionType">
         <xs:sequence>
-            <xs:element name="resource" type="ResourceType" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="resource" type="ResourceType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -77,7 +77,7 @@
 
     <xs:complexType name="AclType">
         <xs:sequence>
-            <xs:element name="grant" type="RuleType" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="grant" type="RuleType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 

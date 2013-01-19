@@ -10,36 +10,32 @@ midas.list.WorkflowHandler = midas.core.BaseObject.extend({
         this.urls = urls || {};
     },
 
-    proceed: function(ticket, gate)
+    proceed: function(resource, gate)
     {
         var that = this;
-        var post_url = this.urls.proceed.replace('{TICKET}', ticket.id);
+        var post_url = this.urls.proceed + '?id=' + resource.data.identifier;
         var post_data = { gate: gate };
         
         return function(ok_callback, err_callback)
         {
             // @todo checkout ticket and take ownership
-            //console.log(this.urls.proceed.replace('{TICKET}', ticket.id));
-            var req = midas.core.Request.curry(
+            midas.core.Request.curry(
                 post_url, 
                 post_data,
                 "POST"
+            )(
+                function(data) { ok_callback(data); }, 
+                function(err) { err_callback(err); }
             );
-            req(function(data){
-                ok_callback(data);
-            },
-            function(data)
-            {
-                err_callback(data);
-            });
         };
     },
 
-    checkout: function(ticket)
+    checkout: function(resource)
     {
-        var url = this.urls.checkout.replace("{TICKET_ID}", ticket.id).replace("{TICKET_REV}", ticket.rev);
+        var url = this.urls.release + '?id=' + resource.data.identifier + '&rev=' + resource.data.revision;
         var req = midas.core.Request.curry(url);
         var that = this;
+
         return function(ok_callback, err_callback)
         {
 			ok_callback();
@@ -64,11 +60,12 @@ midas.list.WorkflowHandler = midas.core.BaseObject.extend({
         };
     },
 
-    release: function(ticket)
+    release: function(resource)
     {
-        var url = this.urls.release.replace("{TICKET}", ticket.id);
+        var url = this.urls.release + '?id=' + resource.data.identifier;
         var req = midas.core.Request.curry(url);
         var that = this;
+
         return function(ok_callback, err_callback)
         {
             req(function(data)
@@ -91,9 +88,9 @@ midas.list.WorkflowHandler = midas.core.BaseObject.extend({
         };
     },
 
-    run: function(ticket)
+    run: function(resource)
     {
         // @todo checkout ticket and take ownership
-        window.location.href = this.urls.run.replace('{TICKET}', ticket.id);
+        window.location.href = this.urls.run + '?id=' + resource.data.identifier;
     }
 });

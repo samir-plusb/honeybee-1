@@ -39,28 +39,21 @@ class Common_ListAction extends CommonBaseAction
         $clientSideOptions = $listConfig->getClientSideController();
         $clientSideOptions['options'] = isset($clientSideOptions['options']) ? $clientSideOptions['options'] : array();
         $clientSideOptions['options']['workflow_urls'] = array(
-            'checkout' => urldecode(htmlspecialchars_decode($routing->gen('workflow.grab', array(
-                'ticket' => array('id' => '{TICKET_ID}', 'rev' => '{TICKET_REV}'), 
-                'type' => $listConfig->getTypeKey()
-            )))),
-            'release' => urldecode(htmlspecialchars_decode($routing->gen('workflow.release', array(
-                'type' => $listConfig->getTypeKey(), 
-                'ticket' => '{TICKET}'
-            )))),
-            'run' => urldecode(htmlspecialchars_decode($routing->gen('workflow.run', array(
-                'type' => $listConfig->getTypeKey(), 
-                'ticket' => '{TICKET}'
-            )))),
+            'checkout' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.workflow.grab', $listConfig->getTypeKey()))
+            )),
+            'release' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.workflow.release', $listConfig->getTypeKey()))
+            )),
+            'run' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.workflow.run', $listConfig->getTypeKey()))
+            )),
             'edit' => urldecode(htmlspecialchars_decode(
                 $routing->gen(sprintf('%s.edit', $listConfig->getTypeKey()))
             )),
-            'delete' => urldecode(htmlspecialchars_decode(
-                $routing->gen(sprintf('%s.delete', $listConfig->getTypeKey()))
-            )),
-            'proceed' => urldecode(htmlspecialchars_decode($routing->gen('workflow.proceed', array(
-                'type' => $listConfig->getTypeKey(), 
-                'ticket' => '{TICKET}'
-            ), array('relative' => FALSE))))
+            'proceed' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.workflow.proceed', $listConfig->getTypeKey()))
+            ))
         );
 
         $this->setAttribute('client_side_controller', $clientSideOptions);
@@ -88,7 +81,7 @@ class Common_ListAction extends CommonBaseAction
             $renderer = NULL;
             if (! isset($rendererPool[$rendererClass]))
             {
-                $renderer = new $rendererClass();
+                $renderer = new $rendererClass($this->getModule());
                 $rendererPool[$rendererClass] = $renderer;
             }
             else
@@ -123,7 +116,7 @@ class Common_ListAction extends CommonBaseAction
                 {
                     if (! isset($rendererPool[$rendererClass]))
                     {
-                        $renderer = new $rendererClass();
+                        $renderer = new $rendererClass($this->getModule());
                         $rendererPool[$rendererClass] = $renderer;
                     }
                     else

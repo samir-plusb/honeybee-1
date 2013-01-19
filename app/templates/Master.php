@@ -2,13 +2,14 @@
 <?php
     $locale = $tm->getCurrentLocale();
     $dir = (($locale->getCharacterOrientation() == 'right-to-left') ? 'rtl' : 'ltr');
+    $is_error_page = TRUE === $rq->getAttribute('is_error_page');
 ?>
 <!DOCTYPE HTML>
 <html 
     xmlns="http://www.w3.org/1999/xhtml" 
     xml:lang="<?php echo $locale->getLocaleLanguage(); ?>" 
     lang="<?php echo $locale->getLocaleLanguage(); ?>" 
-    dir="<?php echo $dir; ?>">
+    dir="<?php echo $dir; ?>" <?php echo ($is_error_page) ? 'class="error-page"' : ''; ?>>
     <head>
         <title><?php echo htmlspecialchars($t['_title']); ?></title>
         <base href="<?php echo $ro->getBaseHref(); ?>" id="base_href"/>

@@ -3,35 +3,84 @@
     xmlns="http://berlinonline.de/schemas/midas/workflow/1.0" 
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
     <ae:configuration>
-        <workflow name="%%MODULE_PREFIX%%">
+        <workflow name="%%MODULE_PREFIX%%.default">
             <description>
-                This workflow defines the process structure for editing/refining created/imported %%MODULE_NAME%%.
+                This workflow defines the process flow for editing/publishing %%MODULE_NAME%% data.
+                The looks something like this: Edit -> Publish -> Archive -> Edit -> ...
             </description>
-            <start_at>edit_%%MODULE_PREFIX%%</start_at>
+            <start_at>edit</start_at>
             <steps>
-
-                <step name="edit_%%MODULE_PREFIX%%">
-                    <description>Manually edit a %%MODULE_NAME%%.</description>
-                    <plugin type="%%MODULE_NAME%%Edit">
+                <step name="edit">
+                    <description>Manually edit a %%MODULE_PREFIX%% document.</description>
+                    <plugin type="Interactive">
+                        <ae:parameters>
+                            <ae:parameter name="module">%%MODULE_NAME%%</ae:parameter>
+                            <ae:parameter name="action">Edit</ae:parameter>
+                        </ae:parameters>
                         <gates>
-                            <gate_step label="delete this %%MODULE_NAME%%" name="delete">delete_%%MODULE_PREFIX%%</gate_step>
+                            <gate_step label="approve %%MODULE_PREFIX%%" name="promote">publish</gate_step>
+                            <gate_step label="delete %%MODULE_PREFIX%%" name="delete">delete</gate_step>
                         </gates>
                     </plugin>
                 </step>
 
-                <step name="delete_%%MODULE_PREFIX%%">
+                <step name="publish">
+                    <description>Tries to publish a given %%MODULE_PREFIX%% document.</description>
+                    <plugin type="Publish">
+                        <gates>
+                            <gate_step label="publishing ok" name="promote">published</gate_step>
+                            <gate_step label="publishing error" name="demote">edit</gate_step>
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="published">
+                    <description>Interactive editing/corrections within a published state.</description>
+                    <plugin type="Interactive">
+                        <ae:parameters>
+                            <ae:parameter name="module">%%MODULE_NAME%%</ae:parameter>
+                            <ae:parameter name="action">Edit</ae:parameter>
+                        </ae:parameters>
+                        <gates>
+                            <gate_step label="archive %%MODULE_PREFIX%%" name="promote">archive</gate_step>
+                            <gate_step label="depublish %%MODULE_PREFIX%%" name="demote">edit</gate_step>
+                            <gate_step label="delete %%MODULE_PREFIX%%" name="delete">delete</gate_step>
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="archive">
+                    <description>Marks a given %%MODULE_PREFIX%% as archived and depublishes it.</description>
+                    <plugin type="Archive">
+                        <gates>
+                            <gate_step label="archiving ok" name="promote">archived</gate_step>
+                            <gate_step label="archiving error" name="demote">published</gate_step>
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="archived">
+                    <description>Represents the archived state.</description>
+                    <plugin type="Null">
+                        <gates>
+                            <gate_step label="reset to edit" name="demote">edit</gate_step>
+                            <gate_step label="delete %%MODULE_PREFIX%%" name="delete">delete</gate_step>
+                        </gates>
+                    </plugin>
+                </step>
+
+                <step name="delete">
                     <description>
                         Marks a given %%MODULE_NAME%% as deleted.
                         During a configurable time period the item(place) can then be recovered,
                         before being removed by the system's maintenance.
                     </description>
-                    <plugin type="%%MODULE_NAME%%Delete">
+                    <plugin type="Delete">
                         <gates>
-                            <gate_end name="trash" />
+                            <gate_end name="suspend" />
                         </gates>
                     </plugin>
                 </step>
-
             </steps>
         </workflow>
     </ae:configuration>

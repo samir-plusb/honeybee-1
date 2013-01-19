@@ -56,7 +56,7 @@ midas.core.EditController = midas.core.BaseObject.extend({
 
         if (this.identifier())
         {
-            post_url += 'id=' + this.identifier();
+            post_url += '?id=' + this.identifier();
         }
 
         handleResponse = function(resp_data)

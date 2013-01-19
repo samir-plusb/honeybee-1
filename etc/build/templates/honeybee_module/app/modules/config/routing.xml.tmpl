@@ -7,7 +7,12 @@
             <route name=".list" pattern="/list" action="List" method="read" />
             <route name=".suggest" pattern="/suggest" action="Suggest" method="read" />
             <route name=".edit" pattern="/edit" action="Edit" />
-            <route name=".delete" pattern="/delete" action="Delete" />
+            <route name=".workflow" pattern="/workflow">
+                <route name=".run" pattern="/run" action="Workflow_Run" />
+                <route name=".grab" pattern="/grab" action="Workflow_Grab" />
+                <route name=".release" pattern="/release" action="Workflow_Release" />
+                <route name=".proceed" pattern="/proceed" action="Workflow_Proceed" />
+            </route>
         </routes>
     </ae:configuration>
 

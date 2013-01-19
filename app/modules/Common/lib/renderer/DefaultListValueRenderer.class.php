@@ -2,6 +2,13 @@
 
 class DefaultListValueRenderer implements IListValueRenderer
 {
+    protected $module;
+    
+    public function __construct(HoneybeeModule $module)
+    {
+        $this->module = $module;
+    }
+
     public function renderValue($value, $fieldname, array $data = array())
     {
         return $value;

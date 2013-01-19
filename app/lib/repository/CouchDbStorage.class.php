@@ -123,6 +123,9 @@ class CouchDbStorage implements IStorage
     public function delete(HoneybeeDocument $document)
     {
         $couchDb = $this->getDatabase()->getConnection();
+
+        var_dump("Deleting " . $document->getIdentifier() . ' - rev. ' . $document->getRevision());
+
         $couchDb->deleteDoc(NULL, $document->getIdentifier(), $document->getRevision());
     }
 

@@ -19,6 +19,7 @@
             <autoload name="IListValueRenderer">%core.module_dir%/Common/lib/renderer/IListValueRenderer.iface.php</autoload>
             <autoload name="TicketOwnerListValueRenderer">%core.module_dir%/Common/lib/renderer/TicketOwnerListValueRenderer.class.php</autoload>
             <autoload name="DefaultListValueRenderer">%core.module_dir%/Common/lib/renderer/DefaultListValueRenderer.class.php</autoload>
+            <autoload name="WorkflowStepListRenderer">%core.module_dir%/Common/lib/renderer/WorkflowStepListRenderer.class.php</autoload>
         </autoloads>
     </ae:configuration>
 </ae:configurations>

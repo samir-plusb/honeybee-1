@@ -20,7 +20,7 @@
 -->
     <div class="row-fluid" style="margin-top: 85px">
 
-        <form class="span12 form-horizontal" method="post" action="<?php echo $editLink; ?>"
+        <form class="span12 form-horizontal" method="post" action="<?php echo $ro->gen(NULL); ?>"
               data-bind="submit: onFormSubmit" style="padding-bottom: 60px;">
             <fieldset>
                 <legend style="display: none;"><?php echo $tm->_('edit-form-title', $td); ?></legend>

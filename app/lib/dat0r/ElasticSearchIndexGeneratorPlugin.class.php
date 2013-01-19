@@ -11,7 +11,10 @@ class ElasticSearchIndexGeneratorPlugin
     private static $typeMap = array(
         'text' => 'string',
         'integer' => 'integer',
-        'aggregate' => 'object'
+        'aggregate' => 'object',
+        'key-value' => 'object',
+        'integer-collection' => 'integer',
+        'boolean' => 'boolean'
     );
 
     public function __construct(array $options = array())
@@ -40,7 +43,10 @@ class ElasticSearchIndexGeneratorPlugin
         );
         foreach ($moduleDefinition->getFields() as $name => $field)
         {
-            $handlerFunc = sprintf('map%s', ucfirst($field['type']));
+            $handlerFunc = sprintf(
+                'map%s', 
+                implode('', array_map('ucfirst', explode('-', $field['type'])))
+            );
 
             if (is_callable(array($this, $handlerFunc)))
             {
@@ -79,6 +85,27 @@ class ElasticSearchIndexGeneratorPlugin
         $esType = self::$typeMap[$field['type']];
 
         return array('type' => $esType);
+    }
+
+    protected function mapIntegerCollection($fieldName, array $field, $moduleDefinition)
+    {   
+        $esType = self::$typeMap[$field['type']];
+
+        return array('type' => $esType);
+    }
+
+    protected function mapBoolean($fieldName, array $field, $moduleDefinition)
+    {   
+        $esType = self::$typeMap[$field['type']];
+
+        return array('type' => $esType);
+    }
+
+    protected function mapKeyValue($fieldName, array $field, $moduleDefinition)
+    {   
+        $esType = self::$typeMap[$field['type']];
+
+        return array('type' => $esType, 'dynamic' => TRUE);
     }
 
     protected function mapAggregate($fieldName, array $field, $moduleDefinition)

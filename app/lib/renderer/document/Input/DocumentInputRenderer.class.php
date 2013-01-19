@@ -26,9 +26,10 @@ class DocumentInputRenderer extends DocumentRenderer
         $tabs = $this->renderTabs($document);
         $tm = $this->getTranslationManager();
         $td = $this->getTranslationDomain();
+        $ro = AgaviContext::getInstance()->getRouting();
         $modulePrefix = $document->getModule()->getOption('prefix');
         $controllerOptions = htmlspecialchars(json_encode($this->getControllerOptions($document)));
-        $editLink = $this->getRouteLink('edit');
+        $editLink = $this->getRouteLink('workflow.run');
         $listLink = $this->getRouteLink('list');
 
         ob_start();

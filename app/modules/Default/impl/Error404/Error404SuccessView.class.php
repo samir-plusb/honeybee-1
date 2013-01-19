@@ -176,6 +176,7 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
      */
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
+        $this->getContext()->getRequest()->setAttribute('is_error_page', TRUE);
         $this->setupHtml($parameters);
 
         $title = $this->getAttribute('_title');

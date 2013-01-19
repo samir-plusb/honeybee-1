@@ -56,6 +56,35 @@ class ConfigurationScanner
                         $configsToInclude['dat0r'][] = $package->getPathName();
                     }
                 }
+
+                $aclPath = $file->getPathname().str_replace('/', DIRECTORY_SEPARATOR, '/config/access_control/');
+                if (is_dir($aclPath))
+                {
+                    $directoryIter = new DirectoryIterator($aclPath);
+                    foreach ($directoryIter as $aclConfig)
+                    {
+                        $fileName = $aclConfig->getFilename();
+                        if ('.' === $fileName || '..' === $fileName)
+                        {
+                            continue;
+                        }
+                        if (! isset($configsToInclude['access_control']))
+                        {
+                            $configsToInclude['access_control'] = array(
+                                'resources' => array(),
+                                'permissions' => array()
+                            );
+                        }
+                        if ($fileName === 'resource.xml')
+                        {
+                            $configsToInclude['access_control']['resources'][] = $aclConfig->getPathname();
+                        }
+                        else if ($fileName === 'permissions.xml')
+                        {
+                            $configsToInclude['access_control']['permissions'][] = $aclConfig->getPathname();
+                        }
+                    }
+                }
             }
         }
 

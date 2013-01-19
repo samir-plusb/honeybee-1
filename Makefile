@@ -100,7 +100,7 @@ install-composer:
 
 	@if [ -d vendor/agavi/agavi/ ]; then svn revert -R vendor/agavi/agavi/; fi
 	@if [ ! -f bin/composer.phar ]; then curl -s http://getcomposer.org/installer | php -d allow_url_fopen=1 -d date.timezone="Europe/Berlin" -- --install-dir=./bin; fi
-	@bin/apply_patches
+	-@bin/apply_patches
 	
 
 update-composer:
@@ -116,7 +116,7 @@ update-vendor: install-vendor
 
 	@svn revert -R vendor/agavi/agavi/ || true
 	@php -d allow_url_fopen=1 bin/composer.phar update
-	@bin/apply_patches
+	-@bin/apply_patches
 
 
 install-node-deps:

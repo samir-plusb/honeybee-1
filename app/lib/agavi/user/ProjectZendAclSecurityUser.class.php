@@ -80,7 +80,7 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
 
     public function isAllowed($resource, $operation = NULL)
     {
-
+        
         return $this->getZendAcl()->isAllowed($this, $resource, $operation);
     }
 

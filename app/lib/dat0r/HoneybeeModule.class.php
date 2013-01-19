@@ -13,6 +13,8 @@ abstract class HoneybeeModule extends RootModule
 
     private $service;
 
+    private $workflowManager;
+
     public function createDocument(array $data = array())
     {
         if (! empty($data))
@@ -21,7 +23,14 @@ abstract class HoneybeeModule extends RootModule
             $data = array_merge($data, $references);
         }
         
-        return parent::createDocument($data);
+        $document = parent::createDocument($data);
+
+        if (! ($ticket = $document->getWorkflowTicket()))
+        {
+            $this->getWorkflowManager()->initWorkflowFor($document);
+        }
+
+        return $document;
     }
 
     public function getService()
@@ -32,6 +41,16 @@ abstract class HoneybeeModule extends RootModule
         }
 
         return $this->service;
+    }
+
+    public function getWorkflowManager()
+    {
+        if (NULL === $this->workflowManager)
+        {
+            $this->workflowManager = new WorkflowManager($this);
+        }
+
+        return $this->workflowManager;
     }
 
     public function getRepository()

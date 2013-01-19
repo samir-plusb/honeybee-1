@@ -10,13 +10,15 @@ class BaseEditAction extends ProjectBaseAction
         $this->setAttribute('module', $module);
         $this->setAttribute('document', $document);
 
+        $this->setContainerPluginState();
+
         return 'Input';
     }
 
     public function executeWrite(AgaviRequestDataHolder $requestData)
     {
         $view = 'Success';
-        
+
         $module = $this->getModule();
         $this->setAttribute('module', $module);
 
@@ -33,33 +35,25 @@ class BaseEditAction extends ProjectBaseAction
             $view = 'Error';
         }
 
+        $this->setContainerPluginState();
+
         return $view;
-    }
-
-    public function handleError(AgaviRequestDataHolder $requestData)
-    {
-        $errors = array();
-
-        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $name => $error)
-        {
-            $errors[] = implode(', ', $error['errors']) . ': ' . $error['message'];
-        }
-
-        $this->setAttribute('errors', $errors);
-
-        return 'Error';
     }
 
     protected function setContainerPluginState()
     {
         $pluginResult = $this->getContainer()->getAttribute(
-            WorkflowBaseInteractivePlugin::ATTR_RESULT,
-            WorkflowBaseInteractivePlugin::NS_PLUGIN_ATTRIBUTES
+            WorkflowInteractivePlugin::ATTR_RESULT,
+            WorkflowInteractivePlugin::NS_PLUGIN_ATTRIBUTES
         );
         
         if ($pluginResult)
         {
             $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
+            $pluginResult->setMessage(
+                "Processed: " . get_class($this) 
+                .' - ' . ucfirst($this->getContext()->getRequest()->getMethod())
+            );
         }
     }
 }

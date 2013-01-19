@@ -27,6 +27,9 @@ foreach ($scanner->scan() as $name => $files)
         case 'dat0r';
             $generator = new Dat0rAutoloadGenerator();
             break;
+        case 'access_control';
+            $generator = new AccessControlXmlConfigGenerator();
+            break;
 
         default:
             $generator = new DefaultXmlConfigGenerator();

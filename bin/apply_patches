@@ -4,6 +4,12 @@ cd `dirname $0`
 
 # Store the vendor directory
 cd ..
+
+if [ ! -d vendor ] ; then
+	echo "No vendor directory found, skipping patches.";
+	exit 1
+fi
+
 cd vendor
 vendor_directory=`pwd`
 
@@ -27,3 +33,5 @@ do
 done
 cd ..
 done
+
+exit 0

@@ -30,7 +30,9 @@ class ElasticSearchFinder implements IFinder
         }
 
         $query->setLimit($limit)->setFrom($offset);
-
+        $query->setFilter(new Elastica_Filter_Not(new Elastica_Filter_Term(
+            array('meta.is_deleted' => TRUE)
+        )));
         $source = $this->getQuerySource();
         $resultSet = $source->search($query);
         

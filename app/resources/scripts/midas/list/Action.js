@@ -18,13 +18,22 @@ midas.list.Action = midas.core.BaseObject.extend({
     execute: function()
     {
         var that = this;
+
         try
         {
             that.fire('start');
             that.payload(
-                function()
+                function(resp)
                 {
-                    that.fire('success');
+                    console.log(resp);
+                    if ('ok' === resp.state)
+                    {
+                        that.fire('success', [ resp ]);
+                    }
+                    else
+                    {
+                        that.fire('failure', [ resp ]);
+                    }
                 },
                 function(error)
                 {

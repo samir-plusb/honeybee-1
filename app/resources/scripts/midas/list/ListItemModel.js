@@ -8,7 +8,7 @@ midas.list.ListItemModel = midas.core.BaseObject.extend({
 
     css_classes: null,
 
-    ticket: null,
+    workflow: null,
 
     selected: null,
 
@@ -17,7 +17,7 @@ midas.list.ListItemModel = midas.core.BaseObject.extend({
         this.parent();
 
         this.data = item_data.data;
-        this.ticket = item_data.ticket;
+        this.workflow = item_data.workflow;
         this.display_data = item_data.display_data;
         this.css_classes = item_data.css_classes ? item_data.css_classes.join(" ") : "";
         this.selected = ko.observable(false);

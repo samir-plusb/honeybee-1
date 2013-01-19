@@ -38,10 +38,21 @@ abstract class BaseService implements IService
         return $document;
     }
 
-    public function delete(HoneybeeDocument $document)
+    public function delete(HoneybeeDocument $document, $markOnly = TRUE)
     {
-        $repository = $this->module->getRepository();
-        $repository->delete($document);
+        if ($markOnly)
+        {
+            $meta = $document->getMeta();
+            $meta['is_deleted'] = TRUE;
+            $document->setMeta($meta);
+            
+            $this->save($document);
+        }
+        else
+        {
+            // this actually is destructive, only use if you REALLY want to delete.
+            $this->module->getRepository()->delete($document);
+        }
     }
 
     public function fetchListData(IListConfig $config, IListState $state)

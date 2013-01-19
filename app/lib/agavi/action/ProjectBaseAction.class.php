@@ -10,36 +10,10 @@
  */
 class ProjectBaseAction extends AgaviAction
 {
-    /**
-     * Default error handling for all methods
-     *
-     * @param AgaviRequestDataHolder $parameters
-     * @return array (modulename, viewname)
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @codingStandardsIgnoreStart
-     */
-    public function handleError(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function isSecure()
     {
-        $container = $this->getContainer();
-        $validation_manager = $container->getValidationManager();
-        $this->setAttribute('_module', $container->getModuleName());
-        $this->setAttribute('_action', $container->getActionName());
-        $this->setAttribute('errors', $validation_manager->getReport()->getErrors());
-
-        if (! $this->hasAttribute("method"))
-        {
-            $this->setAttribute("method", __METHOD__);
-        }
-
-        $this->getContext()->getTranslationManager()->setDefaultDomain($container->getModuleName().'.errors');
-
-        return array(
-            AgaviConfig::get('actions.error_404_module', 'Default'),
-            AgaviConfig::get('actions.error_404_action', 'Error404')
-                .'/'.AgaviConfig::get('actions.error_404_action', 'Error404').'Success');
+        return TRUE;
     }
-
 
     /**
      * Default error handling for method Read (GET Requests)
@@ -49,9 +23,16 @@ class ProjectBaseAction extends AgaviAction
      */
     public function handleReadError(AgaviRequestDataHolder $parameters)
     {
-        $this->setAttribute("method", __METHOD__);
+        $errors = array();
 
-        return $this->handleError($parameters);
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
+        {
+            $errors[] = implode(', ', $errMsg['errors']) . ': ' . $errMsg['message'];
+        }
+
+        $this->setAttribute('errors', $errors);
+
+        return 'Error';
     }
 
     /**
@@ -62,14 +43,31 @@ class ProjectBaseAction extends AgaviAction
      */
     public function handleWriteError(AgaviRequestDataHolder $parameters)
     {
-        $this->setAttribute("method", __METHOD__);
+        $errors = array();
 
-        return $this->handleError($parameters);
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
+        {
+            $errors[] = implode(', ', $errMsg['errors']) . ': ' . $errMsg['message'];
+        }
+
+        $this->setAttribute('errors', $errors);
+
+        return 'Error';
     }
 
-    public function isSecure()
+    protected function getModule()
     {
-        return TRUE;
+        $module = $this->getContext()->getRequest()->getAttribute('module', 'org.honeybee.env');
+
+        if (! ($module instanceof HoneybeeModule))
+        {
+            throw new Exception(
+                "Unable to determine honebee-module for the current action's scope." . PHP_EOL . 
+                "Make sure that the HoneybeeModuleRoutingCallback is executed for the related route."
+            );
+        }
+
+        return $module;
     }
 
     protected function logError($msg)
@@ -88,21 +86,6 @@ class ProjectBaseAction extends AgaviAction
         $logger->log(
             new AgaviLoggerMessage($infoMsg, AgaviLogger::INFO)
         );
-    }
-
-    protected function getModule()
-    {
-        $module = $this->getContext()->getRequest()->getAttribute('module', 'org.honeybee.env');
-
-        if (! ($module instanceof HoneybeeModule))
-        {
-            throw new Exception(
-                "Unable to determine honebee-module for the current action's scope." . PHP_EOL . 
-                "Make sure that the HoneybeeModuleRoutingCallback is executed for the related route."
-            );
-        }
-
-        return $module;
     }
 
     /**

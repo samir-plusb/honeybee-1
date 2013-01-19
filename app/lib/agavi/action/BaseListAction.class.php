@@ -103,12 +103,36 @@ class BaseListAction extends ProjectBaseAction
     protected function prepareListData(HoneybeeDocumentCollection $documents)
     {
         $data = array();
+        $module = $this->getModule();
+        $tm = $this->getContext()->getTranslationManager();
+        $translationDomain = sprintf('%s.list', $module->getOption('prefix'));
+        $workflowManager = $module->getWorkflowManager();
 
         foreach ($documents as $document)
         {
+            $gates = array();
+            $workflowStep = $document->getWorkflowTicket()->getWorkflowStep();
+            foreach ($workflowManager->getPossibleGates($document) as $gateName)
+            {
+                $promptLangKey = sprintf('%s.%s.prompt', $workflowStep, $gateName);
+                $promptMsg = $tm->_($promptLangKey, $translationDomain);
+                if ($promptMsg === $promptLangKey)
+                {
+                    $promptMsg = FALSE;
+                }
+                $gates[] = array(
+                    'label' => $tm->_($workflowStep.'.'.$gateName, $translationDomain),
+                    'name' => $gateName,
+                    'prompt' => $promptMsg
+                );
+            }
+
             $data[] = array(
                 'data' => $document->toArray(),
-                'ticket' => array()
+                'workflow' => array(
+                    'gates' => $gates,
+                    'interactive' => $workflowManager->isInInteractiveState($document)
+                )
             );
         }
 

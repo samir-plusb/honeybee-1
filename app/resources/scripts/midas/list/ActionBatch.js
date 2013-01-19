@@ -33,13 +33,14 @@ midas.list.ActionBatch = midas.core.BaseObject.extend({
 
     run: function()
     {
+        var that = this;
         for (var i = 0; i < this.actions.length; i++)
         {
             var action = this.actions[i];
             this.queue.push(
                 action.on('start', this.onActionStarted.bind(this))
                 .on('success', this.onActionSuccess.bind(this))
-                .on('failure', function(error) { this.onActionFailure(error); }.bind(this))
+                .on('failure', function(error) { that.onActionFailure(error); })
                 .execute.bind(action)
             );
         }

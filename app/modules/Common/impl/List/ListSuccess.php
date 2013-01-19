@@ -191,27 +191,28 @@
 ?>
                     <td class="actions">
                         <div class="btn-group dropdown">
-                            <button class="btn btn-primary midas-action midas-action-<?php echo $itemActions[0]; ?>"
-                                    data-bind="click: function(item, event) { var is_batch = false; <?php echo '$parent.'.$itemActions[0]; ?> }">
-                                <?php echo $tm->_($actionNames[0], $translationDomain); ?>
+                            <!-- ko if: $data.workflow.interactive === true -->
+                            <button class="btn btn-primary midas-action midas-action-edit"
+                                    data-bind="click: function(item, event) { $parent.ctrl.run(false, item); }">
+                                <?php echo $tm->_('edit', $translationDomain); ?>
                             </button>
+                            <!-- /ko -->
+                            <!-- ko if: $data.workflow.interactive !== true -->
+                                <button class="btn btn-primary midas-action midas-action-edit" disabled="disabled">
+                                    <?php echo $tm->_('edit', $translationDomain); ?>
+                                </button>
+                            <!-- /ko -->
+                            <!-- ko if: $data.workflow.gates.length > 0 -->
                             <button class="btn dropdown-toggle btn-primary" data-toggle="dropdown">
                                 <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu pull-right">
-<?php
-
-    for ($i = 1; $i < count($itemActions); $i++)
-    {
-?>
+                            <ul class="dropdown-menu pull-right" data-bind="foreach: $data.workflow.gates">
                                 <li>
-                                    <a class="midas-action midas-action-<?php echo $itemActions[$i]; ?>"
-                                       data-bind="click: function(item, event) { var is_batch = false; <?php echo '$parent.'.$itemActions[$i]; ?> }"><?php echo $tm->_($actionNames[$i], $translationDomain); ?></a>
+                                    <a class="midas-action-proceed"
+                                       data-bind="click: function(item, event) { $root.ctrl.proceed(false, $parent, $data.name, $data.prompt); }, text: $data.label"></a>
                                 </li>
-<?php
-    }
-?>
                             </ul>
+                            <!-- /ko -->
                         </div>
                     </td>
                 </tr>
@@ -232,7 +233,7 @@
 ************************************************** -->
 <div class="modal modal-batch-progress" style="display:none">
     <div class="modal-header">
-        <h3>Stapelverarbeitungs Fortschritt</h3>
+        <h3>Fortschritt</h3>
     </div>
     <div class="modal-body">
         <div class="progress progress-striped active">
@@ -249,7 +250,7 @@
         <h4>Bitte bestätigen</h4>
     </div>
     <div class="modal-body">
-        <p>Willst du den Eintrag wirklich l&ouml;schen?</p>
+        <p class="prompt-text">Aktion wirklich durchf&uuml;hren?</p>
     </div>
     <div class="modal-footer">
         <a href="#" data-twodal-event="confirm" class="btn btn-primary">Ja</a>
