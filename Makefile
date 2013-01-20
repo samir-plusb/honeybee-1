@@ -187,6 +187,12 @@ module:
 	@bin/agavi honeybee-module-wizard
 	@make config
 
+remove-module:
+
+	@bin/agavi module-list
+	@read -p "Enter module to remove:" module; unlink app/modules/$$module; rm -rf ../project/modules/$$module
+	@make link-project-modules
+	@make config
 
 module-code:
 

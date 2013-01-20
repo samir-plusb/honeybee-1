@@ -4,6 +4,7 @@
         project property definitions
     -->
     <property name="project.directory" value="${application.startdir}" />
+    <property name="project.codegen.target" value="${application.startdir}/../project/modules" />
     <property name="project.directory.etc" value="${application.startdir}/etc" />
     <property userProperty="true" override="true" file="${project.directory.etc}/build/build.properties" />
     <property name="module.directory.impl" value="impl" />
@@ -30,10 +31,10 @@
         </if>
         <!-- @todo need a real impl for building module prefixes -->
         <php expression="strtolower('${module.name}')" returnProperty="module.prefix"/>
-        <property userProperty="true" name="module.directory" value="${project.directory}/${project.directory.app.modules}/${module.name}" override="true" />
+        <property userProperty="true" name="module.directory" value="${project.codegen.target}/${module.name}" override="true" />
         <agavi.check-module property="module.available" path="${module.directory}" />
         <fail if="module.available" message="Module ${module.name} already exists at ${module.directory}" />
-
+        <property userProperty="true" name="module.ln_target" value="${project.directory}/app/modules/${module.name}" override="true" />
         <!--# Create Directories #-->
         <mkdir dir="${module.directory}" />
         <mkdir dir="${module.directory}/${module.directory.impl}" />
@@ -181,7 +182,7 @@
             </filterchain>
         </copy>
 
-        <!--# Initially generate dat0r classes #-->
-        <run command="vendor/bin/dat0r.console generate ${module.directory}/config/dat0r/codegen.ini ${module.directory}/config/dat0r/module.xml gen+dep" dir="${project.directory}" />
+        <run command="make link-project-modules" dir="${project.directory}" />
+        <run command="vendor/bin/dat0r.console generate ${module.ln_target}/config/dat0r/codegen.ini ${module.ln_target}/config/dat0r/module.xml gen+dep" dir="${project.directory}" />
     </target>
 </project>
