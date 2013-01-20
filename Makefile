@@ -55,7 +55,7 @@ cc:
 	@make generate-autoloads
 
 
-config: cc
+config:
 
 	-@rm app/config/includes/*
 	@php bin/include_configs.php
@@ -66,9 +66,10 @@ install: install-vendor install-node-deps cc
 
 	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
 	@make twitter-bootstrap
+	@make link-project-modules
 
 
-update: update-composer update-vendor update-node-deps cc
+update: update-composer update-vendor update-node-deps link-project-modules
 
 
 tail-logs:
@@ -172,6 +173,13 @@ lessc:
 lessw: lessc
 
 	@bin/lessc -d pub/less -watch
+
+link-project-modules:
+
+	@cd app/modules/ ; ln -sf ../../../project/modules/* . ;
+	@ls ../project/modules/
+	@(for x in `ls ../project/modules/`; do echo "app/modules/$$x"; done) > .git/info/exclude
+	@make config
 
 
 module:
