@@ -3,27 +3,28 @@ PROJECT_ROOT=`pwd`
 help:
 
 	@echo "COMMON"
-	@echo "  cc - clear the cache directories and set file perms+mode."
-	@echo "  tail-logs - tail all application logs."
-	@echo "  install - initially setup a vanilla checkout."
-	@echo "  update - update the working copy and vendor libs."
+	@echo "  cc - Clear the cache directories and set file perms+mode."
+	@echo "  tail-logs - Tail all application logs."
+	@echo "  install - Initially setup a vanilla checkout."
+	@echo "  update - Update the working copy and vendor libs."
+	@echo "  link-project-modules - Symlink custom code into the honeybee submodule and update the local git/ingo/exclude settings."
 	@echo ""
 	@echo "DEVELOPMENT"
 	@echo "  Scafolding"
 	@echo "    module - Create and integrate a new module."
-	@echo "    module-code - Generate code for a certain module."
+	@echo "    remove-module - Remove an existing module."
+	@echo "    module-code - Generate code for an existing module."
 	@echo "    config - Generate includes for all modules."
-	@echo "    deploy-resources - Generate and deploy js css and assets."
+	@echo "    deploy-resources - Generate and deploy script-, style- and binary-packages."
 	@echo "  Php"
-	@echo "    test - run php test suites."
-	@echo "    phpcs - run the php code-sniffer and publish report."
+	@echo "    test - Run php test suites."
+	@echo "    phpcs - Run the php code-sniffer and publish report."
 	@echo "  Scripts:"
-	@echo "    js-specs - run vows scenarios with spec output to test the project's js code."
-	@echo "    js-xunit - run vows scenarios with xunit output to test the project's js code."
-	@echo "    js-docs - generate api doc for the project's js code."
+	@echo "    js-specs - Run vows scenarios with spec output to test the project's js code."
+	@echo "    js-xunit - Run vows scenarios with xunit output to test the project's js code."
+	@echo "    js-docs - Generate api doc for the project's js code."
 	@echo "  Styles:"
-	@echo "    lessc - compile less files to css directory."
-	@echo "    lessw - compile less files to css directory and watch less files for changes to then auto-compile."
+	@echo "    no current style related targets as the ProjectResourceFilter takes care of this stuff now."
 	@echo ""
 	@echo "INTERNAL"
 	@echo "  install-composer - install composer"
@@ -164,15 +165,6 @@ jsdoc:
 	@/bin/mkdir -p etc/integration/docs/clientside
 	@bin/jsdoc pub/js/midas --output etc/integration/docs/clientside/
 
-
-lessc:
-
-	@bin/lessc -d pub/less
-
-
-lessw: lessc
-
-	@bin/lessc -d pub/less -watch
 
 link-project-modules:
 
