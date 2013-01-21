@@ -39,7 +39,6 @@
             <autoload name="ProjectBaseConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectBaseConfigHandler.class.php</autoload>
             <autoload name="ProjectAclConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectAclConfigHandler.class.php</autoload>
             <autoload name="WorkflowConfigHandler">%core.lib_dir%/agavi/config_handler/WorkflowConfigHandler.class.php</autoload>
-
             <!-- database stuff -->
             <autoload name="ElasticSearchDatabase">%core.lib_dir%/agavi/database/ElasticSearchDatabase.class.php</autoload>
             <autoload name="CouchDbDatabase">%core.lib_dir%/agavi/database/CouchDbDatabase.class.php</autoload>
@@ -79,7 +78,7 @@
             <autoload name="SuggestQueryBuilder">%core.lib_dir%/repository/SuggestQueryBuilder.class.php</autoload>
             
             <!-- 
-                Rendering
+                Rendering - Rendering GUI for documents and modules.
             -->
             <autoload name="IRenderer">%core.lib_dir%/renderer/IRenderer.iface.php</autoload>
             <autoload name="DocumentRenderer">%core.lib_dir%/renderer/document/DocumentRenderer.class.php</autoload>
@@ -97,16 +96,6 @@
             <autoload name="KoReadOnlyFieldInputRenderer">%core.lib_dir%/renderer/field/Input/KoReadOnlyFieldInputRenderer.class.php</autoload>
 
             <!-- 
-                Iterator 
-            -->
-            <autoload name="ProjectDirectoryRegexpIterator">%core.lib_dir%/iterator/ProjectDirectoryRegexpIterator.class.php</autoload>
-            
-            <!-- 
-                Http 
-            -->
-            <autoload name="ProjectCurl">%core.lib_dir%/http/ProjectCurl.class.php</autoload>
-
-            <!-- 
                 Workflow 
             -->
             <autoload name="WorkflowManager">%core.lib_dir%/workflow/WorkflowManager.class.php</autoload>
@@ -114,7 +103,6 @@
             <autoload name="IWorkflowTicket">%core.lib_dir%/workflow/IWorkflowTicket.iface.php</autoload>
             <autoload name="Workflow">%core.lib_dir%/workflow/Workflow.class.php</autoload>
             <autoload name="WorkflowException">%core.lib_dir%/workflow/WorkflowException.class.php</autoload>
-
             <autoload name="IWorkflowPlugin">%core.lib_dir%/workflow/plugin/IWorkflowPlugin.iface.php</autoload>
             <autoload name="WorkflowBasePlugin">%core.lib_dir%/workflow/plugin/WorkflowBasePlugin.class.php</autoload>
             <autoload name="WorkflowDeletePlugin">%core.lib_dir%/workflow/plugin/WorkflowDeletePlugin.class.php</autoload>
@@ -127,15 +115,6 @@
             <autoload name="WorkflowInteractivePluginResult">%core.lib_dir%/workflow/plugin/WorkflowInteractivePluginResult.class.php</autoload>
 
             <!-- 
-                Mail - third party library from: http://code.google.com/p/php-mime-mail-parser/ 
-            -->
-            <autoload name="MimeMailParser">%core.lib_dir%/mail/mailparse.php</autoload>
-            <autoload name="MimeMailParser_attachment">%core.lib_dir%/mail/attachment.class.php</autoload>
-            
-            <!-- third party face detection lib -->
-            <autoload name="Face_Detector">%core.lib_dir%/php-facedetection/FaceDetector.php</autoload>
-
-            <!-- 
                 Config (Generation)
             -->
             <autoload name="ConfigurationScanner">%core.lib_dir%/config/ConfigurationScanner.class.php</autoload>
@@ -145,6 +124,20 @@
             <autoload name="IConfigGenerator">%core.lib_dir%/config/IConfigGenerator.iface.php</autoload>
             <autoload name="AccessControlXmlConfigGenerator">%core.lib_dir%/config/AccessControlXmlConfigGenerator.class.php</autoload>
             
+            <!-- 
+                Iterator 
+            -->
+            <autoload name="ProjectDirectoryRegexpIterator">%core.lib_dir%/iterator/ProjectDirectoryRegexpIterator.class.php</autoload>
+            
+            <!-- 
+                Http 
+            -->
+            <autoload name="ProjectCurl">%core.lib_dir%/http/ProjectCurl.class.php</autoload>
+
+            <!-- 
+                third party face detection lib 
+            -->
+            <autoload name="Face_Detector">%core.lib_dir%/php-facedetection/FaceDetector.php</autoload>
         </autoloads>
     </ae:configuration>
     

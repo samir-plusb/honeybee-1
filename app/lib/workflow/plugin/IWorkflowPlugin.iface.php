@@ -7,7 +7,6 @@
  * which are transistions to other steps, workflows or define a workflow end.
  *
  * @author tay
- * @version $Id$
  * @package Workflow
  * @subpackage Plugin
  */

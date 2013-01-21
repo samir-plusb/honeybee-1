@@ -5,7 +5,6 @@
  * Plugins are considered as interactive when they depend on user input for processing.
  *
  * @author tay
- * @version $Id$
  * @package Workflow
  * @subpackage Plugin
  */

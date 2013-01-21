@@ -5,7 +5,6 @@
  * that holds the reponse returned by actions that are run spefically in the context of interactive plugin execution.
  *
  * @author tay
- * @version $Id$
  * @package Workflow
  * @subpackage Plugin
  */

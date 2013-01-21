@@ -5,7 +5,6 @@
  * that all other IWorkflowPlugin implementations should inherit from.
  *
  * @author tay
- * @version $Id$
  * @package Workflow
  * @subpackage Plugin
  */

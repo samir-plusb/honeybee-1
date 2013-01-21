@@ -7,7 +7,6 @@
  * Once frozen a plugin result may not be modified anymore and attempts to do so shall lead to WorkflowExceptions.
  *
  * @author tay
- * @version $Id$
  * @package Workflow
  * @subpackage Plugin
  */

@@ -7,7 +7,6 @@
  *
  * @package Workflow
  * @author tay
- * @version $Id$
  * @package Workflow
  * @subpackage Plugin
  */

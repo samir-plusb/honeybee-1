@@ -1,11 +1,10 @@
 <?php
+
 /**
  * Representation of one workflow.
  *
  * @package Workflow
  * @author tay
- * @version $Id$
- *
  */
 class Workflow
 {
@@ -290,6 +289,7 @@ class Workflow
         switch ($gateDef['type'])
         {
             case 'step':
+
                 $ticket->setWorkflowStep($gateDef['target']);
                 return self::STATE_NEXT_STEP;
             case 'workflow':
