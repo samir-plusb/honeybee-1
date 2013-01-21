@@ -173,6 +173,31 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
     }
 
     /**
+     * Convenience method for fetching the current AgaviContext.
+     *
+     * @return AgaviContext
+     */
+    protected function getContext()
+    {
+        return AgaviContext::getInstance();
+    }
+
+    protected function getWorkflow()
+    {
+        return $this->workflow;
+    }
+
+    protected function getTicket()
+    {
+        return $this->getResource()->getWorkflowTicket();
+    }
+
+    protected function getResource()
+    {
+        return $this->getWorkflow()->getResource();
+    }
+
+    /**
      * Convenience method for logging errors to the application's error log.
      *
      * @param string $msg
@@ -198,30 +223,5 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
         $logger->log(
             new AgaviLoggerMessage($infoMsg, AgaviLogger::INFO)
         );
-    }
-
-    /**
-     * Convenience method for fetching the current AgaviContext.
-     *
-     * @return AgaviContext
-     */
-    protected function getContext()
-    {
-        return AgaviContext::getInstance();
-    }
-
-    protected function getWorkflow()
-    {
-        return $this->workflow;
-    }
-
-    protected function getTicket()
-    {
-        return $this->getResource()->getWorkflowTicket();
-    }
-
-    protected function getResource()
-    {
-        return $this->getWorkflow()->getResource();
     }
 }

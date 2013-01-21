@@ -279,12 +279,11 @@ class Workflow
         $plugin = $this->getPluginFor($stepName);
         $gateDef = $this->getGateByName($stepName, $gateName);
         $ticket = $this->getTicket();
+        $returnCode = NULL;
 
         if (NULL === $gateDef)
         {
-            throw new WorkflowException(
-                "The given workflow gate '" . $gate . "' does not exist."
-            );
+            throw new WorkflowException("The given workflow gate '$gate' does not exist.");
         }
 
         try
@@ -301,24 +300,48 @@ class Workflow
         switch ($gateDef['type'])
         {
             case 'step':
+            {
                 $ticket->setWorkflowStep($gateDef['target']);
+                try
+                {
+                    $nextPlugin = $this->getPluginFor($gateDef['target']);
+                    $nextPlugin->onResourceEntered($stepName);
+                }
+                catch(Exception $e)
+                {
+                    // atm, can't decide on whether to abort the plugin transistion if the hook fails or not.
+                    // for now we'll abort as this is a critical issue in most cases probally.
+                    throw $e;
+                }
 
-                $nextPlugin = $this->getPluginFor($gateDef['target']);
-                $nextPlugin->onResourceEntered($stepName);
-                return self::STATE_NEXT_STEP;
+                $returnCode = self::STATE_NEXT_STEP;
+                break;
+            }
             case 'workflow':
+            {
                 $ticket->reset();
                 $ticket->setWorkflow($gateDef['target']);
-                return self::STATE_NEXT_WORKFLOW;
+
+                $returnCode = self::STATE_NEXT_WORKFLOW;
+                break;
+            }
             case 'end':
+            {
                 $ticket->reset();
                 $ticket->setBlocked(FALSE);
-                return self::STATE_END;
+
+                $returnCode = self::STATE_END;
+                break;
+            }
             default:
+            {
                 throw new WorkflowException(
                     "The given workflow plugin gate-type '" . $gateDef['type'] . "' is not supported."
                 );
+            }
         }
+
+        return $returnCode;
     }
 
     public function hasUserSession()
