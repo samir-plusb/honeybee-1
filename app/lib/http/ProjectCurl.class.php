@@ -49,6 +49,7 @@ class ProjectCurl
         curl_setopt($curlHandle, CURLOPT_PROXY, AgaviConfig::get('curl.proxy', ''));
         curl_setopt($curlHandle, CURLOPT_TIMEOUT, AgaviConfig::get('curl.timeout', self::DEFAULT_TIMEOUT));
         curl_setopt($curlHandle, CURLOPT_ENCODING, 'gzip,deflate');
+        curl_setopt($curlHandle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
 
         if ($url)
         {
