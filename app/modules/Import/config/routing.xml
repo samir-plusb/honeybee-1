@@ -4,7 +4,6 @@
         <routes>
             <route pattern="import." module="Import">
                 <route pattern="run" action="Run" method="write" />
-                <route pattern="fixtures" action="Fixtures" method="write" />
             </route>
         </routes>
     </ae:configuration>

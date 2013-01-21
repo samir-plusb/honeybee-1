@@ -38,9 +38,4 @@ session_start();
 AgaviTesting::getCodeCoverageFilter()->addDirectoryToBlacklist(AgaviConfig::get('core.cache_dir'));
 AgaviTesting::getCodeCoverageFilter()->addDirectoryToBlacklist(AgaviConfig::get('core.agavi_dir'));
 
-$output = array();
-$setupFixturesCmd = dirname(__FILE__) . '/setup_fixtures.sh';
-// exec($setupFixturesCmd, $output);
-//error_log(print_r($output, TRUE));
-
 AgaviTesting::dispatch(AgaviTesting::processCommandlineOptions());

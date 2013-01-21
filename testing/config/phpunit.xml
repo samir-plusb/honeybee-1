@@ -39,22 +39,17 @@
         <whitelist>
             <directory suffix=".php">../../app/models</directory>
             <directory suffix=".php">../../app/lib</directory>
+            <directory suffix=".php">../../app/modules/Auth/</directory>
+            <directory suffix=".php">../../app/modules/Asset/</directory>
+            <directory suffix=".php">../../app/modules/Default/</directory>
+            <directory suffix=".php">../../app/modules/Common/</directory>
             <directory suffix=".php">../../app/modules/Import/</directory>
-            <directory suffix=".php">../../app/modules/Workflow/</directory>
-            <directory suffix=".php">../../app/modules/News/</directory>
-            <directory suffix=".php">../../app/modules/Shofi/</directory>
-            <directory suffix=".php">../../testing/</directory>
+            <directory suffix=".php">../../testing/tests/</directory>
             <exclude>
-                <!--
-                    Fixtures are not executed during test runtime and therefore are excluded from the code coverage.
-                -->
                 <directory>../../app/modules/Import/impl/Fixtures/</directory>
                 <directory suffix="Success.php">../../app/</directory>
                 <directory suffix="Input.php">../../app/</directory>
                 <directory suffix="Error.php">../../app/</directory>
-                <file>../../app/modules/Shofi/impl/Edit/CoreItem.php</file>
-                <file>../../app/modules/Shofi/impl/Edit/DetailItem.php</file>
-                <file>../../app/modules/Shofi/impl/Edit/SalesItem.php</file>
                 <directory suffix="Error.php">../../app/</directory>
                 <directory>../fixtures/</directory>
             </exclude>
