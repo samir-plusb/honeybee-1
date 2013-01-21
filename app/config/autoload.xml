@@ -13,8 +13,7 @@
             <autoload name="ProjectBaseAction">%core.lib_dir%/agavi/action/ProjectBaseAction.class.php</autoload>
             <autoload name="BaseListAction">%core.lib_dir%/agavi/action/BaseListAction.class.php</autoload>
             <autoload name="BaseEditAction">%core.lib_dir%/agavi/action/BaseEditAction.class.php</autoload>
-            <autoload name="BaseWorkflowProceedAction">%core.lib_dir%/agavi/action/BaseWorkflowProceedAction.class.php</autoload>
-            <autoload name="BaseWorkflowRunAction">%core.lib_dir%/agavi/action/BaseWorkflowRunAction.class.php</autoload>
+            <autoload name="BaseWorkflowExecutionAction">%core.lib_dir%/agavi/action/BaseWorkflowExecutionAction.class.php</autoload>
             <autoload name="BaseSuggestAction">%core.lib_dir%/agavi/action/BaseSuggestAction.class.php</autoload>
             <autoload name="ProjectBaseModel">%core.lib_dir%/agavi/model/ProjectBaseModel.class.php</autoload>
             <autoload name="ProjectBaseView">%core.lib_dir%/agavi/view/ProjectBaseView.class.php</autoload>

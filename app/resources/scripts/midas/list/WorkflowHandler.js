@@ -13,7 +13,7 @@ midas.list.WorkflowHandler = midas.core.BaseObject.extend({
     proceed: function(resource, gate)
     {
         var that = this;
-        var post_url = this.urls.proceed + '?id=' + resource.data.identifier;
+        var post_url = this.urls.execute + '?id=' + resource.data.identifier;
         var post_data = { gate: gate };
         
         return function(ok_callback, err_callback)
@@ -91,6 +91,6 @@ midas.list.WorkflowHandler = midas.core.BaseObject.extend({
     run: function(resource)
     {
         // @todo checkout ticket and take ownership
-        window.location.href = this.urls.run + '?id=' + resource.data.identifier;
+        window.location.href = this.urls.execute + '?id=' + resource.data.identifier;
     }
 });

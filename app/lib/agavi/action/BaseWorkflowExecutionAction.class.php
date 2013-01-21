@@ -1,8 +1,8 @@
 <?php
 
-class BaseWorkflowProceedAction extends ProjectBaseAction
+class BaseWorkflowExecutionAction extends ProjectBaseAction
 {
-    public function executeWrite(AgaviParameterHolder $parameters)
+    public function execute(AgaviParameterHolder $parameters)
     {
         try
         {
@@ -10,10 +10,20 @@ class BaseWorkflowProceedAction extends ProjectBaseAction
             $service = $module->getService();
 
             $resource = $parameters->getParameter('document');
-            $gate = $parameters->getParameter('gate');
+            $gate = $parameters->getParameter('gate', NULL);
 
             $manager = $module->getWorkflowManager();
-            $result = $manager->proceedWorkflow($resource, $gate, $this->getContainer());
+            $result = $manager->executeWorkflowFor($resource, $gate, $this->getContainer());
+            $this->setAttribute('result', $result);
+
+            if ($result instanceof WorkflowInteractivePluginResult)
+            {
+                $this->setAttribute('content', $result->getResponse()->getContent());
+            }
+            else
+            {
+                $this->setAttribute('content', $result->getMessage());
+            }
 
             $errorStates = array(
                 WorkflowPluginResult::STATE_ERROR,
@@ -66,10 +76,5 @@ class BaseWorkflowProceedAction extends ProjectBaseAction
         $this->setAttribute('errors', $errors);
 
         return 'Error';
-    }
-
-    public function isSecure()
-    {
-        return TRUE;
     }
 }

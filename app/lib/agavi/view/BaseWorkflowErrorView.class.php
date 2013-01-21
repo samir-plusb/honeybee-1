@@ -14,13 +14,22 @@ class BaseWorkflowErrorView extends ProjectBaseView
 
     public function executeJson(AgaviRequestDataHolder $parameters) 
     {
-        return json_encode(
-            array(
-                'state' => 'error',
-                'reason' => $this->getAttribute('reason'),
-                'msg' => $this->getAttribute('content'),
-                'errors' => $this->getAttribute('errors')
-            )
-        );
+        $result = $this->getAttribute('result');
+
+        if ($result instanceof WorkflowInteractivePluginResult)
+        {
+            $this->getResponse()->setContent($this->getAttribute('content'));
+        }
+        else
+        {
+            $this->getResponse()->setContent(
+                json_encode(array(
+                    'state' => 'error',
+                    'reason' => $this->getAttribute('reason'),
+                    'msg' => $this->getAttribute('content'),
+                    'errors' => $this->getAttribute('errors')
+                ))
+            );
+        }
     }
 }

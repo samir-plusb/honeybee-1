@@ -75,45 +75,11 @@ class WorkflowManager
      *
      * @throws WorkflowException
      */
-    public function runWorkflow(IWorkflowResource $resource, AgaviExecutionContainer $container = NULL)
+    public function executeWorkflowFor(IWorkflowResource $resource, $startGate = NULL, AgaviExecutionContainer $container = NULL)
     {
         $code = Workflow::STATE_NEXT_WORKFLOW;
         $pluginResult = NULL;
         $ticket = $resource->getWorkflowTicket();
-
-        while (Workflow::STATE_NEXT_WORKFLOW === $code)
-        {
-            $workflow = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
-            $resultData = $workflow->run($resource, NULL, $container);
-            $code = $resultData['code'];
-            $pluginResult = $resultData['result'];
-        }
-
-        if (Workflow::STATE_ERROR === $code)
-        {
-            $message = $pluginResult->getMessage()
-                ? $pluginResult->getMessage()
-                : 'Workflow halted with error'; // Default err-message in case whoever forgot to provide one.
-
-            throw new WorkflowException($message, WorkflowException::UNEXPECTED_EXIT_CODE);
-        }
-
-        $resource->getWorkflowTicket()->setLastResult(array(
-            'state' => $pluginResult->getState(),
-            'gate' => $pluginResult->getGate(),
-            'message' => $pluginResult->getMessage()
-        ));
-
-        $this->getModule()->getService()->save($resource);
-
-        return $pluginResult;
-    }
-
-    public function proceedWorkflow(IWorkflowResource $resource, $startGate, AgaviExecutionContainer $container = NULL)
-    {
-        $ticket = $resource->getWorkflowTicket();
-        $code = Workflow::STATE_NEXT_WORKFLOW;
-        $pluginResult = NULL;
 
         while (Workflow::STATE_NEXT_WORKFLOW === $code)
         {

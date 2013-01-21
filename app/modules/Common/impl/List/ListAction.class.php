@@ -40,19 +40,16 @@ class Common_ListAction extends CommonBaseAction
         $clientSideOptions['options'] = isset($clientSideOptions['options']) ? $clientSideOptions['options'] : array();
         $clientSideOptions['options']['workflow_urls'] = array(
             'checkout' => urldecode(htmlspecialchars_decode(
-                $routing->gen(sprintf('%s.workflow.grab', $listConfig->getTypeKey()))
+                $routing->gen(sprintf('%s.workflow.checkout', $listConfig->getTypeKey()))
             )),
             'release' => urldecode(htmlspecialchars_decode(
                 $routing->gen(sprintf('%s.workflow.release', $listConfig->getTypeKey()))
             )),
-            'run' => urldecode(htmlspecialchars_decode(
-                $routing->gen(sprintf('%s.workflow.run', $listConfig->getTypeKey()))
+            'execute' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.workflow.execute', $listConfig->getTypeKey()))
             )),
             'edit' => urldecode(htmlspecialchars_decode(
                 $routing->gen(sprintf('%s.edit', $listConfig->getTypeKey()))
-            )),
-            'proceed' => urldecode(htmlspecialchars_decode(
-                $routing->gen(sprintf('%s.workflow.proceed', $listConfig->getTypeKey()))
             ))
         );
 

@@ -101,8 +101,7 @@ midas.list.ListController = midas.core.BaseObject.extend({
             return;
         }
 
-        var edit_link = this.options.workflow_urls.run + '?id='+data.data.identifier;
-        window.location.href = edit_link;
+        this.workflow_handler.run(data);
         /* @todo integrate/consider ticket data
         var checkout = this.workflow_handler.checkout(data);
         var that = this;

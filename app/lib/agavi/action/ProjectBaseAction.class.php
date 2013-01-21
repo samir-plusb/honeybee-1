@@ -10,18 +10,13 @@
  */
 class ProjectBaseAction extends AgaviAction
 {
-    public function isSecure()
-    {
-        return TRUE;
-    }
-
     /**
      * Default error handling for method Read (GET Requests)
      *
      * @param AgaviRequestDataHolder $parameters
      * @return array (modulename, viewname)
      */
-    public function handleReadError(AgaviRequestDataHolder $parameters)
+    public function handleError(AgaviRequestDataHolder $parameters)
     {
         $errors = array();
 
@@ -35,24 +30,9 @@ class ProjectBaseAction extends AgaviAction
         return 'Error';
     }
 
-    /**
-     * Default error handling for method Write (POST Requests)
-     *
-     * @param AgaviRequestDataHolder $parameters
-     * @return array (modulename, viewname)
-     */
-    public function handleWriteError(AgaviRequestDataHolder $parameters)
+    public function isSecure()
     {
-        $errors = array();
-
-        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
-        {
-            $errors[] = implode(', ', $errMsg['errors']) . ': ' . $errMsg['message'];
-        }
-
-        $this->setAttribute('errors', $errors);
-
-        return 'Error';
+        return TRUE;
     }
 
     protected function getModule()
