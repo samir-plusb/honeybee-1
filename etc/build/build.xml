@@ -10,7 +10,7 @@
     <property name="module.directory.impl" value="impl" />
     <property name="module.directory.resources" value="resources" />
 
-	<taskdef name="run" classname="BoPhingRunTask" classpath="${project.directory}/app/lib/phing"/>
+	<taskdef name="run" classname="HoneybeeRunTask" classpath="${project.directory.etc}/build/tasks"/>
 
     <!-- 
         Custom module wizward target that builds full stack honeybee modules along with 

@@ -7,7 +7,7 @@
  *
  * @author Thorsten Schmitt-Rink
  */
-class BoPhingRunTask extends Task
+class HoneybeeRunTask extends Task
 {
     private $dir;
     private $command;
