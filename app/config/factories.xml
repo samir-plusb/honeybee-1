@@ -37,11 +37,11 @@
 
         <validation_manager class="AgaviValidationManager" />
     </ae:configuration>
-    <!--
+
     <ae:configuration context="web" environment="development.*">
         <execution_filter class="ProjectDebugExecutionFilter" />
     </ae:configuration>
-    -->
+
     <ae:configuration context="console">
         <request class="AgaviConsoleRequest">
             <ae:parameter name="read_stdin">on</ae:parameter>
