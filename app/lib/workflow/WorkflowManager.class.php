@@ -38,7 +38,7 @@ class WorkflowManager
             'workflowName' => $workflow->getName(),
             'owner' => 'nobody',
             'workflowStep' => $workflow->getFirstStep(),
-            'stepCounts' => array(),
+            'stepCounts' => NULL,
             'lastResult' => array(
                 'state' => NULL,
                 'gate' => NULL,
@@ -84,7 +84,7 @@ class WorkflowManager
         while (Workflow::STATE_NEXT_WORKFLOW === $code)
         {
             $workflow = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
-            $resultData = $workflow->run($resource, $startGate, $container);
+            $resultData = $workflow->execute($resource, $startGate, $container);
             $code = $resultData['code'];
             $pluginResult = $resultData['result'];
         }

@@ -146,7 +146,7 @@ class Workflow
      * @throws WorkflowException
      * @param WorkflowTicket $ticket
      */
-    public function run(IWorkflowResource $resource, $initalGate = NULL, $container = NULL)
+    public function execute(IWorkflowResource $resource, $initalGate = NULL, $container = NULL)
     {
         $this->setResource($resource);
         $ticket = $this->getTicket();

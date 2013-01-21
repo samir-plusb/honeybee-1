@@ -8,7 +8,7 @@ abstract class HoneybeeWorkflowTicket extends Document implements IWorkflowTicke
     {   
         $this->setWorkflowName(NULL);
         $this->setWorkflowStep(NULL);
-        $this->setStepCount(array());
+        $this->setStepCounts(array());
     }
 
     public function isReset()
