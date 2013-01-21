@@ -165,8 +165,8 @@ class Workflow
 
             if (! $initalGate)
             {
-                $result = $this->executePluginStep($stepName, $firstExec);
-                $code = $this->mapResultToStateCode($stepName, $result);
+                $result = $this->executePluginFor($stepName, $firstExec);
+                $code = $this->processPluginResultFor($stepName, $result);
             }
             else
             {
@@ -185,7 +185,7 @@ class Workflow
      *
      * @return WorkflowPluginResult
      */
-    protected function executePluginStep($stepName, $firstExec = TRUE)
+    protected function executePluginFor($stepName, $firstExec = TRUE)
     {
         $result = NULL;
         $plugin = $this->getPluginFor($stepName);
@@ -233,7 +233,7 @@ class Workflow
      *
      * @throws WorkflowException
      */
-    protected function mapResultToStateCode($stepName, WorkflowPluginResult $result)
+    protected function processPluginResultFor($stepName, WorkflowPluginResult $result)
     {
         $code = NULL;
 
@@ -276,6 +276,7 @@ class Workflow
 
     protected function useGate($stepName, $gateName)
     {
+        $plugin = $this->getPluginFor($stepName);
         $gateDef = $this->getGateByName($stepName, $gateName);
         $ticket = $this->getTicket();
 
@@ -286,11 +287,24 @@ class Workflow
             );
         }
 
+        try
+        {
+            $plugin->onResourceLeaving($gateName);
+        }
+        catch(Exception $e)
+        {
+            // atm, can't decide on whether to abort the plugin transistion if the hook fails or not.
+            // for now we'll abort as this is a critical issue in most cases probally.
+            throw $e;
+        }
+
         switch ($gateDef['type'])
         {
             case 'step':
-
                 $ticket->setWorkflowStep($gateDef['target']);
+
+                $nextPlugin = $this->getPluginFor($gateDef['target']);
+                $nextPlugin->onResourceEntered($stepName);
                 return self::STATE_NEXT_STEP;
             case 'workflow':
                 $ticket->reset();

@@ -103,6 +103,16 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
     }
 
     /**
+     * Invoked when the plugin is left by a resource through one of it's gates.
+     */
+    public function onResourceLeaving($gateName){}
+
+    /**
+     * Invoked when the plugin is entered by a resourced.
+     */
+    public function onResourceEntered($prevStepName){}
+
+    /**
      * Return an array containing the names of all gates
      * that are available for the plugin instance.
      *

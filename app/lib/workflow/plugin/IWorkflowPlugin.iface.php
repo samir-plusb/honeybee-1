@@ -57,6 +57,14 @@ interface IWorkflowPlugin
      * @return boolean TRUE if plugin will interact with user
      */
     public function isInteractive();
-}
 
-?>
+    /**
+     * Invoked when the plugin is left by a resource through one of it's gates.
+     */
+    public function onResourceLeaving($gateName);
+
+    /**
+     * Invoked when the plugin is entered by a resourced.
+     */
+    public function onResourceEntered($prevStepName);
+}
