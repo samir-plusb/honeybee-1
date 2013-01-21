@@ -58,5 +58,3 @@ class ProjectCurl
         return $curlHandle;
     }
 }
-
-?>
