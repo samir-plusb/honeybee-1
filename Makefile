@@ -169,9 +169,7 @@ jsdoc:
 
 link-project-modules:
 
-	@cd app/modules/ ; ln -sf ../../../project/modules/* . ;
-	@ls ../project/modules/
-	@(for x in `ls ../project/modules/`; do echo "app/modules/$$x"; done) > .git/info/exclude
+	@bin/link-project-modules
 	@make config
 
 
