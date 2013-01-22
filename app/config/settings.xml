@@ -121,6 +121,27 @@
         </settings>
     </ae:configuration>
 
+    <ae:configuration environment="development-leon">
+        <settings prefix="curl.">
+            <setting name="timeout">2</setting>
+        </settings>
+        <settings>
+            <setting name="auth_provider">SimpleAuthProvider</setting>
+            <setting name="simple_logins">
+                <ae:parameters>
+                    <ae:parameter name="leonweidauer">
+                        <ae:parameter name="pwd">leonweidauer</ae:parameter>
+                        <ae:parameter name="attributes">
+                            <ae:parameter name="acl_role">honeybee-editor</ae:parameter>
+                            <ae:parameter name="login">leonweidauer</ae:parameter>
+                            <ae:parameter name="name">Leon Weidauer</ae:parameter>
+                            <ae:parameter name="email">leon.weidauer@berlinonline.de</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+                </ae:parameters>
+            </setting>
+        </settings>
+    </ae:configuration>
 
     <!--
     ####################
