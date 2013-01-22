@@ -247,7 +247,7 @@ SH_CODE;
         $output = array();
         exec("$path -v", $output);
 
-        if (1 < count($output) && strstr($output[0], 'PHP 5.3'))
+        if (1 < count($output) && preg_match('/PHP 5\.[34]/', $output[0]))
         {
             return TRUE;
         }
