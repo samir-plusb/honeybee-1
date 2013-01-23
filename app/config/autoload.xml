@@ -49,6 +49,8 @@
             <!-- user (access) -->
             <autoload name="ProjectZendAclSecurityUser">%core.lib_dir%/agavi/user/ProjectZendAclSecurityUser.class.php</autoload>
             <autoload name="UserIsItemOwnerAssertion">%core.lib_dir%/agavi/user/assertions/UserIsItemOwnerAssertion.class.php</autoload>
+            <!-- agavi rendering -->
+            <autoload name="AgaviProxyRenderer">%core.lib_dir%/agavi/renderer/AgaviProxyRenderer.class.php</autoload>
             
             <!-- 
                 Repository/Service - Domain Data Access
