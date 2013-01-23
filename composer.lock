@@ -1,5 +1,5 @@
 {
-    "hash": "7345d132577724869b08feff1b59715a",
+    "hash": "383ce7dcc66a571942c222d24e2edee0",
     "packages": [
         {
             "name": "PhpDebugToolbar/php-debug-toolbar",
@@ -1572,18 +1572,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml",
-                "reference": "v2.1.7"
+                "reference": "fef0f818ba06a69da9a976592bde7b951de33a0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Yaml/archive/v2.1.7.zip",
-                "reference": "v2.1.7",
+                "url": "https://github.com/symfony/Yaml/archive/fef0f818ba06a69da9a976592bde7b951de33a0f.zip",
+                "reference": "fef0f818ba06a69da9a976592bde7b951de33a0f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-17 21:21:51",
+            "time": "2013-01-22 07:14:57",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -1715,12 +1715,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "0bb958595cf74086c9f2b5ad42d6b512099b37e5"
+                "reference": "f5e47e76e7d5a63838c6ce2db5564b71f30e00ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/archive/0bb958595cf74086c9f2b5ad42d6b512099b37e5.zip",
-                "reference": "0bb958595cf74086c9f2b5ad42d6b512099b37e5",
+                "url": "https://github.com/zendframework/zf2/archive/f5e47e76e7d5a63838c6ce2db5564b71f30e00ac.zip",
+                "reference": "f5e47e76e7d5a63838c6ce2db5564b71f30e00ac",
                 "shasum": ""
             },
             "require": {
@@ -1789,7 +1789,7 @@
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
                 "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
             },
-            "time": "2013-01-17 20:22:01",
+            "time": "2013-01-22 20:12:28",
             "bin": [
                 "bin/classmap_generator.php"
             ],

@@ -1,6 +1,7 @@
 <?php
 
 use Dat0r\Core\Runtime\Field\IField;
+use Honeybee\Core\Dat0r\Document;
 
 abstract class FieldRenderer implements IRenderer
 {
@@ -8,7 +9,7 @@ abstract class FieldRenderer implements IRenderer
 
     protected $options;
 
-    abstract protected function doRender(HoneybeeDocument $document);
+    abstract protected function doRender(Document $document);
 
     abstract protected function getTemplateDirectory();
 
@@ -22,10 +23,10 @@ abstract class FieldRenderer implements IRenderer
 
     public function render($payload)
     {
-        if (! $payload instanceof HoneybeeDocument)
+        if (! $payload instanceof Document)
         {
             throw new InvalidArgumentException(
-                "Only the type HoneybeeDocument may be passed to this function!"
+                "Only the type Honeybee\Core\Dat0r\Document may be passed to this function!"
             );
         }
         
@@ -42,7 +43,7 @@ abstract class FieldRenderer implements IRenderer
         return AgaviContext::getInstance()->getTranslationManager();
     }
 
-    protected function getTranslationDomain(HoneybeeDocument $document)
+    protected function getTranslationDomain(Document $document)
     {
         return $document->getModule()->getOption('prefix') . '.rendering';
     }

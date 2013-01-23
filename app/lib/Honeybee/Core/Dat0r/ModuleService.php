@@ -1,11 +1,17 @@
 <?php
 
-class HoneybeeModuleService
+namespace Honeybee\Core\Dat0r;
+
+use \DirectoryIterator;
+use \AgaviConfig;
+
+class ModuleService
 {
     public function getModules()
     {
         $modules = array();
         $iter = new DirectoryIterator(AgaviConfig::get('core.modules_dir'));
+        
         foreach($iter as $file) 
         {
             $configPath = $file->getPathname() .

@@ -1,8 +1,10 @@
 <?php
 
+use Honeybee\Core\Dat0r\Document;
+
 class FieldInputRenderer extends FieldRenderer
 {
-    protected function doRender(HoneybeeDocument $document)
+    protected function doRender(Document $document)
     {
         $tm = $this->getTranslationManager();
         $td = $this->getTranslationDomain($document);
@@ -27,7 +29,7 @@ class FieldInputRenderer extends FieldRenderer
         return $content;
     }
 
-    protected function getWidgetType(HoneybeeDocument $document)
+    protected function getWidgetType(Document $document)
     {
         $prefix = $document->getModule()->getOption('prefix');
         $widgetSettings = AgaviConfig::get(sprintf('%s.input_widgets', $prefix));
@@ -43,20 +45,20 @@ class FieldInputRenderer extends FieldRenderer
         return $widget;
     }
 
-    protected function renderWidgetOptions(HoneybeeDocument $document)
+    protected function renderWidgetOptions(Document $document)
     {
         return htmlspecialchars(
             json_encode($this->getWidgetOptions($document))
         );
     }
 
-    protected function renderFieldValue(HoneybeeDocument $document)
+    protected function renderFieldValue(Document $document)
     {
         $value = $document->getValue($this->getField()->getName());
         return is_scalar($value) ? $value : '';
     }
 
-    protected function getWidgetOptions(HoneybeeDocument $document)
+    protected function getWidgetOptions(Document $document)
     {
         $prefix = $document->getModule()->getOption('prefix');
         $widgetSettings = AgaviConfig::get(sprintf('%s.input_widgets', $prefix));
@@ -72,7 +74,7 @@ class FieldInputRenderer extends FieldRenderer
         return $widgetOptions;
     }
 
-    protected function generateInputName(HoneybeeDocument $document)
+    protected function generateInputName(Document $document)
     {
         // @todo introduce a further structure level, let's call it 'groups'.
         // this would allow to render the same form multiple times without value collusions.
@@ -98,7 +100,7 @@ class FieldInputRenderer extends FieldRenderer
         return AgaviContext::getInstance()->getTranslationManager();
     }
 
-    public function getTranslationDomain(HoneybeeDocument $document)
+    public function getTranslationDomain(Document $document)
     {
         return parent::getTranslationDomain($document) . '.input.field';
     }

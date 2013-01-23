@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Core\Dat0r\Document;
+
 class CouchDbStorage implements IStorage
 {
     /**
@@ -84,11 +86,11 @@ class CouchDbStorage implements IStorage
     /**
      * Write the given document to couchdb.
      *
-     * @param HoneybeeDocument $document The document to save.
+     * @param Document $document The document to save.
      *
      * @throws Exception If writing to couchdb fails for some reason.
      */
-    public function writeOne(HoneybeeDocument $document)
+    public function writeOne(Document $document)
     {
         $couchDb = $this->getDatabase()->getConnection();
         $data = $this->mapDomainDataToCouchDb($document);
@@ -120,7 +122,7 @@ class CouchDbStorage implements IStorage
         );
     }
 
-    public function delete(HoneybeeDocument $document)
+    public function delete(Document $document)
     {
         $couchDb = $this->getDatabase()->getConnection();
 
@@ -135,11 +137,11 @@ class CouchDbStorage implements IStorage
 
         foreach ($documents as $document)
         {
-            if (! $document instanceof HoneybeeDocument)
+            if (! $document instanceof Document)
             {
                 throw new Exception(
                     "Invalid object type passed to bulkSave invocation." . PHP_EOL .
-                    "Only HoneybeeDocument instances allowed."
+                    "Only Document instances allowed."
                 );
             }
 
@@ -198,7 +200,7 @@ class CouchDbStorage implements IStorage
         return $errors;
     }
 
-    protected function nextUuid(HoneybeeDocument $document)
+    protected function nextUuid(Document $document)
     {
         $uuids = $this->getDatabase()->getConnection()->nextUuids();
 
@@ -212,11 +214,11 @@ class CouchDbStorage implements IStorage
      * to couch's id and rev fields and making sure that the self::DOC_IDENTIFIER
      * value is set correctly to reflect the current type.
      *
-     * @param HoneybeeDocument $document
+     * @param Document $document
      *
      * @return array
      */
-    protected function mapDomainDataToCouchDb(HoneybeeDocument $document)
+    protected function mapDomainDataToCouchDb(Document $document)
     {
         $data = $document->toArray();
 
@@ -243,7 +245,7 @@ class CouchDbStorage implements IStorage
 
     /**
      * Turn the given (couchdb result)array into an array representation
-     * that can directly be passed to an HoneybeeDocument's create method as is.
+     * that can directly be passed to an Document's create method as is.
      * Basically this means mapping the couch's id and rev fields,
      * to the document's id and rev fields and making sure that the self::DOC_IDENTIFIER field is removed.
      *

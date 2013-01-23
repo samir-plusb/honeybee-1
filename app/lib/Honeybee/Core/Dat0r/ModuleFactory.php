@@ -1,11 +1,20 @@
 <?php
 
+namespace Honeybee\Core\Dat0r;
+
+use \InvalidArgumentException;
+use \IRepository;
+use \IStorage;
+use \IFinder;
+use \IService;
+use \AgaviContext;
+
 // @todo maybe we should rename the create methods into get methods 
 // and pool the instances inside the factory, so we can remove the getRepository and getService
 // methods from the module.
-class HoneybeeModuleFactory
+class ModuleFactory
 {
-    public static function createRepository(HoneybeeModule $module)
+    public static function createRepository(Module $module)
     {
         $implementor = $module->getRepositoryImplementor();
 
@@ -39,7 +48,7 @@ class HoneybeeModuleFactory
         return $repository;
     }
 
-    public static function createService(HoneybeeModule $module)
+    public static function createService(Module $module)
     {
         $implementor = $module->getServiceImplementor();
 
@@ -68,7 +77,7 @@ class HoneybeeModuleFactory
         return $service;
     }
 
-    protected static function createFinder(HoneybeeModule $module)
+    protected static function createFinder(Module $module)
     {
         $implementor = $module->getFinderImplementor();
 
@@ -92,15 +101,17 @@ class HoneybeeModuleFactory
         if (! $finder instanceof IFinder)
         {
             throw new InvalidArgumentException(
-                "The given finder %s for module %s must implement the IFinder interface.",
-                $implementor, $module->getName()
+                sprintf(
+                    "The given finder %s for module %s must implement the IFinder interface.",
+                    $implementor, $module->getName()
+                )
             );
         }
 
         return $finder;
     }
 
-    protected static function createStorage(HoneybeeModule $module)
+    protected static function createStorage(Module $module)
     {
         $implementor = $module->getStorageImplementor();
 

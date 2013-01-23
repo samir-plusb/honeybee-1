@@ -13,6 +13,8 @@
 // |   End:                                                                    |
 // +---------------------------------------------------------------------------+
 
+use Honeybee\Core\Dat0r\ModuleService;
+
 /**
  * The Default_Index_IndexSuccessView class provides presentation logic for the %system_actions.default% action.
  *
@@ -36,7 +38,7 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
     {
         $this->setupHtml($parameters);
         $routing = $this->getContext()->getRouting();
-        $service = new HoneybeeModuleService();
+        $service = new ModuleService();
 
         $modules = array();
         foreach ($service->getModules() as $module)

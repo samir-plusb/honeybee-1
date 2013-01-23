@@ -1,13 +1,15 @@
 <?php
 
+use Honeybee\Core\Dat0r\Document;
+
 class KeyValuesCollectionFieldInputRenderer extends FieldInputRenderer
 {
-    protected function getWidgetType(HoneybeeDocument $document)
+    protected function getWidgetType(Document $document)
     {
         return 'widget-key-values-list';
     }
 
-    protected function getWidgetOptions(HoneybeeDocument $document)
+    protected function getWidgetOptions(Document $document)
     {
         $fieldname = $this->getField()->getName();
         $attributes = $document->getValue($fieldname);

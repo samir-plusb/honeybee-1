@@ -1,14 +1,17 @@
 <?php
 
+use Honeybee\Core\Dat0r\Module;
+use Honeybee\Core\Dat0r\Document;
+
 abstract class DocumentRenderer implements IRenderer
 {
     private $module;
 
     private $factory;
 
-    abstract protected function doRender(HoneybeeDocument $document);
+    abstract protected function doRender(Document $document);
 
-    public function __construct(HoneybeeModule $module)
+    public function __construct(Module $module)
     {
         $this->module = $module;
         $this->factory = new FieldRendererFactory($module);
@@ -16,10 +19,10 @@ abstract class DocumentRenderer implements IRenderer
 
     public function render($payload)
     {
-        if (! $payload instanceof HoneybeeDocument)
+        if (! $payload instanceof Document)
         {
             throw new InvalidArgumentException(
-                "Only the type HoneybeeDocument may be passed to this function!"
+                "Only the type Honeybee\Core\Dat0r\Document may be passed to this function!"
             );
         }
 

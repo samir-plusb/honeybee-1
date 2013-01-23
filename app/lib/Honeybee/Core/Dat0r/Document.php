@@ -1,8 +1,13 @@
 <?php
 
-use Dat0r\Core\Runtime\Document\Document;
+namespace Honeybee\Core\Dat0r;
 
-abstract class HoneybeeDocument extends Document implements Zend_Acl_Resource_Interface, IWorkflowResource
+use \Dat0r\Core\Runtime\Document\Document as BaseDocument;
+use \AgaviConfig;
+use \Zend_Acl_Resource_Interface;
+use \IWorkflowResource;
+
+abstract class Document extends BaseDocument implements Zend_Acl_Resource_Interface, IWorkflowResource
 {
     public function getWorkflowConfigPath()
     {

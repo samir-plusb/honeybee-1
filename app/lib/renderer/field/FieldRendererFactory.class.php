@@ -1,5 +1,6 @@
 <?php
 
+use Honeybee\Core\Dat0r\Module;
 use Dat0r\Core\Runtime\Field\IField;
 
 class FieldRendererFactory
@@ -8,7 +9,7 @@ class FieldRendererFactory
 
     private $module;
 
-    public function __construct(HoneybeeModule $module)
+    public function __construct(Module $module)
     {
         $this->module = $module;
     }

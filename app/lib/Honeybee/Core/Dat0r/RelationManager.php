@@ -1,12 +1,14 @@
 <?php
 
-use Dat0r\Core\Runtime\Field\ReferenceField;
-use Dat0r\Core\Runtime\Document\InvalidValueException;
-use Dat0r\Core\Runtime\Document\DocumentSet;
+namespace Honeybee\Core\Dat0r;
 
-class HoneybeeRelationManager
+use \Dat0r\Core\Runtime\Field\ReferenceField;
+use \Dat0r\Core\Runtime\Document\InvalidValueException;
+use \Dat0r\Core\Runtime\Document\DocumentSet;
+
+class RelationManager
 {
-    public static function loadReferences(HoneybeeModule $module, array $data)
+    public static function loadReferences(Module $module, array $data)
     {
         $referencedDocuments = array();
 

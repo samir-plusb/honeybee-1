@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Core\Dat0r\DocumentCollection;
+
 /**
  * The BaseListAction class serves as a base class to all actions that slot the Common/ListAction.
  *
@@ -100,7 +102,7 @@ class BaseListAction extends ProjectBaseAction
         );
     }
 
-    protected function prepareListData(HoneybeeDocumentCollection $documents)
+    protected function prepareListData(DocumentCollection $documents)
     {
         $data = array();
         $module = $this->getModule();

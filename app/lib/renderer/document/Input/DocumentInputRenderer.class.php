@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Core\Dat0r\Document;
+
 class DocumentInputRenderer extends DocumentRenderer
 {
     static protected $standardTabs = array(
@@ -20,7 +22,7 @@ class DocumentInputRenderer extends DocumentRenderer
         return parent::getTranslationDomain() . '.input.document';
     }
 
-    protected function doRender(HoneybeeDocument $document)
+    protected function doRender(Document $document)
     {
         $template = $this->getTemplate();
         $tabs = $this->renderTabs($document);
@@ -42,7 +44,7 @@ class DocumentInputRenderer extends DocumentRenderer
         return $content;
     }
 
-    protected function renderTabs(HoneybeeDocument $document)
+    protected function renderTabs(Document $document)
     {
         $renderedTabs = array();
         $defaultTab = NULL;
@@ -96,7 +98,7 @@ class DocumentInputRenderer extends DocumentRenderer
         return $renderedTabs;
     }
 
-    protected function renderGroups(HoneybeeDocument $document, array $groups)
+    protected function renderGroups(Document $document, array $groups)
     {
         $renderedGroups = array();
 
@@ -113,7 +115,7 @@ class DocumentInputRenderer extends DocumentRenderer
         return $renderedGroups;
     }
 
-    protected function renderFields(HoneybeeDocument $document, array $fields)
+    protected function renderFields(Document $document, array $fields)
     {
         $renderedFields = array();
 
@@ -127,7 +129,7 @@ class DocumentInputRenderer extends DocumentRenderer
         return $renderedFields;
     }
 
-    protected function getTemplate(HoneybeeDocument $document = NULL)
+    protected function getTemplate(Document $document = NULL)
     {
         $baseDir = $this->getTemplateDirectory();
         $templateName = $this->getTemplateName();
@@ -178,7 +180,7 @@ class DocumentInputRenderer extends DocumentRenderer
             ));
     }
 
-    protected function getControllerOptions(HoneybeeDocument $document)
+    protected function getControllerOptions(Document $document)
     {
         return array(
             'autobind' => TRUE, 

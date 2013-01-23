@@ -50,17 +50,6 @@
             <autoload name="ProjectZendAclSecurityUser">%core.lib_dir%/agavi/user/ProjectZendAclSecurityUser.class.php</autoload>
             <autoload name="UserIsItemOwnerAssertion">%core.lib_dir%/agavi/user/assertions/UserIsItemOwnerAssertion.class.php</autoload>
             
-            <!--
-                Extending Dat0r
-            -->
-            <autoload name="HoneybeeModule">%core.lib_dir%/dat0r/HoneybeeModule.class.php</autoload>
-            <autoload name="HoneybeeDocument">%core.lib_dir%/dat0r/HoneybeeDocument.class.php</autoload>
-            <autoload name="HoneybeeDocumentCollection">%core.lib_dir%/dat0r/HoneybeeDocumentCollection.class.php</autoload>
-            <autoload name="HoneybeeModuleFactory">%core.lib_dir%/dat0r/HoneybeeModuleFactory.class.php</autoload>
-            <autoload name="HoneybeeModuleService">%core.lib_dir%/dat0r/HoneybeeModuleService.class.php</autoload>
-            <autoload name="HoneybeeRelationManager">%core.lib_dir%/dat0r/HoneybeeRelationManager.class.php</autoload>
-            <autoload name="HoneybeeWorkflowTicket">%core.lib_dir%/dat0r/HoneybeeWorkflowTicket.class.php</autoload>
-
             <!-- 
                 Repository/Service - Domain Data Access
             -->

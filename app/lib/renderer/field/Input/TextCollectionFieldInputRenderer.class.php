@@ -1,13 +1,15 @@
 <?php
 
+use Honeybee\Core\Dat0r\Document;
+
 class TextCollectionFieldInputRenderer extends FieldInputRenderer
 {
-    protected function getWidgetType(HoneybeeDocument $document)
+    protected function getWidgetType(Document $document)
     {
         return 'widget-tags-list';
     }
 
-    protected function getWidgetOptions(HoneybeeDocument $document)
+    protected function getWidgetOptions(Document $document)
     {
         $fieldname = $this->getField()->getName();
         $texts = $document->getValue($fieldname);

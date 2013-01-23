@@ -1,14 +1,17 @@
 <?php
 
-use Dat0r\Core\Runtime\Document\Document;
+namespace Honeybee\Core\Dat0r;
 
-abstract class HoneybeeWorkflowTicket extends Document implements IWorkflowTicket
+use \Dat0r\Core\Runtime\Document\Document as BaseDocument;
+use \IWorkflowTicket;
+
+abstract class WorkflowTicket extends BaseDocument implements IWorkflowTicket
 {
     public function reset()
     {   
         $this->setWorkflowName(NULL);
         $this->setWorkflowStep(NULL);
-        $this->setStepCounts(array());
+        $this->setStepCounts(NULL);
     }
 
     public function isReset()

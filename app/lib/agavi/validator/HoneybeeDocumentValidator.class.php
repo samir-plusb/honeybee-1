@@ -3,6 +3,9 @@
 use Dat0r\Core\Runtime\Document\InvalidValueException;
 use Dat0r\Core\Runtime\Field\ReferenceField;
 
+use Honeybee\Core\Dat0r\RelationManager;
+use Honeybee\Core\Dat0r\Module;
+
 class HoneybeeDocumentValidator extends AgaviValidator
 {
     protected function validate()
@@ -65,7 +68,7 @@ class HoneybeeDocumentValidator extends AgaviValidator
         {
             if ($document = $service->get($identifier))
             {
-                $references = HoneybeeRelationManager::loadReferences($module, $data);
+                $references = RelationManager::loadReferences($module, $data);
                 $data = array_merge($data, $references);
                 $document->setValues($data);
             }
@@ -82,7 +85,7 @@ class HoneybeeDocumentValidator extends AgaviValidator
     {
         $module = $this->getContext()->getRequest()->getAttribute('module', 'org.honeybee.env');
 
-        if (! ($module instanceof HoneybeeModule))
+        if (! ($module instanceof Module))
         {
             throw new Exception(
                 "Unable to determine honebee-module for the current action's scope." . PHP_EOL . 

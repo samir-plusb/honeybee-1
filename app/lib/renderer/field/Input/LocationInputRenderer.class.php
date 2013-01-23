@@ -1,13 +1,15 @@
 <?php
 
+use Honeybee\Core\Dat0r\Document;
+
 class LocationInputRenderer extends FieldInputRenderer
 {
-    protected function getWidgetType(HoneybeeDocument $document)
+    protected function getWidgetType(Document $document)
     {
         return 'widget-location-widget';
     }
 
-    protected function getWidgetOptions(HoneybeeDocument $document)
+    protected function getWidgetOptions(Document $document)
     {
         $location = $document->getValue($this->getField()->getName());
         $routing = AgaviContext::getInstance()->getRouting();

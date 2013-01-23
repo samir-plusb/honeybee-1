@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Core\Dat0r\Module;
+
 /**
  * The ProjectBaseAction serves as the base action to all actions implemented inside of this project.
  *
@@ -39,7 +41,7 @@ class ProjectBaseAction extends AgaviAction
     {
         $module = $this->getContext()->getRequest()->getAttribute('module', 'org.honeybee.env');
 
-        if (! ($module instanceof HoneybeeModule))
+        if (! ($module instanceof Module))
         {
             throw new Exception(
                 "Unable to determine honebee-module for the current action's scope." . PHP_EOL . 

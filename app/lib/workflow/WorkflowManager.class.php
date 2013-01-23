@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Core\Dat0r\Module;
+
 /**
  * The WorkflowManager
  * * aims as factory for workflow handlers and tickets
@@ -17,7 +19,7 @@ class WorkflowManager
 {
     private $module;
 
-    public function __construct(HoneybeeModule $module)
+    public function __construct(Module $module)
     {
         $this->module = $module;
     }

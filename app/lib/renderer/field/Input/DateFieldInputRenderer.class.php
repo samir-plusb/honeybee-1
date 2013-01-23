@@ -1,13 +1,15 @@
 <?php
 
+use Honeybee\Core\Dat0r\Document;
+
 class DateFieldInputRenderer extends FieldInputRenderer
 {
-    protected function getWidgetType(HoneybeeDocument $document)
+    protected function getWidgetType(Document $document)
     {
         return 'widget-date-picker';
     }
 
-    protected function getWidgetOptions(HoneybeeDocument $document)
+    protected function getWidgetOptions(Document $document)
     {
         $date = $document->getValue($this->getField()->getName());
 

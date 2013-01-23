@@ -1,5 +1,9 @@
 <?php
 
+use Honeybee\Core\Dat0r\Module;
+use Honeybee\Core\Dat0r\DocumentCollection;
+use Honeybee\Core\Dat0r\Document;
+
 class GenericRepository implements IRepository
 {
     private $module;
@@ -8,7 +12,7 @@ class GenericRepository implements IRepository
 
     private $storage;
 
-    public function __construct(HoneybeeModule $module)
+    public function __construct(Module $module)
     {
         $this->module = $module;
     }
@@ -31,7 +35,7 @@ class GenericRepository implements IRepository
     
     public function find($query = NULL, $limit = 0, $offset = 0)
     {
-        $documents = new HoneybeeDocumentCollection();
+        $documents = new DocumentCollection();
 
         $result = (NULL === $query) 
             ? $this->finder->fetchAll($limit, $offset)
@@ -53,7 +57,7 @@ class GenericRepository implements IRepository
     // @todo add a get method to the finder and use it instead of the storage here.
     public function read($identifier)
     {
-        $documents = new HoneybeeDocumentCollection();
+        $documents = new DocumentCollection();
 
         if (is_array($identifier))
         {
@@ -81,18 +85,18 @@ class GenericRepository implements IRepository
     {
         $errors = array();
 
-        if ($data instanceof HoneybeeDocument)
+        if ($data instanceof Document)
         {
             $this->storage->writeOne($data);
         }
-        else if ($data instanceof HoneybeeDocumentCollection)
+        else if ($data instanceof DocumentCollection)
         {
             $errors = $this->storage->writeMany($data);
         }
         else
         {
             throw new InvalidArgumentException(
-                "Only HoneybeeDocument and HoneybeeDocumentCollection allowed as $data argument."
+                'Only Honeybee\Core\Dat0r\Document and DocumentCollection allowed as $data argument.'
             );
         }
 
@@ -103,14 +107,14 @@ class GenericRepository implements IRepository
     {
         $errors = array();
 
-        if ($data instanceof HoneybeeDocument)
+        if ($data instanceof Document)
         {
             $this->storage->delete($data);
         }
         else
         {
             throw new InvalidArgumentException(
-                "Only HoneybeeDocument and HoneybeeDocumentCollection allowed as $data argument."
+                'Only Document and DocumentCollection allowed as $data argument.'
             );
         }
 

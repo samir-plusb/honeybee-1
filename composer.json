@@ -1,5 +1,24 @@
 {
+    "name": "berlinonline/honeybee",
+    "type": "library",
+    "description": "Framework for building content management systems.",
+    "keywords": ["cms", "cmf" , "scafolding"],
+    "homepage": "https://github.com/berlinonline/honeybee",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Leon Weidauer",
+            "name": "Tom Anheyer",
+            "name": "Thorsten Schmitt-Rink"
+        }
+    ],
+
+    "autoload": {
+        "psr-0": {"Honeybee" : "app/lib" }
+    },
+
     "minimum-stability": "dev",
+
     "require": {
         "php": ">=5.3.3",
         "agavi/agavi": "1.0.*",
@@ -23,6 +42,7 @@
         "berlinonline/Dat0r": "dev-master",
         "phpdocumentor/phpdocumentor": "dev-master"
     },
+
     "repositories": [
         {
             "type": "package",

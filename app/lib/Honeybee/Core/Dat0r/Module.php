@@ -1,13 +1,17 @@
 <?php
 
-use Dat0r\Core\Runtime\Module\RootModule;
-use Dat0r\Core\Runtime\Field\TextField;
+namespace Honeybee\Core\Dat0r;
+
+use \Dat0r\Core\Runtime\Module\RootModule;
+use \Dat0r\Core\Runtime\Field\TextField;
+use \AgaviConfig;
+use \WorkflowManager;
 
 /**
  * @todo We might want to merge the module settings.xml options,
  * with the options that result from the dat0r definition??
  */
-abstract class HoneybeeModule extends RootModule
+abstract class Module extends RootModule
 {
     private $repository;
 
@@ -19,7 +23,7 @@ abstract class HoneybeeModule extends RootModule
     {
         if (! empty($data))
         {
-            $references = HoneybeeRelationManager::loadReferences($this, $data);
+            $references = RelationManager::loadReferences($this, $data);
             $data = array_merge($data, $references);
         }
         
@@ -37,7 +41,7 @@ abstract class HoneybeeModule extends RootModule
     {
         if (NULL === $this->service)
         {
-            $this->service = HoneybeeModuleFactory::createService($this);
+            $this->service = ModuleFactory::createService($this);
         }
 
         return $this->service;
@@ -57,7 +61,7 @@ abstract class HoneybeeModule extends RootModule
     {
         if (NULL === $this->repository)
         {
-            $this->repository = HoneybeeModuleFactory::createRepository($this);
+            $this->repository = ModuleFactory::createRepository($this);
         }
 
         return $this->repository;

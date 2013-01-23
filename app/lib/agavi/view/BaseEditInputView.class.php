@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Core\Dat0r\Document;
+
 class BaseEditInputView extends ProjectBaseView
 {
     /**
@@ -91,7 +93,7 @@ class BaseEditInputView extends ProjectBaseView
      * register widgets by providing: name, type and selector
      * init widgets by providing options below a key you will use in your templates.
      */
-    protected function getWidgets(HoneybeeDocument $document)
+    protected function getWidgets(Document $document)
     {
         return array(
             'options' => array(),

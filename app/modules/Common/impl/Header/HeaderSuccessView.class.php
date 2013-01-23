@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Core\Dat0r\ModuleService;
+
 class Common_Header_HeaderSuccessView extends CommonBaseView
 {
     public function executeHtml(AgaviRequestDataHolder $parameters)
@@ -26,7 +28,7 @@ class Common_Header_HeaderSuccessView extends CommonBaseView
         }
 
         $routing = $this->getContext()->getRouting();
-        $service = new HoneybeeModuleService();
+        $service = new ModuleService();
 
         $modules = array();
         foreach ($service->getModules() as $module)

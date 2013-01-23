@@ -1,15 +1,18 @@
 <?php
 
+use Honeybee\Core\Dat0r\Module;
+use Honeybee\Core\Dat0r\Document;
+
 abstract class BaseService implements IService
 {
     private $module;
 
-    public function __construct(HoneybeeModule $module)
+    public function __construct(Module $module)
     {
         $this->module = $module;
     }
 
-    public function save(HoneybeeDocument $document)
+    public function save(Document $document)
     {
         $repository = $this->module->getRepository();
         $errors = $repository->write($document);
@@ -38,7 +41,7 @@ abstract class BaseService implements IService
         return $document;
     }
 
-    public function delete(HoneybeeDocument $document, $markOnly = TRUE)
+    public function delete(Document $document, $markOnly = TRUE)
     {
         if ($markOnly)
         {
