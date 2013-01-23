@@ -1,0 +1,48 @@
+<section class="container-list-data row-fluid"
+    data-controller="{{client_side_controller.implementor}}"
+    data-controller-options="{{client_side_controller.options|json_encode()|raw}}">
+
+<!-- **************************************************
+    List Controls/Widgets such as search and batch processing.
+************************************************** -->
+    <section class="well container-batch" style="min-height: 60px;">
+        <section class="pull-left search-widget" style="height: 65px;"
+            data-search-widget-options="{{search_widget_opts}}">
+        </section>
+        <section style="margin-left: 20px; border-left: 1px solid #ababab; padding-left: 20px; height: 65px;" class="pull-left">
+            <h3>Stapelverarbeitung</h3>
+
+            {% set batch_action_names = batch_actions|keys %}
+            {% if batch_actions|length > 0 %}
+
+                {% if batch_actions|length > 1 %}
+                    <div class="btn-group dropdown">
+                {% endif %}
+
+                    <button class="btn midas-action midas-action-{{batch_action_names[0]}}"
+                                data-bind="click: function(item, event) { var is_batch = true; {{batch_actions[0]}} },
+                                       enable: has_selection">
+                        {{tm._(batch_action_names[0], translation_domain)}}
+                    </button>
+                
+
+                {% if batch_actions|length > 1 %}
+                    <button class="btn dropdown-toggle" data-bind="enable: has_selection" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                    {% for action_name, action in batch_actions %}
+                        <li>
+                            <a class="midas-action midas-action-{{action_name}}"
+                               data-bind="click: function(item, event) { var is_batch = true; {{action}} },
+                                          enable: has_selection">{{ tm._(action_name, translation_domain) }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </section>
+{# Template Twiggified until here #}
+    </section>
+</section>

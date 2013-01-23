@@ -76,6 +76,7 @@
     }
 ?>
         </section>
+<!-- Template Twiggified until here -->
         <section style="margin-left: 20px; border-left: 1px solid #ababab; padding-left: 20px; height: 65px;" class="pull-left">
             <h3>Kreation</h3>
             <a class="btn" href="<?php echo $ro->gen($typeKey.'.edit'); ?>">Neuer Eintrag</a>
