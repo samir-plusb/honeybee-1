@@ -33,7 +33,7 @@ class Common_List_ListSuccessView extends CommonBaseView
         $this->setAttribute('is_filtered', $listState->hasFilter());
         if ($listState->hasFilter())
         {
-            $this->setAttribute('filter', $listState->getFilter());
+            $this->setAttribute('list_filter', $listState->getFilter());
         }
         $this->setAttribute('search_widget_opts', htmlspecialchars(
             json_encode($searchWidgetOpts)

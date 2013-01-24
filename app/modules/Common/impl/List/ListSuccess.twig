@@ -1,6 +1,7 @@
+
 <section class="container-list-data row-fluid"
     data-controller="{{client_side_controller.implementor}}"
-    data-controller-options="{{client_side_controller.options|json_encode()|raw}}">
+    data-controller-options="{{client_side_controller.options|json_encode}}">
 
 <!-- **************************************************
     List Controls/Widgets such as search and batch processing.
@@ -43,6 +44,143 @@
                 {% endif %}
             {% endif %}
         </section>
+        <section style="margin-left: 20px; border-left: 1px solid #ababab; padding-left: 20px; height: 65px;" class="pull-left">
+            <h3>Kreation</h3>
+            <a class="btn" href="{{ro.gen(module_type_key ~ '.edit')}}">Neuer Eintrag</a>
+        </section>
+    </section>
 {# Template Twiggified until here #}
+
+
+{# **************************************************
+    Search/Filter and other notifications.
+************************************************** #}
+{% if not search|length %}
+    {% set displayed_search = search %}
+{% else %}
+    {% set displayed_search = '' %}
+{% endif %}
+
+{% if search or is_filtered %}
+    <section class="row-fluid" style="margin-bottom: 20px;">
+        <div class="alert search-message alert-info">
+            <p>
+            {% if is_filtered %}
+                Deine erweiterte Suche trifft auf <strong>{{total_count}} Einträge zu</strong>.
+            {% else %}
+                Du hast nach <strong>"{{displayed_search}}"</strong> gesucht.
+                Deine Suche ergab <strong>{{total_count}} Treffer</strong>.
+            {% endif %}
+            </p>
+        </div>
+    </section>
+{% endif %}
+
+{# **************************************************
+    ListData Pagination Top
+************************************************** #}
+    <section class="row-fluid">
+    {# todo This should be controller by a setting, as you probally not always want to have a pagination. #}
+    {{ slots.pagination|raw}}
+{# **************************************************
+    ListData Table Head
+************************************************** #}
+        <table class="data-list table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" data-bind="checked: all_selected" />
+                        <!-- @todo These values should be places to the bottom of the document. -->
+                        <input type="hidden" class="list-data" value="{{list_data|json_encode}}" />
+                    </th>
+
+                    {% for fieldname, field in list_fields %}
+                        {% set sorting_active = (sorting.field == fieldname) %}
+
+                        {% if search %}
+                            {% set routing_data_search = search %}
+                        {% elseif is_filtered %}
+                            {% set routing_data_filter = list_filter %}
+                        {% endif %}
+
+                        {% set routing_data = {
+                            'limit': limit,
+                            'offset': 0,
+                            'sorting': {
+                                'field': fieldname,
+                                'direction': (sorting_active and sorting.direction == 'asc') ? 'desc' : 'asc'
+                            },
+                            'search': routing_data_search,
+                            'filter': routing_data_filter
+                        }%}
+
+                        {% if field.hasSortField %}
+                            <th class="data-header sortable {% if sorting_active %} sorted {{sortDirection}} {% endif %}">
+                                <a href="{{ro.gen(list_route, routing_data)|raw}}">
+                                    {{tm._(fieldname, translation_domain)}}
+                                </a>
+                            </th>
+                        {% else %}
+                            <th class="data-header">
+                                <span>{{tm._(fieldname, translation_domain)}}</span>
+                            </th>
+                        {% endif %}
+
+                    {% endfor %}
+                    <th class="header-actions">
+                        {{tm._('actions', translation_domain)}}
+                    </th>
+                </tr>
+            </thead>
+
+{# **************************************************
+    ListData Table Body
+************************************************** #}
+            <tbody data-bind="foreach: list_items">
+                <tr data-bind='attr: { "class":  $data.css_classes }'>
+                    <td>
+                        <input type="checkbox" data-bind="checked: selected" />
+                    </td>
+                    {% for list_template in templates%}
+                        {{list_template|raw}}
+                    {% endfor %}
+
+
+
+                    <td class="actions">
+                        <div class="btn-group dropdown">
+                            <!-- ko if: $data.workflow.interactive === true -->
+                            <button class="btn btn-primary midas-action midas-action-edit"
+                                    data-bind="click: function(item, event) { $parent.ctrl.run(false, item); }">
+                                {{tm._('edit', translation_domain)}}
+                            </button>
+                            <!-- /ko -->
+                            <!-- ko if: $data.workflow.interactive !== true -->
+                                <button class="btn btn-primary midas-action midas-action-edit" disabled="disabled">
+                                    {{tm._('edit', translation_domain)}}
+                                </button>
+                            <!-- /ko -->
+                            <!-- ko if: $data.workflow.gates.length > 0 -->
+                            <button class="btn dropdown-toggle btn-primary" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" data-bind="foreach: $data.workflow.gates">
+                                <li>
+                                    <a class="midas-action-proceed"
+                                       data-bind="click: function(item, event) { $root.ctrl.proceed(false, $parent, $data.name, $data.prompt); }, text: $data.label"></a>
+                                </li>
+                            </ul>
+                            <!-- /ko -->
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+{# **************************************************
+    ListData Pagination Bottom
+************************************************** #}
+    {% if list_data|length >= 10 %}
+        {{slots.pagination|raw}}
+    {% endif %}
     </section>
 </section>
