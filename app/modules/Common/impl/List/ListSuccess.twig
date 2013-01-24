@@ -8,7 +8,7 @@
 ************************************************** -->
     <section class="well container-batch" style="min-height: 60px;">
         <section class="pull-left search-widget" style="height: 65px;"
-            data-search-widget-options="{{search_widget_opts}}">
+            data-search-widget-options="{{search_widget_opts|raw}}">
         </section>
         <section style="margin-left: 20px; border-left: 1px solid #ababab; padding-left: 20px; height: 65px;" class="pull-left">
             <h3>Stapelverarbeitung</h3>
@@ -184,3 +184,33 @@
     {% endif %}
     </section>
 </section>
+
+<!-- **************************************************
+Modal dialogs
+************************************************** -->
+<div class="modal modal-batch-progress" style="display:none">
+    <div class="modal-header">
+        <h3>Fortschritt</h3>
+    </div>
+    <div class="modal-body">
+        <div class="progress progress-striped active">
+            <div class="bar" style="width: 0%;"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-twodal-event="cancelbatch" class="btn btn-primary">Batchedit abbrechen</a>
+    </div>
+</div>
+
+<div class="modal dialog-confirm" style="display:none">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h4>Bitte bestätigen</h4>
+    </div>
+    <div class="modal-body">
+        <p class="prompt-text">Aktion wirklich durchf&uuml;hren?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-twodal-event="confirm" class="btn btn-primary">Ja</a>
+    </div>
+</div>
