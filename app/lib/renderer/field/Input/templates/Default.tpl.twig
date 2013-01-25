@@ -1,0 +1,12 @@
+<div class="control-group field-wrapper-{{ fieldName }}">
+    <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td)}}</label>
+    {% if hasWidget %}
+        <section class="controls honeybee-widget {{widgetType}}" 
+            data-{{ widgetType|replace({'widget-': ''}) }}-options="{{widgetOptions|raw}}" ></section>
+    {% else %}
+        <div class="controls">
+            <input type="text" name="{{ inputName }}" value="{{ fieldValue }}"
+                id="{{ fieldId }}" placeholder="{{ placeholder }}" class="span11" />
+        </div>
+    {% endif %}
+</div>

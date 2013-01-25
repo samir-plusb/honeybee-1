@@ -24,6 +24,6 @@ class LocationInputRenderer extends FieldInputRenderer
 
     protected function getTemplateName()
     {
-        return 'PlainWidget.tpl.php';
+        return 'PlainWidget.tpl.twig';
     }
 }

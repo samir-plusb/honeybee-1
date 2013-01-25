@@ -24,24 +24,33 @@ class DocumentInputRenderer extends DocumentRenderer
 
     protected function doRender(Document $document)
     {
-        $template = $this->getTemplate();
-        $tabs = $this->renderTabs($document);
-        $tm = $this->getTranslationManager();
-        $td = $this->getTranslationDomain();
-        $ro = AgaviContext::getInstance()->getRouting();
-        $modulePrefix = $document->getModule()->getOption('prefix');
-        $controllerOptions = htmlspecialchars(json_encode($this->getControllerOptions($document)));
-        $editLink = $this->getRouteLink('workflow.run');
-        $listLink = $this->getRouteLink('list');
+        $payload = array(
+            'tabs' => $this->renderTabs($document),
+            'tm' => $this->getTranslationManager(),
+            'td' => $this->getTranslationDomain(),
+            'ro' => AgaviContext::getInstance()->getRouting(),
+            'modulePrefix' => $document->getModule()->getOption('prefix'),
+            'controllerOptions' => htmlspecialchars(json_encode($this->getControllerOptions($document))),
+            'editLink' => $this->getRouteLink('workflow.run'),
+            'listLink' => $this->getRouteLink('list'),
+        );
 
-        ob_start();
+        if (preg_match('/\.twig$/', $this->getTemplateName()))
+        {
+            return $this->renderTwig($payload);
+        }
+        else
+        {
+            extract($payload);
+            ob_start();
 
-        include $template;
+            include $this->getTemplate();
 
-        $content = ob_get_contents();
-        ob_end_clean();
+            $content = ob_get_contents();
+            ob_end_clean();
 
-        return $content;
+            return $content;
+        }
     }
 
     protected function renderTabs(Document $document)

@@ -8,25 +8,40 @@ class FieldInputRenderer extends FieldRenderer
     {
         $tm = $this->getTranslationManager();
         $td = $this->getTranslationDomain($document);
-        $template = $this->getTemplate();
+
         $fieldName = $this->getField()->getName();
-        $field = $this->getField();
-        $inputName = $this->generateInputName($document);
-        $fieldId = 'input-' . $fieldName;
-        $placeholder = $this->getField()->getOption('placesholder', '');
-        $fieldValue = $this->renderFieldValue($document);
         $widgetType = $this->getWidgetType($document);
-        $hasWidget = ($widgetType !== NULL);
-        $widgetOptions = $this->renderWidgetOptions($document);
 
-        ob_start();
+        $payload = array( 
+            'fieldName' => $fieldName,
+            'field' => $this->getField(),
+            'inputName' => $this->generateInputName($document),
+            'fieldId' => 'input-' . $fieldName,
+            'placeholder' => $this->getField()->getOption('placesholder', ''),
+            'fieldValue' => $this->renderFieldValue($document),
+            'widgetType' => $widgetType,
+            'hasWidget' => ($widgetType !== NULL),
+            'widgetOptions' => $this->renderWidgetOptions($document),
+            'tm' => $tm,
+            'td' => $td
+        );
 
-        include $template;
+        if (preg_match('/\.twig$/', $this->getTemplateName()))
+        {
+            return $this->renderTwig($payload);
+        }
+        else
+        {
+            extract($payload);
+            ob_start();
 
-        $content = ob_get_contents();
-        ob_end_clean();
+            include $this->getTemplate();
 
-        return $content;
+            $content = ob_get_contents();
+            ob_end_clean();
+
+            return $content;
+        }
     }
 
     protected function getWidgetType(Document $document)
@@ -87,7 +102,7 @@ class FieldInputRenderer extends FieldRenderer
 
     protected function getTemplateName()
     {
-        return "Default.tpl.php";
+        return "Default.tpl.twig";
     }
 
     protected function getTemplateDirectory()

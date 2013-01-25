@@ -1,0 +1,67 @@
+<div class="container-fluid controller-edit wrapper edit-{{modulePrefix}}"
+     data-edit-controller-options="{{ controllerOptions }}">
+{# 
+    controller notifications (optional section for displaying alerts that are added to the controller) 
+#}
+    <section class="container-alerts"
+         data-bind="template: { foreach: alerts, afterAdd: showAlert, beforeRemove: hideAlert }">
+        <div class="alert"
+             data-bind="css: {
+                            'alert-success': 'success' === type,
+                            'alert-error': 'error' === type
+                        }">
+            <strong data-bind="text: message"></strong>
+            <i class="icon-remove icon-white close"
+               data-bind="click: function(alert) { $parent.removeAlert(alert); }"> </i>
+        </div>
+    </section>
+<!-- 
+    the actual editing form.
+-->
+    <div class="row-fluid" style="margin-top: 85px">
+
+        <form class="span12 form-horizontal" method="post" action="{{ro.gen(NULL)}}"
+              data-bind="submit: onFormSubmit" style="padding-bottom: 60px;">
+            <fieldset>
+                <legend style="display: none;">{{tm._('edit-form-title', td)}}</legend>
+                <div class="tabbable" style="margin-top: 20px;">
+                    <ul class="nav nav-tabs">
+                    {% for tabName, tabDef in tabs %}
+                        <li class="{{tabDef.is_default ? 'active' : ''}}">
+                            <a data-toggle="tab" href="#tab-{{tabName}}">
+                                {{tm._(tabName, td)}}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    {% for tabName, tabDef in tabs %}
+                    <div class="tab-pane tab-{{ tabName }} {{ tabDef.is_default ? 'active in' : '' }} fade" 
+                        id="tab-{{ tabName }}">
+                        {% for rowGroups in tabDef.rows %}
+                        <div class="row-fluid">
+                            {% for groupName, groupDef in rowGroups %}
+                            <div class="span{{groupDef['width']}} group">
+                                <div class="field-group field-group-{{groupName}}">
+                                    <h3>{{tm._(groupName, td)}}</h3>
+                                    {% for field ind groupDef.fields %}
+                                        {{field}}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {%endfor%}
+                    </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <a href="{{ listLink }}" class="btn" style="margin-right: 20px;"><strong>Abbrechen</strong></a>
+                <button type="submit" class="btn btn-primary"><strong>Speichern</strong></button>
+            </div>
+        </form>
+    </div>
+    <div class="push"></div>
+</div>
