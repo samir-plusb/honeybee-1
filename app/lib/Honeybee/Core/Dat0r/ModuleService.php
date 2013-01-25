@@ -34,7 +34,7 @@ class ModuleService
                 }
                 else
                 {
-                    throw new Exception(
+                    throw new \Exception(
                         "Unable to call the '$implementor' module's getInstance method."
                     );
                 }
