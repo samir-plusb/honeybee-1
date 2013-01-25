@@ -1,6 +1,10 @@
 <?php
 
-class BaseSuggestAction extends ProjectBaseAction
+namespace Honeybee\Agavi\Action;
+
+use \AgaviRequestDataHolder;
+
+class BaseSuggestAction extends BaseAction
 {
     public function executeRead(AgaviRequestDataHolder $requestData)
     {

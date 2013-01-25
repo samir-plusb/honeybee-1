@@ -1,15 +1,16 @@
 <?php
 
+use \Honeybee\Agavi\Action\BaseAction;
+
 /**
  * The base action from which all Import module actions inherit.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Import
  * @subpackage      Agavi/Action
  */
-class ImportBaseAction extends ProjectBaseAction
+class ImportBaseAction extends BaseAction
 {
     /**
      * Handle our validation(write) errors.
@@ -31,5 +32,3 @@ class ImportBaseAction extends ProjectBaseAction
         return FALSE;
     }
 }
-
-?>

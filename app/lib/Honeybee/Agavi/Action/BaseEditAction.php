@@ -1,6 +1,12 @@
 <?php
 
-class BaseEditAction extends ProjectBaseAction
+namespace Honeybee\Agavi\Action;
+
+use \AgaviRequestDataHolder;
+use \WorkflowInteractivePlugin;
+use \WorkflowPluginResult;
+
+class BaseEditAction extends BaseAction
 {
     public function executeRead(AgaviRequestDataHolder $requestData)
     {
@@ -28,7 +34,7 @@ class BaseEditAction extends ProjectBaseAction
         {
             $module->getService()->save($document);
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
             $this->setAttribute('errors', array($e->getMessage()));
             // @todo very detailed log and if in development then throw $e

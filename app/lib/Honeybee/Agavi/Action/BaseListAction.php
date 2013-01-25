@@ -1,6 +1,11 @@
 <?php
 
-use Honeybee\Core\Dat0r\DocumentCollection;
+namespace Honeybee\Agavi\Action;
+
+use \Honeybee\Core\Dat0r\DocumentCollection;
+use \AgaviRequestDataHolder;
+use \ListConfig;
+use \AgaviConfig;
 
 /**
  * The BaseListAction class serves as a base class to all actions that slot the Common/ListAction.
@@ -10,7 +15,7 @@ use Honeybee\Core\Dat0r\DocumentCollection;
  * @package         Agavi
  * @subpackage      Action
  */
-class BaseListAction extends ProjectBaseAction
+class BaseListAction extends BaseAction
 {
     /**
      * Execute the write logic for this action, hence run the import.

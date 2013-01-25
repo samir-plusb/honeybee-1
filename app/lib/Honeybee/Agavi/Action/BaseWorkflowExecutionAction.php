@@ -1,8 +1,14 @@
 <?php
 
-class BaseWorkflowExecutionAction extends ProjectBaseAction
+namespace Honeybee\Agavi\Action;
+
+use \AgaviRequestDataHolder;
+use \WorkflowPluginResult;
+use \WorkflowInteractivePluginResult;
+
+class BaseWorkflowExecutionAction extends BaseAction
 {
-    public function execute(AgaviParameterHolder $parameters)
+    public function execute(AgaviRequestDataHolder $parameters)
     {
         try
         {
@@ -35,7 +41,7 @@ class BaseWorkflowExecutionAction extends ProjectBaseAction
                 return 'Error';
             }
         }
-        catch (Exception $e)
+        catch (\Exception $e)
         {
             $this->setAttribute(
                 'content',
