@@ -1,0 +1,17 @@
+<td>
+    <!-- ko if: 'nobody' === $data.display_data.{{field.getName()}} -->
+        <span>&nbsp;</span>
+    <!-- /ko -->
+
+    <!-- ko if: 'nobody' != $data.display_data.{{field.getName()}} -->
+        <!-- ko if: '{{user.getAttribute('login')}}' === $data.display_data.{{field.getName()}} -->
+        <span class="label label-info release-ticket" 
+              data-bind="text: $data.display_data.{{field.getName()}}, 
+                         click: function() { $parent.ctrl.releaseTicket($data, this); }"></span>
+        <!-- /ko -->
+
+        <!-- ko if: '{{user.getAttribute('login')}}' !== $data.display_data.{{field->getName()}} -->
+        <span class="label" data-bind="text: $data.display_data.{{field.getName()}}"></span>
+        <!-- /ko -->
+    <!-- /ko -->
+</td>
