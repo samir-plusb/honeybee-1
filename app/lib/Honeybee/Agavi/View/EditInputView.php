@@ -1,13 +1,16 @@
 <?php
 
-use Honeybee\Core\Dat0r\Document;
+namespace Honeybee\Agavi\View;
 
-class BaseEditInputView extends ProjectBaseView
+use Honeybee\Core\Dat0r\Document;
+use DocumentInputRenderer;
+
+class EditInputView extends BaseView
 {
     /**
      * Run this view for the html output type.
      */
-    public function executeHtml(AgaviRequestDataHolder $parameters)
+    public function executeHtml(\AgaviRequestDataHolder $parameters)
     {
         $this->setupHtml($parameters);
         $module = $this->getAttribute('module');

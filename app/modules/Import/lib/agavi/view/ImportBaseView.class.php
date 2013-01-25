@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Agavi\View\BaseView;
+
 /**
  * The base view from which all Import module views inherit.
  *
@@ -9,9 +11,7 @@
  * @package         Import
  * @subpackage      Agavi/View
  */
-class ImportBaseView extends ProjectBaseView
+class ImportBaseView extends BaseView
 {
 
 }
-
-?>

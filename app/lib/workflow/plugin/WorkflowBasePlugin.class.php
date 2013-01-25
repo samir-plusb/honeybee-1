@@ -177,7 +177,7 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
             // before thinking about flexible user constraints, it might
             // be a good idea to have a system user or something like that for shell jobs etc.
         }
-var_dump($this->getWorkflow()->getSessionUser());exit;
+
         return FALSE;
     }
 

@@ -2,11 +2,9 @@
 
 namespace Honeybee\Agavi\Action;
 
-use \AgaviRequestDataHolder;
-
 class BaseSuggestAction extends BaseAction
 {
-    public function executeRead(AgaviRequestDataHolder $requestData)
+    public function executeRead(\AgaviRequestDataHolder $requestData)
     {
         $displayField = $requestData->getParameter('display_field');
         $identityField = $requestData->getParameter('identity_field');
@@ -38,7 +36,7 @@ class BaseSuggestAction extends BaseAction
      *
      * @return string The name of the view to invoke.
      */
-    public function handleReadError(AgaviRequestDataHolder $parameters)
+    public function handleReadError(\AgaviRequestDataHolder $parameters)
     {
         $errors = array();
         foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)

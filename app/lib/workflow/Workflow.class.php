@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Agavi\User\ZendAclSecurityUser;
+
 /**
  * Representation of one workflow.
  *

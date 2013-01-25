@@ -2,13 +2,10 @@
 
 namespace Honeybee\Core\Dat0r;
 
-use \Honeybee\Core\Repository\IService;
-use \Honeybee\Core\Finder\IFinder;
-use \Honeybee\Core\Storage\IStorage;
-use \Honeybee\Core\Repository\IRepository;
-
-use \AgaviContext;
-use \InvalidArgumentException;
+use Honeybee\Core\Repository\IService;
+use Honeybee\Core\Finder\IFinder;
+use Honeybee\Core\Storage\IStorage;
+use Honeybee\Core\Repository\IRepository;
 
 // @todo maybe we should rename the create methods into get/fetch methods 
 // and pool the instances inside the factory, so we can remove the getRepository and getService
@@ -21,7 +18,7 @@ class ModuleFactory
 
         if (! class_exists($implementor))
         {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     "Unable to load repository class %s for module %s.", 
                     $implementor, $module->getName()
@@ -36,7 +33,7 @@ class ModuleFactory
 
         if (! $repository instanceof IRepository)
         {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     "The given repository %s for module %s must implement the IRepository interface.",
                     $implementor, $module->getName()
@@ -55,7 +52,7 @@ class ModuleFactory
 
         if (! class_exists($implementor))
         {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     "Unable to load service class %s for module %s.", 
                     $implementor, $module->getName()
@@ -67,7 +64,7 @@ class ModuleFactory
 
         if (! $service instanceof IService)
         {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     "The given service %s for module %s must implement the IService interface.",
                     $implementor, $module->getName()
@@ -84,7 +81,7 @@ class ModuleFactory
 
         if (! class_exists($implementor))
         {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     "Unable to load finder class %s for module %s.", 
                     $implementor, $module->getName()
@@ -92,7 +89,7 @@ class ModuleFactory
             );
         }
 
-        $context = AgaviContext::getInstance();
+        $context = \AgaviContext::getInstance();
         $dbManager = $context->getDatabaseManager();
         $finder = new $implementor(
             $dbManager->getDatabase($module->getConnectionName('Read')),
@@ -101,7 +98,7 @@ class ModuleFactory
 
         if (! $finder instanceof IFinder)
         {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     "The given finder %s for module %s must implement the IFinder interface.",
                     $implementor, $module->getName()
@@ -118,7 +115,7 @@ class ModuleFactory
 
         if (! class_exists($implementor))
         {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     "Unable to load storage class %s for module %s.", 
                     $implementor, $module->getName()
@@ -126,7 +123,7 @@ class ModuleFactory
             );
         }
 
-        $context = AgaviContext::getInstance();
+        $context = \AgaviContext::getInstance();
         $dbManager = $context->getDatabaseManager();
         $storage = new $implementor(
             $dbManager->getDatabase($module->getConnectionName('Write'))
@@ -134,7 +131,7 @@ class ModuleFactory
 
         if (! $storage instanceof IStorage)
         {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     "The given storage %s for module %s must implement the IStorage interface.",
                     $implementor, $module->getName()

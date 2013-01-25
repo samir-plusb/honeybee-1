@@ -2,10 +2,6 @@
 
 namespace Honeybee\CodeGen\Config;
 
-use \AgaviConfig;
-use \AgaviModuleFilesystemCheck;
-use \DirectoryIterator;
-
 class ConfigurationScanner
 {
     protected static $supportedConfigs = array(
@@ -15,7 +11,7 @@ class ConfigurationScanner
     public function scan()
     {
         $configsToInclude = array();
-        $iter = new DirectoryIterator(AgaviConfig::get('core.modules_dir'));
+        $iter = new \DirectoryIterator(\AgaviConfig::get('core.modules_dir'));
         foreach($iter as $file) 
         {
             if($file->isDot())
@@ -23,7 +19,7 @@ class ConfigurationScanner
                 continue;
             }
             
-            $check = new AgaviModuleFilesystemCheck();
+            $check = new \AgaviModuleFilesystemCheck();
             $check->setConfigDirectory('config');
             $check->setPath($file->getPathname());
 
@@ -47,7 +43,7 @@ class ConfigurationScanner
                 $dat0rPath = $file->getPathname().str_replace('/', DIRECTORY_SEPARATOR, '/lib/dat0r/');
                 if (is_dir($dat0rPath))
                 {
-                    $directoryIter = new DirectoryIterator($dat0rPath);
+                    $directoryIter = new \DirectoryIterator($dat0rPath);
                     foreach ($directoryIter as $package)
                     {
                         $packageName = $package->getFilename();
@@ -66,7 +62,7 @@ class ConfigurationScanner
                 $aclPath = $file->getPathname().str_replace('/', DIRECTORY_SEPARATOR, '/config/access_control/');
                 if (is_dir($aclPath))
                 {
-                    $directoryIter = new DirectoryIterator($aclPath);
+                    $directoryIter = new \DirectoryIterator($aclPath);
                     foreach ($directoryIter as $aclConfig)
                     {
                         $fileName = $aclConfig->getFilename();

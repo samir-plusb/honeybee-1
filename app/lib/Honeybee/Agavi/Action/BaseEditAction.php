@@ -2,13 +2,12 @@
 
 namespace Honeybee\Agavi\Action;
 
-use \AgaviRequestDataHolder;
-use \WorkflowInteractivePlugin;
-use \WorkflowPluginResult;
+use WorkflowInteractivePlugin;
+use WorkflowPluginResult;
 
 class BaseEditAction extends BaseAction
 {
-    public function executeRead(AgaviRequestDataHolder $requestData)
+    public function executeRead(\AgaviRequestDataHolder $requestData)
     {
         $module = $this->getModule();
         $document = $requestData->getParameter('document', $module->createDocument());
@@ -21,7 +20,7 @@ class BaseEditAction extends BaseAction
         return 'Input';
     }
 
-    public function executeWrite(AgaviRequestDataHolder $requestData)
+    public function executeWrite(\AgaviRequestDataHolder $requestData)
     {
         $view = 'Success';
 

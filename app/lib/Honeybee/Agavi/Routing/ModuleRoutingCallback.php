@@ -1,6 +1,8 @@
 <?php
 
-class HoneybeeModuleRoutingCallback extends AgaviRoutingCallback
+namespace Honeybee\Agavi\Routing;
+
+class ModuleRoutingCallback extends \AgaviRoutingCallback
 {
     /**
      * Routing callback that is invoked when the root we are applied to matches (routing runtime).
@@ -14,14 +16,14 @@ class HoneybeeModuleRoutingCallback extends AgaviRoutingCallback
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @codingStandardsIgnoreStart
      */
-    public function onMatched(array &$parameters, AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
+    public function onMatched(array &$parameters, \AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
     {
         $params = $this->route['opt']['parameters'];
 
         $implementor = $params['implementor'];
         if (! class_exists($implementor))
         {
-            throw new Exception("Unable to load module $implementor");
+            throw new \Exception("Unable to load module $implementor");
         }
 
         $factory = array($implementor, 'getInstance');
@@ -32,7 +34,7 @@ class HoneybeeModuleRoutingCallback extends AgaviRoutingCallback
         }
         else
         {
-            throw new Exception(
+            throw new \Exception(
                 "Unable to call the '$implementor' module's getInstance method."
             );
         }
@@ -52,7 +54,7 @@ class HoneybeeModuleRoutingCallback extends AgaviRoutingCallback
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @codingStandardsIgnoreStart
      */
-    public function onNotMatched(AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
+    public function onNotMatched(\AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
     {
         return TRUE;
     }

@@ -1,14 +1,14 @@
 <?php
 
+namespace Honeybee\Agavi\Filter;
+
 /**
- * The ProjectResourcePacker packs an compresses js and css scripts.
+ * The ResourcePacker packs an compresses js and css scripts.
  *
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Project
- * @subpackage      Agavi/Filter
  */
-class ProjectResourcePacker
+class ResourcePacker
 {
     protected $config;
 
@@ -23,7 +23,7 @@ class ProjectResourcePacker
         )
     );
 
-    public function __construct(array $modules, $outputType, ProjectResourceFilterConfig $config)
+    public function __construct(array $modules, $outputType, ResourceFilterConfig $config)
     {
         $this->config = $config;
         $this->modules = $modules;
@@ -86,7 +86,7 @@ class ProjectResourcePacker
         }
 
         $this->moveResources(
-            AgaviConfig::get('core.app_dir').DIRECTORY_SEPARATOR.'resources',
+            \AgaviConfig::get('core.app_dir').DIRECTORY_SEPARATOR.'resources',
             $resourceBaseDir.DIRECTORY_SEPARATOR.'_global'
         );
     }
@@ -129,7 +129,7 @@ class ProjectResourcePacker
     {
         if (! array_key_exists($type, static::$types))
         {
-            throw new Exception('Unknown MIME type: ' . $type);
+            throw new \Exception('Unknown MIME type: ' . $type);
         }
 
         return static::$types[$type]['extension'];
@@ -137,7 +137,7 @@ class ProjectResourcePacker
 
     protected function getResourceDirectoryForModule($module)
     {
-        $resourcesDir = AgaviConfig::get('core.modules_dir')
+        $resourcesDir = \AgaviConfig::get('core.modules_dir')
             . DIRECTORY_SEPARATOR
             . $module
             . DIRECTORY_SEPARATOR

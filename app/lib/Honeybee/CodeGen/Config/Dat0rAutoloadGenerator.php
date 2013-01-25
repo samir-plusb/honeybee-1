@@ -2,8 +2,6 @@
 
 namespace Honeybee\CodeGen\Config;
 
-use \AgaviConfig;
-
 class Dat0rAutoloadGenerator implements IConfigGenerator
 {
     public function generate($name, array $affectedPaths)
@@ -19,7 +17,7 @@ class Dat0rAutoloadGenerator implements IConfigGenerator
 
         if (! empty($packageMap))
         {
-            $autoloadPath = AgaviConfig::get('core.config_dir') . DIRECTORY_SEPARATOR . 
+            $autoloadPath = \AgaviConfig::get('core.config_dir') . DIRECTORY_SEPARATOR . 
             'includes' . DIRECTORY_SEPARATOR . 'autoload.php';
 
             file_put_contents($autoloadPath, $this->renderTemplate($packageMap));
@@ -29,7 +27,7 @@ class Dat0rAutoloadGenerator implements IConfigGenerator
     protected function renderTemplate(array $packageMap)
     {
         return sprintf($this->getTemplate(), str_replace(
-            "'".AgaviConfig::get('core.app_dir'), 
+            "'".\AgaviConfig::get('core.app_dir'), 
             "dirname(dirname(__DIR__)).'", 
             var_export($packageMap, TRUE)
         ));

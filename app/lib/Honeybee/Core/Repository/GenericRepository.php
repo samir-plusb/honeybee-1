@@ -2,11 +2,11 @@
 
 namespace Honeybee\Core\Repository;
 
-use \Honeybee\Core\Finder\IFinder;
-use \Honeybee\Core\Storage\IStorage;
-use \Honeybee\Core\Dat0r\Module;
-use \Honeybee\Core\Dat0r\Document;
-use \Honeybee\Core\Dat0r\DocumentCollection;
+use Honeybee\Core\Finder\IFinder;
+use Honeybee\Core\Storage\IStorage;
+use Honeybee\Core\Dat0r\Module;
+use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Dat0r\DocumentCollection;
 
 class GenericRepository implements IRepository
 {

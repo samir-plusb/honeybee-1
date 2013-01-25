@@ -1,14 +1,14 @@
 <?php
 
+namespace Honeybee\Agavi\Filter;
+
 /**
- * The ProjectResourceFilterConfig provides access to the resource filter settings.
+ * The ResourceFilterConfig provides access to the resource filter settings.
  *
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Project
- * @subpackage      Agavi/Filter
  */
-class ProjectResourceFilterConfig
+class ResourceFilterConfig
 {
     const CFG_ENABLE_COMBINE = 'combine_scripts';
 
@@ -50,7 +50,7 @@ class ProjectResourceFilterConfig
     {
         if (! in_array($settingName, self::$supportedSettings))
         {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     "The given setting: %s is not supported. Supported settings are:\n- %s",
                     $settingName,
@@ -120,7 +120,7 @@ class ProjectResourceFilterConfig
         {
             if (!isset($parameters[$req]))
             {
-                throw new AgaviConfigurationException(
+                throw new \AgaviConfigurationException(
                     "Missing required setting for '$req'!"
                 );
             }
@@ -130,7 +130,7 @@ class ProjectResourceFilterConfig
         $baseDir = realpath($parameters[self::CFG_BASE_DIR]);
         if (! is_writable($baseDir))
         {
-            throw new AgaviConfigurationException(
+            throw new \AgaviConfigurationException(
                 "The given base directory '$baseDir' is not writeable!"
             );
         }
@@ -160,7 +160,7 @@ class ProjectResourceFilterConfig
         );
 
         $this->settings[self::CFG_PUB_DIR] = realpath(
-            dirname(AgaviConfig::get('core.app_dir')) . DIRECTORY_SEPARATOR . 'pub'
+            dirname(\AgaviConfig::get('core.app_dir')) . DIRECTORY_SEPARATOR . 'pub'
         );
     }
 }

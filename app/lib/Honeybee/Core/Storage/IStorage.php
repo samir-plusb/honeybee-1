@@ -2,7 +2,7 @@
 
 namespace Honeybee\Core\Storage;
 
-use \Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Dat0r\Document;
 
 interface IStorage
 {

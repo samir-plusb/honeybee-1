@@ -1,12 +1,14 @@
 <?php
 
-use Dat0r\Core\Runtime\Document\InvalidValueException;
-use Dat0r\Core\Runtime\Field\ReferenceField;
+namespace Honeybee\Agavi\Validator;
 
 use Honeybee\Core\Dat0r\RelationManager;
 use Honeybee\Core\Dat0r\Module;
 
-class HoneybeeDocumentValidator extends AgaviValidator
+use Dat0r\Core\Runtime\Document\InvalidValueException;
+use Dat0r\Core\Runtime\Field\ReferenceField;
+
+class DocumentValidator extends \AgaviValidator
 {
     protected function validate()
     {
@@ -87,9 +89,9 @@ class HoneybeeDocumentValidator extends AgaviValidator
 
         if (! ($module instanceof Module))
         {
-            throw new Exception(
+            throw new \Exception(
                 "Unable to determine honebee-module for the current action's scope." . PHP_EOL . 
-                "Make sure that the HoneybeeModuleRoutingCallback is executed for the related route."
+                "Make sure that the Honeybee\Agavi\Routing\ModuleRoutingCallback is executed for the related route."
             );
         }
 

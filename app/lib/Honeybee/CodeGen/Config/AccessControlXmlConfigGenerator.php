@@ -2,9 +2,6 @@
 
 namespace Honeybee\CodeGen\Config;
 
-use \AgaviConfig;
-use \DOMDocument;
-
 class AccessControlXmlConfigGenerator extends DefaultXmlConfigGenerator
 {
     public function generate($name, array $filesToInclude)
@@ -28,12 +25,12 @@ class AccessControlXmlConfigGenerator extends DefaultXmlConfigGenerator
         $this->writeConfigFile($document, 'permissions');
     }
 
-    protected function createResourceInclude(DOMDocument $document, $resourceConfig)
+    protected function createResourceInclude(\DOMDocument $document, $resourceConfig)
     {
         $include = $document->createElement('xi:include');
 
         $include->setAttribute('href', str_replace(
-            AgaviConfig::get('core.app_dir'),
+            \AgaviConfig::get('core.app_dir'),
             '../..',
             $resourceConfig
         ));
@@ -48,12 +45,12 @@ class AccessControlXmlConfigGenerator extends DefaultXmlConfigGenerator
         return $include;
     }
 
-    protected function createPermissionInclude(DOMDocument $document, $permissionConfig)
+    protected function createPermissionInclude(\DOMDocument $document, $permissionConfig)
     {
         $include = $document->createElement('xi:include');
 
         $include->setAttribute('href', str_replace(
-            AgaviConfig::get('core.app_dir'),
+            \AgaviConfig::get('core.app_dir'),
             '../..',
             $permissionConfig
         ));
@@ -70,7 +67,7 @@ class AccessControlXmlConfigGenerator extends DefaultXmlConfigGenerator
 
     protected function createDocument($name)
     {
-        $document = new DOMDocument('1.0', 'utf-8');
+        $document = new \DOMDocument('1.0', 'utf-8');
 
         $root = $document->createElementNs(
             'http://agavi.org/agavi/config/global/envelope/1.0', 

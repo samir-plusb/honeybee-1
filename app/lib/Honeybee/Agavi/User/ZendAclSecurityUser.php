@@ -1,30 +1,32 @@
 <?php
 
+namespace Honeybee\Agavi\User;
+
 /**
  * The ZendAclSecurityUser is responseable for detecting required scripts and deploying them for your view.
  *
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  */
-class ZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_Role_Interface
+class ZendAclSecurityUser extends \AgaviSecurityUser implements \Zend_Acl_Role_Interface
 {
     protected $zendAcl;
 
     protected $accessConfig;
 
-    public function initialize(AgaviContext $context, array $parameters = array())
+    public function initialize(\AgaviContext $context, array $parameters = array())
     {
         parent::initialize($context, $parameters);
 
-        $this->accessConfig = include AgaviConfigCache::checkConfig(
-            AgaviConfig::get('core.config_dir') . '/access_control.xml'
+        $this->accessConfig = include \AgaviConfigCache::checkConfig(
+            \AgaviConfig::get('core.config_dir') . '/access_control.xml'
         );
         $this->zendAcl = $this->createZendAcl();
     }
 
     protected function createZendAcl()
     {
-        $zendAcl = new Zend_Acl();
+        $zendAcl = new \Zend_Acl();
         // setup our resources
         foreach ($this->accessConfig['resources'] as $resource => $def)
         {
@@ -96,17 +98,11 @@ class ZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_Role_Int
         return $this->getParameter('default_acl_role', 'user');
     }
 
-    /**
-     *
-     * @param mixed $credential
-     * @return boolean
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
     public function hasCredential($credential)
     {
         try
         {
-            if ($credential instanceof Zend_Acl_Resource_Interface)
+            if ($credential instanceof \Zend_Acl_Resource_Interface)
             {
                 // an object instance was given; perform an access check on this (without an operation)
                 return $this->isAllowed($credential);
@@ -130,7 +126,7 @@ class ZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_Role_Int
                 return $this->hasRole($credential[0]);
             }
         }
-        catch (Zend_Acl_Exception $e)
+        catch (\Zend_Acl_Exception $e)
         {
             return FALSE;
         }
@@ -138,17 +134,21 @@ class ZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_Role_Int
 
     protected function createAssertion($typeKey = NULL)
     {
-        if (! $typeKey)
+        if (!$typeKey)
         {
             return NULL;
         }
+
         $assertionClass = implode('', array_map('ucfirst', explode('_', $typeKey))) . 'Assertion';
-        if (! class_exists($assertionClass))
+        $fqClassName = __NAMESPACE__ . '\\Assertions\\' . $assertionClass;
+
+        if (! class_exists($fqClassName))
         {
-            throw new InvalidArgumentException(
-                "Invalid assertion type given in acl configuration. Can not resolve to class."
+            throw new \InvalidArgumentException(
+                "Invalid assertion type given in acl configuration. Can not resolve to class: " . $fqClassName
             );
         }
-        return new $assertionClass;
+
+        return new $fqClassName;
     }
 }

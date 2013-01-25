@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Agavi\View\BaseView;
+
 /**
  * The base view from which all Common module views inherit.
  *
@@ -11,9 +13,7 @@
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren) 
  */
-class CommonBaseView extends ProjectBaseView
+class CommonBaseView extends BaseView
 {
 
 }
-
-?>

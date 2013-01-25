@@ -8,11 +8,8 @@ namespace Honeybee\Core;
  * The settings provided by this class are always in a local (environment) dedicated and therefore
  * the bin/configure-env script must be run once to set things up before a fresh application can be run.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Project
- * @subpackage      Config
  */
 class Environment
 {

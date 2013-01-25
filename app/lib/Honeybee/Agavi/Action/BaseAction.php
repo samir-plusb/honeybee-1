@@ -2,27 +2,23 @@
 
 namespace Honeybee\Agavi\Action;
 
-use \Honeybee\Core\Dat0r\Module;
-use \AgaviAction;
-use \AgaviRequestDataHolder;
+use Honeybee\Core\Dat0r\Module;
 
 /**
  * The BaseAction serves as the base action to all actions implemented inside of honeybee.
  *
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Agavi
- * @subpackage      Action
  */
-class BaseAction extends AgaviAction
+class BaseAction extends \AgaviAction
 {
     /**
      * Default error handling for method Read (GET Requests)
      *
-     * @param AgaviRequestDataHolder $parameters
+     * @param \AgaviRequestDataHolder $parameters
      * @return array (modulename, viewname)
      */
-    public function handleError(AgaviRequestDataHolder $parameters)
+    public function handleError(\AgaviRequestDataHolder $parameters)
     {
         $errors = array();
 

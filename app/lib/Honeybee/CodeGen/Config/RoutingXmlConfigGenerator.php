@@ -2,9 +2,6 @@
 
 namespace Honeybee\CodeGen\Config;
 
-use \AgaviConfig;
-use \DOMDocument;
-
 class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
 {
     public function generate($name, array $filesToInclude)
@@ -37,11 +34,11 @@ class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
         $this->writeConfigFile($document, $name);
     }
 
-    protected function createConsoleRouting(DOMDocument $document, $configFile)
+    protected function createConsoleRouting(\DOMDocument $document, $configFile)
     {
         $moduleRoutes = $document->createElement('xi:include');
         $moduleRoutes->setAttribute('href', str_replace(
-            AgaviConfig::get('core.app_dir'),
+            \AgaviConfig::get('core.app_dir'),
             '../..',
             $configFile
         ));
@@ -53,11 +50,11 @@ class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
         return $moduleRoutes;
     }
 
-    protected function createWebRouting(DOMDocument $document, $configFile)
+    protected function createWebRouting(\DOMDocument $document, $configFile)
     {
         $moduleName = $this->extractModuleNameFromPath($configFile);
         $moduleDefinition = str_replace('/', DIRECTORY_SEPARATOR,
-             AgaviConfig::get('core.modules_dir').'/'.$moduleName.'/config/dat0r/module.xml'
+             \AgaviConfig::get('core.modules_dir').'/'.$moduleName.'/config/dat0r/module.xml'
         );
 
         $moduleRoute = $document->createElement('route');
@@ -69,7 +66,7 @@ class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
         {
             $callbacks = $document->createElement('callbacks');
             $callback = $document->createElement('callback');
-            $callback->setAttribute('class', 'HoneybeeModuleRoutingCallback');
+            $callback->setAttribute('class', 'Honeybee\\Agavi\\Routing\\ModuleRoutingCallback');
             $callbacks->appendChild($callback);
 
             $parameter = $document->createElement(
@@ -84,7 +81,7 @@ class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
 
         $webInclude = $document->createElement('xi:include');
         $webInclude->setAttribute('href', str_replace(
-            AgaviConfig::get('core.app_dir'), 
+            \AgaviConfig::get('core.app_dir'), 
             '../..', 
             $configFile
         ));
@@ -104,7 +101,7 @@ class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
             '/config/routing.xml', 
             '', 
             str_replace(
-                AgaviConfig::get('core.app_dir').'/modules/', '', $path
+                \AgaviConfig::get('core.app_dir').'/modules/', '', $path
             )
         );
     }

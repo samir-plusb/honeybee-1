@@ -2,10 +2,9 @@
 
 namespace Honeybee\Core\Dat0r;
 
-use \Dat0r\Core\Runtime\Module\RootModule;
-use \Dat0r\Core\Runtime\Field\TextField;
-use \AgaviConfig;
-use \WorkflowManager;
+use Dat0r\Core\Runtime\Module\RootModule;
+use Dat0r\Core\Runtime\Field\TextField;
+use WorkflowManager;
 
 /**
  * @todo We might want to merge the module settings.xml options,
@@ -73,7 +72,7 @@ abstract class Module extends RootModule
 
         if (! in_array($type, $supportedTypes))
         {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 "Unsupported connection type '$type' given. Supported are 'Read' and 'Write'."
             );
         }
@@ -86,28 +85,28 @@ abstract class Module extends RootModule
         $defaultService = sprintf('%sService', $this->getName());
         $settingName = $this->getOption('prefix') . '.service';
 
-        return AgaviConfig::get($settingName, $defaultService);
+        return \AgaviConfig::get($settingName, $defaultService);
     }
 
     public function getRepositoryImplementor()
     {
         $settingName = $this->getOption('prefix') . '.repository';
 
-        return AgaviConfig::get($settingName, '\\Honeybee\\Core\\Repository\\GenericRepository');
+        return \AgaviConfig::get($settingName, '\\Honeybee\\Core\\Repository\\GenericRepository');
     }
 
     public function getStorageImplementor()
     {
         $settingName = $this->getOption('prefix') . '.storage';
 
-        return AgaviConfig::get($settingName, '\\Honeybee\\Core\\Storage\\CouchDb\\Storage');
+        return \AgaviConfig::get($settingName, '\\Honeybee\\Core\\Storage\\CouchDb\\Storage');
     }
 
     public function getFinderImplementor()
     {
         $settingName = $this->getOption('prefix') . '.finder';
         
-        return AgaviConfig::get($settingName, '\\Honeybee\\Core\\Finder\\ElasticSearch\\Finder');
+        return \AgaviConfig::get($settingName, '\\Honeybee\\Core\\Finder\\ElasticSearch\\Finder');
     }
 
     /**
@@ -115,13 +114,13 @@ abstract class Module extends RootModule
      *
      * @return array A list of IField implemenations.
      */
-    protected function getDefaultFields()
+    protected function getDefaultFields() 
     {
         return array_merge(
             parent::getDefaultFields(),
             array(
                 TextField::create('identifier'),
-                TextField::create('revision')
+                TextField::create('revision'),
             )
         );
     }

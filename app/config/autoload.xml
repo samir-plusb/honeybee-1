@@ -6,26 +6,6 @@
     parent="%core.system_config_dir%/autoload.xml">
     <ae:configuration>
         <autoloads>
-            <!-- 
-                Extending Agavi
-            -->
-            <!-- mvc base classes -->
-            <autoload name="ProjectBaseView">%core.lib_dir%/Honeybee/Agavi/View/ProjectBaseView.php</autoload>
-            <autoload name="BaseWorkflowErrorView">%core.lib_dir%/Honeybee/Agavi/View/BaseWorkflowErrorView.php</autoload>
-            <autoload name="BaseWorkflowSuccessView">%core.lib_dir%/Honeybee/Agavi/View/BaseWorkflowSuccessView.php</autoload>
-            <autoload name="BaseEditInputView">%core.lib_dir%/Honeybee/Agavi/View/BaseEditInputView.php</autoload>
-            <!-- validators -->
-            <autoload name="ProjectArrayValidator">%core.lib_dir%/agavi/validator/ProjectArrayValidator.class.php</autoload>
-            <autoload name="HoneybeeDocumentValidator">%core.lib_dir%/agavi/validator/HoneybeeDocumentValidator.class.php</autoload>
-            <!-- routing stuff -->
-            <autoload name="ProjectLanguageRoutingCallback">%core.lib_dir%/agavi/routing/ProjectLanguageRoutingCallback.class.php</autoload>
-            <autoload name="HoneybeeModuleRoutingCallback">%core.lib_dir%/agavi/routing/HoneybeeModuleRoutingCallback.class.php</autoload>
-            <!-- filter stuff - basically all about handling resources (scripts, styles, binaries) -->
-            <autoload name="ProjectExecutionFilter">%core.lib_dir%/agavi/filter/ProjectExecutionFilter.class.php</autoload>
-            <autoload name="ProjectDebugExecutionFilter">%core.lib_dir%/agavi/filter/ProjectDebugExecutionFilter.class.php</autoload>
-            <autoload name="ProjectResourcePacker">%core.lib_dir%/agavi/filter/ProjectResourcePacker.class.php</autoload>
-            <autoload name="ProjectResourceFilter">%core.lib_dir%/agavi/filter/ProjectResourceFilter.class.php</autoload>
-            <autoload name="ProjectResourceFilterConfig">%core.lib_dir%/agavi/filter/ProjectResourceFilterConfig.class.php</autoload>
             <!-- config handlers -->
             <autoload name="ProjectDataImportConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectDataImportConfigHandler.class.php</autoload>
             <autoload name="ProjectDataSourceConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectDataSourceConfigHandler.class.php</autoload>
@@ -40,9 +20,6 @@
             <autoload name="CouchdbClientException">%core.lib_dir%/agavi/database/CouchdbClientException.class.php</autoload>
             <autoload name="CouchDbDatabaseSetup">%core.lib_dir%/agavi/database/CouchDbDatabaseSetup.class.php</autoload>
             <autoload name="ElasticSearchDatabaseSetup">%core.lib_dir%/agavi/database/ElasticSearchDatabaseSetup.class.php</autoload>
-            <!-- user (access) -->
-            <autoload name="ZendAclSecurityUser">%core.lib_dir%/Honeybee/Agavi/User/ZendAclSecurityUser.php</autoload>
-            <autoload name="UserIsItemOwnerAssertion">%core.lib_dir%/Honeybee/Agavi/User/Assertions/UserIsItemOwnerAssertion.php</autoload>
             
             <!-- 
                 Rendering - Rendering GUI for documents and modules.

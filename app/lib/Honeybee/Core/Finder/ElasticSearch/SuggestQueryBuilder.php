@@ -2,9 +2,9 @@
 
 namespace Honeybee\Core\Finder\ElasticSearch;
 
-use \Honeybee\Core\Finder\IQueryBuilder;
-use \Elastica_Query;
-use \Elastica_Query_Text;
+use Honeybee\Core\Finder\IQueryBuilder;
+use Elastica_Query;
+use Elastica_Query_Text;
 
 class SuggestQueryBuilder implements IQueryBuilder
 {

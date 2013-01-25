@@ -2,15 +2,15 @@
 
 namespace Honeybee\Core\Finder\ElasticSearch;
 
-use \Honeybee\Core\Finder\IQueryBuilder;
-use \IListConfig;
-use \IListState;
+use Honeybee\Core\Finder\IQueryBuilder;
+use IListConfig;
+use IListState;
 
-use \Elastica_Query;
-use \Elastica_Query_MatchAll;
-use \Elastica_Query_Text;
-use \Elastica_Filter_Term;
-use \Elastica_Filter_And;
+use Elastica_Query;
+use Elastica_Query_MatchAll;
+use Elastica_Query_Text;
+use Elastica_Filter_Term;
+use Elastica_Filter_And;
 
 class QueryBuilder implements IQueryBuilder
 {

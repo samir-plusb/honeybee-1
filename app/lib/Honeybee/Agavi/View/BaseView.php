@@ -1,17 +1,16 @@
 <?php
 
+namespace Honeybee\Agavi\View;
+
 /**
- * The ProjectBaseView serves as the base view to all views implemented inside of this project.
+ * The BaseView serves as the base view to all views implemented inside of this project.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Project
- * @subpackage      Agavi/View
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class ProjectBaseView extends AgaviView
+class BaseView extends \AgaviView
 {
     /*
       This is the base view all your application's views should extend.
@@ -73,7 +72,7 @@ class ProjectBaseView extends AgaviView
      *
      * @param       AgaviExecutionContainer $container
      */
-    public function initialize(AgaviExecutionContainer $container)
+    public function initialize(\AgaviExecutionContainer $container)
     {
         parent::initialize($container);
 
@@ -92,7 +91,7 @@ class ProjectBaseView extends AgaviView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public final function execute(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public final function execute(\AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
@@ -108,7 +107,7 @@ class ProjectBaseView extends AgaviView
      *
      * @codingStandardsIgnoreStart
      */
-    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeHtml(\AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
@@ -122,7 +121,7 @@ class ProjectBaseView extends AgaviView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeJson(\AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
@@ -136,7 +135,7 @@ class ProjectBaseView extends AgaviView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeText(\AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->throwOutputPutTypeNotImplementedException();
     }
@@ -150,7 +149,7 @@ class ProjectBaseView extends AgaviView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function setupHtml(AgaviRequestDataHolder $parameters, $layoutName = NULL) // @codingStandardsIgnoreEnd
+    public function setupHtml(\AgaviRequestDataHolder $parameters, $layoutName = NULL) // @codingStandardsIgnoreEnd
     {
         if ($layoutName === NULL && $this->getContainer()->getParameter('is_slot', FALSE))
         {
@@ -173,7 +172,7 @@ class ProjectBaseView extends AgaviView
      */
     protected function throwOutputPutTypeNotImplementedException()
     {
-        throw new AgaviViewException(
+        throw new \AgaviViewException(
             sprintf(
                 'The View "%1$s" does not implement an "execute%3$s()" method to serve ' .
                 'the Output Type "%2$s". It is recommended that you change the code of ' .
@@ -215,5 +214,3 @@ class ProjectBaseView extends AgaviView
         return $errors;
     }
 }
-
-?>

@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Agavi\View\BaseView;
+
 /**
  * The DefaultBaseView serves as the base view to all views implemented inside of the Default module.
  *
@@ -9,7 +11,7 @@
  * @package         Default
  * @subpackage      Agavi/View
  */
-class DefaultBaseView extends ProjectBaseView
+class DefaultBaseView extends BaseView
 {
     /*
       This is the base view all your module's views should extend. This way,
@@ -29,5 +31,3 @@ class DefaultBaseView extends ProjectBaseView
       for specific modules in case you require this.
      */
 }
-
-?>

@@ -2,13 +2,12 @@
 
 namespace Honeybee\Agavi\Action;
 
-use \AgaviRequestDataHolder;
-use \WorkflowPluginResult;
-use \WorkflowInteractivePluginResult;
+use WorkflowPluginResult;
+use WorkflowInteractivePluginResult;
 
 class BaseWorkflowExecutionAction extends BaseAction
 {
-    public function execute(AgaviRequestDataHolder $parameters)
+    public function execute(\AgaviRequestDataHolder $parameters)
     {
         try
         {
@@ -57,7 +56,7 @@ class BaseWorkflowExecutionAction extends BaseAction
         return 'Success';
     }
 
-    public function handleError(AgaviRequestDataHolder $parameters)
+    public function handleError(\AgaviRequestDataHolder $parameters)
     {
         $errors = array();
 

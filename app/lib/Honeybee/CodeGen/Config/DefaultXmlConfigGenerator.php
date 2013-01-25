@@ -2,9 +2,6 @@
 
 namespace Honeybee\CodeGen\Config;
 
-use \AgaviConfig;
-use \DOMDocument;
-
 class DefaultXmlConfigGenerator implements IConfigGenerator
 {
     public function generate($name, array $filesToInclude)
@@ -23,7 +20,7 @@ class DefaultXmlConfigGenerator implements IConfigGenerator
 
     protected function createDocument($name)
     {
-        $document = new DOMDocument('1.0', 'utf-8');
+        $document = new \DOMDocument('1.0', 'utf-8');
         $root = $document->createElementNs(
             'http://agavi.org/agavi/config/global/envelope/1.0',
             'ae:configurations'
@@ -38,11 +35,11 @@ class DefaultXmlConfigGenerator implements IConfigGenerator
         return $document;
     }
 
-    protected function createInclude(DOMDocument $document, $includePath)
+    protected function createInclude(\DOMDocument $document, $includePath)
     {
         $include = $document->createElement('xi:include');
         $include->setAttribute('href', str_replace(
-            AgaviConfig::get('core.app_dir'), 
+            \AgaviConfig::get('core.app_dir'), 
             '../..', 
             $includePath
         ));
@@ -54,9 +51,9 @@ class DefaultXmlConfigGenerator implements IConfigGenerator
         return $include;
     }
 
-    protected function writeConfigFile(DOMDocument $document, $name)
+    protected function writeConfigFile(\DOMDocument $document, $name)
     {
-        $configIncludeDir = AgaviConfig::get('core.config_dir') . DIRECTORY_SEPARATOR . 
+        $configIncludeDir = \AgaviConfig::get('core.config_dir') . DIRECTORY_SEPARATOR . 
             'includes' . DIRECTORY_SEPARATOR;
         $document->formatOutput = TRUE;
         $document->save($configIncludeDir.$name.'.xml');

@@ -2,18 +2,14 @@
 
 namespace Honeybee\Agavi\Action;
 
-use \Honeybee\Core\Dat0r\DocumentCollection;
-use \AgaviRequestDataHolder;
-use \ListConfig;
-use \AgaviConfig;
+use Honeybee\Core\Dat0r\DocumentCollection;
+use ListConfig;
 
 /**
  * The BaseListAction class serves as a base class to all actions that slot the Common/ListAction.
  *
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Agavi
- * @subpackage      Action
  */
 class BaseListAction extends BaseAction
 {
@@ -24,7 +20,7 @@ class BaseListAction extends BaseAction
      *
      * @return      string The name of the view to execute.
      */
-    public function executeRead(AgaviRequestDataHolder $parameters)
+    public function executeRead(\AgaviRequestDataHolder $parameters)
     {
         $module = $this->getModule();
         $service = $module->getService();
@@ -53,7 +49,7 @@ class BaseListAction extends BaseAction
      *
      * @return string The name of the view to invoke.
      */
-    public function handleReadError(AgaviRequestDataHolder $parameters)
+    public function handleReadError(\AgaviRequestDataHolder $parameters)
     {
         $this->setAttribute('module', $this->getModule());
 
@@ -71,7 +67,7 @@ class BaseListAction extends BaseAction
     protected function buildListConfig()
     {
         $settingsKey = $this->buildListConfigKey();
-        $listSettings = AgaviConfig::get($settingsKey, array());
+        $listSettings = \AgaviConfig::get($settingsKey, array());
         $fields = array_values($this->getModule()->getFields()->toArray());
 
         if (! isset($listSettings['fields']))

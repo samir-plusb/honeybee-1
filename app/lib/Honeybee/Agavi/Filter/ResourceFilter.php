@@ -1,16 +1,16 @@
 <?php
 
+namespace Honeybee\Agavi\Filter;
+
 /**
- * The ProjectResourceFilter is responseable for detecting required scripts and deploying them for your view.
+ * The ResourceFilter is responseable for detecting required scripts and deploying them for your view.
  *
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Project
- * @subpackage      Agavi/Filter
  *
  * @SuppressWarnings(PHPMD.TooManyMethods)
  */
-class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
+class ResourceFilter extends \AgaviFilter implements \AgaviIGlobalFilter
 {
     public static function addModule($moduleName, $outputType)
     {
@@ -41,11 +41,11 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
      * @param AgaviContext $context
      * @param array $parameters
      */
-    public function initialize(AgaviContext $context, array $parameters = array())
+    public function initialize(\AgaviContext $context, array $parameters = array())
     {
         parent::initialize($context, $parameters);
 
-        $this->config = new ProjectResourceFilterConfig($parameters);
+        $this->config = new ResourceFilterConfig($parameters);
     }
 
     /**
@@ -54,7 +54,7 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
      * @param AgaviFilterChain A FilterChain instance.
      * @param AgaviExecutionContainer The current execution container.
      */
-    public function execute(AgaviFilterChain $filterChain, AgaviExecutionContainer $container)
+    public function execute(\AgaviFilterChain $filterChain, \AgaviExecutionContainer $container)
     {
         $filterChain->execute($container);
         $response = $container->getResponse();
@@ -74,7 +74,7 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
 
         if ($this->config->isCachingEnabled())
         {
-            $packer = new ProjectResourcePacker(self::$modules, $this->curOutputType, $this->config);
+            $packer = new ResourcePacker(self::$modules, $this->curOutputType, $this->config);
             $packer->pack();
         }
 
@@ -122,7 +122,7 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
         $baseDir = $this->config->getBaseDir();
         $pubDir = $this->config->getPubDir();
         $relativeBasePath = str_replace($pubDir, '', $baseDir);
-        $baseUrl = AgaviContext::getInstance()->getRouting()->getBaseHref() . $relativeBasePath;
+        $baseUrl = \AgaviContext::getInstance()->getRouting()->getBaseHref() . $relativeBasePath;
         $resourceBaseUrl = 
             $this->config->isCachingEnabled() 
             ? $baseUrl . '/cache/'
@@ -133,7 +133,7 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
             ? $this->config->getCacheDir()
             : $this->config->getDeployDir();
         
-        $files = ProjectResourcePacker::sortedGlob(
+        $files = ResourcePacker::sortedGlob(
             $resourcesBaseDir.DIRECTORY_SEPARATOR.'_global'.DIRECTORY_SEPARATOR.$subdirectory
         );
 
@@ -147,7 +147,7 @@ class ProjectResourceFilter extends AgaviFilter implements AgaviIGlobalFilter
 
             $files = array_merge(
                 $files, 
-                ProjectResourcePacker::sortedGlob($moduleCachePath)
+                ResourcePacker::sortedGlob($moduleCachePath)
             );
         }
         $urls = array();

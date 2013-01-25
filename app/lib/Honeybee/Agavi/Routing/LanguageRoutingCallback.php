@@ -1,17 +1,16 @@
 <?php
 
+namespace Honeybee\Agavi\Routing;
+
 /**
  * The ProjectLanguageRoutingCallbacck response to locale information
  * matched inside a url and applies the corresponding settings to our agavi env.
  * It is also responseable for correctly providing i18n data for url generation.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Project
- * @subpackage      Agavi/Routing
  */
-class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
+class LanguageRoutingCallback extends \AgaviRoutingCallback
 {
     /**
      * An array containing locales that are available to use.
@@ -27,7 +26,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      *
      * @param       array $route
      */
-    public function initialize(AgaviContext $context, array &$route)
+    public function initialize(\AgaviContext $context, array &$route)
     {
         parent::initialize($context, $route);
 
@@ -50,7 +49,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @codingStandardsIgnoreStart
      */
-    public function onMatched(array &$parameters, AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
+    public function onMatched(array &$parameters, \AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
     {
         // let's check if the locale is allowed
         try
@@ -65,7 +64,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
 
             return TRUE;
         }
-        catch (AgaviException $e)
+        catch (\AgaviException $e)
         {
             // uregistered or ambigious locale... uncool!
             // onNotMatched will be called for us next
@@ -85,7 +84,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @codingStandardsIgnoreStart
      */
-    public function onNotMatched(AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
+    public function onNotMatched(\AgaviExecutionContainer $container) // @codingStandardsIgnoreEnd
     {
         // the pattern didn't match, or onMatched() returned FALSE.
         // that's sad. let's see if there's a locale set in a cookie from an earlier visit.
@@ -101,7 +100,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
 
                 return;
             }
-            catch (AgaviException $e)
+            catch (\AgaviException $e)
             {
                 // bad cookie :<
                 $this->context->getController()->getGlobalResponse()->unsetCookie('locale');
@@ -130,7 +129,7 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
 
                     return;
                 }
-                catch (AgaviException $e)
+                catch (\AgaviException $e)
                 {
                     return;
                 }
@@ -237,5 +236,3 @@ class ProjectLanguageRoutingCallback extends AgaviRoutingCallback
         return array_keys($locales);
     }
 }
-
-?>

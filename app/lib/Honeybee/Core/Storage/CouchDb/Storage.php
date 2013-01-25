@@ -2,10 +2,10 @@
 
 namespace Honeybee\Core\Storage\CouchDb;
 
-use \Honeybee\Core\Storage\IStorage;
-use \Honeybee\Core\Dat0r\Document;
-use \CouchDbDatabase;
-use \CouchdbClientException;
+use Honeybee\Core\Storage\IStorage;
+use Honeybee\Core\Dat0r\Document;
+use CouchDbDatabase;
+use CouchdbClientException;
 
 class Storage implements IStorage
 {

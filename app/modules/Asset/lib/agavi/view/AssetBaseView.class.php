@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Agavi\View\BaseView;
+
 /**
  * The AssetBaseView serves as the base view to all views implemented inside of the Asset module.
  *
@@ -9,9 +11,7 @@
  * @package         Asset
  * @subpackage      Agavi/View
  */
-class AssetBaseView extends ProjectBaseView
+class AssetBaseView extends BaseView
 {
 
 }
-
-?>

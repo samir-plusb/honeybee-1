@@ -2,12 +2,12 @@
 
 namespace Honeybee\Core\Finder\ElasticSearch;
 
-use \Honeybee\Core\Finder\IFinder;
+use Honeybee\Core\Finder\IFinder;
 
-use \Elastica_Query;
-use \Elastica_Filter_Not;
-use \Elastica_ResultSet;
-use \ElasticSearchDatabase;
+use Elastica_Query;
+use Elastica_Filter_Not;
+use Elastica_ResultSet;
+use ElasticSearchDatabase;
 
 class Finder implements IFinder
 {

@@ -8,10 +8,8 @@ namespace Honeybee\Core\Util\FileSystem;
  *
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
- * @package         Project
- * @subpackage      Iterator
  */
-class DirectoryRegexpIterator extends FilterIterator
+class DirectoryRegexpIterator extends \FilterIterator
 {
     const REGEXP_DELIMITER = '~';
 
@@ -20,9 +18,9 @@ class DirectoryRegexpIterator extends FilterIterator
     public function __construct($directoryPath, $filterRegexp)
     {
         parent::__construct(
-            new FilesystemIterator(
+            new \FilesystemIterator(
                 $directoryPath,
-                FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
+                \FilesystemIterator::CURRENT_AS_PATHNAME | \FilesystemIterator::SKIP_DOTS
             )
         );
         $this->filterRegexp = self::REGEXP_DELIMITER.$filterRegexp.self::REGEXP_DELIMITER.'is';

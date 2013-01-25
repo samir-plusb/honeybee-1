@@ -7,8 +7,8 @@ use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Finder\ElasticSearch\QueryBuilder;
 use Honeybee\Core\Finder\ElasticSearch\SuggestQueryBuilder;
 
-use \ListConfig;
-use \IListState;
+use ListConfig;
+use IListState;
 
 abstract class BaseService implements IService
 {

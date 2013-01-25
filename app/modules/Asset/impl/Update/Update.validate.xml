@@ -16,7 +16,7 @@
                 </errors>
             </validator>
 
-            <validator class="ProjectArrayValidator" name="invalid_meta_data" required="false">
+            <validator class="Honeybee\Agavi\Validator\ArrayValidator" name="invalid_meta_data" required="false">
                 <arguments>
                     <argument>metaData</argument>
                 </arguments>
