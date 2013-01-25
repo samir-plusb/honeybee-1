@@ -1,15 +1,25 @@
 <?php
 
+use \AgaviSecurityUser;
+use \AgaviContext;
+use \AgaviConfigCache;
+use \AgaviConfig;
+
+use \Zend_Acl;
+use \Zend_Acl_Role_Interface;
+use \Zend_Acl_Resource_Interface;
+use \Zend_Acl_Exception;
+
+use \InvalidArgumentException;
+
+
 /**
- * The ProjectZendAclSecurityUser is responseable for detecting required scripts and deploying them for your view.
+ * The ZendAclSecurityUser is responseable for detecting required scripts and deploying them for your view.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
- * @package         Project
- * @subpackage      Agavi/User
  */
-class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_Role_Interface
+class ZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_Role_Interface
 {
     protected $zendAcl;
 
@@ -155,5 +165,3 @@ class ProjectZendAclSecurityUser extends AgaviSecurityUser implements Zend_Acl_R
         return new $assertionClass;
     }
 }
-
-?>
