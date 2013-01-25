@@ -45,8 +45,8 @@
                             <div class="span{{groupDef['width']}} group">
                                 <div class="field-group field-group-{{groupName}}">
                                     <h3>{{tm._(groupName, td)}}</h3>
-                                    {% for field ind groupDef.fields %}
-                                        {{field}}
+                                    {% for field in groupDef.fields %}
+                                        {{field|raw}}
                                     {% endfor %}
                                 </div>
                             </div>

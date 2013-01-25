@@ -29,6 +29,14 @@ abstract class DocumentRenderer implements IRenderer
         return $this->doRender($payload);
     }
 
+    protected function renderTwig( array $payload )
+    {
+        $loader = new Twig_Loader_Filesystem($this->getTemplateDirectory());
+        $twig = new Twig_Environment($loader);
+
+        return $twig->render($this->getTemplateName(), $payload);
+    }
+
     public function getFactory()
     {
         return $this->factory;

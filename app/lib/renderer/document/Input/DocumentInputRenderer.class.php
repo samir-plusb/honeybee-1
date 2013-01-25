@@ -148,7 +148,7 @@ class DocumentInputRenderer extends DocumentRenderer
 
     protected function getTemplateName()
     {
-        return "Default.tpl.php";
+        return "Default.tpl.twig";
     }
 
     protected function getTemplateDirectory()
