@@ -47,7 +47,7 @@ class BaseAction extends AgaviAction
 
         if (! ($module instanceof Module))
         {
-            throw new Exception(
+            throw new \Exception(
                 "Unable to determine honebee-module for the current action's scope." . PHP_EOL . 
                 "Make sure that the HoneybeeModuleRoutingCallback is executed for the related route."
             );
@@ -61,7 +61,7 @@ class BaseAction extends AgaviAction
         $logger = $this->getContext()->getLoggerManager()->getLogger('error');
         $errMsg = sprintf("[%s] %s", get_class($this), $msg);
         $logger->log(
-            new AgaviLoggerMessage($errMsg, AgaviLogger::ERROR)
+            new \AgaviLoggerMessage($errMsg, \AgaviLogger::ERROR)
         );
     }
 
@@ -70,7 +70,7 @@ class BaseAction extends AgaviAction
         $logger = $this->getContext()->getLoggerManager()->getLogger('app');
         $infoMsg = sprintf("[%s] %s", get_class($this), $msg);
         $logger->log(
-            new AgaviLoggerMessage($infoMsg, AgaviLogger::INFO)
+            new \AgaviLoggerMessage($infoMsg, \AgaviLogger::INFO)
         );
     }
 
@@ -82,11 +82,11 @@ class BaseAction extends AgaviAction
      * @param int $severity
      * @return AgaviValidationIncident the generated error
      */
-    protected function addError($argument, $message, $severity = AgaviValidator::ERROR)
+    protected function addError($argument, $message, $severity = \AgaviValidator::ERROR)
     {
         $validation_manager = $this->getContainer()->getValidationManager();
-        $incident = new AgaviValidationIncident(NULL, $severity);
-        $incident->addError(new AgaviValidationError($message, NULL, array($argument)));
+        $incident = new \AgaviValidationIncident(NULL, $severity);
+        $incident->addError(new \AgaviValidationError($message, NULL, array($argument)));
         $validation_manager->addIncident($incident);
 
         return $incident;

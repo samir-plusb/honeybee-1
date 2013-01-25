@@ -1,18 +1,5 @@
 <?php
 
-use \AgaviSecurityUser;
-use \AgaviContext;
-use \AgaviConfigCache;
-use \AgaviConfig;
-
-use \Zend_Acl;
-use \Zend_Acl_Role_Interface;
-use \Zend_Acl_Resource_Interface;
-use \Zend_Acl_Exception;
-
-use \InvalidArgumentException;
-
-
 /**
  * The ZendAclSecurityUser is responseable for detecting required scripts and deploying them for your view.
  *

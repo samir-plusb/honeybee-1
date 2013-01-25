@@ -72,9 +72,18 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
 
         $result = new WorkflowPluginResult();
         $result->setState(WorkflowPluginResult::STATE_NOT_ALLOWED);
-        $result->setMessage(
-            "You do not own the required credentials to execute this plugin (" . get_class($this)  . ")!"
+
+        $operation = sprintf(
+            '%s::%s',
+            $this->getPluginId(),
+            $this->getWorkflow()->getContainer()->getRequestMethod()
         );
+
+        $result->setMessage(
+            sprintf("You do not own the required credentials to execute this plugin (%s - %s)!",
+            get_class($this),
+            $operation
+        ));
         $result->freeze();
 
         return $result;
@@ -168,7 +177,7 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
             // before thinking about flexible user constraints, it might
             // be a good idea to have a system user or something like that for shell jobs etc.
         }
-
+var_dump($this->getWorkflow()->getSessionUser());exit;
         return FALSE;
     }
 

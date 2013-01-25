@@ -358,9 +358,11 @@ class Workflow
         {
             $user = AgaviContext::getInstance()->getUser();
 
-            if (! ($user instanceof ProjectZendAclSecurityUser))
+            if (! ($user instanceof ZendAclSecurityUser))
             {
-                return NULL;
+                throw new InvalidArgumentException(
+                    sprintf("User must be instanceof ZendAclSecurityUser, given '%s'", get_class($user))
+                );
             }
 
             return $user;
