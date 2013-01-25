@@ -24,6 +24,7 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
         $this->setupHtml($parameters);
         $listConfig = $parameters->getParameter('config');
         $this->setAttribute('links', $this->generatePagingLinks($listConfig->getRouteName()));
+        $this->setAttribute('list_filter', $this->getAttribute('filter'));
     }
 
     protected function generatePagingLinks($listRoute)

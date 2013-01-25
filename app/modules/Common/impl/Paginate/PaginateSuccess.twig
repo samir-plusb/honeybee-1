@@ -1,0 +1,140 @@
+{% set start_at = 0 %}
+{% set end_at = 0 %}
+{% set center_offset = paging_range // 2%}
+
+<!-- center offset {{center_offset }} -->
+
+{% if paging_range > 0 %}
+    {% set start_at = current_page - center_offset %}
+<!-- start at 1 {{ start_at }} -->
+    {% if  start_at <= 1 %}
+    {# Correct start pos if we are in the first pagination segment. #}
+        {% set start_at = 2 %}
+    {% elseif  last_page - 1 <= current_page + center_offset %}
+        {% set start_at = last_page - paging_range - 1 %}
+<!-- start at 2 {{ start_at }} -->
+    {% endif %}
+
+    {% set end_at = start_at + paging_range %}
+{% endif %}
+<!-- start at 3 {{ start_at }} -->
+
+<nav class="pagination well">
+    <ul>
+    {% if has_previous %}
+        <li class="prev">
+            <a href="{{ links.previous_page|raw }}">&#8592; Previous</a>
+        </li>
+
+    {% else %}
+        <li class="prev disabled">
+            <a>&#8592; Previous</a>
+        </li>
+    {% endif %}
+
+    {% if total_pages > 1 %}
+        <li class="{{ first_page_reached ? 'active' : '' }}">
+        {% if first_page_reached %}
+            <a>1</a>
+        {% else %}
+            <a href="{{ links.first_page|raw }}">1</a>
+        {% endif %}
+        </li>
+    {% endif %}
+
+    {% if start_at == 2 and total_pages > 2 or (total_pages > 2 and total_pages < 6) %}
+        <li class="{{ currentPage == 1 ? 'active' : ''}}">
+        {% if current_oage == 1 %}
+            <a>2</a>
+
+        {% else %}
+            <a href="{{links.second_page|raw}}">2</a>
+        {% endif %}
+        </li>
+    {% elseif total_pages > 5 %}
+        {# with at least 6 pages we also check for the "..." placeholder. #}
+        <li class="disabled">
+            <a>...</a>
+        </li>
+
+    {% endif %}
+
+    {% for cur_page in range(start_at, end_at) if cur_page < end_at %}
+    <!-- {{cur_page}} -->
+
+        {% if search %}
+            {% set routing_data_search = search %}
+        {% elseif filter %}
+            {% set routing_data_filter = list_filter%}
+        {% endif %}
+
+        {% if sorting %}
+            {% set routing_data_sorting = sorting %}
+        {% endif %}
+
+        {% set route_data = {
+            'limit': limit,
+            'offset': cur_page * limit,
+            'search': routing_data_search,
+            'filter': routing_data_filter,
+            'sorting': routing_data_sorting
+        } %}
+
+        {% set link = ro.gen(route_name, route_data) %}
+        {% if cur_page == current_page %}
+            {% set active = true %}
+        {% else %}
+            {% set active = false %}
+        {% endif %}
+
+        <li class="{{ active ? 'active' : ''}}">
+        
+        {% if active %}
+            <a>{{ cur_page + 1 }}</a>
+        {% else %}
+            <a href="{{ link|raw }}">{{ cur_page + 1 }}</a>
+        {% endif %}
+        </li>
+    {% endfor %}
+
+    {% if total_pages > 3 and ( last_page - 1 == end_at or total_pages < 6) %}
+
+        {# if we have at least 4 pages we can display a "second-last page" link, when the current page is within the last pagination segment. #}
+        <li class="{{ last_page - 1 == current_page ? 'active' : ''}}">
+        {% if last_page - 1 == current_page %}
+            <a>{{ last_page }}</a>
+        {% else %}
+            <a href="{{ link.second_last_page|raw }}">{{ last_page }}</a>
+        {% endif %}
+        </li>
+    {% elseif total_pages > 5 %}
+        {# with at least 6 pages we also check for the "..." placeholder. #}
+        <li class="disabled">
+            <a>...</a>
+        </li>
+    {% endif %}
+
+    {% if total_pages > 1 %}
+    {# always render a "last page" link if there are at least two pages. #}
+        <li class="{{last_page_reached ? 'active' : '' }}">
+        {% if last_page_reached %}
+            <a>{{ last_page + 1 }}</a>
+        {% else %}
+            <a href="{{ links.last_page|raw }}">{{ last_page + 1 }}</a>
+        {% endif %}
+        </li>
+    {% endif %}
+
+    {% if has_next %}
+    {# if there is a next page, display the "next page" link. #}
+        <li class="next">
+            <a href="{{ links.next_page|raw }}">Next &#8594;</a>
+        </li>
+    {% else %}
+    {# otherwise disable it. #}
+        <li class="next disabled">
+            <a>Next &#8594;</a>
+        </li>
+    {% endif %}
+    </ul>
+</nav>
