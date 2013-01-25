@@ -7,11 +7,9 @@
 $testing_dir = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR;
 $lib_conf_dir = 'app/lib/config/';
 
-$environment_config_class_file = $testing_dir . $lib_conf_dir . 'ProjectEnvironmentConfig.class.php';
 $configurator_class_file = $testing_dir . '/etc/configure/EnvironmentConfigurator.class.php';
 $configure_script_class_file = $testing_dir . '/etc/configure/ConfigureEnvScript.class.php';
 
-require_once $environment_config_class_file;
 require_once $configurator_class_file;
 require_once $configure_script_class_file;
 

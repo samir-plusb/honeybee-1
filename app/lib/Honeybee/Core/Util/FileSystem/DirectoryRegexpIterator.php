@@ -1,16 +1,17 @@
 <?php
 
+namespace Honeybee\Core\Util\FileSystem;
+
 /**
- * The ProjectFileSystemRegexpIterator lets you traverse files on the file system thereby applying
+ * The DirectoryRegexpIterator lets you traverse files on the file system thereby applying
  * a given regexp to iterate only files that the expression.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Project
  * @subpackage      Iterator
  */
-class ProjectDirectoryRegexpIterator extends FilterIterator
+class DirectoryRegexpIterator extends FilterIterator
 {
     const REGEXP_DELIMITER = '~';
 
@@ -38,5 +39,3 @@ class ProjectDirectoryRegexpIterator extends FilterIterator
         return $this->getInnerIterator()->getMTime();
     }
 }
-
-?>

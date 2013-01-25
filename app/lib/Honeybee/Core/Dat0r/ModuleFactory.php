@@ -2,14 +2,15 @@
 
 namespace Honeybee\Core\Dat0r;
 
-use \InvalidArgumentException;
-use \IRepository;
-use \IStorage;
-use \IFinder;
-use \IService;
-use \AgaviContext;
+use \Honeybee\Core\Repository\IService;
+use \Honeybee\Core\Finder\IFinder;
+use \Honeybee\Core\Storage\IStorage;
+use \Honeybee\Core\Repository\IRepository;
 
-// @todo maybe we should rename the create methods into get methods 
+use \AgaviContext;
+use \InvalidArgumentException;
+
+// @todo maybe we should rename the create methods into get/fetch methods 
 // and pool the instances inside the factory, so we can remove the getRepository and getService
 // methods from the module.
 class ModuleFactory
@@ -134,8 +135,10 @@ class ModuleFactory
         if (! $storage instanceof IStorage)
         {
             throw new InvalidArgumentException(
-                "The given storage %s for module %s must implement the IStorage interface.",
-                $implementor, $module->getName()
+                sprintf(
+                    "The given storage %s for module %s must implement the IStorage interface.",
+                    $implementor, $module->getName()
+                )
             );
         }
 

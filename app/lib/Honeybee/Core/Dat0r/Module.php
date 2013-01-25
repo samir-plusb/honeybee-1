@@ -93,21 +93,21 @@ abstract class Module extends RootModule
     {
         $settingName = $this->getOption('prefix') . '.repository';
 
-        return AgaviConfig::get($settingName, 'GenericRepository');
+        return AgaviConfig::get($settingName, '\\Honeybee\\Core\\Repository\\GenericRepository');
     }
 
     public function getStorageImplementor()
     {
         $settingName = $this->getOption('prefix') . '.storage';
 
-        return AgaviConfig::get($settingName, 'CouchDbStorage');
+        return AgaviConfig::get($settingName, '\\Honeybee\\Core\\Storage\\CouchDb\\Storage');
     }
 
     public function getFinderImplementor()
     {
         $settingName = $this->getOption('prefix') . '.finder';
         
-        return AgaviConfig::get($settingName, 'ElasticSearchFinder');
+        return AgaviConfig::get($settingName, '\\Honeybee\\Core\\Finder\\ElasticSearch\\Finder');
     }
 
     /**

@@ -1,8 +1,13 @@
 <?php
 
-use Honeybee\Core\Dat0r\Document;
+namespace Honeybee\Core\Storage\CouchDb;
 
-class CouchDbStorage implements IStorage
+use \Honeybee\Core\Storage\IStorage;
+use \Honeybee\Core\Dat0r\Document;
+use \CouchDbDatabase;
+use \CouchdbClientException;
+
+class Storage implements IStorage
 {
     /**
      * The name of couchdb's internal id field.

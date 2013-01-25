@@ -1,6 +1,7 @@
 <?php
 
-use Honeybee\Core\Dat0r\ModuleService;
+use \Honeybee\Core\Dat0r\ModuleService;
+use \Honeybee\Core\Util\Http\CurlFactory;
 
 class Common_Header_HeaderSuccessView extends CommonBaseView
 {
@@ -18,7 +19,7 @@ class Common_Header_HeaderSuccessView extends CommonBaseView
         }
 
         $url = str_replace('{EMAIL_HASH}', $hash, $url);
-        $curl = ProjectCurl::create($url);
+        $curl = CurlFactory::create($url);
         $resp = curl_exec($curl);
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 

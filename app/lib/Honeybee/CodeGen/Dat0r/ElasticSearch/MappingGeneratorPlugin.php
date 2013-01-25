@@ -3,8 +3,11 @@
 /**
  * A plugin for the dat0r code-generator.
  * Generates and deploys an elasticsearch index definition for a given module-definition.
+ *
+ * @todo Atm this class is not namespaced as the dat0r plugin interface does not support namespaces yet.
+ * Update as soon as the dat0r codegen ships namespace support for plugins.
  */
-class ElasticSearchIndexGeneratorPlugin
+class MappingGeneratorPlugin
 {
     private $options;
 

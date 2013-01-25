@@ -1,7 +1,9 @@
 <?php
 
+namespace Honeybee\Core;
+
 /**
- * The ProjectEnvironmentConfig provides essential settings for bootstrapping this application,
+ * The Environment provides essential settings for bootstrapping this application,
  * such as the environment to use and depending on that load the correct application settings.
  * The settings provided by this class are always in a local (environment) dedicated and therefore
  * the bin/configure-env script must be run once to set things up before a fresh application can be run.
@@ -12,7 +14,7 @@
  * @package         Project
  * @subpackage      Config
  */
-class ProjectEnvironmentConfig
+class Environment
 {
     // ---------------------------------- <CONSTANTS> --------------------------------------------
 
@@ -71,7 +73,7 @@ class ProjectEnvironmentConfig
     /**
      * Holds an instance of this class.
      *
-     * @var         ProjectEnvironmentConfig
+     * @var         Environment
      */
     private static $instance;
 
@@ -103,7 +105,7 @@ class ProjectEnvironmentConfig
     // ---------------------------------- <CONSTRUCTOR> ------------------------------------------
 
     /**
-     * Create a new ProjectEnvironmentConfig instance.
+     * Create a new Environment instance.
      *
      * @param       boolean $testingEnabled If testing is enabled
      */
@@ -111,7 +113,7 @@ class ProjectEnvironmentConfig
     {
         $this->testingEnabled = $testingEnabled;
 
-        $baseDir = dirname(dirname(dirname(dirname(__FILE__))));
+        $baseDir = dirname(dirname(dirname(dirname(dirname(__FILE__)))));
 
         $localConfigDir =
             $baseDir . DIRECTORY_SEPARATOR .
@@ -144,13 +146,13 @@ class ProjectEnvironmentConfig
      *
      * @param       boolean $testingEnabled
      *
-     * @return      ProjectEnvironmentConfig
+     * @return      Environment
      */
     public static function load($testingEnabled = FALSE)
     {
         if (NULL === self::$instance)
         {
-            self::$instance = new ProjectEnvironmentConfig($testingEnabled);
+            self::$instance = new Environment($testingEnabled);
         }
 
         return self::$instance;

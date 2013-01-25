@@ -1,5 +1,11 @@
 <?php
 
+namespace Honeybee\CodeGen\Config;
+
+use \AgaviConfig;
+use \AgaviModuleFilesystemCheck;
+use \DirectoryIterator;
+
 class ConfigurationScanner
 {
     protected static $supportedConfigs = array(

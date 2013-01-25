@@ -1,5 +1,10 @@
 <?php
 
+namespace Honeybee\CodeGen\Config;
+
+use \AgaviConfig;
+use \DOMDocument;
+
 class AccessControlXmlConfigGenerator extends DefaultXmlConfigGenerator
 {
     public function generate($name, array $filesToInclude)

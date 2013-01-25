@@ -1,6 +1,8 @@
 <?php
 
-use Honeybee\Core\Dat0r\Document;
+namespace Honeybee\Core\Storage;
+
+use \Honeybee\Core\Dat0r\Document;
 
 interface IStorage
 {

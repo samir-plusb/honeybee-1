@@ -1,7 +1,14 @@
 <?php
 
+namespace Honeybee\Core\Repository;
+
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Finder\ElasticSearch\QueryBuilder;
+use Honeybee\Core\Finder\ElasticSearch\SuggestQueryBuilder;
+
+use \ListConfig;
+use \IListState;
 
 abstract class BaseService implements IService
 {
@@ -58,9 +65,10 @@ abstract class BaseService implements IService
         }
     }
 
-    public function fetchListData(IListConfig $config, IListState $state)
+    public function fetchListData(ListConfig $config, IListState $state)
     {
-        $queryBuilder = new ElasticaQueryBuilder();
+        // @todo Introduce a factory setting to allow inject the implementor for building queries.
+        $queryBuilder = new QueryBuilder();
         $query = $queryBuilder->build(
             array('config' => $config, 'state' => $state)
         );

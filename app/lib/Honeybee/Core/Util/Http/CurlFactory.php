@@ -1,7 +1,11 @@
 <?php
 
+namespace Honeybee\Core\Util\Http;
+
+use \AgaviConfig;
+
 /**
- * The ProjectCurl class is a convenience wrapper around php's curl library.
+ * The CurlFactory class is a convenience wrapper around php's curl library.
  * It's job is to create curl handles thereby using system defined settings to init.
  *
  * @version         $Id$
@@ -10,7 +14,7 @@
  * @package         Project
  * @subpackage      Http
  */
-class ProjectCurl
+class CurlFactory
 {
     /**
      * The default timeout to use for curl handles created by this class.

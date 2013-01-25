@@ -1,5 +1,7 @@
 <?php
 
+use \Honeybee\Core\Util\Http\CurlFactory;
+
 /**
  * The AssetValidator class provides validation of asset resources given from various inputs
  * and always exports a valid asset uri that can be used with the ProjectAssetService.
@@ -133,7 +135,7 @@ class AssetResourceValidator extends AgaviFileValidator
 
         if ('http' === $uriParts['scheme'])
         {
-            $curlHandle = ProjectCurl::create();
+            $curlHandle = CurlFactory::create();
             curl_setopt($curlHandle, CURLOPT_HEADER, 1);
             curl_setopt($curlHandle, CURLOPT_NOBODY, 1);
             curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);

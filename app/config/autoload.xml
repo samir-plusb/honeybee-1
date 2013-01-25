@@ -51,21 +51,6 @@
             <autoload name="UserIsItemOwnerAssertion">%core.lib_dir%/agavi/user/assertions/UserIsItemOwnerAssertion.class.php</autoload>
             
             <!-- 
-                Repository/Service - Domain Data Access
-            -->
-            <autoload name="IRepository">%core.lib_dir%/repository/IRepository.iface.php</autoload>
-            <autoload name="GenericRepository">%core.lib_dir%/repository/GenericRepository.class.php</autoload>
-            <autoload name="IFinder">%core.lib_dir%/repository/IFinder.iface.php</autoload>
-            <autoload name="ElasticSearchFinder">%core.lib_dir%/repository/ElasticSearchFinder.class.php</autoload>
-            <autoload name="IStorage">%core.lib_dir%/repository/IStorage.iface.php</autoload>
-            <autoload name="CouchDbStorage">%core.lib_dir%/repository/CouchDbStorage.class.php</autoload>
-            <autoload name="IService">%core.lib_dir%/repository/IService.iface.php</autoload>
-            <autoload name="BaseService">%core.lib_dir%/repository/BaseService.class.php</autoload>
-            <autoload name="IQueryBuilder">%core.lib_dir%/repository/IQueryBuilder.iface.php</autoload>
-            <autoload name="ElasticaQueryBuilder">%core.lib_dir%/repository/ElasticaQueryBuilder.class.php</autoload>
-            <autoload name="SuggestQueryBuilder">%core.lib_dir%/repository/SuggestQueryBuilder.class.php</autoload>
-            
-            <!-- 
                 Rendering - Rendering GUI for documents and modules.
             -->
             <autoload name="IRenderer">%core.lib_dir%/renderer/IRenderer.iface.php</autoload>
@@ -101,26 +86,6 @@
             <autoload name="IWorkflowPluginResult">%core.lib_dir%/workflow/plugin/IWorkflowPluginResult.iface.php</autoload>
             <autoload name="WorkflowPluginResult">%core.lib_dir%/workflow/plugin/WorkflowPluginResult.class.php</autoload>
             <autoload name="WorkflowInteractivePluginResult">%core.lib_dir%/workflow/plugin/WorkflowInteractivePluginResult.class.php</autoload>
-
-            <!-- 
-                Config (Generation)
-            -->
-            <autoload name="ConfigurationScanner">%core.lib_dir%/config/ConfigurationScanner.class.php</autoload>
-            <autoload name="DefaultXmlConfigGenerator">%core.lib_dir%/config/DefaultXmlConfigGenerator.class.php</autoload>
-            <autoload name="RoutingXmlConfigGenerator">%core.lib_dir%/config/RoutingXmlConfigGenerator.class.php</autoload>
-            <autoload name="Dat0rAutoloadGenerator">%core.lib_dir%/config/Dat0rAutoloadGenerator.class.php</autoload>
-            <autoload name="IConfigGenerator">%core.lib_dir%/config/IConfigGenerator.iface.php</autoload>
-            <autoload name="AccessControlXmlConfigGenerator">%core.lib_dir%/config/AccessControlXmlConfigGenerator.class.php</autoload>
-            
-            <!-- 
-                Iterator 
-            -->
-            <autoload name="ProjectDirectoryRegexpIterator">%core.lib_dir%/iterator/ProjectDirectoryRegexpIterator.class.php</autoload>
-            
-            <!-- 
-                Http 
-            -->
-            <autoload name="ProjectCurl">%core.lib_dir%/http/ProjectCurl.class.php</autoload>
 
             <!-- 
                 third party face detection lib 

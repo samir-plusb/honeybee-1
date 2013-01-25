@@ -1,5 +1,11 @@
 <?php
 
+use \Honeybee\CodeGen\Config\ConfigurationScanner;
+use \Honeybee\CodeGen\Config\DefaultXmlConfigGenerator;
+use \Honeybee\CodeGen\Config\RoutingXmlConfigGenerator;
+use \Honeybee\CodeGen\Config\Dat0rAutoloadGenerator;
+use \Honeybee\CodeGen\Config\AccessControlXmlConfigGenerator;
+
 $rootDir = dirname(dirname(__FILE__));
 $default_context = 'web';
 require  $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';

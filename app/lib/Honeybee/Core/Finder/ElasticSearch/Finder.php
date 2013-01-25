@@ -1,6 +1,15 @@
 <?php
 
-class ElasticSearchFinder implements IFinder
+namespace Honeybee\Core\Finder\ElasticSearch;
+
+use \Honeybee\Core\Finder\IFinder;
+
+use \Elastica_Query;
+use \Elastica_Filter_Not;
+use \Elastica_ResultSet;
+use \ElasticSearchDatabase;
+
+class Finder implements IFinder
 {
     const ELASTIC_ID = '_id';
 
@@ -30,7 +39,7 @@ class ElasticSearchFinder implements IFinder
         }
 
         $query->setLimit($limit)->setFrom($offset);
-        $query->setFilter(new Elastica_Filter_Not(new Elastica_Filter_Term(
+        $query->setFilter(new Elastica_Filter_Not(new \Elastica_Filter_Term(
             array('meta.is_deleted' => TRUE)
         )));
         $source = $this->getQuerySource();
@@ -84,7 +93,7 @@ class ElasticSearchFinder implements IFinder
 
         if (! $docType || ! class_exists($docType, TRUE))
         {
-            throw new Exception(
+            throw new \Exception(
                 "Invalid or corrupt type information within document data."
             );
         }

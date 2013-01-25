@@ -1,8 +1,17 @@
 <?php
 
+namespace Honeybee\Core\Finder\ElasticSearch;
+
+use \Honeybee\Core\Finder\IQueryBuilder;
+use \Elastica_Query;
+use \Elastica_Query_Text;
+
 class SuggestQueryBuilder implements IQueryBuilder
 {
-    public function build(array $specification)
+    /**
+     * @todo consider sortDirection
+     */
+    public function build(array $specification, $sortDirection = 'asc')
     {
         $term = $specification['term'];
         $field = $specification['field'];

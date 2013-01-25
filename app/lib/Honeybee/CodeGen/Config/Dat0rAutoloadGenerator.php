@@ -1,5 +1,9 @@
 <?php
 
+namespace Honeybee\CodeGen\Config;
+
+use \AgaviConfig;
+
 class Dat0rAutoloadGenerator implements IConfigGenerator
 {
     public function generate($name, array $affectedPaths)

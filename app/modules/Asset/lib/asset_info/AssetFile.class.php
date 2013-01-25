@@ -1,5 +1,7 @@
 <?php
 
+use \Honeybee\Core\Util\Http\CurlFactory;
+
 /**
  * The AssetFile is a concrete implementation of the IAssetFile interface.
  * It exposes a coarse grained api for moving and deleting files.
@@ -217,7 +219,7 @@ class AssetFile implements IAssetFile
             throw new Exception("Can not open file for writing: ".$tempPath);
         }
 
-        $curlHandle = ProjectCurl::create();
+        $curlHandle = CurlFactory::create();
         curl_setopt($curlHandle, CURLOPT_URL, $assetUri);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 0);
         curl_setopt($curlHandle, CURLOPT_FILE, $filePtr);

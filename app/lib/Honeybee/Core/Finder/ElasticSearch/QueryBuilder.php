@@ -1,9 +1,24 @@
 <?php
 
-class ElasticaQueryBulder implements IQueryBuilder
+namespace Honeybee\Core\Finder\ElasticSearch;
+
+use \Honeybee\Core\Finder\IQueryBuilder;
+use \IListConfig;
+use \IListState;
+
+use \Elastica_Query;
+use \Elastica_Query_MatchAll;
+use \Elastica_Query_Text;
+use \Elastica_Filter_Term;
+use \Elastica_Filter_And;
+
+class QueryBuilder implements IQueryBuilder
 {
-    public function build(IListConfig $config, IListState $state)
+    public function build(array $specification)
     {
+        $state = $specification['state'];
+        $config = $specification['config'];
+
         $innerQuery = $state->hasSearch() 
             ? $this->buildSearchQuery($state->getSearch())
             : new Elastica_Query_MatchAll();
@@ -70,9 +85,7 @@ class ElasticaQueryBulder implements IQueryBuilder
         }
         else
         {
-            throw new Exception(
-                "You must supply at least one filter to the buildFilter method."
-            );
+            throw new Exception("You must supply at least one filter to the buildFilter method.");
         }
 
         return $filter;
@@ -92,9 +105,7 @@ class ElasticaQueryBulder implements IQueryBuilder
 
         if (! $config->hasField($sortField))
         {
-            throw new Exception(
-                "The given sortfield '$sortField' does not exist within the currently loaded config."
-            );
+            throw new Exception("The given sortfield '$sortField' does not exist within the currently loaded config.");
         }
 
         $listField = $config->getField($sortField);

@@ -1,5 +1,7 @@
 <?php
 
+namespace Honeybee\Core\Repository;
+
 interface IRepository
 {
     public function getFinder();
