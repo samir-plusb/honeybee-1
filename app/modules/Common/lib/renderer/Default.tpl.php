@@ -1,1 +1,0 @@
-<td data-bind="text: <?php echo '$data.display_data.'.$field->getName(); ?>"></td>

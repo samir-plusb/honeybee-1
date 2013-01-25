@@ -19,16 +19,16 @@ class DefaultListValueRenderer implements IListValueRenderer
     public function renderTemplate(ListField $field, $options = array())
     {
         $user = AgaviContext::getInstance()->getUser();
-        ob_start();
-        include $this->getTemplatePath();
-        $rendered = ob_get_contents();
-        ob_end_clean();
+        $loader = new Twig_Loader_Filesystem($this->getTemplatePath());
+        $twig = new Twig_Environment($loader);
+
+        $rendered = $twig->render('Default.tpl.twig', array('field' => $field));
         return $rendered;
     }
 
     protected function getTemplatePath()
     {
-        return dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Default.tpl.php';
+        return dirname(__FILE__) . DIRECTORY_SEPARATOR;
     }
 }
 
