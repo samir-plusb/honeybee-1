@@ -6,25 +6,40 @@
     parent="%core.system_config_dir%/config_handlers.xml">
     <ae:configuration>
         <handlers>
+
             <handler pattern="%core.module_dir%/*/*.validate.xml" class="AgaviValidatorConfigHandler">
                 <validation>%core.agavi_dir%/config/xsd/validators.xsd</validation>
                 <transformation>%core.agavi_dir%/config/xsl/validators.xsl</transformation>
             </handler>
+
             <handler pattern="%core.module_dir%/*/*.cache.xml" class="AgaviCachingConfigHandler">
                 <validation>%core.agavi_dir%/config/xsd/caching.xsd</validation>
                 <transformation>%core.agavi_dir%/config/xsl/caching.xsl</transformation>
             </handler>
-            <handler pattern="%core.config_dir%/access_control.xml" class="ProjectAclConfigHandler">
+
+            <handler pattern="%core.config_dir%/access_control.xml" class="Honeybee\Agavi\ConfigHandler\AclConfigHandler">
                 <validation>%core.config_dir%/xsd/access_control.xsd</validation>
             </handler>
-            <handler pattern="workflows.xml" class="WorkflowConfigHandler">
+
+            <handler pattern="workflows.xml" class="Honeybee\Agavi\ConfigHandler\WorkflowConfigHandler">
                 <validation>%core.config_dir%/xsd/workflows.xsd</validation>
                 <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/midas/workflow/1.0</ae:parameter>
             </handler>
+
+            <handler pattern="dataimports.xml" class="Honeybee\Agavi\ConfigHandler\DataImportConfigHandler">
+                <validation>%core.app_dir%/modules/Import/config/xsd/dataimport.xsd</validation>
+                <ae:parameters>
+                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0</ae:parameter>
+                </ae:parameters>
+            </handler>
+            
+            <handler pattern="datasources.xml" class="Honeybee\Agavi\ConfigHandler\DataSourceConfigHandler">
+                <validation>%core.app_dir%/modules/Import/config/xsd/datasource.xsd</validation>
+                <ae:parameters>
+                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/midas/config/datasource/definition/1.0</ae:parameter>
+                </ae:parameters>
+            </handler>
+
         </handlers>
     </ae:configuration>
-
-    <xi:include href="%core.app_dir%/modules/Import/config/config_handlers.xml"
-         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
-    </xi:include>
 </ae:configurations>

@@ -1,14 +1,17 @@
 <?php
+
+namespace Honeybee\Agavi\Database\ElasticSearch;
+
+use Honeybee\Agavi\Database\IDatabaseSetup;
+
 /**
  * Provide elastic search database connection handle
  *
  * @author tay
- * @package Project
- * @subpackage Agavi/Database
  */
-class ElasticSearchDatabase extends AgaviDatabase
+class Database extends \AgaviDatabase
 {
-    const DEFAULT_SETUP = 'ElasticSearchDatabaseSetup';
+    const DEFAULT_SETUP = 'Honeybee\Agavi\Database\ElasticSearch\DatabaseSetup';
 
     const DEFAULT_PORT = 9200;
 
@@ -38,19 +41,15 @@ class ElasticSearchDatabase extends AgaviDatabase
             $indexName = $this->getParameter('index');
             if (! $indexName)
             {
-                throw new AgaviDatabaseException(
-                    "Missing required index param in current configuration."
-                );
+                throw new \AgaviDatabaseException("Missing required index param in current configuration.");
             }
 
             if (! $this->hasParameter('mapping_dir'))
             {
-                throw new AgaviDatabaseException(
-                    "Missing required mapping_dir param in current configuration."
-                );
+                throw new \AgaviDatabaseException("Missing required mapping_dir param in current configuration.");
             }
 
-            $this->connection = new Elastica_Client(
+            $this->connection = new \Elastica_Client(
                 array(
                     'host'      => $this->getParameter('host', self::DEFAULT_HOST),
                     'port'      => $this->getParameter('port', self::DEFAULT_PORT),
@@ -62,14 +61,14 @@ class ElasticSearchDatabase extends AgaviDatabase
         }
         catch (Exception $e)
         {
-            throw new AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
+            throw new \AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
         }
 
         try
         {
             $this->resource->getStatus();
         }
-        catch (Elastica_Exception_Response $e)
+        catch (\Elastica_Exception_Response $e)
         {
             if (FALSE !== strpos($e->getMessage(), 'IndexMissingException'))
             {
@@ -77,7 +76,7 @@ class ElasticSearchDatabase extends AgaviDatabase
             }
             else
             {
-                throw new AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
+                throw new \AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
             }
         }
     }
@@ -100,7 +99,7 @@ class ElasticSearchDatabase extends AgaviDatabase
         $setupImplementor = $this->getParameter('setup_class', self::DEFAULT_SETUP);
         if (! class_exists($setupImplementor))
         {
-            throw new AgaviDatabaseException(
+            throw new \AgaviDatabaseException(
                 "Setup class '$setupImplementor' can not be found."
             );
         }
@@ -108,7 +107,7 @@ class ElasticSearchDatabase extends AgaviDatabase
         $setup = new $setupImplementor();
         if (! ($setup instanceof IDatabaseSetup))
         {
-            throw new AgaviDatabaseException(
+            throw new \AgaviDatabaseException(
                 "Setup class does not implement IDatabaseSetup: $setupImplementor"
             );
         }

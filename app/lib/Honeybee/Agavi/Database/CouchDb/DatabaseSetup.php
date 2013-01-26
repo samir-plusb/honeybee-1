@@ -1,15 +1,16 @@
 <?php
 
+namespace Honeybee\Agavi\Database\CouchDb;
+
+use Honeybee\Agavi\Database\IDatabaseSetup;
+
 /**
- * The CouchDbDatabaseSetup is responseable for setting up a couchdb datbase for usage.
+ * The CouchDb\DatabaseSetup is responseable for setting up a couchdb datbase for usage.
  *
- * @version $Id$
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  * @author Tom Anheyer
- * @package Project
- * @subpackage Database/CouchDb
  */
-class CouchDbDatabaseSetup implements IDatabaseSetup
+class DatabaseSetup implements IDatabaseSetup
 {
     protected $database;
 
@@ -20,13 +21,13 @@ class CouchDbDatabaseSetup implements IDatabaseSetup
      * @param AgaviDatabase $database
      * @param boolean $tearDownFirst optional drop database first; defaults to FALSE
      */
-    public function execute(AgaviDatabase $database, $tearDownFirst = FALSE)
+    public function execute(\AgaviDatabase $database, $tearDownFirst = FALSE)
     {
         $this->database = $database;
 
-        if (! ($this->database instanceof CouchDbDatabase))
+        if (! ($this->database instanceof Database))
         {
-            throw new AgaviDatabaseException("Only CouchDbDatabase instances accepted.");
+            throw new \AgaviDatabaseException("Only Honeybee\Agavi\Database\CouchDb\Database instances accepted.");
         }
 
         if (TRUE === $tearDownFirst)
@@ -83,7 +84,7 @@ class CouchDbDatabaseSetup implements IDatabaseSetup
     }
 
     /**
-     * @return ExtendedCouchDbClient
+     * @return Honeybee\Agavi\Database\CouchDb\Client
      */
     protected final function getClient()
     {
@@ -162,25 +163,25 @@ class CouchDbDatabaseSetup implements IDatabaseSetup
             }
 
             $stat = $this->getClient()->createDesignDocument(NULL, $docid, $doc);
-            $loggerManager = AgaviContext::getInstance()->getLoggerManager();
+            $loggerManager = \AgaviContext::getInstance()->getLoggerManager();
             if (isset($stat['ok']))
             {
                 $loggerManager->getLogger()->log(
-                    new AgaviLoggerMessage(
+                    new \AgaviLoggerMessage(
                         sprintf(
                             '[%s] Successfully saved %s _design/%s',
                             get_class($this),
                             $this->getClient()->getDatabaseName(),
                             $docid
                         ),
-                        AgaviLogger::INFO
+                        \AgaviLogger::INFO
                     )
                 );
             }
             else
             {
                 $loggerManager->getLogger('error')->log(
-                    new AgaviLoggerMessage(
+                    new \AgaviLoggerMessage(
                         sprintf(
                             "[%s]%s::%s:%s:%s\n%s",
                             get_class($this),
@@ -189,7 +190,7 @@ class CouchDbDatabaseSetup implements IDatabaseSetup
                             __FILE__,
                             print_r($stat, TRUE)
                         ),
-                        AgaviLogger::ERROR
+                        \AgaviLogger::ERROR
                     )
                 );
             }

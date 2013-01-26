@@ -1,19 +1,16 @@
 <?php
 
+namespace Honeybee\Agavi\Database\CouchDb;
+
 /**
- * Exception class for ExtendedCouchDbClient exceptions
+ * Exception class for CouchDb\Client exceptions
  *
  * Postive exception codes are CURL error codes.
  *
- * @see ExtendedCouchDbClient
- *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          tay
- * @package Project
- * @subpackage Database/CouchDb
  */
-class CouchdbClientException extends Exception
+class ClientException extends \Exception
 {
     /**
      * response from couch db server is not parseable
@@ -24,5 +21,4 @@ class CouchdbClientException extends Exception
      * prepararing data for PUT requests failed
      */
     const PUT_DATA = -2;
-
 }

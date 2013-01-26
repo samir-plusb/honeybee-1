@@ -1,6 +1,10 @@
 <?php
 
-class ElasticSearchDatabaseSetup implements IDatabaseSetup
+namespace Honeybee\Agavi\Database\ElasticSearch;
+
+use Honeybee\Agavi\Database\IDatabaseSetup;
+
+class DatabaseSetup implements IDatabaseSetup
 {
     const DEFAULT_COUCH_HOST = 'localhost'; 
 
@@ -11,11 +15,11 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
     const DEFAULT_BULK_TIMEOUT = '10ms';
 
     /**
-     * @var ElasticSearchDatabase
+     * @var Honeybee\Agavi\Database\ElasticSearch\Database $database
      */
     protected $database;
 
-    public function execute(AgaviDatabase $database, $tearDownFirst = FALSE)
+    public function execute(\AgaviDatabase $database, $tearDownFirst = FALSE)
     {
         $this->database = $database;
 
@@ -87,7 +91,7 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
         $mappingDirectory = $this->database->getParameter('mapping_dir');
         if (! is_dir($mappingDirectory))
         {
-            throw new AgaviDatabaseException(
+            throw new \AgaviDatabaseException(
                 "Unable to find configured mapping directory: $mappingDirectory"
             );
         }
@@ -99,7 +103,7 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
             $index = $this->database->getResource();
             $elasticaType = $index->gettype(str_replace('.mapping.json', '', basename($mappingFile)));
 
-            $mapping = new Elastica_Type_Mapping();
+            $mapping = new \Elastica_Type_Mapping();
             $mapping->setType($elasticaType);
 
             foreach ($mappingDef as $prop => $value)
@@ -121,7 +125,7 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
         $mappingDirectory = $this->database->getParameter('mapping_dir');
         if (! is_dir($mappingDirectory))
         {
-            throw new AgaviDatabaseException(
+            throw new \AgaviDatabaseException(
                 "Unable to find configured mapping directory: $mappingDirectory"
             );
         }
@@ -129,7 +133,7 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
         $riverDb = $this->database->getParameter('river[couch_db]');
         if (! is_dir($mappingDirectory))
         {
-            throw new AgaviDatabaseException(
+            throw new \AgaviDatabaseException(
                 "Unable to find configured mapping directory: $mappingDirectory"
             );
         }
@@ -138,7 +142,7 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
         $riverFiles = glob($riverFileGlob);
         if (1 !== count($riverFiles))
         {
-            throw new AgaviDatabaseException("Only one river definition per module allowed.");
+            throw new \AgaviDatabaseException("Only one river definition per module allowed.");
         }
         $riverScriptFile = $riverFiles[0];
         $typeName = str_replace('.river.js', '', basename($riverScriptFile));
@@ -163,7 +167,7 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
 
         $this->database->getConnection()->request(
             sprintf("_river/%s/_meta", $typeName),
-            Elastica_Request::PUT,
+            \Elastica_Request::PUT,
             $riverSettings
         );
     }
@@ -173,7 +177,7 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
         $mappingDirectory = $this->database->getParameter('mapping_dir');
         if (! is_dir($mappingDirectory))
         {
-            throw new AgaviDatabaseException(
+            throw new \AgaviDatabaseException(
                 "Unable to find configured mapping directory: $mappingDirectory"
             );
         }
@@ -182,7 +186,7 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
         $riverFiles = glob($riverFileGlob);
         if (1 !== count($riverFiles))
         {
-            throw new AgaviDatabaseException("Only one river definition per module allowed.");
+            throw new \AgaviDatabaseException("Only one river definition per module allowed.");
         }
         
         $riverScriptFile = $riverFiles[0];
@@ -190,7 +194,7 @@ class ElasticSearchDatabaseSetup implements IDatabaseSetup
 
         $this->database->getConnection()->request(
             sprintf("_river/%s", $typeName), 
-            Elastica_Request::DELETE
+            \Elastica_Request::DELETE
         );
     }
 

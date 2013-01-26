@@ -1,8 +1,10 @@
 <?php
 
+use Honeybee\Agavi\Database\CouchDb\Client;
+
 /**
  * The CouchDocumentStore is a couchdb specific implementation of the IDocumentStore interface.
- * It uses the ExtendedCouchDbClient to store, retrieve and delete documents from it's given database (client).
+ * It uses the Client to store, retrieve and delete documents from it's given database (client).
  *
  * @version $Id: CouchDocumentStore.class.php 1469 2012-08-29 12:10:38Z tschmitt $
  * @copyright BerlinOnline Stadtportal GmbH & Co. KG
@@ -44,16 +46,16 @@ class CouchDocumentStore implements IDocumentStore
     /**
      * Holds the client that we use to connect to the couch database.
      *
-     * @var ExtendedCouchDbClient
+     * @var Client
      */
     protected $client;
 
     /**
      * Create a new CouchDocumentStore instance.
      *
-     * @param ExtendedCouchDbClient $client
+     * @param Client $client
      */
-    public function __construct(ExtendedCouchDbClient $client)
+    public function __construct(Client $client)
     {
         $this->client = $client;
     }

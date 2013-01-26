@@ -6,21 +6,6 @@
     parent="%core.system_config_dir%/autoload.xml">
     <ae:configuration>
         <autoloads>
-            <!-- config handlers -->
-            <autoload name="ProjectDataImportConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectDataImportConfigHandler.class.php</autoload>
-            <autoload name="ProjectDataSourceConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectDataSourceConfigHandler.class.php</autoload>
-            <autoload name="ProjectBaseConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectBaseConfigHandler.class.php</autoload>
-            <autoload name="ProjectAclConfigHandler">%core.lib_dir%/agavi/config_handler/ProjectAclConfigHandler.class.php</autoload>
-            <autoload name="WorkflowConfigHandler">%core.lib_dir%/agavi/config_handler/WorkflowConfigHandler.class.php</autoload>
-            <!-- database stuff -->
-            <autoload name="ElasticSearchDatabase">%core.lib_dir%/agavi/database/ElasticSearchDatabase.class.php</autoload>
-            <autoload name="CouchDbDatabase">%core.lib_dir%/agavi/database/CouchDbDatabase.class.php</autoload>
-            <autoload name="IDatabaseSetup">%core.lib_dir%/agavi/database/IDatabaseSetup.iface.php</autoload>
-            <autoload name="ExtendedCouchDbClient">%core.lib_dir%/agavi/database/ExtendedCouchDbClient.class.php</autoload>
-            <autoload name="CouchdbClientException">%core.lib_dir%/agavi/database/CouchdbClientException.class.php</autoload>
-            <autoload name="CouchDbDatabaseSetup">%core.lib_dir%/agavi/database/CouchDbDatabaseSetup.class.php</autoload>
-            <autoload name="ElasticSearchDatabaseSetup">%core.lib_dir%/agavi/database/ElasticSearchDatabaseSetup.class.php</autoload>
-            
             <!-- 
                 Rendering - Rendering GUI for documents and modules.
             -->

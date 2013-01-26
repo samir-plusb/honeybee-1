@@ -1,6 +1,8 @@
 <?php
 
-class ProjectDataImportConfigHandler extends ProjectBaseConfigHandler
+namespace Honeybee\Agavi\ConfigHandler;
+
+class DataImportConfigHandler extends BaseConfigHandler
 {
     /**
      * Holds the name of the data_import document schema namespace.
@@ -21,7 +23,7 @@ class ProjectDataImportConfigHandler extends ProjectBaseConfigHandler
      * @throws     <b>AgaviParseException</b> If a requested configuration file is
      *                                        improperly formatted.
      */
-    public function execute(AgaviXmlConfigDomDocument $document)
+    public function execute(\AgaviXmlConfigDomDocument $document)
     {
         $document->setDefaultNamespace(self::XML_NAMESPACE, 'dataimport');
         $config = $document->documentURI;
@@ -50,7 +52,7 @@ class ProjectDataImportConfigHandler extends ProjectBaseConfigHandler
      *
      * @return array
      */
-    protected function parseImportDefinitions(AgaviXmlConfigDomElement $dataImportsElement)
+    protected function parseImportDefinitions(\AgaviXmlConfigDomElement $dataImportsElement)
     {
         $parsedImportDefinitions = array();
         
@@ -63,7 +65,7 @@ class ProjectDataImportConfigHandler extends ProjectBaseConfigHandler
         return $parsedImportDefinitions;
     }
 
-    protected function parseImportDefinition(AgaviXmlConfigDomElement $dataImportElement)
+    protected function parseImportDefinition(\AgaviXmlConfigDomElement $dataImportElement)
     {
         $importDefinition = array();
         $importDefinition['name'] = $dataImportElement->getAttribute('name');

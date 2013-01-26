@@ -4,7 +4,7 @@ namespace Honeybee\Core\Storage\CouchDb;
 
 use Honeybee\Core\Storage\IStorage;
 use Honeybee\Core\Dat0r\Document;
-use CouchDbDatabase;
+use Honeybee\Agavi\Database\CouchDb\Database;
 use CouchdbClientException;
 
 class Storage implements IStorage
@@ -40,7 +40,7 @@ class Storage implements IStorage
 
     private $database;
 
-    public function __construct(CouchDbDatabase $database)
+    public function __construct(Database $database)
     {
         $this->database = $database;
     }

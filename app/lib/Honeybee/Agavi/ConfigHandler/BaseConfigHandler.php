@@ -1,8 +1,10 @@
 <?php
 
-abstract class ProjectBaseConfigHandler extends AgaviXmlConfigHandler
+namespace Honeybee\Agavi\ConfigHandler;
+
+abstract class BaseConfigHandler extends \AgaviXmlConfigHandler
 {
-    protected function parseSettings(AgaviXmlConfigDomElement $settingsParent)
+    protected function parseSettings(\AgaviXmlConfigDomElement $settingsParent)
     {
         $settings = array();
 
@@ -25,7 +27,7 @@ abstract class ProjectBaseConfigHandler extends AgaviXmlConfigHandler
             }
             else
             {
-                $settings[$index] = AgaviToolkit::expandDirectives(
+                $settings[$index] = \AgaviToolkit::expandDirectives(
                     trim($settingElement->getValue())
                 );
             }

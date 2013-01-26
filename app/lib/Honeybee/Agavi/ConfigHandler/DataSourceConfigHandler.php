@@ -1,6 +1,8 @@
 <?php
 
-class ProjectDataSourceConfigHandler extends ProjectBaseConfigHandler
+namespace Honeybee\Agavi\ConfigHandler;
+
+class DataSourceConfigHandler extends BaseConfigHandler
 {
     /**
      * Holds the name of the data_source document schema namespace.
@@ -21,7 +23,7 @@ class ProjectDataSourceConfigHandler extends ProjectBaseConfigHandler
      * @throws     <b>AgaviParseException</b> If a requested configuration file is
      *                                        improperly formatted.
      */
-    public function execute(AgaviXmlConfigDomDocument $document)
+    public function execute(\AgaviXmlConfigDomDocument $document)
     {
         $document->setDefaultNamespace(self::XML_NAMESPACE, 'datasource');
         $config = $document->documentURI;
@@ -51,7 +53,7 @@ class ProjectDataSourceConfigHandler extends ProjectBaseConfigHandler
      *
      * @return array
      */
-    protected function parseSourceDefinitions(AgaviXmlConfigDomElement $dataSourcesElement)
+    protected function parseSourceDefinitions(\AgaviXmlConfigDomElement $dataSourcesElement)
     {
         $parsedSourceDefinitions = array();
         
@@ -64,7 +66,7 @@ class ProjectDataSourceConfigHandler extends ProjectBaseConfigHandler
         return $parsedSourceDefinitions;
     }
 
-    protected function parseSourceDefinition(AgaviXmlConfigDomElement $dataSourceElement)
+    protected function parseSourceDefinition(\AgaviXmlConfigDomElement $dataSourceElement)
     {
         $sourceDefinition = array();
         $sourceDefinition['name'] = $dataSourceElement->getAttribute('name');

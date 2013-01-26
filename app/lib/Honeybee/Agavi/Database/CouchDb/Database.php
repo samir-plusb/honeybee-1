@@ -1,20 +1,22 @@
 <?php
 
+namespace Honeybee\Agavi\Database\CouchDb;
+
+use IDatabaseSetup;
+
 /**
  * Provides couchdb database connection handle.
  *
  * @author tay
- * @package Project
- * @subpackage Agavi/Database
  */
-class CouchDbDatabase extends AgaviDatabase
+class Database extends \AgaviDatabase
 {
-    const DEFAULT_SETUP = 'CouchDbDatabaseSetup';
+    const DEFAULT_SETUP = 'Honeybee\\Agavi\\Database\\CouchDb\\DatabaseSetup';
 
     /**
      * our database access handle instance
      *
-     * @var ExtendedCouchDbClient
+     * @var Client
      */
     protected $connection;
 
@@ -25,26 +27,26 @@ class CouchDbDatabase extends AgaviDatabase
      */
     protected function connect()
     {
-        $couchUri = $this->getParameter('url', ExtendedCouchDbClient::DEFAULT_URL);
+        $couchUri = $this->getParameter('url', Client::DEFAULT_URL);
 
         if (! $this->hasParameter('database'))
         {
-            throw new AgaviDatabaseException(
+            throw new \AgaviDatabaseException(
                 "Database name required but missing in given configuration."
             );
         }
 
         try
         {
-            $this->connection = new ExtendedCouchDbClient(
+            $this->connection = new Client(
                 $couchUri,
                 $this->getParameter('database', NULL),
                 $this->getParameter('options', NULL)
             );
         }
-        catch (CouchdbClientException $e)
+        catch (ClientException $e)
         {
-            throw new AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
+            throw new \AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
         }
 
         $this->initConnection($this->getParameter('database'));
@@ -77,9 +79,9 @@ class CouchDbDatabase extends AgaviDatabase
                 $this->connection->createDatabase($databaseName);
                 $this->resource = $databaseName;
             }
-            catch (CouchdbClientException $e)
+            catch (ClientException $e)
             {
-                throw new AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
+                throw new \AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
             }
 
             if (TRUE === $this->getParameter('setup', FALSE))
@@ -103,12 +105,12 @@ class CouchDbDatabase extends AgaviDatabase
                 $status = $this->connection->login($this->getParameter('user'), $this->getParameter('password'));
                 if (TRUE !== $status)
                 {
-                    throw new AgaviDatabaseException($status);
+                    throw new \AgaviDatabaseException($status);
                 }
             }
-            catch (CouchdbClientException $e)
+            catch (ClientException $e)
             {
-                throw new AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
+                throw new \AgaviDatabaseException($e->getMessage(), $e->getCode(), $e);
             }
         }
     }
@@ -116,17 +118,17 @@ class CouchDbDatabase extends AgaviDatabase
     /**
      * prepare database for use using the class defined in the parameter 'setup'
      *
-     * The setup class must implement the interface ICouchDbDatabaseSetup
+     * The setup class must implement the interface IDatabaseSetup
      *
-     * @see ICouchDbDatabaseSetup
+     * @see IDatabaseSetup
      * @throws AgaviDatabaseException
      */
     protected function setupDatabase()
     {
-        $setupImplementor = $this->getParameter('setup_class', 'CouchDbDatabaseSetup');
+        $setupImplementor = $this->getParameter('setup_class', self::DEFAULT_SETUP);
         if (! class_exists($setupImplementor))
         {
-            throw new AgaviDatabaseException("Setup class does not exists: $setupImplementor");
+            throw new \AgaviDatabaseException("Setup class does not exists: $setupImplementor");
         }
 
         $setup = new $setupImplementor();
@@ -136,7 +138,7 @@ class CouchDbDatabase extends AgaviDatabase
         }
         else
         {
-            throw new AgaviDatabaseException(
+            throw new \AgaviDatabaseException(
                 "Setup class does not implement IDatabaseSetup: $setupImplementor"
             );
         }

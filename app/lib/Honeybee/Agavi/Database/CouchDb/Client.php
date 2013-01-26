@@ -1,19 +1,18 @@
 <?php
 
+namespace Honeybee\Agavi\Database\CouchDb;
+
 /**
- * The ExtendedCouchDbClient wraps a selection of couchdb api calls to php using CURL
+ * The CouchDb\Client wraps a selection of couchdb api calls to php using CURL
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @author          Tom Anheyer <tanheyer@gmail.com>
- * @package Project
- * @subpackage Database/CouchDb
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyMethods)
  */
-class ExtendedCouchDbClient
+class Client
 {
     /**
      * default couch db host ist localhost
@@ -254,7 +253,7 @@ class ExtendedCouchDbClient
      *
      * @param string $user user account name
      * @param string $password user password
-     * @throws CouchdbClientException on protocol errors
+     * @throws ClientException on protocol errors
      * @return mixed TRUE on login success or error message
      */
     public function login($user, $password)
@@ -324,7 +323,7 @@ class ExtendedCouchDbClient
      *
      * @return      array
      *
-     * @throws      CouchdbClientException
+     * @throws      ClientException
      */
     public function getDoc($database, $documentId, $revision = NULL)
     {
@@ -349,7 +348,7 @@ class ExtendedCouchDbClient
      *
      * @return      array with view result
      *
-     * @throws      CouchdbClientException
+     * @throws      ClientException
      */
     public function getAllDocs($database, array $parameters = NULL, array $keys = NULL)
     {
@@ -367,7 +366,7 @@ class ExtendedCouchDbClient
      *
      * @return      array
      *
-     * @throws      CouchdbClientException
+     * @throws      ClientException
      */
     public function storeDoc($database, array $document)
     {
@@ -389,7 +388,7 @@ class ExtendedCouchDbClient
      *
      * @param       string $database
      * @param       array $document
-     * @throws      CouchdbClientException
+     * @throws      ClientException
      * @return      array
      */
     public function storeDocAutoId($database, array $document)
@@ -413,7 +412,7 @@ class ExtendedCouchDbClient
      * Delete a document from the given couchdb database by id and revision.
      *
      * @see http://wiki.apache.org/couchdb/HTTP_Document_API#DELETE
-     * @throws CouchdbClientException on protocol errors
+     * @throws ClientException on protocol errors
      *
      * @param       string $database
      * @param       string $docId
@@ -493,7 +492,7 @@ class ExtendedCouchDbClient
      * @param       array $parameters addition view query parameters as described in the couchdb api documentation
      * @param       array $keys optional list of document ids to lookup
      *
-     * @throws      CouchdbClientException
+     * @throws      ClientException
      *
      * @return      array result from view
      */
@@ -529,7 +528,7 @@ class ExtendedCouchDbClient
      *
      * @param string $database
      * @param integer $docid
-     * @throws CouchdbClientException on protocol errors or result is not json
+     * @throws ClientException on protocol errors or result is not json
      * @return mixed array or boolean FALSE
      */
     public function getDesignDocument($database, $docid)
@@ -557,7 +556,7 @@ class ExtendedCouchDbClient
      *
      * @see http://wiki.apache.org/couchdb/HTTP_database_API#Database_Information
      *
-     * @throws CouchdbClientException on protocol errors or result is not json
+     * @throws ClientException on protocol errors or result is not json
      * @param string $database
      *
      * @return mixed array or boolean FALSE
@@ -591,7 +590,7 @@ class ExtendedCouchDbClient
      *
      * @param string $database name of new database
      * @return boolean TRUE on database created, FALSE on database already exists
-     * @throws CouchdbClientException on protocol errors, access denied, etc.
+     * @throws ClientException on protocol errors, access denied, etc.
      */
     public function createDatabase($database = NULL)
     {
@@ -621,7 +620,7 @@ class ExtendedCouchDbClient
      *
      * @return boolean TRUE on database found and deleted, FALSE on database missing
      *
-     * @throws CouchdbClientException on protocol errors, access denied, etc.
+     * @throws ClientException on protocol errors, access denied, etc.
      */
     public function deleteDatabase($database)
     {
@@ -697,7 +696,7 @@ class ExtendedCouchDbClient
      *
      * @return      void
      *
-     * @throws      CouchdbClientException
+     * @throws      ClientException
      */
     protected function processCurlErrors($curlHandle, $validReturnCode = self::STATUS_OK)
     {
@@ -715,7 +714,7 @@ class ExtendedCouchDbClient
                     (empty($data['reason']) ? '' : ' :: '.$data['reason']);
             }
             $errorNum = curl_errno($curlHandle);
-            throw new CouchdbClientException(
+            throw new ClientException(
                 $this->lastUri." ($respCode): $error", $errorNum);
         }
     }
@@ -725,7 +724,7 @@ class ExtendedCouchDbClient
      *
      * @param resource $curlHandle
      * @param integer $validReturnCode
-     * @throws CouchdbClientException
+     * @throws ClientException
      * @return array
      */
     protected function getJsonData($curlHandle, $validReturnCode = self::STATUS_OK)
@@ -735,9 +734,9 @@ class ExtendedCouchDbClient
         $data = json_decode($this->lastResponse, TRUE);
         if (NULL === $data)
         {
-            throw new CouchdbClientException(
+            throw new ClientException(
                 $this->lastUri.': Response body can not be parsed to JSON: '. $this->lastResponse,
-                CouchdbClientException::UNPARSEABLE_RESPONSE);
+                ClientException::UNPARSEABLE_RESPONSE);
         }
         return $data;
     }
@@ -764,7 +763,7 @@ class ExtendedCouchDbClient
      * @param string $uri complete api URL
      * @param array $document
      * @param int $validReturnCode
-     * @throws CouchdbClientException
+     * @throws ClientException
      * @return array
      */
     protected function putData($uri, array $document, $validReturnCode)
@@ -775,7 +774,7 @@ class ExtendedCouchDbClient
         $docFd = fopen('data://text/plain,'.urlencode($body), 'r');
         if (! $docFd)
         {
-            throw new CouchdbClientException('Can not setup PUT data.', CouchdbClientException::PUT_DATA);
+            throw new ClientException('Can not setup PUT data.', ClientException::PUT_DATA);
         }
         curl_setopt($curlHandle, CURLOPT_INFILE, $docFd);
         curl_setopt($curlHandle, CURLOPT_INFILESIZE, strlen($body));
@@ -855,7 +854,7 @@ class ExtendedCouchDbClient
      *
      * @return array result from view
      *
-     * @throws CouchdbClientException
+     * @throws ClientException
      */
     private function _getView($url, array $parameters = array(), array $keys = NULL)
     {
@@ -879,5 +878,3 @@ class ExtendedCouchDbClient
 
     // ---------------------------------- </WORKING METHODS> -------------------------------------
 }
-
-?>

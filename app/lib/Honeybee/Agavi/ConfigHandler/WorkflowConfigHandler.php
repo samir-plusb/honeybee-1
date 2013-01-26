@@ -1,17 +1,13 @@
 <?php
 
+namespace Honeybee\Agavi\ConfigHandler;
+
 /**
  * WorkflowConfigHandler parses configuration files that follow the midas workflow markup.
  *
- * @package    Workflow
- * @subpackage Agavi/ConfigHandler
- *
  * @author     Thorsten Schmitt-Rink
- * @copyright  The Agavi Project
- *
- * @version    $Id$
  */
-class WorkflowConfigHandler extends AgaviXmlConfigHandler
+class WorkflowConfigHandler extends \AgaviXmlConfigHandler
 {
     const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/workflow/1.0';
 
@@ -29,7 +25,7 @@ class WorkflowConfigHandler extends AgaviXmlConfigHandler
      * @throws     <b>AgaviParseException</b> If a requested configuration file is
      *                                        improperly formatted.
      */
-    public function execute(AgaviXmlConfigDomDocument $document)
+    public function execute(\AgaviXmlConfigDomDocument $document)
     {
         $document->setDefaultNamespace(self::XML_NAMESPACE, 'workflow');
         $config = $document->documentURI;
@@ -72,7 +68,7 @@ class WorkflowConfigHandler extends AgaviXmlConfigHandler
      * @param AgaviXmlConfigDomElement $gatesNode
      * @return array
      */
-    protected function parseGates(AgaviXmlConfigDomElement $gatesNode)
+    protected function parseGates(\AgaviXmlConfigDomElement $gatesNode)
     {
         $parsedGates = array();
         foreach (array('step', 'workflow', 'end') as $gateType)
@@ -105,5 +101,3 @@ class WorkflowConfigHandler extends AgaviXmlConfigHandler
     }
 
 }
-
-?>

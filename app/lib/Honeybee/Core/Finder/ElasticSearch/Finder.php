@@ -3,11 +3,7 @@
 namespace Honeybee\Core\Finder\ElasticSearch;
 
 use Honeybee\Core\Finder\IFinder;
-
-use Elastica_Query;
-use Elastica_Filter_Not;
-use Elastica_ResultSet;
-use ElasticSearchDatabase;
+use Honeybee\Agavi\Database\ElasticSearch\Database;
 
 class Finder implements IFinder
 {
@@ -25,7 +21,7 @@ class Finder implements IFinder
 
     private $type;
 
-    public function __construct(ElasticSearchDatabase $database, $type = NULL)
+    public function __construct(Database $database, $type = NULL)
     {
         $this->database = $database;
         $this->type = $type;
@@ -33,13 +29,13 @@ class Finder implements IFinder
 
     public function find($query, $limit = 0, $offset = 0)
     {
-        if (! $query instanceof Elastica_Query)
+        if (! $query instanceof \Elastica_Query)
         {
-            $query = Elastica_Query::create($query);
+            $query = \Elastica_Query::create($query);
         }
 
         $query->setLimit($limit)->setFrom($offset);
-        $query->setFilter(new Elastica_Filter_Not(new \Elastica_Filter_Term(
+        $query->setFilter(new \Elastica_Filter_Not(new \Elastica_Filter_Term(
             array('meta.is_deleted' => TRUE)
         )));
         $source = $this->getQuerySource();
@@ -50,7 +46,7 @@ class Finder implements IFinder
 
     public function fetchAll($limit = 0, $offset = 0)
     {
-        $query = Elastica_Query::create(NULL);
+        $query = \Elastica_Query::create(NULL);
         $query->setLimit($limit)->setFrom($offset);
 
         $source = $this->getQuerySource();
@@ -71,7 +67,7 @@ class Finder implements IFinder
         return ($this->type) ? $index->getType($this->type) : $index;
     }
 
-    protected function convertResultSetToArray(Elastica_ResultSet $resultSet)
+    protected function convertResultSetToArray(\Elastica_ResultSet $resultSet)
     {
         $data = array();
 

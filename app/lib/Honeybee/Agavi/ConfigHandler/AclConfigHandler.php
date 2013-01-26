@@ -1,14 +1,13 @@
 <?php
 
+namespace Honeybee\Agavi\ConfigHandler;
+
 /**
  * ProjectAclConfigHandler parses configuration files that follow the midas access_control markup.
  *
- * @version    $Id$
  * @author     Thorsten Schmitt-Rink
- * @package    Project
- * @subpackage Agavi/ConfigHandler
  */
-class ProjectAclConfigHandler extends AgaviXmlConfigHandler
+class AclConfigHandler extends \AgaviXmlConfigHandler
 {
     /**
      * Holds the name of the access_control document schema namespace.
@@ -43,7 +42,7 @@ class ProjectAclConfigHandler extends AgaviXmlConfigHandler
      * @throws     <b>AgaviParseException</b> If a requested configuration file is
      *                                        improperly formatted.
      */
-    public function execute(AgaviXmlConfigDomDocument $document)
+    public function execute(\AgaviXmlConfigDomDocument $document)
     {
         $this->resourceActions = array();
         $this->externalRoles = array();
@@ -86,7 +85,7 @@ class ProjectAclConfigHandler extends AgaviXmlConfigHandler
      *
      * @return array
      */
-    protected function parseRecources(AgaviXmlConfigDomElement $resourcesElement)
+    protected function parseRecources(\AgaviXmlConfigDomElement $resourcesElement)
     {
         $parsedResources = array();
         foreach ($resourcesElement->get('resource') as $resourceElement)
@@ -132,7 +131,7 @@ class ProjectAclConfigHandler extends AgaviXmlConfigHandler
      *
      * @return array
      */
-    protected function parseRoles(AgaviXmlConfigDomElement $rolesElement)
+    protected function parseRoles(\AgaviXmlConfigDomElement $rolesElement)
     {
         $parsedRoles = array();
         foreach ($rolesElement->get('role') as $roleElement)
@@ -197,7 +196,7 @@ class ProjectAclConfigHandler extends AgaviXmlConfigHandler
      *
      * @return array
      */
-    protected function parseRoleMembers(AgaviXmlConfigDomElement $membersElement)
+    protected function parseRoleMembers(\AgaviXmlConfigDomElement $membersElement)
     {
         $members = array();
         foreach ($membersElement->get('member') as $memberNode)
@@ -217,7 +216,7 @@ class ProjectAclConfigHandler extends AgaviXmlConfigHandler
      *
      * @return array
      */
-    protected function parseRoleAcl(AgaviXmlConfigDomElement $aclElement)
+    protected function parseRoleAcl(\AgaviXmlConfigDomElement $aclElement)
     {
         $acl = array(
             'grant' => array(),
@@ -240,5 +239,3 @@ class ProjectAclConfigHandler extends AgaviXmlConfigHandler
         return $acl;
     }
 }
-
-?>
