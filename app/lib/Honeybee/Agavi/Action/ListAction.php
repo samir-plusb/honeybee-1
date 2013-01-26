@@ -11,7 +11,7 @@ use ListConfig;
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  */
-class BaseListAction extends BaseAction
+class ListAction extends BaseAction
 {
     /**
      * Execute the write logic for this action, hence run the import.

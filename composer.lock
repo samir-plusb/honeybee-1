@@ -1,5 +1,5 @@
 {
-    "hash": "383ce7dcc66a571942c222d24e2edee0",
+    "hash": "b0d1fd1bac085bb0ae8bb6e6117bb5cd",
     "packages": [
         {
             "name": "PhpDebugToolbar/php-debug-toolbar",
@@ -24,6 +24,16 @@
                 "type": "svn",
                 "url": "http://svn.agavi.org/",
                 "reference": "tags/1.0.7/"
+            },
+            "type": "library"
+        },
+        {
+            "name": "allmarkedup/jquery-url-parser",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/allmarkedup/jQuery-URL-Parser.git",
+                "reference": "69a50b31c1f6185731c1fca6fe9f31d58d6947f1"
             },
             "type": "library"
         },
@@ -1715,12 +1725,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "8b5ed9ee791a4f87ec05688a086320f04a0d4182"
+                "reference": "3466f7bd13e6a86ce3acab93455ec3a44ab07a6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/archive/8b5ed9ee791a4f87ec05688a086320f04a0d4182.zip",
-                "reference": "8b5ed9ee791a4f87ec05688a086320f04a0d4182",
+                "url": "https://github.com/zendframework/zf2/archive/3466f7bd13e6a86ce3acab93455ec3a44ab07a6a.zip",
+                "reference": "3466f7bd13e6a86ce3acab93455ec3a44ab07a6a",
                 "shasum": ""
             },
             "require": {
@@ -1789,7 +1799,7 @@
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
                 "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
             },
-            "time": "2013-01-24 20:38:25",
+            "time": "2013-01-25 16:43:57",
             "bin": [
                 "bin/classmap_generator.php"
             ],

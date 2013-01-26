@@ -5,7 +5,7 @@ namespace Honeybee\Agavi\Action;
 use WorkflowInteractivePlugin;
 use WorkflowPluginResult;
 
-class BaseEditAction extends BaseAction
+class EditAction extends BaseAction
 {
     public function executeRead(\AgaviRequestDataHolder $requestData)
     {

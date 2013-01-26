@@ -2,7 +2,7 @@
 
 namespace Honeybee\Agavi\Action;
 
-class BaseSuggestAction extends BaseAction
+class SuggestAction extends BaseAction
 {
     public function executeRead(\AgaviRequestDataHolder $requestData)
     {
