@@ -38,7 +38,7 @@
         "knockoutjs/knockoutjs": "2.2.0",
         "underscorejs/underscorejs": "1.4.2",
         "kineticjs/kineticjs": "4.0.*",
-        "twitter/bootstrap": "2.1.1",
+        "twitter/bootstrap": "2.2.2",
         "fortawesome/font-awesome": "2.0.0",
         "berlinonline/Dat0r": "dev-master",
         "phpdocumentor/phpdocumentor": "dev-master"
@@ -137,11 +137,11 @@
             "type": "package",
             "package": {
                 "name": "twitter/bootstrap",
-                "version": "2.1.1",
+                "version": "2.2.2",
                 "source": {
                     "url": "https://github.com/twitter/bootstrap.git",
                     "type": "git",
-                    "reference": "c52368d3c5984b28e6a71e5e1240afdd788fc2e6"
+                    "reference": "9376a7c221a64c2bf508d02ea2ccd85748d10fcc"
                 }
             }
         },
