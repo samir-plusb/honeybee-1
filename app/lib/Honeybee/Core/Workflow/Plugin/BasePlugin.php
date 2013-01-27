@@ -1,16 +1,16 @@
 <?php
 
-use Honeybee\Core\Workflow\Process;
+namespace Honeybee\Core\Workflow\Plugin;
+
+use Honeybee\Core\Workflow;
 
 /**
- * The WorkflowBasePlugin serves as the base implementation of the IWorkflowPlugin interface,
+ * The BasePlugin serves as the base implementation of the IWorkflowPlugin interface,
  * that all other IWorkflowPlugin implementations should inherit from.
  *
  * @author tay
- * @package Workflow
- * @subpackage Plugin
  */
-abstract class WorkflowBasePlugin implements IWorkflowPlugin
+abstract class BasePlugin implements Workflow\IPlugin
 {
     /**
      * Holds an assoc array with an arbitary number of key-value pairs.
@@ -35,9 +35,9 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
      * of a concrete IWorkflowPlugin implementation.
      * In a common scenario this will be the only method you will need to implement when writing new plugins.
      * Usually you would then ask the ticket for it's workflow item, then do something important on the data
-     * and finally return an IWorkflowPluginResult that reflects the result of the plugin's processing.
+     * and finally return an IResult that reflects the result of the plugin's processing.
      *
-     * @return IWorkflowPluginResult
+     * @return Result
      */
     protected abstract function doProcess();
 
@@ -47,9 +47,9 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
      * @param WorkflowTicket $ticket
      * @param string $stepName
      *
-     * @return WorkflowBasePlugin Return $this for fluent api support.
+     * @return BasePlugin Return $this for fluent api support.
      */
-    public function initialize(Process $process, $stepName)
+    public function initialize(Workflow\Process $process, $stepName)
     {
         $this->workflowProcess = $process;
         $this->stepName = $stepName;
@@ -63,7 +63,7 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
     /**
      * Execute the plugin's buisiness logic against it's ticket.
      *
-     * @return WorkflowPluginResult
+     * @return Plugin\
      */
     public function process()
     {
@@ -72,8 +72,8 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
             return $this->doProcess();
         }
 
-        $result = new WorkflowPluginResult();
-        $result->setState(WorkflowPluginResult::STATE_NOT_ALLOWED);
+        $result = new Plugin\Result();
+        $result->setState(Plugin\Result::STATE_NOT_ALLOWED);
 
         $operation = sprintf(
             '%s::%s',
@@ -190,7 +190,7 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
      */
     protected function getContext()
     {
-        return AgaviContext::getInstance();
+        return \AgaviContext::getInstance();
     }
 
     protected function getWorkflow()
@@ -218,7 +218,7 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
         $logger = $this->getContext()->getLoggerManager()->getLogger('error');
         $errMsg = sprintf("[%s] %s", get_class($this), $msg);
         $logger->log(
-            new AgaviLoggerMessage($errMsg, AgaviLogger::ERROR)
+            new \AgaviLoggerMessage($errMsg, \AgaviLogger::ERROR)
         );
     }
 
@@ -232,7 +232,7 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
         $logger = $this->getContext()->getLoggerManager()->getLogger('app');
         $infoMsg = sprintf("[%s] %s", get_class($this), $msg);
         $logger->log(
-            new AgaviLoggerMessage($infoMsg, AgaviLogger::INFO)
+            new \AgaviLoggerMessage($infoMsg, \AgaviLogger::INFO)
         );
     }
 }

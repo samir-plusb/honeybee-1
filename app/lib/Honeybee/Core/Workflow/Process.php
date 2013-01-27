@@ -3,9 +3,6 @@
 namespace Honeybee\Core\Workflow;
 
 use Honeybee\Agavi\User\ZendAclSecurityUser;
-use WorkflowInteractivePlugin;
-use WorkflowPluginResult;
-use IWorkflowPlugin;
 
 /**
  * Representation of one workflow.
@@ -189,7 +186,7 @@ class Process
     /**
      * execute the plugin for current workflow step
      *
-     * @return WorkflowPluginResult
+     * @return Plugin\Result
      */
     protected function executePluginFor($stepName, $firstExec = TRUE)
     {
@@ -206,8 +203,8 @@ class Process
             else
             {
                 $this->getTicket()->setBlocked(FALSE);
-                $result = new WorkflowPluginResult();
-                $result->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
+                $result = new Plugin\Result();
+                $result->setState(Plugin\Result::STATE_EXPECT_INPUT);
                 $result->setMessage("waiting for input ...");
             }
         }
@@ -239,13 +236,13 @@ class Process
      *
      * @throws Exception
      */
-    protected function processPluginResultFor($stepName, WorkflowPluginResult $result)
+    protected function processPluginResultFor($stepName, Plugin\Result $result)
     {
         $code = NULL;
 
         switch ($result->getState())
         {
-            case WorkflowPluginResult::STATE_OK:
+            case Plugin\Result::STATE_OK:
             {
                 if (($gate = $result->getGate()))
                 {
@@ -258,13 +255,13 @@ class Process
                 break;
             }
 
-            case WorkflowPluginResult::STATE_EXPECT_INPUT:
+            case Plugin\Result::STATE_EXPECT_INPUT:
             {
                 $code = self::STATE_WAITING;
                 break;
             }
 
-            case WorkflowPluginResult::STATE_WAIT_UNTIL:
+            case Plugin\Result::STATE_WAIT_UNTIL:
             {
                 $this->getTicket()->setBlocked(FALSE);
                 $code = self::STATE_WAITING;
@@ -470,7 +467,7 @@ class Process
      *
      * @param string $step id of workflow step
      *
-     * @return IWorkflowPlugin
+     * @return IPlugin
      *
      * @throws Exception
      */
@@ -499,27 +496,27 @@ class Process
      * find and initialize a plugin by its name
      *
      * @param string $pluginName name of plugin
-     * @return IWorkflowPlugin
+     * @return IPlugin
      * @throws Exception on class not found errors or initialize problems
      *
      * @todo If there was a step object then this method would go there.
      */
-    public function getPluginByName($pluginName)
+    public function getPluginByName($className)
     {
-        $className = 'Workflow' . ucfirst($pluginName) . 'Plugin';
         if (! class_exists($className, TRUE))
         {
             throw new Exception(
-                "Can not find class '$className' for plugin: " . $pluginName,
+                "Can not find class '$className' for plugin: " . $className,
                 Exception::PLUGIN_MISSING);
         }
 
         $plugin = new $className();
-        if (! $plugin instanceof IWorkflowPlugin)
+        if (! $plugin instanceof IPlugin)
         {
             throw new Exception(
-                'Class for plugin is not instance of IWorkflowPlugin: ' . $className,
-                Exception::PLUGIN_MISSING);
+                'Class for plugin is not instance of IPlugin: ' . $className,
+                Exception::PLUGIN_MISSING
+            );
         }
 
         return $plugin;

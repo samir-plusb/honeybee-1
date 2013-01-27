@@ -2,7 +2,7 @@
 
 namespace Honeybee\Agavi\View;
 
-use WorkflowInteractivePluginResult;
+use Honeybee\Core\Workflow\Plugin\InteractionResult;
 
 class WorkflowErrorView extends BaseView
 {
@@ -20,7 +20,7 @@ class WorkflowErrorView extends BaseView
     {
         $result = $this->getAttribute('result');
 
-        if ($result instanceof WorkflowInteractivePluginResult)
+        if ($result instanceof InteractionResult)
         {
             $this->getResponse()->setContent($this->getAttribute('content'));
         }

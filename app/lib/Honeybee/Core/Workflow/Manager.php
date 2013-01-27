@@ -3,7 +3,6 @@
 namespace Honeybee\Core\Workflow;
 
 use Honeybee\Core\Dat0r\Module;
-use WorkflowInteractivePlugin;
 
 /**
  * The Workflow\Manager
@@ -66,7 +65,7 @@ class Manager
         $execution = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
         $plugin = $execution->getPluginFor($ticket->getWorkflowStep());
 
-        return $plugin instanceof WorkflowInteractivePlugin;
+        return $plugin instanceof Plugin\InteractivePlugin;
     }
 
     /**

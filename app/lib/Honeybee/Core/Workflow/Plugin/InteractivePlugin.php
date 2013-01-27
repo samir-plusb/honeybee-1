@@ -1,14 +1,14 @@
 <?php
 
+namespace Honeybee\Core\Workflow\Plugin;
+
 /**
  * The WorkflowInteractivePlugin serves as the base for interactive plugins.
  * Plugins are considered as interactive when they depend on user input for processing.
  *
  * @author tay
- * @package Workflow
- * @subpackage Plugin
  */
-class WorkflowInteractivePlugin extends WorkflowBasePlugin
+class InteractivePlugin extends BasePlugin
 {
     /**
      * Namespace for returning plugin result values from plugin sub execution container
@@ -68,7 +68,7 @@ class WorkflowInteractivePlugin extends WorkflowBasePlugin
     protected function doProcess()
     {
         $pluginContainer = $this->prepareExecutionContainer();
-        $result = new WorkflowInteractivePluginResult();
+        $result = new InteractionResult();
         $pluginContainer->setAttribute('plugin_result', $result, self::NS_PLUGIN_ATTRIBUTES);
         $result->setResponse($pluginContainer->execute());
         $result->freeze();
@@ -130,6 +130,6 @@ class WorkflowInteractivePlugin extends WorkflowBasePlugin
      */
     protected function getUser()
     {
-        return AgaviContext::getInstance()->getUser();
+        return \AgaviContext::getInstance()->getUser();
     }
 }

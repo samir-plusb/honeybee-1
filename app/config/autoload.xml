@@ -25,20 +25,6 @@
             <autoload name="KoReadOnlyFieldInputRenderer">%core.lib_dir%/renderer/field/Input/KoReadOnlyFieldInputRenderer.class.php</autoload>
 
             <!-- 
-                Workflow 
-            -->
-            <autoload name="IWorkflowPlugin">%core.lib_dir%/workflow/plugin/IWorkflowPlugin.iface.php</autoload>
-            <autoload name="WorkflowBasePlugin">%core.lib_dir%/workflow/plugin/WorkflowBasePlugin.class.php</autoload>
-            <autoload name="WorkflowDeletePlugin">%core.lib_dir%/workflow/plugin/WorkflowDeletePlugin.class.php</autoload>
-            <autoload name="WorkflowPublishPlugin">%core.lib_dir%/workflow/plugin/WorkflowPublishPlugin.class.php</autoload>
-            <autoload name="WorkflowArchivePlugin">%core.lib_dir%/workflow/plugin/WorkflowArchivePlugin.class.php</autoload>
-            <autoload name="WorkflowInteractivePlugin">%core.lib_dir%/workflow/plugin/WorkflowInteractivePlugin.class.php</autoload>
-            <autoload name="WorkflowNullPlugin">%core.lib_dir%/workflow/plugin/WorkflowNullPlugin.class.php</autoload>
-            <autoload name="IWorkflowPluginResult">%core.lib_dir%/workflow/plugin/IWorkflowPluginResult.iface.php</autoload>
-            <autoload name="WorkflowPluginResult">%core.lib_dir%/workflow/plugin/WorkflowPluginResult.class.php</autoload>
-            <autoload name="WorkflowInteractivePluginResult">%core.lib_dir%/workflow/plugin/WorkflowInteractivePluginResult.class.php</autoload>
-
-            <!-- 
                 third party face detection lib 
             -->
             <autoload name="Face_Detector">%core.lib_dir%/php-facedetection/FaceDetector.php</autoload>

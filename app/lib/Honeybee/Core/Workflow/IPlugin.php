@@ -1,5 +1,7 @@
 <?php
 
+namespace Honeybee\Core\Workflow;
+
 use Honeybee\Core\Workflow\Process;
 
 /**
@@ -12,7 +14,7 @@ use Honeybee\Core\Workflow\Process;
  * @package Workflow
  * @subpackage Plugin
  */
-interface IWorkflowPlugin
+interface IPlugin
 {
     /**
      * initialize plugin
@@ -49,7 +51,7 @@ interface IWorkflowPlugin
     /**
      * process the ticket
      *
-     * @return WorkflowPluginResult
+     * @return Result
      */
     public function process();
 

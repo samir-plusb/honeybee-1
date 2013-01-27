@@ -2,8 +2,7 @@
 
 namespace Honeybee\Agavi\Action;
 
-use WorkflowPluginResult;
-use WorkflowInteractivePluginResult;
+use Honeybee\Core\Workflow\Plugin;
 
 class ExecuteWorkflowAction extends BaseAction
 {
@@ -21,7 +20,7 @@ class ExecuteWorkflowAction extends BaseAction
             $result = $manager->executeWorkflowFor($resource, $gate, $this->getContainer());
             $this->setAttribute('result', $result);
 
-            if ($result instanceof WorkflowInteractivePluginResult)
+            if ($result instanceof Plugin\InteractionResult)
             {
                 $this->setAttribute('content', $result->getResponse()->getContent());
             }
@@ -31,8 +30,8 @@ class ExecuteWorkflowAction extends BaseAction
             }
 
             $errorStates = array(
-                WorkflowPluginResult::STATE_ERROR,
-                WorkflowPluginResult::STATE_NOT_ALLOWED
+                Plugin\Result::STATE_ERROR,
+                Plugin\Result::STATE_NOT_ALLOWED
             );
 
             if (in_array($result->getState(), $errorStates))

@@ -1,41 +1,41 @@
 <?php
 
+namespace Honeybee\Core\Workflow\Plugin;
+
+use Honeybee\Core\Workflow\Plugin;
+
 /**
  * This plugin takes care of marking documents as deleted.
- *
- * @package Workflow
- * @subpackage Plugin
  */
-class WorkflowPublishPlugin extends WorkflowBasePlugin
+class DeletePlugin extends BasePlugin
 {
     protected function doProcess()
     {
         try
         {
             $resource = $this->getResource();
+            $service = $resource->getModule()->getService();
+            $service->delete($resource);
 
-            $result = new WorkflowPluginResult();
-            $result->setState(WorkflowPluginResult::STATE_OK);
-            $result->setGate('promote');
-
-            // @todo implement/hook in export strategy here.
-
+            $result = new Plugin\Result();
+            $result->setState(Plugin\Result::STATE_EXPECT_INPUT);
+            $result->setGate('suspend');
+            
             $this->logInfo(sprintf(
-                "Successfully published document: %s to where ever ^^",
+                "Successfully moved document: %s to the trash",
                 $resource->getIdentifier()
             ));
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
-            $result = new WorkflowPluginResult();
-            $result->setState(WorkflowPluginResult::STATE_OK);
+            $result = new Plugin\Result();
+            $result->setState(Plugin\Result::STATE_ERROR);
             $result->setMessage($e->getMessage());
-            $result->setGate('demote');
 
             $this->logError(sprintf(
                 "An error occured while deleting: %s from the database\n
                 The couchdb client threw the following exception: \n%s",
-                $this->getResource()->getIdentifier(),
+                $workflowItem->getIdentifier(),
                 $e->getMessage()
             ));
         }

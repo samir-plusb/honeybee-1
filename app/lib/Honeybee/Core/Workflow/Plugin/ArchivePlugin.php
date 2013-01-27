@@ -1,12 +1,13 @@
 <?php
 
+namespace Honeybee\Core\Workflow\Plugin;
+
+use Honeybee\Core\Workflow\Plugin;
+
 /**
  * This plugin takes care of marking documents as deleted.
- *
- * @package Workflow
- * @subpackage Plugin
  */
-class WorkflowArchivePlugin extends WorkflowBasePlugin
+class ArchivePlugin extends BasePlugin
 {
     protected function doProcess()
     {
@@ -15,8 +16,8 @@ class WorkflowArchivePlugin extends WorkflowBasePlugin
             $resource = $this->getResource();
             $service = $resource->getModule()->getService();
 
-            $result = new WorkflowPluginResult();
-            $result->setState(WorkflowPluginResult::STATE_OK);
+            $result = new Plugin\Result();
+            $result->setState(Plugin\Result::STATE_OK);
             $result->setGate('promote');
             
             $this->logInfo(sprintf(
@@ -24,10 +25,10 @@ class WorkflowArchivePlugin extends WorkflowBasePlugin
                 $resource->getIdentifier()
             ));
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
-            $result = new WorkflowPluginResult();
-            $result->setState(WorkflowPluginResult::OK);
+            $result = new Plugin\Result();
+            $result->setState(Plugin\Result::OK);
             $result->setMessage($e->getMessage());
             $result->setGate('demote');
 

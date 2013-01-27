@@ -2,8 +2,7 @@
 
 namespace Honeybee\Agavi\Action;
 
-use WorkflowInteractivePlugin;
-use WorkflowPluginResult;
+use Honeybee\Core\Workflow\Plugin;
 
 class EditAction extends BaseAction
 {
@@ -48,13 +47,13 @@ class EditAction extends BaseAction
     protected function setContainerPluginState()
     {
         $pluginResult = $this->getContainer()->getAttribute(
-            WorkflowInteractivePlugin::ATTR_RESULT,
-            WorkflowInteractivePlugin::NS_PLUGIN_ATTRIBUTES
+            Plugin\InteractivePlugin::ATTR_RESULT,
+            Plugin\InteractivePlugin::NS_PLUGIN_ATTRIBUTES
         );
         
         if ($pluginResult)
         {
-            $pluginResult->setState(WorkflowPluginResult::STATE_EXPECT_INPUT);
+            $pluginResult->setState(Plugin\Result::STATE_EXPECT_INPUT);
             $pluginResult->setMessage(
                 "Processed: " . get_class($this) 
                 .' - ' . ucfirst($this->getContext()->getRequest()->getMethod())

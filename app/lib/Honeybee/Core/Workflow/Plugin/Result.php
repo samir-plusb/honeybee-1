@@ -1,18 +1,18 @@
 <?php
 
+namespace Honeybee\Core\Workflow\Plugin;
+
 use Honeybee\Core\Workflow\Exception;
+use BaseDataObject;
 
 /**
- * The WorkflowPluginResult is a base implementation of the IWorkflowPluginResult interface
- * and should be extended by other concrete IWorkflowPluginResult implementations.
+ * The Result is a base implementation of the IResult interface
+ * and should be extended by other concrete IResult implementations.
  * It fully implements the interface and should be used by all plugins that are not interactive.
  *
- * @package Workflow
  * @author tay
- * @package Workflow
- * @subpackage Plugin
  */
-class WorkflowPluginResult extends BaseDataObject implements IWorkflowPluginResult
+class Result extends BaseDataObject implements IResult
 {
     /**
      * Holds a int flag that reflects the result of a plugins process method invocation.
@@ -46,11 +46,11 @@ class WorkflowPluginResult extends BaseDataObject implements IWorkflowPluginResu
     private $frozen = FALSE;
 
     /**
-     * Create a new WorkflowPluginResult instance from the given data.
+     * Create a new Result instance from the given data.
      *
      * @param array $data
      *
-     * @return WorkflowPluginResult
+     * @return Result
      */
     public static function fromArray(array $data = array())
     {
@@ -177,5 +177,3 @@ class WorkflowPluginResult extends BaseDataObject implements IWorkflowPluginResu
         );
     }
 }
-
-?>

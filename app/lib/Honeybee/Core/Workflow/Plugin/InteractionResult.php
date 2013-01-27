@@ -1,14 +1,14 @@
 <?php
 
+namespace Honeybee\Core\Workflow\Plugin;
+
 /**
- * The WorkflowInteractivePluginResult class extends the WorkflowPluginResult to add in a response member,
- * that holds the reponse returned by actions that are run spefically in the context of interactive plugin execution.
+ * The InteractionResult class extends the Workflow\Plugin\Result to add in a response member,
+ * that holds the reponse returned by actions that are run spefically in the context of InteractivePlugin execution.
  *
  * @author tay
- * @package Workflow
- * @subpackage Plugin
  */
-class WorkflowInteractivePluginResult extends WorkflowPluginResult
+class InteractionResult extends Result
 {
     /**
      * Holds the response that was returned by the action run by the plugin.
@@ -32,7 +32,7 @@ class WorkflowInteractivePluginResult extends WorkflowPluginResult
      *
      * @param AgaviResponse $response
      */
-    public function setResponse(AgaviResponse $response)
+    public function setResponse(\AgaviResponse $response)
     {
         $this->verifyMutability();
         $this->response = $response;
@@ -51,5 +51,3 @@ class WorkflowInteractivePluginResult extends WorkflowPluginResult
         );
     }
 }
-
-?>

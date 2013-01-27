@@ -12,7 +12,7 @@
             <steps>
                 <step name="edit">
                     <description>Manually edit a %%MODULE_PREFIX%% document.</description>
-                    <plugin type="Interactive">
+                    <plugin type="Honeybee\Core\Workflow\Plugin\InteractivePlugin">
                         <ae:parameters>
                             <ae:parameter name="module">%%MODULE_NAME%%</ae:parameter>
                             <ae:parameter name="action">Edit</ae:parameter>
@@ -26,7 +26,7 @@
 
                 <step name="publish">
                     <description>Tries to publish a given %%MODULE_PREFIX%% document.</description>
-                    <plugin type="Publish">
+                    <plugin type="Honeybee\Core\Workflow\Plugin\PublishPlugin">
                         <gates>
                             <gate_step label="publishing ok" name="promote">published</gate_step>
                             <gate_step label="publishing error" name="demote">edit</gate_step>
@@ -36,7 +36,7 @@
 
                 <step name="published">
                     <description>Interactive editing/corrections within a published state.</description>
-                    <plugin type="Interactive">
+                    <plugin type="Honeybee\Core\Workflow\Plugin\InteractivePlugin">
                         <ae:parameters>
                             <ae:parameter name="module">%%MODULE_NAME%%</ae:parameter>
                             <ae:parameter name="action">Edit</ae:parameter>
@@ -51,7 +51,7 @@
 
                 <step name="archive">
                     <description>Marks a given %%MODULE_PREFIX%% as archived and depublishes it.</description>
-                    <plugin type="Archive">
+                    <plugin type="Honeybee\Core\Workflow\Plugin\ArchivePlugin">
                         <gates>
                             <gate_step label="archiving ok" name="promote">archived</gate_step>
                             <gate_step label="archiving error" name="demote">published</gate_step>
@@ -61,7 +61,7 @@
 
                 <step name="archived">
                     <description>Represents the archived state.</description>
-                    <plugin type="Null">
+                    <plugin type="Honeybee\Core\Workflow\Plugin\NullPlugin">
                         <gates>
                             <gate_step label="reset to edit" name="demote">edit</gate_step>
                             <gate_step label="delete %%MODULE_PREFIX%%" name="delete">delete</gate_step>
@@ -75,7 +75,7 @@
                         During a configurable time period the item(place) can then be recovered,
                         before being removed by the system's maintenance.
                     </description>
-                    <plugin type="Delete">
+                    <plugin type="Honeybee\Core\Workflow\Plugin\DeletePlugin">
                         <gates>
                             <gate_end name="suspend" />
                         </gates>

@@ -1,18 +1,18 @@
 <?php
 
+namespace Honeybee\Core\Workflow\Plugin;
+
 use Honeybee\Core\Workflow\Exception;
 
 /**
- * The IWorkflowPluginResult provides access to the result of an IWorkflowPlugin::process method's invocation.
+ * The IResult provides access to the result of an IWorkflowPlugin::process method's invocation.
  * It exposes data concerning the state, gate and feedback message of the plugin execution.
- * A IWorkflowPluginResult can be frozen by a call to it's freeze method.
+ * A IResult can be frozen by a call to it's freeze method.
  * Once frozen a plugin result may not be modified anymore and attempts to do so shall lead to Exceptions.
  *
  * @author tay
- * @package Workflow
- * @subpackage Plugin
  */
-interface IWorkflowPluginResult extends IDataObject
+interface IResult
 {
     /**
      * Plugin has an internal error.
@@ -93,5 +93,3 @@ interface IWorkflowPluginResult extends IDataObject
      */
     public function setMessage($message);
 }
-
-?>
