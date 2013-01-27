@@ -4,7 +4,7 @@ namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Workflow\Plugin;
 
-class ExecuteWorkflowAction extends BaseAction
+class WorkflowAction extends BaseAction
 {
     public function execute(\AgaviRequestDataHolder $parameters)
     {

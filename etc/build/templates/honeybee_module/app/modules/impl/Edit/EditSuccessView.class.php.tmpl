@@ -1,21 +1,8 @@
 <?php
 
-class %%MODULE_NAME%%_Edit_EditSuccessView extends %%MODULE_NAME%%BaseView
+use Honeybee\Agavi\View\EditSuccessView;
+
+class %%MODULE_NAME%%_Edit_EditSuccessView extends EditSuccessView
 {
-    public function executeJson(AgaviRequestDataHolder $requestData)
-    {
-        $document = $requestData->getParameter('document');
-        
-        $data = array(
-            'state' => 'ok',
-            'messages' => array('Das Dokument wurde erfolgreich gespeichert.'),
-            'errors' => $this->getAttribute('errors', array()),
-            'data' => array(
-                'identifier' => $document->getIdentifier(),
-                'revision' => $document->getRevision()
-            )
-        );
-        
-        $this->getResponse()->setContent(json_encode($data));
-    }
+
 }

@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Agavi\View\SuggestSuccessView;
+
 /**
  * The %%MODULE_NAME%%_Suggest_SuggestSuccessView class handles the presentation logic for our
  * %%MODULE_NAME%%/Suggest actions's success data.
@@ -9,24 +11,7 @@
  * @package         %%MODULE_NAME%%
  * @subpackage      Mvc
  */
-class %%MODULE_NAME%%_Suggest_SuggestSuccessView extends %%MODULE_NAME%%BaseView
+class %%MODULE_NAME%%_Suggest_SuggestSuccessView extends SuggestSuccessView
 {
-    /**
-     * Handle presentation logic for json.
-     *
-     * @param       AgaviRequestDataHolder $parameters
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @codingStandardsIgnoreStart
-     */
-    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-    {
-        $data = array(
-            'state' => 'ok',
-            'messages' => array(),
-            'data' => $this->getAttribute('data')
-        );
-        
-        $this->getResponse()->setContent(json_encode($data));
-    }
+
 }
