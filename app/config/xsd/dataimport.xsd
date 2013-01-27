@@ -7,7 +7,7 @@
     <xs:import namespace="http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0"
                schemaLocation="parts/dataimport_definition.xsd" />
 
-           <xs:redefine schemaLocation="../../../../../vendor/agavi/agavi/src/config/xsd/_envelope.xsd" 
+           <xs:redefine schemaLocation="../../../vendor/agavi/agavi/src/config/xsd/_envelope.xsd" 
                  xmlns:import="http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0">
         <xs:complexType name="configuration">
             <xs:complexContent>
