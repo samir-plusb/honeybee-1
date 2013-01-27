@@ -1,13 +1,15 @@
 <?php
 
+namespace Honeybee\Core\Workflow;
+
 use Honeybee\Core\Dat0r\Module;
+use WorkflowInteractivePlugin;
 
 /**
- * The WorkflowManager
+ * The Workflow\Manager
  * * aims as factory for workflow handlers and tickets
  * * acts as interface to the UI
  *
- * @package Workflow
  * @author tay
  *
  * Basic workflow constraints are as follow:
@@ -15,7 +17,7 @@ use Honeybee\Core\Dat0r\Module;
  * When a ticket without an item is encountered the supervisor raises an exception to propagate the inconsistence
  * and prevent the domain from corrupting our data's integrity.
  */
-class WorkflowManager
+class Manager
 {
     private $module;
 
@@ -29,17 +31,17 @@ class WorkflowManager
         return $this->module;
     }
 
-    public function initWorkflowFor(IWorkflowResource $resource)
+    public function initWorkflowFor(IResource $resource)
     {
-        $workflowName = AgaviConfig::get(
+        $workflowName = \AgaviConfig::get(
             sprintf('%s.workflow', $this->getModule()->getOption('prefix'))
         );
-        $workflow = $this->fetchCleanWorkflow($workflowName, $resource);
+        $execution = $this->fetchCleanWorkflow($workflowName, $resource);
 
         $resource->setWorkflowTicket(array(
-            'workflowName' => $workflow->getName(),
+            'workflowName' => $execution->getName(),
             'owner' => 'nobody',
-            'workflowStep' => $workflow->getFirstStep(),
+            'workflowStep' => $execution->getFirstStep(),
             'stepCounts' => NULL,
             'lastResult' => array(
                 'state' => NULL,
@@ -49,20 +51,20 @@ class WorkflowManager
         ));
     }
 
-    public function getPossibleGates(IWorkflowResource $resource)
+    public function getPossibleGates(IResource $resource)
     {
         $ticket = $resource->getWorkflowTicket();
-        $workflow = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
-        $plugin = $workflow->getPluginFor($ticket->getWorkflowStep());
+        $execution = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
+        $plugin = $execution->getPluginFor($ticket->getWorkflowStep());
 
-        return $workflow->getGatesForStep($ticket->getWorkflowStep());
+        return $execution->getGatesForStep($ticket->getWorkflowStep());
     }
 
-    public function isInInteractiveState(IWorkflowResource $resource)
+    public function isInInteractiveState(IResource $resource)
     {
         $ticket = $resource->getWorkflowTicket();
-        $workflow = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
-        $plugin = $workflow->getPluginFor($ticket->getWorkflowStep());
+        $execution = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
+        $plugin = $execution->getPluginFor($ticket->getWorkflowStep());
 
         return $plugin instanceof WorkflowInteractivePlugin;
     }
@@ -70,20 +72,22 @@ class WorkflowManager
     /**
      * Run the workflow for given resource.
      *
-     * @param IWorkflowResource $resource
+     * @param IResource $resource
      * @param AgaviExecutionContainer $container execution container in interactive mode
+     * @todo If we'll stick with this workflow solution, we need to somehow factor out the container.
+     *       This AgaviExecutionContainer dependency is kinda broken.
      *
      * @return AgaviExecutionContainer or NULL
      *
-     * @throws WorkflowException
+     * @throws Exception
      */
-    public function executeWorkflowFor(IWorkflowResource $resource, $startGate = NULL, AgaviExecutionContainer $container = NULL)
+    public function executeWorkflowFor(IResource $resource, $startGate = NULL, \AgaviExecutionContainer $container = NULL)
     {
-        $code = Workflow::STATE_NEXT_WORKFLOW;
+        $code = Process::STATE_NEXT_WORKFLOW;
         $pluginResult = NULL;
         $ticket = $resource->getWorkflowTicket();
 
-        while (Workflow::STATE_NEXT_WORKFLOW === $code)
+        while (Process::STATE_NEXT_WORKFLOW === $code)
         {
             $workflow = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
             $resultData = $workflow->execute($resource, $startGate, $container);
@@ -91,13 +95,13 @@ class WorkflowManager
             $pluginResult = $resultData['result'];
         }
 
-        if (Workflow::STATE_ERROR === $code)
+        if (Process::STATE_ERROR === $code)
         {
             $message = $pluginResult->getMessage()
                 ? $pluginResult->getMessage()
-                : 'Workflow halted with error'; // Default err-message in case whoever forgot to provide one.
+                : 'Process halted with error'; // Default err-message in case whoever forgot to provide one.
 
-            throw new WorkflowException($message, WorkflowException::UNEXPECTED_EXIT_CODE);
+            throw new Exception($message, Exception::UNEXPECTED_EXIT_CODE);
         }
 
         $resource->getWorkflowTicket()->setLastResult(array(
@@ -112,27 +116,27 @@ class WorkflowManager
     }
 
     /**
-     * get a new Workflow instance for a named workflow
+     * get a new Process instance for a named workflow
      *
      * Workflows are defined by XML files under directory {@see WORKFLOW_CONFIG_DIR}
      *
-     * @throws WorkflowExceptionon unreadable workflow configuration, etc.
+     * @throws Exceptionon unreadable workflow configuration, etc.
      * @param string $name name of workflow
-     * @return Workflow
+     * @return Process
      */
-    protected function fetchCleanWorkflow($name, IWorkflowResource $resource)
+    protected function fetchCleanWorkflow($name, IResource $resource)
     {
         $name = strtolower($name);
 
         if (! preg_match('/^_?[a-z][_\-\.a-z-0-9]+$/', $name))
         {
-            throw new WorkflowException(
+            throw new Exception(
                'Workflow name contains invalid characters: '.$name,
-                WorkflowException::INVALID_WORKFLOW_NAME
+                Exception::INVALID_WORKFLOW_NAME
             );
         }
 
-        $request = AgaviContext::getInstance()->getRequest();
+        $request = \AgaviContext::getInstance()->getRequest();
         $namespace = __CLASS__.'.WorkFlow';
         $workflow = $request->getAttribute($name, $namespace, NULL);
 
@@ -140,23 +144,24 @@ class WorkflowManager
         {
             try
             {
-                $config = include AgaviConfigCache::checkConfig(
+                $config = include \AgaviConfigCache::checkConfig(
                     $resource->getWorkflowConfigPath()
                 );
             }
-            catch (AgaviUnreadableException $e)
+            catch (\AgaviUnreadableException $e)
             {
-                throw new WorkflowException($e->getMessage(), WorkflowException::WORKFLOW_NOT_FOUND, $e);
+                throw new Exception($e->getMessage(), Exception::WORKFLOW_NOT_FOUND, $e);
             }
 
             if (! array_key_exists('workflow', $config))
             {
-                throw new WorkflowException(
+                throw new Exception(
                     'Workflow definition structure is invalid.',
-                    WorkflowException::INVALID_WORKFLOW);
+                    Exception::INVALID_WORKFLOW
+                );
             }
 
-            $workflow = new Workflow($config['workflow']);
+            $workflow = new Process($config['workflow']);
             $request->setAttribute($name, $workflow, $namespace);
         }
 

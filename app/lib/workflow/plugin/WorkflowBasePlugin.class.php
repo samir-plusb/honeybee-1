@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Core\Workflow\Process;
+
 /**
  * The WorkflowBasePlugin serves as the base implementation of the IWorkflowPlugin interface,
  * that all other IWorkflowPlugin implementations should inherit from.
@@ -24,7 +26,7 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
      */
     protected $gates;
 
-    protected $workflow;
+    protected $workflowProcess;
 
     protected $stepName;
 
@@ -47,13 +49,13 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
      *
      * @return WorkflowBasePlugin Return $this for fluent api support.
      */
-    public function initialize(Workflow $workflow, $stepName)
+    public function initialize(Process $process, $stepName)
     {
-        $this->workflow = $workflow;
+        $this->workflowProcess = $process;
         $this->stepName = $stepName;
 
-        $this->parameters = $this->workflow->getParametersForStep($this->stepName);
-        $this->gates = $this->workflow->getGatesForStep($this->stepName);
+        $this->parameters = $this->workflowProcess->getParametersForStep($this->stepName);
+        $this->gates = $this->workflowProcess->getGatesForStep($this->stepName);
 
         return $this;
     }
@@ -193,7 +195,7 @@ abstract class WorkflowBasePlugin implements IWorkflowPlugin
 
     protected function getWorkflow()
     {
-        return $this->workflow;
+        return $this->workflowProcess;
     }
 
     protected function getTicket()

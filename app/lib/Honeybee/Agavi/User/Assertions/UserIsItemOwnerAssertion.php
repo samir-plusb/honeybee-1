@@ -3,6 +3,7 @@
 namespace Honeybee\Agavi\User\Assertions;
 
 use Honeybee\Agavi\User\ZendAclSecurityUser; 
+use Honeybee\Core\Workflow\IResource; 
 
 /**
  * The UserIsItemOwnerAssertion is responseable for asserting that a the current user owns
@@ -28,7 +29,7 @@ class UserIsItemOwnerAssertion implements \Zend_Acl_Assert_Interface
      */
     public function assert(\Zend_Acl $acl, \Zend_Acl_Role_Interface $role = NULL, \Zend_Acl_Resource_Interface $resource = NULL, $privilege = NULL) // @codingStandardsIgnoreEnd
     {
-        if (!($resource instanceof \IWorkflowResource))
+        if (!($resource instanceof IResource))
         {
             // in case the check is performed without a specific workflow-item instance:
             // let's assume that the user can edit a generic workflow-item.

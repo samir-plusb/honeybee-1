@@ -4,7 +4,7 @@ namespace Honeybee\Core\Dat0r;
 
 use Dat0r\Core\Runtime\Module\RootModule;
 use Dat0r\Core\Runtime\Field\TextField;
-use WorkflowManager;
+use Honeybee\Core\Workflow;
 
 /**
  * @todo We might want to merge the module settings.xml options,
@@ -50,7 +50,7 @@ abstract class Module extends RootModule
     {
         if (NULL === $this->workflowManager)
         {
-            $this->workflowManager = new WorkflowManager($this);
+            $this->workflowManager = new Workflow\Manager($this);
         }
 
         return $this->workflowManager;

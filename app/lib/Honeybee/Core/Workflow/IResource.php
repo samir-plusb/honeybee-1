@@ -1,6 +1,8 @@
 <?php
 
-interface IWorkflowResource
+namespace Honeybee\Core\Workflow;
+
+interface IResource
 {
     public function getWorkflowTicket();
 

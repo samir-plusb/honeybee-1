@@ -17,7 +17,14 @@
 
         <logger_manager class="AgaviLoggerManager" />
 
-        <request class="AgaviWebRequest" />
+        <request class="AgaviWebRequest">
+            <!-- <ae:parameter name="method_names">
+                <ae:parameter name="POST">create</ae:parameter>
+                <ae:parameter name="GET">read</ae:parameter>
+                <ae:parameter name="PUT">write</ae:parameter>
+                <ae:parameter name="DELETE">remove</ae:parameter>
+            </ae:parameter> -->
+        </request>
 
         <response class="AgaviWebResponse">
             <ae:parameters>

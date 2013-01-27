@@ -1,10 +1,12 @@
 <?php
 
+use Honeybee\Core\Workflow\Exception;
+
 /**
  * The IWorkflowPluginResult provides access to the result of an IWorkflowPlugin::process method's invocation.
  * It exposes data concerning the state, gate and feedback message of the plugin execution.
  * A IWorkflowPluginResult can be frozen by a call to it's freeze method.
- * Once frozen a plugin result may not be modified anymore and attempts to do so shall lead to WorkflowExceptions.
+ * Once frozen a plugin result may not be modified anymore and attempts to do so shall lead to Exceptions.
  *
  * @author tay
  * @package Workflow
@@ -55,7 +57,7 @@ interface IWorkflowPluginResult extends IDataObject
      *
      * @param string $state Restricted to one of the STATE_* constants.
      *
-     * @throws WorkflowException If the result has been frozen.
+     * @throws Exception If the result has been frozen.
      */
     public function setState($state);
 
@@ -71,7 +73,7 @@ interface IWorkflowPluginResult extends IDataObject
      *
      * @param string $gate
      *
-     * @throws WorkflowException If the result has been frozen.
+     * @throws Exception If the result has been frozen.
      */
     public function setGate($gate);
 
@@ -87,7 +89,7 @@ interface IWorkflowPluginResult extends IDataObject
      *
      * @param string $message
      *
-     * @throws WorkflowException If the result has been frozen.
+     * @throws Exception If the result has been frozen.
      */
     public function setMessage($message);
 }

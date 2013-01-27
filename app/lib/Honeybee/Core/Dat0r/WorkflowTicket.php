@@ -3,9 +3,9 @@
 namespace Honeybee\Core\Dat0r;
 
 use Dat0r\Core\Runtime\Document\Document as BaseDocument;
-use IWorkflowTicket;
+use Honeybee\Core\Workflow\ITicket;
 
-abstract class WorkflowTicket extends BaseDocument implements IWorkflowTicket
+abstract class WorkflowTicket extends BaseDocument implements ITicket
 {
     public function reset()
     {   

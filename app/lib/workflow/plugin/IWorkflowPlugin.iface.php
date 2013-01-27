@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Core\Workflow\Process;
+
 /**
  * IWorkflowPlugin define the smallest part within the workflow architecture.
  * They reflect work that is done in the context of a single "workflow step"
@@ -15,12 +17,12 @@ interface IWorkflowPlugin
     /**
      * initialize plugin
      *
-     * @param Workflow $resource workflow state
+     * @param Process $resource workflow state
      * @param string $stepName
      *
      * @return IWorkflowPlugin return $this for fluid interface
      */
-    public function initialize(Workflow $workflow, $stepName);
+    public function initialize(Process $workflow, $stepName);
 
     /**
      * Return the plugin's unique identifier.

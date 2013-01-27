@@ -1,10 +1,11 @@
 <?php
 
+namespace Honeybee\Core\Workflow;
+
 /**
- * @package Workflow
  * @author tay
  */
-class WorkflowException extends Exception
+class Exception extends \Exception
 {
     /**
      * thrown if Serializabale::unserialize failed
@@ -46,5 +47,4 @@ class WorkflowException extends Exception
      * The WorkflowTicket constructor was passed corrupt or no data.
      */
     const INVALID_TICKET_DATA = 10;
-
 }

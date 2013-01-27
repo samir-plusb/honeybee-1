@@ -27,11 +27,6 @@
             <!-- 
                 Workflow 
             -->
-            <autoload name="WorkflowManager">%core.lib_dir%/workflow/WorkflowManager.class.php</autoload>
-            <autoload name="IWorkflowResource">%core.lib_dir%/workflow/IWorkflowResource.iface.php</autoload>
-            <autoload name="IWorkflowTicket">%core.lib_dir%/workflow/IWorkflowTicket.iface.php</autoload>
-            <autoload name="Workflow">%core.lib_dir%/workflow/Workflow.class.php</autoload>
-            <autoload name="WorkflowException">%core.lib_dir%/workflow/WorkflowException.class.php</autoload>
             <autoload name="IWorkflowPlugin">%core.lib_dir%/workflow/plugin/IWorkflowPlugin.iface.php</autoload>
             <autoload name="WorkflowBasePlugin">%core.lib_dir%/workflow/plugin/WorkflowBasePlugin.class.php</autoload>
             <autoload name="WorkflowDeletePlugin">%core.lib_dir%/workflow/plugin/WorkflowDeletePlugin.class.php</autoload>

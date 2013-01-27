@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Core\Workflow\Exception;
+
 /**
  * The WorkflowPluginResult is a base implementation of the IWorkflowPluginResult interface
  * and should be extended by other concrete IWorkflowPluginResult implementations.
@@ -151,13 +153,13 @@ class WorkflowPluginResult extends BaseDataObject implements IWorkflowPluginResu
     /**
      * Verify that the result is open for modification.
      *
-     * @throws WorkflowException If the plugin result has been frozen.
+     * @throws Exception If the plugin result has been frozen.
      */
     protected function verifyMutability()
     {
         if (TRUE === $this->frozen)
         {
-            throw new WorkflowException("Trying to modify a non-mutable (frozen) workflow-plugin result!");
+            throw new Exception("Trying to modify a non-mutable (frozen) workflow-plugin result!");
         }
     }
 

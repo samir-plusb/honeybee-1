@@ -1,6 +1,8 @@
 <?php
 
-interface IWorkflowTicket
+namespace Honeybee\Core\Workflow;
+
+interface ITicket
 {
     public function getWorkflowName();
 

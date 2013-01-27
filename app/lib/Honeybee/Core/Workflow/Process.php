@@ -1,14 +1,18 @@
 <?php
 
+namespace Honeybee\Core\Workflow;
+
 use Honeybee\Agavi\User\ZendAclSecurityUser;
+use WorkflowInteractivePlugin;
+use WorkflowPluginResult;
+use IWorkflowPlugin;
 
 /**
  * Representation of one workflow.
  *
- * @package Workflow
  * @author tay
  */
-class Workflow
+class Process
 {
     /**
      * maximal number of executions of one specific workflow step to avoid endless workflow loops
@@ -71,7 +75,7 @@ class Workflow
     private $resource;
 
     /**
-     * @var WorkflowManager
+     * @var Manager
      */
     protected $manager;
 
@@ -80,7 +84,7 @@ class Workflow
     /**
      * initialize workflow
      *
-     * This method is called by {@see WorkflowManager::getWorkflowByName()} after reading and parsing a
+     * This method is called by {@see Manager
      * workflow xml definition.
      *
      * The array for $config parameter has the form:
@@ -112,8 +116,8 @@ class Workflow
      *  )
      *  </pre>
      *
-     * @throws WorkflowException on invalid workflow structure
-     * @see WorkflowManager::getWorkflowByName()
+     * @throws Exception on invalid workflow structure
+     * @see Manager::getWorkflowByName()
      * @param array $config parse result of xml workflow definition in the format
      *                      AgaviReturnArrayConfigHandler::convertToArray
      */
@@ -125,7 +129,7 @@ class Workflow
         $this->steps = $config['steps'];
     }
 
-    public function setWorkflowManager(WorkflowManager $manager)
+    public function setWorkflowManager(Manager $manager)
     {
         $this->manager = $manager;
     }
@@ -145,10 +149,10 @@ class Workflow
     /**
      * pull the ticket through the workflow
      *
-     * @throws WorkflowException
+     * @throws Exception
      * @param WorkflowTicket $ticket
      */
-    public function execute(IWorkflowResource $resource, $initalGate = NULL, $container = NULL)
+    public function execute(IResource $resource, $initalGate = NULL, $container = NULL)
     {
         $this->setResource($resource);
         $ticket = $this->getTicket();
@@ -216,9 +220,9 @@ class Workflow
         {
             if ($this->getTicket()->incrementStepCount() > self::MAX_STEP_EXECUTIONS)
             {
-                throw new WorkflowException(
+                throw new Exception(
                     sprintf('To many workflow executions for "%s/%s"', $this->getName(), $stepName),
-                    WorkflowException::MAX_STEP_EXECUTIONS_EXCEEDED
+                    Exception::MAX_STEP_EXECUTIONS_EXCEEDED
                 );
             }
 
@@ -233,7 +237,7 @@ class Workflow
      *
      * @return integer workflow state code
      *
-     * @throws WorkflowException
+     * @throws Exception
      */
     protected function processPluginResultFor($stepName, WorkflowPluginResult $result)
     {
@@ -285,14 +289,14 @@ class Workflow
 
         if (NULL === $gateDef)
         {
-            throw new WorkflowException("The given workflow gate '$gate' does not exist.");
+            throw new Exception("The given workflow gate '$gate' does not exist.");
         }
 
         try
         {
             $plugin->onResourceLeaving($gateName);
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
             // atm, can't decide on whether to abort the plugin transistion if the hook fails or not.
             // for now we'll abort as this is a critical issue in most cases probally.
@@ -309,7 +313,7 @@ class Workflow
                     $nextPlugin = $this->getPluginFor($gateDef['target']);
                     $nextPlugin->onResourceEntered($stepName);
                 }
-                catch(Exception $e)
+                catch(\Exception $e)
                 {
                     // atm, can't decide on whether to abort the plugin transistion if the hook fails or not.
                     // for now we'll abort as this is a critical issue in most cases probally.
@@ -337,7 +341,7 @@ class Workflow
             }
             default:
             {
-                throw new WorkflowException(
+                throw new Exception(
                     "The given workflow plugin gate-type '" . $gateDef['type'] . "' is not supported."
                 );
             }
@@ -348,7 +352,7 @@ class Workflow
 
     public function hasUserSession()
     {
-        $user = AgaviContext::getInstance()->getUser();
+        $user = \AgaviContext::getInstance()->getUser();
         // we only consider the current execution of being a 'user session',
         // if we have both a valid execution container and a session user.
         return $this->container && $user;
@@ -358,11 +362,11 @@ class Workflow
     {
         if ($this->hasUserSession())
         {
-            $user = AgaviContext::getInstance()->getUser();
+            $user = \AgaviContext::getInstance()->getUser();
 
             if (! ($user instanceof ZendAclSecurityUser))
             {
-                throw new InvalidArgumentException(
+                throw new \InvalidArgumentException(
                     sprintf("User must be instanceof ZendAclSecurityUser, given '%s'", get_class($user))
                 );
             }
@@ -387,7 +391,7 @@ class Workflow
         return $pluginGates[$gateName];
     }
 
-    protected function setResource(IWorkflowResource $resource)
+    protected function setResource(IResource $resource)
     {
         $this->resource = $resource;
         $ticket = $this->resource->getWorkflowTicket();
@@ -422,9 +426,9 @@ class Workflow
             // 2. The ticket is coming from another workflow and was not reset before,
             // thereby still containing a step-name from it's previous surrounding workflow.
             // 3. The ticket was modifed from outside the workflow. In this case find and kill the person who did this.
-            throw new WorkflowException(
+            throw new Exception(
                 'Workflow step does not exists: ' . $step, 
-                WorkflowException::STEP_MISSING
+                Exception::STEP_MISSING
             );
         }
 
@@ -468,7 +472,7 @@ class Workflow
      *
      * @return IWorkflowPlugin
      *
-     * @throws WorkflowException
+     * @throws Exception
      */
     public function getPluginFor($stepName)
     {
@@ -477,9 +481,9 @@ class Workflow
          */
         if (! isset($this->steps[$stepName]['plugin']))
         {
-            throw new WorkflowException(
+            throw new Exception(
                 'Workflow step does not define plugin: ' . $stepName,
-                WorkflowException::STEP_MISSING);
+                Exception::STEP_MISSING);
         }
 
         $step = $this->steps[$stepName];
@@ -496,7 +500,7 @@ class Workflow
      *
      * @param string $pluginName name of plugin
      * @return IWorkflowPlugin
-     * @throws WorkflowException on class not found errors or initialize problems
+     * @throws Exception on class not found errors or initialize problems
      *
      * @todo If there was a step object then this method would go there.
      */
@@ -505,17 +509,17 @@ class Workflow
         $className = 'Workflow' . ucfirst($pluginName) . 'Plugin';
         if (! class_exists($className, TRUE))
         {
-            throw new WorkflowException(
+            throw new Exception(
                 "Can not find class '$className' for plugin: " . $pluginName,
-                WorkflowException::PLUGIN_MISSING);
+                Exception::PLUGIN_MISSING);
         }
 
         $plugin = new $className();
         if (! $plugin instanceof IWorkflowPlugin)
         {
-            throw new WorkflowException(
+            throw new Exception(
                 'Class for plugin is not instance of IWorkflowPlugin: ' . $className,
-                WorkflowException::PLUGIN_MISSING);
+                Exception::PLUGIN_MISSING);
         }
 
         return $plugin;
