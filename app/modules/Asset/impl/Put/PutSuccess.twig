@@ -1,0 +1,10 @@
+<div class="info">
+    <ul>
+    {% for info_label, info_value in info %}
+        <li>
+            <h4>{{ info_label }}</h4>
+            <p>{{ info_value }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
