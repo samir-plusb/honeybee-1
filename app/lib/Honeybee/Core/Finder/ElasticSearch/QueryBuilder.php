@@ -6,11 +6,7 @@ use Honeybee\Core\Finder\IQueryBuilder;
 use IListConfig;
 use IListState;
 
-use Elastica_Query;
-use Elastica_Query_MatchAll;
-use Elastica_Query_Text;
-use Elastica_Filter_Term;
-use Elastica_Filter_And;
+use Elastica;
 
 class QueryBuilder implements IQueryBuilder
 {
@@ -21,7 +17,7 @@ class QueryBuilder implements IQueryBuilder
 
         $innerQuery = $state->hasSearch() 
             ? $this->buildSearchQuery($state->getSearch())
-            : new Elastica_Query_MatchAll();
+            : new Elastica\Query\MatchAll();
 
         $filter = NULL;
         if($state->hasFilter())
@@ -31,7 +27,7 @@ class QueryBuilder implements IQueryBuilder
             );
         }
 
-        $query = Elastica_Query::create($innerQuery);
+        $query = Elastica\Query::create($innerQuery);
 
         $query->addSort(
             $this->prepareSortingParams($config, $state)
@@ -53,7 +49,7 @@ class QueryBuilder implements IQueryBuilder
 
         // @todo add "search syntax sugar" and parse it here.
 
-        $query = new Elastica_Query_Text();
+        $query = new Elastica\Query\Text();
         $query->setFieldQuery('_all', $search);
 
         return $query;
@@ -65,18 +61,18 @@ class QueryBuilder implements IQueryBuilder
 
         if (1 === count($filters))
         {
-            $filter = new Elastica_Filter_Term($filters);
+            $filter = new Elastica\Filter\Term($filters);
         }
         else if (1 < count($filters))
         {
-            $filter = new Elastic_Filter_And();
+            $filter = new Elastica\Filter\BoolAnd();
 
             foreach ($filters as $fieldname => $fieldvalue)
             {
                 if (! empty($fieldvalue))
                 {
                     $filter->add(
-                        new Elastica_Filter_Term(array(
+                        new Elastica\Filter\Term(array(
                             $fieldname => $fieldvalue
                         )
                     ));

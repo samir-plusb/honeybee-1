@@ -3,6 +3,7 @@
 namespace Honeybee\Agavi\Database\ElasticSearch;
 
 use Honeybee\Agavi\Database\IDatabaseSetup;
+use Elastica;
 
 /**
  * Provide elastic search database connection handle
@@ -49,7 +50,7 @@ class Database extends \AgaviDatabase
                 throw new \AgaviDatabaseException("Missing required mapping_dir param in current configuration.");
             }
 
-            $this->connection = new \Elastica_Client(
+            $this->connection = new Elastica\Client(
                 array(
                     'host'      => $this->getParameter('host', self::DEFAULT_HOST),
                     'port'      => $this->getParameter('port', self::DEFAULT_PORT),
@@ -68,7 +69,7 @@ class Database extends \AgaviDatabase
         {
             $this->resource->getStatus();
         }
-        catch (\Elastica_Exception_Response $e)
+        catch (Elastica\Exception\Response $e)
         {
             if (FALSE !== strpos($e->getMessage(), 'IndexMissingException'))
             {

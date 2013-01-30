@@ -24,7 +24,7 @@
         "agavi/agavi": "1.0.*",
         "twig/twig": "1.*",
         "craur/craur": "1.6.*",
-        "ruflin/Elastica": "0.19.8.0",
+        "ruflin/Elastica": "dev-master",
         "phpunit/phpunit": "3.7.*",
         "zend/acl": "dev-master",
         "imagine/Imagine": "0.3.*",
