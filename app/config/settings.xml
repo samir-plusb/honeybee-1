@@ -32,7 +32,7 @@
         </system_actions>
 
         <settings>
-            <setting name="app_name">Midas - Content Refining Middleware</setting>
+            <setting name="app_name">Honeybee CMF</setting>
             <setting name="available">true</setting>
             <setting name="debug">false</setting>
             <setting name="use_database">true</setting>
@@ -57,7 +57,7 @@
             <setting name="group_member_attr">member</setting>
             <setting name="group_member_attr_is_dn">true</setting>
             <setting name="group_name_attr">cn</setting>
-            <setting name="group_required">midas.editor</setting>
+            <setting name="group_required">honeybee.editor</setting>
         </settings>
 
         <settings prefix="import.">
@@ -202,7 +202,7 @@
         </settings>
 
         <settings prefix="shofi.">
-            <setting name="cm_export_url">http://localhost/contentmachine/fe/index.php/adressen/midas-import</setting>
+            <setting name="cm_export_url">http://localhost/contentmachine/fe/index.php/adressen/honeybee-import</setting>
         </settings>
     </ae:configuration>
 

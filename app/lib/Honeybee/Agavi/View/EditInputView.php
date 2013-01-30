@@ -43,7 +43,7 @@ class EditInputView extends BaseView
             'icon' => 'icon-list'
         );
 
-        $breadcrumbs = $this->getContext()->getUser()->getAttribute('breadcrumbs', 'midas.breadcrumbs', array());
+        $breadcrumbs = $this->getContext()->getUser()->getAttribute('breadcrumbs', 'honeybee.breadcrumbs', array());
         foreach ($breadcrumbs as $crumb)
         {
             if ('icon-pencil' === $crumb['icon'])
@@ -57,8 +57,8 @@ class EditInputView extends BaseView
             'icon' => 'icon-pencil'
         );
         
-        $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'midas.breadcrumbs');
-        $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'midas.breadcrumbs');
+        $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'honeybee.breadcrumbs');
+        $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'honeybee.breadcrumbs');
     }
 
     /**

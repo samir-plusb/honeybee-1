@@ -56,8 +56,8 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
 
     protected function setBreadcrumb()
     {
-        $this->getContext()->getUser()->setAttribute('breadcrumbs', array(), 'midas.breadcrumbs');
-        $this->getContext()->getUser()->setAttribute('modulecrumb', NULL, 'midas.breadcrumbs');
+        $this->getContext()->getUser()->setAttribute('breadcrumbs', array(), 'honeybee.breadcrumbs');
+        $this->getContext()->getUser()->setAttribute('modulecrumb', NULL, 'honeybee.breadcrumbs');
     }
     
     /**

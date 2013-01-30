@@ -2,7 +2,7 @@
 
 class Common_HeaderAction extends CommonBaseAction
 {
-    const BREADCRUMB_NAMESPACE = 'midas.breadcrumbs';
+    const BREADCRUMB_NAMESPACE = 'honeybee.breadcrumbs';
 
     public function execute(AgaviRequestDataHolder $parameters)
     {

@@ -164,7 +164,7 @@ js-xunit:
 jsdoc:
 
 	@/bin/mkdir -p etc/integration/docs/clientside
-	@bin/jsdoc pub/js/midas --output etc/integration/docs/clientside/
+	@bin/jsdoc pub/js/honeybee --output etc/integration/docs/clientside/
 
 
 link-project-modules:

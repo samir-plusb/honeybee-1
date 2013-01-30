@@ -45,11 +45,11 @@
     
     if (1 === edit_wrapper.length)
     {
-        midas.core.EditController.factory('.controller-edit');
+        honeybee.core.EditController.factory('.controller-edit');
         initStickyControls();
     }
     else if (1 === list_wrapper.length)
     {
-        midas.list.ListController.create('.container-list-data', namespace).attach();
+        honeybee.list.ListController.create('.container-list-data', namespace).attach();
     }
-})(midas.%%MODULE_PREFIX%%);
+})(honeybee.%%MODULE_PREFIX%%);

@@ -3,7 +3,7 @@
 namespace Honeybee\Agavi\ConfigHandler;
 
 /**
- * ProjectAclConfigHandler parses configuration files that follow the midas access_control markup.
+ * ProjectAclConfigHandler parses configuration files that follow the honeybee access_control markup.
  *
  * @author     Thorsten Schmitt-Rink
  */
@@ -12,7 +12,7 @@ class AclConfigHandler extends \AgaviXmlConfigHandler
     /**
      * Holds the name of the access_control document schema namespace.
      */
-    const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/config/access_control/1.0';
+    const XML_NAMESPACE = 'http://berlinonline.de/schemas/honeybee/config/access_control/1.0';
 
     /**
      * An assoc array that maps external roles/groups/whatever to local domain roles.

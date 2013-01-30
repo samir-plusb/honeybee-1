@@ -20,7 +20,7 @@
                     <div class="btn-group dropdown">
                 {% endif %}
 
-                    <button class="btn midas-action midas-action-{{batch_action_names[0]}}"
+                    <button class="btn honeybee-action honeybee-action-{{batch_action_names[0]}}"
                                 data-bind="click: function(item, event) { var is_batch = true; {{batch_actions[0]}} },
                                        enable: has_selection">
                         {{tm._(batch_action_names[0], translation_domain)}}
@@ -34,7 +34,7 @@
                     <ul class="dropdown-menu">
                     {% for action_name, action in batch_actions %}
                         <li>
-                            <a class="midas-action midas-action-{{action_name}}"
+                            <a class="honeybee-action honeybee-action-{{action_name}}"
                                data-bind="click: function(item, event) { var is_batch = true; {{action}} },
                                           enable: has_selection">{{ tm._(action_name, translation_domain) }}</a>
                         </li>
@@ -150,13 +150,13 @@
                     <td class="actions">
                         <div class="btn-group dropdown">
                             <!-- ko if: $data.workflow.interactive === true -->
-                            <button class="btn btn-primary midas-action midas-action-edit"
+                            <button class="btn btn-primary honeybee-action honeybee-action-edit"
                                     data-bind="click: function(item, event) { $parent.ctrl.run(false, item); }">
                                 {{tm._('edit', translation_domain)}}
                             </button>
                             <!-- /ko -->
                             <!-- ko if: $data.workflow.interactive !== true -->
-                                <button class="btn btn-primary midas-action midas-action-edit" disabled="disabled">
+                                <button class="btn btn-primary honeybee-action honeybee-action-edit" disabled="disabled">
                                     {{tm._('edit', translation_domain)}}
                                 </button>
                             <!-- /ko -->
@@ -166,7 +166,7 @@
                             </button>
                             <ul class="dropdown-menu pull-right" data-bind="foreach: $data.workflow.gates">
                                 <li>
-                                    <a class="midas-action-proceed"
+                                    <a class="honeybee-action-proceed"
                                        data-bind="click: function(item, event) { $root.ctrl.proceed(false, $parent, $data.name, $data.prompt); }, text: $data.label"></a>
                                 </li>
                             </ul>

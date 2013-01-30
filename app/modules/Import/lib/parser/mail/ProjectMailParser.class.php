@@ -64,7 +64,7 @@ class ProjectMailParser extends MimeMailParser
      * in order to build a tmp filepath for writing a mail attachments to the disk
      * for further processing.
      */
-    const ATTACHMENT_FILE_PREFIX = 'midas.attached.';
+    const ATTACHMENT_FILE_PREFIX = 'honeybee.attached.';
 
     // ---------------------------------- </CONSTANTS> -------------------------------------------
 

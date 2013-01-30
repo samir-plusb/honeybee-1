@@ -3,13 +3,13 @@
 namespace Honeybee\Agavi\ConfigHandler;
 
 /**
- * WorkflowConfigHandler parses configuration files that follow the midas workflow markup.
+ * WorkflowConfigHandler parses configuration files that follow the honeybee workflow markup.
  *
  * @author     Thorsten Schmitt-Rink
  */
 class WorkflowConfigHandler extends \AgaviXmlConfigHandler
 {
-    const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/workflow/1.0';
+    const XML_NAMESPACE = 'http://berlinonline.de/schemas/honeybee/workflow/1.0';
 
     /**
      * Execute this configuration handler.

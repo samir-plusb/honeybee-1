@@ -38,7 +38,7 @@ class AccessControlXmlConfigGenerator extends DefaultXmlConfigGenerator
         $include->setAttribute(
             'xpointer',
             "xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) " .
-            "xmlns(acl=http://berlinonline.de/schemas/midas/config/access_control/1.0) " . 
+            "xmlns(acl=http://berlinonline.de/schemas/honeybee/config/access_control/1.0) " . 
             "xpointer(/ae:configurations/ae:configuration/acl:resources/*)"
         );
 
@@ -58,7 +58,7 @@ class AccessControlXmlConfigGenerator extends DefaultXmlConfigGenerator
         $include->setAttribute(
             'xpointer',
             "xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) " .
-            "xmlns(acl=http://berlinonline.de/schemas/midas/config/access_control/1.0) " .
+            "xmlns(acl=http://berlinonline.de/schemas/honeybee/config/access_control/1.0) " .
             "xpointer(/ae:configurations/ae:configuration/acl:roles/acl:role[@name='default-permissions']/acl:acl/*)"
         );
 
@@ -74,12 +74,12 @@ class AccessControlXmlConfigGenerator extends DefaultXmlConfigGenerator
             'ae:configurations'
         );
 
-        $root->setAttribute('xmlns', 'http://berlinonline.de/schemas/midas/config/access_control/1.0');
+        $root->setAttribute('xmlns', 'http://berlinonline.de/schemas/honeybee/config/access_control/1.0');
         $root->setAttribute('xmlns:ae','http://agavi.org/agavi/config/global/envelope/1.0');
         $root->setAttribute('xmlns:xi', 'http://www.w3.org/2001/XInclude');
         $root->setAttribute(
             'xmlns:env', 
-            'http://berlinonline.de/schemas/midas/config/envelope/definition/1.0'
+            'http://berlinonline.de/schemas/honeybee/config/envelope/definition/1.0'
         );
 
         $configuration = $document->createElement('ae:configuration');

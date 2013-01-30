@@ -46,7 +46,7 @@ class ListSuccessView extends BaseView
             'icon' => 'icon-list'
         );
 
-        $breadcrumbs = $this->getContext()->getUser()->getAttribute('breadcrumbs', 'midas.breadcrumbs', array());
+        $breadcrumbs = $this->getContext()->getUser()->getAttribute('breadcrumbs', 'honeybee.breadcrumbs', array());
         if (1 <= count($breadcrumbs))
         {
             array_splice($breadcrumbs, 1);
@@ -91,7 +91,7 @@ class ListSuccessView extends BaseView
             );
         }
 
-        $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'midas.breadcrumbs');
-        $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'midas.breadcrumbs');
+        $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'honeybee.breadcrumbs');
+        $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'honeybee.breadcrumbs');
     }
 }

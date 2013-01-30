@@ -7,7 +7,7 @@ class DataImportConfigHandler extends BaseConfigHandler
     /**
      * Holds the name of the data_import document schema namespace.
      */
-    const XML_NAMESPACE = 'http://berlinonline.de/schemas/midas/config/dataimport/definition/1.0';
+    const XML_NAMESPACE = 'http://berlinonline.de/schemas/honeybee/config/dataimport/definition/1.0';
 
     /**
      * Execute this configuration handler.
