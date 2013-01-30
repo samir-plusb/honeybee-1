@@ -24,7 +24,6 @@ class SuggestAction extends BaseAction
         }
 
         $this->setAttribute('data', $suggestData);
-        $this->setAttribute('user', $this->getContext()->getUser()->getAttribute('login'));
 
         return 'Success';
     }

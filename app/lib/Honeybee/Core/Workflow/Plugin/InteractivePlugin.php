@@ -69,6 +69,7 @@ class InteractivePlugin extends BasePlugin
     {
         $pluginContainer = $this->prepareExecutionContainer();
         $result = new InteractionResult();
+        $pluginContainer->setAttribute('resource', $this->getResource(), self::NS_PLUGIN_ATTRIBUTES);
         $pluginContainer->setAttribute('plugin_result', $result, self::NS_PLUGIN_ATTRIBUTES);
         $result->setResponse($pluginContainer->execute());
         $result->freeze();

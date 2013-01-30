@@ -26,11 +26,11 @@ class EditAction extends BaseAction
         $module = $this->getModule();
         $this->setAttribute('module', $module);
 
-        $document = $requestData->getParameter('document');
-
         try
         {
-            $module->getService()->save($document);
+            $module->getService()->save(
+                $this->getResource($requestData)
+            );
         }
         catch(\Exception $e)
         {
@@ -42,6 +42,19 @@ class EditAction extends BaseAction
         $this->setContainerPluginState();
 
         return $view;
+    }
+
+    protected function getResource(\AgaviRequestDataHolder $requestData)
+    {
+        $resource = $requestData->getParameter('document');
+        if ($this->getContainer()->hasAttribute('resource', Plugin\InteractivePlugin::NS_PLUGIN_ATTRIBUTES))
+        {
+            $data = $resource->toArray();
+            $resource = $this->getContainer()->getAttribute('resource', Plugin\InteractivePlugin::NS_PLUGIN_ATTRIBUTES);
+            $resource->setValues($data);
+        }
+
+        return $resource;
     }
 
     protected function setContainerPluginState()
