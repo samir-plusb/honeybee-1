@@ -59,7 +59,7 @@ cc:
 config:
 
 	-@rm app/config/includes/*
-	@php bin/include_configs.php
+	@php bin/include-configs.php
 	@make cc
 
 
@@ -96,14 +96,14 @@ deploy-resources:
 
 	@if [ ! -d pub/static/deploy ]; then mkdir pub/static/deploy; fi
 	@rm -rf pub/static/deploy/*
-	@php bin/deploy_resources.php
+	@php bin/deploy-resources.php
 
 
 install-composer: 
 
 	@if [ -d vendor/agavi/agavi/ ]; then svn revert -R vendor/agavi/agavi/; fi
 	@if [ ! -f bin/composer.phar ]; then curl -s http://getcomposer.org/installer | php -d allow_url_fopen=1 -d date.timezone="Europe/Berlin" -- --install-dir=./bin; fi
-	-@bin/apply_patches
+	-@bin/apply-patches
 	
 
 update-composer:
@@ -119,7 +119,7 @@ update-vendor: install-vendor
 
 	@svn revert -R vendor/agavi/agavi/ || true
 	@php -d allow_url_fopen=1 bin/composer.phar update
-	-@bin/apply_patches
+	-@bin/apply-patches
 
 
 install-node-deps:
@@ -192,7 +192,8 @@ module-code:
     	dator_dir=app/modules/$$module/config/dat0r; \
 		vendor/bin/dat0r.console generate $$dator_dir/codegen.ini $$dator_dir/module.xml gen+dep
 	@make config
-	@curl -XDELETE localhost:9200/_all
+	@curl -XDELETE localhost:9200/
+	@echo "\n"
 
 
 .PHONY: help module module-code lessw lessc jsdoc js-xunit js-specs phpdoc phpcs test twitter-bootstrap cc config install update

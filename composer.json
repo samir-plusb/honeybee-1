@@ -33,11 +33,12 @@
         "PhpDebugToolbar/php-debug-toolbar": "1.5.*",
         "jquery/jquery": "1.8.2",
         "jquery/easing": "1.3",
+        "allmarkedup/jquery-url-parser": "2.2.1",
         "farhadi/html5sortable": "dev-master",
         "knockoutjs/knockoutjs": "2.2.0",
         "underscorejs/underscorejs": "1.4.2",
         "kineticjs/kineticjs": "4.0.*",
-        "twitter/bootstrap": "2.1.1",
+        "twitter/bootstrap": "2.2.2",
         "fortawesome/font-awesome": "2.0.0",
         "berlinonline/Dat0r": "dev-master",
         "phpdocumentor/phpdocumentor": "dev-master"
@@ -123,12 +124,24 @@
         {
             "type": "package",
             "package": {
+                "name": "allmarkedup/jquery-url-parser",
+                "version": "2.2.1",
+                "source": {
+                    "url": "https://github.com/allmarkedup/jQuery-URL-Parser.git",
+                    "type": "git",
+                    "reference": "69a50b31c1f6185731c1fca6fe9f31d58d6947f1"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
                 "name": "twitter/bootstrap",
-                "version": "2.1.1",
+                "version": "2.2.2",
                 "source": {
                     "url": "https://github.com/twitter/bootstrap.git",
                     "type": "git",
-                    "reference": "c52368d3c5984b28e6a71e5e1240afdd788fc2e6"
+                    "reference": "9376a7c221a64c2bf508d02ea2ccd85748d10fcc"
                 }
             }
         },

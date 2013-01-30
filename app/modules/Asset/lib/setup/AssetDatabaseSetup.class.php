@@ -1,15 +1,16 @@
 <?php
 
+use Honeybee\Agavi\Database\CouchDb\DatabaseSetup;
+
 /**
  * The AssetModuleSetup is responseable for setting up our module for usage.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @package         Asset
  * @subpackage      Setup
  */
-class AssetDatabaseSetup extends CouchDbDatabaseSetup
+class AssetDatabaseSetup extends DatabaseSetup
 {
     public function execute(AgaviDatabase $database, $tearDownFirst = FALSE)
     {

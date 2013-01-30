@@ -6,7 +6,7 @@ class ListStateValidator extends AgaviValidator
         'offset' => array('class' => 'AgaviNumberValidator'),
         'limit' => array('class' => 'AgaviNumberValidator'),
         'search' => array('class' => 'AgaviStringValidator'),
-        'filter' => array('class' => 'ProjectArrayValidator'),
+        'filter' => array('class' => 'Honeybee\Agavi\Validator\ArrayValidator'),
         'field' => array(
             'class' => 'AgaviStringValidator',
             'base' => 'sorting'

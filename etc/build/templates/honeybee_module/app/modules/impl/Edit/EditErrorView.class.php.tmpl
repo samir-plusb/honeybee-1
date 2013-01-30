@@ -1,14 +1,8 @@
 <?php
 
-class %%MODULE_NAME%%_Edit_EditErrorView extends %%MODULE_NAME%%BaseView
+use Honeybee\Agavi\View\EditErrorView;
+
+class %%MODULE_NAME%%_Edit_EditErrorView extends EditErrorView
 {
-    public function executeJson(AgaviRequestDataHolder $parameters)
-    {
-        $data = array(
-            'state' => 'error',
-            'errors' => $this->getAttribute('errors', array())
-        );
-        
-        $this->getResponse()->setContent(json_encode($data));
-    }
+    
 }

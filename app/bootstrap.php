@@ -20,11 +20,8 @@ if (is_readable($dat0rAutoloading))
 // make generated files group writeable for easy switch between web/console
 umask(02);
 
-// +---------------------------------------------------------------------------+
-// | An absolute filesystem path to our environment config provider.           |
-// +---------------------------------------------------------------------------+
-require $rootDir . '/app/lib/config/ProjectEnvironmentConfig.class.php';
-ProjectEnvironmentConfig::load(FALSE);
+// load environment
+\Honeybee\Core\Environment::load(FALSE);
 
 // +---------------------------------------------------------------------------+
 // | Initialize the framework. You may pass an environment name to this method.|
@@ -33,6 +30,6 @@ ProjectEnvironmentConfig::load(FALSE);
 // +---------------------------------------------------------------------------+
 
 // @todo Atm this is needed to support routes that rely on the $_SERVER var for their source attribute.
-$_SERVER['AGAVI_ENVIRONMENT'] = ProjectEnvironmentConfig::toEnvString();
+$_SERVER['AGAVI_ENVIRONMENT'] = \Honeybee\Core\Environment::toEnvString();
 Agavi::bootstrap($_SERVER['AGAVI_ENVIRONMENT']);
 AgaviConfig::set('core.default_context', $default_context);

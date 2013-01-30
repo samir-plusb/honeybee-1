@@ -8,7 +8,7 @@ $default_context = // @todo do we really need/want this magic/stunt?
 $rootDir = dirname(__DIR__);
 require $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
-if (FALSE !== strpos(ProjectEnvironmentConfig::getEnvironment(), 'development'))
+if (FALSE !== strpos(\Honeybee\Core\Environment::getEnvironment(), 'development'))
 {
     PhpDebugToolbar::start(array(
         'js_location' => 'static/PhpDebugToolbar/PhpDebugToolbar.js',

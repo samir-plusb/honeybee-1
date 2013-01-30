@@ -1,5 +1,7 @@
 <?php
 
+use \Honeybee\Core\Environment;
+
 /**
  * EnvironmentConfigurator provides an simple api to update/initialize your environment and host configuration.
  * It is meant for command line usage and required user interaction in 3 of 4 public methods (@see self::importHosts).
@@ -49,9 +51,9 @@ class EnvironmentConfigurator
         while (!($environment = $this->promptEnvironment()));
 
         $config = array(
-            ProjectEnvironmentConfig::CFG_PHP         => $php_path,
-            ProjectEnvironmentConfig::CFG_ENVIRONMENT => $environment,
-            ProjectEnvironmentConfig::CFG_BASE_HREF   => $base_href
+            Environment::CFG_PHP         => $php_path,
+            Environment::CFG_ENVIRONMENT => $environment,
+            Environment::CFG_BASE_HREF   => $base_href
         );
 
         $config_filepath = $this->getConfigFilePath();
@@ -162,7 +164,7 @@ class EnvironmentConfigurator
     protected function generateTestingConfig(array $config)
     {
         $config_filepath = str_replace('/local.', '/local.testing.', $this->getConfigFilePath());
-        $config[ProjectEnvironmentConfig::CFG_ENVIRONMENT] = 'testing.'.$config[ProjectEnvironmentConfig::CFG_ENVIRONMENT];
+        $config[Environment::CFG_ENVIRONMENT] = 'testing.'.$config[Environment::CFG_ENVIRONMENT];
 
         $config_code = sprintf(
             $this->getConfigCodeTemplateString(),
@@ -184,9 +186,9 @@ class EnvironmentConfigurator
         {
             $config_code = sprintf(
                 $this->getLocalShConfigCode(),
-                $config[ProjectEnvironmentConfig::CFG_PHP],
-                $config[ProjectEnvironmentConfig::CFG_BASE_HREF],
-                $config[ProjectEnvironmentConfig::CFG_ENVIRONMENT]
+                $config[Environment::CFG_PHP],
+                $config[Environment::CFG_BASE_HREF],
+                $config[Environment::CFG_ENVIRONMENT]
             );
 
             if (FALSE === file_put_contents($sh_config_filepath, $config_code))
@@ -282,8 +284,8 @@ SH_CODE;
         $local_dir = $this->getLocalSettingsBasePath();
 
         return $local_dir
-            . ProjectEnvironmentConfig::CONFIG_FILE_PREFIX
-            . ProjectEnvironmentConfig::CONFIG_FILE_NAME;
+            . Environment::CONFIG_FILE_PREFIX
+            . Environment::CONFIG_FILE_NAME;
     }
 
     protected function getLocalConfigShFilePath()

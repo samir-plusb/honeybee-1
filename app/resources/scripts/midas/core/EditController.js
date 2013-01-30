@@ -54,7 +54,7 @@ midas.core.EditController = midas.core.BaseObject.extend({
             );
         });
 
-        if (this.identifier())
+        if (this.identifier() && ! $.url().param('id'))
         {
             post_url += '?id=' + this.identifier();
         }

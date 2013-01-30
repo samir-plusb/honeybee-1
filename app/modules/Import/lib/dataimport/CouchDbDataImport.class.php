@@ -44,7 +44,7 @@ class CouchDbDataImport extends BaseDataImport
     /**
      * Holds the client, that we use in order to talk to our couch.
      *
-     * @var ExtendedCouchDbClient $couchClient
+     * @var Honeybee\Agavi\Database\CouchDb\Client $couchClient
      */
     protected $couchClient;
 

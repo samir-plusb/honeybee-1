@@ -10,7 +10,7 @@
                 which is currently not integrated into any prod relevant code.
                 The Import/RunActionTest relies on this connection to exist.
             -->
-            <database name="CouchImport" class="CouchDbDatabase">
+            <database name="CouchImport" class="Honeybee\Agavi\Database\CouchDb\Database">
                 <ae:parameter name="url">http://127.0.0.1:5984/</ae:parameter>
                 <ae:parameter name="database">couch_import_testing</ae:parameter>
             </database>

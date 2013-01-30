@@ -1,5 +1,7 @@
 <?php
 
+use \Honeybee\Core\Util\Http\CurlFactory;
+
 class Common_Service_LocalizeAction extends CommonBaseAction
 {
     public function executeRead(AgaviRequestDataHolder $parameters) 
@@ -31,7 +33,7 @@ class Common_Service_LocalizeAction extends CommonBaseAction
         }
 
         // init our curl handle
-        $curl = ProjectCurl::create();
+        $curl = CurlFactory::create();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             'X-Requested-With: XMLHttpRequest',

@@ -11,13 +11,20 @@
 
         <execution_container class="AgaviExecutionContainer" />
 
-        <execution_filter class="ProjectExecutionFilter" />
+        <execution_filter class="Honeybee\Agavi\Filter\ExecutionFilter" />
 
         <filter_chain class="AgaviFilterChain" />
 
         <logger_manager class="AgaviLoggerManager" />
 
-        <request class="AgaviWebRequest" />
+        <request class="AgaviWebRequest">
+            <!-- <ae:parameter name="method_names">
+                <ae:parameter name="POST">create</ae:parameter>
+                <ae:parameter name="GET">read</ae:parameter>
+                <ae:parameter name="PUT">write</ae:parameter>
+                <ae:parameter name="DELETE">remove</ae:parameter>
+            </ae:parameter> -->
+        </request>
 
         <response class="AgaviWebResponse">
             <ae:parameters>
@@ -31,7 +38,7 @@
 
         <storage class="AgaviSessionStorage" />
 
-        <user class="ProjectZendAclSecurityUser" />
+        <user class="Honeybee\Agavi\User\ZendAclSecurityUser" />
 
         <translation_manager class="AgaviTranslationManager" />
 
@@ -39,7 +46,7 @@
     </ae:configuration>
 
     <ae:configuration context="web" environment="development.*">
-        <execution_filter class="ProjectDebugExecutionFilter" />
+        <execution_filter class="Honeybee\Agavi\Filter\DebugExecutionFilter" />
     </ae:configuration>
 
     <ae:configuration context="console">
@@ -52,7 +59,7 @@
 
         <routing class="AgaviConsoleRouting" />
 
-        <user class="ProjectZendAclSecurityUser" />
+        <user class="Honeybee\Agavi\User\ZendAclSecurityUser" />
     </ae:configuration>
 
     <ae:configuration context="web" environment="testing.*">

@@ -2,16 +2,14 @@
 
 namespace Honeybee\Core\Dat0r;
 
-use \Dat0r\Core\Runtime\Document\Document as BaseDocument;
-use \AgaviConfig;
-use \Zend_Acl_Resource_Interface;
-use \IWorkflowResource;
+use Dat0r\Core\Runtime\Document\Document as BaseDocument;
+use Honeybee\Core\Workflow\IResource; 
 
-abstract class Document extends BaseDocument implements Zend_Acl_Resource_Interface, IWorkflowResource
+abstract class Document extends BaseDocument implements \Zend_Acl_Resource_Interface, IResource
 {
     public function getWorkflowConfigPath()
     {
-        $moduleDir = AgaviConfig::get('core.modules_dir') 
+        $moduleDir = \AgaviConfig::get('core.modules_dir') 
             . DIRECTORY_SEPARATOR . $this->getModule()->getName();
 
         return $moduleDir . DIRECTORY_SEPARATOR . 'config' 

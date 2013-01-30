@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Agavi\View\SuggestErrorView;
+
 /**
  * The %%MODULE_NAME%%_Suggest_SuggestErrorView class handles the presentation logic for our
  * %%MODULE_NAME%%/Suggest actions's error data.
@@ -9,24 +11,7 @@
  * @package         %%MODULE_NAME%%
  * @subpackage      Mvc
  */
-class %%MODULE_NAME%%_Suggest_SuggestErrorView extends %%MODULE_NAME%%BaseView
+class %%MODULE_NAME%%_Suggest_SuggestErrorView extends SuggestErrorView
 {
-    /**
-     * Handle presentation logic for json.
-     *
-     * @param       AgaviRequestDataHolder $parameters
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @codingStandardsIgnoreStart
-     */
-    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-    {
-        $data = array(
-            'state' => 'error',
-            'errors' => $this->getAttribute('errors'),
-            'data' => array()
-        );
 
-        $this->getResponse()->setContent(json_encode($data));
-    }
 }

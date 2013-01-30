@@ -25,7 +25,6 @@ midas.list.Action = midas.core.BaseObject.extend({
             that.payload(
                 function(resp)
                 {
-                    console.log(resp);
                     if ('ok' === resp.state)
                     {
                         that.fire('success', [ resp ]);

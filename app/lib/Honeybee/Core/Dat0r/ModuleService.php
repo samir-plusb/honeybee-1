@@ -2,17 +2,14 @@
 
 namespace Honeybee\Core\Dat0r;
 
-use \DirectoryIterator;
-use \AgaviConfig;
-
 class ModuleService
 {
     public function getModules()
     {
         $modules = array();
-        $iter = new DirectoryIterator(AgaviConfig::get('core.modules_dir'));
+        $iter = new \DirectoryIterator(\AgaviConfig::get('core.modules_dir'));
         
-        foreach($iter as $file) 
+        foreach($iter as $file)
         {
             $configPath = $file->getPathname() .
                 str_replace('/', DIRECTORY_SEPARATOR, '/config/dat0r/module.xml');
@@ -20,7 +17,7 @@ class ModuleService
             if (is_readable($configPath))
             {
                 $moduleName = str_replace(
-                    AgaviConfig::get('core.modules_dir') . DIRECTORY_SEPARATOR, 
+                    \AgaviConfig::get('core.modules_dir') . DIRECTORY_SEPARATOR, 
                     '', 
                     $file->getPathname()
                 );
@@ -34,7 +31,7 @@ class ModuleService
                 }
                 else
                 {
-                    throw new Exception(
+                    throw new \Exception(
                         "Unable to call the '$implementor' module's getInstance method."
                     );
                 }
@@ -42,5 +39,5 @@ class ModuleService
         }
 
         return $modules;
-    }    
+    }
 }

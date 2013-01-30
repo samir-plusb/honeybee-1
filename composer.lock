@@ -1,5 +1,5 @@
 {
-    "hash": "383ce7dcc66a571942c222d24e2edee0",
+    "hash": "cc72f1241eb5ba213f4031b2750d5a90",
     "packages": [
         {
             "name": "PhpDebugToolbar/php-debug-toolbar",
@@ -24,6 +24,16 @@
                 "type": "svn",
                 "url": "http://svn.agavi.org/",
                 "reference": "tags/1.0.7/"
+            },
+            "type": "library"
+        },
+        {
+            "name": "allmarkedup/jquery-url-parser",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/allmarkedup/jQuery-URL-Parser.git",
+                "reference": "69a50b31c1f6185731c1fca6fe9f31d58d6947f1"
             },
             "type": "library"
         },
@@ -1190,12 +1200,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c80d9a4dab17c780044ce8c91463db7820396e01"
+                "reference": "0a9b42c743066b45e3f7b923153e0c0111d1e3d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/sebastianbergmann/phpunit/archive/c80d9a4dab17c780044ce8c91463db7820396e01.zip",
-                "reference": "c80d9a4dab17c780044ce8c91463db7820396e01",
+                "url": "https://github.com/sebastianbergmann/phpunit/archive/0a9b42c743066b45e3f7b923153e0c0111d1e3d4.zip",
+                "reference": "0a9b42c743066b45e3f7b923153e0c0111d1e3d4",
                 "shasum": ""
             },
             "require": {
@@ -1217,7 +1227,7 @@
                 "ext-tokenizer": "*",
                 "phpunit/php-invoker": ">=1.1.0"
             },
-            "time": "2013-01-14 20:44:21",
+            "time": "2013-01-15 08:15:29",
             "bin": [
                 "composer/bin/phpunit"
             ],
@@ -1613,18 +1623,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "93c6a8dedc46c73ccdd61342de3d5e761e4412f6"
+                "reference": "5218db779633b2292102863da464896deee0c8cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/93c6a8dedc46c73ccdd61342de3d5e761e4412f6.zip",
-                "reference": "93c6a8dedc46c73ccdd61342de3d5e761e4412f6",
+                "url": "https://github.com/fabpot/Twig/archive/5218db779633b2292102863da464896deee0c8cb.zip",
+                "reference": "5218db779633b2292102863da464896deee0c8cb",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2013-01-18 09:58:04",
+            "time": "2013-01-26 15:09:24",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1658,11 +1668,11 @@
         },
         {
             "name": "twitter/bootstrap",
-            "version": "2.1.1",
+            "version": "2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twitter/bootstrap.git",
-                "reference": "c52368d3c5984b28e6a71e5e1240afdd788fc2e6"
+                "reference": "9376a7c221a64c2bf508d02ea2ccd85748d10fcc"
             },
             "type": "library"
         },
@@ -1715,12 +1725,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "f5e47e76e7d5a63838c6ce2db5564b71f30e00ac"
+                "reference": "4f824eda1fd7a7d2cad24175f91af4c88af14309"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/archive/f5e47e76e7d5a63838c6ce2db5564b71f30e00ac.zip",
-                "reference": "f5e47e76e7d5a63838c6ce2db5564b71f30e00ac",
+                "url": "https://github.com/zendframework/zf2/archive/4f824eda1fd7a7d2cad24175f91af4c88af14309.zip",
+                "reference": "4f824eda1fd7a7d2cad24175f91af4c88af14309",
                 "shasum": ""
             },
             "require": {
@@ -1789,7 +1799,7 @@
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
                 "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
             },
-            "time": "2013-01-22 20:12:28",
+            "time": "2013-01-26 11:28:57",
             "bin": [
                 "bin/classmap_generator.php"
             ],
