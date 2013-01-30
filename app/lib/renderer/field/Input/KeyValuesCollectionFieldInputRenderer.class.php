@@ -24,6 +24,6 @@ class KeyValuesCollectionFieldInputRenderer extends FieldInputRenderer
 
     protected function getTemplateName()
     {
-        return 'KeyValuesCollectionField.tpl.php';
+        return 'KeyValuesCollectionField.tpl.twig';
     }
 }
