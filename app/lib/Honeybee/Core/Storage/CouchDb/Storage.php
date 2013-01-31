@@ -5,7 +5,7 @@ namespace Honeybee\Core\Storage\CouchDb;
 use Honeybee\Core\Storage\IStorage;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Agavi\Database\CouchDb\Database;
-use CouchdbClientException;
+use Honeybee\Agavi\Database\CouchDb\ClientException;
 
 class Storage implements IStorage
 {
@@ -72,7 +72,7 @@ class Storage implements IStorage
                 $couchDb->getDoc(NULL, $identifier, $revision)
             );
         }
-        catch(CouchdbClientException $e)
+        catch(ClientException $e)
         {
             if (preg_match('~(\(404\))~', $e->getMessage()))
             {
@@ -114,7 +114,7 @@ class Storage implements IStorage
         }
         else
         {
-            throw new Exception(
+            throw new \Exception(
                 "Failed to store document: " . $document->getIdentifier()
             );
         }
@@ -264,8 +264,8 @@ class Storage implements IStorage
 
         if (! $docType || ! class_exists($docType, TRUE))
         {
-            throw new Exception(
-                "Invalid or corrupt type information within document data."
+            throw new \Exception(
+                "Invalid or corrupt type information within document data. Type: " . $docType
             );
         }
 
@@ -286,7 +286,7 @@ class Storage implements IStorage
         return $data;
     }
 
-    protected function getDatabase()
+    public function getDatabase()
     {
         return $this->database;
     }

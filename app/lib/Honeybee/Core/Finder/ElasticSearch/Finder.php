@@ -35,10 +35,16 @@ class Finder implements IFinder
             $query = Elastica\Query::create($query);
         }
 
+        $queryArr = $query->toArray();
         $query->setLimit($limit)->setFrom($offset);
-        $query->setFilter(new Elastica\Filter\BoolNot(new Elastica\Filter\Term(
-            array('meta.is_deleted' => TRUE)
-        )));
+
+        if (! isset($queryArr['filter']))
+        {
+            $query->setFilter(new Elastica\Filter\BoolNot(new Elastica\Filter\Term(
+                array('meta.is_deleted' => TRUE)
+            )));
+        }
+
         $source = $this->getQuerySource();
         $resultSet = $source->search($query);
         

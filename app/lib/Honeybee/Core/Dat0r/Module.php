@@ -109,6 +109,11 @@ abstract class Module extends RootModule
         return \AgaviConfig::get($settingName, '\\Honeybee\\Core\\Finder\\ElasticSearch\\Finder');
     }
 
+    public function isActingAsTree()
+    {
+        return 'yes' === $this->getOption('act_as_tree');
+    }
+
     /**
      * Returns the default fields that are initially added to a module upon creation.
      *
