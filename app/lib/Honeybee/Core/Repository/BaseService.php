@@ -3,6 +3,7 @@
 namespace Honeybee\Core\Repository;
 
 use Honeybee\Core\Dat0r\Module;
+use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\Tree;
 use Honeybee\Core\Finder\ElasticSearch\QueryBuilder;
 use Honeybee\Core\Finder\ElasticSearch\SuggestQueryBuilder;
