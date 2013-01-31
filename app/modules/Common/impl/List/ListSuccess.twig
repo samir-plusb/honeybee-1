@@ -39,9 +39,9 @@
     Search/Filter and other notifications.
 ************************************************** #}
 {% if not search|length %}
-    {% set displayed_search = search %}
-{% else %}
     {% set displayed_search = '' %}
+{% else %}
+    {% set displayed_search = search %}
 {% endif %}
 
 {% if search or is_filtered %}
