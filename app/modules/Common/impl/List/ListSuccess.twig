@@ -6,31 +6,17 @@
 <!-- **************************************************
     List Controls/Widgets such as search and batch processing.
 ************************************************** -->
-    <section class="well container-batch" style="min-height: 60px;">
-        <section class="pull-left search-widget" style="height: 65px;"
-            data-search-widget-options="{{search_widget_opts|raw}}">
-        </section>
-        <section style="margin-left: 20px; border-left: 1px solid #ababab; padding-left: 20px; height: 65px;" class="pull-left">
-            <h3>Stapelverarbeitung</h3>
-
-            {% set batch_action_names = batch_actions|keys %}
-            {% if batch_actions|length > 0 %}
-
-                {% if batch_actions|length > 1 %}
-                    <div class="btn-group dropdown">
-                {% endif %}
-
-                    <button class="btn honeybee-action honeybee-action-{{batch_action_names[0]}}"
-                                data-bind="click: function(item, event) { var is_batch = true; {{batch_actions[0]}} },
-                                       enable: has_selection">
-                        {{tm._(batch_action_names[0], translation_domain)}}
-                    </button>
-                
-
-                {% if batch_actions|length > 1 %}
-                    <button class="btn dropdown-toggle" data-bind="enable: has_selection" data-toggle="dropdown">
+    <section class="well toolbar">
+        <div class="container-batch">
+            <section>
+                <a class="btn" href="{{ro.gen(module_type_key ~ '.edit')}}">Neuer Eintrag</a>
+            </section>
+            <section>
+                <div class="btn-group">
+                    <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#">
+                        Stapelverarbeitung
                         <span class="caret"></span>
-                    </button>
+                    </a>
                     <ul class="dropdown-menu">
                     {% for action_name, action in batch_actions %}
                         <li>
@@ -40,14 +26,11 @@
                         </li>
                     {% endfor %}
                     </ul>
-                    </div>
-                {% endif %}
-            {% endif %}
-        </section>
-        <section style="margin-left: 20px; border-left: 1px solid #ababab; padding-left: 20px; height: 65px;" class="pull-left">
-            <h3>Kreation</h3>
-            <a class="btn" href="{{ro.gen(module_type_key ~ '.edit')}}">Neuer Eintrag</a>
-        </section>
+                </div>
+            </section>
+            <section class="search-widget" data-search-widget-options="{{search_widget_opts|raw}}">
+            </section>
+        </div>
     </section>
 {# Template Twiggified until here #}
 
@@ -56,9 +39,9 @@
     Search/Filter and other notifications.
 ************************************************** #}
 {% if not search|length %}
-    {% set displayed_search = search %}
-{% else %}
     {% set displayed_search = '' %}
+{% else %}
+    {% set displayed_search = search %}
 {% endif %}
 
 {% if search or is_filtered %}

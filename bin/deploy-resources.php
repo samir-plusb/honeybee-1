@@ -1,5 +1,7 @@
 <?php
 
+use Honeybee\Agavi\Filter;
+
 $default_context = 'web';
 $rootDir = dirname(dirname(__FILE__));
 require  $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
@@ -34,16 +36,16 @@ echo PHP_EOL . "1. Will deploy resources for the following modules: " . PHP_EOL;
 echo implode(', ', $modules) . PHP_EOL;
 echo PHP_EOL . "2. Starting resource deployment ..." . PHP_EOL;
 
-$packer = new ProjectResourcePacker(
+$packer = new Filter\ResourcePacker(
     array('html' => $modules), 
     'html', 
-    new ProjectResourceFilterConfig(array(
-        ProjectResourceFilterConfig::CFG_OUTPUT_TYPES => array('html'),
-        ProjectResourceFilterConfig::CFG_BASE_DIR => str_replace(
+    new Filter\ResourceFilterConfig(array(
+        Filter\ResourceFilterConfig::CFG_OUTPUT_TYPES => array('html'),
+        Filter\ResourceFilterConfig::CFG_BASE_DIR => str_replace(
             '/', DIRECTORY_SEPARATOR, $rootDir.'/pub/static'
         ),
-        ProjectResourceFilterConfig::CFG_ENABLE_COMBINE => TRUE,
-        ProjectResourceFilterConfig::CFG_ENABLE_COMPRESS => TRUE
+        Filter\ResourceFilterConfig::CFG_ENABLE_COMBINE => TRUE,
+        Filter\ResourceFilterConfig::CFG_ENABLE_COMPRESS => TRUE
     ))
 );
 

@@ -1640,18 +1640,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "eaadcca54b888db779a355e449a16dd8c7760e11"
+                "reference": "81af6a1fd175f99a229de902380e506d9ac9968d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/eaadcca54b888db779a355e449a16dd8c7760e11.zip",
-                "reference": "eaadcca54b888db779a355e449a16dd8c7760e11",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/81af6a1fd175f99a229de902380e506d9ac9968d",
+                "reference": "81af6a1fd175f99a229de902380e506d9ac9968d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2013-01-27 16:32:04",
+            "time": "2013-01-31 10:19:12",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1742,12 +1742,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/zendframework/zf2.git",
-                "reference": "0042858cd8017f86f73ce9d36b2fffac40dd9995"
+                "reference": "6de1b54fd6b3b7508fc71b1061730ee38774b1b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/zendframework/zf2/archive/0042858cd8017f86f73ce9d36b2fffac40dd9995.zip",
-                "reference": "0042858cd8017f86f73ce9d36b2fffac40dd9995",
+                "url": "https://api.github.com/repos/zendframework/zf2/zipball/6de1b54fd6b3b7508fc71b1061730ee38774b1b6",
+                "reference": "6de1b54fd6b3b7508fc71b1061730ee38774b1b6",
                 "shasum": ""
             },
             "require": {
@@ -1816,7 +1816,7 @@
                 "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
                 "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
             },
-            "time": "2013-01-29 23:43:22",
+            "time": "2013-01-31 06:55:30",
             "bin": [
                 "bin/classmap_generator.php"
             ],
