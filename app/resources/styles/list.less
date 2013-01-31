@@ -6,15 +6,24 @@
     position: static;
 }
 
-.container-batch
+.toolbar
 {
     margin-top: 95px;
-}
+    background-color: rgba(253, 253, 253, 0.9);
+    text-align:right;
 
-.container-batch h3
-{
-    margin: 0px 0px 5px 0px;
-    line-height: 32px;
+    .container-batch {
+        text-align: left;
+        display: inline-block;
+        section {
+            display: inline-block;
+            margin-left: 5px;
+
+            &:first-child {
+                margin-left: 0px;
+            }
+        }
+    }
 }
 
 .hidden
@@ -37,9 +46,18 @@ form.search-form
     margin: 0 3em 0 0;
 }
 
-.search-widget form
+.search-widget .form-search
 {
     position: relative;
+    margin: 0;
+
+    label {
+        margin-bottom: 0;
+    }
+
+    input.search-query {
+        border-radius: 0px 4px 4px 0px;
+    }
 }
 
 .reset-search
@@ -96,12 +114,6 @@ form.search-form
 .search-message p
 {
     margin: 0;
-}
-
-.container-batch
-{
-    border: 1px solid #efefef;
-    background-color: rgba(253, 253, 253, 0.9);
 }
 
 /**
@@ -321,11 +333,6 @@ form.delete-item
     max-height: 600px;
 }
 
-.jsb-searchbox .btn
-{
-    margin-top: 0;
-}
-
 .release-ticket
 {
     cursor: pointer;
@@ -357,7 +364,7 @@ form.delete-item
 td.actions
 {
     width: 150px;
-    text-align: center;;
+    text-align: center;
 }
 
 /*
