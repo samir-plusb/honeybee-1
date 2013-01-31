@@ -166,9 +166,28 @@ class ResourcePacker
         return true; //target doesn't exist so it's considered outdated
     }
 
+    protected function compileLessFile($filePath)
+    {
+        $recessPath = str_replace('/', DIRECTORY_SEPARATOR, \AgaviConfig::get('core.app_dir').'/../node_modules/recess/node_modules/less/bin/lessc');
+        $command = "node $recessPath --compile " . escapeshellarg($filePath);
+
+        $retval = null;
+        $fileContents = shell_exec($command);
+
+        return $fileContents;
+    }
+
+    protected function uglifyJsFile($filePath)
+    {
+        $uglifyPath = str_replace('/', DIRECTORY_SEPARATOR, \AgaviConfig::get('core.app_dir').'/../node_modules/uglify-js/bin/uglifyjs');
+        $command = "node $uglifyPath " . escapeshellarg($filePath);
+        $fileContents = shell_exec($command);
+
+        return $fileContents;
+    }
+
     protected function packScripts($from, $to)
     {
-        $uglifyPath = str_replace('/', DIRECTORY_SEPARATOR, AgaviConfig::get('core.app_dir').'/../node_modules/.bin/uglifyjs');
         $scriptFiles = self::sortedGlob($from);
         $outputPath = $to . DIRECTORY_SEPARATOR . 'combined.js';
         
@@ -181,16 +200,16 @@ class ResourcePacker
 
         foreach ($scriptFiles as $file)
         {
-            $scripts[$file] = shell_exec($uglifyPath.' '.$file);
+            $scripts[$file] = $this->uglifyJsFile($file);
         }
 
         $this->ensureDirectoryExists($to);
+
         file_put_contents($outputPath, $this->concatParts($scripts));
     }
 
-    protected function packStyles($from, $to)
+    protected function packStyles($from, $to, $combine = false)
     {
-        $lesscPath = str_replace('/', DIRECTORY_SEPARATOR, AgaviConfig::get('core.app_dir').'/../node_modules/.bin/lessc');
         $styleFiles = self::sortedGlob($from);
         $outputPath = $to . DIRECTORY_SEPARATOR . 'combined.css';
         
@@ -209,7 +228,7 @@ class ResourcePacker
                 {
                     continue;
                 }
-                $fileContents = shell_exec($lesscPath.' '.$file);
+                $fileContents = $this->compileLessFile($file);
             }
             else
             {
@@ -219,6 +238,7 @@ class ResourcePacker
         }
 
         $this->ensureDirectoryExists($to);
+
         file_put_contents($outputPath, $this->concatParts($styles));
     }
 
@@ -256,7 +276,14 @@ class ResourcePacker
 
             $this->ensureDirectoryExists(dirname($to));
 
-            return copy($from, $to);
+            if (preg_match('#\.less$#', $from))
+            {
+                return file_put_contents(preg_replace('#\.less$#', '.css', $to), $this->compileLessFile($from));
+            }
+            else
+            {
+                return copy($from, $to);
+            }
         }
 
         $dir = opendir($from);
