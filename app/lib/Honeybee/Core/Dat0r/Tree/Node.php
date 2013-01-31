@@ -4,6 +4,8 @@ namespace Honeybee\Core\Dat0r\Tree;
 
 abstract class Node implements INode
 {
+    protected $parent;
+
     protected $children;
 
     public function __construct(array $children = array())
@@ -14,6 +16,21 @@ abstract class Node implements INode
         {
             $this->addChild($child);
         }
+    }
+
+    public function hasParent()
+    {
+        return $this->parent instanceof INode;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function setParent(INode $parent)
+    {
+        $this->parent = $parent;
     }
 
     public function hasChildren()
@@ -38,8 +55,9 @@ abstract class Node implements INode
 
     public function addChild(INode $child)
     {
-        if (! in_array($child, $this->children))
+        if (! in_array($child, $this->children, TRUE))
         {
+            $child->setParent($this);
             $this->children[] = $child;
         }
     }
@@ -52,19 +70,27 @@ abstract class Node implements INode
         }
     }
 
-    public function toArray()
+    public function toArray($level = NULL, $expand = TRUE)
     {
         $children = array();
 
         foreach ($this->getChildren() as $childNode)
         {
-            $children[] = $childNode->toArray();
+            $children[] = $childNode->toArray($level, $expand);
         }
 
-        return array(
-            'identifier' => $this->getIdentifier(),
-            'label' => $this->getLabel(),
-            'children' => $children
+        $expandedData = array();
+        if (TRUE === $expand)
+        {
+            $expandedData = array(
+                'label' => $this->getLabel(),
+                'parent' => $this->hasParent() ? $this->getParent()->getIdentifier() : NULL,
+            );
+        }
+
+        return array_merge(
+            $expandedData,
+            array('identifier' => $this->getIdentifier(), 'children' => $children)
         );
     }
 }

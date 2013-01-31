@@ -286,7 +286,7 @@ class Storage implements IStorage
         return $data;
     }
 
-    protected function getDatabase()
+    public function getDatabase()
     {
         return $this->database;
     }

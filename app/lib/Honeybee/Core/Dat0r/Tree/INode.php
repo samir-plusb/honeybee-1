@@ -20,5 +20,5 @@ interface INode
 
     public function removeChild(INode $child);
 
-    public function toArray();
+    public function toArray($level = NULL, $expand = TRUE);
 }

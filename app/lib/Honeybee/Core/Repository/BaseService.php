@@ -20,66 +20,62 @@ abstract class BaseService implements IService
         $this->module = $module;
     }
 
+    /* ---- TREE RELATED STUFF - this is not the final API, watch out for changes ^^ ---- */ 
     public function getTree($name = 'tree')
     {
         $repository = $this->module->getRepository();
         $storage = $repository->getStorage();
-        $treeData = $storage->read('tree');
 
-        $getNodeIds = function(array $node) use (&$getNodeIds)
+        if (($treeData = $storage->read($name)))
         {
-            $ids = array($node['identifier']);
-            foreach ($node['children'] as $childNode)
-            {
-                $ids = array_merge($ids, $getNodeIds($childNode));
-            }
-            return $ids;
-        };
-
-        $ids = array();
-        foreach ($treeData['rootNode']['children'] as $topLevelNode)
-        {
-            $ids = array_merge($ids, $getNodeIds($topLevelNode));
+            $tree = new Tree\Tree($this->module, $name);
+            $tree->hydrate($treeData);
+        }
+        else
+        {   
+            $tree = $this->createNewTree($name);
         }
 
-        $query = Elastica\Query::create(NULL);
-        $query->setFilter(new Elastica\Filter\Ids(
-            $this->module->getOption('prefix'), 
-            array_unique($ids)
-        ));
+        return $tree;
+    }
 
-        $docMap = array();
-        $documents = $repository->find($query, 10000, 0);
+    public function createNewTree($name)
+    {
+        $repository = $this->module->getRepository();
+        $storage = $repository->getStorage();
+        $tree = NULL;
 
+        $documents = $repository->find(NULL, 10000, 0);
+        $children = array();
         foreach ($documents['documents'] as $document)
         {
-            $docMap[$document->getIdentifier()] = $document;
+            $children[] = new Tree\DocumentNode($document);
         }
 
-        $createNode = function(array $node) use (&$createNode, &$docMap)
-        {
-            $document = $docMap[$node['identifier']];
-            $children = array();
-            foreach ($node['children'] as $childNode)
-            {
-                $children[] = $createNode($childNode);
-            }
-            return new Tree\DocumentNode($document, $children);
-        };
-
-        $topLevelNodes = array();
-        foreach ($treeData['rootNode']['children'] as $topLevelNode)
-        {
-            $topLevelNodes[] = $createNode($topLevelNode);
-        }
-
-        return new Tree\Tree(new Tree\RootNode($topLevelNodes));
+        return new Tree\Tree($this->module, $name, new Tree\RootNode($children));
     }
 
     public function storeTree(Tree\Tree $tree)
     {
-        // @todo implement
+        $repository = $this->module->getRepository();
+        $storage = $repository->getStorage();
+        $treeDoc = $storage->read($tree->getName());
+
+        if (! $treeDoc)
+        {
+            $treeDoc = array(
+                '_id' => $tree->getName(),
+                'type' => get_class($tree),
+                'rootNode' => array('children' => array())
+            );
+        }
+
+        $newStructure = $tree->toArray(NULL, FALSE);
+        $treeDoc['rootNode']['children'] = $newStructure['rootNode']['children'];
+
+        $storage->getDatabase()->getConnection()->storeDoc(NULL, $treeDoc);
     }
+    /* ---- end of tree related stuff ---- */
 
     public function save(Document $document)
     {
