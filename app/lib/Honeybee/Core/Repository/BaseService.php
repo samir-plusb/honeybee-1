@@ -57,11 +57,9 @@ abstract class BaseService implements IService
             ));
         }
 
-        $repository = $this->module->getRepository();
-        $storage = $repository->getStorage();
         $tree = NULL;
+        $documents = $this->module->getRepository()->find(NULL, 10000, 0);
 
-        $documents = $repository->find(NULL, 10000, 0);
         $children = array();
         foreach ($documents['documents'] as $document)
         {
