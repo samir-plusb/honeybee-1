@@ -8,6 +8,10 @@ interface INode
 
     public function getLabel();
 
+    public function getParent();
+
+    public function setParent(INode $parent);
+
     public function hasChildren();
 
     public function getChildren();
