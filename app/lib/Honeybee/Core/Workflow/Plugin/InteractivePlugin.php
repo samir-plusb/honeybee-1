@@ -96,10 +96,7 @@ class InteractivePlugin extends BasePlugin
 
         if (isset($actionData['parameters']) && is_array($actionData['parameters']))
         {
-            foreach ($actionData['parameters'] as $name => $value)
-            {
-                $pluginContainer->setParameter($name, $value);
-            }
+            $pluginContainer->setParameters($actionData['parameters']);
         }
         $pluginContainer->setParameter('is_workflow_container', TRUE);
 

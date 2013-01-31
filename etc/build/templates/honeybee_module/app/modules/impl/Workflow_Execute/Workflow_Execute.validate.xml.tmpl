@@ -7,15 +7,6 @@
         <validators>
 
             <validator class="or" name="invalid_%%MODULE_PREFIX%%" required="true">
-                <validator class="%%MODULE_NAME%%DocumentValidator" name="invalid_%%MODULE_PREFIX%%_id" required="false">
-                    <arguments>
-                        <argument>id</argument>
-                    </arguments>
-                    <errors>
-                        <error>An invalid id was given.</error>
-                    </errors>
-                </validator>
-
                 <validator class="%%MODULE_NAME%%DocumentValidator" name="invalid_%%MODULE_PREFIX%%_data" required="false">
                     <arguments>
                         <argument>%%MODULE_PREFIX%%</argument>
@@ -24,8 +15,16 @@
                         <error>An invalid (%%MODULE_PREFIX%%)id was given.</error>
                     </errors>
                 </validator>
+
+                <validator class="%%MODULE_NAME%%DocumentValidator" name="invalid_%%MODULE_PREFIX%%_id" required="false">
+                    <arguments>
+                        <argument>id</argument>
+                    </arguments>
+                    <errors>
+                        <error>An invalid id was given.</error>
+                    </errors>
+                </validator>
             </validator>
-            
 
             <validator class="string" name="invalid_gate" required="false">
                 <arguments>

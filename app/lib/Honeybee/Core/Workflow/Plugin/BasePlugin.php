@@ -72,8 +72,8 @@ abstract class BasePlugin implements Workflow\IPlugin
             return $this->doProcess();
         }
 
-        $result = new Plugin\Result();
-        $result->setState(Plugin\Result::STATE_NOT_ALLOWED);
+        $result = new Result();
+        $result->setState(Result::STATE_NOT_ALLOWED);
 
         $operation = sprintf(
             '%s::%s',
