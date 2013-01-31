@@ -23,6 +23,14 @@ abstract class BaseService implements IService
     /* ---- TREE RELATED STUFF - this is not the final API, watch out for changes ^^ ---- */ 
     public function getTree($name = 'tree')
     {
+        if (! $this->module->isActingAsTree())
+        {
+            return throw new \Exception(sprintf(
+                "The module %s is not acting as a tree. Please make sure you have apllied the acts_as_tree option.",
+                $this->module->getName()
+            ));
+        }
+
         $repository = $this->module->getRepository();
         $storage = $repository->getStorage();
 
@@ -41,6 +49,14 @@ abstract class BaseService implements IService
 
     public function createNewTree($name)
     {
+        if (! $this->module->isActingAsTree())
+        {
+            return throw new \Exception(sprintf(
+                "The module %s is not acting as a tree. Please make sure you have apllied the acts_as_tree option.",
+                $this->module->getName()
+            ));
+        }
+
         $repository = $this->module->getRepository();
         $storage = $repository->getStorage();
         $tree = NULL;
@@ -57,6 +73,14 @@ abstract class BaseService implements IService
 
     public function storeTree(Tree\Tree $tree)
     {
+        if (! $this->module->isActingAsTree())
+        {
+            return throw new \Exception(sprintf(
+                "The module %s is not acting as a tree. Please make sure you have apllied the acts_as_tree option.",
+                $this->module->getName()
+            ));
+        }
+        
         $repository = $this->module->getRepository();
         $storage = $repository->getStorage();
         $treeDoc = $storage->read($tree->getName());
