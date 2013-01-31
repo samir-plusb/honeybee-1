@@ -3,9 +3,10 @@
 namespace Honeybee\Core\Repository;
 
 use Honeybee\Core\Dat0r\Module;
-use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Dat0r\Tree;
 use Honeybee\Core\Finder\ElasticSearch\QueryBuilder;
 use Honeybee\Core\Finder\ElasticSearch\SuggestQueryBuilder;
+use Elastica;
 
 use ListConfig;
 use IListState;
@@ -17,6 +18,67 @@ abstract class BaseService implements IService
     public function __construct(Module $module)
     {
         $this->module = $module;
+    }
+
+    public function getTree($name = 'tree')
+    {
+        $repository = $this->module->getRepository();
+        $storage = $repository->getStorage();
+        $treeData = $storage->read('tree');
+
+        $getNodeIds = function(array $node) use (&$getNodeIds)
+        {
+            $ids = array($node['identifier']);
+            foreach ($node['children'] as $childNode)
+            {
+                $ids = array_merge($ids, $getNodeIds($childNode));
+            }
+            return $ids;
+        };
+
+        $ids = array();
+        foreach ($treeData['rootNode']['children'] as $topLevelNode)
+        {
+            $ids = array_merge($ids, $getNodeIds($topLevelNode));
+        }
+
+        $query = Elastica\Query::create(NULL);
+        $query->setFilter(new Elastica\Filter\Ids(
+            $this->module->getOption('prefix'), 
+            array_unique($ids)
+        ));
+
+        $docMap = array();
+        $documents = $repository->find($query, 10000, 0);
+
+        foreach ($documents['documents'] as $document)
+        {
+            $docMap[$document->getIdentifier()] = $document;
+        }
+
+        $createNode = function(array $node) use (&$createNode, &$docMap)
+        {
+            $document = $docMap[$node['identifier']];
+            $children = array();
+            foreach ($node['children'] as $childNode)
+            {
+                $children[] = $createNode($childNode);
+            }
+            return new Tree\DocumentNode($document, $children);
+        };
+
+        $topLevelNodes = array();
+        foreach ($treeData['rootNode']['children'] as $topLevelNode)
+        {
+            $topLevelNodes[] = $createNode($topLevelNode);
+        }
+
+        return new Tree\Tree(new Tree\RootNode($topLevelNodes));
+    }
+
+    public function storeTree(Tree\Tree $tree)
+    {
+        // @todo implement
     }
 
     public function save(Document $document)
