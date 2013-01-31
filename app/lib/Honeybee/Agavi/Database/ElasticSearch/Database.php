@@ -69,7 +69,7 @@ class Database extends \AgaviDatabase
         {
             $this->resource->getStatus();
         }
-        catch (Elastica\Exception\Response $e)
+        catch (Elastica\Exception\ResponseException $e)
         {
             if (FALSE !== strpos($e->getMessage(), 'IndexMissingException'))
             {

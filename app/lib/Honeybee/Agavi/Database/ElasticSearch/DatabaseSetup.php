@@ -3,6 +3,7 @@
 namespace Honeybee\Agavi\Database\ElasticSearch;
 
 use Honeybee\Agavi\Database\IDatabaseSetup;
+use Elastica;
 
 class DatabaseSetup implements IDatabaseSetup
 {
@@ -103,7 +104,7 @@ class DatabaseSetup implements IDatabaseSetup
             $index = $this->database->getResource();
             $elasticaType = $index->gettype(str_replace('.mapping.json', '', basename($mappingFile)));
 
-            $mapping = new \Elastica_Type_Mapping();
+            $mapping = new Elastica\Type\Mapping();
             $mapping->setType($elasticaType);
 
             foreach ($mappingDef as $prop => $value)
@@ -167,7 +168,7 @@ class DatabaseSetup implements IDatabaseSetup
 
         $this->database->getConnection()->request(
             sprintf("_river/%s/_meta", $typeName),
-            \Elastica_Request::PUT,
+            Elastica\Request::PUT,
             $riverSettings
         );
     }
@@ -194,7 +195,7 @@ class DatabaseSetup implements IDatabaseSetup
 
         $this->database->getConnection()->request(
             sprintf("_river/%s", $typeName), 
-            \Elastica_Request::DELETE
+            Elastica\Request::DELETE
         );
     }
 

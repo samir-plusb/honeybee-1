@@ -25,7 +25,7 @@ abstract class BaseService implements IService
     {
         if (! $this->module->isActingAsTree())
         {
-            return throw new \Exception(sprintf(
+            throw new \Exception(sprintf(
                 "The module %s is not acting as a tree. Please make sure you have apllied the acts_as_tree option.",
                 $this->module->getName()
             ));
@@ -51,7 +51,7 @@ abstract class BaseService implements IService
     {
         if (! $this->module->isActingAsTree())
         {
-            return throw new \Exception(sprintf(
+            throw new \Exception(sprintf(
                 "The module %s is not acting as a tree. Please make sure you have apllied the acts_as_tree option.",
                 $this->module->getName()
             ));
@@ -75,12 +75,12 @@ abstract class BaseService implements IService
     {
         if (! $this->module->isActingAsTree())
         {
-            return throw new \Exception(sprintf(
+            throw new \Exception(sprintf(
                 "The module %s is not acting as a tree. Please make sure you have apllied the acts_as_tree option.",
                 $this->module->getName()
             ));
         }
-        
+
         $repository = $this->module->getRepository();
         $storage = $repository->getStorage();
         $treeDoc = $storage->read($tree->getName());
