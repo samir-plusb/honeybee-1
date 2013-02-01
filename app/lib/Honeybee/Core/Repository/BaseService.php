@@ -45,6 +45,7 @@ abstract class BaseService implements IService
             $tree = $this->createNewTree($name);
         }
 
+
         return $tree;
     }
 
@@ -57,9 +58,17 @@ abstract class BaseService implements IService
                 $this->module->getName()
             ));
         }
+        /*
+         * Only fetch documents that are not deleted.
+         */
+        $query_field = new Elastica\Query\Field();
+        $query_field->setField('workflowTicket.workflowStep');
+        $query_field->setQueryString('delete');
+        $query_bool = new Elastica\Query\Bool();
+        $query_bool->addMustNot($query_field);
 
         $tree = NULL;
-        $documents = $this->module->getRepository()->find(NULL, 10000, 0);
+        $documents = $this->module->getRepository()->find($query_bool, 10000, 0);
 
         $children = array();
         foreach ($documents['documents'] as $document)

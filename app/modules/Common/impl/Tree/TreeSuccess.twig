@@ -1,0 +1,26 @@
+<section class="container-list-data row-fluid"
+    data-controller="{{client_side_controller.implementor}}"
+    data-controller-options="{{client_side_options|json_encode}}">
+
+<!-- **************************************************
+    List Controls/Widgets such as search and batch processing.
+************************************************** -->
+    <section class="well toolbar">
+    foo
+    </section>
+
+{% macro render_tree_node(node) %}
+    {{node.label}} - {{node.identifier}}
+    <ul>
+    {% for child in node.children%}
+        <li>
+            {{ _self.render_tree_node(child)|raw }}
+        </li>
+    {% endfor %}
+
+    </ul>
+{% endmacro %}
+
+{{ _self.render_tree_node(tree.rootNode) }}
+
+</section>
