@@ -1,25 +1,18 @@
-<section class="container-list-data row-fluid"
+<section class="container-tree-data row-fluid"
     data-controller="{{client_side_controller.implementor}}"
-    data-controller-options="{{client_side_options|json_encode}}">
+    data-controller-options="{{client_side_controller.options|json_encode}}">
 
 <!-- **************************************************
-    List Controls/Widgets such as search and batch processing.
+    Tree Controls/Widgets such as search and batch processing.
 ************************************************** -->
     <section class="well toolbar">
     </section>
 
-{% macro render_tree_node(node) %}
-    {{node.label}} - {{node.identifier}}
-    <ul>
-    {% for child in node.children%}
-        <li>
-            {{ _self.render_tree_node(child)|raw }}
-        </li>
-    {% endfor %}
+    <section class="render-tree">
+    </section>
 
-    </ul>
-{% endmacro %}
-
-{{ _self.render_tree_node(tree.rootNode) }}
-
+    <script class="tree-data-json" type="application/json">
+        {{tree|json_encode|raw}}
+    </script>
 </section>
+

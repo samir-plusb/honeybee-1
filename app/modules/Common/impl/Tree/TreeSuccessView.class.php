@@ -19,8 +19,6 @@ class Common_Tree_TreeSuccessView extends CommonBaseView
 
         $this->setAttribute('tree', $tree->toArray());
         $this->setAttribute('client_side_controller', $treeConfig->getClientSideController());
-
-        #var_dump($treeConfig->getClientSideController());die();
     }
 }
 

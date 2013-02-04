@@ -67,6 +67,8 @@ abstract class BaseService implements IService
         $query_bool = new Elastica\Query\Bool();
         $query_bool->addMustNot($query_field);
 
+        $query_bool = null;
+
         $tree = NULL;
         $documents = $this->module->getRepository()->find($query_bool, 10000, 0);
 

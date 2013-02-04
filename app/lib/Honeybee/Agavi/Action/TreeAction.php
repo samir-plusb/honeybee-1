@@ -21,6 +21,8 @@ class TreeAction extends BaseAction
     public function executeWrite(\AgaviRequestDataHolder $requestData)
     {
         $treeData = $requestData->getParameter('structure');
+        $module = $this->getModule();
+        $this->setAttribute('module', $module);
         // to see the expected structure: $this->getModule()->getService()->getTree()->toArray()
         $tree = new Tree\Tree($this->getModule(), $treeData['name']);
         $tree->hydrate($treeData);
