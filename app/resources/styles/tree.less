@@ -1,24 +1,37 @@
 .container-tree-data {
     .render-tree {
         .children {
-        margin-left: 0;
         }
         
         .child {
-            list-style: none;
-            list-style-posistion: inside;
+            padding: 5px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: white;
+            background-color: #fff;
             
             &.even {
-                background-color: #fff;
             }
 
             &.odd {
-                background-color: #eee;
             }
 
             .node-label {
-                height: 30px;
+                height: 40px;
                 display: block;
+            }
+
+            &.drop-before {
+                border-top-color: black;
+                background-color: #fee;
+            }
+            &.drop-after {
+                border-bottom-color: black;
+                background-color: #fee;
+            }
+            &.drop-inside {
+                border-color: black;
+                background-color: #fee;
             }
         }
     }

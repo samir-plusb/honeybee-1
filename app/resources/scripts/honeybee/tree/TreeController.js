@@ -4,6 +4,8 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
     options: null,
 
+    dropMode: null,
+
     tree: {},
 
     init: function(options)
@@ -27,20 +29,61 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
     bindDragEvents: function()
     {
         var that = this;
+        var lastNode;
+
+        var clearDragCss = function(element)
+        {
+            var classes = 'drop-before drop-inside drop-after';
+            $(element).removeClass(classes).parentsUntil('#'+that.tree.rootNode.identifier).removeClass(classes);
+        };
 
         this.renderTarget.find('li').bind('dragstart', function(ev)
         {
             ev.stopPropagation();
             ev.originalEvent.dataTransfer.setData('Text', $(this).attr('id'));
+        }).bind('dragenter', function(ev)
+        {
+            ev.stopPropagation();
+            lastNode = this;
         }).bind('dragover', function(ev)
         {
             ev.preventDefault();
-        })
-        .bind('drop', function(ev)
+            ev.stopPropagation();
+            var dragY = ev.originalEvent.pageY;
+
+            var elementY = $(this).offset().top;
+            var height = $(this).height();
+
+            var borderAreaHeight = 0.3;
+
+            if (dragY < elementY + height*borderAreaHeight) //dragged over the top 20% of the target
+            {
+                that.dropMode = 'before';
+            }
+            else if (dragY > elementY + height*(1-borderAreaHeight))
+            {
+                that.dropMode = 'after';
+            }
+            else
+            {
+                that.dropMode = 'inside';
+            }
+
+            clearDragCss(this);
+            $(this).addClass('drop-'+that.dropMode);
+
+        }).bind('dragleave', function(ev)
+        {
+            clearDragCss(lastNode);
+            clearDragCss(this);
+        }).bind('drop', function(ev)
         {
             ev.preventDefault();
-            that.moveNode($('#'+ev.originalEvent.dataTransfer.getData('Text')), $(this));
             ev.stopPropagation();
+
+            clearDragCss(lastNode);
+            clearDragCss(this);
+            that.moveNode($('#'+ev.originalEvent.dataTransfer.getData('Text')), $(this));
         });
     },
 
@@ -50,8 +93,6 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
         domContext.attr('id', node.identifier);
         domContext.append($('<span></span>').addClass('node-label').text(node.label));
-
-        console.log('rendering', node.identifier);
 
         if (node.hasOwnProperty('children') && node.children.length > 0)
         {
@@ -74,19 +115,15 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
     refreshCss: function()
     {
         var even = false;
-        var depth = 0;
         //encapsule in a function to avoid bloating mamory usage with "var that = this;" on every recursion
         var traverseAndRefresh = function(domContext)
         {
             even = !even;
             domContext.removeClass('odd even').addClass(even ? 'even' : 'odd');
-            domContext.children('.node-label').css('padding-left', depth*30);
-            depth = depth + 1;
             domContext.children('ul').children('li').each(function(i, element)
             {
                 traverseAndRefresh($(element));
             });
-            depth = depth - 1;
         };
 
         traverseAndRefresh(this.renderTarget);
@@ -97,25 +134,45 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         var dataContainer = this.domElement.find('.tree-data-json');
 
         this.tree = JSON.parse(dataContainer.text().trim());
-
-        console.log('loaded', JSON.stringify(this.tree));
     },
 
     moveNode: function(from, to)
     {
-        if ($.contains(from, to))
+        var children;
+
+        if ($.contains(from.get(0), to.get(0)))
         {
-            //we can't move a node into one of its children. that would probably destroy the fabric of space-time
+            //we can't move a node into one of its children. that would probably destroy the fabric of space-time, which wouldn't be so nice.
+            this.logDebug("can't place the node inside itself");
             return;
         }
-        var children = to.children('.children');
-        if (children.length === 0)
+
+        if(from.is(to))
         {
-            children = $('<ul></ul>').addClass('children');
-            to.append(children);
+            //placing an element next to itself doesn't make any sense. Seriously, why would anyone do that?
+            this.logDebug("can't place an element next to itself.");
+            return;
         }
 
-        children.append(from);
+        if (this.dropMode === 'before')
+        {
+            from.insertBefore(to);
+        }
+        else if (this.dropMode === 'after')
+        {
+            from.insertAfter(to);
+        }
+        else
+        {
+            children = to.children('.children');
+            if (children.length === 0)
+            {
+                children = $('<ul></ul>').addClass('children');
+                to.append(children);
+            }
+
+            children.append(from);
+        }
 
         this.refreshCss();
 
@@ -152,7 +209,6 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
     saveData: function()
     {
         this.tree.name = 'tree';
-        console.log('saving', JSON.stringify(this.tree));
         $.ajax({
             url: this.options.saveCompleteTreeUrl,
             type: 'POST',
@@ -168,7 +224,7 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
         }).fail(function(response)
         {
-            //console.log(response.responseText);
+            console.log(response.responseText);
         });
     }
 });
