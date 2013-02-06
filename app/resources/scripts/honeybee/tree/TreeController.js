@@ -54,13 +54,13 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
             var elementY = $(this).offset().top;
             var height = $(this).height();
 
-            var borderAreaHeight = 0.3;
+            var borderAreaHeight = 8;
 
-            if (dragY < elementY + height*borderAreaHeight) //dragged over the top 20% of the target
+            if (dragY < elementY + borderAreaHeight) 
             {
                 that.dropMode = 'before';
             }
-            else if (dragY > elementY + height*(1-borderAreaHeight))
+            else if (dragY > elementY + height - borderAreaHeight)
             {
                 that.dropMode = 'after';
             }
@@ -92,7 +92,10 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         var childList, childContent, i;
 
         domContext.attr('id', node.identifier);
-        domContext.append($('<span></span>').addClass('node-label').text(node.label));
+        if (node.identifier !== this.tree.rootNode.identifier)
+        {
+            domContext.append($('<span></span>').addClass('node-label').text(node.label));
+        }
 
         if (node.hasOwnProperty('children') && node.children.length > 0)
         {
@@ -134,6 +137,8 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         var dataContainer = this.domElement.find('.tree-data-json');
 
         this.tree = JSON.parse(dataContainer.text().trim());
+
+        console.log('loaded', JSON.stringify(this.tree));
     },
 
     moveNode: function(from, to)
@@ -199,9 +204,7 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
             return node;
         };
 
-        this.tree = {
-            rootNode: buildJsonNode(this.renderTarget)
-        };
+        this.tree.rootNode = buildJsonNode(this.renderTarget);
 
         this.saveData();
     },
