@@ -71,9 +71,18 @@ class Tree implements ITree
         }
 
         $rootChildren = array();
-        foreach ($treeData['rootNode']['children'] as $topLevelNode)
+
+        if (isset($treeData['rootNode']))
         {
-            $rootChildren[] = $this->createNode($topLevelNode, $documentIdMap);
+            foreach ($treeData['rootNode']['children'] as $topLevelNode)
+            {
+                $rootChildren[] = $this->createNode($topLevelNode, $documentIdMap);
+            }
+        }
+
+        foreach ($documentIdMap as $leftOver)
+        {
+            $rootChildren[] = new DocumentNode($leftOver, array());
         }
 
         $this->rootNode = new RootNode($rootChildren);

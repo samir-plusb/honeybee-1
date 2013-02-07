@@ -8,10 +8,11 @@ use TreeConfig;
 class TreeAction extends BaseAction
 {
     public function executeRead(\AgaviRequestDataHolder $requestData)
-    {
-        $tree = $this->getModule()->getService()->getTree();
+    {   
+        $module = $this->getModule();
+        $tree = $module->getService()->getTree();
 
-        $this->getModule()->getService()->storeTree($tree);
+        $this->setAttribute('module', $module);
         $this->setAttribute('tree', $tree);
         $this->setAttribute('config', TreeConfig::create($this->buildTreeConfig()));
 
