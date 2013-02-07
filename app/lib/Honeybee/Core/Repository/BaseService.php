@@ -21,86 +21,6 @@ abstract class BaseService implements IService
         $this->module = $module;
     }
 
-    /* ---- TREE RELATED STUFF - this is not the final API, watch out for changes ^^ ---- */ 
-    public function getTree($name = 'tree')
-    {
-        if (! $this->module->isActingAsTree())
-        {
-            throw new \Exception(sprintf(
-                "The module %s is not acting as a tree. Please make sure you have apllied the acts_as_tree option.",
-                $this->module->getName()
-            ));
-        }
-
-        $repository = $this->module->getRepository();
-        $storage = $repository->getStorage();
-
-        if (($treeData = $storage->read($name)))
-        {
-            $tree = new Tree\Tree($this->module, $name);
-            $tree->hydrate($treeData);
-        }
-        else
-        {   
-            $tree = $this->createNewTree($name);
-        }
-
-
-        return $tree;
-    }
-
-    public function createNewTree($name)
-    {
-        if (! $this->module->isActingAsTree())
-        {
-            throw new \Exception(sprintf(
-                "The module %s is not acting as a tree. Please make sure you have apllied the acts_as_tree option.",
-                $this->module->getName()
-            ));
-        }
-
-        $tree = NULL;
-        $documents = $this->module->getRepository()->find($query_bool, 10000, 0);
-
-        $children = array();
-        foreach ($documents['documents'] as $document)
-        {
-            $children[] = new Tree\DocumentNode($document);
-        }
-
-        return new Tree\Tree($this->module, $name, new Tree\RootNode($children));
-    }
-
-    public function storeTree(Tree\Tree $tree)
-    {
-        if (! $this->module->isActingAsTree())
-        {
-            throw new \Exception(sprintf(
-                "The module %s is not acting as a tree. Please make sure you have apllied the acts_as_tree option.",
-                $this->module->getName()
-            ));
-        }
-
-        $repository = $this->module->getRepository();
-        $storage = $repository->getStorage();
-        $treeDoc = $storage->read($tree->getName());
-
-        if (! $treeDoc)
-        {
-            $treeDoc = array(
-                '_id' => $tree->getName(),
-                'type' => get_class($tree),
-                'rootNode' => array('children' => array())
-            );
-        }
-
-        $newStructure = $tree->toArray(NULL, FALSE);
-        $treeDoc['rootNode']['children'] = $newStructure['rootNode']['children'];
-
-        $storage->getDatabase()->getConnection()->storeDoc(NULL, $treeDoc);
-    }
-    /* ---- end of tree related stuff ---- */
-
     public function save(Document $document)
     {
         $repository = $this->module->getRepository();
@@ -128,6 +48,27 @@ abstract class BaseService implements IService
         }
 
         return $document;
+    }
+
+    public function getMany(array $identifiers = array(), $limit = 10000, $offset = 0)
+    {
+        $query = NULL;
+
+        if (empty($identifiers))
+        {
+            $query = Elastica\Query::create(NULL);
+        }
+        else
+        {
+            $query = Elastica\Query::create(new Elastica\Filter\Ids(
+                $this->module->getOption('prefix'), 
+                array_unique($ids)
+            ));
+        }
+
+        $repository = $this->module->getRepository();
+
+        return $repository->find($query, $limit, $offset);
     }
 
     public function delete(Document $document, $markOnly = TRUE)
@@ -171,5 +112,44 @@ abstract class BaseService implements IService
         );
 
         return $repository->find($query, 50, 0);
+    }
+
+    public function getTree($treeName = 'tree-default')
+    {
+        $this->verifyModuleTreeAccess();
+
+        $repository = $this->module->getRepository('tree');
+        $tree = $repository->read($treeName);
+
+        return $tree ? $tree : $this->createTree($treeName);
+    }
+
+    public function storeTree(Tree\Tree $tree)
+    {
+        $this->verifyModuleTreeAccess();
+
+        $repository = $this->module->getRepository('tree');
+        $repository->write($tree);
+    }
+
+    protected function createTree($treeName)
+    {
+        $this->verifyModuleTreeAccess();        
+
+        return new Tree\Tree(
+            $this->module, 
+            array('identifier' => $treeName)
+        );
+    }
+
+    protected function verifyModuleTreeAccess()
+    {
+        if (! $this->module->isActingAsTree())
+        {
+            throw new \Exception(sprintf(
+                "The module %s is not acting as a tree. Please make sure you have apllied the acts_as_tree option.",
+                $this->module->getName()
+            ));
+        }
     }
 }

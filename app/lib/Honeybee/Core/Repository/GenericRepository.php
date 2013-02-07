@@ -37,7 +37,7 @@ class GenericRepository implements IRepository
         return $this->storage;
     }
     
-    public function find($query = NULL, $limit = 0, $offset = 0)
+    public function find($query = NULL, $limit = 100000, $offset = 0)
     {
         $documents = new DocumentCollection();
 
@@ -113,7 +113,7 @@ class GenericRepository implements IRepository
 
         if ($data instanceof Document)
         {
-            $this->storage->delete($data);
+            $this->storage->delete($data->getIdentifier(), $data->getRevision());
         }
         else
         {
@@ -123,5 +123,10 @@ class GenericRepository implements IRepository
         }
 
         return $errors;
+    }
+
+    public function getModule()
+    {
+        return $this->module;
     }
 }

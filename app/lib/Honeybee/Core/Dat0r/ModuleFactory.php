@@ -12,9 +12,9 @@ use Honeybee\Core\Repository\IRepository;
 // methods from the module.
 class ModuleFactory
 {
-    public static function createRepository(Module $module)
+    public static function createRepository(Module $module, $context = 'default')
     {
-        $implementor = $module->getRepositoryImplementor();
+        $implementor = self::getRepositoryImplementor($module, $context);
 
         if (! class_exists($implementor))
         {
@@ -26,8 +26,8 @@ class ModuleFactory
             );
         }
 
-        $finder = self::createFinder($module);
-        $storage = self::createStorage($module);
+        $finder = self::createFinder($module, $context);
+        $storage = self::createStorage($module, $context);
         
         $repository = new $implementor($module);
 
@@ -46,9 +46,9 @@ class ModuleFactory
         return $repository;
     }
 
-    public static function createService(Module $module)
+    public static function createService(Module $module, $context = 'default')
     {
-        $implementor = $module->getServiceImplementor();
+        $implementor = self::getServiceImplementor($module, $context);
 
         if (! class_exists($implementor))
         {
@@ -75,9 +75,9 @@ class ModuleFactory
         return $service;
     }
 
-    protected static function createFinder(Module $module)
+    protected static function createFinder(Module $module, $context = 'default')
     {
-        $implementor = $module->getFinderImplementor();
+        $implementor = self::getFinderImplementor($module, $context);
 
         if (! class_exists($implementor))
         {
@@ -109,9 +109,9 @@ class ModuleFactory
         return $finder;
     }
 
-    protected static function createStorage(Module $module)
+    protected static function createStorage(Module $module, $context = 'default')
     {
-        $implementor = $module->getStorageImplementor();
+        $implementor = self::getStorageImplementor($module, $context);
 
         if (! class_exists($implementor))
         {
@@ -140,5 +140,52 @@ class ModuleFactory
         }
 
         return $storage;
+    }
+
+    public static function getServiceImplementor($module, $context)
+    {
+        $defaultService = sprintf('%sService', $module->getName());
+        $settingName = $module->getOption('prefix') . '.service';
+
+        return \AgaviConfig::get($settingName, $defaultService);
+    }
+
+    public static function getRepositoryImplementor(Module $module, $context)
+    {
+        $default = 'Honeybee\\Core\\Repository\\GenericRepository';
+        if ('tree' === $context)
+        {
+            $default = 'Honeybee\\Core\\Repository\\TreeRepository';
+        }
+
+        $settingName = $module->getOption('prefix') . '.repository';
+
+        return \AgaviConfig::get($settingName, $default);
+    }
+
+    public static function getStorageImplementor(Module $module, $context)
+    {
+        $default = 'Honeybee\\Core\\Storage\\CouchDb\\Storage';
+        if ('tree' === $context)
+        {
+            $default = 'Honeybee\\Core\\Storage\\CouchDb\\TreeStorage';
+        }
+
+        $settingName = $module->getOption('prefix') . '.storage';
+
+        return \AgaviConfig::get($settingName, $default);
+    }
+
+    public static function getFinderImplementor(Module $module, $context)
+    {
+        $default = 'Honeybee\\Core\\Finder\\ElasticSearch\\Finder';
+        if ('tree' === $context)
+        {
+            $default = 'Honeybee\\Core\\Finder\\ElasticSearch\\TreeFinder';
+        }
+
+        $settingName = $module->getOption('prefix') . '.finder';
+        
+        return \AgaviConfig::get($settingName, $default);
     }
 }
