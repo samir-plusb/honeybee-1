@@ -20,10 +20,20 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         this.renderTreeNode(this.tree.rootNode, this.renderTarget);
         this.refreshCss(this.renderTarget);
         this.bindDragEvents();
+        this.bindToggleEvents();
     },
 
     attach: function()
     {
+    },
+
+    bindToggleEvents: function()
+    {
+        this.renderTarget.find('.node-toggle').bind('click', function(ev)
+        {
+            $(this).parentsUntil('.child').parent().toggleClass('closed');
+            $(this).toggleClass('icon-chevron-down icon-chevron-right');
+        });
     },
 
     bindDragEvents: function()
@@ -89,12 +99,15 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
     renderTreeNode: function(node, domContext)
     {
-        var childList, childContent, i;
+        var childList, childContent, i, toggle, label;
 
         domContext.attr('id', node.identifier);
         if (node.identifier !== this.tree.rootNode.identifier)
         {
-            domContext.append($('<span></span>').addClass('node-label').text(node.label));
+            toggle = $('<i></i>').addClass('node-toggle icon-chevron-down');
+            label = $('<span></span>').addClass('node-label').text(node.label).prepend(toggle);
+
+            domContext.append(label);
         }
 
         if (node.hasOwnProperty('children') && node.children.length > 0)
@@ -122,11 +135,22 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         var traverseAndRefresh = function(domContext)
         {
             even = !even;
-            domContext.removeClass('odd even').addClass(even ? 'even' : 'odd');
-            domContext.children('ul').children('li').each(function(i, element)
+            //domContext.removeClass('odd even').addClass(even ? 'even' : 'odd');
+            var children = domContext.children('ul').children('li');
+
+            if (children.length > 0)
             {
-                traverseAndRefresh($(element));
-            });
+                domContext.addClass('expandable');
+                domContext.children('ul').children('li').each(function(i, element)
+                {
+                    traverseAndRefresh($(element));
+                });
+            }
+            else
+            {
+                domContext.removeClass('expandable open closed');
+            }
+
         };
 
         traverseAndRefresh(this.renderTarget);
@@ -206,7 +230,7 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
         this.tree.rootNode = buildJsonNode(this.renderTarget);
 
-        this.saveData();
+        //this.saveData(); //doesn't work on server side yet. 
     },
 
     saveData: function()

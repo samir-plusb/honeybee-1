@@ -5,6 +5,10 @@
         
         .child {
             padding: 5px;
+
+            list-style-position: inside;
+            list-style-type: none;
+
             border-width: 1px;
             border-style: solid;
             border-color: white;
@@ -14,6 +18,12 @@
             }
 
             &.odd {
+            }
+
+            &.closed {
+                > .children {
+                    display: none;
+                }
             }
 
             .node-label {
@@ -32,6 +42,19 @@
             &.drop-inside {
                 border-color: black;
                 background-color: #fee;
+            }
+
+            > .node-label {
+                > .node-toggle {
+                    visibility: hidden;
+                }
+            }
+            &.expandable {
+                > .node-label {
+                    > .node-toggle {
+                        visibility: visible;
+                    }
+                }
             }
         }
     }
