@@ -8,6 +8,8 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
     tree: {},
 
+    alerts: null,
+
     init: function(options)
     {
         this.parent();
@@ -21,6 +23,14 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         this.refreshCss(this.renderTarget);
         this.bindDragEvents();
         this.bindToggleEvents();
+
+        this.initKnockoutProperties();
+    },
+
+    initKnockoutProperties: function()
+    {
+        this.alerts = ko.observableArray([ ]);
+        ko.applyBindings(this, this.domElement[0]);
     },
 
     attach: function()
@@ -161,8 +171,6 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         var dataContainer = this.domElement.find('.tree-data-json');
 
         this.tree = JSON.parse(dataContainer.text().trim());
-
-        console.log('loaded', JSON.stringify(this.tree));
     },
 
     moveNode: function(from, to)
@@ -235,7 +243,8 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
     saveData: function()
     {
-        this.tree.name = 'tree';
+        var that = this;
+
         $.ajax({
             url: this.options.saveCompleteTreeUrl,
             type: 'POST',
@@ -247,12 +256,68 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
             }
         }).done(function(response)
         {
-            console.log(response);
+            //console.log(response);
+            that.addAlert({
+                type: 'success',
+                message: 'Gespeichert'
+            });
 
         }).fail(function(response)
         {
-            console.log(response.responseText);
+            //console.log(response.responseText);
+            that.addAlert({
+                type: 'error',
+                message: 'Speichern fehlgeschlagen!'
+            });
         });
+    },
+
+    addAlert: function(alert)
+    {
+        var that = this;
+        this.alerts.push(alert);
+        setTimeout(function()
+        {
+            if (-1 !== that.alerts.indexOf(alert)) // if alert is still there.
+            {
+                that.removeAlert(alert);
+            }
+        }, 10000);
+    },
+
+    removeAlert: function(alert)
+    {
+        this.alerts.remove(alert);
+    },
+
+    showAlert: function(elem, idx, alert) 
+    { 
+        var that = this;
+        if (elem.nodeType === 1) 
+        {
+            $(elem).animate({
+               opacity: 1
+            }, { duration: 600, queue: false });
+            $(elem).animate({
+               'margin-top': '0px'
+            }, { duration: 400, queue: false });
+        }
+    },
+
+    hideAlert: function(elem, idx, alert)
+    {
+        if (elem.nodeType === 1) 
+        {
+            $(elem).animate({
+               opacity: 0
+            }, { duration: 300, queue: false });
+            $(elem).animate({
+               'margin-top': '-55px'
+            }, { duration: 600, queue: false, complete: function() 
+            {
+                $(elem).remove();
+            } });
+        }
     }
 });
 
