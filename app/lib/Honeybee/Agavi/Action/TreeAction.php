@@ -9,6 +9,9 @@ class TreeAction extends BaseAction
     public function executeRead(\AgaviRequestDataHolder $requestData)
     {
         $tree = $this->getModule()->getService()->getTree();
+
+        $this->getModule()->getService()->storeTree($tree);
+
         $this->setAttribute('tree', $tree);
 
         return 'Success';

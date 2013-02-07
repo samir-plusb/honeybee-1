@@ -5,6 +5,7 @@ namespace Honeybee\Core\Dat0r;
 use Dat0r\Core\Runtime\Module\RootModule;
 use Dat0r\Core\Runtime\Field\TextField;
 use Honeybee\Core\Workflow;
+use Honeybee\Core\Storage\CouchDb\TreeStorage;
 
 /**
  * @todo We might want to merge the module settings.xml options,
@@ -12,7 +13,7 @@ use Honeybee\Core\Workflow;
  */
 abstract class Module extends RootModule
 {
-    private $repository;
+    private $repositories;
 
     private $service;
 
@@ -56,14 +57,19 @@ abstract class Module extends RootModule
         return $this->workflowManager;
     }
 
-    public function getRepository()
+    public function getRepository($context = 'default')
     {
-        if (NULL === $this->repository)
+        if (! is_array($this->repositories))
         {
-            $this->repository = ModuleFactory::createRepository($this);
+            $this->repositories = array();
         }
 
-        return $this->repository;
+        if (! isset($this->repositories[$context]))
+        {
+            $this->repositories[$context] = ModuleFactory::createRepository($this, $context);
+        }
+
+        return $this->repositories[$context];
     }
 
     public function getConnectionName($type)
@@ -78,35 +84,6 @@ abstract class Module extends RootModule
         }
 
         return sprintf('%s.%s', $this->getName(), $type);
-    }
-
-    public function getServiceImplementor()
-    {
-        $defaultService = sprintf('%sService', $this->getName());
-        $settingName = $this->getOption('prefix') . '.service';
-
-        return \AgaviConfig::get($settingName, $defaultService);
-    }
-
-    public function getRepositoryImplementor()
-    {
-        $settingName = $this->getOption('prefix') . '.repository';
-
-        return \AgaviConfig::get($settingName, '\\Honeybee\\Core\\Repository\\GenericRepository');
-    }
-
-    public function getStorageImplementor()
-    {
-        $settingName = $this->getOption('prefix') . '.storage';
-
-        return \AgaviConfig::get($settingName, '\\Honeybee\\Core\\Storage\\CouchDb\\Storage');
-    }
-
-    public function getFinderImplementor()
-    {
-        $settingName = $this->getOption('prefix') . '.finder';
-        
-        return \AgaviConfig::get($settingName, '\\Honeybee\\Core\\Finder\\ElasticSearch\\Finder');
     }
 
     public function isActingAsTree()

@@ -7,22 +7,37 @@ use Elastica;
 
 class Tree implements ITree
 {
-    protected $rootNode;
-
     protected $module;
 
-    protected $name;
+    protected $rootNode;
 
-    public function __construct(Module $module, $name, RootNode $rootNode = NULL)
+    protected $identifier;
+
+    protected $revision;
+
+    public function __construct(Module $module, array $data = array())
     {
-        $this->rootNode = $rootNode;
         $this->module = $module;
-        $this->name = $name;
+        
+        if (! empty($data))
+        {
+            $this->hydrate($data);
+        }
     }
 
-    public function getName()
+    public function getIdentifier()
     {
-        return $this->name;
+        return $this->identifier;
+    }
+
+    public function getRevision()
+    {
+        return $this->revision;
+    }
+
+    public function setRevision($revision)
+    {
+        $this->revision = $revision;
     }
 
     public function getModule()
@@ -37,69 +52,49 @@ class Tree implements ITree
 
     public function toArray($level = NULL, $expand = TRUE)
     {
-        $treeData = array(
-            'rootNode' => $this->rootNode->toArray($level, $expand)
+        return array(
+            'rootNode' => $this->rootNode->toArray($level, $expand),
+            'identifier' => $this->getIdentifier(),
+            'revision' => $this->getRevision()
         );
-
-        if (TRUE === $expand)
-        {
-            $treeData['name'] = $this->getName();
-        }
-
-        return $treeData;
     }
 
     public function hydrate(array $treeData)
     {
-        $repository = $this->module->getRepository();
-        $storage = $repository->getStorage();
-        // load all ids from tree, in order to fetch their documents...
-        $ids = array();
-        $getNodeIds = function(array $node) use (&$getNodeIds)
-        {
-            $ids = array($node['identifier']);
-            foreach ($node['children'] as $childNode)
-            {
-                $ids = array_merge($ids, $getNodeIds($childNode));
-            }
-            return $ids;
-        };
-        foreach ($treeData['rootNode']['children'] as $topLevelNode)
-        {
-            $ids = array_merge($ids, $getNodeIds($topLevelNode));
-        }
-        // ... then fetch documents from index
-        $query = Elastica\Query::create(NULL);
-        $query->setFilter(new Elastica\Filter\Ids(
-            $this->module->getOption('prefix'), 
-            array_unique($ids)
-        ));
-        $documents = $repository->find($query, 10000, 0);
-        // make documents from collection accessable bei identifier ...
-        $docMap = array();
+        $service = $this->module->getService();
+        $documents = $service->getMany();
+
+        $documentIdMap = array();
         foreach ($documents['documents'] as $document)
         {
-            $docMap[$document->getIdentifier()] = $document;
+            $documentIdMap[$document->getIdentifier()] = $document;
         }
-        // ... then create the actual document tree.
-        $topLevelNodes = array();
-        $createNode = function(array $node) use (&$createNode, &$docMap)
-        {
-            $document = $docMap[$node['identifier']];
-            $children = array();
-            foreach ($node['children'] as $childNode)
-            {
-                $children[] = $createNode($childNode);
-            }
-            return new DocumentNode($document, $children);
-        };
+
+        $rootChildren = array();
         foreach ($treeData['rootNode']['children'] as $topLevelNode)
         {
-            $topLevelNodes[] = $createNode($topLevelNode);
+            $rootChildren[] = $this->createNode($topLevelNode, $documentIdMap);
         }
 
-        $this->rootNode = new RootNode($topLevelNodes);
+        $this->rootNode = new RootNode($rootChildren);
+        $this->identifier = $treeData['identifier'];
+        $this->revision = isset($treeData['revision']) ? $treeData['revision'] : NULL;
 
         return $this;
+    }
+
+    protected function createNode(array $nodeData, array &$documentIdMap)
+    {
+        $children = array();
+        $document = $documentIdMap[$nodeData['identifier']];
+
+        foreach ($nodeData['children'] as $childNode)
+        {
+            $children[] = $this->createNode($childNode, $documentIdMap);
+        }
+
+        unset($documentIdMap[$nodeData['identifier']]);
+
+        return new DocumentNode($document, $children);
     }
 }

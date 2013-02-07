@@ -8,7 +8,9 @@ interface IStorage
 {
     public function read($identifier, $revision = NULL);
 
-    public function writeOne(Document $document);
+    public function writeOne($data);
 
-    public function writeMany(array $documents);
+    public function writeMany(array $bulkData);
+
+    public function delete($identifier, $revision = NULL);
 }
