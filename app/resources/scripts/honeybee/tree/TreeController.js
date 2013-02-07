@@ -230,7 +230,7 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
         this.tree.rootNode = buildJsonNode(this.renderTarget);
 
-        //this.saveData(); //doesn't work on server side yet. 
+        this.saveData(); //doesn't work on server side yet. 
     },
 
     saveData: function()
