@@ -12,7 +12,7 @@ use Elastica;
 use ListConfig;
 use IListState;
 
-class GenericService implements IService
+class DocumentService implements IService
 {
     private $module;
 

@@ -157,7 +157,7 @@ class ModuleFactory
 
     public static function getRepositoryImplementor(Module $module, $context)
     {
-        $default = 'Honeybee\\Core\\Repository\\GenericRepository';
+        $default = 'Honeybee\\Core\\Repository\\DocumentRepository';
         if ('tree' === $context)
         {
             $default = 'Honeybee\\Core\\Repository\\TreeRepository';

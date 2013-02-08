@@ -9,7 +9,7 @@ use Honeybee\Core\Dat0r\Tree;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\DocumentCollection;
 
-class TreeRepository extends GenericRepository
+class TreeRepository extends BaseRepository
 {
     public function find($query = NULL, $limit = 0, $offset = 0)
     {

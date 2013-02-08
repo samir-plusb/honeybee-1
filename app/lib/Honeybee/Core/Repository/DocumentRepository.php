@@ -8,47 +8,20 @@ use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\DocumentCollection;
 
-class GenericRepository implements IRepository
+class DocumentRepository extends BaseRepository
 {
-    private $module;
-
-    private $finder;
-
-    private $storage;
-
-    public function __construct(Module $module)
-    {
-        $this->module = $module;
-    }
-
-    public function initialize(IFinder $finder = NULL, IStorage $storage = NULL)
-    {
-        $this->finder = $finder;
-        $this->storage = $storage;
-    }
-
-    public function getFinder()
-    {
-        return $this->finder;
-    }
-
-    public function getStorage()
-    {
-        return $this->storage;
-    }
-    
     public function find($query = NULL, $limit = 100000, $offset = 0)
     {
         $documents = new DocumentCollection();
 
         $result = (NULL === $query) 
-            ? $this->finder->fetchAll($limit, $offset)
-            : $this->finder->find($query, $limit, $offset);
+            ? $this->getFinder()->fetchAll($limit, $offset)
+            : $this->getFinder()->find($query, $limit, $offset);
 
         foreach ($result['data'] as $documentData)
         {
             $documents->add(
-                $this->module->createDocument($documentData)
+                $this->getModule()->createDocument($documentData)
             );
         }
 
@@ -67,18 +40,18 @@ class GenericRepository implements IRepository
         {
             foreach ($identifier as $curIdentifier)
             {
-                if (($data = $this->storage->read($curIdentifier)))
+                if (($data = $this->getStorage()->read($curIdentifier)))
                 {
                     $documents->add(
-                        $this->module->createDocument($data)
+                        $this->getModule()->createDocument($data)
                     );
                 }
             }
         }
-        else if (($data = $this->storage->read($identifier)))
+        else if (($data = $this->getStorage()->read($identifier)))
         {
             $documents->add(
-                $this->module->createDocument($data)
+                $this->getModule()->createDocument($data)
             );
         }
         
@@ -91,11 +64,11 @@ class GenericRepository implements IRepository
 
         if ($data instanceof Document)
         {
-            $this->storage->writeOne($data);
+            $this->getStorage()->writeOne($data);
         }
         else if ($data instanceof DocumentCollection)
         {
-            $errors = $this->storage->writeMany($data);
+            $errors = $this->getStorage()->writeMany($data);
         }
         else
         {
@@ -113,7 +86,10 @@ class GenericRepository implements IRepository
 
         if ($data instanceof Document)
         {
-            $this->storage->delete($data->getIdentifier(), $data->getRevision());
+            $this->getStorage()->delete(
+                $data->getIdentifier(), 
+                $data->getRevision()
+            );
         }
         else
         {
@@ -123,10 +99,5 @@ class GenericRepository implements IRepository
         }
 
         return $errors;
-    }
-
-    public function getModule()
-    {
-        return $this->module;
     }
 }
