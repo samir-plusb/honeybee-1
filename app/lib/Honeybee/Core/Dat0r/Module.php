@@ -13,9 +13,9 @@ use Honeybee\Core\Storage\CouchDb\TreeStorage;
  */
 abstract class Module extends RootModule
 {
-    private $repositories;
+    private $services;
 
-    private $service;
+    private $repositories;
 
     private $workflowManager;
 
@@ -37,24 +37,19 @@ abstract class Module extends RootModule
         return $document;
     }
 
-    public function getService()
+    public function getService($context = 'default')
     {
-        if (NULL === $this->service)
+        if (! is_array($this->services))
         {
-            $this->service = ModuleFactory::createService($this);
+            $this->services = array();
         }
 
-        return $this->service;
-    }
-
-    public function getWorkflowManager()
-    {
-        if (NULL === $this->workflowManager)
+        if (! isset($this->services[$context]))
         {
-            $this->workflowManager = new Workflow\Manager($this);
+            $this->services[$context] = ModuleFactory::createService($this, $context);
         }
 
-        return $this->workflowManager;
+        return $this->services[$context];
     }
 
     public function getRepository($context = 'default')
@@ -72,18 +67,14 @@ abstract class Module extends RootModule
         return $this->repositories[$context];
     }
 
-    public function getConnectionName($type)
+    public function getWorkflowManager()
     {
-        $supportedTypes = array('Read', 'Write');
-
-        if (! in_array($type, $supportedTypes))
+        if (NULL === $this->workflowManager)
         {
-            throw new \InvalidArgumentException(
-                "Unsupported connection type '$type' given. Supported are 'Read' and 'Write'."
-            );
+            $this->workflowManager = new Workflow\Manager($this);
         }
 
-        return sprintf('%s.%s', $this->getName(), $type);
+        return $this->workflowManager;
     }
 
     public function isActingAsTree()

@@ -6,7 +6,7 @@ use Honeybee\Core\Finder\IFinder;
 use Honeybee\Agavi\Database\ElasticSearch\Database;
 use Elastica;
 
-class Finder implements IFinder
+class DocumentFinder implements IFinder
 {
     const ELASTIC_ID = '_id';
 
