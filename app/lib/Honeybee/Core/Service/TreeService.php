@@ -36,7 +36,7 @@ class TreeService implements IService
         $repository = $this->module->getRepository('tree');
         $tree = $repository->read($treeName);
 
-        return $tree ? $tree : $this->createTree($treeName);
+        return $tree ? $tree : $this->create($treeName);
     }
 
     public function delete(Tree\ITree $tree, $markOnly = TRUE)

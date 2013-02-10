@@ -71,12 +71,14 @@ class Tree implements ITree
         }
 
         $rootChildren = array();
-
         if (isset($treeData['rootNode']))
         {
             foreach ($treeData['rootNode']['children'] as $topLevelNode)
             {
-                $rootChildren[] = $this->createNode($topLevelNode, $documentIdMap);
+                if (($childNode = $this->createNode($topLevelNode, $documentIdMap)))
+                {
+                    $rootChildren[] = $childNode;
+                }
             }
         }
 
@@ -95,11 +97,21 @@ class Tree implements ITree
     protected function createNode(array $nodeData, array &$documentIdMap)
     {
         $children = array();
+
+        if (! isset($documentIdMap[$nodeData['identifier']]))
+        {
+            // document was deleted in the meanwhile.
+            return NULL;
+        }
+
         $document = $documentIdMap[$nodeData['identifier']];
 
         foreach ($nodeData['children'] as $childNode)
         {
-            $children[] = $this->createNode($childNode, $documentIdMap);
+            if (($childNode = $this->createNode($childNode, $documentIdMap)))
+            {
+                $children[] = $childNode;
+            }
         }
 
         unset($documentIdMap[$nodeData['identifier']]);
