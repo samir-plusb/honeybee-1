@@ -17,6 +17,7 @@ class Common_Tree_TreeSuccessView extends CommonBaseView
         $tree = $parameters->getParameter('tree');
         $treeConfig = $parameters->getParameter('config');
 
+        $this->setAttribute('module_type_key', $treeConfig->getTypeKey());
         $this->setAttribute('tree', $tree->toArray());
         $this->setAttribute('client_side_controller', $treeConfig->getClientSideController());
     }

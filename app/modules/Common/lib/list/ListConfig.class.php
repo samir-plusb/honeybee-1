@@ -22,6 +22,8 @@ class ListConfig implements IListConfig
 
     protected $suggestField = '_all';
 
+    protected $hasTreeView;
+
     public static function create(array $data = array())
     {
         return empty($data) ? new static : new static($data);
@@ -136,5 +138,10 @@ class ListConfig implements IListConfig
                 }
             }
         }
+    }
+
+    public function hasTreeView()
+    {
+        return $this->hasTreeView;
     }
 }

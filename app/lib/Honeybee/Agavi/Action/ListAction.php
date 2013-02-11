@@ -92,6 +92,8 @@ class ListAction extends BaseAction
         }
         $routing = $this->getContext()->getRouting();
 
+        $listSettings['hasTreeView'] = $this->getModule()->isActingAsTree();
+
         return $listSettings;
     }
 

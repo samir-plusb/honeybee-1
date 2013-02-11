@@ -19,6 +19,12 @@
     Tree Controls/Widgets such as search and batch processing.
 ************************************************** -->
     <section class="well toolbar">
+        <section class="view-mode-switch">
+            <div class="btn-group" data-toggle="radio">
+                <a class="btn btn-primary" href="{{ro.gen(module_type_key ~ '.list')}}">Liste</a>
+                <a class="btn active btn-primary" href="{{ro.gen(module_type_key ~ '.tree')}}">Hierarchie</a>
+            </div>
+        </section>
     </section>
 
     <section class="render-tree">

@@ -43,6 +43,8 @@ class Common_List_ListSuccessView extends CommonBaseView
             $routing->gen($listConfig->getRouteName(), array('offset' => 0, 'limit' => $listState->getLimit()))
         );
 
+        $this->setAttribute('has_tree_view', $listConfig->hasTreeView());
+
         $this->getLayer('content')->setSlot(
             'pagination',
             $this->createSlotContainer('Common', 'Paginate', array('state' => $listState, 'config' => $listConfig))

@@ -6,6 +6,8 @@ class TreeConfig implements ITreeConfig
 
     protected $routeName;
 
+    protected $typeKey;
+
     public static function create(array $data = array())
     {
         return empty($data) ? new static : new static($data);
@@ -14,6 +16,11 @@ class TreeConfig implements ITreeConfig
     public function getClientSideController()
     {
         return $this->clientSideController;
+    }
+
+    public function getTypeKey()
+    {
+        return $this->typeKey;
     }
 
     public function getRouteName()
