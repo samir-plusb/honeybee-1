@@ -1,12 +1,17 @@
 .toolbar
 {
+    min-height: 30px;
     margin-top: 95px;
     background-color: rgba(253, 253, 253, 0.9);
     text-align:right;
 
-    .container-batch {
+    div {
         text-align: left;
         display: inline-block;
+    }
+
+    .container-actions {
+        float: right;
         section {
             display: inline-block;
             margin-left: 5px;
@@ -15,6 +20,10 @@
                 margin-left: 0px;
             }
         }
+    }
+
+    .container-viewcontrols {
+        float: left;
     }
 }
 
@@ -61,6 +70,3 @@
     max-height: 900px;
 }
 
-.view-mode-switch {
-    float: left;
-}
