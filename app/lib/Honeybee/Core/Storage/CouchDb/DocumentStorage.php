@@ -7,7 +7,7 @@ use Honeybee\Core\Dat0r\Document;
 use Honeybee\Agavi\Database\CouchDb\Database;
 use Honeybee\Agavi\Database\CouchDb\ClientException;
 
-class Storage extends BaseStorage
+class DocumentStorage extends BaseStorage
 {
     /**
      * Read a document's data from couchdb.

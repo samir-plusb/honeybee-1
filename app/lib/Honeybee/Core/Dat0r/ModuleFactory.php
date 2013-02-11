@@ -2,7 +2,7 @@
 
 namespace Honeybee\Core\Dat0r;
 
-use Honeybee\Core\Repository\IService;
+use Honeybee\Core\Service\IService;
 use Honeybee\Core\Finder\IFinder;
 use Honeybee\Core\Storage\IStorage;
 use Honeybee\Core\Repository\IRepository;
@@ -92,7 +92,7 @@ class ModuleFactory
         $context = \AgaviContext::getInstance();
         $dbManager = $context->getDatabaseManager();
         $finder = new $implementor(
-            $dbManager->getDatabase($module->getConnectionName('Read')),
+            $dbManager->getDatabase(self::getConnectionName($module, 'Read')),
             $module->getOption('prefix')
         );
 
@@ -126,7 +126,7 @@ class ModuleFactory
         $context = \AgaviContext::getInstance();
         $dbManager = $context->getDatabaseManager();
         $storage = new $implementor(
-            $dbManager->getDatabase($module->getConnectionName('Write'))
+            $dbManager->getDatabase(self::getConnectionName($module, 'Write'))
         );
 
         if (! $storage instanceof IStorage)
@@ -144,15 +144,20 @@ class ModuleFactory
 
     public static function getServiceImplementor($module, $context)
     {
-        $defaultService = sprintf('%sService', $module->getName());
+        $default = sprintf('%sService', $module->getName());
+        if ('tree' === $context)
+        {
+            $default = 'Honeybee\\Core\\Service\\TreeService';
+        }
+
         $settingName = $module->getOption('prefix') . '.service';
 
-        return \AgaviConfig::get($settingName, $defaultService);
+        return \AgaviConfig::get($settingName, $default);
     }
 
     public static function getRepositoryImplementor(Module $module, $context)
     {
-        $default = 'Honeybee\\Core\\Repository\\GenericRepository';
+        $default = 'Honeybee\\Core\\Repository\\DocumentRepository';
         if ('tree' === $context)
         {
             $default = 'Honeybee\\Core\\Repository\\TreeRepository';
@@ -165,7 +170,7 @@ class ModuleFactory
 
     public static function getStorageImplementor(Module $module, $context)
     {
-        $default = 'Honeybee\\Core\\Storage\\CouchDb\\Storage';
+        $default = 'Honeybee\\Core\\Storage\\CouchDb\\DocumentStorage';
         if ('tree' === $context)
         {
             $default = 'Honeybee\\Core\\Storage\\CouchDb\\TreeStorage';
@@ -178,7 +183,7 @@ class ModuleFactory
 
     public static function getFinderImplementor(Module $module, $context)
     {
-        $default = 'Honeybee\\Core\\Finder\\ElasticSearch\\Finder';
+        $default = 'Honeybee\\Core\\Finder\\ElasticSearch\\DocumentFinder';
         if ('tree' === $context)
         {
             $default = 'Honeybee\\Core\\Finder\\ElasticSearch\\TreeFinder';
@@ -187,5 +192,19 @@ class ModuleFactory
         $settingName = $module->getOption('prefix') . '.finder';
         
         return \AgaviConfig::get($settingName, $default);
+    }
+
+    public static function getConnectionName(Module $module, $accessType = 'Read')
+    {
+        $supportedTypes = array('Read', 'Write');
+
+        if (! in_array($accessType, $supportedTypes))
+        {
+            throw new \InvalidArgumentException(
+                "Unsupported connection type '$type' given. Supported are 'Read' and 'Write'."
+            );
+        }
+
+        return sprintf('%s.%s', $module->getName(), $accessType);
     }
 }

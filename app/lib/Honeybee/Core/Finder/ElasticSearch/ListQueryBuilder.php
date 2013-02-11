@@ -8,7 +8,7 @@ use IListState;
 
 use Elastica;
 
-class QueryBuilder implements IQueryBuilder
+class ListQueryBuilder implements IQueryBuilder
 {
     public function build(array $specification)
     {

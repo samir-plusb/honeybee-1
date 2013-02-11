@@ -10,7 +10,7 @@ class TreeAction extends BaseAction
     public function executeRead(\AgaviRequestDataHolder $requestData)
     {   
         $module = $this->getModule();
-        $tree = $module->getService()->getTree();
+        $tree = $module->getService('tree')->get();
 
         $this->setAttribute('module', $module);
         $this->setAttribute('tree', $tree);
@@ -23,8 +23,12 @@ class TreeAction extends BaseAction
     {
         $module = $this->getModule();
 
-        $tree = new Tree\Tree($module, $requestData->getParameter('structure'));
-        $module->getService()->storeTree($tree);
+        $tree = new Tree\Tree(
+            $module, 
+            $requestData->getParameter('structure')
+        );
+
+        $module->getService('tree')->save($tree);
 
         $this->setAttribute('module', $module);
         $this->setAttribute('tree', $tree);

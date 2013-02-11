@@ -1,6 +1,6 @@
 <?php
 
-use \Honeybee\Core\Environment;
+use Honeybee\Core\Environment;
 
 /**
  * EnvironmentConfigurator provides an simple api to update/initialize your environment and host configuration.
@@ -11,8 +11,6 @@ use \Honeybee\Core\Environment;
  *
  * @author     Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  * @copyright  BerlinOnline GmbH & Co. KG
- *
- * @version $Id: EnvironmentConfigurator.class.php 4182 2011-06-08 12:22:07Z tschmitt $
  */
 class EnvironmentConfigurator
 {

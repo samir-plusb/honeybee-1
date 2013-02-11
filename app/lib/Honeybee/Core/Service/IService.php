@@ -1,6 +1,6 @@
 <?php
 
-namespace Honeybee\Core\Repository;
+namespace Honeybee\Core\Service;
 
 interface IService
 {
