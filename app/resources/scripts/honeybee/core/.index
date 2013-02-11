@@ -1,4 +1,5 @@
 core.js
+Events.js
 Module.js
 BaseObject.js
 CidSequence.js
