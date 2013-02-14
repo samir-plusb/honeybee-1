@@ -27,6 +27,11 @@ class ListSuccessView extends BaseView
             )), NULL, 'read'
         );
 
+        $this->getLayer('content')->setSlot(
+            'sidebar',
+            $this->createSlotContainer('Common', 'Sidebar', array()), NULL, 'read'
+        );
+
         $this->setBreadcrumb();
     }
 

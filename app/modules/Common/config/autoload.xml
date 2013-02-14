@@ -17,6 +17,7 @@
             <autoload name="ListState">%core.module_dir%/Common/lib/list/ListState.class.php</autoload>
 
             <autoload name="TreeConfigValidator">%core.module_dir%/Common/lib/agavi/validator/TreeConfigValidator.class.php</autoload>
+            <autoload name="SlotListValidator">%core.module_dir%/Common/lib/agavi/validator/SlotListValidator.class.php</autoload>
             <autoload name="TreeConfig">%core.module_dir%/Common/lib/tree/TreeConfig.class.php</autoload>
             <autoload name="ITreeConfig">%core.module_dir%/Common/lib/tree/ITreeConfig.iface.php</autoload>
 

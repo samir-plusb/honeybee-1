@@ -23,6 +23,7 @@ class ListAction extends BaseAction
     public function executeRead(\AgaviRequestDataHolder $parameters)
     {
         $module = $this->getModule();
+
         $service = $module->getService();
 
         $listConfig = ListConfig::create($this->buildListConfig());
@@ -143,4 +144,5 @@ class ListAction extends BaseAction
 
         return $data;
     }
+
 }
