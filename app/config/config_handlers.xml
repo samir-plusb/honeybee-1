@@ -26,17 +26,17 @@
                 <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/workflow/1.0</ae:parameter>
             </handler>
 
-            <handler pattern="dataimports.xml" class="Honeybee\Agavi\ConfigHandler\DataImportConfigHandler">
-                <validation>%core.config_dir%/xsd/dataimport.xsd</validation>
+            <handler pattern="import.consumers.xml" class="Honeybee\Agavi\ConfigHandler\ImportConsumerConfigHandler">
+                <validation>%core.config_dir%/xsd/import_consumer.xsd</validation>
                 <ae:parameters>
-                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/config/dataimport/definition/1.0</ae:parameter>
+                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/config/consumer/definition/1.0</ae:parameter>
                 </ae:parameters>
             </handler>
             
-            <handler pattern="datasources.xml" class="Honeybee\Agavi\ConfigHandler\DataSourceConfigHandler">
-                <validation>%core.config_dir%/xsd/datasource.xsd</validation>
+            <handler pattern="import.providers.xml" class="Honeybee\Agavi\ConfigHandler\ImportProviderConfigHandler">
+                <validation>%core.config_dir%/xsd/import_provider.xsd</validation>
                 <ae:parameters>
-                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/config/datasource/definition/1.0</ae:parameter>
+                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/config/provider/definition/1.0</ae:parameter>
                 </ae:parameters>
             </handler>
 

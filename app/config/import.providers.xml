@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://berlinonline.de/schemas/honeybee/config/provider/definition/1.0"
+    xmlns:env="http://berlinonline.de/schemas/honeybee/config/envelope/definition/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+
+    <ae:configuration>
+        <providers>
+
+            <provider name="test-provider" class="Honeybee\Core\Import\Provider\ArrayProvider">
+                <description>Test import provider configuration.</description>
+                <settings>
+                    <setting name="bar">foo</setting>
+                    <setting name="baz">foo-baar</setting>
+                </settings>
+            </provider>
+
+        </providers>
+    </ae:configuration>
+</ae:configurations>

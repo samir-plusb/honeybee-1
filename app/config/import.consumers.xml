@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://berlinonline.de/schemas/honeybee/config/consumer/definition/1.0"
+    xmlns:env="http://berlinonline.de/schemas/honeybee/config/envelope/definition/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+    <ae:configuration>
+        <consumers>
+
+            <!-- Consumer test definition -->
+            <consumer name="test-consumer" class="Honeybee\Core\Import\Consumer\BaseConsumer">
+                <description>Test consumer configuration.</description>
+                <provider ref="test-provider" />
+                <!-- consumer settings -->
+                <settings>
+                    <setting name="foo">bar</setting>
+                </settings>
+                <!-- Filters to use on data coming for this consumer. -->
+                <filters>
+                    <filter name="default" class="Honeybee\Core\Import\Filter\RemapFilter">
+                        <settings>
+                            <setting name="include_unmapped">on</setting>
+                            <setting name="map">
+                                <setting name="title">name</setting>
+                                <setting name="teaser">description</setting>
+                            </setting>
+                        </settings>
+                    </filter>
+                </filters>
+            </consumer>
+
+        </consumers>
+    </ae:configuration>
+</ae:configurations>
