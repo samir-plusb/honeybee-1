@@ -7,8 +7,8 @@ class RemapFilter extends BaseFilter
     protected function run(array $input)
     {
         $mappedData = array();
-        $keyMap = $this->getConfig()->getSetting('map');
-        $includeUnmapped = $this->getConfig()->getSetting('include_unmapped', FALSE);
+        $keyMap = $this->getConfig()->get('map');
+        $includeUnmapped = $this->getConfig()->get('include_unmapped', FALSE);
 
         foreach ($input as $key => $value)
         {

@@ -32,9 +32,4 @@ class ArrayConfig extends BaseConfig
 
         return $configSrc;
     }
-
-    protected function getRequiredSettings()
-    {
-        return array();
-    }
 }

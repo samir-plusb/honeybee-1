@@ -27,15 +27,6 @@ abstract class BaseConfig implements IConfig
     abstract protected function load($configSource);
 
     /**
-     * Return an array of settings that are to be considered as mandatory for this instance.
-     * An exception will occur upon initialization,
-     * if a required setting is not available after loading.
-     *
-     * @return      array
-     */
-    abstract protected function getRequiredSettings();
-
-    /**
      * Create a new BaseConfig instance for the given $configSource.
      *
      * @param       mixed $configSource
@@ -54,7 +45,7 @@ abstract class BaseConfig implements IConfig
      *
      * @return      mixed
      */
-    public function getSetting($setting, $default = NULL)
+    public function get($setting, $default = NULL)
     {
         $value = $default;
 
@@ -73,19 +64,9 @@ abstract class BaseConfig implements IConfig
      *
      * @return      bool
      */
-    public function hasSetting($setting)
+    public function has($setting)
     {
         return isset($this->settings[$setting]);
-    }
-
-   /**
-    * Return an array containing our supported setting names.
-    *
-    * @return       array
-    */
-    public function getSupportSettings()
-    {
-        return array_keys($this->settings);
     }
 
     /**
@@ -123,5 +104,17 @@ abstract class BaseConfig implements IConfig
                 );
             }
         }
+    }
+
+    /**
+     * Return an array of settings that are to be considered as mandatory for this instance.
+     * An exception will occur upon initialization,
+     * if a required setting is not available after loading.
+     *
+     * @return      array
+     */
+    protected function getRequiredSettings()
+    {
+        return array();
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Honeybee\Core\Import\Provider;
 
-use Honeybee\Core\Import\Config;
-
 /**
  * The ArrayProvider class is a concrete implementation of the BaseProvider base class.
  * It basically just wraps a standard php array and exposes it through the IProvider interface,
@@ -81,7 +79,7 @@ class ArrayProvider extends BaseProvider
     {
         if (! isset($this->data[$this->cursorPos]))
         {
-            throw new ProviderException(
+            throw new Exception(
                 "Invalid cursor position detected for ArrayProvider. There is no data at index: " . $this->cursorPos
             );
         }

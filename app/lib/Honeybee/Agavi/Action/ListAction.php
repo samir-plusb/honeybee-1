@@ -23,14 +23,6 @@ class ListAction extends BaseAction
      */
     public function executeRead(\AgaviRequestDataHolder $parameters)
     {
-        $service = new Import\Service();
-        $report = $service->consume('test-consumer', array(), array('data' => array(
-            array('title' => 'Foo title', 'teaser' => 'Bar teaser'),
-            array('title' => 'Baz 2 title', 'teaser' => 'Baz 2 teaser', 'asdad' => 'asasdaf')
-        )));
-        var_dump($report);
-        exit;
-
         $module = $this->getModule();
         $service = $module->getService();
 

@@ -14,7 +14,7 @@ use Honeybee\Core\Import\Filter;
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  */
-class BaseConsumer implements IConsumer
+abstract class BaseConsumer implements IConsumer
 {
     /**
      * Holds our consumption report.
@@ -59,6 +59,22 @@ class BaseConsumer implements IConsumer
     private $filters;
 
     /**
+     * Holds a reference to a provider currently giving us data.
+     *
+     * @var         IProvider
+     */
+    private $currentProvider;
+
+    /**
+     * Proccess the given on the context of a concrete consumer context.
+     * Usually this is the place where you would persist things,
+     * hence get the actual import business done.
+     *
+     * @param       array $data
+     */
+    abstract protected function processData(array $data);
+
+    /**
      * Create a new BaseConsumer instance.
      *
      * @param       IConfig $config
@@ -98,13 +114,16 @@ class BaseConsumer implements IConsumer
      */
     public function consume(Provider\IProvider $provider)
     {
-        $this->report = new ConsumerReport();
+        $this->setUp($provider);
 
         while (($item = $provider->provideNextItem()))
         {
             try
             {
-                $this->processItem($item, $provider);
+                $this->processData(
+                    $this->executeFilters($item, $provider)
+                );
+
                 $this->report->addRecordSuccess($item);
             }
             catch(\Exception $e)
@@ -114,7 +133,8 @@ class BaseConsumer implements IConsumer
         }
 
         $report = $this->report;
-        $this->report = NULL;
+
+        $this->cleanUp();
 
         return $report;
     }
@@ -150,13 +170,11 @@ class BaseConsumer implements IConsumer
     }
 
     /**
-     * This method is called once for each item, that is delivered by our provider,
-     * when executing our run method.
-     * Shall return true if the consumption succeeded and false otherwise.
+     * Run our filters on the given data and return the outcome.
      *
-     * @return      boolean
+     * @return      array
      */
-    protected function processItem(array $item, Provider\IProvider $provider)
+    protected function executeFilters(array $item)
     {
         $processedData = $item;
 
@@ -165,8 +183,36 @@ class BaseConsumer implements IConsumer
             $processedData = $filter->execute($processedData);
         }
 
-        var_dump(__METHOD__ . "  --  importing filtered data: " . print_r($processedData, TRUE));
+        return $processedData;
+    }
 
-        return TRUE;
+    /**
+     * Return our current provider.
+     *
+     * @return      IProvider
+     */
+    protected function getCurrentProvider()
+    {
+        return $this->currentProvider;
+    }
+
+    /**
+     * Called before kicking off consumption, sets up our runtime state.
+     *
+     * @param       IProvider $provider
+     */
+    protected function setUp(Provider\IProvider $provider)
+    {
+        $this->currentProvider = $provider;
+        $this->report = new ConsumerReport();
+    }
+
+    /**
+     * Called after consumption, resets our runtime state.
+     */
+    protected function cleanUp()
+    {
+        $this->currentProvider = NULL;
+        $this->report = NULL;
     }
 }

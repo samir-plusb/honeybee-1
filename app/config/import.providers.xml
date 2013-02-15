@@ -7,11 +7,10 @@
     <ae:configuration>
         <providers>
 
-            <provider name="test-provider" class="Honeybee\Core\Import\Provider\ArrayProvider">
-                <description>Test import provider configuration.</description>
+            <provider name="books-csv" class="Honeybee\Core\Import\Provider\CsvProvider">
+                <description>Provides data on books abandoned by the nazis.</description>
                 <settings>
-                    <setting name="bar">foo</setting>
-                    <setting name="baz">foo-baar</setting>
+                    <setting name="filepath">%core.app_dir%/../../../books.csv</setting>
                 </settings>
             </provider>
 

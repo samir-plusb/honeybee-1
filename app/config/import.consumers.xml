@@ -6,22 +6,28 @@
     <ae:configuration>
         <consumers>
 
-            <!-- Consumer test definition -->
-            <consumer name="test-consumer" class="Honeybee\Core\Import\Consumer\BaseConsumer">
-                <description>Test consumer configuration.</description>
-                <provider ref="test-provider" />
-                <!-- consumer settings -->
+            <consumer name="test-consumer" class="Honeybee\Core\Import\Consumer\ModuleConsumer">
+                <description>Consumes books meta-data coming from a csv source.</description>
+                <provider ref="books-csv" />
                 <settings>
-                    <setting name="foo">bar</setting>
+                    <setting name="module">Honeybee\Domain\Books\BooksModule</setting>
                 </settings>
-                <!-- Filters to use on data coming for this consumer. -->
                 <filters>
                     <filter name="default" class="Honeybee\Core\Import\Filter\RemapFilter">
                         <settings>
-                            <setting name="include_unmapped">on</setting>
+                            <setting name="include_unmapped">off</setting>
                             <setting name="map">
-                                <setting name="title">name</setting>
-                                <setting name="teaser">description</setting>
+                                <setting name="Quelle">source</setting>
+                                <setting name="Markierung">extra-flag</setting>
+                                <setting name="Nachname">lastname</setting>
+                                <setting name="Vorname">firstname</setting>
+                                <setting name="Titel">title</setting>
+                                <setting name="Ort">city</setting>
+                                <setting name="Verlag">publisher</setting>
+                                <setting name="Jahr">year</setting>
+                                <setting name="Ort 2">secondCity</setting>
+                                <setting name="Verlag 2">secondPublisher</setting>
+                                <setting name="Jahr 2">secondYear</setting>
                             </setting>
                         </settings>
                     </filter>
