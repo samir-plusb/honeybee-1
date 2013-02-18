@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Common_Sidebar_SidebarSuccessView class handles Common/Sidebar success data presentation.
+ * The Common_SidebarTree_SidebarTreeErrorView class handles Common/Tree error data presentation.
  *
  * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -9,7 +9,7 @@
  * @package         Common
  * @subpackage      Mvc
  */
-class Common_Sidebar_SidebarSuccessView extends CommonBaseView
+class Common_SidebarTree_SidebarTreeErrorView extends CommonBaseView
 {
     /**
      * Handle presentation logic for the web  (html).
@@ -22,18 +22,6 @@ class Common_Sidebar_SidebarSuccessView extends CommonBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
-        $tree_modules = $parameters->getParameter('tree_modules');
-
-        foreach($tree_modules as $moduleName)
-        {
-            $this->getLayer('content')->setSlot(
-                $moduleName,
-                $this->createSlotContainer('Common', 'SidebarTree', array(
-                    'moduleName' => $moduleName
-                ), NULL, 'read')
-            );
-        }
     }
-
 }
 

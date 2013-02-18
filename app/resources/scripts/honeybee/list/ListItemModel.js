@@ -21,5 +21,12 @@ honeybee.list.ListItemModel = honeybee.core.BaseObject.extend({
         this.display_data = item_data.display_data;
         this.css_classes = item_data.css_classes ? item_data.css_classes.join(" ") : "";
         this.selected = ko.observable(false);
+    },
+
+    dragStart: function(data, ev)
+    {
+        ev.originalEvent.dataTransfer.setData('text/plain', this.data.identifier);
+        console.log('Dragged', this.data.identifier);
+        return true;
     }
 });

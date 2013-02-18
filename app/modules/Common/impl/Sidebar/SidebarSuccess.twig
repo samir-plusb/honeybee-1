@@ -1,5 +1,8 @@
 <div class="sidebar sidebar-hidden" data-controller="SidebarController">
     <div class="slots">
+    {% for slot in slots %}
+        {{ slot|raw }}
+    {% endfor %}
     </div>
     <div class="edge-handles">
         <i class="icon icon-chevron-right expand"></i>

@@ -9,6 +9,7 @@
     border-right: 1px solid black;
 
     width: @sidebarDefaultWidth;
+    padding-right: 15px;
 
     max-width: 500px;
 
@@ -17,9 +18,7 @@
     }
 
     &.sidebar-hidden {
-        width: 0;
-        overflow: visible;
-        border-right: transparent;
+        width: 0px;
         + .wrapper {
             margin-left: 15px;
         }
@@ -27,6 +26,12 @@
         .drag {
             color: #ccc;
         }
+
+    }
+
+    .slots {
+        width: 100%;
+        overflow: auto;
     }
 
     .edge-handles {
@@ -34,13 +39,13 @@
         width: 15px;
         height: 58px;
         top:50%;
-        right: -16px;
+        right: 0px;
         background-color: white;
-
+        /*
         border-width: 1px 1px 1px 0;
         border-style: solid;
         border-color: black;
-
+        */
 
         .icon {
             display: inline-block;

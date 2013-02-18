@@ -130,7 +130,7 @@
     ListData Table Body
 ************************************************** #}
             <tbody data-bind="foreach: list_items">
-                <tr data-bind='attr: { "class":  $data.css_classes }'>
+                <tr data-bind='attr: { "class":  $data.css_classes }, event:{dragstart: dragStart}' draggable="true">
                     <td>
                         <input type="checkbox" data-bind="checked: selected" />
                     </td>

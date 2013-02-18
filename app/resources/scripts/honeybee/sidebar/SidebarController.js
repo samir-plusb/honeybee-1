@@ -1,4 +1,4 @@
-honeybee.core.SidebarController = honeybee.core.BaseObject.extend({
+honeybee.sidebar.SidebarController = honeybee.core.BaseObject.extend({
 
     log_prefix: "SidebarController",
 
@@ -14,6 +14,7 @@ honeybee.core.SidebarController = honeybee.core.BaseObject.extend({
         this.siblingWrapper = this.domElement.siblings('.wrapper');
 
         this.domElement.height(this.domElement.parent().height() - parseInt(this.domElement.css('margin-top'), 10) - 37);
+        this.domElement.children('.slots').height(this.domElement.height());
 
         this.bindEdgeEvents();
     },
@@ -80,7 +81,7 @@ honeybee.core.SidebarController = honeybee.core.BaseObject.extend({
 
 });
 
-honeybee.core.SidebarController.create = function(element, namespace)
+honeybee.sidebar.SidebarController.create = function(element, namespace)
 {
     jqElement = $(element);
 

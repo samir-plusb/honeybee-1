@@ -1,0 +1,14 @@
+<section class="sidebar-slot row-fluid" data-controller="SidebarSlotController">
+    <section class="sidebar-tree" data-controller="SidebarTreeController">
+
+        <h3>{{moduleName}}</h3>
+        <section class="render-tree">
+        
+        </section>
+
+        <script class="tree-data-json" type="application/json">
+            {{tree|json_encode|raw}}
+        </script>
+    </section>
+</section>
+

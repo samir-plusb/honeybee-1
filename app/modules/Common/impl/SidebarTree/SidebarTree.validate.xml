@@ -2,19 +2,12 @@
 <ae:configurations
 	xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
 	xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
-    xmlns:xi="http://www.w3.org/2001/XInclude"
 	parent="%core.config_dir%/validators.xml">
-
     <ae:configuration>
-
         <validators>
-            <validator class="SidebarTreeModuleValidator" required="false">
-                <arguments base="tree_modules[]">
-                    <argument/>
-                </arguments>
+            <validator class="isset">
+                <argument>moduleName</argument>
             </validator>
         </validators>
-
     </ae:configuration>
-
 </ae:configurations>
