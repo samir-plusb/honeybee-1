@@ -43,11 +43,23 @@ class Common_List_ListSuccessView extends CommonBaseView
             $routing->gen($listConfig->getRouteName(), array('offset' => 0, 'limit' => $listState->getLimit()))
         );
 
+        $this->setAttribute('has_tree_view', $listConfig->hasTreeView());
+
         $this->getLayer('content')->setSlot(
             'pagination',
             $this->createSlotContainer('Common', 'Paginate', array('state' => $listState, 'config' => $listConfig))
         );
     }
+
+    /**
+     * Handle presentation logic for the web (json).
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     */
+    public function executeJson(AgaviRequestDataHolder $parameters)
+    {
+        return json_encode($this->getAttribute('list_data'));
+    }
 }
 
-?>
+

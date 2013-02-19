@@ -2,6 +2,8 @@
 
 namespace Honeybee\Agavi\View;
 
+use Dat0r\Core\Runtime\Field\ReferenceField;
+
 class ListSuccessView extends BaseView
 {
     /**
@@ -24,10 +26,31 @@ class ListSuccessView extends BaseView
             $this->createSlotContainer('Common', 'List', array(
                 'config' => $this->getAttribute('config'),
                 'state' => $this->getAttribute('state')
-            )), NULL, 'read'
+            ), NULL, 'read')
+        );
+
+        $this->getLayer('content')->setSlot(
+            'sidebar',
+            $this->createSlotContainer('Common', 'Sidebar', array('tree_modules' => $this->getSidebarTreeModules()), NULL, 'read')
         );
 
         $this->setBreadcrumb();
+    }
+
+    /**
+     * Handle presentation logic for the web (json).
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
+     */
+    public function executeJson(\AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        return $this->createSlotContainer('Common', 'List', array(
+            'config' => $this->getAttribute('config'),
+            'state' => $this->getAttribute('state')
+        ), NULL, 'read');
     }
 
     protected function setBreadcrumb()
@@ -93,5 +116,28 @@ class ListSuccessView extends BaseView
 
         $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'honeybee.breadcrumbs');
         $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'honeybee.breadcrumbs');
+    }
+
+    protected function getSidebarTreeModules()
+    {
+        $module = $this->getAttribute('module');
+        $modules = array();
+
+        foreach ($module->getFields() as $field)
+        {
+            if ($field instanceof ReferenceField)
+            {
+                $referencedModules = $field->getReferencedModules();
+                foreach ($referencedModules as $module)
+                {
+                    if ($module->isActingAsTree())
+                    {
+                        $modules[] = get_class($module);
+                    }
+                }
+            } 
+        }
+
+        return $modules;
     }
 }

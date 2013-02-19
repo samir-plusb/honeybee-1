@@ -13,7 +13,7 @@ honeybee.list.ActionBatch = honeybee.core.BaseObject.extend({
         this.parent();
         this.actions = actions || [];
         this.queue = [];
-        this.progress_dialog = $('.modal-batch-progress').clone().twodal({ // @todo make selector configurable
+        this.progress_dialog = $('.modal-batch-progress').twodal({ // @todo make selector configurable
             events: {
                 keyboard: false,
                 show: false,
@@ -34,13 +34,15 @@ honeybee.list.ActionBatch = honeybee.core.BaseObject.extend({
     run: function()
     {
         var that = this;
+        var failHandler = function(error) { that.onActionFailure(error); };
+
         for (var i = 0; i < this.actions.length; i++)
         {
             var action = this.actions[i];
             this.queue.push(
                 action.on('start', this.onActionStarted.bind(this))
                 .on('success', this.onActionSuccess.bind(this))
-                .on('failure', function(error) { that.onActionFailure(error); })
+                .on('failure',  failHandler)
                 .execute.bind(action)
             );
         }

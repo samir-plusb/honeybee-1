@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * The ProjectAssetService is a concrete implementation of the IAssetService interface.
  * It exposes a coarse grained crud api for managing assets.
@@ -49,7 +50,7 @@ class ProjectAssetService implements IAssetService
     /**
      * Holds the client we use to talk to couchdb.
      *
-     * @var         Elastica_Index
+     * @var         Elastica\Index
      */
     protected $assetDocIndex;
 
@@ -133,9 +134,9 @@ class ProjectAssetService implements IAssetService
         {
             return $assets;
         }
-        $query = Elastica_Query::create(NULL);
+        $query = Elastica\Query::create(NULL);
         $query->setFilter(
-            new Elastica_Filter_Ids('asset', $assetIds)
+            new Elastica\Filter\Ids('asset', $assetIds)
         );
         $query->setSort(array(
             array('created.date' => IListState::SORT_ASC),
@@ -158,9 +159,9 @@ class ProjectAssetService implements IAssetService
      */
     public function findByOrigin($origin)
     {
-        $originFilter = new Elastica_Filter_Term();
+        $originFilter = new Elastica\Filter\Term();
         $originFilter->setTerm(array('origin.raw' => $origin));
-        $query = Elastica_Query::create($originFilter);
+        $query = Elastica\Query::create($originFilter);
         $resultSet = $this->assetDocIndex->getType('asset')->search($query);
         if (0 === $resultSet->count())
         {

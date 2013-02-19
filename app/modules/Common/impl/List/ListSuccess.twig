@@ -7,7 +7,17 @@
     List Controls/Widgets such as search and batch processing.
 ************************************************** -->
     <section class="well toolbar">
-        <div class="container-batch">
+        <div class="container-viewcontrols">
+            {% if has_tree_view %}
+                <section class="view-mode-switch">
+                    <div class="btn-group" data-toggle="radio">
+                        <a class="btn active btn-primary" href="{{ro.gen(module_type_key ~ '.list')}}">Liste</a>
+                        <a class="btn btn-primary" href="{{ro.gen(module_type_key ~ '.tree')}}">Hierarchie</a>
+                    </div>
+                </section>
+            {% endif %}
+        </div>
+        <div class="container-actions clearfix">
             <section>
                 <a class="btn" href="{{ro.gen(module_type_key ~ '.edit')}}">Neuer Eintrag</a>
             </section>
@@ -45,7 +55,7 @@
 {% endif %}
 
 {% if search or is_filtered %}
-    <section class="row-fluid" style="margin-bottom: 20px;">
+    <section style="margin-bottom: 20px;">
         <div class="alert search-message alert-info">
             <p>
             {% if is_filtered %}
@@ -120,7 +130,7 @@
     ListData Table Body
 ************************************************** #}
             <tbody data-bind="foreach: list_items">
-                <tr data-bind='attr: { "class":  $data.css_classes }'>
+                <tr data-bind='attr: { "class":  $data.css_classes }, event:{dragstart: dragStart}' draggable="true">
                     <td>
                         <input type="checkbox" data-bind="checked: selected" />
                     </td>

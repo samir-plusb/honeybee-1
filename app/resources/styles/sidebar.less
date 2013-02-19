@@ -1,0 +1,66 @@
+@sidebarDefaultWidth: 300px;
+
+.sidebar {
+    float: left;
+    position: relative;
+
+    margin-top:95px;
+
+    border-right: 1px solid black;
+
+    width: @sidebarDefaultWidth;
+    padding-right: 15px;
+
+    max-width: 500px;
+
+    + .wrapper {
+        margin-left: @sidebarDefaultWidth;
+    }
+
+    &.sidebar-hidden {
+        width: 0px;
+        + .wrapper {
+            margin-left: 15px;
+        }
+
+        .drag {
+            color: #ccc;
+        }
+
+    }
+
+    .slots {
+        width: 100%;
+        overflow: auto;
+    }
+
+    .edge-handles {
+        position:absolute;
+        width: 15px;
+        height: 58px;
+        top:50%;
+        right: 0px;
+        background-color: white;
+        /*
+        border-width: 1px 1px 1px 0;
+        border-style: solid;
+        border-color: black;
+        */
+
+        .icon {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            font-size: 14px;
+            line-height: 14px;
+            text-align: center;
+            cursor: default;
+
+            &.drag {
+                cursor: ew-resize;
+            }
+        }
+
+    }
+}
+

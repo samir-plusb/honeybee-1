@@ -24,6 +24,7 @@ class ListAction extends BaseAction
     public function executeRead(\AgaviRequestDataHolder $parameters)
     {
         $module = $this->getModule();
+
         $service = $module->getService();
 
         $listConfig = ListConfig::create($this->buildListConfig());
@@ -93,6 +94,8 @@ class ListAction extends BaseAction
         }
         $routing = $this->getContext()->getRouting();
 
+        $listSettings['hasTreeView'] = $this->getModule()->isActingAsTree();
+
         return $listSettings;
     }
 
@@ -142,4 +145,5 @@ class ListAction extends BaseAction
 
         return $data;
     }
+
 }

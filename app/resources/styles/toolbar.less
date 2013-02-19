@@ -1,0 +1,72 @@
+.toolbar
+{
+    min-height: 30px;
+    margin-top: 95px;
+    background-color: rgba(253, 253, 253, 0.9);
+    text-align:right;
+
+    div {
+        text-align: left;
+        display: inline-block;
+    }
+
+    .container-actions {
+        float: right;
+        section {
+            display: inline-block;
+            margin-left: 5px;
+
+            &:first-child {
+                margin-left: 0px;
+            }
+        }
+    }
+
+    .container-viewcontrols {
+        float: left;
+    }
+}
+
+.search-widget .form-search
+{
+    position: relative;
+    margin: 0;
+
+    label {
+        margin-bottom: 0;
+    }
+
+    input.search-query {
+        border-radius: 0px 4px 4px 0px;
+    }
+}
+
+.reset-search
+{
+    position: absolute;
+    right: 7px;
+    color: #404040;
+    opacity:0.4;
+    font-size: 23px;
+    font-weight: bold;
+    background: none;
+    top: 2px;
+}
+
+.reset-search:hover
+{
+    text-decoration: none;
+    color: #000000;
+}
+
+.search-widget .search-query
+{
+    float: none;
+    display: inline-block;
+}
+
+.modal-search-filter
+{
+    max-height: 900px;
+}
+
