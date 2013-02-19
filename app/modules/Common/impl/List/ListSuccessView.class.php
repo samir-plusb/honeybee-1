@@ -50,6 +50,16 @@ class Common_List_ListSuccessView extends CommonBaseView
             $this->createSlotContainer('Common', 'Paginate', array('state' => $listState, 'config' => $listConfig))
         );
     }
+
+    /**
+     * Handle presentation logic for the web (json).
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     */
+    public function executeJson(AgaviRequestDataHolder $parameters)
+    {
+        return json_encode($this->getAttribute('list_data'));
+    }
 }
 
-?>
+

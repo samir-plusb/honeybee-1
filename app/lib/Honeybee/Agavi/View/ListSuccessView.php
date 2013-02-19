@@ -37,6 +37,22 @@ class ListSuccessView extends BaseView
         $this->setBreadcrumb();
     }
 
+    /**
+     * Handle presentation logic for the web (json).
+     *
+     * @param       AgaviRequestDataHolder $parameters
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreStart
+     */
+    public function executeJson(\AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        return $this->createSlotContainer('Common', 'List', array(
+            'config' => $this->getAttribute('config'),
+            'state' => $this->getAttribute('state')
+        ), NULL, 'read');
+    }
+
     protected function setBreadcrumb()
     {
         $listState = $this->getAttribute('state');

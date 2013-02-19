@@ -30,6 +30,40 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         ko.applyBindings(this.viewmodel);
         this.search_widget = honeybee.widgets.Widget.factory('.search-widget', 'SearchWidget');
         this.confirm_dialog = new honeybee.list.ListController.ConfirmDialog('.dialog-confirm');
+
+        var that = this;
+        honeybee.core.events.on('filterBy', function(data)
+        {
+            var filter = {};
+            if (typeof data.field !== "undefined" && typeof data.value !== "undefined")
+            {
+                filter[data.field] = data.value;
+                that.reloadList({
+                    filter: filter
+                });
+            }
+        });
+    },
+
+    reloadList: function(parameters)
+    {
+        var that = this;
+        var href;
+
+        if (parameters)
+        {
+            href = document.location.href.split('?')[0];
+            history.pushState(parameters, 'list_reload', href + '?' + $.param(parameters));
+        }
+        else
+        {
+            href = document.location.href;
+        }
+
+        $.getJSON(href, parameters, function(data, status, jqXHR)
+        {
+            that.loadData(data);
+        });
     },
 
     loadData: function(data)

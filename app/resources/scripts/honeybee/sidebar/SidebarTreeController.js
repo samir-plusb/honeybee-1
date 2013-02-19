@@ -4,6 +4,8 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
 
     tree: {},
 
+    moduleName: null,
+
     init: function(options)
     {
         this.domElement = options.domElement;
@@ -11,18 +13,40 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
 
         this.loadData();
 
+        this.moduleName = this.domElement.attr('data-module');
+        console.log(this.moduleName);
+
         this.renderTreeNode(this.tree.rootNode, this.renderTarget);
         this.refreshCss(this.renderTarget);
         this.bindDropEvents();
         this.bindToggleEvents();
+        this.bindClickEvents();
+    },
+
+    bindClickEvents: function()
+    {
+        var that = this;
+        this.renderTarget.find('.node-label').bind('click', function(ev)
+        {
+            honeybee.core.events.fireEvent('filterBy', {
+                field: that.moduleName,
+                value: $(this).parent('.child').attr('id')
+            });
+
+            that.renderTarget.find('.node-label').removeClass('highlighted');
+            $(this).addClass('highlighted');
+        });
     },
 
     bindDropEvents: function()
     {
+        var that = this;
         this.renderTarget.find('li').bind('drop', function(ev)
         {
             ev.stopPropagation();
             ev.preventDefault();
+            that.renderTarget.find('.child').removeClass('drop-inside');
+
             var data = ev.originalEvent.dataTransfer.getData('text/plain');
 
             honeybee.core.events.fireEvent('itemDroppedOnItem', {
@@ -33,6 +57,14 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
         {
             ev.stopPropagation();
             ev.preventDefault();
+
+            $(this).addClass('drop-inside');
+        }).bind('dragleave', function(ev)
+        {
+            ev.stopPropagation();
+            ev.preventDefault();
+
+            $(this).removeClass('drop-inside');
         });
     },
 
