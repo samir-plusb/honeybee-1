@@ -26,7 +26,6 @@ honeybee.list.ListItemModel = honeybee.core.BaseObject.extend({
     dragStart: function(data, ev)
     {
         ev.originalEvent.dataTransfer.setData('text/plain', this.data.identifier);
-        console.log('Dragged', this.data.identifier);
         return true;
     }
 });

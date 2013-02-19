@@ -23,7 +23,12 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
         {
             ev.stopPropagation();
             ev.preventDefault();
-            console.log('Dropped', ev.originalEvent.dataTransfer.getData('text/plain'));
+            var data = ev.originalEvent.dataTransfer.getData('text/plain');
+
+            honeybee.core.events.fireEvent('itemDroppedOnItem', {
+                sourceId: data,
+                targetId: $(this).attr('id')
+            });
         }).bind('dragover', function(ev)
         {
             ev.stopPropagation();
