@@ -57,7 +57,7 @@
             <setting name="group_member_attr">member</setting>
             <setting name="group_member_attr_is_dn">true</setting>
             <setting name="group_name_attr">cn</setting>
-            <setting name="group_required">honeybee.editor</setting>
+            <setting name="group_required">midas.editor</setting>
         </settings>
 
         <settings prefix="import.">
