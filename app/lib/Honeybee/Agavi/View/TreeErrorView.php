@@ -11,10 +11,13 @@ class TreeErrorView extends BaseView
         return '<h1>I can haz tree-error html?</h1>';
     }
 
-    public function executeJson(\AgaviRequestDataHolder $requestData)
+    public function executeJson(\AgaviRequestDataHolder $parameters)
     {
-        $this->getResponse()->setContent(json_encode(
-            array('state' => 'error','errors' => array())
-        ));
+        $data = array(
+            'state' => 'error',
+            'errors' => $this->getAttribute('errors', array())
+        );
+        
+        $this->getResponse()->setContent(json_encode($data));
     }
 }
