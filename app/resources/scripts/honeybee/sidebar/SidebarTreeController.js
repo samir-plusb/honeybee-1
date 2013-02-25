@@ -72,6 +72,7 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
     {
         this.renderTarget.find('.node-toggle').bind('click', function(ev)
         {
+            ev.stopPropagation();
             $(this).parentsUntil('.child').parent().toggleClass('closed');
             $(this).toggleClass('icon-chevron-down icon-chevron-right');
         });
