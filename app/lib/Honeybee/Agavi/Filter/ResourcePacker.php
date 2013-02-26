@@ -250,6 +250,12 @@ class ResourcePacker
         {
             $targetPath = str_replace($from, $to, $file);
             $this->recursiveCopy($file, $targetPath);
+
+            $indexFile = dirname($file).DIRECTORY_SEPARATOR.'.index';
+            if (file_exists($indexFile))
+            {
+                $this->rewriteIndexFile($indexFile, str_replace($from, $to, $indexFile));
+            }
         }
 
         $indexFile = $from.DIRECTORY_SEPARATOR.'.index';
