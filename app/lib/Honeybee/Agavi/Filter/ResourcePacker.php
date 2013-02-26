@@ -250,19 +250,28 @@ class ResourcePacker
         {
             $targetPath = str_replace($from, $to, $file);
             $this->recursiveCopy($file, $targetPath);
-
-            $indexFile = dirname($file).DIRECTORY_SEPARATOR.'.index';
-            if (file_exists($indexFile))
-            {
-                $this->recursiveCopy($indexFile, str_replace($from, $to, $indexFile));
-            }
         }
 
         $indexFile = $from.DIRECTORY_SEPARATOR.'.index';
         if (file_exists($indexFile))
         {
-            copy($indexFile, $to.DIRECTORY_SEPARATOR.'.index');
+            $this->rewriteIndexFile($indexFile, $to.DIRECTORY_SEPARATOR.'.index');
         }
+    }
+
+    protected function rewriteIndexFile($from, $to)
+    {
+        $fileEndingMap = array(
+            'less' => 'css',
+        );
+        $sourceContent = file_get_contents($from);
+
+        foreach ($fileEndingMap as $mapFrom => $mapTo)
+        {
+            $targetContent = preg_replace("#\.$mapFrom"."[\n\r]+#", ".$mapTo\n", $sourceContent);
+        }
+
+        file_put_contents($to, $targetContent);
     }
 
     protected function recursiveCopy($from, $to)
