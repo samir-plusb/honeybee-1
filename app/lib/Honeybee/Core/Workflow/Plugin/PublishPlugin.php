@@ -3,6 +3,8 @@
 namespace Honeybee\Core\Workflow\Plugin;
 
 use Honeybee\Core\Workflow\Plugin;
+use Honeybee\Core\Queue\Job\PublishJob;
+use Honeybee\Core\Queue\Job\JobQueue;
 
 /**
  * This plugin takes care of marking documents as deleted.
@@ -19,7 +21,12 @@ class PublishPlugin extends BasePlugin
             $result->setState(Plugin\Result::STATE_OK);
             $result->setGate('promote');
 
-            // @todo implement/hook in export strategy here.
+            /*$queue = new JobQueue('prio:1-jobs');
+            $jobData = array(
+                'moduleClass' => get_class($resource->getModule()),
+                'documentId' => $resource->getIdentifier()
+            );
+            $queue->push(new PublishJob($jobData));*/
 
             $this->logInfo(sprintf(
                 "Successfully published document: %s to where ever ^^",

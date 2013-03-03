@@ -11,7 +11,7 @@
 
     <ae:configuration context="console">
         <routes>
-            <route pattern="empty" module="Empty" action="Empty" />
+            <route pattern="queue.spinner" module="Common" action="Queue_Spinner" />
         </routes>
     </ae:configuration>
 </ae:configurations>
