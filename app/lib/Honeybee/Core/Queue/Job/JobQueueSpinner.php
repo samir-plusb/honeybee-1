@@ -4,52 +4,76 @@ namespace Honeybee\Core\Queue\Job;
 
 class JobQueueSpinner
 {
-    private $queue;
-
     private $run = FALSE;
 
-    public function __construct($queueName)
+    public function start($queueName)
     {
-        $this->queue = new JobQueue($queueName);
-    }
+        $this->running = TRUE;
 
-    public function start()
-    {
-        $this->run = TRUE;
-
-        while ($this->run)
+        while ($this->running)
         {
-            if ($job = $this->queue->openNext())
+            $pid = pcntl_fork();
+
+            if (-1 === $pid)
             {
-                try
+                $this->running = FLASE;
+            }
+            elseif (0 === $pid)
+            {
+                $queue = new JobQueue($queueName);
+
+                if ($job = $queue->shift())
                 {
-                    if (IJob::STATE_SUCCESS === $job->run())
-                    {
-                        $this->queue->closeCurrent();
-                        echo "Memory: " . (memory_get_usage(TRUE) / 1048576) . PHP_EOL;
-                    }
-                    else
-                    {
-                        $this->handleJobError($job);
-                    }
+                    $this->runJob($queue, $job);
                 }
-                catch(Queue\Exception $e)
-                {
-                    if (NULL !== $job)
-                    {
-                        $this->handleJobError($job);
-                    }
-                }
+
+                exit(0);
+            }
+            else
+            {
+                pcntl_waitpid($pid, $status);
             }
 
-            sleep(1);
+            // @todo we should register to sig* in order to
+            // in order to kill zombie children and try grafefull shutdown.
+
+            sleep(1); 
         }
     }
 
-    protected function handleJobError(IJob $job)
+    protected function runJob($queue, IJob $job)
     {
-        // @todo inspect retry constraints and then decide whether to repush or drop as fatal.
-        echo "[" . get_class($this) . "] Job had an error... Readding to queue." . PHP_EOL;
-        $this->queue->push($job);
+        try
+        {
+            if (IJob::STATE_SUCCESS === $job->run())
+            {
+                $queue->closeCurrent();
+            }
+            else
+            {
+                $this->handleJobError($queue, $job);
+            }
+        }
+        catch(Exception $e)
+        {
+            $this->handleJobError($queue, $job);
+        }
+    }
+
+    protected function handleJobError($queue, IJob $job)
+    {
+        $queue->closeCurrent();
+        
+        if (IJob::STATE_FATAL !== $job->getState())
+        {
+            $queue->push($job);
+        }
+        else
+        {
+            // @todo the job is now dropped from queue as fatal.
+            // we might want to push it to an error queue
+            // or to a journal for fatal jobs.
+            echo "Dropping fatal job.\n";
+        }
     }
 }

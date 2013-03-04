@@ -7,10 +7,10 @@ class Common_Queue_SpinnerAction extends CommonBaseAction
 {
     public function execute(AgaviRequestDataHolder $parameters)
     {
-        $spinner = new JobQueueSpinner(
-            $parameters->getParameter('queue', 'prio:1-jobs')
-        );
-        $spinner->start();
+        $queueName = $parameters->getParameter('queue', 'prio:1-jobs');
+        
+        $spinner = new JobQueueSpinner();
+        $spinner->start($queueName);
 
         return AgaviView::NONE;
     }

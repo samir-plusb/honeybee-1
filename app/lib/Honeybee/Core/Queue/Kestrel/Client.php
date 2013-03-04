@@ -71,7 +71,7 @@ class Client
     
     public function getNext($key) //always a reliable read. does a close and a get
     {
-        return unserialize($this->kestrelApi->get($key . self::CMD_RELIABLE_READ));
+        return $this->kestrelApi->get($key . self::CMD_RELIABLE_READ);
     }
     
     public function peek($key)

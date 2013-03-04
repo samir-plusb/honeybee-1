@@ -127,11 +127,18 @@ class ListAction extends BaseAction
                 {
                     $promptMsg = FALSE;
                 }
-                $gates[] = array(
-                    'label' => $tm->_($workflowStep.'.'.$gateName, $translationDomain),
-                    'name' => $gateName,
-                    'prompt' => $promptMsg
-                );
+
+                $action = $module->getOption('prefix') . '.' . $workflowStep.'::'. $gateName;
+                $user = $this->getContext()->getUser();
+
+                if ($user->isAllowed($document, $action))
+                {
+                    $gates[] = array(
+                        'label' => $tm->_($workflowStep.'.'.$gateName, $translationDomain),
+                        'name' => $gateName,
+                        'prompt' => $promptMsg
+                    );
+                }
             }
 
             $data[] = array(

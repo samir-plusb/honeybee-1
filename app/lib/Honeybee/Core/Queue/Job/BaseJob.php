@@ -10,6 +10,8 @@ abstract class BaseJob implements IJob, IQueueItem
 
     protected $errors = array();
 
+    protected $maxRetries = 3;
+
     abstract protected function execute();
 
     public function __construct(array $state = array())
@@ -27,9 +29,15 @@ abstract class BaseJob implements IJob, IQueueItem
         catch(\Exception $e)
         {
             $this->errors[] = $e->getMessage();
-            $this->setState(self::STATE_ERROR);
 
-            throw new Exception("An error occured during job runtime.", 0 , $e);
+            if ($this->getErrorCount() < $this->maxRetries)
+            {
+                $this->setState(self::STATE_ERROR);
+            }
+            else
+            {
+                $this->setState(self::STATE_FATAL);
+            }
         }
 
         return $this->state;
@@ -42,11 +50,12 @@ abstract class BaseJob implements IJob, IQueueItem
 
     public function setState($state)
     {
-        static $states = array(
-            self::STATE_FRESH, self::STATE_SUCCESS, self::STATE_ERROR
+        static $validStates = array(
+            self::STATE_FRESH, self::STATE_SUCCESS, 
+            self::STATE_ERROR, self::STATE_FATAL
         );
 
-        if (! in_array($state, $states))
+        if (! in_array($state, $validStates))
         {
             throw new Exception("Invalid state given.");
         }

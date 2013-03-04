@@ -8,7 +8,7 @@ class JobQueue extends Queue\FifoQueue
 {
     public function push(Queue\IQueueItem $job)
     {
-        if (! ($job instanceof IJob))
+        if (!($job instanceof IJob))
         {
             throw new Exception(
                 "The jobqeue only allows queuing of IJob implementations."
@@ -27,7 +27,7 @@ class JobQueue extends Queue\FifoQueue
 
         if (($jobData = parent::shift()))
         {
-            return $this->create($jobData);
+            return $this->createJob($jobData);
         }
         else
         {
@@ -41,7 +41,7 @@ class JobQueue extends Queue\FifoQueue
 
         if (($jobData = parent::openNext()))
         {
-            return $this->create($jobData);
+            return $this->createJob($jobData);
         }
         else
         {
@@ -49,7 +49,7 @@ class JobQueue extends Queue\FifoQueue
         }
     }
 
-    protected function create(array $jobData)
+    protected function createJob(array $jobData)
     {
         if (!isset($jobData['type']))
         {

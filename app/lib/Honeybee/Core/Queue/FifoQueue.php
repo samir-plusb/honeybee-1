@@ -25,9 +25,9 @@ class FifoQueue implements IQueue
 
     public function shift()
     {
-        return unserialize($this->client->get($this->name, TRUE));
+        return unserialize($this->client->getNext($this->name));
     }
-    
+
     public function getName()
     {
         return $this->name;
