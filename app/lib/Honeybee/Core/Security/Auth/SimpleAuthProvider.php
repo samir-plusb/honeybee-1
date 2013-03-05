@@ -9,7 +9,7 @@ namespace Honeybee\Core\Security\Auth;
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
  */
-class SimpleAuthProvider extends BaseAuthProvider
+class SimpleAuthProvider implements IAuthProvider
 {
     const TYPE_KEY = 'simple-auth';
 

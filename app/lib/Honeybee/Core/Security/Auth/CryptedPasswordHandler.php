@@ -4,8 +4,6 @@ namespace Honeybee\Core\Security\Auth;
 
 class CryptedPasswordHandler implements IPasswordHandler
 {
-    const SALT_IV_SIZE = 24;
-
     public function hash($password)
     {
         return crypt($password, $this->generateBcryptSalt());
