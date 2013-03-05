@@ -1,27 +1,28 @@
 <?php
 
+namespace Honeybee\Core\Security\Auth;
+
 /**
  * The SimpleAuthProvider provides authentication against xml based account information.
  * The accounts used by te simple auth provider are configured inside the settings.xml.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
- * @package         Auth
- * @subpackage      AuthProvider
  */
 class SimpleAuthProvider extends BaseAuthProvider
 {
+    const TYPE_KEY = 'simple-auth';
+
     private $accounts;
 
     public function __construct()
     {
-        $this->accounts = AgaviConfig::get('core.simple_logins', array());
+        $this->accounts = \AgaviConfig::get('core.simple_logins', array());
     }
 
-    public function getTypeIdentifier()
+    public function getTypeKey()
     {
-        return 'simple';
+        return static::TYPE_KEY;
     }
 
     /**
@@ -31,8 +32,12 @@ class SimpleAuthProvider extends BaseAuthProvider
     public function authenticate($username, $password, $options = array()) // @codingStandardsIgnoreEnd
     {
         $errors = array();
-
-        if (isset($this->accounts[$username]) && $this->accounts[$username]['pwd'] === $password)
+        $passwordHandler = new CryptedPasswordHandler();
+ 
+        if (isset($this->accounts[$username]) &&
+            isset($this->accounts[$username]['pwd_hash']) &&
+            $passwordHandler->verify($password, $this->accounts[$username]['pwd_hash'])
+        )
         {
             return new AuthResponse(
                 AuthResponse::STATE_AUTHORIZED,
@@ -49,5 +54,3 @@ class SimpleAuthProvider extends BaseAuthProvider
         );
     }
 }
-
-?>

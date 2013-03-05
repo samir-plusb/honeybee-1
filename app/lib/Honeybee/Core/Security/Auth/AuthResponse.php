@@ -1,22 +1,21 @@
 <?php
 
+namespace Honeybee\Core\Security\Auth;
+
 /**
  * The AuthResponse class is the default implementation of the IAuthResponse interface.
  * It provides data representing the result of an authentication attempt.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
- * @package         Auth
- * @subpackage      AuthProvider
  */
 class AuthResponse implements IAuthResponse
 {
-    const STATE_AUTHORIZED = "authorized";
+    const STATE_AUTHORIZED = TRUE;
 
-    const STATE_UNAUTHORIZED = "unauthorized";
+    const STATE_UNAUTHORIZED = FALSE;
 
-    const STATE_ERROR = "error";
+    const STATE_ERROR = -1;
 
     protected $message;
 
@@ -59,5 +58,3 @@ class AuthResponse implements IAuthResponse
         return array_key_exists($name, $this->attributes) ? $this->attributes[$name] : $default;
     }
 }
-
-?>

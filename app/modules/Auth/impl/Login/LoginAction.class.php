@@ -1,9 +1,10 @@
 <?php
 
+use Honeybee\Core\Security\Auth;
+
 /**
  * The Auth_LoginAction class provides login support.
  *
- * @version         $Id$
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Tom Anheyer <Tom.Anheyer@BerlinOnline.de>
  * @author          Thorsten Schmitt-Rink <thorsten.schmitt-rink@berlinonline.de>
@@ -26,6 +27,7 @@ class Auth_LoginAction extends AuthBaseAction
         {
             return $this->executeWrite($parameters);
         }
+
         return 'Input';
     }
 
@@ -45,22 +47,26 @@ class Auth_LoginAction extends AuthBaseAction
         $username = $parameters->getParameter('username');
         $password = $parameters->getParameter('password');
         $authProviderClass = AgaviConfig::get('core.auth_provider');
+
         if (! class_exists($authProviderClass, TRUE))
         {
             throw new InvalidArgumentException('The configured auth provider can not be loaded');
         }
+
         $authProvider = new $authProviderClass();
         $authResponse = $authProvider->authenticate($username, $password);
 
-        if (AuthResponse::STATE_AUTHORIZED === $authResponse->getState())
+        if (Auth\AuthResponse::STATE_AUTHORIZED === $authResponse->getState())
         {
             $logger->log(
                 new AgaviLoggerMessage("Successfull authentication attempt for username $username")
             );
+
             $userAttributes = array_merge(
                 array('acl_role' => 'user'),
                 $authResponse->getAttributes()
             );
+
             if (isset($userAttributes['external_roles']) && is_array($userAttributes['external_roles']))
             {
                 foreach ($userAttributes['external_roles'] as $externalRole)
@@ -69,6 +75,7 @@ class Auth_LoginAction extends AuthBaseAction
                         $authProvider->getTypeIdentifier(),
                         $externalRole
                     );
+
                     if ($domainRole)
                     {
                         $userAttributes['acl_role'] = $domainRole;
@@ -76,31 +83,37 @@ class Auth_LoginAction extends AuthBaseAction
                     }
                 }
             }
+
             $user->setAttributes($userAttributes);
             $user->setAuthenticated(TRUE);
+
             return 'Success';
         }
-        else if (AuthResponse::STATE_UNAUTHORIZED === $authResponse->getState())
+        else if (Auth\AuthResponse::STATE_UNAUTHORIZED === $authResponse->getState())
         {
+            $user->setAuthenticated(FALSE);
+
             $logger->log(
-                new AgaviLoggerMessage(
-                    join(PHP_EOL, $authResponse->getErrors())
-                )
+                new AgaviLoggerMessage(join(PHP_EOL, $authResponse->getErrors()))
             );
+
             $errorMessage = $translationManager->_($authResponse->getMessage(), 'auth.messages');
             $this->getContainer()->getValidationManager()->setError(
                 'username_password_mismatch',
                 $errorMessage
             );
+
             $this->setAttribute('errors', array('auth' => $errorMessage));
-            $user->setAuthenticated(FALSE);
-            return 'Input';
+
+            return 'Error';
         }
 
         $errorMessage = join(PHP_EOL, $authResponse->getErrors());
         $logger->log(new AgaviLoggerMessage($errorMessage));
+
         $this->setAttribute('error', array('auth' => $authResponse->getMessage()));
         $user->setAuthenticated(FALSE);
+
         return 'Error';
     }
 
@@ -122,12 +135,15 @@ class Auth_LoginAction extends AuthBaseAction
                 )
             )
         );
+
         foreach ($this->getContainer()->getValidationManager()->getErrors() as $field => $error)
         {
             $errors[$field] = $error['messages'][0];
         }
+
         $this->setAttribute('errors', $errors);
-        return 'Input';
+
+        return 'Error';
     }
 
     /**
@@ -141,5 +157,3 @@ class Auth_LoginAction extends AuthBaseAction
         return FALSE;
     }
 }
-
-?>
