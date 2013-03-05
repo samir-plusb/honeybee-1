@@ -1,7 +1,7 @@
 {% import _self as self %}
 
 {% macro treenode(data) %}
-    {% import _self as this %}
+    {% import _self as self %}
     <li id="{{data.identifier}}" class="child expandable" draggable="true">
         <span class="node-label">
             <i class="icon-chevron-down node-toggle"></i>
@@ -11,7 +11,7 @@
         {% if data.children|length > 0 %}
         <ul class="children">
         {% for child in data.children %}
-            {{ this.treenode(child) }}            
+            {{ self.treenode(child) }}            
         {% endfor %}
         </ul>
         {% endif %}
@@ -60,9 +60,9 @@
                     <ul class="dropdown-menu">
                     {% for action_name, action in batch_actions %}
                         <li>
-                            <a class="honeybee-action honeybee-action-{{action_name}}"
-                               data-bind="click: function(item, event) { var is_batch = true; {{action}} },
-                                          enable: has_selection">{{ tm._(action_name, translation_domain) }}</a>
+                            <a class="honeybee-action honeybee-action-{{action_name}}" data-action="{{action}}">
+                                {{ tm._(action_name, translation_domain) }}
+                            </a>
                         </li>
                     {% endfor %}
                     </ul>
@@ -72,7 +72,11 @@
     </section>
 
     <section class="render-tree">
-        {{ self.treenode(tree.rootNode) }}
+        <ul class="children">
+        {% for node in tree.rootNode.children %}
+            {{ self.treenode(node) }}
+        {% endfor %}
+        </ul>
     </section>
 
     <script class="tree-data-json" type="application/json">

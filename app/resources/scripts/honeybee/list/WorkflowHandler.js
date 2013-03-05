@@ -14,6 +14,7 @@ honeybee.list.WorkflowHandler = honeybee.core.BaseObject.extend({
     {
         var that = this;
         var post_url = this.urls.execute + '?id=' + resource.data.identifier;
+        console.log('post_url',post_url);
         var post_data = { gate: gate };
         
         return function(ok_callback, err_callback)

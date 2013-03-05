@@ -1,4 +1,4 @@
-honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
+honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
     log_prefix: "TreeController",
 
@@ -10,9 +10,11 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
     alerts: null,
 
+    workflow_handler: null,
+
     init: function(options)
     {
-        this.parent();
+        //this.parent();
         this.options = options;
         this.domElement = options.domElement;
         this.renderTarget = this.domElement.find('.render-tree');
@@ -24,6 +26,12 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         this.bindToggleEvents();
 
         this.initKnockoutProperties();
+
+        this.bindBatchActions();
+
+        this.workflow_handler = new honeybee.list.WorkflowHandler(
+            this.options.workflow_urls || {}
+        );
     },
 
     initKnockoutProperties: function()
@@ -34,6 +42,34 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
     attach: function()
     {
+    },
+
+    bindBatchActions: function()
+    {
+        var that = this;
+        this.domElement.find('.container-actions .honeybee-action').bind('click', function(ev)
+        {
+            var action = $(this).attr('data-action');
+            that.proceed(true, null, action);
+        });
+    },
+
+    getSelectedItems: function()
+    {
+        var checkboxes = this.renderTarget.find('.child input:checkbox[checked=checked]');
+        var items = [];
+
+        checkboxes.each(function(index, element)
+        {
+            var parentNode = $(element).parent().parent();
+            items.push({
+                data: {
+                    identifier: parentNode.attr('id')
+                }
+            });
+        });
+
+        return items;
     },
 
     bindToggleEvents: function()
