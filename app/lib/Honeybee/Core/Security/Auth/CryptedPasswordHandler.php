@@ -8,7 +8,7 @@ class CryptedPasswordHandler implements IPasswordHandler
     {
         if (CRYPT_BLOWFISH !== 1)
         {
-            throw new Exception("Missing blowfish support.");
+            throw new \Exception("Missing blowfish support.");
         }
     }
 
