@@ -19,7 +19,6 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
         this.loadData();
 
-        this.renderTreeNode(this.tree.rootNode, this.renderTarget);
         this.refreshCss(this.renderTarget);
         this.bindDragEvents();
         this.bindToggleEvents();
@@ -105,38 +104,6 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
             clearDragCss(this);
             that.moveNode($('#'+ev.originalEvent.dataTransfer.getData('Text')), $(this));
         });
-    },
-
-    renderTreeNode: function(node, domContext)
-    {
-        var childList, childContent, i, toggle, label, check;
-
-        domContext.attr('id', node.identifier);
-        if (node.identifier !== this.tree.rootNode.identifier)
-        {
-            toggle = $('<i></i>').addClass('node-toggle icon-chevron-down');
-            check = $('<input />').attr('type', 'checkbox').addClass('check');
-            label = $('<span></span>').addClass('node-label').text(node.label).prepend(check).prepend(toggle);
-
-            domContext.append(label);
-        }
-
-        if (node.hasOwnProperty('children') && node.children.length > 0)
-        {
-            childList = $('<ul></ul>').addClass('children');
-            domContext.append(childList);
-
-            for (i in node.children)
-            {
-                if (node.children.hasOwnProperty(i))
-                {
-                    var childElement = $('<li></li>').addClass('child').attr('draggable', true);
-                    this.renderTreeNode(node.children[i], childElement);
-
-                    childList.append(childElement);
-                }
-            }
-        }
     },
 
     refreshCss: function()

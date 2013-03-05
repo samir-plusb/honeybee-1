@@ -1,3 +1,23 @@
+{% import _self as self %}
+
+{% macro treenode(data) %}
+    {% import _self as this %}
+    <li id="{{data.identifier}}" class="child expandable" draggable="true">
+        <span class="node-label">
+            <i class="icon-chevron-down node-toggle"></i>
+            <input type="checkbox" class="check" />
+            {{data.label}}
+        </span>
+        {% if data.children|length > 0 %}
+        <ul class="children">
+        {% for child in data.children %}
+            {{ this.treenode(child) }}            
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </li>
+{% endmacro %}
+
 <section class="container-tree-data row-fluid"
     data-controller="{{client_side_controller.implementor}}"
     data-controller-options="{{client_side_controller.options|json_encode}}">
@@ -52,6 +72,7 @@
     </section>
 
     <section class="render-tree">
+        {{ self.treenode(tree.rootNode) }}
     </section>
 
     <script class="tree-data-json" type="application/json">
