@@ -18,19 +18,30 @@
                 <actions>
                     <action>%%MODULE_PREFIX%%.edit::read</action>
                     <action>%%MODULE_PREFIX%%.edit::write</action>
+                    <action>%%MODULE_PREFIX%%.edit::promote</action>
+                    <action>%%MODULE_PREFIX%%.edit::delete</action>
 
                     <action>%%MODULE_PREFIX%%.publish::write</action>
+                    <action>%%MODULE_PREFIX%%.publish::promote</action>
+                    <action>%%MODULE_PREFIX%%.publish::demote</action>
 
                     <action>%%MODULE_PREFIX%%.published::read</action>
                     <action>%%MODULE_PREFIX%%.published::write</action>
+                    <action>%%MODULE_PREFIX%%.published::promote</action>
+                    <action>%%MODULE_PREFIX%%.published::demote</action>
+                    <action>%%MODULE_PREFIX%%.published::delete</action>
 
                     <action>%%MODULE_PREFIX%%.archive::write</action>
+                    <action>%%MODULE_PREFIX%%.archive::promote</action>
+                    <action>%%MODULE_PREFIX%%.archive::demote</action>
 
                     <action>%%MODULE_PREFIX%%.archived::read</action>
                     <action>%%MODULE_PREFIX%%.archived::write</action>
+                    <action>%%MODULE_PREFIX%%.archived::promote</action>
+                    <action>%%MODULE_PREFIX%%.archived::demote</action>
+                    <action>%%MODULE_PREFIX%%.archived::delete</action>
 
                     <action>%%MODULE_PREFIX%%.delete::write</action>
-                    <action>%%MODULE_PREFIX%%.publish::write</action>
                 </actions>
             </resource>
         </resources>
