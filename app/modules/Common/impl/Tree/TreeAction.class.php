@@ -22,6 +22,8 @@ class Common_TreeAction extends CommonBaseAction
      */
     public function executeRead(AgaviRequestDataHolder $parameters)
     {
+        $treeConfig = $parameters->getParameter('config');
+        $this->setAttribute('batch_actions',$treeConfig->getBatchActions());
         return 'Success';
     }
 }

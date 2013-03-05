@@ -54,7 +54,7 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         var clearDragCss = function(element)
         {
             var classes = 'drop-before drop-inside drop-after';
-            $(element).removeClass(classes).parentsUntil('#'+that.tree.rootNode.identifier).removeClass(classes);
+            that.renderTarget.find('.child').removeClass(classes);
         };
 
         this.renderTarget.find('li').bind('dragstart', function(ev)
@@ -109,13 +109,14 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
     renderTreeNode: function(node, domContext)
     {
-        var childList, childContent, i, toggle, label;
+        var childList, childContent, i, toggle, label, check;
 
         domContext.attr('id', node.identifier);
         if (node.identifier !== this.tree.rootNode.identifier)
         {
             toggle = $('<i></i>').addClass('node-toggle icon-chevron-down');
-            label = $('<span></span>').addClass('node-label').text(node.label).prepend(toggle);
+            check = $('<input />').attr('type', 'checkbox').addClass('check');
+            label = $('<span></span>').addClass('node-label').text(node.label).prepend(check).prepend(toggle);
 
             domContext.append(label);
         }

@@ -28,6 +28,26 @@
             </section>
         </div>
         <div class="container-actions clearfix">
+            <section>
+                <a class="btn" href="{{ro.gen(module_type_key ~ '.edit')}}">Neuer Eintrag</a>
+            </section>
+            <section>
+                <div class="btn-group">
+                    <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#">
+                        Stapelverarbeitung
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                    {% for action_name, action in batch_actions %}
+                        <li>
+                            <a class="honeybee-action honeybee-action-{{action_name}}"
+                               data-bind="click: function(item, event) { var is_batch = true; {{action}} },
+                                          enable: has_selection">{{ tm._(action_name, translation_domain) }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </section>
         </div>
     </section>
 
@@ -39,3 +59,32 @@
     </script>
 </section>
 
+<!-- **************************************************
+Modal dialogs
+************************************************** -->
+<div class="modal modal-batch-progress" style="display:none">
+    <div class="modal-header">
+        <h3>Fortschritt</h3>
+    </div>
+    <div class="modal-body">
+        <div class="progress progress-striped active">
+            <div class="bar" style="width: 0%;"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-twodal-event="cancelbatch" class="btn btn-primary">Batchedit abbrechen</a>
+    </div>
+</div>
+
+<div class="modal dialog-confirm" style="display:none">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h4>Bitte bestätigen</h4>
+    </div>
+    <div class="modal-body">
+        <p class="prompt-text">Aktion wirklich durchf&uuml;hren?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-twodal-event="confirm" class="btn btn-primary">Ja</a>
+    </div>
+</div>
