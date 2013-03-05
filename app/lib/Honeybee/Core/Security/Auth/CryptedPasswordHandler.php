@@ -4,14 +4,22 @@ namespace Honeybee\Core\Security\Auth;
 
 class CryptedPasswordHandler implements IPasswordHandler
 {
+    public function __construct()
+    {
+        if (CRYPT_BLOWFISH !== 1)
+        {
+            throw new Exception("Missing blowfish support.");
+        }
+    }
+
     public function hash($password)
     {
         return crypt($password, $this->generateBcryptSalt());
     }
 
-    public function verify($password, $goodHash)
+    public function verify($password, $challenge)
     {
-        return crypt($password, $goodHash) === $goodHash;
+        return crypt($password, $challenge) === $challenge;
     }
 
     protected function generateBcryptSalt()
