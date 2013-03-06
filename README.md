@@ -6,4 +6,4 @@ BerlinOnline Content Management Framework
 
 Usage:
 
-bash <(curl -s http://24-hetzner.berlinonline.de/create_project.sh)
+bash <(curl -s http://24-hetzner.berlinonline.de/scripts/create_project.sh)
