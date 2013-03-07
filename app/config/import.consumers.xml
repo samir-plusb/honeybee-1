@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://berlinonline.de/schemas/honeybee/config/consumer/definition/1.0"
+    xmlns:env="http://berlinonline.de/schemas/honeybee/config/envelope/definition/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+    <ae:configuration>
+        <consumers>
+
+            <consumer name="test-consumer" class="Honeybee\Core\Import\Consumer\ModuleConsumer">
+                <description>Consumes books meta-data coming from a csv source.</description>
+                <provider ref="books-csv" />
+                <settings>
+                    <setting name="module">Honeybee\Domain\Books\BooksModule</setting>
+                </settings>
+                <filters>
+                    <filter name="default" class="Honeybee\Core\Import\Filter\RemapFilter">
+                        <settings>
+                            <setting name="include_unmapped">off</setting>
+                            <setting name="map">
+                                <setting name="Quelle">source</setting>
+                                <setting name="Markierung">extra-flag</setting>
+                                <setting name="Nachname">lastname</setting>
+                                <setting name="Vorname">firstname</setting>
+                                <setting name="Titel">title</setting>
+                                <setting name="Ort">city</setting>
+                                <setting name="Verlag">publisher</setting>
+                                <setting name="Jahr">year</setting>
+                                <setting name="Ort 2">secondCity</setting>
+                                <setting name="Verlag 2">secondPublisher</setting>
+                                <setting name="Jahr 2">secondYear</setting>
+                            </setting>
+                        </settings>
+                    </filter>
+                </filters>
+            </consumer>
+
+        </consumers>
+    </ae:configuration>
+</ae:configurations>

@@ -50,7 +50,10 @@ class TreeSuccessView extends BaseView
     public function executeJson(\AgaviRequestDataHolder $requestData)
     {
         $this->getResponse()->setContent(json_encode(
-            $this->getAttribute('tree')->toArray()
+            array(
+                'state' => 'ok',
+                'data' => $this->getAttribute('tree')->toArray()
+            )
         ));
     }
 }

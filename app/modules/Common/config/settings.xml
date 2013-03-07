@@ -4,7 +4,8 @@
     xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
     <ae:configuration>
         <settings prefix="common.">
-            <setting name="service.localization">http://geoprototype.berlinonline.de/api/query</setting>
+            <setting name="geo_service.url">https://api.berlinonline.net/boapi/geo/ask.json</setting>
+            <setting name="geo_service.auth">geo.midas:WnrwDf7qFAFk3xTrbaQ</setting>
         </settings>
     </ae:configuration>
 </ae:configurations>

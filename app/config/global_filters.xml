@@ -14,7 +14,7 @@
                     use true for development and false for production. 
                     make sure to deploy and commit your latest scripts: `make deploy-resources`
                 -->
-                <ae:parameter name="use_caching">true</ae:parameter>
+                <ae:parameter name="use_caching">on</ae:parameter>
                 <ae:parameter name="combine_scripts">off</ae:parameter>
                 <ae:parameter name="compress_scripts">off</ae:parameter>
             </filter>
@@ -53,7 +53,7 @@
                     <ae:parameter>html</ae:parameter>
                 </ae:parameter>
                 <ae:parameter name="base_dir">%core.app_dir%/../pub/static/</ae:parameter>
-                <ae:parameter name="use_caching">false</ae:parameter>
+                <ae:parameter name="use_caching">off</ae:parameter>
                 <ae:parameter name="combine_scripts">on</ae:parameter>
                 <ae:parameter name="compress_scripts">on</ae:parameter>
             </filter>

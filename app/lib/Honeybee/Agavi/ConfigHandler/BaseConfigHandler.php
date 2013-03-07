@@ -27,9 +27,9 @@ abstract class BaseConfigHandler extends \AgaviXmlConfigHandler
             }
             else
             {
-                $settings[$index] = \AgaviToolkit::expandDirectives(
+                $settings[$index] = \AgaviToolkit::literalize(\AgaviToolkit::expandDirectives(
                     trim($settingElement->getValue())
-                );
+                ));
             }
         }
 

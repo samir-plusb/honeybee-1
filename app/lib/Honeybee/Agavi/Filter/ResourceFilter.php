@@ -121,8 +121,8 @@ class ResourceFilter extends \AgaviFilter implements \AgaviIGlobalFilter
     {
         $baseDir = $this->config->getBaseDir();
         $pubDir = $this->config->getPubDir();
-        $relativeBasePath = str_replace($pubDir, '', $baseDir);
-        $baseUrl = \AgaviContext::getInstance()->getRouting()->getBaseHref() . $relativeBasePath;
+        $relativeBasePath = str_replace($pubDir . DIRECTORY_SEPARATOR, '', $baseDir);
+        $baseUrl = $relativeBasePath;
         $resourceBaseUrl = 
             $this->config->isCachingEnabled() 
             ? $baseUrl . '/cache/'

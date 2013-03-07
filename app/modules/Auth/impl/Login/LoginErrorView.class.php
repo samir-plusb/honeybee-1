@@ -29,10 +29,14 @@ class Auth_Login_LoginErrorView extends AuthBaseView
      */
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
+        parent::setupHtml($parameters);
+
         $translationManager = $this->getContext()->getTranslationManager();
 
         $this->setAttribute('_title', $translationManager->_('Login Error', 'auth.messages'));
         $this->setAttribute('error_messages', $this->getContainer()->getValidationManager()->getErrorMessages());
+
+        $this->getLayer('content')->setTemplate('Login/LoginInput');
     }
 
     /**

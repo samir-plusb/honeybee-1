@@ -75,16 +75,10 @@ abstract class BasePlugin implements Workflow\IPlugin
         $result = new Result();
         $result->setState(Result::STATE_NOT_ALLOWED);
 
-        $operation = sprintf(
-            '%s::%s',
-            $this->getPluginId(),
-            $this->getWorkflow()->getContainer()->getRequestMethod()
-        );
-
         $result->setMessage(
-            sprintf("You do not own the required credentials to execute this plugin (%s - %s)!",
+            sprintf("You do not own the required credentials to execute this plugin %s(%s)!",
             get_class($this),
-            $operation
+            $this->getPluginId()
         ));
         $result->freeze();
 
@@ -164,13 +158,13 @@ abstract class BasePlugin implements Workflow\IPlugin
     {
         if (($user = $this->getWorkflow()->getSessionUser()))
         {
-            $operation = sprintf(
+            $action = sprintf(
                 '%s::%s',
                 $this->getPluginId(),
                 $this->getWorkflow()->getContainer()->getRequestMethod()
             );
 
-            return $user->isAllowed($this->getResource(), $operation);
+            return $user->isAllowed($this->getResource(), $action);
         }
         else
         {
@@ -178,9 +172,8 @@ abstract class BasePlugin implements Workflow\IPlugin
             // it could be that we run into here during shell jobs.
             // before thinking about flexible user constraints, it might
             // be a good idea to have a system user or something like that for shell jobs etc.
+            return TRUE;
         }
-
-        return FALSE;
     }
 
     /**

@@ -310,7 +310,9 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         $.ajax({
             url: this.options.saveCompleteTreeUrl,
             type: 'POST',
-            data: {
+            data: { 
+                // :INFO: we are sending the tree as a string due to:
+                // http://php.net/manual/en/info.configuration.php#ini.max-input-vars
                 structure: JSON.stringify(this.tree)
             },
             headers: {
@@ -318,15 +320,22 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
             }
         }).done(function(response)
         {
-            //console.log(response);
-            that.addAlert({
-                type: 'success',
-                message: 'Gespeichert'
-            });
-
+            if ('ok' === response.state)
+            {
+                that.addAlert({
+                    type: 'success',
+                    message: 'Gespeichert'
+                });
+            }
+            else
+            {
+                that.addAlert({
+                    type: 'error',
+                    message: response.errors.join(',')
+                });
+            }
         }).fail(function(response)
         {
-            //console.log(response.responseText);
             that.addAlert({
                 type: 'error',
                 message: 'Speichern fehlgeschlagen!'
