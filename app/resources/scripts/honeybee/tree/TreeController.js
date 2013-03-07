@@ -6,6 +6,8 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
     dropMode: null,
 
+    currentMoveNode: null,
+
     tree: {},
 
     alerts: null,
@@ -23,6 +25,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
         this.refreshCss(this.renderTarget);
         this.bindDragEvents();
+        this.bindClickMoveEvents();
         this.bindToggleEvents();
 
         this.initKnockoutProperties();
@@ -94,6 +97,45 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         {
             $(this).parentsUntil('.child').parent().toggleClass('closed');
             $(this).toggleClass('icon-minus icon-plus');
+        });
+    },
+
+    bindClickMoveEvents: function()
+    {
+        var that = this;
+
+        var resetMoveElements = function() {
+            that.renderTarget.find('.move-target').hide();
+            that.renderTarget.find('.move').show();
+        };
+
+        this.renderTarget.find('.move-target').hide().removeClass('hide');
+        this.renderTarget.find('.child').each(function(index, element) {
+            element = $(element);
+            var controls = element.children('.node-controls');
+            controls.find('.move').bind('click', function(ev) {
+                that.renderTarget.find('.move').hide();
+                that.renderTarget.find('.move-target').show();
+                element.children('.node-controls').find('.move-target').hide();
+
+                that.currentMoveNode = element;
+            });
+
+            controls.find('.move-before').bind('click', function(){
+                that.dropMode = 'before';
+                that.moveNode(that.currentMoveNode, element);
+                resetMoveElements();
+            });
+            controls.find('.move-after').bind('click', function(){
+                that.dropMode = 'after';
+                that.moveNode(that.currentMoveNode, element);
+                resetMoveElements();
+            });
+            controls.find('.move-inside').bind('click', function(){
+                that.dropMode = 'inside';
+                that.moveNode(that.currentMoveNode, element);
+                resetMoveElements();
+            });
         });
     },
 
