@@ -105,11 +105,11 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         var that = this;
 
         var resetMoveElements = function() {
-            that.renderTarget.find('.move-target').hide();
+            that.renderTarget.find('.move-target, .move-cancel').hide();
             that.renderTarget.find('.move').show();
         };
 
-        this.renderTarget.find('.move-target').hide().removeClass('hide');
+        this.renderTarget.find('.move-target, .move-cancel').hide().removeClass('hide');
         this.renderTarget.find('.child').each(function(index, element) {
             element = $(element);
             var controls = element.children('.node-controls');
@@ -117,8 +117,14 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
                 that.renderTarget.find('.move').hide();
                 that.renderTarget.find('.move-target').show();
                 element.children('.node-controls').find('.move-target').hide();
+                element.children('.node-controls').find('.move-cancel').show();
 
                 that.currentMoveNode = element;
+            });
+
+            controls.find('.move-cancel').bind('click', function(ev) {
+                resetMoveElements();
+                this.currentMoveNode = null;
             });
 
             controls.find('.move-before').bind('click', function(){
