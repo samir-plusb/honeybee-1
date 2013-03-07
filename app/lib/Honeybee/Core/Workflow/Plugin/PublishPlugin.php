@@ -19,7 +19,7 @@ class PublishPlugin extends BasePlugin
         {
             $resource = $this->getResource();
 
-            $queue = new JobQueue('prio:1-jobs');
+            /*$queue = new JobQueue('prio:1-jobs');
             $jobData = array(
                 'moduleClass' => get_class($resource->getModule()),
                 'documentId' => $resource->getIdentifier()
@@ -27,6 +27,10 @@ class PublishPlugin extends BasePlugin
             $queue->push(new PublishJob($jobData));
 
             $result->setState(Plugin\Result::STATE_EXPECT_INPUT);
+            $result->setGate('promote');*/
+
+            $result->setState(Plugin\Result::STATE_OK);
+            $result->setGate('promote');
 
             $this->logInfo(sprintf(
                 "Successfully queued publish job for document: %s",
