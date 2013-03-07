@@ -8,6 +8,8 @@ class TreeConfig implements ITreeConfig
 
     protected $typeKey;
 
+    protected $translationDomain;
+
     protected $batchActions = array();
 
     public static function create(array $data = array())
@@ -35,6 +37,10 @@ class TreeConfig implements ITreeConfig
         return $this->batchActions;
     }
 
+    public function getTranslationDomain()
+    {
+        return $this->translationDomain;
+    }
 
     protected function __construct(array $data = array())
     {

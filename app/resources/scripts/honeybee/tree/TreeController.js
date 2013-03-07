@@ -27,7 +27,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
         this.initKnockoutProperties();
 
-        this.bindBatchActions();
+        this.bindActions();
 
         this.workflow_handler = new honeybee.list.WorkflowHandler(
             this.options.workflow_urls || {}
@@ -42,15 +42,35 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
     attach: function()
     {
+        this.confirm_dialog = new honeybee.list.ListController.ConfirmDialog('.dialog-confirm');
     },
 
-    bindBatchActions: function()
+    bindActions: function()
     {
         var that = this;
         this.domElement.find('.container-actions .honeybee-action').bind('click', function(ev)
         {
             var action = $(this).attr('data-action');
             that.proceed(true, null, action);
+        });
+
+        this.renderTarget.find('.child').each(function(index, element) {
+            element = $(element);
+            var documentData = JSON.parse(element.attr('data-document'));
+            element.find('.honeybee-action-proceed').bind('click', function(ev){
+                var confirm_text;
+                var gate = $(this).attr('data-gate');
+                $.each(documentData.workflow.gates, function(i, value){
+                    if (gate === value.name) {
+                        confirm_text = value.prompt;
+                    }
+                });
+
+                that.proceed(false, documentData, gate, confirm_text);
+            });
+            element.find('.honeybee-action-edit').bind('click', function(ev){
+                that.run(false, documentData); 
+            });
         });
     },
 
@@ -62,11 +82,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         checkboxes.each(function(index, element)
         {
             var parentNode = $(element).parent().parent();
-            items.push({
-                data: {
-                    identifier: parentNode.attr('id')
-                }
-            });
+            items.push(JSON.parse(parentNode.attr('data-document')));
         });
 
         return items;
@@ -77,7 +93,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         this.renderTarget.find('.node-toggle').bind('click', function(ev)
         {
             $(this).parentsUntil('.child').parent().toggleClass('closed');
-            $(this).toggleClass('icon-chevron-down icon-chevron-right');
+            $(this).toggleClass('icon-minus icon-plus');
         });
     },
 
@@ -150,7 +166,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         {
             even = !even;
             //domContext.removeClass('odd even').addClass(even ? 'even' : 'odd');
-            var children = domContext.children('ul').children('li');
+            var children = domContext.children('.children').children('.child');
 
             if (children.length > 0)
             {

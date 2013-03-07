@@ -1,17 +1,52 @@
 {% import _self as self %}
 
-{% macro treenode(data) %}
+{% macro treenode(data, documents, translation_domain) %}
     {% import _self as self %}
-    <li id="{{data.identifier}}" class="child expandable" draggable="true">
+
+    {% set document = documents[data.identifier] %}
+    <li id="{{data.identifier}}" class="child {% if data.children|length > 0 %}expandable{% endif %}" draggable="true" data-document="{{document|json_encode}}">
         <span class="node-label">
-            <i class="icon-chevron-down node-toggle"></i>
             <input type="checkbox" class="check" />
+            <i class="icon-minus node-toggle"></i>
             {{data.label}}
         </span>
+        <ul class="node-controls">
+            <li class="control">
+                <a class="move">
+                    <span class="control-label">Verschieben</span>
+                    <i class="icon-move"></i>
+                </a>
+            </li>
+            <li class="control">
+                <div class="btn-group dropdown">
+                    {% if document.workflow.interactive %}
+                    <button class="btn btn-primary honeybee-action honeybee-action-edit">
+                        <i class="icon icon-cog"></i> {{tm._('edit', translation_domain)}}
+                    </button>
+                    {% else %}
+                        <button class="btn btn-primary honeybee-action honeybee-action-edit" disabled="disabled">
+                            <i class="icon icon-cog"></i> {{tm._('edit', translation_domain)}}
+                        </button>
+                    {% endif %}
+                    {% if document.workflow.gates|length > 0 %}
+                    <button class="btn dropdown-toggle btn-primary" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        {% for gate in document.workflow.gates %}
+                        <li>
+                            <a class="honeybee-action-proceed" data-gate="{{gate.name}}">{{gate.label}}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </li>
+        </ul>
         {% if data.children|length > 0 %}
         <ul class="children">
         {% for child in data.children %}
-            {{ self.treenode(child) }}            
+            {{ self.treenode(child, documents, translation_domain) }}            
         {% endfor %}
         </ul>
         {% endif %}
@@ -74,7 +109,7 @@
     <section class="render-tree">
         <ul class="children">
         {% for node in tree.rootNode.children %}
-            {{ self.treenode(node) }}
+            {{ self.treenode(node, documents, translation_domain) }}
         {% endfor %}
         </ul>
     </section>
