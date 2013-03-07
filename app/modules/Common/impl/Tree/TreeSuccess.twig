@@ -12,27 +12,10 @@
         </span>
         <ul class="node-controls">
             <li class="control">
-                <a class="move">
-                    <span class="control-label">Verschieben</span>
-                    <i class="icon-move"></i>
-                </a>
-                <ul class="move-target hide">
-                    <li class="move-before">▲</li>
-                    <li class="move-after">▼</li>
-                    <li class="move-inside">▶</li>
-                </ul>
-            </li>
-            <li class="control">
                 <div class="btn-group dropdown">
-                    {% if document.workflow.interactive %}
-                    <button class="btn btn-primary honeybee-action honeybee-action-edit">
-                        <i class="icon icon-cog"></i> {{tm._('edit', translation_domain)}}
-                    </button>
-                    {% else %}
-                        <button class="btn btn-primary honeybee-action honeybee-action-edit" disabled="disabled">
+                        <button class="btn btn-primary honeybee-action honeybee-action-edit" {% if not document.workflow.interactive %}disabled="disabled"{% endif %}>
                             <i class="icon icon-cog"></i> {{tm._('edit', translation_domain)}}
                         </button>
-                    {% endif %}
                     {% if document.workflow.gates|length > 0 %}
                     <button class="btn dropdown-toggle btn-primary" data-toggle="dropdown">
                         <span class="caret"></span>
@@ -46,6 +29,17 @@
                     </ul>
                     {% endif %}
                 </div>
+            </li>
+            <li class="control">
+                <a class="move">
+                    <span class="control-label">Verschieben</span>
+                    <i class="icon-move"></i>
+                </a>
+                <ul class="move-target hide">
+                    <li class="move-before"><span class="arrow">▲</span></li>
+                    <li class="move-after"><span class="arrow">▼</span></li>
+                    <li class="move-inside"><span class="arrow">▶</span></li>
+                </ul>
             </li>
         </ul>
         {% if data.children|length > 0 %}

@@ -74,6 +74,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
     proceed: function(is_batch, data, gate, confirm_text)
     {
+        console.log('proceed', gate);
         var that = this;
         confirm_text = (undefined === confirm_text) ? false : confirm_text;
         var proceed = function()

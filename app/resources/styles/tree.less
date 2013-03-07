@@ -54,13 +54,14 @@
                 padding: 5px 5px;
 
                 .control {
-                    display: inline-block;
+                    display: block;
+                    float: right;
 
                     padding: 0 10px;
 
-                    border-left: 1px solid gray;
+                    border-right: 1px solid gray;
                     &:first-child {
-                        border-left: none;
+                        border-right: none;
                     }
 
                     .icon {
@@ -100,18 +101,49 @@
                     margin: 0;
                     padding: 0;
                     list-style: none;
+                    height: 30px;
+                    overflow: hidden;
                     li {
+                        position: relative;
                         display: inline-block;
-                        width: 30px;
-                        height: 30px;
+                        width: 28px;
+                        height: 28px;
 
                         border-radius: 15px;
-                        background-color: #f70;
+                        background-color: #ffa421;
+                        border: 1px solid #ed981e;
                         color: white;
                         text-align: center;
-                        line-height: 30px;
+
+                        .arrow {
+                            position: absolute;
+                            width: 18px;
+                            height: 18px;
+                            top: 4px;
+                            left: 5px;
+                            text-align: center;
+                            vertical-align: middle;
+                        }
                     }
-                    
+
+                    .move-before {
+                        .arrow {
+                            top: 2px;
+                            left: 5px;
+                        }
+                    }           
+                    .move-inside {
+                        .arrow {
+                            top: 4px;
+                            left: 6px;
+                        }
+                    }           
+                    .move-after {
+                        .arrow {
+                            top: 4px;
+                            left: 5px;
+                        }
+                    }           
                 }
             }
 
