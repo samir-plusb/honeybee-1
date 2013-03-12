@@ -6,7 +6,7 @@
 <!-- **************************************************
     List Controls/Widgets such as search and batch processing.
 ************************************************** -->
-    <section class="well toolbar">
+    <section class="well toolbar primary">
         <div class="container-viewcontrols">
             {% if has_tree_view %}
                 <section class="view-mode-switch">
@@ -67,12 +67,25 @@
     </section>
 {% endif %}
 
+<section class="row-fluid">
+    <section class="well toolbar secondary">
+        <ul class="toolset">
+            <li class="tool select-all">
+                <input type="checkbox" data-bind="checked: all_selected" /> Alle auswählen
+            </li>
+            <li class="tool assign-category">
+                <a><i class="icon icon-move"></i> Kategorie zuweisen</a>
+            </li>
+            <li class="tool cancel-assign-category hide">
+                <a><i class="icon icon-remove"></i> Zuweisen abbrechen</a>
+            </li>
+        </ul>
 {# **************************************************
     ListData Pagination Top
 ************************************************** #}
-    <section class="row-fluid">
-    {# todo This should be controller by a setting, as you probally not always want to have a pagination. #}
-    {{ slots.pagination|raw}}
+        {# todo This should be controller by a setting, as you probally not always want to have a pagination. #}
+        {{ slots.pagination|raw}}
+    </section>
 {# **************************************************
     ListData Table Head
 ************************************************** #}
@@ -80,7 +93,6 @@
             <thead>
                 <tr>
                     <th>
-                        <input type="checkbox" data-bind="checked: all_selected" />
                         <!-- @todo These values should be places to the bottom of the document. -->
                         <input type="hidden" class="list-data" value="{{list_data|json_encode}}" />
                     </th>
@@ -170,9 +182,11 @@
 {# **************************************************
     ListData Pagination Bottom
 ************************************************** #}
+    <section class="well toolbar secondary">
     {% if list_data|length >= 10 %}
         {{slots.pagination|raw}}
     {% endif %}
+    </section>
     </section>
 </section>
 

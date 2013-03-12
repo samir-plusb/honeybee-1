@@ -14,7 +14,6 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
         this.loadData();
 
         this.moduleName = this.domElement.attr('data-module');
-        console.log(this.moduleName);
 
         this.refreshCss(this.renderTarget);
         this.bindDropEvents();
@@ -34,6 +33,26 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
 
             that.renderTarget.find('.node-label').removeClass('highlighted');
             $(this).addClass('highlighted');
+        });
+
+        that.renderTarget.find('.move-inside').bind('click', function(){
+            var id = $(this).parents('.child').first().attr('id');
+            honeybee.core.events.fireEvent('reference::targetSelected', {
+                module: that.moduleName,
+                targetId: id
+            }); 
+        });
+
+        honeybee.core.events.on('reference::startTargetSelection', function(data) {
+            if (that.moduleName !== data.module) {
+                return;
+            }
+
+            that.renderTarget.find('.move-target').show();
+        });
+
+        honeybee.core.events.on('reference::cancelTargetSelection', function(data) {
+            that.renderTarget.find('.move-target').hide();
         });
     },
 
