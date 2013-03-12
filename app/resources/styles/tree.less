@@ -223,15 +223,27 @@
 }
 
 .sidebar-tree {
+    position: relative;
+    
+    .render-tree {
+        padding: 0 5px;
+    }
+
     .child {
         min-width: 200px;
 
         .node-label {
             padding-left: 10px;
-        }
 
-        &.highlighted {
-            box-shadow: inset 0 0 5px @dropShadowColor;
+            &.highlighted {
+                box-shadow: inset 0 0 5px @dropShadowColor;
+            }
         }
+    }
+
+    .clear-list-filter {
+        position: absolute;
+        top: 15px;
+        right: 0;
     }
 }

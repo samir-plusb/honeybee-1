@@ -43,6 +43,10 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
                 });
             }
         });
+
+        honeybee.core.events.on('clearFilter', function() {
+            that.reloadList({});
+        });
     },
 
     reloadList: function(parameters)
@@ -69,7 +73,8 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
     loadData: function(data)
     {
         this.viewmodel.list_items.removeAll();
-        this.viewmodel.initItems(data);
+        this.viewmodel.initItems(data.listItems);
+        this.viewmodel.initMetadata(data.metaData);
     },
 
     proceed: function(is_batch, data, gate, confirm_text)

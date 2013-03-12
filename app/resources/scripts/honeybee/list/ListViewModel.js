@@ -16,6 +16,12 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
 
     has_selection: null,
 
+    has_filter: null,
+    
+    has_search: null,
+
+    item_count: null,
+
     init: function(controller, list_data)
     {
         this.parent();
@@ -32,7 +38,16 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
         {
             return 0 < that.selected_items().length;
         });
-        this.initItems(list_data);
+
+        this.has_filter = ko.observable(false);
+        this.has_search = ko.observable(false);
+        this.item_count = ko.computed(function()
+        {
+            return that.list_items().length;
+        });
+
+        this.initItems(list_data.listItems);
+        this.initMetadata(list_data.metaData);
     },
 
     initItems: function(items)
@@ -43,6 +58,16 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
                 new honeybee.list.ListItemModel(items[i])
             );
         }
+    },
+
+    initMetadata: function(metaData)
+    {
+        this.has_search(metaData.search ? true : false);
+        this.has_filter(metaData.has_filter);
+    },
+
+    clearFilter: function() {
+        honeybee.core.events.fireEvent('clearFilter'); 
     },
 
     addItem: function(item)
