@@ -24,13 +24,10 @@
         "agavi/agavi": "1.0.*",
         "twig/twig": "1.*",
         "craur/craur": "1.6.*",
-        "ruflin/Elastica": "dev-master",
-        "phpunit/phpunit": "3.7.*",
+        "ruflin/Elastica": "v0.20.5.0.RC1",
         "zend/acl": "dev-master",
         "imagine/Imagine": "0.3.*",
         "phing/phing": "2.4.12",
-        "zerkalica/phpcs": "dev-master",
-        "PhpDebugToolbar/php-debug-toolbar": "1.5.*",
         "jquery/jquery": "1.8.2",
         "jquery/easing": "1.3",
         "allmarkedup/jquery-url-parser": "2.2.1",
@@ -40,8 +37,17 @@
         "kineticjs/kineticjs": "4.0.*",
         "twitter/bootstrap": "2.2.2",
         "fortawesome/font-awesome": "2.0.0",
-        "berlinonline/Dat0r": "dev-master",
-        "phpdocumentor/phpdocumentor": "dev-master"
+        "berlinonline/Dat0r": "dev-master"
+    },
+
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "dev-master",
+        "phpmd/phpmd": "1.4.1",
+        "phploc/phploc": "1.7.4",
+        "pdepend/pdepend": "1.1.0",
+        "PhpDebugToolbar/php-debug-toolbar": "1.5.*",
+        "squizlabs/php_codesniffer": "~1.4.4",
+        "phpunit/phpunit": "3.7.*"
     },
 
     "repositories": [
