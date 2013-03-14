@@ -1,11 +1,41 @@
+{% import _self as self %}
+
+{% macro treenode(data) %}
+    {% import _self as self %}
+
+    <li id="{{data.identifier}}" class="child {% if data.children|length > 0 %}expandable{% endif %}">
+        <span class="node-label">
+            <i class="icon-minus node-toggle"></i>
+            {{data.label}}
+        </span>
+        <ul class="node-controls">
+            <li class="control">
+                <ul class="move-target hide">
+                    <li class="move-inside"><span class="arrow">▶</span></li>
+                </ul>
+            </li>
+        </ul>
+        {% if data.children|length > 0 %}
+        <ul class="children">
+        {% for child in data.children %}
+            {{ self.treenode(child, documents, translation_domain) }}            
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </li>
+{% endmacro %}
+
 <section class="sidebar-slot row-fluid" data-controller="SidebarSlotController">
     <section class="sidebar-tree" data-controller="SidebarTreeController" data-module="{{moduleName|lower}}">
 
         <h3>{{moduleName}}</h3>
         <section class="render-tree">
-        
+            <ul class="children">
+            {% for node in tree.rootNode.children %}
+                {{ self.treenode(node) }}
+            {% endfor %}
+            </ul>
         </section>
-
         <script class="tree-data-json" type="application/json">
             {{tree|json_encode|raw}}
         </script>

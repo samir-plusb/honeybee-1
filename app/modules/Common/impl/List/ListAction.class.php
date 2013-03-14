@@ -131,6 +131,13 @@ class Common_ListAction extends CommonBaseAction
             $row['css_classes'] = isset($row['css_classes']) ? $row['css_classes'] : array();
             $listData[] = $row;
         }
-        return $listData;
+        return array(
+            'listItems' => $listData,
+            'metaData' => array(
+                'search' => $listState->getSearch(),
+                'has_filter' => $listState->hasFilter(),
+                'item_count' => count($listData)
+            )
+        );
     }
 }

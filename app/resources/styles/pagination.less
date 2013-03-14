@@ -1,0 +1,39 @@
+.pagination {
+    height: 30px;
+    margin: 0;
+    background-color: transparent;
+    border: none;
+
+    > ul {
+        box-shadow: none;
+        > li {
+            > a {
+                border-radius: 15px;
+                padding: 4px 11px;
+                margin: 0 5px;
+            }
+
+            &:first-child, &:last-child {
+                a {
+                    border-radius: 15px;
+                }
+            }
+
+            &.active {
+                a {
+                    @color: #0063c7;
+                    background-color: @color;
+                    border-color: @color;
+                    color: white;
+                }
+            }
+        }
+
+    }
+}
+
+.container-list-data {
+    .pagination {
+        float: right;
+    }       
+}

@@ -1,4 +1,4 @@
-honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
+honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
     log_prefix: "TreeController",
 
@@ -6,25 +6,35 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
     dropMode: null,
 
+    currentMoveNode: null,
+
     tree: {},
 
     alerts: null,
 
+    workflow_handler: null,
+
     init: function(options)
     {
-        this.parent();
+        //this.parent();
         this.options = options;
         this.domElement = options.domElement;
         this.renderTarget = this.domElement.find('.render-tree');
 
         this.loadData();
 
-        this.renderTreeNode(this.tree.rootNode, this.renderTarget);
         this.refreshCss(this.renderTarget);
         this.bindDragEvents();
+        this.bindClickMoveEvents();
         this.bindToggleEvents();
 
         this.initKnockoutProperties();
+
+        this.bindActions();
+
+        this.workflow_handler = new honeybee.list.WorkflowHandler(
+            this.options.workflow_urls || {}
+        );
     },
 
     initKnockoutProperties: function()
@@ -35,6 +45,50 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
 
     attach: function()
     {
+        this.confirm_dialog = new honeybee.list.ListController.ConfirmDialog('.dialog-confirm');
+    },
+
+    bindActions: function()
+    {
+        var that = this;
+        this.domElement.find('.container-actions .honeybee-action').bind('click', function(ev)
+        {
+            var action = $(this).attr('data-action');
+            that.proceed(true, null, action);
+        });
+
+        this.renderTarget.find('.child').each(function(index, element) {
+            element = $(element);
+            var documentData = JSON.parse(element.attr('data-document'));
+            element.find('.honeybee-action-proceed').bind('click', function(ev){
+                var confirm_text;
+                var gate = $(this).attr('data-gate');
+                $.each(documentData.workflow.gates, function(i, value){
+                    if (gate === value.name) {
+                        confirm_text = value.prompt;
+                    }
+                });
+
+                that.proceed(false, documentData, gate, confirm_text);
+            });
+            element.find('.honeybee-action-edit').bind('click', function(ev){
+                that.run(false, documentData); 
+            });
+        });
+    },
+
+    getSelectedItems: function()
+    {
+        var checkboxes = this.renderTarget.find('.child input:checkbox[checked=checked]');
+        var items = [];
+
+        checkboxes.each(function(index, element)
+        {
+            var parentNode = $(element).parent().parent();
+            items.push(JSON.parse(parentNode.attr('data-document')));
+        });
+
+        return items;
     },
 
     bindToggleEvents: function()
@@ -42,7 +96,52 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         this.renderTarget.find('.node-toggle').bind('click', function(ev)
         {
             $(this).parentsUntil('.child').parent().toggleClass('closed');
-            $(this).toggleClass('icon-chevron-down icon-chevron-right');
+            $(this).toggleClass('icon-minus icon-plus');
+        });
+    },
+
+    bindClickMoveEvents: function()
+    {
+        var that = this;
+
+        var resetMoveElements = function() {
+            that.renderTarget.find('.move-target, .move-cancel').hide();
+            that.renderTarget.find('.move').show();
+        };
+
+        this.renderTarget.find('.move-target, .move-cancel').hide().removeClass('hide');
+        this.renderTarget.find('.child').each(function(index, element) {
+            element = $(element);
+            var controls = element.children('.node-controls');
+            controls.find('.move').bind('click', function(ev) {
+                that.renderTarget.find('.move').hide();
+                that.renderTarget.find('.move-target').show();
+                element.children('.node-controls').find('.move-target').hide();
+                element.children('.node-controls').find('.move-cancel').show();
+
+                that.currentMoveNode = element;
+            });
+
+            controls.find('.move-cancel').bind('click', function(ev) {
+                resetMoveElements();
+                this.currentMoveNode = null;
+            });
+
+            controls.find('.move-before').bind('click', function(){
+                that.dropMode = 'before';
+                that.moveNode(that.currentMoveNode, element);
+                resetMoveElements();
+            });
+            controls.find('.move-after').bind('click', function(){
+                that.dropMode = 'after';
+                that.moveNode(that.currentMoveNode, element);
+                resetMoveElements();
+            });
+            controls.find('.move-inside').bind('click', function(){
+                that.dropMode = 'inside';
+                that.moveNode(that.currentMoveNode, element);
+                resetMoveElements();
+            });
         });
     },
 
@@ -54,7 +153,7 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         var clearDragCss = function(element)
         {
             var classes = 'drop-before drop-inside drop-after';
-            $(element).removeClass(classes).parentsUntil('#'+that.tree.rootNode.identifier).removeClass(classes);
+            that.renderTarget.find('.child').removeClass(classes);
         };
 
         this.renderTarget.find('li').bind('dragstart', function(ev)
@@ -107,37 +206,6 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         });
     },
 
-    renderTreeNode: function(node, domContext)
-    {
-        var childList, childContent, i, toggle, label;
-
-        domContext.attr('id', node.identifier);
-        if (node.identifier !== this.tree.rootNode.identifier)
-        {
-            toggle = $('<i></i>').addClass('node-toggle icon-chevron-down');
-            label = $('<span></span>').addClass('node-label').text(node.label).prepend(toggle);
-
-            domContext.append(label);
-        }
-
-        if (node.hasOwnProperty('children') && node.children.length > 0)
-        {
-            childList = $('<ul></ul>').addClass('children');
-            domContext.append(childList);
-
-            for (i in node.children)
-            {
-                if (node.children.hasOwnProperty(i))
-                {
-                    var childElement = $('<li></li>').addClass('child').attr('draggable', true);
-                    this.renderTreeNode(node.children[i], childElement);
-
-                    childList.append(childElement);
-                }
-            }
-        }
-    },
-
     refreshCss: function()
     {
         var even = false;
@@ -146,7 +214,7 @@ honeybee.tree.TreeController = honeybee.core.BaseObject.extend({
         {
             even = !even;
             //domContext.removeClass('odd even').addClass(even ? 'even' : 'odd');
-            var children = domContext.children('ul').children('li');
+            var children = domContext.children('.children').children('.child');
 
             if (children.length > 0)
             {
