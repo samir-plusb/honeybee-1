@@ -2,10 +2,11 @@
 
 namespace Honeybee\Core\Dat0r;
 
+use Zend\Permissions\Acl;
 use Dat0r\Core\Runtime\Document\Document as BaseDocument;
 use Honeybee\Core\Workflow\IResource; 
 
-abstract class Document extends BaseDocument implements \Zend_Acl_Resource_Interface, IResource
+abstract class Document extends BaseDocument implements IResource, Acl\Resource\ResourceInterface
 {
     public function getWorkflowConfigPath()
     {

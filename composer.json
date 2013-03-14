@@ -9,7 +9,8 @@
         {
             "name": "Leon Weidauer",
             "name": "Tom Anheyer",
-            "name": "Thorsten Schmitt-Rink"
+            "name": "Thorsten Schmitt-Rink",
+            "name": "Steffen Gransow"
         }
     ],
 
@@ -25,19 +26,19 @@
         "twig/twig": "1.*",
         "craur/craur": "1.6.*",
         "ruflin/Elastica": "v0.20.5.0.RC1",
-        "zend/acl": "dev-master",
+        "zendframework/zend-permissions-acl": "2.1.2",
         "imagine/Imagine": "0.3.*",
         "phing/phing": "2.4.12",
         "jquery/jquery": "1.8.2",
         "jquery/easing": "1.3",
         "allmarkedup/jquery-url-parser": "2.2.1",
-        "farhadi/html5sortable": "dev-master",
+        "farhadi/html5sortable": "0.9",
         "knockoutjs/knockoutjs": "2.2.0",
         "underscorejs/underscorejs": "1.4.2",
         "kineticjs/kineticjs": "4.0.*",
         "twitter/bootstrap": "2.2.2",
         "fortawesome/font-awesome": "2.0.0",
-        "berlinonline/Dat0r": "dev-master"
+        "berlinonline/dat0r": "0.1"
     },
 
     "require-dev": {
@@ -60,18 +61,6 @@
                     "url": "http://svn.agavi.org/",
                     "type": "svn",
                     "reference": "tags/1.0.7/"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "farhadi/html5sortable",
-                "version": "dev-master",
-                "source": {
-                    "url": "https://github.com/farhadi/html5sortable.git",
-                    "type": "git",
-                    "reference": "b90b6baac95cdc0df1ec1682b7181ff94b1f7820"
                 }
             }
         },
@@ -193,6 +182,18 @@
                 "dist": {
                     "url": "http://kineticjs.com/download/v4.0.5/kinetic-v4.0.5.min.js",
                     "type": "file"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "farhadi/html5sortable",
+                "version": "0.9",
+                "source": {
+                    "url": "https://github.com/farhadi/html5sortable.git",
+                    "type": "git",
+                    "reference": "b90b6baac95cdc0df1ec1682b7181ff94b1f7820"
                 }
             }
         }
