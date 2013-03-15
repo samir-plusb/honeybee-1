@@ -7,6 +7,8 @@ help:
 	@echo "  tail-logs - Tail all application logs."
 	@echo "  install - Initially setup a vanilla checkout."
 	@echo "  update - Update the working copy and vendor libs."
+	@echo "  install-dev - Initially setup a vanilla development working environment."
+	@echo "  update-dev - Update the working copy and vendor libs regarding development 'goodies'."
 	@echo "  link-project-modules - Symlink custom code into the honeybee submodule and update the local git/ingo/exclude settings."
 	@echo ""
 	@echo "DEVELOPMENT"
@@ -70,8 +72,16 @@ install: install-vendor install-node-deps cc
 	@make link-project-modules
 	@make deploy-resources
 
+install-dev: install-vendor-dev install-node-deps cc
+
+	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
+	@make twitter-bootstrap
+	@make link-project-modules
+	@make deploy-resources
 
 update: update-composer update-vendor update-node-deps link-project-modules
+
+update-dev: update-composer update-vendor-dev update-node-deps link-project-modules
 
 
 tail-logs:
@@ -109,19 +119,35 @@ install-composer:
 update-composer:
 	@bin/composer.phar self-update
 
-
+#
+# Install vendor libraries, either development specific ot plain.
+#
 install-vendor: install-composer
 
-	@php -d allow_url_fopen=1 bin/composer.phar install
+	@php -d allow_url_fopen=1 bin/composer.phar install --no-dev
 
+install-vendor-dev: install-composer
 
+	@php -d allow_url_fopen=1 bin/composer.phar install --dev
+
+#
+# Update vendor libraries, either development specific ot plain.
+#
 update-vendor: install-vendor
 
 	@svn revert -R vendor/agavi/agavi/ || true
-	@php -d allow_url_fopen=1 bin/composer.phar update
+	@php -d allow_url_fopen=1 bin/composer.phar update --no-dev
 	-@bin/apply-patches
 
+update-vendor-dev: install-vendor-dev
 
+	@svn revert -R vendor/agavi/agavi/ || true
+	@php -d allow_url_fopen=1 bin/composer.phar update --dev
+	-@bin/apply-patches
+
+#
+# Node module installation and updates
+#
 install-node-deps:
 
 	@npm install
@@ -131,11 +157,12 @@ update-node-deps: install-node-deps
 
 	@npm update
 
-
+#
+# Php integration related tasks.
+#
 test:
 
 	@nice bin/test --configuration testing/config/phpunit.xml
-
 
 phpcs:
 
@@ -149,6 +176,9 @@ phpdoc:
 	@vendor/bin/phpdoc.php --config ${PROJECT_ROOT}/app/config/phpdocumentor.xml
 
 
+#
+# Javascript (integration) related tasks.
+#
 js-specs:
 
 	@bin/test-js --spec
@@ -166,7 +196,9 @@ jsdoc:
 	@/bin/mkdir -p etc/integration/docs/clientside
 	@bin/jsdoc pub/js/honeybee --output etc/integration/docs/clientside/
 
-
+#
+# Module related tasks.
+#
 link-project-modules:
 
 	@bin/link-project-modules
@@ -195,7 +227,9 @@ module-code:
 	@curl -XDELETE localhost:9200/
 	@echo "\n"
 
-
+#
+# PHONY targets @see http://www.linuxdevcenter.com/pub/a/linux/2002/01/31/make_intro.html?page=2
+#
 .PHONY: help module module-code lessw lessc jsdoc js-xunit js-specs phpdoc phpcs test twitter-bootstrap cc config install update
 
 # vim: ts=4:sw=4:noexpandtab!:
