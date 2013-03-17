@@ -8,9 +8,9 @@
     "authors": [
         {
             "name": "Leon Weidauer",
-            "name": "Tom Anheyer",
+            "name": "Steffen Gransow",
             "name": "Thorsten Schmitt-Rink",
-            "name": "Steffen Gransow"
+            "name": "Tom Anheyer"
         }
     ],
 
@@ -36,36 +36,24 @@
         "kineticjs/kineticjs": "4.0.*",
         "twitter/bootstrap": "2.2.2",
         "fortawesome/font-awesome": "2.0.0",
-        "berlinonline/dat0r": "0.2"
+        "berlinonline/dat0r": "0.3"
     },
 
     "minimum-stability": "dev",
 
     "require-dev": {
         "PhpDebugToolbar/php-debug-toolbar": "1.5.*",
-        "phpdocumentor/phpdocumentor": "dev-master",
+        "phpdocumentor/phpdocumentor": "dev-develop",
         "phpmd/phpmd": "1.4.1",
-        "phploc/phploc": "1.7.4",
+        "phploc/phploc": "dev-master",
         "pdepend/pdepend": "1.1.0",
         "zerkalica/php-code-browser": "dev-master",
         "squizlabs/php_codesniffer": "~1.4.4",
         "phpunit/phpunit": "3.7.*",
-        "hartym/php-cpd": "dev-master"
+        "shrink/phpcpd": "dev-master"
     },
 
     "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "hartym/php-cpd",
-                "version": "dev-master",
-                "source": {
-                    "url": "https://github.com/hartym/php-cpd.git",
-                    "type": "git",
-                    "reference": "9da564f802d79820aaf24e60ddc55f078cfcf43e"
-                }
-            }
-        },
         {
             "type": "package",
             "package": {

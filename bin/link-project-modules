@@ -10,13 +10,14 @@ if [ -f "$GIT_PATH" ]; then
 fi
 
 INFO_DIR="$GIT_PATH/info";
-
+echo $INFO_DIR
 if [ ! -d "$INFO_DIR" ]; then
    mkdir -p "$INFO_DIR";
 fi
 
 EXCLUDE_FILE_PATH="$INFO_DIR/exclude";
 
+for i in `ls $BASEDIR/app/modules`; do unlink app/modules/$i; done;
 (for x in `ls $BASEDIR/../project/modules/`; do echo "app/modules/$x"; done) > "$EXCLUDE_FILE_PATH"
 (cd $BASEDIR/app/modules/ && ln -s ../../../project/modules/* .)
 
