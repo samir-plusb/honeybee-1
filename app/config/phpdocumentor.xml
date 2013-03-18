@@ -3,7 +3,7 @@
   <title>Honeybee</title>
   <parser>
     <default-package-name>Honeybee</default-package-name>
-    <target>../../etc/integration/docs/serverside</target>
+    <target>../../etc/integration/build/logs/api/serverside</target>
     <markers>
       <item>TODO</item>
       <item>FIXME</item>
@@ -14,7 +14,7 @@
     <visibility></visibility>
   </parser>
   <transformer>
-    <target>../../etc/integration/docs/serverside</target>
+    <target>../../etc/integration/build/logs/api/serverside</target>
   </transformer>
   <transformations>
     <template name="../../data/templates/responsive" />
