@@ -36,13 +36,13 @@
         "kineticjs/kineticjs": "4.0.*",
         "twitter/bootstrap": "2.2.2",
         "fortawesome/font-awesome": "2.0.0",
-        "berlinonline/dat0r": "0.3"
+        "berlinonline/dat0r": "0.3",
+        "PhpDebugToolbar/php-debug-toolbar": "1.5.*"
     },
 
     "minimum-stability": "dev",
 
     "require-dev": {
-        "PhpDebugToolbar/php-debug-toolbar": "1.5.*",
         "phpdocumentor/phpdocumentor": "dev-develop",
         "phpmd/phpmd": "1.4.1",
         "phploc/phploc": "dev-master",
