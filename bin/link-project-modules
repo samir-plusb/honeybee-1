@@ -18,6 +18,7 @@ fi
 EXCLUDE_FILE_PATH="$INFO_DIR/exclude";
 
 for i in `ls $BASEDIR/app/modules`; do unlink app/modules/$i; done;
+# beware of the convention relying on '$BASEDIR/../project/modules/' to exist abaove honeybee's base dir.
 (for x in `ls $BASEDIR/../project/modules/`; do echo "app/modules/$x"; done) > "$EXCLUDE_FILE_PATH"
 (cd $BASEDIR/app/modules/ && ln -s ../../../project/modules/* .)
 

@@ -120,10 +120,10 @@ install-dev: install-vendor-dev install-node-deps cc
 	@make deploy-resources
 
 
-update: update-composer update-vendor update-node-deps link-project-modules
+update: update-composer update-vendor update-node-deps
 
 
-update-dev: update-composer update-vendor-dev update-node-deps link-project-modules
+update-dev: update-composer update-vendor-dev update-node-deps
 
 
 install-composer: 
@@ -139,24 +139,24 @@ update-composer:
 	@bin/composer.phar self-update
 
 
-install-vendor: install-composer
+install-vendor:
 
 	@php -d allow_url_fopen=1 bin/composer.phar install --no-dev
 
 
-install-vendor-dev: install-composer
+install-vendor-dev:
 
 	@php -d allow_url_fopen=1 bin/composer.phar install --dev
 
 
-update-vendor: install-vendor
+update-vendor:
 
 	@svn revert -R vendor/agavi/agavi/ || true
 	@php -d allow_url_fopen=1 bin/composer.phar update --no-dev
 	-@bin/apply-patches
 
 
-update-vendor-dev: install-vendor-dev
+update-vendor-dev:
 
 	@svn revert -R vendor/agavi/agavi/ || true
 	@php -d allow_url_fopen=1 bin/composer.phar update --dev
