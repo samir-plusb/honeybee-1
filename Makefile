@@ -104,7 +104,7 @@ deploy-resources:
 #
 # Composer and vendor handling
 #
-install: install-vendor install-node-deps cc
+install: install-composer install-vendor install-node-deps cc
 
 	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
 	@make twitter-bootstrap
@@ -112,7 +112,7 @@ install: install-vendor install-node-deps cc
 	@make deploy-resources
 
 
-install-dev: install-vendor-dev install-node-deps cc
+install-dev: install-composer install-vendor-dev install-node-deps cc
 
 	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
 	@make twitter-bootstrap
