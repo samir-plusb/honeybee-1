@@ -189,11 +189,11 @@
 {# **************************************************
     ListData Pagination Bottom
 ************************************************** #}
-    <section class="well toolbar secondary">
     {% if list_data|length >= 10 %}
+    <section class="well toolbar secondary">
         {{slots.pagination|raw}}
-    {% endif %}
     </section>
+    {% endif %}
     </section>
 </section>
 
