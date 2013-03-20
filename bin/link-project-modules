@@ -17,12 +17,14 @@ fi
 
 EXCLUDE_FILE_PATH="$INFO_DIR/exclude";
 
-for i in `ls $BASEDIR/app/modules`; do unlink app/modules/$i; done;
+for module_name in `ls $BASEDIR/app/modules`; do unlink app/modules/$module_name; done;
+
 # beware of the convention relying on '$BASEDIR/../project/modules/' to exist abaove honeybee's base dir.
-(for x in `ls $BASEDIR/../project/modules/`; do echo "app/modules/$x"; done) > "$EXCLUDE_FILE_PATH"
-for x in `ls $BASEDIR/../project/modules/`; 
+(for project_module in `ls $BASEDIR/../project/modules/`; do echo "app/modules/$project_module"; done) > "$EXCLUDE_FILE_PATH"
+cd "$BASEDIR/app/modules"
+for project_module in `ls $BASEDIR/../project/modules/`; 
 do 
-    ln -s "$BASEDIR/../project/modules/$x" "$BASEDIR/app/modules/$x"; 
+    ln -s "../../../project/modules/$project_module" "$project_module"; 
 done
 
 echo -e "\033[32mExluded from git in $EXCLUDE_FILE_PATH:\033[39m"
