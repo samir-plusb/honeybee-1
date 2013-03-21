@@ -29,10 +29,12 @@ class ListSuccessView extends BaseView
             ), NULL, 'read')
         );
 
+        /* Will comment back in, when the stuff is completely styled.
         $this->getLayer('content')->setSlot(
             'sidebar',
             $this->createSlotContainer('Common', 'Sidebar', array('tree_modules' => $this->getSidebarTreeModules()), NULL, 'read')
         );
+        */
 
         $this->setBreadcrumb();
     }
