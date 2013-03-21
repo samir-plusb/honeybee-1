@@ -38,10 +38,11 @@
         });
 
         stick();
-    }
+    };
 
     var edit_wrapper = $('.controller-edit');
     var list_wrapper = $('.container-list-data');
+    var tree_wrapper = $('.container-tree-data');
     
     if (1 === edit_wrapper.length)
     {
@@ -51,5 +52,9 @@
     else if (1 === list_wrapper.length)
     {
         honeybee.list.ListController.create('.container-list-data', namespace).attach();
+    }
+    else if (1 === tree_wrapper.length)
+    {
+        honeybee.tree.TreeController.create('.container-tree-data', namespace).attach();
     }
 })(honeybee.%%MODULE_PREFIX%%);
