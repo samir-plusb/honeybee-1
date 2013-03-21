@@ -7,8 +7,8 @@
 <header class="navbar navbar-inverse navbar-fixed-top" data-scrollspy="scrollspy">
     <div class="navbar-inner">
         <div class="container-fluid upper-bar" style="width: auto;">
-            <a class="brand" href="{{ro.gen('index')}}" title="Honeybee 3.0 - Erato">
-                <span class="icon-wrench"> Honeybee</span>
+            <a class="brand" href="{{ro.gen('index')}}" title="{{tm._('brand-title', 'modules.labels')}}">
+                <span class="icon-wrench"> {{tm._('brand-name', 'modules.labels')}}</span>
             </a>
 
             {% if us.isAuthenticated %}

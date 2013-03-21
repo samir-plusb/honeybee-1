@@ -41,6 +41,13 @@ AgaviConfig::set(
     )
 );
 
+// paths to the project directory where custom overrides/includes of honeybee are
+AgaviConfig::set('project.dir', dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'project' );
+AgaviConfig::set('project.app_dir', dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'project' . DIRECTORY_SEPARATOR . 'app');
+AgaviConfig::set('project.module_templates_dir', dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'project' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'module_templates');
+// path to the custom project modules that are linked into the honeybee app/modules
+AgaviConfig::set('project.modules_dir', dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'project' . DIRECTORY_SEPARATOR . 'modules');
+
 // +---------------------------------------------------------------------------+
 // | An absolute filesystem path to the directory where cache files will be    |
 // | stored.                                                                   |

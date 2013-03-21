@@ -156,7 +156,7 @@
         </settings>
     </ae:configuration>
 
-    <!-- custom settings.xml files for all project modules -->
+    <!-- custom settings.xml files from all project modules -->
     <xi:include href="%core.app_dir%/config/includes/settings.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
         <xi:fallback />
     </xi:include>

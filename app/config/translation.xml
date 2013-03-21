@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
-    xmlns="http://agavi.org/agavi/config/parts/translation/1.0" 
-    xmlns:xi="http://www.w3.org/2001/XInclude">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/translation/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
     <ae:configuration>
+
         <available_locales default_locale="de_DE">
 			<!-- German, Germany -->
             <available_locale identifier="de_DE">
@@ -30,25 +28,37 @@
     </ae:configuration>
 
     <ae:configuration>
+
         <translators default_domain="modules.labels">
             <translator domain="modules">
                 <message_translator class="AgaviSimpleTranslator">
-                
                      <ae:parameter name="labels">
                         <ae:parameter name="de">
+                            <ae:parameter name="brand-name">Honeybee</ae:parameter>
+                            <ae:parameter name="brand-title">Honeybee 3.0 - Erato</ae:parameter>
                             <ae:parameter name="Organization">Institutionen</ae:parameter>
                             <ae:parameter name="Person">Personen</ae:parameter>
                             <ae:parameter name="Category">Kategorien</ae:parameter>
                         </ae:parameter>
+                        <ae:parameter name="en">
+                            <ae:parameter name="brand-name">Honeybee</ae:parameter>
+                            <ae:parameter name="brand-title">Honeybee 3.0 - Erato</ae:parameter>
+                        </ae:parameter>
                     </ae:parameter>
-
                 </message_translator>
             </translator>
         </translators>
+
     </ae:configuration>
 
-
-    <xi:include href="%core.app_dir%/config/includes/translation.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
+    <!-- custom translation.xml files from all project modules -->
+    <xi:include href="%core.app_dir%/config/includes/translation.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
+        <xi:fallback />
     </xi:include>
+
+    <!-- custom project translation.xml that may override everything imported from project modules and honeybee-core -->
+    <xi:include href="%core.app_dir%/../../project/app/config/translation.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
+        <xi:fallback />
+    </xi:include>
+
 </ae:configurations>
