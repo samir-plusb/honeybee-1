@@ -79,7 +79,7 @@
     DEVELOPMENT COMMONS
     ####################
     -->
-    <ae:configuration environment="development*">
+    <ae:configuration environment="development.*">
         <settings>
             <setting name="debug">true</setting>
         </settings>
@@ -156,8 +156,13 @@
         </settings>
     </ae:configuration>
 
-    <xi:include href="%core.app_dir%/config/includes/settings.xml"
-        xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
+    <!-- custom settings.xml files for all project modules -->
+    <xi:include href="%core.app_dir%/config/includes/settings.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
+        <xi:fallback />
+    </xi:include>
+
+    <!-- custom project settings.xml that may override everything imported from project modules and honeybee-core -->
+    <xi:include href="%core.app_dir%/../../project/app/config/settings.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
         <xi:fallback />
     </xi:include>
 
