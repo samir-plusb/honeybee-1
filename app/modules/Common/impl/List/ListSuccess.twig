@@ -78,7 +78,8 @@
     <section class="well toolbar secondary">
         <ul class="toolset">
             <li class="tool select-all">
-                <input type="checkbox" data-bind="checked: all_selected" /> Alle auswählen
+                <input type="checkbox" id="select_all_rows_toggle" data-bind="checked: all_selected" /> 
+                <label style="display: inline-block;" for="select_all_rows_toggle">Alle auswählen</label>
             </li>
 <!-- We need to display the label generically and hide the whole thing when not within a tree-reference context
             <li class="tool assign-category">
