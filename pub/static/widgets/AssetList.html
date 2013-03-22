@@ -40,15 +40,15 @@
     </li>
 <!-- /ko -->
 <!-- ko if: true === $data.dropzone -->
-    <li class="dropzone">
-        <p>Bilder hier ablegen</p>
+    <li data-bind="visible: $data.show()" class="dropzone">
+        <p data-bind="text: $data.label()" />
     </li>
 <!-- /ko -->
 </ul>
 <div class="modal modal-edit-asset">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">×</a>
-        <h3>Bildbearbeitung</h3>
+        <h3>Datei - Metadaten</h3>
     </div>
     <div class="modal-body">
         <div class="row-fluid">
@@ -67,7 +67,7 @@
                         <input type="text" class="input-copyright-url" value="" style="width: 95%;" />
                     </div>
                     <button class="btn" type="button" data-toggle="button"
-                            data-bind="css: { 'active': start_active }, click: toggleAoiSelection">
+                            data-bind="css: { 'active': start_active }, visible: cur_file_is_image, click: toggleAoiSelection">
                         Auswahl für "area of interest"
                     </button>
                     <button class="btn" style="padding: 3px 7px; margin-left: 6px;"
@@ -98,6 +98,6 @@
         </div>
     </div>
     <div class="modal-footer" style="margin-top: 1em; text-align: left;">
-        <input type="button" class="btn btn-primary" data-twodal-event="onstoredata" value="Bilddaten speichern">
+        <input type="button" class="btn btn-primary" data-twodal-event="onstoredata" value="Metadaten speichern">
     </div>
 </div>
