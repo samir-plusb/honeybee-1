@@ -29,6 +29,8 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
 
     cur_file_is_image: null,
 
+    face_detect_feat_on: null,
+
     init: function(element, options)
     {
         this.parent(element, options);
@@ -75,6 +77,7 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
         this.start_active = ko.observable(false);
         this.cur_file_is_image = ko.observable(false);
         this.aoi_scan_active = ko.observable(false);
+        this.face_detect_feat_on = ko.observable(false);
         this.area_of_interest = ko.observableArray([]);
         this.popover_pos = ko.observable(this.options.popover_pos || 'top');
         var assets = this.options.assets || [];

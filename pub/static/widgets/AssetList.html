@@ -71,7 +71,7 @@
                         Auswahl für "area of interest"
                     </button>
                     <button class="btn" style="padding: 3px 7px; margin-left: 6px;"
-                            data-bind="visible: aoi_enabled() && ! aoi_scan_active(), click: runFaceDetection">
+                            data-bind="visible: aoi_enabled() && ! aoi_scan_active() && face_detect_feat_on(), click: runFaceDetection">
                         <img src="static/deploy/_global/binaries/icon_facedetection.png" style="width: 23px;" />
                     </button>
                     <img src="static/deploy/_global/binaries/loading-small.gif" title="Gesichtserkennung läuft, hier klicken um den Vorgang abzubrechen." 
