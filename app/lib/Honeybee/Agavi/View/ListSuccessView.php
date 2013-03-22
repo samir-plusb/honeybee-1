@@ -64,10 +64,11 @@ class ListSuccessView extends BaseView
         $page = round($listState->getOffset() / $listState->getLimit()) + 1;
         $routing = $this->getContext()->getRouting();
 
+        $moduleName = $this->getContext()->getTranslationManager()->_($module->getName(), 'modules.labels');
         $moduleCrumb = array(
-            'text' => $module->getName(),
+            'text' => $moduleName,
             'link' => $routing->gen($listRouteName),
-            'info' => sprintf('%s - Listenansicht (Anfang)', $module->getName()),
+            'info' => sprintf('%s - Listenansicht (Anfang)', $moduleName),
             'icon' => 'icon-list'
         );
 
@@ -89,9 +90,9 @@ class ListSuccessView extends BaseView
         if (! $listState->hasSearch() && ! $listState->hasFilter())
         {
             $breadcrumbs = array(array(
-                'text' => $module->getName(),
+                'text' => $moduleName,
                 'link' => $routing->gen($listRouteName, $routeParams),
-                'info' => $module->getName() . ' (Seite ' . $page . ')',
+                'info' => $moduleName . ' (Seite ' . $page . ')',
                 'icon' => 'icon-list'
             ));
         }
@@ -99,7 +100,7 @@ class ListSuccessView extends BaseView
         {
             $routeParams['search'] = $listState->getSearch();
             $breadcrumbs[] = array(
-                'text' => $module->getName(),
+                'text' => $moduleName,
                 'link' => $routing->gen($listRouteName, $routeParams),
                 'info' => 'Suche nach: ' . $listState->getSearch() . ' (Seite ' . $page . ')',
                 'icon' => 'icon-search'
@@ -109,7 +110,7 @@ class ListSuccessView extends BaseView
         {
             $routeParams['filter'] = $listState->getFilter();
             $breadcrumbs[] = array(
-                'text' => $module->getName(),
+                'text' => $moduleName,
                 'link' => $routing->gen($listRouteName, $routeParams),
                 'info' => 'Erweiterte Suche (Seite ' . $page. ')',
                 'icon' => 'icon-search'
