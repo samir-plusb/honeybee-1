@@ -17,6 +17,8 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
     identifier: null,
 
     revision: null,
+
+    request_pending: null,
     // </knockout_properties>
 
     init: function(element, options)
@@ -42,6 +44,11 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
 
     onFormSubmit: function()
     {
+        if (this.request_pending())
+        {
+            return;
+        }
+
         var that = this;
         var form = this.element.find('form');
         var post_url = form.attr('action');
@@ -61,6 +68,8 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
 
         handleResponse = function(resp_data)
         {
+            that.request_pending(false);
+
             if (! resp_data || ! resp_data.state)
             {
                 throw "Unexpected response data structure received from honeybee backend (places save).";
@@ -91,6 +100,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
             }
         };
 
+        this.request_pending(true);
         honeybee.core.Request.curry(
             post_url,
             form.serialize(), 
@@ -164,6 +174,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
     initKnockoutProperties: function()
     {
         this.alerts = ko.observableArray([ ]);
+        this.request_pending = ko.observable(false);
         this.identifier = ko.observable(this.options.identifier || "");
         this.revision = ko.observable(this.options.revision || "");
     },
