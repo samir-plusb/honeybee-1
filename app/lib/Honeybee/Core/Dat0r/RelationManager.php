@@ -35,11 +35,10 @@ class RelationManager
                 $referencedModule = $referencedModules[0];
                 $referencedDocuments[$fieldname] = new DocumentSet();
 
-                foreach ($refData as $identifier)
+                if (! empty($refData))
                 {
-                    $identifier = trim($identifier);
-                    if (! empty($identifier) && 
-                        ($referencedDocument = $referencedModule->getService()->get($identifier)))
+                    $referenceData = $referencedModule->getService()->getMany($refData);
+                    foreach ($referenceData['documents'] as $referencedDocument)
                     {
                         $referencedDocuments[$fieldname]->add($referencedDocument);
                     }
