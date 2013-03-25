@@ -56,7 +56,7 @@ abstract class BaseStorage implements IStorage
      *
      * @return array
      */
-    protected function mapDomainDataToCouchDb($type, array $data, $idPrefix)
+    protected function mapDomainDataToCouchDb($type, array $data)
     {
         $data[self::DOC_IMPLEMENTOR] = $type;
 

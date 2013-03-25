@@ -4,7 +4,7 @@ namespace Honeybee\Agavi\View;
 
 class EditErrorView extends BaseView
 {
-    public function executeJson(AgaviRequestDataHolder $parameters)
+    public function executeJson(\AgaviRequestDataHolder $parameters)
     {
         $data = array(
             'state' => 'error',

@@ -4,6 +4,8 @@ namespace Honeybee\Core\Dat0r;
 
 use Dat0r\Core\Runtime\Module\RootModule;
 use Dat0r\Core\Runtime\Field\TextField;
+use Dat0r\Core\Runtime\Field\IntegerField;
+use Dat0r\Core\Runtime\Field\UuidField;
 use Honeybee\Core\Workflow;
 use Honeybee\Core\Storage\CouchDb\TreeStorage;
 
@@ -94,6 +96,9 @@ abstract class Module extends RootModule
             array(
                 TextField::create('identifier'),
                 TextField::create('revision'),
+                UuidField::create('uuid'),
+                TextField::create('language', array('default_value' => 'DE_de')),
+                IntegerField::create('version', array('default_value' => 1))
             )
         );
     }

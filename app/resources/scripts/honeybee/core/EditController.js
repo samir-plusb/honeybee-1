@@ -177,6 +177,9 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         this.request_pending = ko.observable(false);
         this.identifier = ko.observable(this.options.identifier || "");
         this.revision = ko.observable(this.options.revision || "");
+        this.uuid = ko.observable(this.options.uuid || "");
+        this.language = ko.observable(this.options.language || "");
+        this.version = ko.observable(this.options.version || "");
     },
 
     registerWidgets: function()
