@@ -36,7 +36,7 @@
         "kineticjs/kineticjs": "4.0.*",
         "twitter/bootstrap": "2.2.2",
         "fortawesome/font-awesome": "2.0.0",
-        "berlinonline/dat0r": "0.4",
+        "berlinonline/dat0r": "0.5",
         "PhpDebugToolbar/php-debug-toolbar": "1.5.*"
     },
 
