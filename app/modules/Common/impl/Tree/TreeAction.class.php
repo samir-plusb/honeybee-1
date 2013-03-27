@@ -27,10 +27,16 @@ class Common_TreeAction extends CommonBaseAction
          * Here we call the Listaction of the current module
          * to get the complete document data so we can render the correct wirkflow buttons in our GUI
          */
-        $rd = new AgaviRequestDataHolder(array(
-            'limit' => 10000,
-            'offset' => 0,
-        ));
+        $rdhc = $this->context->getRequest()->getParameter('request_data_holder_class');
+        $rd = new $rdhc(
+            array(
+                AgaviRequestDataHolder::SOURCE_PARAMETERS => array(
+                    'limit' => 10000,
+                    'offset' => 0,
+                )
+            )
+        );
+
         $container = $this->getContext()->getController()->createExecutionContainer(
             $this->getModule()->getName(),
             'List',
