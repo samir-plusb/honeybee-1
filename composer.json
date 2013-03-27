@@ -146,11 +146,11 @@
             "type": "package",
             "package": {
                 "name": "fortawesome/font-awesome",
-                "version": "dev-master",
+                "version": "2.0.0",
                 "source": {
                     "url": "https://github.com/FortAwesome/Font-Awesome.git",
                     "type": "git",
-                    "reference": "ee55c859d23af4a3d4825610815ed5926c417101"
+                    "reference": "0ad5e104960bb6051d4ec49abf42be4b74678e48"
                 }
             }
         },
