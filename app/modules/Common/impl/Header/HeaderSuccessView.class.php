@@ -34,11 +34,18 @@ class Common_Header_HeaderSuccessView extends CommonBaseView
         $modules = array();
         foreach ($service->getModules() as $module)
         {
-            $modules[$module->getName()] = array(
+            $module_links = array(
                 'list_link' => $routing->gen($module->getOption('prefix') . '.list'),
                 'create_link' => $routing->gen($module->getOption('prefix') . '.edit'),
                 'module_label' => $this->getContext()->getTranslationManager()->_($module->getName(), 'modules.labels')
             );
+
+            if ($module->isActingAsTree())
+            {
+                $module_links['tree_link'] = $routing->gen($module->getOption('prefix') . '.tree');
+            }
+
+            $modules[$module->getName()] = $module_links;
         }
 
         // sort modules by their translated labels
