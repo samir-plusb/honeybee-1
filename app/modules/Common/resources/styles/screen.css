@@ -21,3 +21,8 @@
     padding: 10px 15px;
     margin-bottom: 0px;
 }
+
+#fat-menu > p
+{
+    color: #cdcdcd;
+}

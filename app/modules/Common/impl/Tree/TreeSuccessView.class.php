@@ -19,7 +19,26 @@ class Common_Tree_TreeSuccessView extends CommonBaseView
 
         $this->setAttribute('module_type_key', $treeConfig->getTypeKey());
         $this->setAttribute('tree', $tree->toArray());
-        $this->setAttribute('client_side_controller', $treeConfig->getClientSideController());
+
+        $routing = $this->getContext()->getRouting();
+        $clientSideOptions = $treeConfig->getClientSideController();
+        $clientSideOptions['options'] = isset($clientSideOptions['options']) ? $clientSideOptions['options'] : array();
+        $clientSideOptions['options']['workflow_urls'] = array(
+            'checkout' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.workflow.checkout', $treeConfig->getTypeKey()))
+            )),
+            'release' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.workflow.release', $treeConfig->getTypeKey()))
+            )),
+            'execute' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.workflow.execute', $treeConfig->getTypeKey()))
+            )),
+            'edit' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.edit', $treeConfig->getTypeKey()))
+            ))
+        );
+
+        $this->setAttribute('client_side_controller', $clientSideOptions);
     }
 }
 

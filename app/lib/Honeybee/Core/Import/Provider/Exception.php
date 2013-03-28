@@ -9,7 +9,7 @@ namespace Honeybee\Core\Import\Provider;
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  */
-class Exception extends Exception
+class Exception extends \Exception
 {
 
 }

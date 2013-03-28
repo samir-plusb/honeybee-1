@@ -120,6 +120,27 @@
                 </ae:parameter>
             </setting>
             -->
+
+            <!--
+            <setting name="tree_config">
+                <ae:parameter name="typeKey">%%MODULE_PREFIX%%</ae:parameter>
+                <ae:parameter name="translationDomain">%%MODULE_PREFIX%%.list</ae:parameter>
+                <ae:parameter name="clientSideController">
+                    <ae:parameter name="implementor">%%MODULE_NAME%%TreeController</ae:parameter>
+                    <ae:parameter name="options">
+                        <ae:parameter name="rootNodeIdentifier">root-node</ae:parameter>
+                        <ae:parameter name="invisibleStates">
+                            <ae:parameter>delete</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+                </ae:parameter>
+                <ae:parameter name="batchActions">
+                    <ae:parameters>
+                        <ae:parameter name="delete">delete</ae:parameter>
+                    </ae:parameters>
+                </ae:parameter>
+            </setting>
+        -->
         </settings>
     </ae:configuration>
 </ae:configurations>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns="http://agavi.org/agavi/config/parts/validators/1.0" xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" parent="%core.module_dir%/Asset/config/validators.xml">
+    <ae:configuration>
+        <validators>
+            
+            <validator class="asset_info" name="invalid_asset_binary" required="true" method="read">
+                <arguments>
+                    <argument>aid</argument>
+                </arguments>
+                <errors>
+                    <error>No valid asset id given.</error>
+                    <error for="non_existant">The given asset id does not exist.</error>
+                </errors>
+            </validator>
+
+        </validators>
+    </ae:configuration>
+</ae:configurations>

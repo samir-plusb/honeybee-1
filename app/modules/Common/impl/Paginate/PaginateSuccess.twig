@@ -19,7 +19,7 @@
 {% endif %}
 <!-- start at 3 {{ start_at }} -->
 
-<nav class="pagination well">
+<nav class="pagination clearfix ">
     <ul>
     {% if has_previous %}
         <li class="prev">
@@ -43,8 +43,8 @@
     {% endif %}
 
     {% if start_at == 2 and total_pages > 2 or (total_pages > 2 and total_pages < 6) %}
-        <li class="{{ currentPage == 1 ? 'active' : ''}}">
-        {% if current_oage == 1 %}
+        <li class="{{ current_page == 1 ? 'active' : ''}}">
+        {% if current_page == 1 %}
             <a>2</a>
 
         {% else %}
@@ -104,7 +104,7 @@
         {% if last_page - 1 == current_page %}
             <a>{{ last_page }}</a>
         {% else %}
-            <a href="{{ link.second_last_page|raw }}">{{ last_page }}</a>
+            <a href="{{ links.second_last_page|raw }}">{{ last_page }}</a>
         {% endif %}
         </li>
     {% elseif total_pages > 5 %}

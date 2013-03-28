@@ -54,7 +54,6 @@ class Manager
     {
         $ticket = $resource->getWorkflowTicket();
         $execution = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
-        $plugin = $execution->getPluginFor($ticket->getWorkflowStep());
 
         return $execution->getGatesForStep($ticket->getWorkflowStep());
     }

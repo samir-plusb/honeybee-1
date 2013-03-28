@@ -30,9 +30,22 @@ class ListAction extends BaseAction
         $listConfig = ListConfig::create($this->buildListConfig());
         $listState = $parameters->getParameter('state');
 
+        // apply default limit of the module if none is set on the liststate
+        if (!$listState->hasLimit())
+        {
+            $listState->setLimit($listConfig->getDefaultLimit());
+        }
+
+        // apply default offset if none is set on the liststate
+        if (!$listState->hasOffset())
+        {
+            $listState->setOffset(0);
+        }
+
         $data = $service->fetchListData($listConfig, $listState);
 
         $listState->setTotalCount($data['totalCount']);
+
         $listState->setData(
             $this->prepareListData($data['documents'])
         );
@@ -127,11 +140,18 @@ class ListAction extends BaseAction
                 {
                     $promptMsg = FALSE;
                 }
-                $gates[] = array(
-                    'label' => $tm->_($workflowStep.'.'.$gateName, $translationDomain),
-                    'name' => $gateName,
-                    'prompt' => $promptMsg
-                );
+
+                $action = $module->getOption('prefix') . '.' . $workflowStep.'::'. $gateName;
+                $user = $this->getContext()->getUser();
+
+                if ($user->isAllowed($document, $action))
+                {
+                    $gates[] = array(
+                        'label' => $tm->_($workflowStep.'.'.$gateName, $translationDomain),
+                        'name' => $gateName,
+                        'prompt' => $promptMsg
+                    );
+                }
             }
 
             $data[] = array(

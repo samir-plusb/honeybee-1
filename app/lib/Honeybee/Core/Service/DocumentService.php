@@ -60,10 +60,17 @@ class DocumentService implements IService
         }
         else
         {
-            $query = Elastica\Query::create(new Elastica\Filter\Ids(
+            $container = new Elastica\Filter\BoolAnd();
+            $container->addFilter(new Elastica\Filter\Ids(
                 $this->module->getOption('prefix'), 
-                array_unique($ids)
+                array_unique($identifiers)
             ));
+            $container->addFilter(new Elastica\Filter\BoolNot(
+                new Elastica\Filter\Term(
+                    array('meta.is_deleted' => TRUE)
+                )
+            ));
+            $query = Elastica\Query::create($container);
         }
 
         $repository = $this->module->getRepository();

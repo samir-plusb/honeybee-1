@@ -75,12 +75,8 @@ class DocumentValidator extends \AgaviValidator
                 $document->setValues($data);
             }
         }
-        else
-        {
-            $document = $module->createDocument($data);
-        }
 
-        return $document;
+        return $document ? $document : $module->createDocument($data);
     }
 
     protected function getModule()

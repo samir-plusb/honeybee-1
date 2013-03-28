@@ -10,7 +10,7 @@ class DocumentInputRenderer extends DocumentRenderer
             'rows' => array(
                 array(
                     'groups' => array(
-                        'identity' => array('identifier', 'revision')
+                        'identity' => array('identifier', 'uuid', 'language', 'version', 'revision')
                     )
                 )
             )
@@ -158,7 +158,7 @@ class DocumentInputRenderer extends DocumentRenderer
 
     protected function buildDefaultTemplate()
     {
-        $excludeFields = array('identifier', 'revision');
+        $excludeFields = array('identifier', 'uuid', 'language', 'version', 'revision');
         $mainGroup = array();
 
         foreach ($this->getModule()->getFields() as $field)
@@ -194,7 +194,10 @@ class DocumentInputRenderer extends DocumentRenderer
         return array(
             'autobind' => TRUE, 
             'identifier' => $document->getIdentifier(),
-            'revision' => $document->getRevision()
+            'revision' => $document->getRevision(),
+            'uuid' => $document->getValue('uuid'),
+            'language' => $document->getValue('language'),
+            'version' => $document->getValue('version')
         );
     }
 }

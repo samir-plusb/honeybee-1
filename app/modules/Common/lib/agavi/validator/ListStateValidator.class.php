@@ -3,18 +3,36 @@
 class ListStateValidator extends AgaviValidator
 {
     protected static $childArgValidators = array(
-        'offset' => array('class' => 'AgaviNumberValidator'),
-        'limit' => array('class' => 'AgaviNumberValidator'),
-        'search' => array('class' => 'AgaviStringValidator'),
-        'filter' => array('class' => 'Honeybee\Agavi\Validator\ArrayValidator'),
+        'offset' => array(
+            'class' => 'AgaviNumberValidator',
+            'min' => 0,
+            'max' => 2147483647,
+            'type' => 'integer'
+        ),
+        'limit' => array(
+            'class' => 'AgaviNumberValidator',
+            'min' => 0,
+            'max' => 2147483647,
+            'type' => 'integer'
+        ),
+        'search' => array(
+            'class' => 'AgaviStringValidator',
+            'min' => 1
+        ),
+        'filter' => array(
+            'class' => 'Honeybee\Agavi\Validator\ArrayValidator'
+        ),
         'field' => array(
             'class' => 'AgaviStringValidator',
-            'base' => 'sorting'
+            'base' => 'sorting',
+            'min' => 1
         ),
         'direction' => array(
             'class' => 'AgaviInarrayValidator',
             'base' => 'sorting',
-            'values' => array('asc', 'desc')
+            'values' => array('asc', 'desc'),
+            'strict' => true,
+            'case' => true
         )
     );
 

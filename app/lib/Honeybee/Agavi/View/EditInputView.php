@@ -37,7 +37,7 @@ class EditInputView extends BaseView
         $routing = $this->getContext()->getRouting();
         $module = $this->getAttribute('module');
         $moduleCrumb = array(
-            'text' => $module->getName(),
+            'text' => $this->getContext()->getTranslationManager()->_($module->getName(), 'modules.labels'),
             'link' => $routing->gen($module->getOption('prefix') . '.list'),
             'info' => $module->getName() . ' - Listenansicht (Anfang)',
             'icon' => 'icon-list'

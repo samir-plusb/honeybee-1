@@ -2,7 +2,7 @@
 
 namespace Honeybee\Agavi\Database\CouchDb;
 
-use IDatabaseSetup;
+use Honeybee\Agavi\Database\IDatabaseSetup;
 
 /**
  * Provides couchdb database connection handle.

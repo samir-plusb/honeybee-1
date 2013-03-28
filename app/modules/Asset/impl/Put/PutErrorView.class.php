@@ -27,6 +27,16 @@ class Asset_Put_PutErrorView extends AssetBaseView
         $this->setAttribute('_title', 'Asset PUT - Html Form Interface / ERROR');
     }
 
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        $returnData = array(
+            'state' => 'error',
+            'errors' => $this->getErrorMessages()
+        );
+
+        $this->getResponse()->setContent(json_encode($returnData));
+    }
+
     /**
      * Handle presentation logic for commandline interfaces.
      *

@@ -1,5 +1,5 @@
 <div class="control-group field-wrapper-{{ fieldName }}">
-    <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td)}}</label>
+    <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td)|raw}}</label>
     {% if hasWidget %}
         <section class="controls honeybee-widget {{widgetType}}" 
             data-{{ widgetType|replace({'widget-': ''}) }}-options="{{widgetOptions|raw}}" ></section>

@@ -1,68 +1,251 @@
-.render-tree {
-    .children {
-    }
-    
-    .child {
-        padding: 5px;
+@dropBorderColor: rgba(255, 128, 0, 0.5);
+@dropShadowColor: rgba(255, 128, 0, 1.0);
 
-        list-style-position: inside;
-        list-style-type: none;
+.container-tree-data, .sidebar-tree {
+    .render-tree {
+        .children {
+            margin-left: 0;
 
-        border-width: 1px;
-        border-style: solid;
-        border-color: white;
-        background-color: #fff;
-
-        cursor: default;
+            .children {
+                margin-left: 20px;
+            }
+        }
         
-        &.even {
-        }
+        .child {
+            position: relative;
+            padding: 5px 0 5px 5px;
 
-        &.odd {
-        }
+            margin: 10px 0;
 
-        &.closed {
-            > .children {
-                display: none;
-            }
-        }
+            list-style-position: inside;
+            list-style-type: none;
 
-        .node-label {
-            height: 40px;
-            display: block;
-            &.highlighted {
-                background-color: #eef;
-            }
-        }
+            background-color: #fff;
 
-        &.drop-before {
-            border-top-color: black;
-            background-color: #fee;
-        }
-        &.drop-after {
-            border-bottom-color: black;
-            background-color: #fee;
-        }
-        &.drop-inside {
-            border-color: black;
-            background-color: #fee;
-        }
-
-        .node-toggle {
             cursor: default;
-        }
-
-        > .node-label {
-            > .node-toggle {
-                visibility: hidden;
+            
+            &.closed {
+                > .children {
+                    display: none;
+                }
             }
-        }
-        &.expandable {
+
+            .node-label {
+                height: 40px;
+                display: block;
+                border: 1px solid #c4c4c4;
+                border-radius: 5px;
+                background: linear-gradient(to bottom, #fafafa 0%, #f1f1f1 100%, ); /* W3C */
+
+                line-height: 37px;
+
+                color: rgb(0, 68, 204);
+                font-weight: 700;
+
+                .check {
+                    margin: 10px 5px 13px 5px;
+                    display: inline-block;
+                }
+            }
+
+            .node-controls {
+                position: absolute;
+                right: 0;
+                top: 6px;
+                padding: 5px 5px;
+
+                .control {
+                    display: block;
+                    float: right;
+
+                    padding: 0 10px;
+
+                    border-right: 1px solid gray;
+                    &:first-child {
+                        border-right: none;
+                    }
+
+                    .icon {
+                        font-size: 1.4em;
+                    }
+                }
+
+                .move {
+                    display: inline-block;
+                    border: 1px solid #c4c4c4;
+                    padding: 2px 3px 2px 4px;
+                    border-radius: 11px;
+                    height: 24px;
+                    vertical-align: middle;
+                    text-align: right;
+                    text-decoration: none;
+
+                    background-color: white;
+
+                    .control-label {
+                        display: none;
+                        padding-left: 5px;
+                    }
+
+                    &:hover {
+                        .control-label {
+                            display: inline-block;
+                        }
+                    }
+
+                    .icon-move {
+                        font-size: 1.3em;
+                        line-height: 1.3em;
+                        display: inline-block;
+                    }
+                }
+
+                .move-cancel {
+                    display: inline-block;
+                    border: 1px solid #c4c4c4;
+                    padding: 2px 3px 2px 4px;
+                    border-radius: 11px;
+                    height: 24px;
+                    vertical-align: middle;
+                    text-align: right;
+                    text-decoration: none;
+
+                    background-color: white;
+
+                    .control-label {
+                        display: inline-block;
+                        padding-left: 5px;
+                        padding-right: 5px;
+                    }
+
+                }
+
+                .move-target {
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    height: 30px;
+                    overflow: hidden;
+                    li {
+                        position: relative;
+                        display: inline-block;
+                        width: 28px;
+                        height: 28px;
+
+                        border-radius: 15px;
+                        background-color: #ffa421;
+                        border: 1px solid #ed981e;
+                        color: white;
+                        text-align: center;
+
+                        .arrow {
+                            position: absolute;
+                            width: 18px;
+                            height: 18px;
+                            top: 4px;
+                            left: 5px;
+                            text-align: center;
+                            vertical-align: middle;
+                        }
+                    }
+
+                    .move-before {
+                        .arrow {
+                            top: 2px;
+                            left: 5px;
+                        }
+                    }           
+                    .move-inside {
+                        .arrow {
+                            top: 4px;
+                            left: 6px;
+                        }
+                    }           
+                    .move-after {
+                        .arrow {
+                            top: 4px;
+                            left: 5px;
+                        }
+                    }           
+                }
+            }
+
+            .dropzone {
+                content: " ";
+                position: absolute;
+                display: block;
+                height: 5px;
+                width: 100%;
+                border: 1px solid @dropBorderColor;
+                background-color: @dropBorderColor;
+                box-shadow: 0 0 5px @dropShadowColor;
+                padding: 10px;
+                left: -10px;
+                border-radius: 5px;
+            }
+
+            &.drop-before {
+                &:before {
+                    .dropzone();
+                    top: -5px;
+                }
+            }
+            &.drop-after {
+                &:after {
+                    .dropzone();
+                    bottom: -5px;
+                }
+            }
+            &.drop-inside {
+                > .node-label {
+                    box-shadow: 0 0 5px @dropShadowColor;
+                }
+            }
+
+            .node-toggle {
+                cursor: default;
+                cursor: hand;
+                cursor: pointer;
+            }
+
             > .node-label {
                 > .node-toggle {
-                    visibility: visible;
+                   display: none; 
+                }
+            }
+            &.expandable {
+                > .node-label {
+                    > .node-toggle {
+                        display: inline;
+                    }
                 }
             }
         }
+    }
+}
+
+.sidebar-tree {
+    position: relative;
+    
+    .render-tree {
+        padding: 0 5px;
+    }
+
+    .child {
+        min-width: 200px;
+
+        .node-label {
+            padding-left: 10px;
+
+            &.highlighted {
+                box-shadow: inset 0 0 5px @dropShadowColor;
+            }
+        }
+    }
+
+    .clear-list-filter {
+        position: absolute;
+        top: 15px;
+        right: 0;
     }
 }

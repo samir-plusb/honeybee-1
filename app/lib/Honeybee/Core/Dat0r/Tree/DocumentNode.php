@@ -8,6 +8,8 @@ class DocumentNode extends Node
 {
     protected $document;
 
+    protected $labelFieldname;
+
     public function __construct(Document $document, array $children = array())
     {
         $this->document = $document;
@@ -22,7 +24,9 @@ class DocumentNode extends Node
 
     public function getLabel()
     {
-        return $this->document->getName();
+        return $this->document->getValue(
+            $this->document->getModule()->getOption('tree_label_field')
+        );
     }
 
     public function getDocument()

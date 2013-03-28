@@ -11,6 +11,7 @@ html
   background: -moz-linear-gradient(top, #fefefe, #ffffff); 
   background: -ms-linear-gradient(top, #fefefe, #ffffff);
   background: -o-linear-gradient(top, #fefefe, #ffffff);
+  background: linear-gradient(top, #fefefe, #ffffff);
   background-attachment: fixed;
 }
 
@@ -350,6 +351,7 @@ dd {
     background-image: -moz-linear-gradient(center top , rgba(51, 51, 51, 0.6), rgba(34, 34, 34, 0.6));
     background-repeat: repeat-x;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25), 0px -1px 0px rgba(0, 0, 0, 0.1) inset;
+    margin-top: 40px;
 }
 
 .footer p
@@ -393,10 +395,10 @@ input.typeahead
   width: 100%; 
   left: 0; 
   padding: 19px 20px 20px;
-  transition: opacity 0.6s;
   -moz-transition: opacity 0.6s;
   -webkit-transition: opacity 0.6s;
   -o-transition: opacity 0.6s;
+  transition: opacity 0.6s;
 }
 
 .widget-location-widget

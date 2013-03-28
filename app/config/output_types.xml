@@ -8,7 +8,16 @@
     -->
     <ae:sandbox>
         <layers>
-            <layer name="content" />
+            <layer name="content">
+                <ae:parameters>
+                    <ae:parameter name="targets">
+                        <ae:parameter>%project.module_templates_dir%/${template}.${locale}${extension}</ae:parameter>
+                        <ae:parameter>%project.module_templates_dir%/${template}${extension}</ae:parameter>
+                        <ae:parameter>${directory}/${template}.${locale}${extension}</ae:parameter>
+                        <ae:parameter>${directory}/${template}${extension}</ae:parameter>
+                    </ae:parameter>
+                </ae:parameters>
+            </layer>
         </layers>
 
         <renderers default="proxy">

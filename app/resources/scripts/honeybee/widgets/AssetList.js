@@ -25,6 +25,12 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
 
     popover_pos: null,
 
+    dropzone: null,
+
+    cur_file_is_image: null,
+
+    face_detect_feat_on: null,
+
     init: function(element, options)
     {
         this.parent(element, options);
@@ -56,9 +62,10 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
                 }
             }
         });
-        this.element.find('ul').sortable().bind('sortupdate', function() {
+        
+        /*this.element.find('ul').sortable().bind('sortupdate', function() {
             console.log('Yay, we\'ve a new sorting!');
-        });;
+        });*/
 
         this.element.find('.asset-item').popover();
     },
@@ -68,7 +75,9 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
         this.fieldname = ko.observable(this.options.fieldname);
         this.aoi_enabled = ko.observable(false);
         this.start_active = ko.observable(false);
+        this.cur_file_is_image = ko.observable(false);
         this.aoi_scan_active = ko.observable(false);
+        this.face_detect_feat_on = ko.observable(false);
         this.area_of_interest = ko.observableArray([]);
         this.popover_pos = ko.observable(this.options.popover_pos || 'top');
         var assets = this.options.assets || [];
@@ -79,7 +88,13 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
                 new honeybee.widgets.AssetList.Asset(assets[i])
             );
         }
-        this.assets.push({dropzone: true});
+        this.dropzone = {
+            dropzone: true, 
+            show: ko.observable(true), 
+            label: ko.observable('Datei(en) hier ablegen') 
+        };
+
+        this.assets.push(this.dropzone);
     },
 
     initUploader: function()
@@ -87,31 +102,35 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
         var that = this;
         this.uploader = new honeybee.widgets.AssetList.FileUploader({
             drop_target: this.element.find('.dropzone').first(),
-            put_url: this.options.put_url
+            put_url: this.options.put_url,
+            allowed_types: this.options.allowed_types
         });
+
         this.uploader.on('upload::start', function(asset)
         {
             that.element.find('.asset-item').popover('destroy');
             that.assets.splice(that.assets().length - 1, 0, asset);
             that.element.find('.asset-item').popover();
-            if (that.options.max <= that.assets().length)
+            if (that.options.max <= that.assets().length - 1)
             {
                 that.uploader.enabled = false;
+                that.dropzone.show(false);
             }
-        });
-        this.uploader.on('upload::progress', function(asset, progress)
+        }).on('upload::progress', function(asset, progress)
         {
             asset.progress(progress * 100);
-        });
-        this.uploader.on('upload::complete', function(asset, data)
+        }).on('upload::complete', function(asset, data)
         {
             that.element.find('.asset-list').sortable();
             asset.id(data.identifier);
             asset.url(data.url);
+            asset.mime_type = data.mimeType;
         });
-        if (that.options.max <= that.assets().length)
+
+        if (that.options.max <= that.assets().length - 1)
         {
             that.uploader.enabled = false;
+            that.dropzone.show(false);
         }
     },
 
@@ -153,10 +172,22 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
         this.dialog.twodal('promptVal', '.input-caption', asset.caption());
         this.dialog.twodal('promptVal', '.input-copyright', asset.copyright());
         this.dialog.twodal('promptVal', '.input-copyright-url', asset.copyright_url());
-
         this.area_of_interest(asset.aoi || [0, 0, 20, 20]);
 
         var that = this;
+
+        this.cur_file_is_image(false);
+        var supported_img_types = ['jpg', 'png', 'gif', 'jpeg'];
+        for (var i = 0; i < supported_img_types.length; i++)
+        {
+            if (-1 !== asset.mime_type.indexOf(supported_img_types[i]))
+            {
+                this.cur_file_is_image(true);
+                break;
+            }
+        }
+
+        this.aoi_enabled(false);
         this.ichie.launch(asset.url(), function(){
             if (asset.aoi)
             {
@@ -166,7 +197,7 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
                     right: asset.aoi[0] + asset.aoi[2],
                     bottom: asset.aoi[1] + asset.aoi[3]
                 });
-                that.aoi_enabled(true);
+                that.aoi_enabled(that.cur_file_is_image());
                 that.start_active(false); // hack, make sure we trigger a value -change
                 that.start_active(true); // which would not be the case if start_active was true.
                 that.ichie.showSelection();
@@ -195,9 +226,10 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
         this.assets.remove(asset);
         this.element.find('.asset-item').popover();
 
-        if (this.options.max > this.assets().length)
+        if (this.options.max > this.assets().length - 1)
         {
             this.uploader.enabled = true;
+            this.dropzone.show(true);
         }
     },
 
@@ -266,19 +298,24 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
 
     applyAoiSelection: function(selection)
     {
-        this.area_of_interest.splice(
-            0, 4,
-            Math.floor(selection.left),
-            Math.ceil(selection.top),
-            Math.ceil(selection.right - selection.left),
-            Math.ceil(selection.bottom - selection.top)
-        );
+        if (true === this.aoi_enabled())
+        {
+            this.area_of_interest.splice(
+                0, 4,
+                Math.floor(selection.left),
+                Math.ceil(selection.top),
+                Math.ceil(selection.right - selection.left),
+                Math.ceil(selection.bottom - selection.top)
+            );
+        }
     }
 });
 
 honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
 
     id: null,
+
+    mime_type: null,
 
     url: null,
 
@@ -320,6 +357,7 @@ honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
     {
         this.parent();
         this.initKnockoutProperties(data);
+        this.mime_type = data.mimeType;
         this.setAoi(data.aoi);
     },
 
@@ -342,34 +380,10 @@ honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
 
         this.id = ko.observable(data.id || '');
         this.is_loading = ko.observable(false);
+
         this.url = ko.observable(data.url);
         this.name = ko.observable(data.name);
         this.caption = ko.observable(data.caption || '');
-        var cell_width = 140;
-        var cell_height = 130;
-        var width = data.width || cell_width;
-        var height = data.height || cell_height;
-        var ratio = width / height;
-
-        if (ratio > 1 && width > cell_width)
-        {
-            width = cell_width;
-            height = width / ratio;
-        }
-        else if(ratio <= 1 && height > cell_height)
-        {
-            height = cell_height;
-            width = ratio * height;
-        }
-
-        this.height = ko.observable(height);
-        this.width = ko.observable(width);
-        this.x = ko.observable(
-            Math.floor((cell_width - width) / 2)
-        );
-        this.y = ko.observable(
-            Math.floor((cell_height - height) / 2)
-        );
 
         this.aoi_enabled = ko.observable(!!data.aoi);
         this.progress = ko.observable(0);
@@ -399,6 +413,32 @@ honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
                 '</p><p><b>Copyright</b> ' + that.copyright_txt() +
                 '</p><p><b>Copyright Url</b> ' + that.copyright_url_txt()
         });
+
+        var cell_width = 140;
+        var cell_height = 130;
+        var width = data.width || cell_width;
+        var height = data.height || cell_height;
+        var ratio = width / height;
+
+        if (ratio > 1 && width > cell_width)
+        {
+            width = cell_width;
+            height = width / ratio;
+        }
+        else if(ratio <= 1 && height > cell_height)
+        {
+            height = cell_height;
+            width = ratio * height;
+        }
+
+        this.height = ko.observable(height);
+        this.width = ko.observable(width);
+        this.x = ko.observable(
+            Math.floor((cell_width - width) / 2)
+        );
+        this.y = ko.observable(
+            Math.floor((cell_height - height) / 2)
+        );
     }
 });
 
@@ -416,6 +456,12 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
 
     is_running: null,
 
+    supported_image_types: ['image/jpeg', 'image/png', 'image/gif'],
+
+    supported_doc_types: ['application/pdf'],
+
+    allowed_types: null,
+
     init: function(options)
     {
         this.parent();
@@ -423,6 +469,7 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
         this.queue = [];
         this.enabled = true;
         this.put_url = options.put_url;
+        this.allowed_types = options.allowed_types;
         this.is_running = false;
         this.drop_target = $(options.drop_target);
         this.initDragEvents();
@@ -483,9 +530,20 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
     handleFiles: function(files) 
     {
         var that = this;
+
         for (i = 0; i < files.length; i++) 
-        {               
-            this.queue.push(files[i]);                                                                                                                                     
+        {
+            var file = files[i];
+            var is_allowed = (-1 !== this.allowed_types.indexOf(file.type));    
+
+            if (is_allowed)
+            {
+                this.queue.push(file);
+            }           
+            else
+            {
+                alert("File type: '" + file.type + "'' not supported.");
+            }
         }
         if (! this.is_running)
         {
@@ -542,20 +600,45 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
     uploadFile: function(file, result)
     {
         var that = this;
+        var is_image = (-1 !== this.supported_image_types.indexOf(file.type));
+        var is_doc = (-1 !== this.supported_doc_types.indexOf(file.type));
+
+        if (-1 === this.allowed_types.indexOf(file.type))
+        {
+            alert("File type not supported and should not have landed in the queue in the first place.");
+            return;
+        }
 
         var img = new Image;
+
         img.onload = function() 
         {
             var fd = new FormData();
+            var asset = null;
+
             fd.append("asset", file);
-            var asset = new honeybee.widgets.AssetList.Asset({
-                name: file.name,
-                url: result,
-                width: img.width,
-                height: img.height
-            });
+
+            if (is_image)
+            {
+                asset = new honeybee.widgets.AssetList.Asset({
+                    name: file.name,
+                    url: result,
+                    width: img.width,
+                    height: img.height
+                });
+            }
+            else
+            {
+                asset = new honeybee.widgets.AssetList.Asset({
+                    name: file.name,
+                    url: img.src,
+                    width: img.width,
+                    height: img.height
+                });
+            }
 
             xhr = new XMLHttpRequest();
+
             xhr.onload = function(evt)
             {
                 if (xhr.status == 200) 
@@ -565,6 +648,7 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
                     that.shiftQueue();
                 }
             };
+
             xhr.upload.addEventListener("progress", function(evt)
             {
                 if (evt.lengthComputable)
@@ -576,10 +660,18 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
             that.fire('upload::start', [ asset ]);  
 
             xhr.open('post', that.put_url, true);
-            xhr.setRequestHeader("Accept", "application/json");                                                                                                 
+            xhr.setRequestHeader("Accept", "application/json");                                                                                              
             xhr.send(fd);
         };
-        img.src = result;
+
+        if (is_image)
+        {
+            img.src = result;
+        }
+        else if (is_doc)
+        {
+            img.src = 'static/deploy/_global/binaries/pdficon_large.png';
+        }
     }
 });
 
@@ -590,5 +682,6 @@ honeybee.widgets.AssetList.DEFAULT_OPTIONS = {
     assets: null,
     post_url: '',
     put_url: '',
-    max: 50
+    max: 50,
+    allowed_types: [ 'image/jpeg', 'image/png', 'image/gif' ]
 };

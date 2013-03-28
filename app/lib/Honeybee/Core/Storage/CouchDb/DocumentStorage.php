@@ -65,8 +65,7 @@ class DocumentStorage extends BaseStorage
 
         $data = $this->mapDomainDataToCouchDb(
             get_class($document), 
-            $document->toArray(),
-            $document->getModule()->getOption('prefix')
+            $document->toArray()
         );
 
         $result = $couchDb->storeDoc(NULL, $data);
@@ -79,7 +78,6 @@ class DocumentStorage extends BaseStorage
 
         if (isset($result['ok']) && isset($result['rev']))
         {
-            $document->setIdentifier($result['id']);
             $document->setRevision($result['rev']);
         }
         else
@@ -119,8 +117,7 @@ class DocumentStorage extends BaseStorage
 
             $curData = $this->mapDomainDataToCouchDb(
                 get_class($document), 
-                $document->toArray(),
-                $document->getModule()->getOption('prefix')
+                $document->toArray()
             );
 
             $data[$curData[self::COUCH_ID]] = array('doc' => $document, 'data' => $curData);
@@ -152,7 +149,6 @@ class DocumentStorage extends BaseStorage
             {
                 $document = $data[$docId]['doc'];
                 $document->setRevision($docResult['rev']);
-                $document->setIdentifier($docId);
             }
         }
 
@@ -169,31 +165,10 @@ class DocumentStorage extends BaseStorage
                 {
                     $document = $data[$docId]['doc'];
                     $document->setRevision($docResult['rev']);
-                    $document->setIdentifier($docId);
                 }
             }
         }
 
         return $errors;
-    }
-
-    protected function mapDomainDataToCouchDb($type, array $data, $idPrefix)
-    {
-        $data = parent::mapDomainDataToCouchDb($type, $data, $idPrefix);
-
-        if (! isset($data[self::COUCH_ID]))
-        {
-            $data[self::COUCH_ID] = $this->nextUuid($idPrefix);
-        }
-        
-        return $data;
-    }
-    
-
-    protected function nextUuid($idPrefix)
-    {
-        $uuids = $this->getDatabase()->getConnection()->nextUuids();
-
-        return sprintf('%s-%s', $idPrefix, $uuids[0]);
     }
 }

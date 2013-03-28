@@ -6,9 +6,9 @@ class ListState implements IListState
 
     protected $totalCount = NULL;
 
-    protected $limit = 10;
+    protected $limit = NULL;
 
-    protected $offset = 0;
+    protected $offset = NULL;
 
     protected $search = NULL;
 

@@ -8,6 +8,10 @@ class TreeConfig implements ITreeConfig
 
     protected $typeKey;
 
+    protected $translationDomain;
+
+    protected $batchActions = array();
+
     public static function create(array $data = array())
     {
         return empty($data) ? new static : new static($data);
@@ -26,6 +30,16 @@ class TreeConfig implements ITreeConfig
     public function getRouteName()
     {
         return $this->routeName;
+    }
+
+    public function getBatchActions()
+    {
+        return $this->batchActions;
+    }
+
+    public function getTranslationDomain()
+    {
+        return $this->translationDomain;
     }
 
     protected function __construct(array $data = array())

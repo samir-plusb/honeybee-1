@@ -2,10 +2,12 @@
 
 namespace Honeybee\Core\Dat0r;
 
+use Zend\Permissions\Acl;
 use Dat0r\Core\Runtime\Document\Document as BaseDocument;
-use Honeybee\Core\Workflow\IResource; 
+use Honeybee\Core\Workflow\IResource;
+use Dat0r\Core\Runtime\Module\IModule;
 
-abstract class Document extends BaseDocument implements \Zend_Acl_Resource_Interface, IResource
+abstract class Document extends BaseDocument implements IResource, Acl\Resource\ResourceInterface
 {
     public function getWorkflowConfigPath()
     {
@@ -23,7 +25,13 @@ abstract class Document extends BaseDocument implements \Zend_Acl_Resource_Inter
 
     public function getIdentifier()
     {
-        return $this->getValue('identifier');   
+        return sprintf(
+            '%s-%s-%s-%s',
+            $this->getModule()->getOption('prefix'),
+            $this->getValue('uuid'), 
+            $this->getValue('language'), 
+            $this->getValue('version')
+        );
     }
 
     public function setRevision($revision)
@@ -39,5 +47,15 @@ abstract class Document extends BaseDocument implements \Zend_Acl_Resource_Inter
     public function getResourceId()
     {
         return $this->getModule()->getOption('prefix');
+    }
+
+    protected function hydrate(array $values = array())
+    {
+        parent::hydrate($values);
+
+        if (! $this->hasValue('uuid'))
+        {
+            $this->setValue('uuid', $this->getValue('uuid'));
+        }
     }
 }

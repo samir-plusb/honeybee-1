@@ -20,8 +20,7 @@ class TreeStorage extends BaseStorage
         $couchDb = $this->getDatabase()->getConnection();
         $data = $this->mapDomainDataToCouchDb(
             get_class($tree), 
-            $tree->toArray(NULL, FALSE),
-            NULL
+            $tree->toArray(NULL, FALSE)
         );
 
         $result = $couchDb->storeDoc(NULL, $data);
