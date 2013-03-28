@@ -2,7 +2,9 @@ bootstrap.css
 datepicker.css
 honeybee.css
 list.less
+navigation.less
+pagination.less
 sidebar.less
 toolbar.less
+toolbars.less
 tree.less
-navigation.less

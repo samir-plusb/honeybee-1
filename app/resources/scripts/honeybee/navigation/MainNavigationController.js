@@ -13,23 +13,34 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
     {
         this.parent();
         this.options = options;
-        this.domElement = options.domElement;
+        this.domElement = $(options.domElement);
 
         var that = this;
-
-        $(window).on('resize', function(ev)
-        {
-            that.handleResizeEvent(ev);
-        });
 
         this.initialWidth = this.domElement.outerWidth();
         this.currentWidth = this.initialWidth;
 
-        this.domElement.parent().children().css('outline', '1px solid red');
-        this.overflowElement = $('<ul></ul>').addClass('overflow-nav');
+        //this.domElement.parent().children().css('outline', '1px solid red');
 
-        this.overflowElement.insertAfter(this.domElement);
-        this.resizeToFit();
+        this.domElement.append($('<li id="more-menu" class="dropdown more"><a data-toggle="dropdown" class="dropdown-toggle" role="button" href="#" id="drop-more"> Mehr...<b class="caret"></b></a><ul aria-labelledby="drop-more" role="menu" class="dropdown-menu" id="overflow-modules"></ul></li>'));
+        this.overflowElement = $('#more-menu');
+        this.overflowListElement = $('#overflow-modules');
+        this.overflowElement.hide();
+
+        this.handleResizeEvent();
+
+        var resizeTimer;
+        $(window).resize(function(ev)
+        {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(that.handleResizeEvent(ev), 100);
+        });
+
+/*        $(window).on('resize', function(ev)
+        {
+            that.handleResizeEvent(ev);
+        });
+*/
     },
 
     handleResizeEvent: function (ev)
@@ -65,7 +76,9 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
     getAvailableWidth: function()
     {
         var width = this.domElement.parent().width();
+        console.log('parent width: ', width);
         var that = this;
+        console.log(this.domElement.siblings());
         this.domElement.siblings().each(function(index, element)
         {
             if (element !== that.domElement[0])
@@ -80,9 +93,17 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
     hideNavElement: function()
     {
         var width;
-        element = this.domElement.children().last();
+        element = this.domElement.children('li.dropdown').not('.more').last();
         width = element.width();
-        element.prependTo(this.overflowElement);
+
+        element.removeClass('dropdown').addClass('dropdown-submenu pull-left');
+        element.find('a > b.caret').hide();
+        element.prependTo(this.overflowListElement);
+
+        if (this.overflowListElement.children().length > 0)
+        {
+            this.overflowElement.show();
+        }
 
         return width;
     },
@@ -90,9 +111,17 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
     showNavElement: function(element)
     {
         var width;
-        element = this.overflowElement.children().first();
+        element = this.overflowListElement.children().first();
         width = element.width();
-        element.appendTo(this.domElement);
+
+        element.addClass('dropdown').removeClass('dropdown-submenu pull-left');
+        element.find('a > b.caret').show();
+        element.insertBefore(this.overflowElement);
+
+        if (this.overflowListElement.children().length == 0)
+        {
+            this.overflowElement.hide();
+        }
 
         return width;
     }
