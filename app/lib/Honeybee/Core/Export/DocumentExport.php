@@ -45,10 +45,14 @@ class DocumentExport implements IExport
             throw new \Exception("Unable to export document without a configured type key.");
         }
 
+
         $connection = \AgaviContext::getInstance()->getDatabaseConnection(
             $this->settings->get('connection')
         );
 
+        $data['_id'] = $document->getIdentifier();
+        $data['type'] = $type;
+        
         $connection->storeDoc(NULL, $data);
     }
 
