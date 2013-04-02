@@ -76,9 +76,8 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
     getAvailableWidth: function()
     {
         var width = this.domElement.parent().width();
-        console.log('parent width: ', width);
         var that = this;
-        console.log(this.domElement.siblings());
+
         this.domElement.siblings().each(function(index, element)
         {
             if (element !== that.domElement[0])
