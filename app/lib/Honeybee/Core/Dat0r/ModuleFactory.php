@@ -144,10 +144,16 @@ class ModuleFactory
 
     public static function getServiceImplementor($module, $context)
     {
-        $default = sprintf('%sService', $module->getName());
-        if ('tree' === $context)
+        switch ($context)
         {
-            $default = 'Honeybee\\Core\\Service\\TreeService';
+            case 'tree':
+                $default = 'Honeybee\\Core\\Service\\TreeService';
+                break;
+            case 'export':
+                $default = 'Honeybee\\Core\\Export\\Service';
+                break;
+            default:
+                $default = sprintf('%sService', $module->getName());
         }
 
         $settingName = $module->getOption('prefix') . '.service';

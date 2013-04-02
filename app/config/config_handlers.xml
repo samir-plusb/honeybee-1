@@ -21,6 +21,12 @@
                 <validation>%core.config_dir%/xsd/access_control.xsd</validation>
             </handler>
 
+            <handler pattern="exports.xml" class="Honeybee\Agavi\ConfigHandler\ExportsConfigHandler">
+                <ae:parameters>
+                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/exports/1.0</ae:parameter>
+                </ae:parameters>
+            </handler>
+
             <handler pattern="workflows.xml" class="Honeybee\Agavi\ConfigHandler\WorkflowConfigHandler">
                 <validation>%core.config_dir%/xsd/workflows.xsd</validation>
                 <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/workflow/1.0</ae:parameter>

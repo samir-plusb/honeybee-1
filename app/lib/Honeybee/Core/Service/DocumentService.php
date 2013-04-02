@@ -78,6 +78,13 @@ class DocumentService implements IService
         return $repository->find($query, $limit, $offset);
     }
 
+    public function fetchAll($offset, $limit)
+    {
+        $repository = $this->module->getRepository();
+
+        return $repository->find(NULL, $limit, $offset);
+    }
+
     public function delete(Document $document, $markOnly = TRUE)
     {
         if ($markOnly)

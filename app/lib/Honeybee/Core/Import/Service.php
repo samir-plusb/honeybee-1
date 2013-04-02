@@ -17,11 +17,12 @@ class Service
 
     public function __construct()
     {
+        // @todo Use Config\AgaviXmlConfig here
         $this->consumerConfig = include \AgaviConfigCache::checkConfig(
             \AgaviConfig::get('core.config_dir') . '/import.consumers.xml'
         );
         $this->consumerConfig = $this->consumerConfig['consumers'];
-
+        // @todo Use Config\AgaviXmlConfig here
         $this->providerConfig = include \AgaviConfigCache::checkConfig(
             \AgaviConfig::get('core.config_dir') . '/import.providers.xml'
         );
