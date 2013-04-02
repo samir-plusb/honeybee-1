@@ -45,6 +45,11 @@ class Service implements IService
         {
             $params = $this->exportsConfig->get($exportName);
         }
+        else
+        {
+            // @todo garcon! export specific exceptions s'il vouz plait.
+            throw new \InvalidArgumentException("Trying to load not configured export.");
+        }
 
         $exportClass = $params['class'];
 

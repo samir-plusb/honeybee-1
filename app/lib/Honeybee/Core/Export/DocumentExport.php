@@ -25,6 +25,8 @@ class DocumentExport implements IExport
 
     public function export(Document $document)
     {
+        // asset cleanup (delete removed, add new and update existing)
+
         $data = array();
 
         foreach ($this->filters as $filter)
@@ -33,6 +35,14 @@ class DocumentExport implements IExport
                 $data,
                 $filter->execute($document)
             );
+        }
+
+        $type = $this->settings->get('type', FALSE);
+
+        if (FALSE === $type)
+        {
+            // @todo Introduce export exceptions.
+            throw new \Exception("Unable to export document without a configured type key.");
         }
 
         $connection = \AgaviContext::getInstance()->getDatabaseConnection(
