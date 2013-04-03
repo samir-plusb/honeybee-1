@@ -29,3 +29,10 @@ done
 
 echo -e "\033[32mExluded from git in $EXCLUDE_FILE_PATH:\033[39m"
 echo "`cat $EXCLUDE_FILE_PATH`"
+
+# beware of the convention relying on '$BASEDIR/../project/modules/' to exist abaove honeybee's base dir.
+cd "$BASEDIR/app/project"
+for project_app_dir in `ls $BASEDIR/../project/app/`; 
+do 
+    ln -s "../../../project/app/$project_app_dir" "$project_app_dir"; 
+done
