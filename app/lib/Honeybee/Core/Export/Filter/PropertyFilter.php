@@ -9,7 +9,7 @@ class PropertyFilter extends BaseFilter
 {
     public function execute(Document $document)
     {
-        $output = array();
+        $filterOutput = array();
 
         $propertyMap = $this->getConfig()->get('properties');
 
@@ -23,9 +23,9 @@ class PropertyFilter extends BaseFilter
                 $value = $propValue->toArray();
             }
 
-            $output[$targetKey] = $value;
+            $filterOutput[$targetKey] = $value;
         }
 
-        return $output;
+        return $filterOutput;
     }
 }

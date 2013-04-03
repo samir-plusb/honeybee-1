@@ -52,9 +52,9 @@ class DatabaseSetup implements IDatabaseSetup
      *
      * @return string
      */
-    public function getSourceDirectory()
+    public function getScriptsLocation()
     {
-        return $this->database->getParameter('script_dir');
+        return $this->database->getParameter('scripts_location');
     }
 
     // ---------------------------------- <WORKING METHODS> --------------------------------------
@@ -111,7 +111,7 @@ class DatabaseSetup implements IDatabaseSetup
      * Create a couchdb view used to fetch our current id from our idsequence.
      *
      * This method looks for javascript files in the directory given by
-     * {@see getSourceDirectory()}. Each file must contain exact one function.
+     * {@see getScriptsLocation()}. Each file must contain exact one function.
      * The filename must match the patterns:
      *
      * <ul>
@@ -121,13 +121,13 @@ class DatabaseSetup implements IDatabaseSetup
      */
     protected function initViews()
     {
-        if (! is_dir($this->getSourceDirectory()))
+        if (! is_dir($this->getScriptsLocation()))
         {
-            error_log("Database view src-directory does not exist " . $this->getSourceDirectory());
+            error_log("Database view src-directory does not exist " . $this->getScriptsLocation());
             return;
         }
 
-        $glob = glob($this->getSourceDirectory().'/*.{map,reduce,filters}.js', GLOB_BRACE);
+        $glob = glob($this->getScriptsLocation().'/*.{map,reduce,filters}.js', GLOB_BRACE);
         if (! is_array($glob))
         {
             return;

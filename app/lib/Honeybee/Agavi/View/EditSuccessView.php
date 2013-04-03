@@ -14,7 +14,8 @@ class EditSuccessView extends BaseView
             'errors' => $this->getAttribute('errors', array()),
             'data' => array(
                 'identifier' => $document->getIdentifier(),
-                'revision' => $document->getRevision()
+                'revision' => $document->getRevision(),
+                'shortId' => $document->getShortId()
             )
         );
         

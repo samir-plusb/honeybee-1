@@ -18,6 +18,8 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
 
     revision: null,
 
+    shortId: null,
+
     request_pending: null,
     // </knockout_properties>
 
@@ -88,6 +90,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
 
                 that.identifier(resp_data.data.identifier);
                 that.revision(resp_data.data.revision);
+                that.shortId(resp_data.data.shortId);
 
                 // @todo history.pushState nice 2 have here
             }
@@ -178,6 +181,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         this.identifier = ko.observable(this.options.identifier || "");
         this.revision = ko.observable(this.options.revision || "");
         this.uuid = ko.observable(this.options.uuid || "");
+        this.shortId = ko.observable(this.options.shortId || "");
         this.language = ko.observable(this.options.language || "");
         this.version = ko.observable(this.options.version || "");
     },

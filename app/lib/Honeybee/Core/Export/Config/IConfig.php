@@ -20,7 +20,7 @@ interface IConfig
      *
      * @return      mixed
      */
-    public function get($setting, $default = NULL);
+    public function get($setting = NULL, $default = NULL);
 
     /**
      * Tells if we have a value for a given setting.

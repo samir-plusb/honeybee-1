@@ -8,13 +8,13 @@ class ReferenceFilter extends BaseFilter
 {
     public function execute(Document $document)
     {
-        $output = array();
+        $filterOutput = array();
 
         $references = $this->getConfig()->get('references');
 
         foreach ($references as $reference => $fieldnames)
         {
-            $output[$reference] = array();
+            $filterOutput[$reference] = array();
             $referencedDocs = $document->getValue($reference);
 
             foreach ($referencedDocs as $refDocument)
@@ -26,10 +26,10 @@ class ReferenceFilter extends BaseFilter
                     $refData[$fieldname] = $refDocument->getValue($fieldname);
                 }
 
-                $output[$reference][] = $refData;
+                $filterOutput[$reference][] = $refData;
             }
         }
 
-        return $output;
+        return $filterOutput;
     }
 }

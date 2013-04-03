@@ -29,6 +29,19 @@ class Service implements IService
         return $this->getExport($exportName)->export($document);
     }
 
+    public function getExports()
+    {
+        $exportNames = array_keys($this->exportsConfig->get());
+        $exports = array();
+
+        foreach ($exportNames as $name)
+        {
+            $exports[] = $this->getExport($name);
+        }
+
+        return $exports;
+    }
+
     public function getExport($exportName)
     {
         if (! isset($this->exports[$exportName]))

@@ -97,6 +97,8 @@ abstract class Module extends RootModule
                 TextField::create('identifier'),
                 TextField::create('revision'),
                 UuidField::create('uuid'),
+                IntegerField::create('shortId'),
+                TextField::create('slug'),
                 TextField::create('language', array('default_value' => 'DE_de')),
                 IntegerField::create('version', array('default_value' => 1))
             )

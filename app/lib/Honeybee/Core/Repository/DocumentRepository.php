@@ -64,6 +64,7 @@ class DocumentRepository extends BaseRepository
 
         if ($data instanceof Document)
         {
+            $data->onBeforeWrite();
             $this->getStorage()->writeOne($data);
         }
         else if ($data instanceof DocumentCollection)

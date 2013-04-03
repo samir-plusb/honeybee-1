@@ -152,6 +152,9 @@ class ModuleFactory
             case 'export':
                 $default = 'Honeybee\\Core\\Export\\Service';
                 break;
+            case 'short-id':
+                $default = 'Honeybee\\Core\\Service\\ShortIdService';
+                break;
             default:
                 $default = sprintf('%sService', $module->getName());
         }

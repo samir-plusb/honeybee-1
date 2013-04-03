@@ -44,6 +44,11 @@
             <setting name="gravatar_url_tpl">http://www.gravatar.com/avatar/{EMAIL_HASH}?s=41</setting>
         </settings>
 
+        <settings prefix="service.short_ids.">
+            <setting name="connection">Service.ShortIds</setting>
+            
+        </settings>
+
         <settings prefix="assets.">
             <setting name="mime_database">/usr/share/misc/magic.mgc</setting>
             <setting name="base_dir">%core.app_dir%/../data/assets</setting>

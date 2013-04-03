@@ -45,8 +45,13 @@ abstract class BaseConfig implements IConfig
      *
      * @return      mixed
      */
-    public function get($setting, $default = NULL)
+    public function get($setting = NULL, $default = NULL)
     {
+        if (! $setting)
+        {
+            return $this->settings;
+        }
+        
         $value = $default;
 
         if (isset($this->settings[$setting]))
