@@ -21,9 +21,16 @@ class ReferenceFilter extends BaseFilter
             {
                 $refData = array();
 
-                foreach ($fieldnames as $fieldname)
+                foreach ($fieldnames as $fieldname => $exportKey)
                 {
-                    $refData[$fieldname] = $refDocument->getValue($fieldname);
+                    if ('shortIdentifier' === $fieldname)
+                    {
+                        $refData[$exportKey] = $refDocument->getShortIdentifier();
+                    }
+                    else
+                    {
+                        $refData[$exportKey] = $refDocument->getValue($fieldname);
+                    }
                 }
 
                 $filterOutput[$reference][] = $refData;
