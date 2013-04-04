@@ -20,7 +20,7 @@ class ListSuccessView extends BaseView
         $module = $this->getAttribute('module');
 
 	$tm = $this->getContext()->getTranslationManager();
-        $this->setAttribute('_title', $tm->_($module->getName(), 'modules.labels') . ': ' . $tm->_('List view', 'modules.labels') . ' - ' . $tm->_('brand-name', 'modules.label'));
+        $this->setAttribute('_title', $tm->_($module->getName(), 'modules.labels') . ': ' . $tm->_('List view', 'modules.labels'));
 
         $this->getLayer('content')->setSlot(
             'list',
