@@ -10,7 +10,7 @@ class EditSuccessView extends BaseView
         
         $data = array(
             'state' => 'ok',
-            'messages' => array('Das Dokument wurde erfolgreich gespeichert.'),
+            'messages' => array($this->getContext()->getTranslationManager()->_('The document was saved successfully.', 'modules.labels')),
             'errors' => $this->getAttribute('errors', array()),
             'data' => array(
                 'identifier' => $document->getIdentifier(),

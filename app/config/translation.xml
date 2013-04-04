@@ -39,10 +39,23 @@
                             <ae:parameter name="Organization">Institutionen</ae:parameter>
                             <ae:parameter name="Person">Personen</ae:parameter>
                             <ae:parameter name="Category">Kategorien</ae:parameter>
+                            <ae:parameter name="Edit view">Bearbeitenansicht</ae:parameter>
+                            <ae:parameter name="Tree view">Baumansicht</ae:parameter>
+                            <ae:parameter name="List view">Listenansicht</ae:parameter>
+                            <ae:parameter name="List view (start)">Listenansicht (Anfang)</ae:parameter>
+                            <ae:parameter name="Edit">Bearbeiten</ae:parameter>
+                            <ae:parameter name="Editing:">Bearbeitung von:</ae:parameter>
+                            <ae:parameter name="Page">Seite</ae:parameter>
+                            <ae:parameter name="Search for:">Suche nach:</ae:parameter>
+                            <ae:parameter name="Extended Search">Erweiterte Suche</ae:parameter>
+                            <ae:parameter name="The document was saved successfully.">Das Dokument wurde erfolgreich gespeichert.</ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="en">
                             <ae:parameter name="brand-name">Honeybee</ae:parameter>
                             <ae:parameter name="brand-title">Honeybee 3.0 - Erato</ae:parameter>
+                            <ae:parameter name="Organization">Institutionen</ae:parameter>
+                            <ae:parameter name="Person">Personen</ae:parameter>
+                            <ae:parameter name="Category">Kategorien</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
                 </message_translator>

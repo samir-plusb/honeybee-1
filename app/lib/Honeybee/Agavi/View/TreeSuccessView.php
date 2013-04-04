@@ -9,7 +9,8 @@ class TreeSuccessView extends BaseView
         $this->setupHtml($parameters);
 
         $module = $this->getAttribute('module');
-        $this->setAttribute('_title', sprintf('Honeybee - %s: Hierarchie', $module->getName()));
+        $tm = $this->getContext()->getTranslationManager();
+        $this->setAttribute('_title', $tm->_($module->getName(), 'modules.labels') . ': ' . $tm->_('Tree view', 'modules.labels') . ' - ' . $tm->_('brand-name', 'modules.labels'));
 
         $this->getLayer('content')->setSlot(
             'tree',
@@ -29,10 +30,12 @@ class TreeSuccessView extends BaseView
         $treeRouteName = sprintf('%s.list', $module->getOption('prefix'));
         $routing = $this->getContext()->getRouting();
 
+        $tm = $this->getContext()->getTranslationManager();
+        $moduleName = $tm->_($module->getName(), 'modules.labels');
         $moduleCrumb = array(
-            'text' => $module->getName(),
+            'text' => $moduleName,
             'link' => $routing->gen($treeRouteName),
-            'info' => sprintf('%s - Baumansicht', $module->getName()),
+            'info' => $moduleName . ' - ' . $tm->_('Tree view', 'modules.labels'),
             'icon' => 'icon-list'
         );
 

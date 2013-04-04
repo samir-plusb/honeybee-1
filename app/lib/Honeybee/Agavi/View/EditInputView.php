@@ -14,7 +14,8 @@ class EditInputView extends BaseView
     {
         $this->setupHtml($parameters);
         $module = $this->getAttribute('module');
-        $this->setAttribute('_title', $module->getName() . ' - Edit');
+	$tm = $this->getContext()->getTranslationManager();
+        $this->setAttribute('_title', $tm->_($module->getName(), 'modules.labels') . ' - ' . $tm->_('Edit view', 'modules.labels'));
 
         $document = $this->getAttribute('document');
         $data = $document->toArray();
@@ -35,11 +36,13 @@ class EditInputView extends BaseView
     protected function setBreadcrumb()
     {
         $routing = $this->getContext()->getRouting();
+        $tm = $this->getContext()->getTranslationManager();
         $module = $this->getAttribute('module');
+        $moduleName = $tm->_($module->getName(), 'modules.labels');
         $moduleCrumb = array(
-            'text' => $this->getContext()->getTranslationManager()->_($module->getName(), 'modules.labels'),
+            'text' => $moduleName,
             'link' => $routing->gen($module->getOption('prefix') . '.list'),
-            'info' => $module->getName() . ' - Listenansicht (Anfang)',
+            'info' => $moduleName . ' - ' . $tm->_('List view (start)', 'modules.labels'),
             'icon' => 'icon-list'
         );
 
@@ -52,8 +55,8 @@ class EditInputView extends BaseView
             }
         }
         $breadcrumbs[] = array(
-            'text' => 'Bearbeiten',
-            'info' => 'Bearbeitung von: ' . $this->getAttribute('document')->getIdentifier(),
+            'text' => $tm->_('Edit', 'modules.labels'),
+            'info' => $tm->_('Editing:', 'modules.labels') . ' ' . $this->getAttribute('document')->getIdentifier(),
             'icon' => 'icon-pencil'
         );
         

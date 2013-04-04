@@ -19,7 +19,8 @@ class ListSuccessView extends BaseView
         $this->setupHtml($parameters);
         $module = $this->getAttribute('module');
 
-        $this->setAttribute('_title', sprintf('Honeybee - %s: Liste', $module->getName()));
+	$tm = $this->getContext()->getTranslationManager();
+        $this->setAttribute('_title', $tm->_($module->getName(), 'modules.labels') . ': ' . $tm->_('List view', 'modules.labels') . ' - ' . $tm->_('brand-name', 'modules.label'));
 
         $this->getLayer('content')->setSlot(
             'list',
@@ -64,11 +65,12 @@ class ListSuccessView extends BaseView
         $page = round($listState->getOffset() / $listState->getLimit()) + 1;
         $routing = $this->getContext()->getRouting();
 
-        $moduleName = $this->getContext()->getTranslationManager()->_($module->getName(), 'modules.labels');
+        $tm = $this->getContext()->getTranslationManager();
+        $moduleName = $tm->_($module->getName(), 'modules.labels');
         $moduleCrumb = array(
             'text' => $moduleName,
             'link' => $routing->gen($listRouteName),
-            'info' => sprintf('%s - Listenansicht (Anfang)', $moduleName),
+            'info' => $moduleName . ' - ' . $tm->_('List view (start)', 'modules.labels'),
             'icon' => 'icon-list'
         );
 
@@ -92,7 +94,7 @@ class ListSuccessView extends BaseView
             $breadcrumbs = array(array(
                 'text' => $moduleName,
                 'link' => $routing->gen($listRouteName, $routeParams),
-                'info' => $moduleName . ' (Seite ' . $page . ')',
+                'info' => $moduleName . ' (' . $tm->_('Page', 'modules.labels') . ' ' . $page . ')',
                 'icon' => 'icon-list'
             ));
         }
@@ -102,7 +104,7 @@ class ListSuccessView extends BaseView
             $breadcrumbs[] = array(
                 'text' => $moduleName,
                 'link' => $routing->gen($listRouteName, $routeParams),
-                'info' => 'Suche nach: ' . $listState->getSearch() . ' (Seite ' . $page . ')',
+                'info' => $tm->_('Search for:', 'modules.labels') . ' ' . $listState->getSearch() . ' (' . $tm->_('Page', 'modules.labels') . ' ' . $page . ')',
                 'icon' => 'icon-search'
             );
         }
@@ -112,7 +114,7 @@ class ListSuccessView extends BaseView
             $breadcrumbs[] = array(
                 'text' => $moduleName,
                 'link' => $routing->gen($listRouteName, $routeParams),
-                'info' => 'Erweiterte Suche (Seite ' . $page. ')',
+                'info' => $tm->_('Extended Search', 'modules.labels') . ' (' . $tm->_('Page', 'modules.labels') . ' ' . $page . ')',
                 'icon' => 'icon-search'
             );
         }
