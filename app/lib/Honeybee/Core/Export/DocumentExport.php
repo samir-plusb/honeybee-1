@@ -27,16 +27,7 @@ class DocumentExport implements IExport
 
     public function export(Document $document)
     {
-        $data = array();
-
-        foreach ($this->filters as $filter)
-        {
-            $data = array_merge(
-                $data,
-                $filter->execute($document)
-            );
-        }
-
+        $data = $this->buildExportData($data);
         $data['identifier'] = $document->getShortIdentifier();
         $data['type'] = $document->getModule()->getOption('prefix');
         
@@ -56,5 +47,25 @@ class DocumentExport implements IExport
     public function getDescription()
     {
         return $this->description;
+    }
+
+    protected function buildExportData(Document $document)
+    {
+        $data = array();
+
+        foreach ($this->filters as $filter)
+        {
+            $data = array_merge(
+                $data,
+                $filter->execute($document)
+            );
+        }
+
+        return $data;
+    }
+
+    protected function getStorage()
+    {
+        return $this->storage;
     }
 }

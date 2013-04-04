@@ -14,7 +14,7 @@ class EditInputView extends BaseView
     {
         $this->setupHtml($parameters);
         $module = $this->getAttribute('module');
-	$tm = $this->getContext()->getTranslationManager();
+        $tm = $this->getContext()->getTranslationManager();
         $this->setAttribute('_title', $tm->_($module->getName(), 'modules.labels') . ' - ' . $tm->_('Edit view', 'modules.labels'));
 
         $document = $this->getAttribute('document');
