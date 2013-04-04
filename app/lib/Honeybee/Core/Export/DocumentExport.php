@@ -4,78 +4,28 @@ namespace Honeybee\Core\Export;
 
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Dat0r\Document;
-use Honeybee\Agavi\Database\CouchDb\ClientException;
+use Honeybee\Core\Storage\IStorage;
+use Honeybee\Core\Config;
 
 class DocumentExport implements IExport
 {
-    protected $name;
+    private $name;
 
-    protected $description;
+    private $description;
 
-    protected $module;
+    private $settings;
 
-    protected $settings;
+    private $storage;
 
-    protected $client;
-
-    public function __construct($name, $description, Module $module, Config\ArrayConfig $settings)
+    public function __construct(Config\ArrayConfig $settings, IStorage $storage, $name, $description)
     {
+        $this->settings = $settings;
+        $this->storage = $storage;
         $this->name = $name;
         $this->description = $description;
-        $this->module = $module;
-        $this->settings = $settings;
-        $this->client = \AgaviContext::getInstance()->getDatabaseConnection(
-            $this->settings->get('connection')
-        );
     }
 
     public function export(Document $document)
-    {
-        $exportDoc = $this->loadExportDocument($document);
-
-        $data = $this->buildExportData($document);
-
-        $data['_id'] = $document->getShortIdentifier();
-        $data['type'] = $document->getModule()->getOption('prefix');
-
-        if ($exportDoc)
-        {
-            $data['_rev'] = $exportDoc['_rev'];
-        }
-        
-        $this->client->storeDoc(NULL, $data);
-    }
-
-    public function setFilters(Filter\FilterList $filters)
-    {
-        $this->filters = $filters;
-    }
-
-    protected function loadExportDocument(Document $document)
-    {
-        $exportDocument = NULL;
-
-        try
-        {
-            $exportDocument = $this->client->getDoc(NULL, $document->getShortIdentifier());
-        }
-        catch(ClientException $e)
-        {
-            if (preg_match('~(\(404\))~', $e->getMessage()))
-            {
-                // no document for the given id in our current database.
-                $exportDocument = NULL;
-            }
-            else
-            {
-                throw $e;
-            }
-        }
-
-        return $exportDocument;
-    }
-
-    protected function buildExportData(Document $document)
     {
         $data = array();
 
@@ -87,6 +37,24 @@ class DocumentExport implements IExport
             );
         }
 
-        return $data;
+        $data['identifier'] = $document->getShortIdentifier();
+        $data['type'] = $document->getModule()->getOption('prefix');
+        
+        $this->storage->write($data);
+    }
+
+    public function setFilters(Filter\FilterList $filters)
+    {
+        $this->filters = $filters;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

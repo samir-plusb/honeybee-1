@@ -3,21 +3,22 @@
 namespace Honeybee\Core\Export\Filter;
 
 use Honeybee\Core\Dat0r\Document;
-use Honeybee\Core\Export\Config\IConfig;
-use Honeybee\Agavi\Database\CouchDb\ClientException;
+use Honeybee\Core\Config\IConfig;
+use Honeybee\Core\Storage\CouchDb;
 use Imagine;
 
 class AssetFilter extends BaseFilter
 {
-    protected $client;
+    protected $storage;
 
     public function __construct($name, IConfig $config)
     {
         parent::__construct($name, $config);
 
-        $this->client = \AgaviContext::getInstance()->getDatabaseConnection(
+        $database = \AgaviContext::getInstance()->getDatabaseManager()->getDatabase(
             $this->getConfig()->get('connection')
         );
+        $this->storage = new CouchDb\GenericStorage($database);
     }
 
     public function execute(Document $document)
@@ -34,28 +35,19 @@ class AssetFilter extends BaseFilter
 
             foreach ($fieldAssetIds as $assetId)
             {
-                $assetData = $this->buildAssetData(
-                    \ProjectAssetService::getInstance()->get($assetId)
-                );
+                $assetData = $this->buildAssetData(\ProjectAssetService::getInstance()->get($assetId));
 
-                if (NULL === $assetData)
+                if (! $assetData)
                 {
                     // broken asset ...
                     continue;
                 }
 
-                $assetDoc = $this->loadAssetDoc($assetData['_id']);
-                if ($assetDoc)
-                {
-                    // set revision so couchdb will update without complaining.
-                    $assetData['_rev'] = $assetDoc['_rev'];
-                }
-
                 $assetData['sourceDoc'] = $documentShortId;
 
-                // no 
-                $this->client->storeDoc(NULL, $assetData);
-                $filterOutput[$fieldname][] = $assetData['_id'];
+                $this->storage->write($assetData);
+
+                $filterOutput[$fieldname][] = $assetData['identifier'];
             }
         }
 
@@ -64,36 +56,45 @@ class AssetFilter extends BaseFilter
         return $filterOutput;
     }
 
-    protected function cleanupOldAssets(Document $document, array $output)
+    protected function cleanupOldAssets(Document $document, array $filterOutput)
     {
         $previousAssetIds = $this->getReferencedAssetIds($document);
         $currentAssetIds = array();
 
-        foreach ($output as $fieldname => $assetIds)
+        foreach ($filterOutput as $fieldname => $assetIds)
         {
             $currentAssetIds = array_merge($currentAssetIds, $assetIds);
         }
 
         foreach (array_diff($previousAssetIds, array_unique($currentAssetIds)) as $oldAssetId)
         {
-            // in order to delete documents from couch we need the current revision.
-            $assetRevision = $this->client->statDoc(NULL, $oldAssetId);
-
-            if (0 !== $assetRevision)
+            if (($oldAsset = $this->storage->read($oldAssetId)))
             {
-                $this->client->deleteDoc(NULL, $oldAssetId, $assetRevision);
+                $this->storage->delete($oldAsset['identifier'], $oldAsset['revision']);
             }
         }
     }
 
+    // this part is very couchdb specific, while using the 'couchdb views' feature to look up related assets.
+    // this will be tricky to abstract if we dont want to call this a CouchDbAssetFilter,
+    // which we would have to do right now if were strict about concise naming ^^.
     protected function getReferencedAssetIds(Document $document)
     {
+        if (! $this->getConfig()->has('document_asset_map_view'))
+        {
+            throw new \Exception(
+                "Missing setting 'document_asset_map_view' for the AssetFilter's couchdb view name to use for mapping assets to documents."
+            );
+        }
+
         $viewName = $this->getConfig()->get('document_asset_map_view');
+
         $viewParts = explode('.', $viewName);
         $designDoc = $viewParts[0];
         $viewKey = $viewParts[1];
         $viewParams = array('key' => $document->getShortIdentifier());
-        $map = $this->client->getView(NULL, $designDoc, $viewKey, $viewParams);
+        $couchDbClient = $this->storage->getDatabase()->getConnection();
+        $map = $couchDbClient->getView(NULL, $designDoc, $viewKey, $viewParams);
         $assetIds = array();
 
         foreach ($map['rows'] as $row)
@@ -110,22 +111,19 @@ class AssetFilter extends BaseFilter
 
         try
         {
-            if (TRUE === $this->getConfig()->get('enable_aoi', FALSE))
+            $fileIsImage = (0 === strpos($asset->getMimeType(), 'image'));
+
+            if ($fileIsImage && TRUE === $this->getConfig()->get('enable_aoi', FALSE))
             {
                 $this->writeAoi($asset);
             }
+
             $metaData = $asset->getMetaData();
             $filePath = $asset->getFullPath();
-
-            $imagine = new Imagine\Gd\Imagine();
-            $image = $imagine->open($filePath);
-            $size = $image->getSize();
             
             $assetData = array(
-                '_id' => "asset-" . $asset->getIdentifier(),
+                'identifier' => "asset-" . $asset->getIdentifier(),
                 'data' => base64_encode(fread(fopen($filePath, 'r'), $asset->getSize())),
-                'width' => $size->getWidth(),
-                'height' => $size->getHeight(),
                 'mime' => $asset->getMimeType(),
                 'filename' => $asset->getFullName(),
                 'modified' => date(DATE_ISO8601, filemtime($filePath)),
@@ -134,6 +132,16 @@ class AssetFilter extends BaseFilter
                 'caption' => isset($metaData['caption']) ? $metaData['caption'] : '',
                 'type' => 'asset'
             );
+
+            if ($fileIsImage)
+            {
+                $imagine = new Imagine\Gd\Imagine();
+                $image = $imagine->open($filePath);
+                $size = $image->getSize();
+
+                $assetData['width'] = $size->getWidth();
+                $assetData['height'] = $size->getHeight();
+            }
         }
         catch(\Exception $e)
         {
@@ -180,29 +188,5 @@ class AssetFilter extends BaseFilter
         {   
             throw new \Exception("Unable to write aoi information to binary: " . implode(PHP_EOL, $output));
         }
-    }
-
-    protected function loadAssetDoc($assetDocId)
-    {
-        $assetDocument = NULL;
-
-        try
-        {
-            $assetDocument = $this->client->getDoc(NULL, $assetDocId);
-        }
-        catch(ClientException $e)
-        {
-            if (preg_match('~(\(404\))~', $e->getMessage()))
-            {
-                // no document for the given id in our current database.
-                $assetDocument = NULL;
-            }
-            else
-            {
-                throw $e;
-            }
-        }
-
-        return $assetDocument;
     }
 }

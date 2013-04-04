@@ -3,7 +3,6 @@
 namespace Honeybee\Core\Export\Filter;
 
 use Honeybee\Core\Dat0r\Document;
-use Dat0r\Core\Runtime\Field;
 
 class ReferenceFilter extends BaseFilter
 {
