@@ -47,7 +47,15 @@ class AssetFilter extends BaseFilter
 
                 $this->storage->write($assetData);
 
-                $filterOutput[$fieldname][] = $assetData['identifier'];
+                $assetExportFields = $this->getConfig()->get('asset_fields', array('identifier' => 'id'));
+
+                $exportValue = array();
+                foreach ($assetExportFields as $metaDataKey => $exportKey)
+                {
+                    $exportValue[$exportKey] = $assetData[$metaDataKey];
+                }
+
+                $filterOutput[$fieldname][] = $exportValue;
             }
         }
 
@@ -61,9 +69,12 @@ class AssetFilter extends BaseFilter
         $previousAssetIds = $this->getReferencedAssetIds($document);
         $currentAssetIds = array();
 
-        foreach ($filterOutput as $fieldname => $assetIds)
+        foreach ($filterOutput as $fieldname => $assets)
         {
-            $currentAssetIds = array_merge($currentAssetIds, $assetIds);
+            foreach ($assets as $assetData)
+            {
+                $currentAssetIds[] = $assetData['id'];
+            }
         }
 
         foreach (array_diff($previousAssetIds, array_unique($currentAssetIds)) as $oldAssetId)
@@ -125,6 +136,7 @@ class AssetFilter extends BaseFilter
                 'identifier' => "asset-" . $asset->getIdentifier(),
                 'data' => base64_encode(fread(fopen($filePath, 'r'), $asset->getSize())),
                 'mime' => $asset->getMimeType(),
+                'size' => $asset->getSize(),
                 'filename' => $asset->getFullName(),
                 'modified' => date(DATE_ISO8601, filemtime($filePath)),
                 'copyright' => isset($metaData['copyright']) ? $metaData['copyright'] : '',
