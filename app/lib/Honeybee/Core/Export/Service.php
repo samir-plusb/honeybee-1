@@ -5,21 +5,23 @@ namespace Honeybee\Core\Export;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Service\IService;
+use Honeybee\Core\Storage\CouchDb;
+use Honeybee\Core\Config;
 
 class Service implements IService
 {
     private $module;
 
-    private $filters;
-
     private $exports;
+
+    private $exportDefinitions;
 
     public function __construct(Module $module)
     {
         $this->module = $module;
         $this->exports = array();
 
-        $this->exportsConfig = new Config\AgaviXmlConfig(
+        $this->exportDefinitions = new Config\AgaviXmlConfig(
             \AgaviConfig::get('core.modules_dir') . '/' . $module->getName() . '/config/exports.xml'
         );
     }
@@ -31,7 +33,7 @@ class Service implements IService
 
     public function getExports()
     {
-        $exportNames = array_keys($this->exportsConfig->get());
+        $exportNames = array_keys($this->exportDefinitions->get());
         $exports = array();
 
         foreach ($exportNames as $name)
@@ -42,21 +44,21 @@ class Service implements IService
         return $exports;
     }
 
-    public function getExport($exportName)
+    public function getExport($name)
     {
-        if (! isset($this->exports[$exportName]))
+        if (! isset($this->exports[$name]))
         {
-            $this->exports[$exportName] = $this->createExport($exportName);
+            $this->exports[$name] = $this->createExport($name);
         }
 
-        return $this->exports[$exportName];
+        return $this->exports[$name];
     }
 
-    protected function createExport($exportName)
+    protected function createExport($name)
     {
-        if ($this->exportsConfig->has($exportName))
+        if ($this->exportDefinitions->has($name))
         {
-            $params = $this->exportsConfig->get($exportName);
+            $params = $this->exportDefinitions->get($name);
         }
         else
         {
@@ -64,14 +66,15 @@ class Service implements IService
             throw new \InvalidArgumentException("Trying to load not configured export.");
         }
 
-        $exportClass = $params['class'];
+        $implementor = $params['class'];
+        $description = $params['description'];
+        $settings = new Config\ArrayConfig($params['settings']);
 
-        $export = new $exportClass(
-            $exportName, 
-            $params['description'],
-            $this->module,
-            new Config\ArrayConfig($params['settings'])
-        );
+        // @todo get rid of being specific about couchdb here and generalize storage creation.
+        $database = \AgaviContext::getInstance()->getDatabaseManager()->getDatabase($settings->get('connection'));
+        $storage = new CouchDb\GenericStorage($database);
+
+        $export = new $implementor($settings, $storage, $name, $description);
         $filters = new Filter\FilterList();
 
         foreach ($params['filters'] as $filterName => $filterParams)

@@ -3,11 +3,10 @@
 namespace Honeybee\Core\Storage\CouchDb;
 
 use Honeybee\Core\Storage\IStorage;
-use Honeybee\Core\Dat0r\Document;
 use Honeybee\Agavi\Database\CouchDb\Database;
 use Honeybee\Agavi\Database\CouchDb\ClientException;
 
-abstract class BaseStorage implements IStorage
+class GenericStorage implements IStorage
 {
     /**
      * The name of couchdb's internal id field.
@@ -46,6 +45,83 @@ abstract class BaseStorage implements IStorage
     }
 
     /**
+     * Write the given document to couchdb.
+     *
+     * @param mixed $document The document to save.
+     *
+     * @throws Exception If writing to couchdb fails for some reason.
+     */
+    public function write(array $data)
+    {
+        $couchDbClient = $this->getDatabase()->getConnection();
+        $data = $this->mapDomainDataToCouchDb($data);
+
+        $result = $couchDbClient->storeDoc(NULL, $data);
+        $revision = NULL;
+
+        if(isset($result['error']) && 'conflict' === $result['error'])
+        {
+            $data[self::COUCH_REV] = $couchDbClient->statDoc(NULL, $data[self::COUCH_ID]);
+            $result = $couchDbClient->storeDoc(NULL, $data);
+        }
+
+        if (isset($result['ok']) && isset($result['rev']))
+        {
+            $revision = $result['rev'];
+        }
+        else
+        {
+            throw new \Exception("Failed to write data for doc-id: " . @$data[self::COUCH_ID]);
+        }
+
+        return $revision;
+    }
+
+    /**
+     * Read a document's data from couchdb by identifier($key).
+     * This method is not exposed to the repository and shall be used with caution.
+     * For doing casual reads use a repositories find and read methods.
+     *
+     * @param string $key The document key to look up.
+     * @param string $revision The document revision to select.
+     *
+     * @return array The document's data (domain structure).
+     *
+     * @throws CouchdbClientException When something goes wrong while reading from couchdb.
+     */
+    public function read($key, $revision = NULL)
+    {
+        $data = NULL;
+
+        try
+        {
+            $data = $this->mapCouchDbDataToDomain(
+                $this->getDatabase()->getConnection()->getDoc(NULL, $key, $revision)
+            );
+        }
+        catch(ClientException $e)
+        {
+            if (preg_match('~(\(404\))~', $e->getMessage()))
+            {
+                // no document for the given id in our current database.
+                $data = NULL;
+            }
+            else
+            {
+                throw $e;
+            }
+        }
+
+        return $data;
+    }
+
+    public function delete($key, $revision = NULL)
+    {
+        $couchDbClient = $this->getDatabase()->getConnection();
+        $couchDbClient->deleteDoc(NULL, $key, $revision);
+    }
+
+    /**
      * Turn the given (domain entity) data into an array representation, 
      * that can directly be passed to couchdb as is.
      * Basically this means mapping the document's id and rev fields,
@@ -56,9 +132,15 @@ abstract class BaseStorage implements IStorage
      *
      * @return array
      */
-    protected function mapDomainDataToCouchDb($type, array $data)
+    protected function mapDomainDataToCouchDb(array $data)
     {
-        $data[self::DOC_IMPLEMENTOR] = $type;
+        $docType = isset($data[self::DOC_IMPLEMENTOR]) ? $data[self::DOC_IMPLEMENTOR] : FALSE;
+        if (! $docType)
+        {
+            throw new \Exception(
+                "Invalid or corrupt type information within document data. Type: " . $docType
+            );
+        }
 
         if (isset($data[self::DOC_IDENTIFIER]) && ! empty($data[self::DOC_IDENTIFIER]))
         {
@@ -89,7 +171,7 @@ abstract class BaseStorage implements IStorage
     {
         $docType = isset($data[self::DOC_IMPLEMENTOR]) ? $data[self::DOC_IMPLEMENTOR] : FALSE;
 
-        if (! $docType || ! class_exists($docType, TRUE))
+        if (! $docType)
         {
             throw new \Exception(
                 "Invalid or corrupt type information within document data. Type: " . $docType

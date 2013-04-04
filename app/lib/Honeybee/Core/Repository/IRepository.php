@@ -12,5 +12,5 @@ interface IRepository
 
     public function read($identifier);
 
-    public function write($data);
+    public function write($entity);
 }

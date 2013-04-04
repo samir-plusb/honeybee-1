@@ -6,8 +6,6 @@ use Honeybee\Core\Finder\IFinder;
 use Honeybee\Core\Storage\IStorage;
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Dat0r\Tree;
-use Honeybee\Core\Dat0r\Document;
-use Honeybee\Core\Dat0r\DocumentCollection;
 
 class TreeRepository extends BaseRepository
 {
@@ -30,16 +28,32 @@ class TreeRepository extends BaseRepository
 
     public function write($tree)
     {
-        $storage = $this->getStorage();
+        $errors = array();
 
-        $this->getStorage()->writeOne($tree);
+        if ($tree instanceof Tree\ITree)
+        {
+            $storage = $this->getStorage();
+            $data = $tree->toArray(NULL, FALSE);
+            $data['type'] = get_class($tree);
+
+            $revision = $this->getStorage()->write($data);
+            $tree->setRevision($revision);
+        }
+        else
+        {
+            throw new \InvalidArgumentException(
+                'Only instances of ITree are allowed as $data argument; ' . get_class($tree) . ' given.'
+            );
+        }
+
+        return $errors;
     }
 
     public function delete($tree)
     {
         $errors = array();
 
-        if ($data instanceof ITree)
+        if ($data instanceof Tree\ITree)
         {
             $this->getStorage()->delete(
                 $tree->getIdentifier(), 
@@ -48,8 +62,8 @@ class TreeRepository extends BaseRepository
         }
         else
         {
-            throw new InvalidArgumentException(
-                'Only ITree instances allowed as $data argument.'
+            throw new \InvalidArgumentException(
+                'Only instances of ITree are allowed as $data argument; ' . get_class($tree) . ' given.'
             );
         }
 

@@ -58,45 +58,37 @@ class DocumentRepository extends BaseRepository
         return $documents;
     }
 
-    public function write($data)
+    public function write($document)
     {
-        $errors = array();
-
-        if ($data instanceof Document)
+        if ($document instanceof Document)
         {
-            $data->onBeforeWrite();
-            $this->getStorage()->writeOne($data);
-        }
-        else if ($data instanceof DocumentCollection)
-        {
-            $errors = $this->getStorage()->writeMany($data);
+            $document->onBeforeWrite();
+            
+            $data = $document->toArray();
+            $data['type'] = get_class($document);
+            $revision = $this->getStorage()->write($data);
+            $document->setRevision($revision);
         }
         else
         {
-            throw new InvalidArgumentException(
-                'Only Honeybee\Core\Dat0r\Document and DocumentCollection allowed as $data argument.'
-            );
+            throw new \InvalidArgumentException('Only Document instances are allowed as $data argument.');
         }
-
-        return $errors;
     }
 
-    public function delete($data)
+    public function delete($document)
     {
         $errors = array();
 
-        if ($data instanceof Document)
+        if ($document instanceof Document)
         {
             $this->getStorage()->delete(
-                $data->getIdentifier(), 
-                $data->getRevision()
+                $document->getIdentifier(), 
+                $document->getRevision()
             );
         }
         else
         {
-            throw new InvalidArgumentException(
-                'Only Document and DocumentCollection allowed as $data argument.'
-            );
+            throw new \InvalidArgumentException('Only Document instances allowed for the $data method parameter.');
         }
 
         return $errors;
