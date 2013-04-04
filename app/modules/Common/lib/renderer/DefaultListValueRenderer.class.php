@@ -11,8 +11,22 @@ class DefaultListValueRenderer implements IListValueRenderer
         $this->module = $module;
     }
 
-    public function renderValue($value, $fieldname, array $data = array())
+    public function renderValue($value, $field, array $data = array())
     {
+        if (is_array($value))
+        {
+            $value = strip_tags(implode(', ', $value));
+        }
+        else
+        {
+            $value = strip_tags($value);
+            // shorten long strings to 30 words...
+            if (mb_strlen($value) >= 255)
+            {
+                return implode(' ', array_slice(explode(' ', $value), 0, 30)) . ' [...]';
+            }
+        }
+
         return $value;
     }
 
