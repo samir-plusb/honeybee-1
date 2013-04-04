@@ -1,6 +1,6 @@
 <?php
 
-namespace Honeybee\Core\Export\Config;
+namespace Honeybee\Core\Config;
 
 /**
  * The AgaviXmlConfig's job is to provide a strategy for loading and handling xml config-resources.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Honeybee\Core\Export\Config;
+namespace Honeybee\Core\Config;
 
 /**
  * The ConfigException reflects errors that occur in the context of

@@ -1,6 +1,6 @@
 <?php
 
-namespace Honeybee\Core\Import\Config;
+namespace Honeybee\Core\Config;
 
 /**
  * The ArrayConfig class is an abstract implementation of the BaseConfig base.

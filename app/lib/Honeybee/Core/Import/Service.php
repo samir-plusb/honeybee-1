@@ -2,6 +2,8 @@
 
 namespace Honeybee\Core\Import;
 
+use Honeybee\Core\Config;
+
 /*
 $service = new Import\Service();
 $report = $service->consume('test-consumer', array(), array('data' => array(

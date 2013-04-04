@@ -1,6 +1,6 @@
 <?php
 
-namespace Honeybee\Core\Export\Config;
+namespace Honeybee\Core\Config;
 
 /**
  * The BaseConfig class is an abstract implementation of the IConfig interface.

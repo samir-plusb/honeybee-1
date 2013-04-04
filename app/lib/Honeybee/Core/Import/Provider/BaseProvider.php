@@ -2,7 +2,7 @@
 
 namespace Honeybee\Core\Import\Provider;
 
-use Honeybee\Core\Import\Config;
+use Honeybee\Core\Config;
 
 /**
  * The BaseProvider class is an abstract implementation of the IProvider interface.

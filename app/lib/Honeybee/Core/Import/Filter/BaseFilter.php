@@ -2,7 +2,7 @@
 
 namespace Honeybee\Core\Import\Filter;
 
-use Honeybee\Core\Import\Config;
+use Honeybee\Core\Config;
 
 /**
  * The BaseFilter class is an abstract implementation of the IFilter interface.

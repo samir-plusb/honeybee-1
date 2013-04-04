@@ -2,7 +2,7 @@
 
 namespace Honeybee\Core\Import\Consumer;
 
-use Honeybee\Core\Import\Config;
+use Honeybee\Core\Config;
 use Honeybee\Core\Import\Provider;
 use Honeybee\Core\Import\Filter;
 use Dat0r\Core\Runtime\Module;

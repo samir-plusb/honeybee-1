@@ -1,6 +1,6 @@
 <?php
 
-namespace Honeybee\Core\Export\Config;
+namespace Honeybee\Core\Config;
 
 /**
  * IConfig implementations provide access to configration data,
