@@ -13,6 +13,7 @@ class MappingGeneratorPlugin
 
     private static $typeMap = array(
         'text' => 'string',
+        'textarea' => 'string',
         'integer' => 'integer',
         'aggregate' => 'object',
         'key-value' => 'object',
@@ -81,6 +82,13 @@ class MappingGeneratorPlugin
                 'index' => 'not_analyzed'
             )
         ));
+    }
+
+    protected function mapTextarea($fieldName, array $field, $moduleDefinition)
+    {
+        $esType = self::$typeMap[$field['type']];
+
+        return array('type' => $esType);
     }
 
     protected function mapInteger($fieldName, array $field, $moduleDefinition)
