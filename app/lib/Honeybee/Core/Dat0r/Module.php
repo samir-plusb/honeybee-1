@@ -23,12 +23,6 @@ abstract class Module extends RootModule
 
     public function createDocument(array $data = array())
     {
-        if (! empty($data))
-        {
-            $references = RelationManager::loadReferences($this, $data);
-            $data = array_merge($data, $references);
-        }
-        
         $document = parent::createDocument($data);
 
         if (! ($ticket = $document->getWorkflowTicket()))

@@ -6,6 +6,7 @@ use Zend\Permissions\Acl;
 use Dat0r\Core\Runtime\Document\Document as BaseDocument;
 use Honeybee\Core\Workflow\IResource;
 use Dat0r\Core\Runtime\Module\IModule;
+use Dat0r\Core\Runtime\Field\ReferenceField;
 
 abstract class Document extends BaseDocument implements IResource, Acl\Resource\ResourceInterface
 {
@@ -98,11 +99,30 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
 
     protected function hydrate(array $values = array())
     {
+        $referenceData = array();
+
+        if (! empty($values))
+        {
+            foreach ($this->getModule()->getFields() as $fieldname => $field)
+            {
+                if (($field instanceof ReferenceField) && isset($values[$fieldname]))
+                {
+                    $referenceData[$fieldname] = $values[$fieldname];
+                    unset($values[$fieldname]);
+                }
+            }
+        }
+
         parent::hydrate($values);
 
-        if (!$this->hasValue('uuid'))
+        if (! $this->hasValue('uuid'))
         {
             $this->setValue('uuid', $this->getValue('uuid'));
+        }
+
+        foreach (RelationManager::loadReferences($this, $referenceData) as $fieldname => $refDocuments)
+        {
+            $this->setValue($fieldname, $refDocuments);
         }
     }
 

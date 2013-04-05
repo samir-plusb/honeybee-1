@@ -8,8 +8,21 @@ use Dat0r\Core\Runtime\Document\DocumentSet;
 
 class RelationManager
 {
-    public static function loadReferences(Module $module, array $data)
+    private static $referencePool;
+
+    private static $referenceDepth = 0;
+
+    public static function loadReferences(Document $document, array $data)
     {
+        if (0 === self::$referenceDepth)
+        {
+            self::$referencePool = array();
+        }
+
+        self::$referenceDepth++;
+        self::$referencePool[$document->getIdentifier()] = $document;
+
+        $module = $document->getModule();
         $referencedDocuments = array();
 
         foreach ($module->getFields() as $field)
@@ -37,14 +50,32 @@ class RelationManager
 
                 if (! empty($refData))
                 {
-                    $referenceData = $referencedModule->getService()->getMany($refData);
-                    foreach ($referenceData['documents'] as $referencedDocument)
+                    $pooledDocuments = self::$referencePool;
+                    $idsToLoad = array_filter($refData, function($documentIdentifier) use ($pooledDocuments)
                     {
-                        $referencedDocuments[$fieldname]->add($referencedDocument);
+                        return ! isset($pooledDocuments[$documentIdentifier]);
+                    });
+
+                    foreach (array_diff($refData, $idsToLoad) as $pooledIdentifier)
+                    {
+                        $referencedDocuments[$fieldname]->add(self::$referencePool[$pooledIdentifier]);
+                    }
+
+                    if (! empty($idsToLoad))
+                    {
+                        sort($idsToLoad);
+                        $referenceData = $referencedModule->getService()->getMany($idsToLoad);
+                        foreach ($referenceData['documents'] as $referencedDocument)
+                        {
+                            self::$referencePool[$referencedDocument->getIdentifier()] = $referencedDocument;
+                            $referencedDocuments[$fieldname]->add($referencedDocument);
+                        }
                     }
                 }
             }
         }
+
+        self::$referenceDepth--;
 
         return $referencedDocuments;
     }

@@ -37,7 +37,6 @@ class DocumentValidator extends \AgaviValidator
         }
         else if (! ($document = $service->get($data)))
         {
-
             $success = FALSE;
             $this->throwError('non_existant');
         }
@@ -70,8 +69,6 @@ class DocumentValidator extends \AgaviValidator
         {
             if ($document = $service->get($identifier))
             {
-                $references = RelationManager::loadReferences($module, $data);
-                $data = array_merge($data, $references);
                 $document->setValues($data);
             }
         }
