@@ -21,11 +21,19 @@ interface IFilter
     public function getName();
 
     /**
-     * Process the given input and return a corresponding deterministic output.
+     * Process the given document in the context of building export data 
+     * and return a corresponding deterministic output.
      *
-     * @param       array $input
+     * @param       Document $document
      *
      * @return      array
      */
     public function execute(Document $document);
+
+    /**
+     * Hook that is invoked when a document is revoked from export.
+     *
+     * @param       Document $document
+     */
+    public function onDocumentRevoked(Document $document);
 }

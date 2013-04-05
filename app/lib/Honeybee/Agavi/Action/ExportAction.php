@@ -23,10 +23,7 @@ class ExportAction extends BaseAction
 
             foreach ($docCollection as $document)
             {
-                foreach ($exportService->getExports() as $export)
-                {
-                    $export->export($document);
-                }
+                $exportService->export('pulq-fe', $document);
             }
 
             $offset += $limit;

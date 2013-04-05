@@ -12,5 +12,7 @@ interface IExport
 
     public function export(Document $document);
 
+    public function revoke(Document $document);
+
     public function setFilters(Filter\FilterList $filters);
 }

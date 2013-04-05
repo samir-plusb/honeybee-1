@@ -31,6 +31,11 @@ class Service implements IService
         return $this->getExport($exportName)->export($document);
     }
 
+    public function revoke($exportName, Document $document)
+    {
+        return $this->getExport($exportName)->revoke($document);
+    }
+
     public function getExports()
     {
         $exportNames = array_keys($this->exportDefinitions->get());

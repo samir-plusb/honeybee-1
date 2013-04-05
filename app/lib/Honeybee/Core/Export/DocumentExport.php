@@ -27,11 +27,26 @@ class DocumentExport implements IExport
 
     public function export(Document $document)
     {
-        $data = $this->buildExportData($data);
+        $data = $this->buildExportData($document);
         $data['identifier'] = $document->getShortIdentifier();
         $data['type'] = $document->getModule()->getOption('prefix');
         
         $this->storage->write($data);
+    }
+
+    public function revoke(Document $document)
+    {
+        $identifier = $document->getShortIdentifier();
+
+        if ($data = $this->storage->read($identifier))
+        {
+            $this->storage->delete($identifier, $data['revision']);
+            
+            foreach ($this->filters as $filter)
+            {
+                $filter->onDocumentRevoked($document);
+            }
+        }
     }
 
     public function setFilters(Filter\FilterList $filters)
@@ -55,10 +70,7 @@ class DocumentExport implements IExport
 
         foreach ($this->filters as $filter)
         {
-            $data = array_merge(
-                $data,
-                $filter->execute($document)
-            );
+            $data = array_merge($data, $filter->execute($document));
         }
 
         return $data;

@@ -64,6 +64,17 @@ class AssetFilter extends BaseFilter
         return $filterOutput;
     }
 
+    public function onDocumentRevoked(Document $document)
+    {
+        foreach ($this->getReferencedAssetIds($document) as $assetId)
+        {
+            if (($asset = $this->storage->read($assetId)))
+            {
+                $this->storage->delete($asset['identifier'], $asset['revision']);
+            }
+        }
+    }
+
     protected function cleanupOldAssets(Document $document, array $filterOutput)
     {
         $previousAssetIds = $this->getReferencedAssetIds($document);

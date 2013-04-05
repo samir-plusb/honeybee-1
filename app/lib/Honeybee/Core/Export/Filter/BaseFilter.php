@@ -3,6 +3,7 @@
 namespace Honeybee\Core\Export\Filter;
 
 use Honeybee\Core\Config\IConfig;
+use Honeybee\Core\Dat0r\Document;
 
 /**
  * The BaseFilter class is an abstract implementation of the IFilter interface.
@@ -38,6 +39,11 @@ abstract class BaseFilter implements IFilter
     public function getName()
     {
         return $this->name;
+    }
+
+    public function onDocumentRevoked(Document $document)
+    {
+
     }
 
     /**

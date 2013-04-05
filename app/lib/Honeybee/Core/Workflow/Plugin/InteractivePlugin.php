@@ -130,4 +130,17 @@ class InteractivePlugin extends BasePlugin
     {
         return \AgaviContext::getInstance()->getUser();
     }
+
+    public function onResourceLeaving($gateName)
+    {
+        $resource = $this->getResource();
+        $ticket = $resource->getWorkflowTicket();
+
+        if ('published' === $ticket->getWorkflowStep())
+        {
+            $module = $resource->getModule();
+            $exportService = $module->getService('export');
+            $exportService->revoke('pulq-fe', $resource);
+        }
+    }
 }

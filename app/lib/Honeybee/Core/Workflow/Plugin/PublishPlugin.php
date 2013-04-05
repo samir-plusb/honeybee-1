@@ -29,6 +29,10 @@ class PublishPlugin extends BasePlugin
             $result->setState(Plugin\Result::STATE_EXPECT_INPUT);
             $result->setGate('promote');*/
 
+            $module = $resource->getModule();
+            $exportService = $module->getService('export');
+            $exportService->export('pulq-fe', $resource);
+
             $result->setState(Plugin\Result::STATE_OK);
             $result->setGate('promote');
 
