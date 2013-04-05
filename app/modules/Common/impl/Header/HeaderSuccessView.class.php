@@ -19,14 +19,7 @@ class Common_Header_HeaderSuccessView extends CommonBaseView
         }
 
         $url = str_replace('{EMAIL_HASH}', $hash, $url);
-        $curl = CurlFactory::create($url);
-        $resp = curl_exec($curl);
-        $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-        if (200 === $status)
-        {
-            $this->setAttribute('avatar_url', $url);
-        }
+        $this->setAttribute('avatar_url', $url);
 
         $routing = $this->getContext()->getRouting();
         $service = new ModuleService();

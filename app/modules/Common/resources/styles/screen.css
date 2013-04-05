@@ -26,3 +26,12 @@
 {
     color: #cdcdcd;
 }
+
+
+.avatar-image-wrapper
+{
+    float: left;
+    width: 41px;
+    height: 41px;
+    background-image: url(../../_global/binaries/avatar_default.jpg);
+}

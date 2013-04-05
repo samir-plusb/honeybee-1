@@ -36,11 +36,7 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
             resizeTimer = setTimeout(that.handleResizeEvent(ev), 100);
         });
 
-/*        $(window).on('resize', function(ev)
-        {
-            that.handleResizeEvent(ev);
-        });
-*/
+        this.replaceAvatarImage();
     },
 
     handleResizeEvent: function (ev)
@@ -123,6 +119,32 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
         }
 
         return width;
+    },
+
+    replaceAvatarImage: function()
+    {
+        var that = this;
+        var online = window.navigator.onLine;
+        if (online)
+        {
+            $('.avatar-image-wrapper').each(function(index, item)
+            {
+                var item = $(item);
+                var url = item.data('honeybee-avatar-url');
+                if (!url)
+                {
+                    return;
+                }
+                var img = new Image();
+                img.onload = function()
+                {
+                    $(img).hide().appendTo(item).fadeIn({duration: 1500});
+                }
+                img.className = 'avatar-image';
+                img.src = url;
+            });
+            
+        }
     }
 
 });
