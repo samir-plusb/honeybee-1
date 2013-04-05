@@ -42,7 +42,7 @@
                 <ae:parameter name="setup">true</ae:parameter>
                 <ae:parameter name="mapping_dir">%core.modules_dir%/Asset/config/elasticsearch/</ae:parameter>
                 <ae:parameter name="river">
-                    <ae:parameter name="couch_db">preview_famport_honeybee_asset</ae:parameter>
+                    <ae:parameter name="preview_couch_db">preview_famport_honeybee_asset</ae:parameter>
                 </ae:parameter>
             </database>
         </databases>
@@ -65,7 +65,7 @@
                 <ae:parameter name="setup">true</ae:parameter>
                 <ae:parameter name="mapping_dir">%core.modules_dir%/Asset/config/elasticsearch/</ae:parameter>
                 <ae:parameter name="river">
-                    <ae:parameter name="couch_db">famport_honeybee_asset_testing</ae:parameter>
+                    <ae:parameter name="couch_db_testing">famport_honeybee_asset_testing</ae:parameter>
                 </ae:parameter>
             </database>
         </databases>
