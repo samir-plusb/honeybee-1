@@ -46,7 +46,7 @@
         </filters>
     </ae:configuration>
 
-    <ae:configuration context="web" environment="stage">
+    <ae:configuration context="web" environment="(preview|stage).*">
         <filters>
             <filter name="ResourceFilter" class="Honeybee\Agavi\Filter\ResourceFilter">
                 <ae:parameter name="output_types">
