@@ -166,8 +166,9 @@ class DatabaseSetup implements IDatabaseSetup
             )
         );
 
+        $riverName = sprintf('river_%s', $this->database->getResource()->getName());
         $this->database->getConnection()->request(
-            sprintf("_river/%s/_meta", $typeName),
+            sprintf("_river/%s/_meta", $riverName),
             Elastica\Request::PUT,
             $riverSettings
         );
