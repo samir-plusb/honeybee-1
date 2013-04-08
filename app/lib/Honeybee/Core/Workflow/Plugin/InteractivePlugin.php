@@ -72,6 +72,16 @@ class InteractivePlugin extends BasePlugin
         $pluginContainer->setAttribute('resource', $this->getResource(), self::NS_PLUGIN_ATTRIBUTES);
         $pluginContainer->setAttribute('plugin_result', $result, self::NS_PLUGIN_ATTRIBUTES);
         $result->setResponse($pluginContainer->execute());
+
+        $resource = $this->getResource();
+        $ticket = $resource->getWorkflowTicket();
+
+        if ('published' === $ticket->getWorkflowStep())
+        {
+            $exportService = $resource->getModule()->getService('export');
+            $exportService->revoke('pulq-fe', $resource);
+        }
+
         $result->freeze();
 
         return $result;
