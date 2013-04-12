@@ -53,20 +53,15 @@ class DatabaseSetup implements IDatabaseSetup
                         'tokenizer' => 'icu_tokenizer',
                         'filter' => array('lowercase', 'snowball', 'icu_folding')
                     ),
-                    'noLang' => array(
+                    "AutoCompleteAnalyzer" => array(
+                      "type" => "custom",
+                      "tokenizer" => "whitespace",
+                      "filter" => array("lowercase", "edge")
+                    ), 
+                    'IcuAnalyzer_DE' => array(
                         'type' => 'custom',
-                        'tokenizer' => 'icu_tokenizer',
-                        'filter' => array('lowercase', 'icu_folding')
-                    ),
-                    'searchAnalyzer' => array(
-                        'type' => 'custom',
-                        'tokenizer' => 'icu_tokenizer',
-                        'filter' => array('lowercase', 'snowball', 'icu_folding')
-                    ),
-                    'containsText' => array(
-                        'type' => 'custom',
-                        "tokenizer" => "whitespace",
-                        "filter" => array('lowercase', "snowball", "icu_folding", "autocomplete")
+                        'tokenizer' => 'keyword',
+                        'filter' => array('collation_de')
                     )
                 ),
                 'filter' => array(
@@ -74,11 +69,24 @@ class DatabaseSetup implements IDatabaseSetup
                         'type' => 'snowball',
                         'language' => 'German2'
                     ),
-                    'autocomplete' => array(
-                        'type' => 'edgeNGram',
-                        'min_gram' => 1,
-                        'max_gram' => 50,
-                        'side' => 'front'
+                    'edge' => array(
+                      'type' => 'edgeNGram',
+                      'min_gram' => 1,
+                      'max_gram' => 10,
+                      'side' => 'front'
+                    ),
+                    'collation_de' => array(
+                        'type' => "icu_collation",
+                        'language' => "de", // german
+                        'country' => "DE", // Germany
+                        //'variant' : "MV", // hahaha Mecklenburg-Vorpommern :-D
+                        //'strength' => "quaternary", // "tertiary" is the usual default
+                        //'decomposition' => "canonical", // "no" is faster, as no normalization takes place and many languages don't require text normalization
+                        'alternate' => "shifted", // or "non-ignorable", sets alternate handling for "quaternary" strength; ignoring punctuation and whitespace
+                        'caseLevel' => true, // ignore accent differences in "primary" strength?; defaults to "false" 
+                        'caseFirst' => "upper", // or "upper", which case is sorted first in "tertiary" strength?
+                        'numeric' => true, // defaults to false; should "egg-9" be before "egg-21"?
+                        'hiraganaQuaternaryMode' => false // distinguish between Katakana and Hiragana characters in "quaternary" strength
                     )
                 )
             )

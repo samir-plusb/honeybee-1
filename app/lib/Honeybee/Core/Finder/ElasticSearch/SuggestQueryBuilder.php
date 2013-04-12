@@ -17,9 +17,9 @@ class SuggestQueryBuilder implements IQueryBuilder
         $sortSpec = $specification['sorting'];
 
         $suggestQuery = new Elastica\Query\Text();
-        $suggestQuery->setFieldQuery($field, $term);
-        $suggestQuery->setFieldType($field, 'phrase_prefix');
-        $suggestQuery->setFieldMaxExpansions($field, 15);
+        $suggestQuery->setFieldQuery($field . '.suggest', $term);
+        $suggestQuery->setFieldType($field . '.suggest', 'phrase_prefix');
+        $suggestQuery->setFieldMaxExpansions($field . '.suggest', 15);
 
         $query = Elastica\Query::create($suggestQuery);
 

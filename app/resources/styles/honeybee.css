@@ -626,3 +626,112 @@ input.typeahead
 {
   z-index: 10000;
 }
+
+.select2-search-choice
+{
+  display: none;
+}
+
+div.select2-drop
+{
+  margin-top: 5px;
+}
+
+.refwidget-container
+{
+  width: 91.4894%;
+}
+
+/* 
+ * Make select 2 look the way we think is right. Opinionated!
+ */
+div.select2-container-multi.select2-container-active ul.select2-choices,
+div.select2-container-multi ul.select2-choices
+{
+  background: none;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(204, 204, 204);
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+  border-radius: 4px 4px 4px 4px;
+  height: auto;
+  transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
+
+div.select2-container-multi.select2-container-active ul.select2-choices
+{
+  border-color: rgba(82, 168, 236, 0.8);
+  outline: 0px none;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(82, 168, 236, 0.6);
+}
+
+div.select2-container-multi ul.select2-choices .select2-search-field input
+{
+  height: 17px;
+  padding: 6px 5px 4px;
+}
+
+div.select2-drop .select2-results .select2-highlighted 
+{
+  color: rgb(255, 255, 255);
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.2);
+  background-color: rgb(0, 136, 204);
+}
+
+div.select2-container .select2-choice abbr {
+    display: block;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    right: 26px;
+    top: 8px;
+
+    font-size: 1px;
+    text-decoration: none;
+
+    border: 0;
+    background: url('../binaries/select2.png') right top no-repeat;
+    cursor: pointer;
+    outline: 0;
+}
+
+div.select2-container .select2-choices abbr 
+{
+    background: url('../binaries/select2.png') right top no-repeat;
+}
+
+div.select2-container .select2-choices div b 
+{
+    background: url('../binaries/select2.png') no-repeat 0 1px;
+}
+
+div.select2-container-multi .select2-choices .select2-search-field 
+{
+  width: 100%;
+}
+
+div.select2-container-multi .select2-choices .select2-search-field input
+{
+    width: 100% !important;
+    background: #fff url('../binaries/select2.png') no-repeat 96% -22px !important;
+}
+
+div.select2-container-multi .select2-choices .select2-search-field input.select2-active 
+{
+    background: #fff url('../binaries/select2-spinner.gif') no-repeat 95% !important;
+}
+
+div.select2-container .select2-more-results.select2-active 
+{
+    background: #f4f4f4 url('../binaries/select2-spinner.gif') no-repeat 95%;
+}
+
+div.select2-container .select2-search-choice-close 
+{
+    background: url('../binaries/select2.png') right top no-repeat;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi)  {
+  .select2-search input, .select2-search-choice-close, .select2-container .select2-choice abbr, .select2-container .select2-choice div b {
+      background-image: url('../binaries/select2x2.png') !important;
+  }
+}

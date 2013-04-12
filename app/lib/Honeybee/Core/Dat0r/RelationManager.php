@@ -14,6 +14,8 @@ class RelationManager
 
     public static function loadReferences(Document $document, array $data)
     {
+        $referencedDocuments = array();
+
         if (0 === self::$referenceDepth)
         {
             self::$referencePool = array();
@@ -22,61 +24,107 @@ class RelationManager
         self::$referenceDepth++;
         self::$referencePool[$document->getIdentifier()] = $document;
 
-        $module = $document->getModule();
-        $referencedDocuments = array();
+        $referenceFields = $document->getModule()->getFields(
+            array(), array('Dat0r\Core\Runtime\Field\ReferenceField')
+        );
 
-        foreach ($module->getFields() as $field)
+        foreach ($referenceFields as $referenceField)
         {
-            $fieldname = $field->getName();
-            
-            if ($field instanceof ReferenceField && isset($data[$fieldname]))
+            $fieldname = $referenceField->getName();
+            if (! isset($data[$fieldname]))
             {
-                $refData = $data[$fieldname];
-
-                if (! is_array($refData))
-                {
-                    $error = new InvalidValueException(
-                        sprintf("Unable to load reference for field %s", $fieldname)
-                    );
-                    $error->setFieldname($fieldname);
-
-                    throw $error;
-                }
-
-                // @todo dont forget to adjust when introducing multi-reference fields.
-                $referencedModules = $field->getReferencedModules();
-                $referencedModule = $referencedModules[0];
-                $referencedDocuments[$fieldname] = new DocumentSet();
-
-                if (! empty($refData))
-                {
-                    $pooledDocuments = self::$referencePool;
-                    $idsToLoad = array_filter($refData, function($documentIdentifier) use ($pooledDocuments)
-                    {
-                        return ! isset($pooledDocuments[$documentIdentifier]);
-                    });
-
-                    foreach (array_diff($refData, $idsToLoad) as $pooledIdentifier)
-                    {
-                        $referencedDocuments[$fieldname]->add(self::$referencePool[$pooledIdentifier]);
-                    }
-
-                    if (! empty($idsToLoad))
-                    {
-                        sort($idsToLoad);
-                        $referenceData = $referencedModule->getService()->getMany($idsToLoad);
-                        foreach ($referenceData['documents'] as $referencedDocument)
-                        {
-                            self::$referencePool[$referencedDocument->getIdentifier()] = $referencedDocument;
-                            $referencedDocuments[$fieldname]->add($referencedDocument);
-                        }
-                    }
-                }
+                continue;
             }
+
+            $fieldData = $data[$fieldname];
+            if (! is_array($fieldData))
+            {
+                $error = new InvalidValueException(
+                    sprintf("Unable to load reference for field %s", $fieldname)
+                );
+                $error->setFieldname($fieldname);
+
+                throw $error;
+            }
+
+            $referencedDocuments[$fieldname] = self::getReferenceDocuments($referenceField, $fieldData);
         }
 
         self::$referenceDepth--;
 
         return $referencedDocuments;
+    }
+
+    protected static function getReferenceDocuments(ReferenceField $field, array $fieldData)
+    {
+        self::loadFieldReferences($field, $fieldData);
+
+        $referencedDocuments = new DocumentSet();
+        foreach ($fieldData as $reference)
+        {
+            if (isset($reference['id']) && isset(self::$referencePool[$reference['id']]))
+            {
+                $referencedDocuments->add(self::$referencePool[$reference['id']]);
+            }
+            else
+            {
+                // throw execpetion?
+            }
+        }
+
+        return $referencedDocuments;
+    }
+
+    protected static function loadFieldReferences(ReferenceField $field, array $fieldData)
+    {
+        $mappedRefData = self::mapDataToModules($fieldData);
+
+        foreach ($field->getReferencedModules() as $referencedModule)
+        {
+            $modulePrefix = $referencedModule->getOption('prefix');
+            if (! isset($mappedRefData[$modulePrefix]))
+            {
+                continue;
+            }
+
+            $pooledDocuments = self::$referencePool;
+            $idsToLoad = array_filter($mappedRefData[$modulePrefix], function($documentIdentifier) use ($pooledDocuments)
+            {
+                return ! isset($pooledDocuments[$documentIdentifier]);
+            });
+
+            if (! empty($idsToLoad))
+            {
+                sort($idsToLoad); // remove array-filter key artifacts o0
+                $referenceData = $referencedModule->getService()->getMany($idsToLoad);
+
+                foreach ($referenceData['documents'] as $referencedDocument)
+                {
+                    self::$referencePool[$referencedDocument->getIdentifier()] = $referencedDocument;
+                }
+            }
+        }
+    }
+
+    protected static function mapDataToModules(array $fieldData)
+    {
+        $mappedData = array();
+
+        foreach ($fieldData as $reference)
+        {
+            if (! isset($reference['module']))
+            {
+                continue;
+            }
+
+            if (! isset($mappedData[$reference['module']]))
+            {
+                $mappedData[$reference['module']] = array();
+            }
+
+            $mappedData[$reference['module']][] = $reference['id'];
+        }
+
+        return $mappedData;
     }
 }

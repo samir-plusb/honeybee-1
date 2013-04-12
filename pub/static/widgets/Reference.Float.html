@@ -1,0 +1,19 @@
+<input type="hidden" value="" data-bind="attr: { name: fieldname() + '[]' }" />
+<input class="tagslist-input" type="hidden" value="" />
+<ul class="tagslist-value-list" style="display: none;"
+    data-bind="foreach: tags">
+  <li class="tagslist-value">
+      <input type="hidden"
+             data-bind="attr: { name: $parent.fieldname() + '[' + $parent.tags.indexOf($data) + '][id]' },
+                        value: $data.id" />
+      <input type="hidden"
+             data-bind="attr: { name: $parent.fieldname() + '[' + $parent.tags.indexOf($data) + '][module]' },
+                        value: $data.module_prefix" />
+  </li>
+</ul>
+<ul data-bind="foreach: tags" class="tagslist-list">
+    <li class="btn btn-info tagslist-tag">
+        <span data-bind="text: $data.label" /> 
+        <i data-bind="click: function(data) { $parent.removeTag(data); }" class="icon-remove icon-white"> </i>
+    </li>
+</ul><br clear="all" />

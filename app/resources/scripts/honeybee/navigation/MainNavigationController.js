@@ -33,7 +33,10 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
         $(window).resize(function(ev)
         {
             clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(that.handleResizeEvent(ev), 100);
+            resizeTimer = setTimeout(function()
+            {
+                that.handleResizeEvent();
+            }, 100);
         });
 
         this.replaceAvatarImage();

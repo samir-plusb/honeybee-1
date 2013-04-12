@@ -44,7 +44,6 @@ class DocumentFinder implements IFinder
                 array('meta.is_deleted' => TRUE)
             )));
         }
-
         $source = $this->getQuerySource();
         $resultSet = $source->search($query);
         
@@ -53,7 +52,12 @@ class DocumentFinder implements IFinder
 
     public function fetchAll($limit = 0, $offset = 0)
     {
-        $query = Elastica\Query::create(NULL);
+        $query = Elastica\Query::create(
+            new Elastica\Filter\BoolNot(new Elastica\Filter\Term(
+                array('meta.is_deleted' => TRUE)
+            ))
+        );
+
         $query->setLimit($limit)->setFrom($offset);
 
         $source = $this->getQuerySource();

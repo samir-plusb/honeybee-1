@@ -77,9 +77,20 @@ class MappingGeneratorPlugin
 
         return array('type' => 'multi_field', 'fields' => array(
             $fieldName => array('type' => $esType),
-            sprintf("%s.raw", $fieldName) => array(
+            'raw' => array(
                 'type' => $esType, 
-                'index' => 'not_analyzed'
+                'index' => 'not_analyzed',
+                'inlclude_in_all' => FALSE
+            ),
+            'sort' => array(
+                'type' => $esType,
+                'analyzer' => 'IcuAnalyzer_DE',
+                'inlclude_in_all' => FALSE
+            ),
+            'suggest' => array(
+                'type' => $esType,
+                'analyzer' => 'AutoCompleteAnalyzer',
+                'inlclude_in_all' => FALSE
             )
         ));
     }

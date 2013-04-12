@@ -138,7 +138,7 @@ class GenericStorage implements IStorage
         if (! $docType)
         {
             throw new \Exception(
-                "Invalid or corrupt type information within document data. Type: " . $docType
+                "[mapDomainDataToCouchDb] Invalid or corrupt type information within document data. Type: " . $docType
             );
         }
 
@@ -174,7 +174,7 @@ class GenericStorage implements IStorage
         if (! $docType)
         {
             throw new \Exception(
-                "Invalid or corrupt type information within document data. Type: " . $docType
+                "[mapCouchDbDataToDomain] Invalid or corrupt type information within document data. Type: " . $docType
             );
         }
 

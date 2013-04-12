@@ -12,7 +12,16 @@ class SuggestAction extends BaseAction
 
         $module = $this->getModule();
         $service = $module->getService();
-        $result = $service->suggestDocuments($term, $displayField);
+        $result = NULL;
+
+        if ($term)
+        {
+            $result = $service->suggestDocuments($term, $displayField);
+        }
+        else
+        {
+            $result = $service->fetchAll(0, 20);
+        }
 
         $suggestData = array();
         foreach ($result['documents'] as $document)

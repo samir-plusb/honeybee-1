@@ -29,6 +29,7 @@ do
     ls $patches_directory/$line | while read patch
 do
     echo " > Patch found: $patch"
+    echo $line
     patch -p0 -i $patches_directory/$line/$patch
 done
 cd ..
