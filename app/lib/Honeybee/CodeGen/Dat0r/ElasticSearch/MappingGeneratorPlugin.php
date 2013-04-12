@@ -35,7 +35,7 @@ class MappingGeneratorPlugin
             "_source" => array("enabled" => TRUE)
         );
 
-        $properties = array(
+        $defaultProperties = array(
             'identifier' => array(
                 'type' => 'string',
                 'index' => 'not_analyzed'
@@ -43,8 +43,23 @@ class MappingGeneratorPlugin
             'revision' => array(
                 'type' => 'string',
                 'index' => 'not_analyzed'
+            ),
+            'language' => array(
+                'type' => 'string',
+                'index' => 'not_analyzed'
+            ),
+            'version' => array(
+                'type' => 'integer'
+            ),
+            'shortId' => array(
+                'type' => 'integer'
+            ),
+            'slug' => array(
+                'type' => 'string',
+                'index' => 'not_analyzed'
             )
         );
+
         foreach ($moduleDefinition->getFields() as $name => $field)
         {
             $handlerFunc = sprintf(
@@ -54,10 +69,10 @@ class MappingGeneratorPlugin
 
             if (is_callable(array($this, $handlerFunc)))
             {
-                $properties[$name] = $this->$handlerFunc($name, $field, $moduleDefinition);
+                $defaultProperties[$name] = $this->$handlerFunc($name, $field, $moduleDefinition);
             }
         }
-        $indexDefinition['properties'] = (object)$properties;
+        $indexDefinition['properties'] = (object)$defaultProperties;
 
         $deployPath = $this->options['deployPath'];
         if (0 !== strpos($deployPath, DIRECTORY_SEPARATOR))
@@ -77,11 +92,6 @@ class MappingGeneratorPlugin
 
         return array('type' => 'multi_field', 'fields' => array(
             $fieldName => array('type' => $esType),
-            'raw' => array(
-                'type' => $esType, 
-                'index' => 'not_analyzed',
-                'inlclude_in_all' => FALSE
-            ),
             'sort' => array(
                 'type' => $esType,
                 'analyzer' => 'IcuAnalyzer_DE',

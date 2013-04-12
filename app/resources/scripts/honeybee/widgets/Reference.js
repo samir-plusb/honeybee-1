@@ -67,36 +67,26 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 query.term.toUpperCase()
             ) : -1;
 
-            var markup = [];
-
             if (match < 0) 
             {
-                markup.push(result.text);
-                return;
+                return result.text;
             }
 
             
             var parts = result.text.split(' ');
-            var i;
+            var markup = [], i;
 
             for (i = 0; i < parts.length; i++)
             {
-                if ( 0 === parts[i].toUpperCase().indexOf(query.term.toUpperCase()))
+                if (0 === parts[i].toUpperCase().indexOf(query.term.toUpperCase()))
                 {
-                    parts[i] = '<b>' + query.term + '</b>' + ;
+                    parts[i] = "<b>" + parts[i].substring(0, query.term.length) + "</b>" +
+                        parts[i].substring(query.term.length, parts[i].length);
                 }
-                else
-                {
-                    markup.push(parts[i]);
-                }
+                markup.push(parts[i]);
             }
-            markup.push(result.text.substring(0, match));
-            markup.push("<b>");
-            markup.push(result.text.substring(match, match + query.term.length));
-            markup.push("</b>");
-            markup.push(result.text.substring(match + query.term.length, result.text.length));
 
-            return markup.join('');
+            return markup.join(' ');
         };
 
         var formatSelection = function(result, element, query)
@@ -201,7 +191,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 {
                     if (is_processing)
                     {
-                        setTimeout(function(){ process_response(resp); }, 500);
+                        setTimeout(function(){ process_response(resp); }, 200);
                         return;
                     }
 

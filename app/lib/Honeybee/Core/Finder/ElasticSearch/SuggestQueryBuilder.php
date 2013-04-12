@@ -28,7 +28,7 @@ class SuggestQueryBuilder implements IQueryBuilder
         {   
             $sortDefs[] = $sortSpec;
         }
-        $sortDefs[] = array('_uid' => 'asc');
+        $sortDefs[] = array(sprintf('%s.sort', $field) => 'asc');
 
         return $query->addSort($sortDefs);
     }

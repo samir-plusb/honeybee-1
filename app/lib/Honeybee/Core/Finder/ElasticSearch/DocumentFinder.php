@@ -59,6 +59,9 @@ class DocumentFinder implements IFinder
         );
 
         $query->setLimit($limit)->setFrom($offset);
+        $query->addSort(
+            array(array('shortId' => 'desc'))
+        );
 
         $source = $this->getQuerySource();
         $resultSet = $source->search($query);

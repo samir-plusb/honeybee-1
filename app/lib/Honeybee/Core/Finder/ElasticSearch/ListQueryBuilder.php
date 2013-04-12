@@ -95,7 +95,7 @@ class ListQueryBuilder implements IQueryBuilder
         if (! $sortField)
         {
             return array(
-                array('_uid' => IListState::SORT_ASC)
+                array('shortId' => IListState::SORT_DESC)
             );
         }
 
@@ -117,7 +117,7 @@ class ListQueryBuilder implements IQueryBuilder
 
         return array(
             array($esSortFieldName => $sortDirection),
-            array('_uid' => IListState::SORT_ASC)
+            array('shortId' => IListState::SORT_DESC)
         );
     }
 }
