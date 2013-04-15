@@ -12,13 +12,16 @@ class ExportAction extends BaseAction
 
         $offset = 0;
         $limit = 100;
-        $data = $docService->fetchAll($offset, $limit);
+
+        $filter = array('workflowTicket.workflowStep' => 'published');
+        $searchSpec = array('filter' => $filter);
+
+        $data = $docService->find($searchSpec, $offset, $limit);
+        $totalDocs = $data['totalCount'];
         $curDocCount = count($data['documents']);
-        $docCollection = array();
-        
+
         while(0 < $curDocCount)
         {
-            $totalDocs = $data['totalCount'];
             $docCollection = $data['documents'];
 
             foreach ($docCollection as $document)
@@ -27,7 +30,7 @@ class ExportAction extends BaseAction
             }
 
             $offset += $limit;
-            $data = $docService->fetchAll($offset, $limit);
+            $data = $docService->find($searchSpec, $offset, $limit);
             $curDocCount = count($data['documents']);
         }
         

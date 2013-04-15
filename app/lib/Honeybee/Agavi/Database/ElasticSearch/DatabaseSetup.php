@@ -48,10 +48,10 @@ class DatabaseSetup implements IDatabaseSetup
             'number_of_replicas' => 1,
             'analysis' => array(
                 'analyzer' => array(
-                    'default' => array(
+                    "DefaultAnalyzer" => array(
                         'type' => 'custom',
-                        'tokenizer' => 'icu_tokenizer',
-                        'filter' => array('lowercase', 'snowball', 'icu_folding')
+                        'tokenizer' => 'whitespace',
+                        'filter' => array('lowercase')
                     ),
                     "AutoCompleteAnalyzer" => array(
                       "type" => "custom",

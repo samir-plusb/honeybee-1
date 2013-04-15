@@ -29,8 +29,8 @@ class MappingGeneratorPlugin
     public function execute($moduleDefinition)
     {
         $indexDefinition = array(
-            "index_analyzer" => "default",
-            "search_analyzer" => "default",
+            "index_analyzer" => "DefaultAnalyzer",
+            "search_analyzer" => "DefaultAnalyzer",
             "dynamic" => FALSE,
             "_source" => array("enabled" => TRUE)
         );

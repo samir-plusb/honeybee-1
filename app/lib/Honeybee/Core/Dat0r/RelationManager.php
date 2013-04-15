@@ -10,18 +10,18 @@ class RelationManager
 {
     private static $referencePool;
 
-    private static $referenceDepth = 0;
+    private static $recursionDepth = 0;
 
     public static function loadReferences(Document $document, array $data)
     {
         $referencedDocuments = array();
 
-        if (0 === self::$referenceDepth)
+        if (0 === self::$recursionDepth)
         {
             self::$referencePool = array();
         }
 
-        self::$referenceDepth++;
+        self::$recursionDepth++;
         self::$referencePool[$document->getIdentifier()] = $document;
 
         $referenceFields = $document->getModule()->getFields(
@@ -50,7 +50,7 @@ class RelationManager
             $referencedDocuments[$fieldname] = self::getReferenceDocuments($referenceField, $fieldData);
         }
 
-        self::$referenceDepth--;
+        self::$recursionDepth--;
 
         return $referencedDocuments;
     }

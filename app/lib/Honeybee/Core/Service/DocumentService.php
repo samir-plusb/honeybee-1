@@ -5,8 +5,7 @@ namespace Honeybee\Core\Service;
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\Tree;
-use Honeybee\Core\Finder\ElasticSearch\ListQueryBuilder;
-use Honeybee\Core\Finder\ElasticSearch\SuggestQueryBuilder;
+use Honeybee\Core\Finder\ElasticSearch;
 use Elastica;
 
 use ListConfig;
@@ -85,6 +84,15 @@ class DocumentService implements IService
         return $repository->find(NULL, $limit, $offset);
     }
 
+    public function find(array $spec, $offset, $limit)
+    {
+        $queryBuilder = new ElasticSearch\DefaultQueryBuilder();
+        $query = $queryBuilder->build($spec);
+        $repository = $this->module->getRepository();
+        
+        return $repository->find($query, $limit, $offset);
+    }
+
     public function delete(Document $document, $markOnly = TRUE)
     {
         if ($markOnly)
@@ -105,7 +113,7 @@ class DocumentService implements IService
     public function fetchListData(ListConfig $config, IListState $state)
     {
         // @todo Introduce a factory setting to allow inject the implementor for building queries.
-        $queryBuilder = new ListQueryBuilder();
+        $queryBuilder = new ElasticSearch\ListQueryBuilder();
         $query = $queryBuilder->build(
             array('config' => $config, 'state' => $state)
         );
@@ -120,7 +128,7 @@ class DocumentService implements IService
     public function suggestDocuments($term, $field, $sorting = array())
     {
         $repository = $this->module->getRepository();
-        $queryBuilder = new SuggestQueryBuilder();
+        $queryBuilder = new ElasticSearch\SuggestQueryBuilder();
         $query = $queryBuilder->build(
             array('term' => $term, 'field' => $field, 'sorting' => $sorting)
         );

@@ -12,14 +12,16 @@ class PublishJob extends BaseJob
     {
         $document = $this->loadDocument();
         $module = $document->getModule();
-        $service = $module->getService();
 
         $workflowStep = $document->getWorkflowTicket()->getWorkflowStep();
 
         if ('publish' === $workflowStep)
         {
-            // @todo integrate the export/deployment component here
-        
+            // @todo handle export errors and set corresponding workflow state.
+            $exportService = $module->getService('export');
+            $exportService->export('pulq-fe', $document);
+
+            // @todo promote should be configurable for each job, as you dont always want it.
             $workflowManager = $module->getWorkflowManager();
             $workflowManager->executeWorkflowFor($document, 'promote');
         }

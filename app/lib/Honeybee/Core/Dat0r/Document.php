@@ -91,10 +91,7 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
         }
 
         $slug = $this->getSlug();
-        if (empty($slug))
-        {
             $this->setSlug($this->buildSlug());
-        }
     }
 
     protected function hydrate(array $values = array())

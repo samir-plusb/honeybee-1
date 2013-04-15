@@ -26,13 +26,11 @@ class PublishPlugin extends BasePlugin
             );
             $queue->push(new PublishJob($jobData));
 
-            $result->setState(Plugin\Result::STATE_EXPECT_INPUT);
-            $result->setGate('promote');*/
-
+            $result->setState(Plugin\Result::STATE_EXPECT_INPUT);*/
+            
             $module = $resource->getModule();
             $exportService = $module->getService('export');
             $exportService->export('pulq-fe', $resource);
-
             $result->setState(Plugin\Result::STATE_OK);
             $result->setGate('promote');
 

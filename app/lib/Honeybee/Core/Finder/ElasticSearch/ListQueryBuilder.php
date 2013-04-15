@@ -8,7 +8,7 @@ use IListState;
 
 use Elastica;
 
-class ListQueryBuilder implements IQueryBuilder
+class ListQueryBuilder extends DefaultQueryBuilder
 {
     public function build(array $specification)
     {
@@ -41,50 +41,6 @@ class ListQueryBuilder implements IQueryBuilder
         }
 
         return $query;
-    }
-
-    protected function buildSearchQuery($search)
-    {
-        $query = NULL;
-
-        // @todo add "search syntax sugar" and parse it here.
-
-        $query = new Elastica\Query\Text();
-        $query->setFieldQuery('_all', $search);
-
-        return $query;
-    }
-
-    protected function buildFilter(array $filters)
-    {
-        $filter = NULL;
-
-        if (1 === count($filters))
-        {
-            $filter = new Elastica\Filter\Term($filters);
-        }
-        else if (1 < count($filters))
-        {
-            $filter = new Elastica\Filter\BoolAnd();
-
-            foreach ($filters as $fieldname => $fieldvalue)
-            {
-                if (! empty($fieldvalue))
-                {
-                    $filter->add(
-                        new Elastica\Filter\Term(array(
-                            $fieldname => $fieldvalue
-                        )
-                    ));
-                }
-            }
-        }
-        else
-        {
-            throw new Exception("You must supply at least one filter to the buildFilter method.");
-        }
-
-        return $filter;
     }
 
     protected function prepareSortingParams(IListConfig $config, IListState $state)
