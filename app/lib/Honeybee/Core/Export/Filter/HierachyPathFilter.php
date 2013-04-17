@@ -33,7 +33,6 @@ class HierachyPathFilter extends BaseFilter
         }
 
         $pathParts = array_reverse($pathParts);
-        array_shift($pathParts);
         $pathSep = $this->getConfig()->get('path_separator');
         $exportKey = $this->getConfig()->get('export_key');
 
