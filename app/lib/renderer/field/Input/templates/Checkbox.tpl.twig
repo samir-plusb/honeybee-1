@@ -2,6 +2,7 @@
     <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td)|raw}}</label>
     <div class="controls">
         <input type="hidden" name="{{ inputName }}" value="0" title="{{ placeholder }}" />
-        <input type="checkbox" name="{{ inputName }}" value="1" id="{{ fieldId }}" title="{{ placeholder }}" />
+        <input type="checkbox" name="{{ inputName }}" value="1" id="{{ fieldId }}" title="{{ placeholder }}" 
+             {% if true == fieldValue %} checked="checked" {% endif %} />
     </div>
 </div>
