@@ -33,8 +33,9 @@ class RemapFilter extends BaseFilter
         $parsedPath = self::getPartsFromPath($path);
         $curPart = $parsedPath['parts'][0];
         $value = &$array[$curPart];
+        $pathPartCount = count($parsedPath['parts']);
 
-        for ($i = 1; $i < count($parsedPath['parts']); $i++)
+        for ($i = 1; $i < $pathPartCount; $i++)
         {
             $curPart = $parsedPath['parts'][$i];
             $value = &$value[$curPart];
@@ -53,8 +54,9 @@ class RemapFilter extends BaseFilter
             $array[$curPart] = array();
         }
         $valuePath = &$array[$curPart];
-
-        for ($i = 1; $i < count($parsedPath['parts']); $i++)
+        $pathPartCount = count($parsedPath['parts']);
+        
+        for ($i = 1; $i < $pathPartCount; $i++)
         {
             $curPart = $parsedPath['parts'][$i];
             if (! isset($valuePath[$curPart]))
