@@ -19,18 +19,28 @@ class PublishPlugin extends BasePlugin
         {
             $resource = $this->getResource();
 
-            /*$queue = new JobQueue('prio:1-jobs');
+            /* @todo Reintegrate when we introduce queue in production:
+            $queue = new JobQueue('prio:1-jobs');
             $jobData = array(
                 'moduleClass' => get_class($resource->getModule()),
-                'documentId' => $resource->getIdentifier()
+                'documentId' => $resource->getIdentifier(),
+                'exports' => $this->getParameter('exports')
             );
             $queue->push(new PublishJob($jobData));
-
             $result->setState(Plugin\Result::STATE_EXPECT_INPUT);*/
             
             $module = $resource->getModule();
+
+            $exports = $this->getParameter('exports');
+            $exports = is_array($exports) ? $exports : array();
+
             $exportService = $module->getService('export');
-            $exportService->export('pulq-fe', $resource);
+
+            foreach ($exports as $exportName)
+            {
+                $exportService->export($exportName, $resource);
+            }
+            
             $result->setState(Plugin\Result::STATE_OK);
             $result->setGate('promote');
 
