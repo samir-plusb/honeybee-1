@@ -2,6 +2,7 @@
 
 namespace Honeybee\Core\Export\Filter;
 
+use Honeybee\Core\Dat0r\Tree;
 use Honeybee\Core\Dat0r\Document;
 use Dat0r\Core\Runtime\Document as Dat0r;
 use Dat0r\Core\Runtime\Field\ReferenceField;
@@ -19,19 +20,23 @@ class HierachyPathFilter extends BaseFilter
         );
 
         $curNode = $documentNode;
-        $pathParts = array($curNode->getIdentifier());
+        $pathParts = array($curNode->getDocument()->getShortIdentifier());
 
         while ($curNode->hasParent())
         {
             $curNode = $curNode->getParent();
-            $pathParts[] = $curNode->getIdentifier();
+
+            if (! ($curNode instanceof Tree\RootNode))
+            {
+                $pathParts[] = $curNode->getDocument()->getShortIdentifier();
+            }
         }
 
         $pathParts = array_reverse($pathParts);
         array_shift($pathParts);
         $pathSep = $this->getConfig()->get('path_separator');
         $exportKey = $this->getConfig()->get('export_key');
-        
+
         return array(
             $exportKey => $pathSep . implode($pathSep, $pathParts)
         );
