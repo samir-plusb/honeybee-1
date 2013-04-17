@@ -56,7 +56,7 @@ class PublishPlugin extends BasePlugin
                 $this->getResource()->getIdentifier(),
                 $e->getMessage()
             ));
-
+var_dump($e->getMessage());exit;
             $result->setState(Plugin\Result::STATE_OK);
             $result->setMessage($e->getMessage());
             $result->setGate('demote');

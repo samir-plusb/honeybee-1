@@ -169,6 +169,11 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
         // trim
         $text = trim($text, '-');
         // transliterate
+        $text = str_replace(
+            array('Ä', 'ä', 'Ö', 'ö', 'Ü', 'ü', 'ß'), 
+            array('Ae', 'ae', 'Oe', 'oe', 'Ue', 'ue', 'ss'), 
+            $text
+        );
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
         // lowercase
         $text = strtolower($text);

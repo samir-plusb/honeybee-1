@@ -151,7 +151,6 @@ class InteractivePlugin extends BasePlugin
         if ('published' === $ticket->getWorkflowStep())
         {
             $this->revokeResource($resource);
-            $module = $resource->getModule();
         }
     }
 
@@ -164,7 +163,7 @@ class InteractivePlugin extends BasePlugin
             'documentId' => $resource->getIdentifier(),
             'exports' => $this->getParameter('exports')
         );
-        $queue->push(new PublishJob($jobData));
+        $queue->push(new RevokeJob($jobData));
         $result->setState(Plugin\Result::STATE_EXPECT_INPUT);*/
         
         $module = $resource->getModule();
