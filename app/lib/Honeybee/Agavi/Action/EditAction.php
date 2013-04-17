@@ -9,8 +9,12 @@ class EditAction extends BaseAction
     public function executeRead(\AgaviRequestDataHolder $requestData)
     {
         $module = $this->getModule();
-        $document = $requestData->getParameter('document', $module->createDocument());
+        $document = $requestData->getParameter('document', NULL);
 
+        if (! $document)
+        {
+            $document = $module->createDocument();
+        }
         $this->setAttribute('module', $module);
         $this->setAttribute('document', $document);
 
