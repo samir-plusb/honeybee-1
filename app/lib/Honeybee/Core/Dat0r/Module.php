@@ -24,8 +24,8 @@ abstract class Module extends RootModule
     public function createDocument(array $data = array())
     {
         $document = parent::createDocument($data);
-
-        if (! ($ticket = $document->getWorkflowTicket()))
+        
+        if (! ($workflowName = $document->getWorkflowTicket()->getWorkflowName()))
         {
             $this->getWorkflowManager()->initWorkflowFor($document);
         }
