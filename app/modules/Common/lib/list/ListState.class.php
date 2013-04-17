@@ -18,6 +18,8 @@ class ListState implements IListState
 
     protected $filter = array();
 
+    protected $referenceField = FALSE;
+
     protected $searchMode = self::MODE_SEARCH;
 
     public static function create(array $data = array())
@@ -133,6 +135,16 @@ class ListState implements IListState
     public function getSearchMode()
     {
         return $this->searchMode;
+    }
+
+    public function getReferenceField()
+    {
+        return $this->referenceField;
+    }
+
+    public function isInSelectOnlyMode()
+    {
+        return ! empty($this->referenceField);
     }
 
     protected function __construct(array $data = array())

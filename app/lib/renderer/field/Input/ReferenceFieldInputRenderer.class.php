@@ -48,8 +48,10 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
             'autocomplete' => TRUE,
             'autocomp_mappings' => $this->buildAutoCompleteOptions(),
             'fieldname' => $this->generateInputName($document),
+            'realname' => $this->getField()->getName(),
             'max' => $maxCount,
             'tags' => $tags,
+            'tpl' => 'Stacked',
             'texts' =>  array(
                 'placeholder' => $tm->_('Verknüpfen'),
                 'searching' => $tm->_('Suche ...'),

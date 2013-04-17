@@ -44,6 +44,15 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             }
         });
 
+        var messageEventHandler = function(event)
+        {
+            if(event.origin == 'http://cms.familienportal.dev/')
+            {
+                alert(event.data);
+            }
+        }
+        window.addEventListener('message', messageEventHandler,false);
+
         honeybee.core.events.on('clearFilter', function() {
             that.reloadList({});
         });
@@ -185,6 +194,42 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
     ajaxCurry: function(url, data, method, type)
     {
         return honeybee.core.Request.curry(url, data, method, type);
+    },
+
+    onItemSelected: function(item)
+    {
+        if (true === this.options.select_only_mode)
+        {
+            var msg_payload = {
+                event_type: 'item-added',
+                reference_field: this.options.reference_field,
+                item: {
+                    id: item.data.identifier,
+                    text: item.data.title,
+                    module: 'topic'
+                }
+            };
+
+            window.top.postMessage(JSON.stringify(msg_payload), 'http://cms.familienportal.dev/');
+        }
+    },
+
+    onItemDeselected: function(item)
+    {
+        if (true === this.options.select_only_mode)
+        {
+            var msg_payload = {
+                event_type: 'item-removed',
+                reference_field: this.options.reference_field,
+                item: {
+                    id: item.data.identifier,
+                    text: item.data.title,
+                    module: 'topic'
+                }
+            };
+
+            window.top.postMessage(JSON.stringify(msg_payload), 'http://cms.familienportal.dev/');
+        }
     }
 });
 

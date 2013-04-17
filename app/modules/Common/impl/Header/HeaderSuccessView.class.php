@@ -52,7 +52,10 @@ class Common_Header_HeaderSuccessView extends CommonBaseView
         $sortedModules = array();
         foreach ($customModuleSortOrder as $moduleName)
         {
-            $sortedModules[$moduleName] = $modules[$moduleName];
+            if (isset($modules[$moduleName]))
+            {
+                $sortedModules[$moduleName] = $modules[$moduleName];
+            }   
         }
 
         // add all modules that were not specified in project/config/settings.xml

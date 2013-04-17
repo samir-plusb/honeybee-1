@@ -52,7 +52,8 @@ class Common_ListAction extends CommonBaseAction
                 $routing->gen(sprintf('%s.edit', $listConfig->getTypeKey()))
             ))
         );
-
+        $clientSideOptions['options']['select_only_mode'] = $listState->isInSelectOnlyMode();
+        $clientSideOptions['options']['reference_field'] = $listState->getReferenceField();
         $this->setAttribute('client_side_controller', $clientSideOptions);
         $this->setAttribute('list_route', $listConfig->getRouteName());
         $this->setAttribute('translation_domain', $listConfig->getTranslationDomain());
@@ -136,7 +137,7 @@ class Common_ListAction extends CommonBaseAction
             'metaData' => array(
                 'search' => $listState->getSearch(),
                 'has_filter' => $listState->hasFilter(),
-                'item_count' => count($listData)
+                'item_count' => $listState->getTotalCount()
             )
         );
     }

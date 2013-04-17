@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+    {% set locale = tm.getCurrentLocale() %}
+    {% set dir = locale.getCharacterOrientation() == 'right-to-left' ? 'rtl' : 'ltr' %}
+    {% set is_error_page = TRUE == rq.getAttribute('is_error_page') %}
+<!DOCTYPE HTML>
+<html 
+    xmlns="http://www.w3.org/1999/xhtml" 
+    xml:lang="{{ locale.getLocaleLanguage() }}" 
+    lang="{{ locale.getLocaleLanguage() }}" 
+    dir="{{ dir }}" {{ rq.getAttribute('is_error_page') ? 'class="error-page"' : '' }}>
+    <head>
+        <title>{{ _title }}</title>
+        <base href="{{ ro.getBaseHref() }}" id="base_href"/>
+        <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+        <!-- GoogleMaps code - @todo get this sucker oughta here! -->
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript" src="static/ckeditor/ckeditor.js"></script>
+        <!-- %%STYLESHEETS%% -->
+    </head>
+    <body class="ctx-reference-access">
+        {{ inner|raw }}
+        <!-- %%JAVASCRIPTS%% -->
+    </body>
+</html>

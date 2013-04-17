@@ -67,7 +67,7 @@ honeybee.widgets.SearchWidget = honeybee.widgets.Widget.extend({
         this.search = ko.observable(this.options.search || '');
         this.sort_direction = ko.observable(this.options.sort_direction);
         this.sort_field = ko.observable(this.options.sort_field);
-        this.search_url = ko.observable(this.options.search_url);
+        this.search_url = ko.observable(this.options.search_url.replace(/\&amp;/ig, '&'));
         this.has_filter_dialog = ko.observable(this.filter_dialog.length === 1);
         var that = this;
         this.has_search = ko.computed(function()
@@ -81,7 +81,8 @@ honeybee.widgets.SearchWidget = honeybee.widgets.Widget.extend({
     // ##################################
     doSearch: function()
     {
-        return true;
+        window.location.href = this.search_url() + '&search=' + this.search();
+        return false;
     },
 
     showFilterDialog: function()
@@ -93,6 +94,7 @@ honeybee.widgets.SearchWidget = honeybee.widgets.Widget.extend({
     resetSearchPhrase: function()
     {
         this.search('');
+
         this.form.find('.search-query').focus();
     }
 });
@@ -102,7 +104,7 @@ honeybee.widgets.SearchWidget = honeybee.widgets.Widget.extend({
 // #####################
 honeybee.widgets.SearchWidget.DEFAULT_OPTIONS = {
     autobind: true,
-    search_url: window.location.href,
+    search_url: '',
     filter_url: '',
     search: '',
     sort_direction: 'desc',

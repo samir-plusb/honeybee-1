@@ -7,8 +7,12 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
     select2_element: null,
 
+    reference_list_modal: null,
+
     // <knockout_props>
     fieldname: null,
+
+    realname: null,
 
     tags: null,
     // </knockout_props>
@@ -29,11 +33,62 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     initGui: function()
     {
         this.parent();
+        var that = this;
 
         if (this.options.autocomplete)
         {
             this.initAutoComplete();
         }
+
+        var messageEventHandler = function(event)
+        {
+            if(event.origin == 'http://cms.familienportal.dev')
+            {
+                var msg_data = JSON.parse(event.data);
+                if (msg_data.reference_field == that.options.realname)
+                {
+                    if (msg_data.event_type === 'item-removed')
+                    {
+                        var to_remove = null;
+                        for (var i = 0; i < that.tags().length && ! to_remove; i++)
+                        {
+                            if (that.tags()[i].id === msg_data.item.id)
+                            {
+                                to_remove = that.tags()[i];
+                            }
+                        }
+                        if (to_remove)
+                        {
+                            that.tags.remove(to_remove);
+                        }
+                    }
+                    else if(msg_data.event_type === 'item-added')
+                    {
+                        var allready_added = null;
+                        var item_data = {
+                            id: msg_data.item.id,
+                            text: msg_data.item.text,
+                            module_prefix: msg_data.item.module,
+                            label: msg_data.item.text 
+                        };
+                        for (var i = 0; i < that.tags().length && ! to_remove; i++)
+                        {
+                            if (that.tags()[i].id === item_data.id)
+                            {
+                                allready_added = that.tags()[i];
+                            }
+                        }
+                        if (! allready_added)
+                        {
+                            that.tags.push(item_data);
+                        }
+                    }
+                    
+                    that.element.find('.tagslist-input').select2('data', that.tags());
+                }
+            }
+        }
+        window.addEventListener('message', messageEventHandler,false);
     },
 
     initKnockoutProperties: function()
@@ -47,6 +102,17 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     {
         this.tags.remove(tag);
         this.element.find('.tagslist-input').select2('data', this.tags());
+    },
+
+    openReferenceListView: function()
+    {
+        var that = this;
+        this.element.find('.reference-list-access')[0].onload = function()
+        {
+            that.reference_list_modal = that.element.find('.modal-reference-list').first().modal({'show': true});
+        };
+
+        this.element.find('.reference-list-access')[0].contentDocument.location.reload(true);
     },
 
     // #########################

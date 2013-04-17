@@ -23,13 +23,22 @@ class Common_List_ListSuccessView extends CommonBaseView
         $listConfig = $parameters->getParameter('config');
         $listState = $parameters->getParameter('state');
         $routing = $this->getContext()->getRouting();
+        $listRoute = $listConfig->getRouteName();
         $searchWidgetOpts = array(
             'search' => $listState->getSearch(),
             'limit' => $listState->getLimit(),
             'sort_field' => $listState->getSortField(),
             'sort_direction' => $listState->getSortDirection(),
-            'filter_url' => $routing->gen($listConfig->getRouteName(), array('offset' => 0, 'limit' => $listState->getLimit()))
+            'search_url' => urldecode($routing->gen($listRoute, array(
+                'offset' => 0, 
+                'limit' => $listState->getLimit()
+            ))),
+            'filter_url' => urldecode($routing->gen($listRoute, array(
+                'offset' => 0, 
+                'limit' => $listState->getLimit()
+            )))
         );
+
         $this->setAttribute('is_filtered', $listState->hasFilter());
         if ($listState->hasFilter())
         {
@@ -40,9 +49,13 @@ class Common_List_ListSuccessView extends CommonBaseView
         ));
         $this->setAttribute(
             'list_base_url',
-            $routing->gen($listConfig->getRouteName(), array('offset' => 0, 'limit' => $listState->getLimit()))
+            $routing->gen($listRoute, array(
+                'offset' => 0, 
+                'limit' => $listState->getLimit()
+            ))
         );
 
+        $this->setAttribute('select_only_mode', $listState->isInSelectOnlyMode());
         $this->setAttribute('has_tree_view', $listConfig->hasTreeView());
 
         $this->getLayer('content')->setSlot(

@@ -57,6 +57,7 @@ class Common_PaginateAction extends CommonBaseAction
             'total_count' => $totalCount,
             'total_pages' => $totalPages,
             'route_name' => $routeName,
+            'select_only_mode' => $listState->isInSelectOnlyMode(),
             'sorting' => array(
                 'direction' => $listState->getSortDirection(),
                 'field' => $listState->getSortField()

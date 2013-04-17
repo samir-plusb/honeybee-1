@@ -16,10 +16,11 @@ class ListSuccessView extends BaseView
      */
     public function executeHtml(\AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $this->setupHtml($parameters);
+        $layout = $this->hasAttribute('referenceField') ? 'reference' : NULL;
+        $this->setupHtml($parameters, $layout);
         $module = $this->getAttribute('module');
 
-	$tm = $this->getContext()->getTranslationManager();
+        $tm = $this->getContext()->getTranslationManager();
         $this->setAttribute('_title', $tm->_($module->getName(), 'modules.labels') . ': ' . $tm->_('List view', 'modules.labels'));
 
         $this->getLayer('content')->setSlot(

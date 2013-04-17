@@ -27,9 +27,11 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
         this.parent();
 
         this.ctrl = controller;
+        var that = this;
         this.workflow_handler = this.ctrl.workflow_handler;
         this.dont_toggle = false; // helper to prevent toggle recursion.
         this.selected_items = ko.observableArray();
+        
         this.list_items = ko.observableArray();
         this.all_selected = ko.observable(false);
         this.all_selected.subscribe(this.toggleAllItemsSelection.bind(this));
@@ -41,10 +43,6 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
 
         this.has_filter = ko.observable(false);
         this.has_search = ko.observable(false);
-        this.item_count = ko.computed(function()
-        {
-            return that.list_items().length;
-        });
 
         this.initItems(list_data.listItems);
         this.initMetadata(list_data.metaData);
@@ -64,6 +62,7 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
     {
         this.has_search(metaData.search ? true : false);
         this.has_filter(metaData.has_filter);
+        this.item_count = ko.observable(metaData.item_count);
     },
 
     clearFilter: function() {
@@ -83,10 +82,12 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
         if (item.selected())
         {
             this.selected_items.push(item);
+            this.ctrl.onItemSelected(item);
         }
         else
         {
             this.selected_items.remove(item);
+            this.ctrl.onItemDeselected(item);
         }
 
         if (this.dont_toggle) return;

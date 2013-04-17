@@ -27,6 +27,10 @@ class ListStateValidator extends AgaviValidator
             'base' => 'sorting',
             'min' => 1
         ),
+        'referenceField' => array(
+            'class' => 'AgaviStringValidator',
+            'required' => false
+        ),
         'direction' => array(
             'class' => 'AgaviInarrayValidator',
             'base' => 'sorting',
