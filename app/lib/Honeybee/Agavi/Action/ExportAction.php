@@ -7,7 +7,7 @@ class ExportAction extends BaseAction
     public function executeWrite(\AgaviRequestDataHolder $parameters)
     {
         $module = $this->getModule();
-        $exportName = $parameters->getExport('provider', 'pulq-fe');
+        $exportName = $parameters->getParameter('provider', 'pulq-fe');
         $exportService = $module->getService('export');
         $docService = $module->getService();
 
