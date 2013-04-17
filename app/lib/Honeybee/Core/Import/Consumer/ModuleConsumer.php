@@ -43,8 +43,41 @@ class ModuleConsumer extends BaseConsumer
      */
     protected function processData(array $data)
     {
-        $this->module->getService()->save(
-            $this->module->createDocument($data)
-        );
+        $updateField = $this->getConfig()->get('update_field');
+        $document = NULL;
+
+        if (($updateValue = Filter\RemapFilter::getArrayValue($data, $updateField)))
+        {
+            $parsedPath = Filter\RemapFilter::getPartsFromPath($updateField);
+            $updateFilterField = implode('.', $parsedPath['parts']);
+
+            $searchSpec = array('filter' => array($updateFilterField => $updateValue));
+            $result = $this->module->getService()->find($searchSpec, 0, 1);
+
+            if (1 < $result['totalCount'])
+            {
+                // wtf, multiple update candidates found ...
+                error_log(__METHOD__ . " - Skipping import dataset due to multiple update candidates.");
+            }
+            else if (0 < $result['totalCount'])
+            {
+                $document = $result['documents'][0];
+                $document->setValues($data);
+            }
+            else
+            {
+                $document = $this->module->createDocument($data);
+            }
+        }
+        else
+        {
+            // really import this stuff, if we couldn't find an update value (origin info)?
+            $document = $this->module->createDocument($data);
+        }
+        
+        if ($document)
+        {
+            $this->module->getService()->save($document);
+        }
     }
 }
