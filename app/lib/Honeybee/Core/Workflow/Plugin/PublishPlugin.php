@@ -38,7 +38,7 @@ class PublishPlugin extends BasePlugin
 
             foreach ($exports as $exportName)
             {
-                $exportService->export($exportName, $resource);
+                $exportService->publish($exportName, $resource);
             }
             
             $result->setState(Plugin\Result::STATE_OK);

@@ -10,7 +10,7 @@ interface IExport
 
     public function getDescription();
 
-    public function export(Document $document);
+    public function publish(Document $document);
 
     public function revoke(Document $document);
 

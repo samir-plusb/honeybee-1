@@ -26,9 +26,9 @@ class Service implements IService
         );
     }
 
-    public function export($exportName, Document $document)
+    public function publish($exportName, Document $document)
     {
-        return $this->getExport($exportName)->export($document);
+        return $this->getExport($exportName)->publish($document);
     }
 
     public function revoke($exportName, Document $document)
