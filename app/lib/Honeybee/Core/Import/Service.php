@@ -2,40 +2,41 @@
 
 namespace Honeybee\Core\Import;
 
+use Honeybee\Core\Dat0r\Module;
+use Honeybee\Core\Service\IService;
 use Honeybee\Core\Config;
 
-/*
-$service = new Import\Service();
-$report = $service->consume('test-consumer', array(), array('data' => array(
-    array('title' => 'Foo title', 'teaser' => 'Bar teaser'),
-    array('title' => 'Baz 2 title', 'teaser' => 'Baz 2 teaser', 'asdad' => 'asasdaf')
-)));
-*/
-class Service
+class Service implements IService
 {
+    protected $module;
+
+    protected $imports;
+
     protected $consumerConfig;
 
-    protected $providerConfig;
-
-    public function __construct()
+    public function __construct(Module $module)
     {
-        // @todo Use Config\AgaviXmlConfig here
-        $this->consumerConfig = include \AgaviConfigCache::checkConfig(
-            \AgaviConfig::get('core.config_dir') . '/import.consumers.xml'
+        $this->module = $module;
+        $this->imports = array();
+
+        $importConfig = new Config\AgaviXmlConfig(
+            \AgaviConfig::get('core.modules_dir') . '/' . $module->getName() . '/config/imports.xml'
         );
-        $this->consumerConfig = $this->consumerConfig['consumers'];
-        // @todo Use Config\AgaviXmlConfig here
-        $this->providerConfig = include \AgaviConfigCache::checkConfig(
-            \AgaviConfig::get('core.config_dir') . '/import.providers.xml'
-        );
-        $this->providerConfig = $this->providerConfig['providers'];
+
+        $this->consumerConfig = new Config\ArrayConfig($importConfig->get('consumers'));
     }
 
     public function consume($consumerName, $consumerParams = array(), $providerParams = array())
     {
         $consumer = $this->getConsumer($consumerName, $consumerParams);
-        $consumerDef = $this->consumerConfig[$consumerName];
-        $provider = $this->getProvider($consumerDef['provider'], $providerParams);
+
+        if (! $consumer)
+        {
+            throw new \InvalidArgumentException("Consumer '$consumerName' could not be resolved. Typo in argument or config?");
+        }
+
+        $consumerDef = $this->consumerConfig->get($consumerName);
+        $provider = $this->createEntity($consumerDef['provider'], $providerParams);
         
         return $consumer->consume($provider);
     }
@@ -44,9 +45,14 @@ class Service
     {
         $consumer = NULL;
 
-        if (isset($this->consumerConfig[$name]))
+        if (isset($this->imports[$name]))
         {
-            $consumerDef = $this->consumerConfig[$name];
+            return $this->imports[$name];
+        }
+
+        if ($this->consumerConfig->has($name))
+        {
+            $consumerDef = $this->consumerConfig->get($name);
             $consumer = $this->createEntity($consumerDef, $parameters);
             
             $filters = new Filter\FilterList();
@@ -58,20 +64,9 @@ class Service
 
             $consumer->setFilters($filters);
         }
+        $this->imports[$name] = $consumer;
 
         return $consumer;
-    }
-
-    public function getProvider($name, array $parameters = array())
-    {
-        $provider = NULL;
-
-        if (isset($this->providerConfig[$name]))
-        {
-            $provider = $this->createEntity($this->providerConfig[$name], $parameters);
-        }
-
-        return $provider;
     }
 
     protected function createEntity(array $factoryInfo, array $parameters)
