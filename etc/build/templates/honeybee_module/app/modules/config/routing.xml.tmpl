@@ -19,7 +19,18 @@
 
     <ae:configuration context="console">
         <routes>
-            <route pattern="%%MODULE_PREFIX%%.export" module="%%MODULE_NAME%%" action="Export" method="write" />
+            <route pattern="%%MODULE_PREFIX%%.export" module="%%MODULE_NAME%%" action="Export" method="write">
+                <ae:parameter name="implementor">Honeybee\Domain\%%MODULE_NAME%%\%%MODULE_NAME%%Module</ae:parameter>
+                <callbacks>
+                  <callback class="Honeybee\Agavi\Routing\ModuleRoutingCallback"/>
+                </callbacks>
+            </route>
+            <route pattern="%%MODULE_PREFIX%%.import" module="%%MODULE_NAME%%" action="Import" method="write">
+                <ae:parameter name="implementor">Honeybee\Domain\%%MODULE_NAME%%\%%MODULE_NAME%%Module</ae:parameter>
+                <callbacks>
+                  <callback class="Honeybee\Agavi\Routing\ModuleRoutingCallback"/>
+                </callbacks>
+            </route>
         </routes>
     </ae:configuration>
 </ae:configurations>

@@ -26,6 +26,15 @@
 
                 <step name="publish">
                     <description>Tries to publish a given %%MODULE_PREFIX%% document.</description>
+                    <!-- Register your exports here; consumer front-ends etc.
+                    <ae:parameters>
+                        <ae:parameter name="exports">
+                            <ae:parameters>
+                                <ae:parameter>pulq-fe</ae:parameter>
+                            </ae:parameters>
+                        </ae:parameter>
+                    </ae:parameters> 
+                    -->
                     <plugin type="Honeybee\Core\Workflow\Plugin\PublishPlugin">
                         <gates>
                             <gate_step label="publishing ok" name="promote">published</gate_step>
