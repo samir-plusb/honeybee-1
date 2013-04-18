@@ -2,6 +2,8 @@
 
 namespace Honeybee\Core\Workflow\Plugin;
 
+use Honeybee\Core\Workflow;
+
 /**
  * The WorkflowInteractivePlugin serves as the base for interactive plugins.
  * Plugins are considered as interactive when they depend on user input for processing.
@@ -148,9 +150,32 @@ class InteractivePlugin extends BasePlugin
 
         if ('published' === $ticket->getWorkflowStep())
         {
-            $module = $resource->getModule();
-            $exportService = $module->getService('export');
-            $exportService->revoke('pulq-fe', $resource);
+            $this->revokeResource($resource);
+        }
+    }
+
+    protected function revokeResource(Workflow\IResource $resource)
+    {
+        /* @todo Reintegrate when we introduce queue in production:
+        $queue = new JobQueue('prio:1-jobs');
+        $jobData = array(
+            'moduleClass' => get_class($resource->getModule()),
+            'documentId' => $resource->getIdentifier(),
+            'exports' => $this->getParameter('exports')
+        );
+        $queue->push(new RevokeJob($jobData));
+        $result->setState(Plugin\Result::STATE_EXPECT_INPUT);*/
+        
+        $module = $resource->getModule();
+
+        $exports = $this->getParameter('exports');
+        $exports = is_array($exports) ? $exports : array();
+
+        $exportService = $module->getService('export');
+
+        foreach ($exports as $exportName)
+        {
+            $exportService->revoke($exportName, $resource);
         }
     }
 }

@@ -149,6 +149,9 @@ class ModuleFactory
             case 'tree':
                 $default = 'Honeybee\\Core\\Service\\TreeService';
                 break;
+            case 'import':
+                $default = 'Honeybee\\Core\\Import\\Service';
+                break;
             case 'export':
                 $default = 'Honeybee\\Core\\Export\\Service';
                 break;

@@ -30,12 +30,12 @@
                 <ae:parameter name="fields">
                     <ae:parameter name="title">
                         <ae:parameter name="valuefield">title</ae:parameter>
-                        <ae:parameter name="sortfield">title.title.raw</ae:parameter>
+                        <ae:parameter name="sortfield">title.sort</ae:parameter>
                     </ae:parameter> 
                      <ae:parameter name="state">
                         <ae:parameter name="valuefield">workflowTicket.workflowStep</ae:parameter>
                         <ae:parameter name="renderer">WorkflowStepListRenderer</ae:parameter>
-                        <ae:parameter name="sortfield">workflowTicket.workflowStep.workflowStep.raw</ae:parameter>
+                        <ae:parameter name="sortfield">workflowTicket.workflowStep.sort</ae:parameter>
                     </ae:parameter> 
                 </ae:parameter> -->
 
@@ -113,13 +113,32 @@
             </setting>
             -->
 
-            <!-- Custom renderer configuration
+            <!-- Custom renderer configuration -->
             <setting name="rendering_config">
+                <!-- asset widget renderer example
                 <ae:parameter name="image">
                     <ae:parameter name="input">ImageFieldInputRenderer</ae:parameter>
                 </ae:parameter>
+                -->
+                <ae:parameter name="identifier">
+                    <ae:parameter name="input">KoReadOnlyFieldInputRenderer</ae:parameter>
+                </ae:parameter>
+                <ae:parameter name="shortId">
+                    <ae:parameter name="input">KoReadOnlyFieldInputRenderer</ae:parameter>
+                </ae:parameter>
+                <ae:parameter name="revision">
+                    <ae:parameter name="input">KoReadOnlyFieldInputRenderer</ae:parameter>
+                </ae:parameter>
+                <ae:parameter name="uuid">
+                    <ae:parameter name="input">KoReadOnlyFieldInputRenderer</ae:parameter>
+                </ae:parameter>
+                <ae:parameter name="language">
+                    <ae:parameter name="input">KoReadOnlyFieldInputRenderer</ae:parameter>
+                </ae:parameter>
+                <ae:parameter name="version">
+                    <ae:parameter name="input">KoReadOnlyFieldInputRenderer</ae:parameter>
+                </ae:parameter>
             </setting>
-            -->
 
             <!--
             <setting name="tree_config">

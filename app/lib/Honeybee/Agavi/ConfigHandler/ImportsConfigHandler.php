@@ -2,12 +2,12 @@
 
 namespace Honeybee\Agavi\ConfigHandler;
 
-class ImportConsumerConfigHandler extends BaseConfigHandler
+class ImportsConfigHandler extends BaseConfigHandler
 {
     /**
      * Holds the name of the data_import document schema namespace.
      */
-    const XML_NAMESPACE = 'http://berlinonline.de/schemas/honeybee/config/consumer/definition/1.0';
+    const XML_NAMESPACE = 'http://berlinonline.de/schemas/honeybee/imports/1.0';
 
     /**
      * Execute this configuration handler.
@@ -90,15 +90,37 @@ class ImportConsumerConfigHandler extends BaseConfigHandler
             );
         }
 
+        $descriptionNode = $consumerElement->getChild('description');
+        $providerNode = $consumerElement->getChild('provider');
+        $parsedProvider = $this->parseProviderDefinition($providerNode);
+
         return array(
             'name' => trim($consumerElement->getAttribute('name')),
-            'description' => trim($consumerElement->getChild('description')->getValue()),
+            'description' => $descriptionNode ? trim($descriptionNode->getValue()) : '',
             'class' => trim($consumerElement->getAttribute('class')),
             'settings' => $settings,
             'filters' => $filters, 
-            'provider' => trim(
-                $consumerElement->getChild('provider')->getAttribute('ref')
-            )
+            'provider' => $parsedProvider
         );
     }
+
+    protected function parseProviderDefinition(\AgaviXmlConfigDomElement $providerNode)
+    {
+        $descriptionNode = $providerNode->getChild('description');
+
+        $providerDefinition = array();
+        $providerDefinition['name'] = $providerNode->getAttribute('name');
+        $providerDefinition['class'] = $providerNode->getAttribute('class');
+        $providerDefinition['description'] = $descriptionNode ? trim($descriptionNode->getValue()) : '';
+
+        $settings = array();
+        if (($settingsElement = $providerNode->getChild('settings')))
+        {
+            $settings = $this->parseSettings($settingsElement);
+        }
+        $providerDefinition['settings'] = $settings;
+
+        return $providerDefinition;
+    }
 }
+

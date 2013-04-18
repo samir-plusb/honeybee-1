@@ -25,7 +25,7 @@ class DocumentExport implements IExport
         $this->description = $description;
     }
 
-    public function export(Document $document)
+    public function publish(Document $document)
     {
         $data = $this->buildExportData($document);
         $data['identifier'] = $document->getShortIdentifier();

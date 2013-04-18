@@ -21,8 +21,6 @@ class ArchivePlugin extends BasePlugin
             $result->setState(Plugin\Result::STATE_OK);
             $result->setGate('promote');
             
-            // depublish document from consumers eg. frontends etc.?
-
             $this->logInfo(sprintf(
                 "Successfully depublished and archived document: %s",
                 $resource->getIdentifier()

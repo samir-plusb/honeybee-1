@@ -71,7 +71,7 @@ abstract class BaseConfig implements IConfig
      */
     public function has($setting)
     {
-        return isset($this->settings[$setting]);
+        return array_key_exists($setting, $this->settings);
     }
 
     /**

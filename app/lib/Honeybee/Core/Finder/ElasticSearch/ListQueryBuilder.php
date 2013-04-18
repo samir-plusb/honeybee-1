@@ -57,13 +57,13 @@ class ListQueryBuilder extends DefaultQueryBuilder
 
         if (! $config->hasField($sortField))
         {
-            throw new Exception("The given sortfield '$sortField' does not exist within the currently loaded config.");
+            throw new \Exception("The given sortfield '$sortField' does not exist within the currently loaded config.");
         }
 
         $listField = $config->getField($sortField);
         if (! $listField->hasSortfield())
         {
-            throw new Exception(
+            throw new \Exception(
                 "The given sortfield '$sortField' does not support sorting." . PHP_EOL .
                 " Make sure to add a 'sortfield' param to your corresponding listconfg."
             );

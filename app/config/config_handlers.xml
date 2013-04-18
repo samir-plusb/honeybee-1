@@ -21,31 +21,24 @@
                 <validation>%core.config_dir%/xsd/access_control.xsd</validation>
             </handler>
 
+            <handler pattern="workflows.xml" class="Honeybee\Agavi\ConfigHandler\WorkflowConfigHandler">
+                <validation>%core.config_dir%/xsd/workflows.xsd</validation>
+                <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/workflow/1.0</ae:parameter>
+            </handler>
+
             <handler pattern="exports.xml" class="Honeybee\Agavi\ConfigHandler\ExportsConfigHandler">
                 <ae:parameters>
                     <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/exports/1.0</ae:parameter>
                 </ae:parameters>
             </handler>
 
-            <handler pattern="workflows.xml" class="Honeybee\Agavi\ConfigHandler\WorkflowConfigHandler">
-                <validation>%core.config_dir%/xsd/workflows.xsd</validation>
-                <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/workflow/1.0</ae:parameter>
-            </handler>
-
-            <handler pattern="import.consumers.xml" class="Honeybee\Agavi\ConfigHandler\ImportConsumerConfigHandler">
-                <validation>%core.config_dir%/xsd/import_consumer.xsd</validation>
+            <handler pattern="imports.xml" class="Honeybee\Agavi\ConfigHandler\ImportsConfigHandler">
+                <validation>%core.config_dir%/xsd/imports.xsd</validation>
                 <ae:parameters>
-                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/config/consumer/definition/1.0</ae:parameter>
+                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/imports/1.0</ae:parameter>
                 </ae:parameters>
             </handler>
             
-            <handler pattern="import.providers.xml" class="Honeybee\Agavi\ConfigHandler\ImportProviderConfigHandler">
-                <validation>%core.config_dir%/xsd/import_provider.xsd</validation>
-                <ae:parameters>
-                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/config/provider/definition/1.0</ae:parameter>
-                </ae:parameters>
-            </handler>
-
         </handlers>
     </ae:configuration>
 </ae:configurations>

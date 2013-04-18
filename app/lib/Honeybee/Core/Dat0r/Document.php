@@ -26,13 +26,7 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
 
     public function getIdentifier()
     {
-        return sprintf(
-            '%s-%s-%s-%s',
-            $this->getModule()->getOption('prefix'),
-            $this->getValue('uuid'), 
-            $this->getValue('language'), 
-            $this->getValue('version')
-        );
+        return $this->getValue('identifier');
     }
 
     public function getShortIdentifier()
@@ -91,10 +85,11 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
         }
 
         $slug = $this->getSlug();
-            $this->setSlug($this->buildSlug());
+            $this->setSlug($this->buildSlug()
+        );
     }
 
-    protected function hydrate(array $values = array())
+    protected function hydrate(array $values = array(), $applyDefaults = FALSE)
     {
         $referenceData = array();
 
@@ -110,11 +105,22 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
             }
         }
 
-        parent::hydrate($values);
+        parent::hydrate($values, $applyDefaults);
 
-        if (! $this->hasValue('uuid'))
+        if ($applyDefaults)
         {
-            $this->setValue('uuid', $this->getValue('uuid'));
+            if (! $this->hasValue('uuid'))
+            {
+                $this->setValue('uuid', $this->getValue('uuid'));
+            }
+        
+            $this->setIdentifier(sprintf(
+                '%s-%s-%s-%s',
+                $this->getModule()->getOption('prefix'),
+                $this->getValue('uuid'), 
+                $this->getValue('language'), 
+                $this->getValue('version')
+            ));
         }
 
         foreach (RelationManager::loadReferences($this, $referenceData) as $fieldname => $refDocuments)
@@ -163,6 +169,11 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
         // trim
         $text = trim($text, '-');
         // transliterate
+        $text = str_replace(
+            array('Ä', 'ä', 'Ö', 'ö', 'Ü', 'ü', 'ß'), 
+            array('Ae', 'ae', 'Oe', 'oe', 'Ue', 'ue', 'ss'), 
+            $text
+        );
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
         // lowercase
         $text = strtolower($text);
