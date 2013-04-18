@@ -46,9 +46,18 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
         var messageEventHandler = function(event)
         {
-            if(event.origin == 'http://cms.familienportal.dev/')
+            if(event.origin == 'http://cms.familienportal.dev')
             {
-                alert(event.data);
+                var msg_data = JSON.parse(event.data);
+                var cur_item, i;
+                for (i = 0; i < that.viewmodel.list_items().length; i++)
+                {
+                    cur_item = that.viewmodel.list_items()[i];
+                    if (-1 !== msg_data.selected_doc_ids.indexOf(cur_item.data.identifier))
+                    {
+                        cur_item.selected(true);
+                    }
+                }
             }
         }
         window.addEventListener('message', messageEventHandler,false);
@@ -56,6 +65,14 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         honeybee.core.events.on('clearFilter', function() {
             that.reloadList({});
         });
+
+        window.top.postMessage(
+            JSON.stringify({
+                'event_type': 'list-loaded', 
+                'reference_field': this.options.reference_field
+            }),
+            'http://cms.familienportal.dev/'
+        );
     },
 
     reloadList: function(parameters)

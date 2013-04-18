@@ -124,12 +124,12 @@ body
   cursor: default;
 }
 
-.tagslist-list .tagslist-tag i
+.tagslist-list .tagslist-tag .icon-remove
 {
   display: block;
   position: absolute;
-  right: 10px;
-  top: 8px;
+  right: 1px;
+  top: 5px;
   text-align: center;
 }
 
@@ -166,12 +166,14 @@ body
 
 }
 
-.tagslist-list-view
+.tagslist-list-view.refbrowser-open
 {
   display: block;
   position: absolute;
+  text-decoration: none;
+  outline: none;
   right: 18px;
-  top: 5px;
+  top: 8px;
 }
 
 .tagslist-input-wrapper
@@ -186,6 +188,12 @@ body
   display: inline-block;
   padding: 0.3em 0.4em 0.3em 0.3em;
   cursor: pointer;
+}
+
+.nav-stacked .tagslist-tag .icon-remove
+{
+  right: 10px;
+  top: 8px;
 }
 
 /**
@@ -241,11 +249,6 @@ body
   float: none;
   margin-top: 0px;
   margin-right: 0px;
-}
-
-.category-matching-widget h2
-{
-  margin-bottom: 0.7em;
 }
 
 /**
@@ -718,38 +721,9 @@ div.select2-container .select2-choice abbr {
     outline: 0;
 }
 
-div.select2-container .select2-choices abbr 
-{
-    background: url('../binaries/select2.png') right top no-repeat;
-}
-
-div.select2-container .select2-choices div b 
-{
-    background: url('../binaries/select2.png') no-repeat 0 1px;
-}
-
 div.select2-container-multi .select2-choices .select2-search-field 
 {
   width: 100%;
-}
-
-div.select2-container-multi .select2-choices .select2-search-field input
-{
-}
-
-div.select2-container-multi .select2-choices .select2-search-field input.select2-active 
-{
-    background: #fff url('../binaries/select2-spinner.gif') no-repeat 95% !important;
-}
-
-div.select2-container .select2-more-results.select2-active 
-{
-    background: #f4f4f4 url('../binaries/select2-spinner.gif') no-repeat 95%;
-}
-
-div.select2-container .select2-search-choice-close 
-{
-    background: url('../binaries/select2.png') right top no-repeat;
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi)  {
@@ -766,7 +740,8 @@ div.select2-container .select2-search-choice-close
   margin-left: -45%;
 }
 
-.modal-reference-list .modal-header .close {
+.modal-reference-list .modal-header .close 
+{
     margin-top: 5px;
 }
 
@@ -789,7 +764,17 @@ div.select2-container .select2-search-choice-close
   width: 100%;
 }
 
+.refbrowser-open img
+{
+  margin-top: -2px;
+}
+
 .ctx-reference-access .toolbar.primary
 {
   margin-top: 0;
+}
+
+.nav-pills.nav-stacked .tagslist-tag > a
+{
+  cursor: default;
 }

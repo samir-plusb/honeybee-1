@@ -12,6 +12,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     // <knockout_props>
     fieldname: null,
 
+    loading: null,
+
     realname: null,
 
     tags: null,
@@ -83,18 +85,33 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                             that.tags.push(item_data);
                         }
                     }
+                    else if (msg_data.event_type === 'list-loaded')
+                    {
+                        var doc_ids = [], i;
+                        for (i = 0; i < that.tags().length; i++)
+                        {
+                            doc_ids.push(that.tags()[i].id);
+                        }
+                        that.element.find('.reference-list-access')[0].contentWindow.postMessage(
+                            JSON.stringify({
+                                'selected_doc_ids': doc_ids
+                            }), 
+                            'http://cms.familienportal.dev/'
+                        );
+                    }
                     
                     that.element.find('.tagslist-input').select2('data', that.tags());
                 }
             }
         }
-        window.addEventListener('message', messageEventHandler,false);
+        window.addEventListener('message', messageEventHandler, false);
     },
 
     initKnockoutProperties: function()
     {
         var that = this;
         this.fieldname = ko.observable(this.options.fieldname);
+        this.is_loading = ko.observable(false);
         this.tags = ko.observableArray(this.options.tags || [ ]);
     },
 
@@ -107,12 +124,14 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     openReferenceListView: function()
     {
         var that = this;
-        this.element.find('.reference-list-access')[0].onload = function()
+        var iframe = this.element.find('.reference-list-access')[0];
+        iframe.onload = function()
         {
+            that.element.find('.modal-reference-loading').modal('hide');
             that.reference_list_modal = that.element.find('.modal-reference-list').first().modal({'show': true});
         };
-
-        this.element.find('.reference-list-access')[0].contentDocument.location.reload(true);
+        this.element.find('.modal-reference-loading').modal('show');
+        iframe.src = this.options.reference_list_url;
     },
 
     // #########################
@@ -246,6 +265,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 callback(data);
             };
 
+            this.is_loading(true);
+
             honeybee.core.Request.curry(
                 autocomp.uri.replace('{PHRASE}', encodeURIComponent(phrase))
             )(function()
@@ -264,6 +285,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                     is_processing = true;
                     process_response(resp, module, options);
                     is_processing = false;
+                    
+                    that.is_loading(false);
                 }
             }());
         }
@@ -279,6 +302,7 @@ honeybee.widgets.Reference.DEFAULT_OPTIONS = {
     fieldname: 'tagslist[]',
     autocomplete: false,
     autocomp_mappings: [],
+    reference_list_url: "http://cms.familienportal.dev/topics/list/relatedTopics?selectOnlyMode=true&limit=10",
     texts: {
         placeholder: '',
         too_short: '',
