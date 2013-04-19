@@ -13,7 +13,7 @@ use Dat0r\Core\Runtime\Field\ReferenceField;
  * - characters: maximum number of characters (default: 250)
  * - words: maximum number of words
  * - sentences: maximum number of sentences (ending with ".", "?" or "!")
- * - paragrpahs: maximum number of paragraphs (actual html "</p>"s)
+ * - paragraphs: maximum number of paragraphs (actual html "</p>"s)
  * - skip: number of characters|words|sentences|paragraphs to skip at the
  *         beginning (strip from start)
  * - ellipsis: string to use as an ellipsis (default is: " […]")
