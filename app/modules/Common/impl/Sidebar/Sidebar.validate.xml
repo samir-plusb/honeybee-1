@@ -9,8 +9,8 @@
 
         <validators>
             <validator class="SidebarTreeModuleValidator" required="false">
-                <arguments base="tree_modules[]">
-                    <argument/>
+                <arguments>
+                    <argument>tree_relation_data</argument>
                 </arguments>
             </validator>
         </validators>

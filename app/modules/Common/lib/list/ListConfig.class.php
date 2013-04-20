@@ -24,6 +24,8 @@ class ListConfig implements IListConfig
 
     protected $hasTreeView;
 
+    protected $sidebarTreeTargets = array();
+
     public static function create(array $data = array())
     {
         return empty($data) ? new static : new static($data);
@@ -87,6 +89,11 @@ class ListConfig implements IListConfig
     public function getField($fieldname)
     {
         return $this->hasField($fieldname) ? $this->fields[$fieldname] : NULL;
+    }
+
+    public function getSidebarTreeTargets()
+    {
+        return $this->sidebarTreeTargets;
     }
 
     // Hydrate Setters

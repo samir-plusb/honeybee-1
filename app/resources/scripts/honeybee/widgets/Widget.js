@@ -15,7 +15,7 @@ honeybee.widgets.Widget = honeybee.core.BaseObject.extend({
         ready_callback = ready_callback || function() {};
         // basic member initialization
         this.element = element;
-        this.options = options;
+        this.options = $.extend(true, {}, options);
         // render the widget
         var tpl = this.getTemplate();
         var that = this;

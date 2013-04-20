@@ -10,6 +10,8 @@ honeybee.list.ListItemModel = honeybee.core.BaseObject.extend({
 
     workflow: null,
 
+    custom_actions: null,
+
     selected: null,
 
     init: function(item_data)
@@ -17,6 +19,7 @@ honeybee.list.ListItemModel = honeybee.core.BaseObject.extend({
         this.parent();
 
         this.data = item_data.data;
+        this.custom_actions = item_data.custom_actions || [];
         this.workflow = item_data.workflow;
         this.display_data = item_data.display_data;
         this.css_classes = item_data.css_classes ? item_data.css_classes.join(" ") : "";

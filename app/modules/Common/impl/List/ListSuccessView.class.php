@@ -44,6 +44,7 @@ class Common_List_ListSuccessView extends CommonBaseView
         );
 
         $this->setAttribute('has_tree_view', $listConfig->hasTreeView());
+        $this->setAttribute('custom_item_actions', $listConfig->getItemActions());
 
         $this->getLayer('content')->setSlot(
             'pagination',

@@ -4,7 +4,7 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
 
     tree: {},
 
-    moduleName: null,
+    treeRelation: null,
 
     init: function(options)
     {
@@ -12,8 +12,7 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
         this.renderTarget = this.domElement.find('.render-tree');
 
         this.loadData();
-
-        this.moduleName = this.domElement.attr('data-module');
+        this.treeRelation = JSON.parse(this.domElement.attr('data-tree-relation'));
 
         this.refreshCss(this.renderTarget);
         this.bindDropEvents();
@@ -27,7 +26,7 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
         this.renderTarget.find('.node-label').bind('click', function(ev)
         {
             honeybee.core.events.fireEvent('filterBy', {
-                field: that.moduleName,
+                field: that.treeRelation.referenceField + '.id',
                 value: $(this).parent('.child').attr('id')
             });
 
@@ -35,27 +34,32 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
             $(this).addClass('highlighted');
         });
 
-        honeybee.core.events.on('clearFilter', function() {
+        honeybee.core.events.on('clearFilter', function() 
+        {
             that.renderTarget.find('.node-label').removeClass('highlighted'); 
         });
 
-        that.renderTarget.find('.move-inside').bind('click', function(){
-            var id = $(this).parents('.child').first().attr('id');
+        that.renderTarget.find('.move-inside').bind('click', function()
+        {
             honeybee.core.events.fireEvent('reference::targetSelected', {
-                module: that.moduleName,
-                targetId: id
+                id: $(this).parents('.child').first().attr('id'),
+                module: that.treeRelation.treeModule,
+                reference_field: that.treeRelation.referenceField
             }); 
         });
 
-        honeybee.core.events.on('reference::startTargetSelection', function(data) {
-            if (that.moduleName !== data.module) {
+        honeybee.core.events.on('reference::startTargetSelection', function(data) 
+        {
+            if (that.treeRelation.treeModule !== data.module) 
+            {
                 return;
             }
 
             that.renderTarget.find('.move-target').show();
         });
 
-        honeybee.core.events.on('reference::cancelTargetSelection', function(data) {
+        honeybee.core.events.on('reference::cancelTargetSelection', function(data) 
+        {
             that.renderTarget.find('.move-target').hide();
         });
     },
@@ -73,6 +77,9 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
 
             honeybee.core.events.fireEvent('itemDroppedOnItem', {
                 sourceId: data,
+                id: $(ev.target).parent('.child').attr('id'),
+                module: that.treeRelation.treeModule,
+                reference_field: that.treeRelation.referenceField,
                 targetId: $(this).attr('id')
             });
         }).bind('dragover', function(ev)
@@ -134,6 +141,4 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
 
         this.tree = JSON.parse(dataContainer.text().trim());
     }
-
 });
-

@@ -29,13 +29,14 @@ class Common_ListAction extends CommonBaseAction
         $this->setAttribute('list_fields', $listConfig->getFields());
         $this->setAttribute('item_actions',$listConfig->getItemActions());
         $this->setAttribute('batch_actions',$listConfig->getBatchActions());
-        $this->setAttribute('list_data', $this->renderListValues($listConfig, $listState));
-        $this->setAttribute('templates', $this->renderListTemplates($listConfig, $listState));
-
+        $this->setAttribute('list_data', $this->buildListData($listConfig, $listState));
+        $this->setAttribute('templates', $this->renderKoListFieldTemplates($listConfig, $listState));
         $this->setAttribute('total_count', $listState->getTotalCount());
         $this->setAttribute('offset', $listState->getOffset());
         $this->setAttribute('limit', $listState->getLimit());
         $this->setAttribute('module_type_key', $listConfig->getTypeKey());
+        $this->setAttribute('sidebar_tree_targets', $listConfig->getSidebarTreeTargets());
+
         $clientSideOptions = $listConfig->getClientSideController();
         $clientSideOptions['options'] = isset($clientSideOptions['options']) ? $clientSideOptions['options'] : array();
         $clientSideOptions['options']['workflow_urls'] = array(
@@ -60,6 +61,7 @@ class Common_ListAction extends CommonBaseAction
             'direction' => $listState->getSortDirection(),
             'field'     => $listState->getSortField()
         ));
+
         if ($listState->hasSearch())
         {
             $this->setAttribute('search', $listState->getSearch());
@@ -68,10 +70,11 @@ class Common_ListAction extends CommonBaseAction
         return 'Success';
     }
 
-    protected function renderListTemplates(IListConfig $listConfig, IListState $listState)
+    protected function renderKoListFieldTemplates(IListConfig $listConfig, IListState $listState)
     {
         $templates = array();
         $rendererPool = array();
+
         foreach ($listConfig->getFields() as $fieldname => $field)
         {
             $rendererClass = $field->getRenderer();
@@ -87,16 +90,19 @@ class Common_ListAction extends CommonBaseAction
             }
             $templates[$fieldname] = $renderer->renderTemplate($field);
         }
+
         return $templates;
     }
 
-    protected function renderListValues(IListConfig $listConfig, IListState $listState)
+    protected function buildListData(IListConfig $listConfig, IListState $listState)
     {
         $listData = array();
         $rendererPool = array();
+
         foreach ($listState->getData() as $row)
         {
             $renderedData = array();
+
             foreach ($listConfig->getFields() as $fieldname => $field)
             {
                 $arrayPath = new AgaviVirtualArrayPath(
@@ -106,9 +112,11 @@ class Common_ListAction extends CommonBaseAction
                         implode('][', explode('.', $field->getValuefield()))
                     )
                 );
+
                 $value = $arrayPath->getValue($row);
                 $rendererClass = $field->getRenderer();
                 $renderer = NULL;
+
                 if ($field->hasRenderer())
                 {
                     if (! isset($rendererPool[$rendererClass]))
@@ -127,10 +135,12 @@ class Common_ListAction extends CommonBaseAction
                     $renderedData[$fieldname] = $value;
                 }
             }
+
             $row['display_data'] = $renderedData;
             $row['css_classes'] = isset($row['css_classes']) ? $row['css_classes'] : array();
             $listData[] = $row;
         }
+
         return array(
             'listItems' => $listData,
             'metaData' => array(

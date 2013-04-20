@@ -6,7 +6,13 @@
     <ae:configuration>
         <validators>
             <validator class="isset">
-                <argument>moduleName</argument>
+                <argument>treeModule</argument>
+            </validator>
+            <validator class="isset">
+                <argument>localModule</argument>
+            </validator>
+            <validator class="isset">
+                <argument>referenceField</argument>
             </validator>
         </validators>
     </ae:configuration>

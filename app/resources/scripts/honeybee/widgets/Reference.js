@@ -40,7 +40,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     {
         var that = this;
         this.fieldname = ko.observable(this.options.fieldname);
-        this.tags = ko.observableArray(this.options.tags || [ ]);
+        this.tags = ko.observableArray(this.options.tags || []);
     },
 
     removeTag: function(tag)
@@ -116,7 +116,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 autocomplete_timer = window.setTimeout(function()
                 {
                     that.fetchData(query.term, query.callback);
-                }, 300);
+                }, 250);
             },
             formatResult: formatResult,
             formatSelection: formatSelection 
@@ -191,7 +191,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 {
                     if (is_processing)
                     {
-                        setTimeout(function(){ process_response(resp); }, 200);
+                        setTimeout(function(){ process_response(resp); }, 50);
                         return;
                     }
 

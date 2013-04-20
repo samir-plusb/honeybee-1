@@ -3,6 +3,7 @@
 namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Dat0r\DocumentCollection;
+use Dat0r\Core\Runtime\Field\ReferenceField;
 use Honeybee\Core\Import;
 use ListConfig;
 
@@ -30,6 +31,10 @@ class ListAction extends BaseAction
         $listConfig = ListConfig::create($this->buildListConfig());
         $listState = $parameters->getParameter('state');
 
+        $this->setAttribute('config', $listConfig);
+        $this->setAttribute('state', $listState);
+        $this->setAttribute('module', $module);
+
         // apply default limit of the module if none is set on the liststate
         if (!$listState->hasLimit())
         {
@@ -49,10 +54,6 @@ class ListAction extends BaseAction
         $listState->setData(
             $this->prepareListData($data['documents'])
         );
-
-        $this->setAttribute('config', $listConfig);
-        $this->setAttribute('state', $listState);
-        $this->setAttribute('module', $module);
 
         return 'Success';
     }
@@ -81,7 +82,7 @@ class ListAction extends BaseAction
 
     protected function buildListConfig()
     {
-        $settingsKey = $this->buildListConfigKey();
+        $settingsKey = sprintf('%s.list_config', $this->getModule()->getOption('prefix'));
         $listSettings = \AgaviConfig::get($settingsKey, array());
         $fields = array_values($this->getModule()->getFields()->toArray());
 
@@ -105,19 +106,58 @@ class ListAction extends BaseAction
         {
             $listSettings['suggestField'] = $fields[0]->getName();
         }
+        $translationManager = $this->getContext()->getTranslationManager();
         $routing = $this->getContext()->getRouting();
 
         $listSettings['hasTreeView'] = $this->getModule()->isActingAsTree();
+        $listSettings['clientSideController']['options']['module'] = $this->getModule()->getOption('prefix');
+        $listSettings['clientSideController']['options']['reference_batches'] = $this->buildReferenceBatchConfig();
+
+        if (TRUE === \AgaviConfig::get(sprintf('%s.sidebar.folders.enabled', $this->getModule()->getOption('prefix')), FALSE))
+        {
+            $listSettings['itemActions'] = isset($listSettings['itemActions']) ? $listSettings['itemActions'] : array();
+            // reference-fields that are affected by a configured 'assignReference' item action.
+            $itemActionReferenceFields = array();
+            foreach ($listSettings['itemActions'] as $actionName => $itemAction)
+            {
+                if ('assignReference' === $itemAction['action'])
+                {
+                    $itemActionReferenceFields[$itemAction['parameters'][0]] = $actionName;
+                }
+            }
+
+            $referenceFields = $this->getModule()->getFields(array(), array('Dat0r\Core\Runtime\Field\ReferenceField'));
+            // all targets available to the list for enabling/disabling tree-modules within the sidebar.
+            $sidebarTreeTargets = array();
+            foreach ($referenceFields as $referenceField)
+            {
+                foreach ($referenceField->getReferencedModules() as $referencedModule)
+                {
+                    $isFieldBoundToItemAction = isset($itemActionReferenceFields[$referenceField->getName()]);
+                    if ($isFieldBoundToItemAction && $referencedModule->isActingAsTree())
+                    {
+                        $modulePrefix = $this->getModule()->getOption('prefix');
+                        $sidebarTreeTargets[] = array(
+                            'module' => $referencedModule->getOption('prefix'),
+                            'related_action' => $itemActionReferenceFields[$referenceField->getName()],
+                            'labels' => array(
+                                'assign' => $translationManager->_(
+                                    'assign_' . $referenceField->getName(), 
+                                    $modulePrefix . '.list'
+                                ),
+                                'abort' => $translationManager->_(
+                                    'abort_' . $referenceField->getName() . '_assignment', 
+                                    $modulePrefix . '.list'
+                                )
+                            )
+                        );
+                    }
+                }
+            }
+            $listSettings['sidebarTreeTargets'] = $sidebarTreeTargets;
+        }
 
         return $listSettings;
-    }
-
-    protected function buildListConfigKey()
-    {
-        return sprintf(
-            '%s.list_config', 
-            $this->getModule()->getOption('prefix')
-        );
     }
 
     protected function prepareListData(DocumentCollection $documents)
@@ -126,24 +166,33 @@ class ListAction extends BaseAction
         $module = $this->getModule();
         $tm = $this->getContext()->getTranslationManager();
         $translationDomain = sprintf('%s.list', $module->getOption('prefix'));
+        // this guy knows everything about the current workflow state and where we can go from here.
         $workflowManager = $module->getWorkflowManager();
 
         foreach ($documents as $document)
         {
             $gates = array();
             $workflowStep = $document->getWorkflowTicket()->getWorkflowStep();
+            // iterate over all the gates of the current workflow step 
+            // and check if the current user may access them.
             foreach ($workflowManager->getPossibleGates($document) as $gateName)
             {
+                // magic! there is a convention for the translations of a module's list domain,
+                // that allows you to trigger confirm prompts in the GUI and show a specific translated message,
+                // when a user wants to execute the corresponding action.
+                // :Example:      <ae:parameter name="edit.promote.prompt">Really promote?</ae:parameter>
+                // :Explaination: show a prompt with "Really promote?",
+                //                when the user attempts to promote a document that is in edit state.
                 $promptLangKey = sprintf('%s.%s.prompt', $workflowStep, $gateName);
                 $promptMsg = $tm->_($promptLangKey, $translationDomain);
                 if ($promptMsg === $promptLangKey)
                 {
                     $promptMsg = FALSE;
                 }
-
+                // build the resource action-key by convention ...
                 $action = $module->getOption('prefix') . '.' . $workflowStep.'::'. $gateName;
                 $user = $this->getContext()->getUser();
-
+                // ... and check if the user has access (via zend-acl).
                 if ($user->isAllowed($document, $action))
                 {
                     $gates[] = array(
@@ -154,16 +203,132 @@ class ListAction extends BaseAction
                 }
             }
 
-            $data[] = array(
+            $isInteractive = $workflowManager->isInInteractiveState($document);
+            // will be passed to the ListItemViewModel.js and is the data available inside all the
+            // batch callbacks and item actions invoked upon an ListController.js
+            $documentListItemData = array(
                 'data' => $document->toArray(),
-                'workflow' => array(
-                    'gates' => $gates,
-                    'interactive' => $workflowManager->isInInteractiveState($document)
-                )
+                'workflow' => array('gates' => $gates, 'interactive' => $isInteractive)
             );
+            // for interactive workflow states we support custom item actions.
+            // they are appended to the default system actions.
+            if ($isInteractive)
+            {
+                // @todo check if the current has the permission to execute writes within the current state.
+                $customActions = array();
+
+                foreach ($this->getAttribute('config')->getItemActions() as $actionName => $actionDefinition)
+                {
+                    // @todo individual permission for custom actions 
+                    // or is it enough to just check write access for the current state?
+                    $promptLangKey = sprintf('%s.%s.prompt', $workflowStep, $actionName);
+                    $promptMsg = $tm->_($promptLangKey, $translationDomain);
+
+                    $customActions[] = array(
+                        'label' => $tm->_($actionName, $translationDomain),
+                        'name' => $actionName,
+                        'prompt' => ($promptMsg === $promptLangKey) ? FALSE : $promptMsg,
+                        'binding' => array(
+                            'method' => $actionDefinition['action'],
+                            'parameters' => isset($actionDefinition['parameters']) ? $actionDefinition['parameters'] : array()
+                        ) 
+                    );
+                }
+                
+                $documentListItemData['custom_actions'] = $customActions;
+            }
+
+            $data[] = $documentListItemData;
         }
 
         return $data;
     }
 
+    protected function buildReferenceBatchConfig()
+    {   
+        $routing = $this->getContext()->getRouting();
+        $tm = $this->getContext()->getTranslationManager();
+
+        $referenceFields = $this->getModule()->getFields(array(), array('Dat0r\Core\Runtime\Field\ReferenceField'));
+        $referenceBatchConfigs = array();
+
+        foreach ($referenceFields as $referenceField)
+        {
+            $references = $referenceField->getOption(ReferenceField::OPT_REFERENCES);
+            $referenceModuleClass = $references[0][ReferenceField::OPT_MODULE];
+            $displayField = $references[0][ReferenceField::OPT_DISPLAY_FIELD];
+            $identityField = $references[0][ReferenceField::OPT_IDENTITY_FIELD];
+
+            $referenceModule = $referenceModuleClass::getInstance();
+
+            $maxCount = (int)$referenceField->getOption(ReferenceField::OPT_MAX_REFERENCES, 0);
+            $updateUrl = urldecode(htmlspecialchars_decode(
+                $routing->gen(
+                    sprintf('%s.workflow.execute', $this->getModule()->getOption('prefix')), 
+                    array('id' => '{ID}')
+                )
+            ));
+
+            $translationDomain = sprintf('%s.list', $this->getModule()->getOption('prefix'));
+            $refWidgetOptions = array(
+                'autobind' => TRUE,
+                'autocomplete' => TRUE,
+                'autocomp_mappings' => $this->buildReferenceWidgetSuggestOptions($referenceField),
+                'fieldname' => $referenceField->getName(),
+                'max' => $maxCount,
+                'tags' => array(),
+                'tpl' => 'Float',
+                'texts' =>  array(
+                    'placeholder' => $tm->_('assign_references', $translationDomain),
+                    'searching' => $tm->_('searching', $translationDomain),
+                    'too_short' => $tm->_('reference_suggest_to_short', $translationDomain),
+                    'too_long' => $tm->_('max_references_reached', $translationDomain),
+                    'no_results' => $tm->_('no_references_found', $translationDomain),
+                    'field_label' => $tm->_($referenceField->getName(), $translationDomain),
+                    'override_references' => $tm->_('override_references', $translationDomain),
+                    'append_references' => $tm->_('append_reference', $translationDomain),
+                    'assign_references' => $tm->_('assign_references', $translationDomain)
+                )
+            );
+            $referenceBatchConfigs[$referenceField->getName()] = array(
+                'widget_options' => $refWidgetOptions,
+                'update_url' => $updateUrl
+            );
+        }
+
+        return $referenceBatchConfigs;
+    }
+
+    protected function buildReferenceWidgetSuggestOptions(ReferenceField $referenceField)
+    {
+        $routing = $this->getContext()->getRouting();
+        $tm = $this->getContext()->getTranslationManager();
+        $references = $referenceField->getOption(ReferenceField::OPT_REFERENCES);
+        
+        $autoCompleteMappings = array();
+        foreach ($references as $reference)
+        {
+            $referenceModuleClass = $reference['module'];
+            $displayField = $reference[ReferenceField::OPT_DISPLAY_FIELD];
+            $identityField = $reference[ReferenceField::OPT_IDENTITY_FIELD];
+            $referencedModule = $referenceModuleClass::getInstance();
+            $modulePrefix = $referencedModule->getOption('prefix');
+            $suggestRouteName = sprintf('%s.suggest', $modulePrefix);
+
+            $autoCompleteMappings[$modulePrefix] = array(
+                'display_field' => $displayField,
+                'identity_field' => $identityField,
+                'module_label' => $tm->_($referencedModule->getName(), 'modules.labels'),
+                'uri' => htmlspecialchars_decode(
+                    urldecode($routing->gen($suggestRouteName, array(
+                        'term' => '{PHRASE}',
+                        'display_field' => $displayField,
+                        'identity_field' => $identityField
+                    )))
+                )
+            ); 
+        }
+
+        return $autoCompleteMappings;
+    }
 }
