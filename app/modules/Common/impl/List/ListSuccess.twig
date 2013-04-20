@@ -23,17 +23,21 @@
                 <a class="btn" href="{{ro.gen(module_type_key ~ '.edit')}}">Neuer Eintrag</a>
             </section>
             <section>
-                <div class="btn-group">
-                    <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#">
-                        Stapelverarbeitung
+                <div class="btn-group batch_actions">
+                    <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" data-bind="css: { 'disabled': ! has_selection() }">
+                        {{ tm._('batch_actions', translation_domain) }}
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                     {% for action_name, action in batch_actions %}
                         <li>
                             <a class="honeybee-action honeybee-action-{{action_name}}"
-                               data-bind="click: function(item, event) { var is_batch = true; {{action}} },
-                                          enable: has_selection">{{ tm._(action_name, translation_domain) }}</a>
+                               data-bind="click: function(item, event) { var is_batch = true; {{action}} },">
+                               {{ tm._(action_name, translation_domain) }}
+                           </a>
+                           <a class="honeybee-action-{{action_name}} disabled_ghost" onclick="return false;">
+                               {{ tm._(action_name, translation_domain) }}
+                           </a>
                         </li>
                     {% endfor %}
                     </ul>
@@ -83,14 +87,22 @@
                 <input type="checkbox" id="select_all_rows_toggle" data-bind="checked: all_selected" /> 
                 <label style="display: inline-block;" for="select_all_rows_toggle">Alle auswählen</label>
             </li>
-	        <!-- We need to display the label generically and hide the whole thing when not within a tree-reference context
-            <li class="tool assign-category">
-                <a><i class="icon icon-move"></i> Kategorie zuweisen</a>
+            {% if 0 < sidebar_tree_targets|length %}
+            <li class="tool sidebar-tree-targets">
+                <ul>
+                    {% for sidebar_target in sidebar_tree_targets %}
+                    <li class="tree-target">
+                        <div class="reference-assign disabled" data-module="{{sidebar_target.module}}" data-action="{{sidebar_target.related_action}}">
+                            <a><i class="icon icon-move"></i> {{sidebar_target.labels.assign}}</a>
+                        </div>
+                        <div class="reference-abort" data-module="{{sidebar_target.module}}" data-action="{{sidebar_target.related_action}}" style="display: none">
+                            <a><i class="icon icon-remove"></i> {{sidebar_target.labels.abort}}</a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
             </li>
-
-            <li class="tool cancel-assign-category hide">
-                <a><i class="icon icon-remove"></i> Zuweisen abbrechen</a>
-            </li>-->
+            {% endif %}
         </ul>
 {# **************************************************
     ListData Pagination Top
@@ -155,10 +167,14 @@
     ListData Table Body
 ************************************************** #}
             <tbody data-bind="foreach: list_items">
-                <tr data-bind='attr: { "class":  $data.css_classes }, event:{dragstart: dragStart}' draggable="true">
+                <tr data-bind='attr: { 
+                    "class":  $data.css_classes }, 
+                        event:{ dragstart: dragStart }, 
+                        attr: { "draggable": ({{ sidebar_tree_targets|length }} > 0 && $data.workflow.interactive) ? "true" : "false" }'>
                     <td>
                         <input type="checkbox" data-bind="checked: selected" />
                     </td>
+
                     {% for list_template in templates%}
                         {{list_template|raw}}
                     {% endfor %}
@@ -181,11 +197,28 @@
                             <button class="btn dropdown-toggle btn-primary" data-toggle="dropdown">
                                 <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu pull-right" data-bind="foreach: $data.workflow.gates">
+                            <ul class="dropdown-menu pull-right">
+                                <!-- ko foreach: $data.workflow.gates -->
                                 <li>
-                                    <a class="honeybee-action-proceed"
-                                       data-bind="click: function(item, event) { $root.ctrl.proceed(false, $parent, $data.name, $data.prompt); }, text: $data.label"></a>
+                                    <a data-bind="click: function(item, event) 
+                                    { 
+                                        $root.ctrl.proceed(false, $parent, $data.name, $data.prompt); 
+                                    }, text: $data.label, attr: { 'class': ('honeybee-action-' + $data.name) }"></a>
                                 </li>
+                                <!-- /ko -->
+                                <!-- ko foreach: $data.custom_actions -->
+                                <li>
+                                    <a data-bind="click: function(item, event) 
+                                    { 
+                                        var i, args = [false, $parent];
+                                        for (i = 0; i < $data.binding.parameters.length; i++)
+                                        {
+                                            args.push($data.binding.parameters[i]);
+                                        }
+                                        $root.ctrl[$data.binding.method].apply($root.ctrl, args);
+                                    }, text: $data.label, attr: { 'class': ('honeybee-action-' + $data.name) }"></a>
+                                </li>
+                                <!-- /ko -->
                             </ul>
                             <!-- /ko -->
                         </div>
@@ -234,3 +267,29 @@ Modal dialogs
         <a href="#" data-twodal-event="confirm" class="btn btn-primary">Ja</a>
     </div>
 </div>
+
+<div class="modal assign-reference-modal" style="display:none">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h4 class="header">select reference</h4>
+    </div>
+    <div class="modal-body">
+        <div class="control-group">
+            <section class="honeybee-widget widget-tags-list"></section>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="settings settings-reference-batch">
+            <div class="setting setting-override-existing">
+                <label class="setting-label">replace values</label>
+                <input class="setting-value" type="radio" name="override-existing" />
+            </div>
+            <div class="setting setting-append-to-existing">
+                <label class="setting-label">append values</label>
+                <input class="setting-value" type="radio" name="override-existing" checked="checked" />
+            </div>
+        </div>
+        <button class="btn btn-primary select-reference">assign values</button>
+    </div>
+</div>
+

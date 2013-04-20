@@ -778,3 +778,56 @@ div.select2-container-multi .select2-choices .select2-search-field
 {
   cursor: default;
 }
+
+.assign-reference-modal .refwidget-container
+{
+  width: 100%;
+}
+
+.assign-reference-modal .select-reference
+{
+  margin-top: 18px;
+}
+
+.settings-reference-batch 
+{
+  float: left;
+}
+
+.settings-reference-batch .setting
+{
+  padding: 2px;
+}
+
+.settings-reference-batch .setting .setting-label
+{
+  display: inline-block;
+}
+
+.settings-reference-batch .setting .setting-value
+{
+  margin: 0 0 0 5px;
+}
+
+.disabled_ghost,
+.dropdown-menu li > .disabled_ghost
+{
+  display: none;
+}
+
+.disabled .disabled_ghost,
+.dropdown-menu li.disabled > a.disabled_ghost
+{
+  display: inline-block;
+}
+
+.disabled .honeybee-action
+{
+  display: none;
+}
+
+.tree-target .disabled a,
+.toolbar .toolset .tool .disabled .icon-move
+{
+  color: #ababab;
+}

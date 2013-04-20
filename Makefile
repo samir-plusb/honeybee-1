@@ -1,5 +1,6 @@
 PROJECT_ROOT=`pwd`
 BUILD_DIR=${PROJECT_ROOT}/etc/integration/build/
+PHP_ERROR_LOG=`php -i | grep error_log | cut -f '3' -d " "`
 
 help:
 
@@ -80,7 +81,7 @@ cc:
 
 tail-logs:
 
-	@tail -f app/log/*.log
+	@tail -f "${PHP_ERROR_LOG}" app/log/*.log
 
 
 #

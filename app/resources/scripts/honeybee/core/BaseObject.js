@@ -32,7 +32,7 @@ honeybee.core.BaseObject = honeybee.core.Module.create(
      */
     init: function(options)
     {
-        this.options = options || {};
+        this.options = $.extend(true, {}, options);
         this.logger = {}; // @todo create a logger class and use it here.
         this.listeners = {};
     },

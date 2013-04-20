@@ -16,6 +16,7 @@ class MappingGeneratorPlugin
         'textarea' => 'string',
         'integer' => 'integer',
         'aggregate' => 'object',
+        'reference' => 'object',
         'key-value' => 'object',
         'integer-collection' => 'integer',
         'boolean' => 'boolean'
@@ -97,6 +98,10 @@ class MappingGeneratorPlugin
                 'analyzer' => 'IcuAnalyzer_DE',
                 'inlclude_in_all' => FALSE
             ),
+            'filter' => array(
+                'type' => $esType,
+                'index' => 'not_analyzed'
+            ),
             'suggest' => array(
                 'type' => $esType,
                 'analyzer' => 'AutoCompleteAnalyzer',
@@ -124,6 +129,25 @@ class MappingGeneratorPlugin
         $esType = self::$typeMap[$field['type']];
 
         return array('type' => $esType);
+    }
+
+    protected function mapReference($fieldName, array $field, $moduleDefinition)
+    {   
+        $esType = self::$typeMap[$field['type']];
+
+        return array(
+            'type' => $esType, 
+            'properties' => array(
+                'id' => array(
+                    'type' => 'string',
+                    'index' => 'not_analyzed'
+                ),
+                'module' => array(
+                    'type' => 'string',
+                    'index' => 'not_analyzed'
+                )
+            )
+        );
     }
 
     protected function mapBoolean($fieldName, array $field, $moduleDefinition)

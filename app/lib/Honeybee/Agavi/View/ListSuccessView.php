@@ -31,12 +31,18 @@ class ListSuccessView extends BaseView
             ), NULL, 'read')
         );
 
-        /* Will comment back in, when the stuff is completely styled.
-        $this->getLayer('content')->setSlot(
-            'sidebar',
-            $this->createSlotContainer('Common', 'Sidebar', array('tree_modules' => $this->getSidebarTreeModules()), NULL, 'read')
-        );
-        */
+        if (TRUE === \AgaviConfig::get(sprintf('%s.sidebar.folders.enabled', $module->getOption('prefix')), FALSE))
+        {
+            $sidebarTrees = $this->getSidebarTreeRelationData();
+            if (! empty($sidebarTrees))
+            {
+                $sidebarParams = array('tree_relation_data' => $this->getSidebarTreeRelationData());
+                $this->getLayer('content')->setSlot(
+                    'sidebar',
+                    $this->createSlotContainer('Common', 'Sidebar', $sidebarParams, NULL, 'read')
+                );
+            }
+        }
 
         $this->setBreadcrumb();
     }
@@ -124,26 +130,27 @@ class ListSuccessView extends BaseView
         $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'honeybee.breadcrumbs');
     }
 
-    protected function getSidebarTreeModules()
+    protected function getSidebarTreeRelationData()
     {
         $module = $this->getAttribute('module');
-        $modules = array();
+        $treeRelationData = array();
+        $referenceFields = $module->getFields(array(), array('Dat0r\Core\Runtime\Field\ReferenceField'));
 
-        foreach ($module->getFields() as $field)
+        foreach ($referenceFields as $referenceField)
         {
-            if ($field instanceof ReferenceField)
+            foreach ($referenceField->getReferencedModules() as $referencedModule)
             {
-                $referencedModules = $field->getReferencedModules();
-                foreach ($referencedModules as $module)
+                if ($referencedModule->isActingAsTree())
                 {
-                    if ($module->isActingAsTree())
-                    {
-                        $modules[] = get_class($module);
-                    }
+                    $treeRelationData[] = array(
+                        'treeModule' => get_class($referencedModule),
+                        'localModule' => get_class($module),
+                        'referenceField' => $referenceField->getName()
+                    );
                 }
-            } 
+            }
         }
 
-        return $modules;
+        return $treeRelationData;
     }
 }

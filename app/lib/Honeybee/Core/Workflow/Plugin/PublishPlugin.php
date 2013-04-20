@@ -28,19 +28,18 @@ class PublishPlugin extends BasePlugin
             );
             $queue->push(new PublishJob($jobData));
             $result->setState(Plugin\Result::STATE_EXPECT_INPUT);*/
-            
+
             $module = $resource->getModule();
 
             $exports = $this->getParameter('exports');
             $exports = is_array($exports) ? $exports : array();
-
             $exportService = $module->getService('export');
 
             foreach ($exports as $exportName)
             {
                 $exportService->publish($exportName, $resource);
             }
-            
+
             $result->setState(Plugin\Result::STATE_OK);
             $result->setGate('promote');
 
@@ -56,14 +55,14 @@ class PublishPlugin extends BasePlugin
                 $this->getResource()->getIdentifier(),
                 $e->getMessage()
             ));
-var_dump($e->getMessage());exit;
+
             $result->setState(Plugin\Result::STATE_OK);
             $result->setMessage($e->getMessage());
             $result->setGate('demote');
         }
 
         $result->freeze();
-        
+
         return $result;
     }
 }

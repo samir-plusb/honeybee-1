@@ -22,18 +22,18 @@ class Common_Sidebar_SidebarSuccessView extends CommonBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
-        $tree_modules = $parameters->getParameter('tree_modules');
+        $treeRelationData = $parameters->getParameter('tree_relation_data');
 
-        foreach($tree_modules as $moduleName)
+        foreach($treeRelationData as $treeRelation)
         {
             $this->getLayer('content')->setSlot(
-                $moduleName,
+                $treeRelation['treeModule'],
                 $this->createSlotContainer('Common', 'SidebarTree', array(
-                    'moduleName' => $moduleName
+                    'treeModule' => $treeRelation['treeModule'],
+                    'localModule' => $treeRelation['localModule'],
+                    'referenceField' => $treeRelation['referenceField']
                 ), NULL, 'read')
             );
         }
     }
-
 }
-

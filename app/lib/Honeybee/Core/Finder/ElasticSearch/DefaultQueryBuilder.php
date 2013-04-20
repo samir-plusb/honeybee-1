@@ -84,7 +84,6 @@ class DefaultQueryBuilder implements IQueryBuilder
         {
             $fields = array_keys($filters);
             $field = $fields[0];
-            $filters[$field] = strtolower($filters[$field]);
             $filter = new Elastica\Filter\Term($filters);
         }
         else if (1 < count($filters))
@@ -96,9 +95,7 @@ class DefaultQueryBuilder implements IQueryBuilder
                 if (! empty($fieldvalue))
                 {
                     $filter->addFilter(
-                        new Elastica\Filter\Term(array(
-                            $fieldname => strtolower($fieldvalue)
-                        )
+                        new Elastica\Filter\Term(array($fieldname => $fieldvalue)
                     ));
                 }
             }
