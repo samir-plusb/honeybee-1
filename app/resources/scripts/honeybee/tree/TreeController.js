@@ -228,7 +228,14 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         this.renderTarget.find('li').bind('dragstart', function(ev)
         {
             ev.stopPropagation();
-            ev.originalEvent.dataTransfer.setData('Text', $(this).attr('id'));
+            if ('true' == $(this).attr('draggable'))
+            {
+                ev.originalEvent.dataTransfer.setData('Text', $(this).attr('id'));
+            }
+            else
+            {
+                return false;
+            }
         }).bind('dragenter', function(ev)
         {
             ev.stopPropagation();
