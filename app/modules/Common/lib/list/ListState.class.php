@@ -20,6 +20,8 @@ class ListState implements IListState
 
     protected $referenceField = FALSE;
 
+    protected $referenceModule = FALSE;
+
     protected $searchMode = self::MODE_SEARCH;
 
     public static function create(array $data = array())
@@ -140,6 +142,11 @@ class ListState implements IListState
     public function getReferenceField()
     {
         return $this->referenceField;
+    }
+
+    public function getReferenceModule()
+    {
+        return $this->referenceModule;
     }
 
     public function isInSelectOnlyMode()

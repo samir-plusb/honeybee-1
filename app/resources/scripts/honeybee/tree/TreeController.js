@@ -35,6 +35,54 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         this.workflow_handler = new honeybee.list.WorkflowHandler(
             this.options.workflow_urls || {}
         );
+
+        var that = this;
+        this.renderTarget.find('.child input:checkbox').change(function()
+        {
+            var parentNode = $(this).parent().parent();
+            var itemData = JSON.parse(parentNode.attr('data-document'));
+            if ($(this).is(':checked'))
+            {
+                that.onItemSelected(itemData);
+            }
+            else
+            {
+                that.onItemDeselected(itemData);
+            }
+        });
+
+        var messageEventHandler = function(event)
+        {
+            var msg_data, tree_node, i;
+            if(0 === that.options.event_origin.indexOf(event.origin))
+            {
+                msg_data = JSON.parse(event.data);
+                if (msg_data.source_type === that.type_key)
+                {
+                    // ignore our own messages.
+                    return;
+                }
+
+                for (i = 0; i < msg_data.selected_doc_ids.length; i++)
+                {
+                    tree_node = $('#' + msg_data.selected_doc_ids[i]);
+                    tree_node.find('> .node-label input:checkbox').attr('checked', 'checked');
+                }
+            }
+        }
+
+        window.addEventListener('message', messageEventHandler,false);
+
+        honeybee.core.events.on('clearFilter', function() { that.reloadList({}); });
+
+        window.top.postMessage(
+            JSON.stringify({
+                'event_type': 'list-loaded', 
+                'source_type': this.type_key,
+                'reference_field': this.options.reference_field
+            }),
+            that.options.event_origin
+        );
     },
 
     initKnockoutProperties: function()
@@ -404,12 +452,12 @@ honeybee.tree.TreeController.create = function(element, namespace)
 
     if (0 === element.length)
     {
-        throw "Unable to find element to create controller from. Looked for: " + element;
+        throw "[TreeController] Unable to find element to create controller from. Looked for: " + element;
     }
     var controller_class = element.attr('data-controller');
     if (! controller_class || ! namespace[controller_class])
     {
-        throw "Unable to resolve controller implementor: " + controller_class;
+        throw "[TreeController] Unable to resolve controller implementor: " + controller_class;
     }
 
     var options = element.attr('data-controller-options') || "{}";

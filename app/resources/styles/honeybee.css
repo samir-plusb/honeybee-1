@@ -779,7 +779,9 @@ div.select2-container-multi .select2-choices .select2-search-field
   cursor: default;
 }
 
-.assign-reference-modal .refwidget-container
+.assign-reference-modal .refwidget-container,
+.assign-reference-modal .tagslist-input-wrapper,
+.assign-reference-modal .pill-container
 {
   width: 100%;
 }

@@ -26,6 +26,17 @@ class ListAction extends BaseAction
     {
         $module = $this->getModule();
 
+        if ($parameters->hasParameter('referenceField') && $parameters->hasParameter('referenceModule'))
+        {
+            $fieldname = $parameters->getParameter('referenceField');
+            $moduleClass = sprintf('Honeybee\\Domain\\%1$s\\%1$sModule', $parameters->getParameter('referenceModule'));
+            $referenceModule = $moduleClass::getInstance();
+            $referenceField = $referenceModule->getField($fieldname);
+
+            $this->setAttribute('referenceModule', $referenceModule);
+            $this->setAttribute('referenceField', $referenceField);
+        }
+
         $service = $module->getService();
 
         $listConfig = ListConfig::create($this->buildListConfig());
@@ -111,9 +122,32 @@ class ListAction extends BaseAction
 
         $listSettings['hasTreeView'] = $this->getModule()->isActingAsTree();
         $listSettings['clientSideController']['options']['module'] = $this->getModule()->getOption('prefix');
+        $listSettings['clientSideController']['options']['event_origin'] = $routing->getBaseHref();
         $listSettings['clientSideController']['options']['reference_batches'] = $this->buildReferenceBatchConfig();
 
-        if (TRUE === \AgaviConfig::get(sprintf('%s.sidebar.folders.enabled', $this->getModule()->getOption('prefix')), FALSE))
+        if ($this->hasAttribute('referenceField'))
+        {
+            $referenceField = $this->getAttribute('referenceField');
+            $referenceModule = $this->getAttribute('referenceModule');
+
+            foreach ($referenceField->getOption(ReferenceField::OPT_REFERENCES) as $reference)
+            {
+                if (get_class($this->getModule()) === $reference[ReferenceField::OPT_MODULE])
+                {
+                    $listSettings['clientSideController']['options']['reference_field'] = $referenceField->getName();
+                    $listSettings['clientSideController']['options']['reference_module'] = $referenceModule->getName();
+                    $listSettings['clientSideController']['options']['reference_settings'] = array(
+                        'identity_field' => $reference[ReferenceField::OPT_IDENTITY_FIELD],
+                        'display_field' => $reference[ReferenceField::OPT_DISPLAY_FIELD]
+                    );
+                    break;
+                }
+            }
+        }
+
+        $enableFoldersSetting = sprintf('%s.sidebar.folders.enabled', $this->getModule()->getOption('prefix'));
+
+        if (! $this->hasAttribute('referenceField') && TRUE === \AgaviConfig::get($enableFoldersSetting, FALSE))
         {
             $listSettings['itemActions'] = isset($listSettings['itemActions']) ? $listSettings['itemActions'] : array();
             // reference-fields that are affected by a configured 'assignReference' item action.
@@ -254,13 +288,6 @@ class ListAction extends BaseAction
 
         foreach ($referenceFields as $referenceField)
         {
-            $references = $referenceField->getOption(ReferenceField::OPT_REFERENCES);
-            $referenceModuleClass = $references[0][ReferenceField::OPT_MODULE];
-            $displayField = $references[0][ReferenceField::OPT_DISPLAY_FIELD];
-            $identityField = $references[0][ReferenceField::OPT_IDENTITY_FIELD];
-
-            $referenceModule = $referenceModuleClass::getInstance();
-
             $maxCount = (int)$referenceField->getOption(ReferenceField::OPT_MAX_REFERENCES, 0);
             $updateUrl = urldecode(htmlspecialchars_decode(
                 $routing->gen(
@@ -272,12 +299,15 @@ class ListAction extends BaseAction
             $translationDomain = sprintf('%s.list', $this->getModule()->getOption('prefix'));
             $refWidgetOptions = array(
                 'autobind' => TRUE,
+                'event_origin' => $routing->getBaseHref(),
                 'autocomplete' => TRUE,
                 'autocomp_mappings' => $this->buildReferenceWidgetSuggestOptions($referenceField),
                 'fieldname' => $referenceField->getName(),
+                'realname' => $referenceField->getName(),
                 'max' => $maxCount,
+                'disable_backdrop' => TRUE,
                 'tags' => array(),
-                'tpl' => 'Float',
+                'tpl' => 'Stacked',
                 'texts' =>  array(
                     'placeholder' => $tm->_('assign_references', $translationDomain),
                     'searching' => $tm->_('searching', $translationDomain),
@@ -314,11 +344,18 @@ class ListAction extends BaseAction
             $referencedModule = $referenceModuleClass::getInstance();
             $modulePrefix = $referencedModule->getOption('prefix');
             $suggestRouteName = sprintf('%s.suggest', $modulePrefix);
+            $listRouteName = sprintf('%s.list', $modulePrefix);
 
             $autoCompleteMappings[$modulePrefix] = array(
                 'display_field' => $displayField,
                 'identity_field' => $identityField,
                 'module_label' => $tm->_($referencedModule->getName(), 'modules.labels'),
+                'list_url' => htmlspecialchars_decode(
+                    urldecode($routing->gen($listRouteName, array(
+                        'referenceModule' => $this->getModule()->getName(),
+                        'referenceField' => $referenceField->getName()
+                    )
+                ))),
                 'uri' => htmlspecialchars_decode(
                     urldecode($routing->gen($suggestRouteName, array(
                         'term' => '{PHRASE}',

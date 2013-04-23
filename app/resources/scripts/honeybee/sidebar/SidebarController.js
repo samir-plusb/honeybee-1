@@ -87,12 +87,12 @@ honeybee.sidebar.SidebarController.create = function(element, namespace)
 
     if (0 === jqElement.length)
     {
-        throw "Unable to find element to create controller from. Looked for: " + element;
+        throw "[SidebarController] Unable to find element to create controller from. Looked for: " + element;
     }
     var controller_class = jqElement.attr('data-controller');
     if (! controller_class || ! namespace[controller_class])
     {
-        throw "Unable to resolve controller implementor: " + controller_class;
+        throw "[SidebarController] Unable to resolve controller implementor: " + controller_class;
     }
 
     var options = jqElement.attr('data-controller-options') || "{}";

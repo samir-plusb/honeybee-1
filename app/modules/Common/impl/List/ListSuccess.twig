@@ -11,8 +11,8 @@
             {% if has_tree_view %}
                 <section class="view-mode-switch">
                     <div class="btn-group" data-toggle="radio">
-                        <a class="btn active btn-primary" href="{{ro.gen(module_type_key ~ '.list')}}">Liste</a>
-                        <a class="btn btn-primary" href="{{ro.gen(module_type_key ~ '.tree')}}">Hierarchie</a>
+                        <a class="btn active btn-primary" href="{{list_base_url}}">Liste</a>
+                        <a class="btn btn-primary" href="{{tree_view_link}}">Hierarchie</a>
                     </div>
                 </section>
             {% endif %}
@@ -270,7 +270,7 @@ Modal dialogs
 
 <div class="modal assign-reference-modal" style="display:none">
     <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
+        <a class="close close-dialog">×</a>
         <h4 class="header">select reference</h4>
     </div>
     <div class="modal-body">

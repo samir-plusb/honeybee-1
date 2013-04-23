@@ -6,7 +6,8 @@ class TreeSuccessView extends BaseView
 {
     public function executeHtml(\AgaviRequestDataHolder $parameters)
     {
-        $this->setupHtml($parameters);
+        $layout = $this->hasAttribute('referenceField') ? 'reference' : NULL;
+        $this->setupHtml($parameters, $layout);
 
         $module = $this->getAttribute('module');
         $tm = $this->getContext()->getTranslationManager();

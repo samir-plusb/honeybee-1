@@ -7,8 +7,6 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
     select2_element: null,
 
-    reference_list_modal: null,
-
     // <knockout_props>
     fieldname: null,
 
@@ -44,7 +42,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
         var messageEventHandler = function(event)
         {
-            if(event.origin == 'http://cms.familienportal.dev')
+            if(0 === that.options.event_origin.indexOf(event.origin))
             {
                 var msg_data = JSON.parse(event.data);
                 if (msg_data.reference_field == that.options.realname)
@@ -92,18 +90,23 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                         {
                             doc_ids.push(that.tags()[i].id);
                         }
-                        that.element.find('.reference-list-access')[0].contentWindow.postMessage(
-                            JSON.stringify({
-                                'selected_doc_ids': doc_ids
-                            }), 
-                            'http://cms.familienportal.dev/'
-                        );
+
+                        var iframe = that.element.find('.reference-list-access')[0];
+                        if (iframe)
+                        {
+                            iframe.contentWindow.postMessage(
+                                JSON.stringify({'selected_doc_ids': doc_ids}), 
+                                that.options.event_origin
+                            );
+                        }
+                        
                     }
                     
                     that.element.find('.tagslist-input').select2('data', that.tags());
                 }
             }
         }
+        
         window.addEventListener('message', messageEventHandler, false);
     },
 
@@ -125,13 +128,54 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     {
         var that = this;
         var iframe = this.element.find('.reference-list-access')[0];
+        var hideDialog = function(element)
+        {
+            if (that.options.disable_backdrop)
+            {
+                element.css('display', 'none');
+            }
+            else
+            {
+                element.modal('hide');
+            }
+        };
+        var showDialog = function(element)
+        {
+            if (that.options.disable_backdrop)
+            {
+                element.css('display', 'block');
+            }
+            else
+            {
+                element.modal({'show': true, 'backdrop': 'static'});
+            }
+        }
+
         iframe.onload = function()
         {
-            that.element.find('.modal-reference-loading').modal('hide');
-            that.reference_list_modal = that.element.find('.modal-reference-list').first().modal({'show': true});
+            hideDialog(that.element.find('.modal-reference-loading'));
+            showDialog(that.element.find('.modal-reference-list'));
         };
-        this.element.find('.modal-reference-loading').modal('show');
-        iframe.src = this.options.reference_list_url;
+
+        showDialog(this.element.find('.modal-reference-loading'));
+        this.element.find('.modal-reference-loading .modal-header .close-dialog').click(function()
+        {
+            hideDialog(that.element.find('.modal-reference-loading'));
+        });
+
+        this.element.find('.modal-reference-list .modal-header .close-dialog').click(function()
+        {
+            hideDialog(that.element.find('.modal-reference-list'));
+        });
+
+        var refmodule_name;
+        for (refmodule_name in this.options.autocomp_mappings)
+        {
+            break;
+        }
+
+        // open refbrowser with first found referenced module selected by default.
+        iframe.src = this.options.autocomp_mappings[refmodule_name].list_url;
     },
 
     // #########################
@@ -302,7 +346,7 @@ honeybee.widgets.Reference.DEFAULT_OPTIONS = {
     fieldname: 'tagslist[]',
     autocomplete: false,
     autocomp_mappings: [],
-    reference_list_url: "http://cms.familienportal.dev/topics/list/relatedTopics?selectOnlyMode=true&limit=10",
+    reference_list_url: "",
     texts: {
         placeholder: '',
         too_short: '',

@@ -3,6 +3,7 @@
 namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Dat0r\Tree;
+use Dat0r\Core\Runtime\Field\ReferenceField;
 use TreeConfig;
 
 class TreeAction extends BaseAction
@@ -10,6 +11,18 @@ class TreeAction extends BaseAction
     public function executeRead(\AgaviRequestDataHolder $requestData)
     {   
         $module = $this->getModule();
+
+        if ($requestData->hasParameter('referenceField') && $requestData->hasParameter('referenceModule'))
+        {
+            $fieldname = $requestData->getParameter('referenceField');
+            $moduleClass = sprintf('Honeybee\\Domain\\%1$s\\%1$sModule', $requestData->getParameter('referenceModule'));
+            $referenceModule = $moduleClass::getInstance();
+            $referenceField = $referenceModule->getField($fieldname);
+
+            $this->setAttribute('referenceModule', $referenceModule);
+            $this->setAttribute('referenceField', $referenceField);
+        }
+
         $tree = $module->getService('tree')->get('tree-default');
 
         $this->setAttribute('module', $module);
@@ -38,6 +51,7 @@ class TreeAction extends BaseAction
 
     protected function buildTreeConfig()
     {
+        $routing = $this->getContext()->getRouting();
         $settingsKey = $this->buildTreeConfigKey();
         $treeSettings = \AgaviConfig::get($settingsKey, array());
         $fields = array_values($this->getModule()->getFields()->toArray());
@@ -56,6 +70,30 @@ class TreeAction extends BaseAction
                 );
             }
             $treeSettings['fields'] = $listFields;
+        }
+
+        $treeSettings['clientSideController']['options']['module'] = $this->getModule()->getOption('prefix');
+        $treeSettings['clientSideController']['options']['event_origin'] = $routing->getBaseHref();
+
+        if ($this->hasAttribute('referenceField'))
+        {
+            $referenceField = $this->getAttribute('referenceField');
+            $referenceModule = $this->getAttribute('referenceModule');
+
+            foreach ($referenceField->getOption(ReferenceField::OPT_REFERENCES) as $reference)
+            {
+                if (get_class($this->getModule()) === $reference[ReferenceField::OPT_MODULE])
+                {
+                    $treeSettings['clientSideController']['options']['reference_field'] = $referenceField->getName();
+                    $treeSettings['clientSideController']['options']['select_only_mode'] = TRUE;
+                    $treeSettings['clientSideController']['options']['reference_module'] = $referenceModule->getName();
+                    $treeSettings['clientSideController']['options']['reference_settings'] = array(
+                        'identity_field' => $reference[ReferenceField::OPT_IDENTITY_FIELD],
+                        'display_field' => $reference[ReferenceField::OPT_DISPLAY_FIELD]
+                    );
+                    break;
+                }
+            }
         }
 
         return $treeSettings;

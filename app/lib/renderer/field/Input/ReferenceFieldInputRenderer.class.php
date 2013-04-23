@@ -41,12 +41,13 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                 );
             }
         }
-
+        $routing = AgaviContext::getInstance()->getRouting();
         $maxCount = (int)$this->getField()->getOption(ReferenceField::OPT_MAX_REFERENCES, 0);
         return array(
             'autobind' => TRUE,
+            'event_origin' => $routing->getBaseHref(),
             'autocomplete' => TRUE,
-            'autocomp_mappings' => $this->buildAutoCompleteOptions(),
+            'autocomp_mappings' => $this->buildAutoCompleteOptions($document),
             'fieldname' => $this->generateInputName($document),
             'realname' => $this->getField()->getName(),
             'max' => $maxCount,
@@ -62,7 +63,7 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
         );
     }
 
-    protected function buildAutoCompleteOptions()
+    protected function buildAutoCompleteOptions(Document $document)
     {
         $tm = AgaviContext::getInstance()->getTranslationManager();
         $references = $this->getField()->getOption(ReferenceField::OPT_REFERENCES);
@@ -77,11 +78,18 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
             $referencedModule = $referenceModuleClass::getInstance();
             $modulePrefix = $referencedModule->getOption('prefix');
             $suggestRouteName = sprintf('%s.suggest', $modulePrefix);
+            $listRouteName = sprintf('%s.list', $modulePrefix);
 
             $autoCompleteMappings[$modulePrefix] = array(
                 'display_field' => $displayField,
                 'identity_field' => $identityField,
                 'module_label' => $tm->_($referencedModule->getName(), 'modules.labels'),
+                'list_url' => htmlspecialchars_decode(
+                    urldecode($this->getRouteLink($listRouteName, array(
+                        'referenceModule' => $document->getModule()->getName(),
+                        'referenceField' => $this->getField()->getName()
+                    )))
+                ),
                 'uri' => htmlspecialchars_decode(
                     urldecode($this->getRouteLink($suggestRouteName, array(
                         'term' => '{PHRASE}',

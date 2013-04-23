@@ -19,8 +19,22 @@ class Common_Tree_TreeSuccessView extends CommonBaseView
 
         $this->setAttribute('module_type_key', $treeConfig->getTypeKey());
         $this->setAttribute('tree', $tree->toArray());
+        $this->setAttribute('select_only_mode', $parameters->hasParameter('referenceField'));
+
+        $listParams = array();
+        if ($parameters->hasParameter('referenceField'))
+        {
+            $listParams = array(
+                'referenceField' => $parameters->getParameter('referenceField'),
+                'referenceModule' => $parameters->getParameter('referenceModule')
+            );
+        }
 
         $routing = $this->getContext()->getRouting();
+
+        $this->setAttribute('list_view_link', $routing->gen($treeConfig->getTypeKey() . '.list', $listParams));
+        $this->setAttribute('tree_view_link', $routing->gen($treeConfig->getTypeKey() . '.tree'));
+
         $clientSideOptions = $treeConfig->getClientSideController();
         $clientSideOptions['options'] = isset($clientSideOptions['options']) ? $clientSideOptions['options'] : array();
         $clientSideOptions['options']['workflow_urls'] = array(

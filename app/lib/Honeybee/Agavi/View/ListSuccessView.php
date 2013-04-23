@@ -31,7 +31,11 @@ class ListSuccessView extends BaseView
             ), NULL, 'read')
         );
 
-        if (TRUE === \AgaviConfig::get(sprintf('%s.sidebar.folders.enabled', $module->getOption('prefix')), FALSE))
+        $enableFolders = 
+            ! $this->hasAttribute('referenceField') && 
+            (TRUE === \AgaviConfig::get(sprintf('%s.sidebar.folders.enabled', $module->getOption('prefix')), FALSE));
+
+        if (TRUE === $enableFolders)
         {
             $sidebarTrees = $this->getSidebarTreeRelationData();
             if (! empty($sidebarTrees))

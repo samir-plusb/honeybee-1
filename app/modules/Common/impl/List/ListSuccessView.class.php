@@ -59,6 +59,17 @@ class Common_List_ListSuccessView extends CommonBaseView
         $this->setAttribute('has_tree_view', $listConfig->hasTreeView());
         $this->setAttribute('custom_item_actions', $listConfig->getItemActions());
 
+        $modulePrefix = $listConfig->getTypeKey();
+        $treeParams = array();
+        if ($listState->isInSelectOnlyMode())
+        {
+            $treeParams = array(
+                'referenceField' => $listState->getReferenceField(),
+                'referenceModule' => $listState->getReferenceModule()
+            );
+        }
+        $this->setAttribute('tree_view_link', $routing->gen($modulePrefix . '.tree', $treeParams));
+
         $this->getLayer('content')->setSlot(
             'pagination',
             $this->createSlotContainer('Common', 'Paginate', array('state' => $listState, 'config' => $listConfig))

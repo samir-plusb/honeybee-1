@@ -54,7 +54,7 @@ class Common_ListAction extends CommonBaseAction
             ))
         );
         $clientSideOptions['options']['select_only_mode'] = $listState->isInSelectOnlyMode();
-        $clientSideOptions['options']['reference_field'] = $listState->getReferenceField();
+        
         $this->setAttribute('client_side_controller', $clientSideOptions);
         $this->setAttribute('list_route', $listConfig->getRouteName());
         $this->setAttribute('translation_domain', $listConfig->getTranslationDomain());

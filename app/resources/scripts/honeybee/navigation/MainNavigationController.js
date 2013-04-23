@@ -158,12 +158,13 @@ honeybee.navigation.MainNavigationController.create = function(element, namespac
 
     if (0 === element.length)
     {
-        throw "Unable to find element to create controller from. Looked for: " + element;
+        throw "[NavigationController] Unable to find element to create controller from. Looked for: " + element;
     }
+    
     var controller_class = element.attr('data-controller');
     if (! controller_class || ! namespace[controller_class])
     {
-        throw "Unable to resolve controller implementor: " + controller_class;
+        throw "[NavigationController] Unable to resolve controller implementor: " + controller_class;
     }
 
     var options = element.attr('data-controller-options') || "{}";

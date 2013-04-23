@@ -6,6 +6,8 @@ honeybee.list.ActionBatch = honeybee.core.BaseObject.extend({
 
     queue: null,
 
+    progress_dialog_tpl: null,
+
     progress_dialog: null,
 
     init: function(actions)
@@ -13,17 +15,7 @@ honeybee.list.ActionBatch = honeybee.core.BaseObject.extend({
         this.parent();
         this.actions = actions || [];
         this.queue = [];
-        this.progress_dialog = $('.modal-batch-progress').twodal({ // @todo make selector configurable
-            events: {
-                keyboard: false,
-                show: false,
-                cancelbatch: function()
-                {
-                    // @todo implement cancel.
-                    console.log("cancel batch clicked!");
-                }
-            }
-        });
+        this.progress_dialog_tpl = $('.modal-batch-progress').first()[0].outerHTML;
     },
 
     addAction: function(action)
@@ -47,7 +39,7 @@ honeybee.list.ActionBatch = honeybee.core.BaseObject.extend({
             );
         }
         this.dequeue();
-        this.progress_dialog.twodal('show');
+        this.progress_dialog = $(this.progress_dialog_tpl).twodal('show');
         return this;
     },
 
@@ -60,6 +52,8 @@ honeybee.list.ActionBatch = honeybee.core.BaseObject.extend({
             {
                 that.fire('complete');
                 that.progress_dialog.twodal('hide');
+                that.progress_dialog.remove();
+                that.progress_dialog = null;
             }, 1500);
             return;
         }

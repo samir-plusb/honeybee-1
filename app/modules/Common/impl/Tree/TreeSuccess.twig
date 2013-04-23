@@ -1,15 +1,17 @@
 {% import _self as self %}
 
-{% macro treenode(data, documents, translation_domain) %}
+{% macro treenode(data, documents, translation_domain, select_only_mode) %}
     {% import _self as self %}
 
     {% set document = documents[data.identifier] %}
-    <li id="{{data.identifier}}" class="child {% if data.children|length > 0 %}expandable{% endif %}" draggable="true" data-document="{{document|json_encode}}">
+    <li id="{{data.identifier}}" class="child {% if data.children|length > 0 %}expandable{% endif %}" 
+        {% if false == select_only_mode %}draggable="true"{% endif %} data-document="{{document|json_encode}}">
         <span class="node-label">
             <input type="checkbox" class="check" />
             <i class="icon-minus node-toggle"></i>
             {{data.label}}
         </span>
+        {% if false == select_only_mode %}
         <ul class="node-controls">
             <li class="control">
                 <div class="btn-group dropdown">
@@ -45,10 +47,11 @@
                 </ul>
             </li>
         </ul>
+        {% endif %}
         {% if data.children|length > 0 %}
         <ul class="children">
         {% for child in data.children %}
-            {{ self.treenode(child, documents, translation_domain) }}            
+            {{ self.treenode(child, documents, translation_domain, select_only_mode) }}            
         {% endfor %}
         </ul>
         {% endif %}
@@ -79,11 +82,12 @@
         <div class="container-viewcontrols">
             <section class="view-mode-switch">
                 <div class="btn-group" data-toggle="radio">
-                    <a class="btn btn-primary" href="{{ro.gen(module_type_key ~ '.list')}}">Liste</a>
-                    <a class="btn active btn-primary" href="{{ro.gen(module_type_key ~ '.tree')}}">Hierarchie</a>
+                    <a class="btn btn-primary" href="{{list_view_link}}">Liste</a>
+                    <a class="btn active btn-primary" href="{{tree_view_link}}">Hierarchie</a>
                 </div>
             </section>
         </div>
+        {% if false == select_only_mode %}
         <div class="container-actions clearfix">
             <section>
                 <a class="btn" href="{{ro.gen(module_type_key ~ '.edit')}}">Neuer Eintrag</a>
@@ -106,12 +110,13 @@
                 </div>
             </section>
         </div>
+        {% endif %}
     </section>
 
     <section class="render-tree">
         <ul class="children">
         {% for node in tree.rootNode.children %}
-            {{ self.treenode(node, documents, translation_domain) }}
+            {{ self.treenode(node, documents, translation_domain, select_only_mode) }}
         {% endfor %}
         </ul>
     </section>

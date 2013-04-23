@@ -2,6 +2,8 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
     log_prefix: "ListController",
 
+    type_key: 'list_controller',
+
     viewmodel: null,
 
     workflow_handler: null,
@@ -56,10 +58,16 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
         var messageEventHandler = function(event)
         {
-            if(event.origin == 'http://cms.familienportal.dev')
+            if(0 === that.options.event_origin.indexOf(event.origin))
             {
                 var msg_data = JSON.parse(event.data);
+                if (msg_data.source_type === that.type_key)
+                {
+                    // ignore our own messages.
+                    return;
+                }
                 var cur_item, i;
+
                 for (i = 0; i < that.viewmodel.list_items().length; i++)
                 {
                     cur_item = that.viewmodel.list_items()[i];
@@ -70,18 +78,18 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
                 }
             }
         }
+
         window.addEventListener('message', messageEventHandler,false);
 
-        honeybee.core.events.on('clearFilter', function() {
-            that.reloadList({});
-        });
+        honeybee.core.events.on('clearFilter', function() { that.reloadList({}); });
 
         window.top.postMessage(
             JSON.stringify({
                 'event_type': 'list-loaded', 
+                'source_type': this.type_key,
                 'reference_field': this.options.reference_field
             }),
-            'http://cms.familienportal.dev/'
+            that.options.event_origin
         );
     },
 
@@ -150,7 +158,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         {
             alert("Datensatz konnte nicht geöffnet werden, da er bereits bearbeitet wird.");
         });
-*/
+        */
     },
 
     proceed: function(is_batch, data, gate, confirm_text)
@@ -199,6 +207,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
         var assign_trigger = reference_dialog.find('.select-reference');
         assign_trigger.text(labels.assign_references);
+        var close_trigger = reference_dialog.find('.modal-header .close-dialog');
 
         var widget_container = reference_dialog.find('.widget-tags-list');
         var widget_options = batch_options.widget_options;
@@ -227,7 +236,11 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             }
         });
 
-        reference_dialog.modal('show');
+        reference_dialog.modal({'show': true, 'backdrop': 'static'});
+        close_trigger.click(function()
+        {
+            reference_dialog.modal('hide');
+        });
         reference_dialog.on('hidden', function()
         {
             reference_dialog.remove();
@@ -417,20 +430,9 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         });
     },
 
-    onItemSelected: function(item)
-    {
-        this.updateSidebarClickTriggers();
-    },
-
-    onItemDeselected: function()
-    {
-        this.updateSidebarClickTriggers();
-    },
-
     updateSidebarClickTriggers: function()
     {
         var that = this;
-
         $('.sidebar-tree-targets .tree-target').each(function(idx, element)
         {
             var target_container = $(element);
@@ -466,16 +468,20 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         {
             var msg_payload = {
                 event_type: 'item-added',
+                source_type: this.type_key,
                 reference_field: this.options.reference_field,
+                reference_module: this.options.reference_module,
                 item: {
-                    id: item.data.identifier,
-                    text: item.data.title,
-                    module: 'topic'
+                    id: item.data[this.options.reference_settings.identity_field], 
+                    text: item.data[this.options.reference_settings.display_field], 
+                    module: this.options.module
                 }
             };
 
-            window.top.postMessage(JSON.stringify(msg_payload), 'http://cms.familienportal.dev/');
+            window.top.postMessage(JSON.stringify(msg_payload), this.options.event_origin);
         }
+
+        this.updateSidebarClickTriggers();
     },
 
     onItemDeselected: function(item)
@@ -484,33 +490,39 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         {
             var msg_payload = {
                 event_type: 'item-removed',
+                source_type: this.type_key,
                 reference_field: this.options.reference_field,
+                reference_module: this.options.reference_module,
                 item: {
-                    id: item.data.identifier,
-                    text: item.data.title,
-                    module: 'topic'
+                    id: item.data[this.options.reference_settings.identity_field],  
+                    text: item.data[this.options.reference_settings.display_field],     
+                    module: this.options.module
                 }
             };
 
-            window.top.postMessage(JSON.stringify(msg_payload), 'http://cms.familienportal.dev/');
+            window.top.postMessage(JSON.stringify(msg_payload), this.options.event_origin);
         }
+
+        this.updateSidebarClickTriggers();
     }
 });
 
 honeybee.list.ListController.create = function(element, namespace)
 {
     element = $(element);
+
     if (0 === element.length)
     {
-        throw "Unable to find element to create controller from. Looked for: " + element;
+        throw "[ListController] Unable to find element to create controller from. Looked for: " + element;
     }
     var controller_class = element.attr('data-controller');
     if (! controller_class || ! namespace[controller_class])
     {
-        throw "Unable to resolve controller implementor: " + controller_class;
+        throw "[ListController] Unable to resolve controller implementor: " + controller_class;
     }
     var options = element.attr('data-controller-options') || "{}";
     var controller = new namespace[controller_class](JSON.parse(options));
+
     return controller;
 };
 
