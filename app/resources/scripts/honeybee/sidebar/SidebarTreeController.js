@@ -9,6 +9,13 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
     init: function(options)
     {
         this.domElement = options.domElement;
+
+        this.options = options || {};
+
+        this.options.leaf = options.leaf || '〉'; // &#x3009; &#x232a;  &#x27e9;
+        this.options.leaf_open = options.leaf_open || '➖'; // &#x2796; &#x2212;
+        this.options.leaf_closed = options.leaf_closed || '➕'; // &#x2795;
+
         this.renderTarget = this.domElement.find('.render-tree');
 
         this.loadData();
@@ -30,13 +37,16 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
                 value: $(this).parent('.child').attr('id')
             });
 
-            that.renderTarget.find('.node-label').removeClass('highlighted');
-            $(this).addClass('highlighted');
+            that.renderTarget.find('li.highlighted').removeClass('highlighted');
+            $(this).parent('li').addClass('highlighted');
+            //that.renderTarget.find('.node-label').removeClass('highlighted');
+            //$(this).addClass('highlighted');
         });
 
         honeybee.core.events.on('clearFilter', function() 
         {
-            that.renderTarget.find('.node-label').removeClass('highlighted'); 
+            that.renderTarget.find('li.highlighted').removeClass('highlighted');
+            //that.renderTarget.find('.node-label').removeClass('highlighted');
         });
 
         that.renderTarget.find('.move-inside').bind('click', function()
@@ -99,12 +109,28 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
 
     bindToggleEvents: function()
     {
+        var that = this;
         this.renderTarget.find('.node-toggle').bind('click', function(ev)
         {
+            var toggle = $(ev.target);
+            var child = toggle.parentsUntil('.child').parent();
+            child.toggleClass('closed');
+            if (child.hasClass('expandable'))
+            {
+                var text = toggle.html();
+                if (text == that.options.leaf_open)
+                {
+                    toggle.html(that.options.leaf_closed);
+                }
+                else
+                {
+                    toggle.html(that.options.leaf_open);
+                }
+            }
+            ev.preventDefault();
             ev.stopPropagation();
-            $(this).parentsUntil('.child').parent().toggleClass('closed');
-            $(this).toggleClass('icon-minus icon-plus');
         });
+
     },
 
     refreshCss: function()
@@ -120,6 +146,14 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
             if (children.length > 0)
             {
                 domContext.addClass('expandable');
+                if (domContext.hasClass('closed'))
+                {
+                    domContext.find('.node-toggle').html('➕');
+                }
+                else
+                {
+                    domContext.find('.node-toggle').html('➖');
+                }
                 domContext.children('ul').children('li').each(function(i, element)
                 {
                     traverseAndRefresh($(element));
@@ -128,6 +162,7 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
             else
             {
                 domContext.removeClass('expandable open closed');
+                domContext.find('.node-toggle').html('〉');
             }
 
         };

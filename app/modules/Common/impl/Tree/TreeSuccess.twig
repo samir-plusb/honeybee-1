@@ -5,16 +5,21 @@
 
     {% set document = documents[data.identifier] %}
     <li id="{{data.identifier}}" class="child {% if data.children|length > 0 %}expandable{% endif %}" draggable="true" data-document="{{document|json_encode}}">
-        <span class="node-label">
+        <label class="node-label">
+            {% if data.children|length > 0 %}
+            {# <i class="icon-minus node-toggle"></i> #}
+            <span class="node-toggle">➖</span>
+            {% else %}
+            <span class="node-toggle">〉</span>
+            {% endif %}
             <input type="checkbox" class="check" />
-            <i class="icon-minus node-toggle"></i>
-            {{data.label}}
-        </span>
+            <span class="name">{{data.label}}</span>
+        </label>
         <ul class="node-controls">
             <li class="control">
                 <div class="btn-group dropdown">
                         <button class="btn btn-primary honeybee-action honeybee-action-edit" {% if not document.workflow.interactive %}disabled="disabled"{% endif %}>
-                            <i class="icon icon-cog"></i> {{tm._('edit', translation_domain)}}
+                            {{tm._('edit', translation_domain)}}
                         </button>
                     {% if document.workflow.gates|length > 0 %}
                     <button class="btn dropdown-toggle btn-primary" data-toggle="dropdown">
@@ -39,16 +44,16 @@
                     <span class="control-label">Abbrechen</span>
                 </a>
                 <ul class="move-target hide">
-                    <li class="move-before"><span class="arrow">▲</span></li>
-                    <li class="move-after"><span class="arrow">▼</span></li>
-                    <li class="move-inside"><span class="arrow">▶</span></li>
+                    <li class="move-before" title="{{tm._('Vor diesem Eintrag einfügen', translation_domain)}}"><span class="arrow">▲</span></li>
+                    <li class="move-after" title="{{tm._('Nach diesem Eintrag einfügen', translation_domain)}}"><span class="arrow">▼</span></li>
+                    <li class="move-inside" title="{{tm._('Als Kind an diesen Eintrag anhängen', translation_domain)}}"><span class="arrow">▶</span></li>
                 </ul>
             </li>
         </ul>
         {% if data.children|length > 0 %}
         <ul class="children">
         {% for child in data.children %}
-            {{ self.treenode(child, documents, translation_domain) }}            
+            {{ self.treenode(child, documents, translation_domain) }}
         {% endfor %}
         </ul>
         {% endif %}
