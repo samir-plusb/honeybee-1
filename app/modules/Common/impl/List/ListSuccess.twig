@@ -84,8 +84,10 @@
     <section class="well toolbar secondary">
         <ul class="toolset">
             <li class="tool select-all">
-                <input type="checkbox" id="select_all_rows_toggle" data-bind="checked: all_selected" /> 
-                <label style="display: inline-block;" for="select_all_rows_toggle">Alle auswählen</label>
+                <label title="Alle Einträge dieser Seite ab-/auswählen"><input type="checkbox" id="select_all_rows_toggle" data-bind="checked: all_selected" /> {{tm._('Alle auswählen',  translation_domain)}}</label>
+            </li>
+            <li class="tool select-invert">
+                <a data-bind="click: invertAllSelected">{{tm._('Auswahl umkehren',  translation_domain)}}</a>
             </li>
             {% if 0 < sidebar_tree_targets|length %}
             <li class="tool sidebar-tree-targets">
@@ -171,8 +173,9 @@
                     "class":  $data.css_classes }, 
                         event:{ dragstart: dragStart }, 
                         attr: { "draggable": ({{ sidebar_tree_targets|length }} > 0 && $data.workflow.interactive) ? "true" : "false" }'>
-                    <td>
-                        <input type="checkbox" data-bind="checked: selected" />
+
+                    <td class="list_item_checkbox">
+                        <label title="{{tm._('Eintrag wählen', translation_domain)}}"><input type="checkbox" data-bind="checked: selected" /></label>
                     </td>
 
                     {% for list_template in templates%}

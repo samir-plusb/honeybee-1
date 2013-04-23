@@ -18,6 +18,11 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
     {
         //this.parent();
         this.options = options;
+
+        this.options.leaf = options.leaf || '〉'; // &#x3009; &#x232a;  &#x27e9;
+        this.options.leaf_open = options.leaf_open || '➖'; // &#x2796; &#x2212;
+        this.options.leaf_closed = options.leaf_closed || '➕'; // &#x2795;
+
         this.domElement = options.domElement;
         this.renderTarget = this.domElement.find('.render-tree');
 
@@ -141,10 +146,26 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
     bindToggleEvents: function()
     {
+        var that = this;
         this.renderTarget.find('.node-toggle').bind('click', function(ev)
         {
-            $(this).parentsUntil('.child').parent().toggleClass('closed');
-            $(this).toggleClass('icon-minus icon-plus');
+            var toggle = $(ev.target);
+            var child = toggle.parentsUntil('.child').parent();
+            child.toggleClass('closed');
+            if (child.hasClass('expandable'))
+            {
+                var text = toggle.html();
+                if (text == that.options.leaf_open)
+                {
+                    toggle.html(that.options.leaf_closed);
+                }
+                else
+                {
+                    toggle.html(that.options.leaf_open);
+                }
+            }
+            ev.preventDefault();
+            ev.stopPropagation();
         });
     },
 
@@ -267,6 +288,14 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
             if (children.length > 0)
             {
                 domContext.addClass('expandable');
+                if (domContext.hasClass('closed'))
+                {
+                    domContext.find('.node-toggle').html('➕');
+                }
+                else
+                {
+                    domContext.find('.node-toggle').html('➖');
+                }
                 domContext.children('ul').children('li').each(function(i, element)
                 {
                     traverseAndRefresh($(element));
@@ -275,6 +304,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
             else
             {
                 domContext.removeClass('expandable open closed');
+                domContext.find('.node-toggle').html('〉');
             }
 
         };

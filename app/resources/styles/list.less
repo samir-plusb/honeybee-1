@@ -213,12 +213,12 @@ th.header-actions
  */
 .table-striped tbody tr:nth-child(2n+1):hover td
 {
-    background: #F9F9F9;
+    background: rgba(141, 192, 219, 0.25);
 }
 
 .table-striped tbody tr:nth-child(2n):hover td
 {
-    background: none;
+    background: rgba(141, 192, 219, 0.25);
 }
 
 .list-data table td
@@ -239,6 +239,28 @@ th.header-actions
 .list-data .item-owner
 {
     float: right;
+}
+
+th.list_item_checkbox,
+td.list_item_checkbox
+{
+    text-align: center;
+    padding: 0;
+}
+
+th.list_item_checkbox label,
+td.list_item_checkbox label
+{
+    margin: 0;
+    padding: 0;
+    line-height: 40px;
+}
+
+th.list_item_checkbox label input,
+td.list_item_checkbox label input
+{
+    margin: 0;
+    padding: 0;
 }
 
 .dialog-modal-overlay
@@ -317,6 +339,9 @@ td.actions
 */
 
 .toolbar.secondary {
+
+    padding-left: 10px;
+
     .assign-category {
 
     }

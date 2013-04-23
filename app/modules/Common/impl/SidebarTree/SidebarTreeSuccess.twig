@@ -5,7 +5,12 @@
 
     <li id="{{data.identifier}}" class="child {% if data.children|length > 0 %}expandable{% endif %}">
         <span class="node-label">
-            <i class="icon-minus node-toggle"></i>
+            {% if data.children|length > 0 %}
+            {# <i class="icon-minus node-toggle"></i> #}
+            <span class="node-toggle">➖</span>
+            {% else %}
+            <span class="node-toggle">〉</span>
+            {% endif %}
             {{data.label}}
         </span>
         <ul class="node-controls">
@@ -18,7 +23,7 @@
         {% if data.children|length > 0 %}
         <ul class="children">
         {% for child in data.children %}
-            {{ self.treenode(child, documents, translation_domain) }}            
+            {{ self.treenode(child, documents, translation_domain) }}
         {% endfor %}
         </ul>
         {% endif %}

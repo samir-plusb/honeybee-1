@@ -1,67 +1,132 @@
 @dropBorderColor: rgba(255, 128, 0, 0.5);
 @dropShadowColor: rgba(255, 128, 0, 1.0);
 
-.container-tree-data, .sidebar-tree {
-    .render-tree {
-        .children {
-            margin-left: 0;
+/* category */
+@treeModuleNameText: #424547;
+@treeModuleNameBackground: #e3e3e3;
+@treeModuleNameBorder: #000;
 
-            .children {
-                margin-left: 20px;
-            }
+/* node labels*/
+@treeItemText: #424547;
+@treeItemBackground: #f5f5f5;
+@treeItemBullet: #aeaeae;
+
+@treeItemHoverBackground: rgba(141, 192, 219, 0.25);
+@treeItemHoverText: #424547;
+
+/* highlighted/active node labels */
+@treeItemActiveText: #fff;
+@treeItemActiveBackground: #0088cc;
+@treeItemActiveBullet: #fff;
+
+.container-tree-data, .sidebar-tree {
+
+    h3 {
+        margin: 0;
+        padding-left: 20px;
+        color: @treeModuleNameText;
+        background: @treeModuleNameBackground;
+        border-bottom: 1px solid @treeModuleNameBorder;
+    }
+
+    .render-tree {
+
+        color: @treeItemText;
+        background-color: @treeItemBackground;
+
+        .children {
+            margin: 0;
+            padding: 0;
         }
-        
+
         .child {
             position: relative;
-            padding: 5px 0 5px 5px;
-
-            margin: 10px 0;
+            margin: 0;
+            padding: 0;
 
             list-style-position: inside;
             list-style-type: none;
 
-            background-color: #fff;
-
             cursor: default;
-            
+
             &.closed {
                 > .children {
                     display: none;
                 }
             }
 
+            &.highlighted .child {
+                color: @treeItemText;
+                background-color: @treeItemBackground;
+            }
+
+            .node-toggle {
+                cursor: default;
+                cursor: hand;
+                cursor: pointer;
+                color: @treeItemText;
+            }
+
             .node-label {
-                height: 40px;
-                display: block;
-                border: 1px solid #c4c4c4;
-                border-radius: 5px;
-                background-image: -webkit-linear-gradient(top, #fafafa 0%, #f1f1f1 100%);
-                background-image: linear-gradient(to bottom, #fafafa 0%, #f1f1f1 100%); /* W3C */
+                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+                box-sizing: border-box;
+
+                display: inline-block;
+                padding: 0;
+                margin: 0;
+
+                width: 100%;
+                max-width: 100%;
 
                 line-height: 37px;
 
-                color: rgb(0, 68, 204);
-                font-weight: 700;
+                cursor: default;
+                cursor: hand;
+                cursor: pointer;
+
+                &:hover,
+                &:focus {
+                    background-color: @treeItemHoverBackground;
+                    color: @treeItemHoverText;
+                }
+
+                .node-toggle {
+                    display: inline-block;
+                    width: 1em;
+                    padding-left: 1em;
+                }
 
                 .check {
                     margin: 10px 5px 13px 5px;
                     display: inline-block;
+                }
+
+                .name {
+                    cursor: move;
                 }
             }
 
             .node-controls {
                 position: absolute;
                 right: 0;
-                top: 6px;
-                padding: 5px 5px;
+                top: 4px;
+
+                cursor: default;
+                cursor: hand;
+                cursor: pointer;
 
                 .control {
                     display: block;
                     float: right;
 
                     padding: 0 10px;
-
                     border-right: 1px solid gray;
+
+                    cursor: default;
+                    cursor: hand;
+                    cursor: pointer;
+
                     &:first-child {
                         border-right: none;
                     }
@@ -155,21 +220,37 @@
                             top: 2px;
                             left: 5px;
                         }
-                    }           
+                    }
                     .move-inside {
                         .arrow {
                             top: 4px;
                             left: 6px;
                         }
-                    }           
+                    }
                     .move-after {
                         .arrow {
                             top: 4px;
                             left: 5px;
                         }
-                    }           
+                    }
                 }
             }
+
+            &.expandable {
+                > .node-label {
+                    > .node-toggle {
+                        display: inline-block;
+                        color: @treeItemActiveBackground;
+                    }
+                }
+
+                > .node-label:hover {
+                    > .node-toggle {
+                        color: @treeItemActiveBackground;
+                    }
+                }
+            }
+
 
             .dropzone {
                 content: " ";
@@ -203,43 +284,237 @@
                 }
             }
 
-            .node-toggle {
-                cursor: default;
-                cursor: hand;
-                cursor: pointer;
-            }
+        }
 
-            > .node-label {
-                > .node-toggle {
-                   display: none; 
-                }
-            }
-            &.expandable {
-                > .node-label {
-                    > .node-toggle {
-                        display: inline;
-                    }
-                }
-            }
+        .child > .children >
+        .child .node-label {
+            padding-left: 1.8em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 3.6em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 5.4em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 7.2em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 9em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 10.8em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 12.6em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 14.4em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 16.2em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 18em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 19.8em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 21.6em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 23.4em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 25.2em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 27em;
+        }
+
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child > .children >
+        .child .node-label {
+            padding-left: 28.8em;
         }
     }
 }
 
-.sidebar-tree {
+.sidebar-tree .render-tree {
     position: relative;
-    
-    .render-tree {
-        padding: 0 5px;
-    }
 
     .child {
-        min-width: 200px;
+        min-width: 20em;
 
-        .node-label {
-            padding-left: 10px;
+        .node-label > .node-toggle {
+            padding-left: 0.2em;
+        }
 
-            &.highlighted {
-                box-shadow: inset 0 0 5px @dropShadowColor;
+        &.highlighted {
+
+            > .node-label {
+                color: @treeItemActiveText;
+                background-color: @treeItemActiveBackground;
+
+                > .node-toggle {
+                    color: @treeItemActiveText;
+                }
+            }
+
+            &:hover {
+                > .node-label {
+                    > .node-toggle {
+                        color: @treeItemActiveText;
+                    }
+                }
             }
         }
     }
@@ -250,3 +525,5 @@
         right: 0;
     }
 }
+
+

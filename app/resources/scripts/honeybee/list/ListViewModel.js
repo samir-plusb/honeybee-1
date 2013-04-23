@@ -17,7 +17,7 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
     has_selection: null,
 
     has_filter: null,
-    
+
     has_search: null,
 
     item_count: null,
@@ -59,8 +59,8 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
         this.has_selection = ko.computed(function()
         {
             that.actionCountMap = {};
-            
-            var enabled_actions_count = 0, 
+
+            var enabled_actions_count = 0,
                 action, action_name, action_element, i, n;
 
             function incrementActionCount(action_name)
@@ -78,7 +78,7 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
             for (i = 0; i < that.selected_items().length; i++)
             {
                 selected_item = that.selected_items()[i];
-                
+
                 for (n = 0; n < selected_item.workflow.gates.length; n++)
                 {
                     incrementActionCount(selected_item.workflow.gates[n].name);
@@ -131,7 +131,7 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
     },
 
     clearFilter: function() {
-        honeybee.core.events.fireEvent('clearFilter'); 
+        honeybee.core.events.fireEvent('clearFilter');
     },
 
     addItem: function(item)
@@ -170,5 +170,12 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
             item.selected(selected_state);
         }.bind(this));
         this.dont_toggle = false;
+    },
+
+    invertAllSelected: function()
+    {
+        ko.utils.arrayForEach(this.list_items(), function(item) {
+            item.selected(!item.selected());
+        }.bind(this));
     }
 });
