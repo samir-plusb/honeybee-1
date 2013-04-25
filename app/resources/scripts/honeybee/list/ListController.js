@@ -33,10 +33,10 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             this.options.workflow_urls || {}
         );
         this.viewmodel = new honeybee.list.ListViewModel(
-            this, 
+            this,
             JSON.parse($('input.list-data').val())
         );
-        
+
         ko.applyBindings(this.viewmodel, this.element[0]);
 
         this.search_widget = honeybee.widgets.Widget.factory('.search-widget', 'SearchWidget');
@@ -82,15 +82,6 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         window.addEventListener('message', messageEventHandler,false);
 
         honeybee.core.events.on('clearFilter', function() { that.reloadList({}); });
-
-        window.top.postMessage(
-            JSON.stringify({
-                'event_type': 'list-loaded', 
-                'source_type': this.type_key,
-                'reference_field': this.options.reference_field
-            }),
-            that.options.event_origin
-        );
     },
 
     reloadList: function(parameters)
@@ -119,6 +110,15 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         this.viewmodel.list_items.removeAll();
         this.viewmodel.initItems(data.listItems);
         this.viewmodel.initMetadata(data.metaData);
+
+        window.top.postMessage(
+            JSON.stringify({
+                'event_type': 'list-loaded',
+                'source_type': this.type_key,
+                'reference_field': this.options.reference_field
+            }),
+            this.options.event_origin
+        );
     },
 
     getSelectedItems: function()
@@ -168,7 +168,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         var proceed = function()
         {
             that.createProceedBatch(
-                (true === is_batch) ? that.getSelectedItems() : [ data ], 
+                (true === is_batch) ? that.getSelectedItems() : [ data ],
                 gate
             ).run();
         };
@@ -254,7 +254,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         for (var i = 0; i < items.length; i++)
         {
             var item = items[i];
-            
+
             batch.addAction(new honeybee.list.Action(
                 this.workflow_handler.proceed(item, gate)
             ));
@@ -362,13 +362,13 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         this.bindSidebarTreeClickEvents();
     },
 
-    bindSidebarTreeClickEvents: function() 
+    bindSidebarTreeClickEvents: function()
     {
         var that = this;
 
-        var referenceSelectHandler = function(target_module) 
+        var referenceSelectHandler = function(target_module)
         {
-            honeybee.core.events.once('reference::targetSelected', function(data) 
+            honeybee.core.events.once('reference::targetSelected', function(data)
             {
                 if (! that.options.reference_batches[data.reference_field])
                 {
@@ -401,8 +401,8 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             var target_container = $(element);
             var abort_trigger = target_container.find('.reference-abort');
             var assign_trigger = target_container.find('.reference-assign');
-            
-            honeybee.core.events.on('reference::cancelTargetSelection', function() 
+
+            honeybee.core.events.on('reference::cancelTargetSelection', function()
             {
                 honeybee.core.events.off('reference::targetSelected', referenceSelectHandler);
 
@@ -423,7 +423,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
             abort_trigger.click(function()
             {
-                honeybee.core.events.fireEvent('reference::cancelTargetSelection', { 
+                honeybee.core.events.fireEvent('reference::cancelTargetSelection', {
                     module: abort_trigger.data('module')
                 });
             });
@@ -442,7 +442,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
             if (! that.viewmodel.actionCountMap[action] || itemCount !== that.viewmodel.actionCountMap[action])
             {
-                honeybee.core.events.fireEvent('reference::cancelTargetSelection', { 
+                honeybee.core.events.fireEvent('reference::cancelTargetSelection', {
                     module: assign_trigger.data('module')
                 });
                 assign_trigger.addClass('disabled');
@@ -472,8 +472,8 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
                 reference_field: this.options.reference_field,
                 reference_module: this.options.reference_module,
                 item: {
-                    id: item.data[this.options.reference_settings.identity_field], 
-                    text: item.data[this.options.reference_settings.display_field], 
+                    id: item.data[this.options.reference_settings.identity_field],
+                    text: item.data[this.options.reference_settings.display_field],
                     module: this.options.module
                 }
             };
@@ -494,8 +494,8 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
                 reference_field: this.options.reference_field,
                 reference_module: this.options.reference_module,
                 item: {
-                    id: item.data[this.options.reference_settings.identity_field],  
-                    text: item.data[this.options.reference_settings.display_field],     
+                    id: item.data[this.options.reference_settings.identity_field],
+                    text: item.data[this.options.reference_settings.display_field],
                     module: this.options.module
                 }
             };

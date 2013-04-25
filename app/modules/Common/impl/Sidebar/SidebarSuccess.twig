@@ -1,4 +1,4 @@
-<div class="sidebar sidebar-hidden" data-controller="SidebarController">
+<div class="sidebar sidebar-hidden" data-controller="SidebarController" data-controller-options="{{sidebar_controller_options|json_encode}}">
     <div class="slots">
     {% for slot in slots %}
         {{ slot|raw }}

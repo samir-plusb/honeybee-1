@@ -12,11 +12,42 @@ honeybee.sidebar.SidebarController = honeybee.core.BaseObject.extend({
         this.options = options;
         this.domElement = options.domElement;
         this.siblingWrapper = this.domElement.siblings('.wrapper');
-
-        this.domElement.height(this.domElement.parent().height() - parseInt(this.domElement.css('margin-top'), 10) - 37);
-        this.domElement.children('.slots').height(this.domElement.height());
+        this.domSlotsElement = this.domElement.find('.slots');
+        this.domDataList = $('.data-list');
+        this.domNavbar = $('.navbar');
+        this.domFooter = $('.footer');
+        this.domSidebarPushElement = this.domElement.find('.push');
 
         this.bindEdgeEvents();
+
+        var that = this;
+        var messageEventHandler = function(event)
+        {
+            if (0 === that.options.origin.indexOf(event.origin))
+            {
+                var msg_data = JSON.parse(event.data);
+                if (msg_data.event_type === 'list-loaded')
+                {
+                    that.adjustHeight();
+                }
+            }
+        }
+        window.addEventListener('message', messageEventHandler, false);
+    },
+
+    adjustHeight: function()
+    {
+        var viewportHeight = $(window).height() - +this.domFooter.outerHeight() - +this.domNavbar.outerHeight() - 17;
+
+        var list_height = +this.domDataList.outerHeight() + +this.domDataList.position().top - +this.domNavbar.outerHeight() + this.domSidebarPushElement.outerHeight();
+
+        if (list_height < viewportHeight)
+        {
+            list_height = viewportHeight; // for short lists we adjust the sidebar height to the viewport space that is left
+        }
+
+        this.domElement.height(list_height);
+        this.domSlotsElement.height(list_height);
     },
 
     bindEdgeEvents: function()

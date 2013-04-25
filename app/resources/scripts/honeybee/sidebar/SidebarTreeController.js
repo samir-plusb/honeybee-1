@@ -39,14 +39,11 @@ honeybee.sidebar.SidebarTreeController = honeybee.core.BaseObject.extend({
 
             that.renderTarget.find('li.highlighted').removeClass('highlighted');
             $(this).parent('li').addClass('highlighted');
-            //that.renderTarget.find('.node-label').removeClass('highlighted');
-            //$(this).addClass('highlighted');
         });
 
         honeybee.core.events.on('clearFilter', function() 
         {
             that.renderTarget.find('li.highlighted').removeClass('highlighted');
-            //that.renderTarget.find('.node-label').removeClass('highlighted');
         });
 
         that.renderTarget.find('.move-inside').bind('click', function()

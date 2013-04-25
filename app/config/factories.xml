@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
-    xmlns="http://agavi.org/agavi/config/parts/factories/1.0">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/factories/1.0">
     <ae:configuration>
-        <controller class="AgaviController" />
+
+        <controller class="AgaviController">
+            <ae:parameter name="max_executions">100</ae:parameter>
+        </controller>
 
         <database_manager class="AgaviDatabaseManager" />
 
@@ -27,16 +28,33 @@
         </request>
 
         <response class="AgaviWebResponse">
-            <ae:parameters>
-                <ae:parameter name="send_content_length">false</ae:parameter>
-            </ae:parameters>
+            <ae:parameter name="send_content_length">false</ae:parameter>
+            <ae:parameter name="expose_agavi">false</ae:parameter>
         </response>
 
-        <routing class="AgaviWebRouting" />
+        <routing class="AgaviWebRouting">
+            <!-- as we do not just output HTML with set base_href via PHP,
+                 we need correct URLs that other services can consume. -->
+            <ae:parameter name="default_gen_options">
+                <ae:parameter name="separator">&amp;</ae:parameter>
+                <ae:parameter name="relative">false</ae:parameter>
+            </ae:parameter>
+        </routing>
 
         <security_filter class="AgaviSecurityFilter" />
 
-        <storage class="AgaviSessionStorage" />
+        <storage class="AgaviSessionStorage">
+            <ae:parameter name="session_name">honeybee_session</ae:parameter>
+
+            <ae:parameter name="session_cache_limiter">nocache</ae:parameter> <!-- public | private | nocache | private_no_expire - when using private* the pre-check/post-check values are set to cache_expire time which is not that cool, so a custom ProjectWebResponse that sets headers may be appropriate -->
+            <ae:parameter name="session_cache_expire">180</ae:parameter> <!-- in minutes; php default is 180 minutes -->
+
+            <ae:parameter name="session_cookie_lifetime">+2 hours</ae:parameter> <!-- lifetime of the session cookie in seconds or strtotime() syntax -->
+            <!-- <ae:parameter name="session_cookie_path">/</ae:parameter> --> <!-- path on the domain (single slash for all paths), defaults to base href in agavi -->
+            <!-- <ae:parameter name="session_cookie_domain">www.example.com</ae:parameter> --> <!-- cookie domain (be careful with leading '.' as cookies are then visible to all subdomains) -->
+            <!-- <ae:parameter name="session_cookie_secure">true</ae:parameter> --> <!-- true for secure connection cookie only, Agavi sets it to secure if request is https -->
+            <!-- <ae:parameter name="session_cookie_httponly">true</ae:parameter> --> <!-- set httponly flag (beware of XMLHttpRequest issues) -->
+        </storage>
 
         <user class="Honeybee\Agavi\User\ZendAclSecurityUser" />
 
@@ -45,9 +63,7 @@
         <validation_manager class="AgaviValidationManager" />
     </ae:configuration>
 
-    <ae:configuration context="web" environment="development.*">
-        <execution_filter class="Honeybee\Agavi\Filter\DebugExecutionFilter" />
-    </ae:configuration>
+
 
     <ae:configuration context="console">
         <request class="AgaviConsoleRequest">
@@ -55,16 +71,29 @@
             <ae:parameter name="stdin_file_name">stdin_buffer_filepath</ae:parameter>
         </request>
 
-        <response class="AgaviConsoleResponse" />
+        <response class="AgaviConsoleResponse">
+            <ae:parameter name="append_eol">false</ae:parameter>
+        </response>
 
         <routing class="AgaviConsoleRouting" />
 
         <user class="Honeybee\Agavi\User\ZendAclSecurityUser" />
     </ae:configuration>
 
+
+
+    <ae:configuration context="web" environment="development.*">
+        <execution_filter class="Honeybee\Agavi\Filter\DebugExecutionFilter" />
+        <response class="AgaviWebResponse">
+            <ae:parameter name="expose_agavi">true</ae:parameter>
+        </response>
+    </ae:configuration>
+
+
+
     <ae:configuration context="web" environment="testing.*">
         <request class="AgaviWebRequest">
-			<!-- static values for unit tests -->
+            <!-- static values for unit tests -->
             <ae:parameter name="sources">
                 <ae:parameter name="HTTPS" />
                 <ae:parameter name="REQUEST_METHOD">GET</ae:parameter>

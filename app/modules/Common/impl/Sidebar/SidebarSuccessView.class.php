@@ -35,5 +35,9 @@ class Common_Sidebar_SidebarSuccessView extends CommonBaseView
                 ), NULL, 'read')
             );
         }
+
+        $this->setAttribute('sidebar_controller_options', array(
+            'origin' => $this->getContext()->getRouting()->getBaseHref()
+        ));
     }
 }
