@@ -23,7 +23,10 @@ class Common_Service_LocalizeAction extends CommonBaseAction
     {
         $client = new Client(\AgaviConfig::get('common.geo_service.url'));
         $auth = \AgaviConfig::get('common.geo_service.auth');
-        $request = $client->get()->setAuth($auth['user'], $auth['pwd']);
+
+        $request = $client->get()->setAuth(
+            $auth['user'], $auth['pwd']
+        );
         $request->getQuery()->merge($queryValues);
         $response = $request->send();
 
