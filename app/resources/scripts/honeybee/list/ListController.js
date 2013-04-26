@@ -82,6 +82,15 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         window.addEventListener('message', messageEventHandler,false);
 
         honeybee.core.events.on('clearFilter', function() { that.reloadList({}); });
+
+        window.top.postMessage(
+            JSON.stringify({
+                'event_type': 'list-loaded',
+                'source_type': this.type_key,
+                'reference_field': this.options.reference_field
+            }),
+            this.options.event_origin
+        );
     },
 
     reloadList: function(parameters)

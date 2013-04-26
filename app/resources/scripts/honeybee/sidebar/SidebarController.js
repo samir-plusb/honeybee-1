@@ -28,10 +28,11 @@ honeybee.sidebar.SidebarController = honeybee.core.BaseObject.extend({
                 var msg_data = JSON.parse(event.data);
                 if (msg_data.event_type === 'list-loaded')
                 {
-                    that.adjustHeight();
+                    setTimeout(that.adjustHeight.bind(that), 1000);
                 }
             }
         }
+
         window.addEventListener('message', messageEventHandler, false);
     },
 
@@ -48,6 +49,7 @@ honeybee.sidebar.SidebarController = honeybee.core.BaseObject.extend({
 
         this.domElement.height(list_height);
         this.domSlotsElement.height(list_height);
+        this.adjustEdgePosition();
     },
 
     bindEdgeEvents: function()
@@ -93,6 +95,34 @@ honeybee.sidebar.SidebarController = honeybee.core.BaseObject.extend({
                     $(document).unbind('mousemove', moveHandler);
                 });
         });
+
+        $(window).scroll(function()
+        {
+            that.adjustEdgePosition();
+        });
+        $(window).resize(function()
+        {
+            that.adjustEdgePosition();
+        });
+    },
+
+    adjustEdgePosition: function()
+    { 
+        var edge = this.domElement.children('.edge-handles');
+        var height = $(window).height() - this.domElement.offset().top + 15;
+        var scrollOffset = $(window).scrollTop();
+        var middle = (height / 2) - ((edge.outerHeight() + 37) / 2) + scrollOffset;
+
+        if (15 >= scrollOffset)
+        {
+            middle += 15 - scrollOffset;
+        }
+        else
+        {
+            middle += 15;
+        }
+
+        edge.css('top', middle);
     },
 
     setWidth: function(width)

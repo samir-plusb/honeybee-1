@@ -1,6 +1,6 @@
 <?php
 
-use \Honeybee\Core\Util\Http\CurlFactory;
+use Guzzle\Http\Client;
 
 /**
  * The AssetValidator class provides validation of asset resources given from various inputs
@@ -135,16 +135,11 @@ class AssetResourceValidator extends AgaviFileValidator
 
         if ('http' === $uriParts['scheme'])
         {
-            $curlHandle = CurlFactory::create();
-            curl_setopt($curlHandle, CURLOPT_HEADER, 1);
-            curl_setopt($curlHandle, CURLOPT_NOBODY, 1);
-            curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($curlHandle, CURLOPT_URL, $assetUri);
+            $client = new Client($assetUri);
+            $request = $client->get(NULL, NULL, $filePtr);
+            $response = $request->send();
 
-            curl_exec($curlHandle);
-            $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
-
-            if (200 > $respCode || 300 <= $respCode)
+            if (200 > $response->getStatusCode() || 300 <= $response->getStatusCode())
             {
                 return FALSE;
             }

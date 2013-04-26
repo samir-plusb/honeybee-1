@@ -5,7 +5,10 @@
     <ae:configuration>
         <settings prefix="common.">
             <setting name="geo_service.url">https://api.berlinonline.net/boapi/geo/ask.json</setting>
-            <setting name="geo_service.auth">geo.midas:WnrwDf7qFAFk3xTrbaQ</setting>
+            <setting name="geo_service.auth.">
+                <ae:parameter name="user">geo.midas</setting>
+                <ae:parameter name="pwd">WnrwDf7qFAFk3xTrbaQ</setting>
+            </setting>
         </settings>
     </ae:configuration>
 </ae:configurations>

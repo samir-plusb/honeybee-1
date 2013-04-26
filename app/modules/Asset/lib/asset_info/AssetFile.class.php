@@ -1,6 +1,6 @@
 <?php
 
-use \Honeybee\Core\Util\Http\CurlFactory;
+use Guzzle\Http\Client;
 
 /**
  * The AssetFile is a concrete implementation of the IAssetFile interface.
@@ -214,29 +214,23 @@ class AssetFile implements IAssetFile
     {
         $tempPath = $this->getDowloadTmpPath();
         $filePtr = fopen($tempPath,'wb');
+
         if (! $filePtr)
         {
             throw new Exception("Can not open file for writing: ".$tempPath);
         }
 
-        $curlHandle = CurlFactory::create();
-        curl_setopt($curlHandle, CURLOPT_URL, $assetUri);
-        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 0);
-        curl_setopt($curlHandle, CURLOPT_FILE, $filePtr);
-        curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, 1);
-        curl_exec($curlHandle);
+        $client = new Client($assetUri);
+        $request = $client->get(NULL, NULL, $filePtr);
+        $response = $request->send();
 
-        $error = curl_error($curlHandle);
-        $errorNum = curl_errno($curlHandle);
-        $respCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
-        fclose($filePtr);
-
-        if (200 > $respCode || 300 <= $respCode || $errorNum || $error)
+        if (200 > $response->getStatusCode() || 300 <= $response->getStatusCode())
         {
             throw new Exception(
                 "Failed to download asset binary from uri: $assetUri' resp code: $respCode ($error)"
             );
         }
+
         return $tempPath;
     }
 

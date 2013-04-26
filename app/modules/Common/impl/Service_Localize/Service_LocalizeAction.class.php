@@ -1,6 +1,6 @@
 <?php
 
-use \Honeybee\Core\Util\Http\CurlFactory;
+use Guzzle\Http\Client;
 
 class Common_Service_LocalizeAction extends CommonBaseAction
 {
@@ -21,26 +21,22 @@ class Common_Service_LocalizeAction extends CommonBaseAction
 
     public function fetchGeoCoordinates(array $queryValues)
     {
-        $url = \AgaviConfig::get('common.geo_service.url') . '?' . http_build_query($queryValues);
-    
-        $curl = CurlFactory::create();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_USERPWD, \AgaviConfig::get('common.geo_service.auth'));
-    
-        $resp = curl_exec($curl);    
-        $this->logInfo("Received following response for localization of '" . $url . "': " . PHP_EOL . $resp);
+        $client = new Client(\AgaviConfig::get('common.geo_service.url'));
+        $auth = \AgaviConfig::get('common.geo_service.auth');
+        $request = $client->get()->setAuth($auth['user'], $auth['pwd']);
+        $request->getQuery()->merge($queryValues);
+        $response = $request->send();
+
+        if (200 > $response->getStatusCode() || 300 <= $response->getStatusCode())
+        {
+            return FALSE;
+        }
+
+        $this->logInfo("Received following response for localization of '" . $request->getUrl() . "': " . PHP_EOL . $response->getBody());
         
         $location = array('item_count' => 0);
     
-        if (200 != curl_getinfo($curl, CURLINFO_HTTP_CODE))
-        {
-            $this->logInfo("'$url' failed with: " . curl_error($curl));
-            curl_close($curl);
-            return $location;
-        }
-    
-        curl_close($curl);
-        $jdata = json_decode($resp, TRUE);
+        $jdata = $response->json();
         if (!is_array($jdata))
         {
             $this->logInfo("'$url': Broken JSON response");

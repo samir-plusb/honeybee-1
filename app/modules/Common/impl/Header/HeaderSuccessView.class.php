@@ -1,7 +1,6 @@
 <?php
 
 use \Honeybee\Core\Dat0r\ModuleService;
-use \Honeybee\Core\Util\Http\CurlFactory;
 
 class Common_Header_HeaderSuccessView extends CommonBaseView
 {
