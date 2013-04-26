@@ -252,6 +252,10 @@ module:
 	@bin/agavi honeybee-module-wizard
 	@make config
 
+action:
+
+	@bin/agavi honeybee-action-wizard
+
 
 remove-module:
 
