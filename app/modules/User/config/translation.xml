@@ -91,11 +91,12 @@
                     <ae:parameter name="ui">
                         <ae:parameter name="de">
                             <ae:parameter name="Signin">Anmelden</ae:parameter>
-                            <ae:parameter name="Reset">Zurücksetzen</ae:parameter>
+                            <ae:parameter name="Reset">zurücksetzen</ae:parameter>
                             <ae:parameter name="Username">Nutzername</ae:parameter>
+                            <ae:parameter name="Reset password">Kennwort zurücksetzen</ae:parameter>
                             <ae:parameter name="Password">Kennwort</ae:parameter>
-                            <ae:parameter name="Please sign in">Bitte Nutzernamen und Password eingeben</ae:parameter>
-                            <ae:parameter name="Please enter your email or username">Bitte Nutzernamen oder Emailadresse eingeben</ae:parameter>
+                            <ae:parameter name="Please sign in">Bitte Nutzernamen und Kennwort eingeben</ae:parameter>
+                            <ae:parameter name="Please enter your email or username.">Bitte Nutzernamen oder Emailadresse eingeben.</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
 
@@ -104,6 +105,16 @@
                             <ae:parameter name="This combination of username and password is invalid.">Die Kombination von Benutzername und Kennwort ist ungültig.</ae:parameter>
                             <ae:parameter name="Failed authentication attempt for username %1$s, require group membership of '%2$s'">Fehlende Gruppe '%2$s' für Benutzer '%1$s'.</ae:parameter>
                             <ae:parameter name="Login Error">Fehler in der Anmeldung</ae:parameter>
+                            <ae:parameter name="reset_success"><![CDATA[
+                                <p>Das Kennwort für das angegebene Nutzerkonto kann nun zurückgesetzt werden.</p>
+                                <p>Die hierfür notwendigen Schritte wurden via Email an die mit dem Nutzerkonto verknüpfte Adresse versendet.</p>
+                            ]]></ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="en">
+                            <ae:parameter name="reset_success"><![CDATA[
+                                <p>The password for the affected user account may be reset now.</p>
+                                <p>The necessary steps have been mailed to the email adress related to the latter user account.</p>
+                            ]]></ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
                 </message_translator>
