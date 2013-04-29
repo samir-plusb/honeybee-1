@@ -91,9 +91,11 @@
                     <ae:parameter name="ui">
                         <ae:parameter name="de">
                             <ae:parameter name="Signin">Anmelden</ae:parameter>
+                            <ae:parameter name="Reset">Zurücksetzen</ae:parameter>
                             <ae:parameter name="Username">Nutzername</ae:parameter>
                             <ae:parameter name="Password">Kennwort</ae:parameter>
-                            <ae:parameter name="Please sign in">Bitte melden sie sich an</ae:parameter>
+                            <ae:parameter name="Please sign in">Bitte Nutzernamen und Password eingeben</ae:parameter>
+                            <ae:parameter name="Please enter your email or username">Bitte Nutzernamen oder Emailadresse eingeben</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
 
@@ -102,9 +104,6 @@
                             <ae:parameter name="This combination of username and password is invalid.">Die Kombination von Benutzername und Kennwort ist ungültig.</ae:parameter>
                             <ae:parameter name="Failed authentication attempt for username %1$s, require group membership of '%2$s'">Fehlende Gruppe '%2$s' für Benutzer '%1$s'.</ae:parameter>
                             <ae:parameter name="Login Error">Fehler in der Anmeldung</ae:parameter>
-                            <ae:parameter name="ldap authenticaton failed">(Ldap) Authentifizierung fehlgeschlagen</ae:parameter>
-                            <ae:parameter name="The password is either missing or invalid.">Das Passwort fehlt entweder oder ist ungültig.</ae:parameter>
-                            <ae:parameter name="The username is either missing or invalid.">Das Nutzername fehlt entweder oder ist ungültig.</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
                 </message_translator>
