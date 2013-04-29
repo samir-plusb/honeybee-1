@@ -18,7 +18,7 @@ class User_ResetPasswordAction extends UserBaseAction
 
             if (1 === $result['totalCount'])
             {
-                $this->sendResetLinkViaEmail(
+                $this->getModule()->getService()->sendPasswordLostEmail(
                     $result['documents']->first()
                 );
             }
@@ -71,30 +71,6 @@ class User_ResetPasswordAction extends UserBaseAction
 
     protected function sendResetLinkViaEmail(UserDocument $user)
     {
-        $fullname = $user->getFirstname() . ' ' . $user->getLastname();
-        $projectName = AgaviConfig::get('core.app_name');
-
-        $message = Swift_Message::newInstance()
-            ->setSubject($projectName . ' - Passwort zurücksetzen')
-            ->setFrom(array('no-reply@honeybee.de' => $projectName . ' CMS'))
-            ->setTo(array($user->getEmail() => $fullname))
-            ->setBody(sprintf(
-                "Klicken sie den folgenden Link und vergeben sie auf der resultierden Seite ein neues Passwort:\n%s\n" .
-                "Der Link läuft in 20 Minuten aus.",
-                $this->getContext()->getRouting()->gen(
-                    'user.set_password', 
-                    array('token' => $user->getAuthToken())
-                )
-            ));
-
-        $transport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
-        $mailer = Swift_Mailer::newInstance($transport);
         
-        if (! $mailer->send($message))
-        {
-            throw new Exception(
-                "Unable to deliver mail. Please try again later or contact the reponseable staff."
-            );
-        }
     }
 }
