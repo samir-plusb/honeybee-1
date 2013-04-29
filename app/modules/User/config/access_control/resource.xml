@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://berlinonline.de/schemas/honeybee/config/access_control/1.0" 
+    xmlns:env="http://berlinonline.de/schemas/honeybee/config/envelope/definition/1.0" 
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
+    <ae:configuration>
+        <!-- 
+            Defines all actions that shall be available upon the user resource.
+
+            :INFO:
+            In opposite to the permissions file, which will probally vanish,
+            this file will serve as a source to the later rights gui,
+            allowing to show the available actions per resource/module.
+        -->
+        <resources>
+            <resource name="user">
+                <description>Defines a resource that represents user documents.</description>
+                <actions>
+                    <action>user.edit::read</action>
+                    <action>user.edit::write</action>
+                    <action>user.edit::promote</action>
+                    <action>user.edit::delete</action>
+
+                    <action>user.publish::write</action>
+                    <action>user.publish::promote</action>
+                    <action>user.publish::demote</action>
+
+                    <action>user.published::read</action>
+                    <action>user.published::write</action>
+                    <action>user.published::promote</action>
+                    <action>user.published::demote</action>
+                    <action>user.published::delete</action>
+
+                    <action>user.archive::write</action>
+                    <action>user.archive::promote</action>
+                    <action>user.archive::demote</action>
+
+                    <action>user.archived::read</action>
+                    <action>user.archived::write</action>
+                    <action>user.archived::promote</action>
+                    <action>user.archived::demote</action>
+                    <action>user.archived::delete</action>
+
+                    <action>user.delete::write</action>
+                </actions>
+            </resource>
+        </resources>
+    </ae:configuration>
+</ae:configurations>

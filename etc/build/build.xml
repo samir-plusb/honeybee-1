@@ -41,8 +41,6 @@
         <mkdir dir="${module.directory}/${module.directory.config}" />
         <mkdir dir="${module.directory}/${module.directory.lib}" />
         <mkdir dir="${module.directory}/${module.directory.resources}" />
-        <mkdir dir="${module.directory}/${module.directory.lib}/export" />
-        <mkdir dir="${module.directory}/${module.directory.lib}/renderer" />
 
         <!--# Create Library #-->
         <agavi.select-path property="template.path" type="directory" path="${templates.directory.app.modules.lib}">
@@ -50,25 +48,6 @@
         </agavi.select-path>
         <copy todir="${module.directory}/${module.directory.lib}">
             <mapper type="regexp" from="^(.+[\\\/])?(.+)\.tmpl$" to="\1/${module.name}\2" />
-            <fileset dir="${template.path}">
-                <include name="**/*.tmpl" />
-                <exclude name="**/workflow/plugin/*.tmpl" />
-            </fileset>
-            <filterchain>
-                <replacetokens begintoken="%%" endtoken="%%">
-                    <token key="MODULE_PREFIX" value="${module.prefix}" />
-                    <token key="PROJECT_LOCATION" value="${project.directory}" />
-                    <token key="PROJECT_PREFIX" value="${project.prefix}" />
-                    <token key="MODULE_NAME" value="${module.name}" />
-                </replacetokens>
-            </filterchain>
-        </copy>
-        <!-- Special naming convention for workflow plugins (should get rid of that). -->
-        <agavi.select-path property="template.path" type="directory" path="${templates.directory.app.modules.lib}/workflow/plugin">
-            <from path="${templates.directory}" />
-        </agavi.select-path>
-        <copy todir="${module.directory}/${module.directory.lib}/workflow/plugin">
-            <mapper type="regexp" from="^(.+[\\\/])?(.+)\.tmpl$" to="\1/Workflow${module.name}\2" />
             <fileset dir="${template.path}">
                 <include name="**/*.tmpl" />
             </fileset>

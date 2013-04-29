@@ -14,7 +14,7 @@
                 <action>Error404</action>
             </system_action>
             <system_action name="login">
-                <module>Auth</module>
+                <module>User</module>
                 <action>Login</action>
             </system_action>
             <system_action name="module_disabled">

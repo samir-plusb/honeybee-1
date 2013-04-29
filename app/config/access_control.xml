@@ -21,9 +21,6 @@
             </role>
             <role name="honeybee-editor" parent="no-perms">
                 <description>Current default role for full-stack editing/publishing.</description>
-                <members>
-                    <member type="ldap">midas.editor</member>
-                </members>
                 <acl>
                     <xi:include 
                         href="%core.config_dir%/includes/permissions.xml"
