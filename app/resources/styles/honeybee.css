@@ -850,3 +850,18 @@ div.select2-container-multi .select2-choices .select2-search-field
   top: 12.5%;
   width: 100%;
 }
+
+.form-reset .controls
+{
+  margin-left: 86px;
+}
+
+.form-reset .controls.input-prepend
+{
+  margin-left: 10px;
+}
+
+.form-reset .control-label
+{
+  width: 76px;
+}
