@@ -92,12 +92,7 @@ class User_LoginAction extends UserBaseAction
                 new AgaviLoggerMessage(join(PHP_EOL, $authResponse->getErrors()))
             );
 
-            $errorMessage = $translationManager->_($authResponse->getMessage(), 'user.messages');
-            $this->getContainer()->getValidationManager()->setError(
-                'username_password_mismatch',
-                $errorMessage
-            );
-
+            $errorMessage = $translationManager->_('invalid_login', 'user.messages');
             $this->setAttribute('errors', array('auth' => $errorMessage));
 
             return 'Error';
@@ -121,6 +116,7 @@ class User_LoginAction extends UserBaseAction
      */
     public function handleError(AgaviRequestDataHolder $parameters)
     {
+        $translationManager = $this->getContext()->getTranslationManager();
         $logger = $this->getContext()->getLoggerManager()->getLogger('login');
         $logger->log(
             new AgaviLoggerMessage(
@@ -130,12 +126,14 @@ class User_LoginAction extends UserBaseAction
                 )
             )
         );
-
+        
+        $errors = array();
         foreach ($this->getContainer()->getValidationManager()->getErrors() as $field => $error)
         {
             $errors[$field] = $error['messages'][0];
         }
 
+        $errors['auth'] = $translationManager->_('invalid_login', 'user.messages');
         $this->setAttribute('errors', $errors);
 
         return 'Error';

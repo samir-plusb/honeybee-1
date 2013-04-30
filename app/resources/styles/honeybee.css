@@ -26,6 +26,7 @@ body
     height: auto !important;
     height: 100%;
     margin: 0 auto -38px;
+    position: relative;
 }
 
 .container-list-data
@@ -835,4 +836,17 @@ div.select2-container-multi .select2-choices .select2-search-field
 .toolbar .toolset .tool .disabled .icon-move
 {
   color: #ababab;
+}
+
+
+
+/*
+ * Auth - Login, Reset
+ */
+
+.errors
+{
+  position: absolute;
+  top: 12.5%;
+  width: 100%;
 }

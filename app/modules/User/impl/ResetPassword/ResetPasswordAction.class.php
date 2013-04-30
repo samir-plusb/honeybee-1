@@ -10,6 +10,8 @@ class User_ResetPasswordAction extends UserBaseAction
 {
     public function executeWrite(AgaviRequestDataHolder $parameters)
     {
+        $translationManager = $this->getContext()->getTranslationManager();
+
         try 
         {
             $result = $this->getModule()->getService()->find(
@@ -24,7 +26,14 @@ class User_ResetPasswordAction extends UserBaseAction
             }
             else
             {
-                throw new Exception("Corrupt user information given.");
+                $this->setAttribute(
+                    'errors', 
+                    array(
+                        'invalid_account' => $translationManager->_('invalid_account', 'user.messages')
+                    )
+                );
+
+                return 'Input';
             }
 
             return 'Success';            
@@ -44,6 +53,11 @@ class User_ResetPasswordAction extends UserBaseAction
     public function handleError(AgaviRequestDataHolder $parameters)
     {
         parent::handleError($parameters);
+
+        $translationManager = $this->getContext()->getTranslationManager();
+        $this->setAttribute('errors', array(
+            $translationManager->_('invalid_account', 'user.messages')
+        ));
 
         return 'Input';
     }
@@ -67,10 +81,5 @@ class User_ResetPasswordAction extends UserBaseAction
         }
 
         return $userFilter;
-    }
-
-    protected function sendResetLinkViaEmail(UserDocument $user)
-    {
-        
     }
 }

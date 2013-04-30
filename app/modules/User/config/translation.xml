@@ -102,9 +102,9 @@
 
                     <ae:parameter name="messages">
                         <ae:parameter name="de">
-                            <ae:parameter name="This combination of username and password is invalid.">Die Kombination von Benutzername und Kennwort ist ungültig.</ae:parameter>
-                            <ae:parameter name="Failed authentication attempt for username %1$s, require group membership of '%2$s'">Fehlende Gruppe '%2$s' für Benutzer '%1$s'.</ae:parameter>
-                            <ae:parameter name="Login Error">Fehler in der Anmeldung</ae:parameter>
+                            <ae:parameter name="invalid_login">Die Kombination aus Nutzername und Kennwort ist ungültig.</ae:parameter>
+                            <ae:parameter name="invalid_account">Ungültige Kontodaten; bitte die angegebene Email oder den Nutzernamen auf Richtigkeit überprüfen.</ae:parameter>
+                            <ae:parameter name="Login Error">Fehler während der Anmeldung</ae:parameter>
                             <ae:parameter name="reset_success"><![CDATA[
                                 <p>Das Kennwort für das angegebene Nutzerkonto kann nun zurückgesetzt werden.</p>
                                 <p>Die hierfür notwendigen Schritte wurden via Email an die mit dem Nutzerkonto verknüpfte Adresse versendet.</p>
