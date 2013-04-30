@@ -8,20 +8,28 @@
         </div>
     </div>
     {% endif %}
-    <form class="well" action="{{ro.gen(NULL)}}" method="post" style="margin-top: 20%;">
+    <form class="well form-auth form-horizontal" action="{{ro.gen(NULL)}}" method="post" style="margin-top: 20%;">
         <fieldset>
             <legend>{{tm._('Signin','user.ui')}}</legend>
-            <div class="control-group input-prepend">
+            <div class="control-group">
                 <label for="user_input" class="control-label">{{ tm._('Username','user.ui') }}</label>
-                <label for="user_input" class="add-on icon-user">&#8203;</label>
-                <input type="text" id="user_input" name="username" placeholder="clark.kent" />
+                <div class="controls input-prepend">
+                    <label for="user_input" class="add-on icon-user">&#8203;</label>
+                    <input type="text" id="user_input" name="username" placeholder="clark.kent" />
+                </div>
             </div>
-            <div class="control-group input-prepend">
+            <div class="control-group">
                 <label for="password_input" class="control-label">{{ tm._('Password','user.ui') }}</label>
-                <label for="password_input" class="add-on icon-lock">&#8203;</label>
-                <input id="password_input" type="password" name="password" placeholder="*******" />
+                <div class="controls input-prepend">
+                    <label for="password_input" class="add-on icon-lock">&#8203;</label>
+                    <input id="password_input" type="password" name="password" placeholder="*******" />
+                </div>
             </div>
-            <button style="display: block;" type="submit" class="btn btn-primary"> {{tm._('Signin','user.ui') }}</button>
+            <div class="control-group">
+                <div class="controls">
+                    <button style="display: block;" type="submit" class="btn btn-primary"> {{tm._('Signin','user.ui') }}</button>
+                </div>
+            </div>
         </fieldset>
     </form>
     <a href="{{ ro.gen('user.reset') }}">{{ tm._('Reset password', 'user.ui') }}</a>

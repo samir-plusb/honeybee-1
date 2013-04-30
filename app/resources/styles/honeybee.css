@@ -851,17 +851,21 @@ div.select2-container-multi .select2-choices .select2-search-field
   width: 100%;
 }
 
-.form-reset .controls
+.form-reset .controls,
+.form-auth .controls
 {
   margin-left: 86px;
 }
 
-.form-reset .controls.input-prepend
+.form-reset .controls.input-prepend,
+.form-auth .controls.input-prepend
 {
   margin-left: 10px;
 }
 
-.form-reset .control-label
+.form-reset .control-label,
+.form-auth .control-label
 {
   width: 76px;
 }
+

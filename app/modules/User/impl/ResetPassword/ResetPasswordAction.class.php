@@ -28,9 +28,7 @@ class User_ResetPasswordAction extends UserBaseAction
             {
                 $this->setAttribute(
                     'errors', 
-                    array(
-                        'invalid_account' => $translationManager->_('invalid_account', 'user.messages')
-                    )
+                    array('invalid_account' => $translationManager->_('invalid_account', 'user.messages'))
                 );
 
                 return 'Input';
