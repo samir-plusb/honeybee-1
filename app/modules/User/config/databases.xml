@@ -27,7 +27,7 @@
         </databases>
     </ae:configuration>
     
-    <ae:configuration>
+    <ae:configuration environment="preview.*">
         <databases default="User.Write">
             <!-- Repository write connection (storage) -->
             <database name="User.Write" class="Honeybee\Agavi\Database\CouchDb\Database">
