@@ -34,6 +34,7 @@ honeybee.user.PasswordRequirementsController = honeybee.core.BaseObject.extend({
         });
 
         this.initPopover();
+        this.element.find('.btn-set-pwd').first().prop('disabled', true);
     },
 
     onPasswordChanged: function(password)
@@ -54,14 +55,23 @@ honeybee.user.PasswordRequirementsController = honeybee.core.BaseObject.extend({
                 this.element.find('.'+class_name).first().removeClass('accomplished');
             }
         }
-
         if (8 <= password.length)
         {
             this.element.find('.length-chars').first().addClass('accomplished');
+
+            if (0 < counts['lowercase-chars'] && 0 < counts['numeric-chars'])
+            {
+                this.element.find('.btn-set-pwd').first().prop('disabled', false);
+            }
+            else
+            {
+                this.element.find('.btn-set-pwd').first().prop('disabled', true);
+            }
         }
         else
         {
             this.element.find('.length-chars').first().removeClass('accomplished');
+            this.element.find('.btn-set-pwd').first().prop('disabled', true);
         }
 
         var scorebar = this.element.find('.strength-scorebar');
