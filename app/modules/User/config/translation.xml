@@ -91,10 +91,11 @@
                     <ae:parameter name="ui">
                         <ae:parameter name="de">
                             <ae:parameter name="Signin">Anmelden</ae:parameter>
-                            <ae:parameter name="Reset">zurücksetzen</ae:parameter>
+                            <ae:parameter name="Set password">Kennwort setzen</ae:parameter>
                             <ae:parameter name="Username">Nutzername</ae:parameter>
                             <ae:parameter name="Reset password">Kennwort zurücksetzen</ae:parameter>
                             <ae:parameter name="Password">Kennwort</ae:parameter>
+                            <ae:parameter name="Repeat password">Kennwort wiederholen</ae:parameter>
                             <ae:parameter name="Please sign in">Bitte Nutzernamen und Kennwort eingeben</ae:parameter>
                             <ae:parameter name="Please enter your email or username."><![CDATA[Bitte Nutzernamen <b>oder</b> Emailadresse eingeben.]]></ae:parameter>
                         </ae:parameter>

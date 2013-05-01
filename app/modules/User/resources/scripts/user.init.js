@@ -43,7 +43,8 @@
     var edit_wrapper = $('.controller-edit');
     var list_wrapper = $('.container-list-data');
     var tree_wrapper = $('.container-tree-data');
-    
+    var password_form = $('.form-password').first();
+
     if (1 === edit_wrapper.length)
     {
         honeybee.core.EditController.factory('.controller-edit');
@@ -56,5 +57,15 @@
     else if (1 === tree_wrapper.length)
     {
         honeybee.tree.TreeController.create('.container-tree-data', namespace).attach();
+    }
+
+    if(1 === password_form.length)
+    {
+        var controller = new honeybee.user.PasswordRequirementsController(password_form, {
+            popover_pos: 'right',
+            popover_title: 'Kennwortrichtlinien',
+            popover_trigger: 'focus',
+            popover_tpl_selector: '#password_requirements'
+        });
     }
 })(honeybee.user);

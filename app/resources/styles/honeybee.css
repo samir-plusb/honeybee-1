@@ -852,20 +852,72 @@ div.select2-container-multi .select2-choices .select2-search-field
 }
 
 .form-reset .controls,
-.form-auth .controls
+.form-auth .controls,
+.form-password .controls
 {
   margin-left: 86px;
 }
 
 .form-reset .controls.input-prepend,
-.form-auth .controls.input-prepend
+.form-auth .controls.input-prepend,
+.form-password .controls.input-prepend
 {
   margin-left: 10px;
 }
 
 .form-reset .control-label,
-.form-auth .control-label
+.form-auth .control-label,
+.form-password .control-label
 {
   width: 76px;
 }
 
+.form-password .popover
+{
+  width: 335px;
+}
+
+.form-password .password_requirements,
+.form-password .password-strengths
+{
+  list-style: none;
+}
+
+.form-password .password_requirements li,
+.form-password .password-strengths li
+{
+  font-size: 14px;
+}
+
+.form-password .password_requirements li .icon-ok-sign
+{
+  display: none;
+}
+
+.form-password .password_requirements li .icon-exclamation-sign
+{
+  color: red;
+}
+
+.form-password .password_requirements li.accomplished .icon-ok-sign
+{
+  display: inline;
+  color: green;
+}
+
+.form-password .password_requirements li.accomplished .icon-exclamation-sign
+{
+  display: none;
+}
+
+.form-password .password-strengths
+{
+  position: absolute;
+  width: 100%;
+}
+
+.form-password .password-strengths li
+{
+  float: left;
+  width: 33%;
+}
