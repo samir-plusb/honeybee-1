@@ -421,6 +421,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
             assign_trigger.click(function()
             {
+                $('.edge-handles .expand').click(); // TODO: make this an event for the sidebar controller?
                 if (! assign_trigger.hasClass('disabled'))
                 {
                     referenceSelectHandler(assign_trigger.data('module'));
