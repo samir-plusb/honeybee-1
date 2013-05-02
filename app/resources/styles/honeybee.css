@@ -884,30 +884,56 @@ div.select2-container-multi .select2-choices .select2-search-field
 }
 
 .form-password .password_requirements li,
-.form-password .password-strengths li
+.form-password .password-strengths li,
+.form-password p
 {
   font-size: 14px;
 }
 
-.form-password .password_requirements li .icon-ok-sign
+.form-password .password_requirements
+{
+  margin: 0;
+}
+
+.form-password .password_requirements li .hb-icon-checkmark-circle
 {
   display: none;
 }
 
-.form-password .password_requirements li .icon-exclamation-sign
+.form-password .password_requirements li .hb-icon-spam
 {
-  color: red;
+  color: rgb(185, 74, 72);
 }
 
-.form-password .password_requirements li.accomplished .icon-ok-sign
+.form-password .password_requirements-optional li .hb-icon-spam
+{
+  color: #ababab;
+}
+
+.form-password .password_requirements li.accomplished .hb-icon-checkmark-circle
 {
   display: inline-block;
   color: green;
 }
 
-.form-password .password_requirements li.accomplished .icon-exclamation-sign
+.form-password .password_requirements li.accomplished .hb-icon-spam
 {
   display: none;
+}
+
+.form-password .password_requirements li:last-child
+{
+  margin-bottom: 0.5em;
+}
+
+.form-password .requirments-label
+{
+  margin-bottom: 0.4em;
+}
+
+.form-password .password_requirements-optional li:last-child
+{
+    margin-bottom: 0.3em; 
 }
 
 .form-password .password-strengths
@@ -920,4 +946,10 @@ div.select2-container-multi .select2-choices .select2-search-field
 {
   float: left;
   width: 33%;
+}
+
+.strength-scorebar
+{
+  margin-top: 10px;
+  margin-bottom: 0px;
 }

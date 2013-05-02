@@ -41,6 +41,7 @@ honeybee.user.PasswordRequirementsController = honeybee.core.BaseObject.extend({
     {
         var scores = this.calculatePasswordStrength(password);
         var counts = this.countCriteriaOccurences(password);
+        var mandatory_requirements_ok = false;
         var class_name, count;
 
         for (class_name in counts)
@@ -55,6 +56,7 @@ honeybee.user.PasswordRequirementsController = honeybee.core.BaseObject.extend({
                 this.element.find('.'+class_name).first().removeClass('accomplished');
             }
         }
+
         if (8 <= password.length)
         {
             this.element.find('.length-chars').first().addClass('accomplished');
@@ -62,6 +64,7 @@ honeybee.user.PasswordRequirementsController = honeybee.core.BaseObject.extend({
             if (0 < counts['lowercase-chars'] && 0 < counts['numeric-chars'])
             {
                 this.element.find('.btn-set-pwd').first().prop('disabled', false);
+                mandatory_requirements_ok = true;
             }
             else
             {
@@ -80,7 +83,7 @@ honeybee.user.PasswordRequirementsController = honeybee.core.BaseObject.extend({
 
         scorebar.find('.bar').first().css('width', scores.total_score + '%');
 
-        if (0 <= scores.total_score && 33 >= scores.total_score)
+        if (33 >= scores.total_score)
         {
             scorebar.removeClass(states_string);
             scorebar.addClass('progress-danger');
@@ -90,10 +93,17 @@ honeybee.user.PasswordRequirementsController = honeybee.core.BaseObject.extend({
             scorebar.removeClass(states_string);
             scorebar.addClass('progress-warning');
         }
-        else if (68 < scores.total_score && 100 >= scores.total_score)
+        else if (68 < scores.total_score)
         {
             scorebar.removeClass(states_string);
-            scorebar.addClass('progress-success');
+            if (true === mandatory_requirements_ok)
+            {
+                scorebar.addClass('progress-success');
+            }
+            else
+            {
+                scorebar.addClass('progress-warning');
+            }
         }
     },
 
@@ -175,9 +185,9 @@ honeybee.user.PasswordRequirementsController = honeybee.core.BaseObject.extend({
         {
             points = 45;
         }
-        else if (20 < password.length)
+        else if (32 < password.length)
         {
-            points = 80;
+            points = 60;
         }
 
         return points;
