@@ -286,8 +286,10 @@ honeybee.user.PasswordRequirementsController = honeybee.core.BaseObject.extend({
     getCharacterCount: function(password)
     {
         var characters_cnt = 0;
-
-        var special_chars_pattern = this.special_chars.join("").replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+        var special_chars_pattern = this.special_chars.join("").replace(
+            /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, 
+            "\\$&"
+        );
 
         var chars_exp = new RegExp('[' + special_chars_pattern + ']+', 'g');
         var characters = password.match(chars_exp) || [];

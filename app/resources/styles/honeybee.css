@@ -901,7 +901,7 @@ div.select2-container-multi .select2-choices .select2-search-field
 
 .form-password .password_requirements li.accomplished .icon-ok-sign
 {
-  display: inline;
+  display: inline-block;
   color: green;
 }
 

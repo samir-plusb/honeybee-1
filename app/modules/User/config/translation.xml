@@ -98,6 +98,14 @@
                             <ae:parameter name="Repeat password">Kennwort wiederholen</ae:parameter>
                             <ae:parameter name="Please sign in">Bitte Nutzernamen und Kennwort eingeben</ae:parameter>
                             <ae:parameter name="Please enter your email or username."><![CDATA[Bitte Nutzernamen <b>oder</b> Emailadresse eingeben.]]></ae:parameter>
+                            <ae:parameter name="Min. 8 characters long">Mind. 8 Zeichen lang</ae:parameter>
+                            <ae:parameter name="Contains lowercase letters">Enthält Kleinbuchstaben</ae:parameter>
+                            <ae:parameter name="Contains uppercase letters">Enthält Grossbuchstaben</ae:parameter>
+                            <ae:parameter name="Contains numeric characters">Enthält Ziffern</ae:parameter>
+                            <ae:parameter name="Contains special characters">Enthält Sonderzeichen</ae:parameter>
+                            <ae:parameter name="weak">schwach</ae:parameter>
+                            <ae:parameter name="medium">mittel</ae:parameter>
+                            <ae:parameter name="strong">stark</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
 

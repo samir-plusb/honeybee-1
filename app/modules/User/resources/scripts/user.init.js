@@ -62,7 +62,7 @@
     if(1 === password_form.length)
     {
         var controller = new honeybee.user.PasswordRequirementsController(password_form, {
-            popover_pos: 'right',
+            popover_pos: 'top',
             popover_title: 'Kennwortrichtlinien',
             popover_trigger: 'focus',
             popover_tpl_selector: '#password_requirements'
