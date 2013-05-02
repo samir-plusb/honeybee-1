@@ -37,7 +37,6 @@
         "underscorejs/underscorejs": "1.4.2",
         "kineticjs/kineticjs": "4.0.*",
         "twitter/bootstrap": "2.2.2",
-        "fortawesome/font-awesome": "3.0.2",
         "ivaynberg/select2": "3.3.2",
         "PhpDebugToolbar/php-debug-toolbar": "1.5.*"
     },
@@ -141,18 +140,6 @@
                     "url": "https://github.com/twitter/bootstrap.git",
                     "type": "git",
                     "reference": "9376a7c221a64c2bf508d02ea2ccd85748d10fcc"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "fortawesome/font-awesome",
-                "version": "3.0.2",
-                "source": {
-                    "url": "https://github.com/FortAwesome/Font-Awesome.git",
-                    "type": "git",
-                    "reference": "0ad5e104960bb6051d4ec49abf42be4b74678e48"
                 }
             }
         },

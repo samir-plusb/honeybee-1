@@ -34,14 +34,14 @@ class ListErrorView extends BaseView
             'text' => $module->getName(),
             'link' => $routing->gen($listRouteName),
             'info' => sprintf('%s - Listenansicht (Anfang)', $module->getName()),
-            'icon' => 'icon-list'
+            'icon' => 'hb-icon-list'
         );
 
         $breadcrumbs = array(array(
             'text' => 'Liste - Fehler',
             'link' => $routing->gen($listRouteName),
             'info' => 'Fehlerhafte parameter',
-            'icon' => 'icon-thumbs-down'
+            'icon' => 'hb-icon-thumbs-down'
         ));
 
         $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'honeybee.breadcrumbs');

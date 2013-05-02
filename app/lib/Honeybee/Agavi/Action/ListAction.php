@@ -268,7 +268,7 @@ class ListAction extends BaseAction
                         ) 
                     );
                 }
-                
+
                 $documentListItemData['custom_actions'] = $customActions;
             }
 
@@ -279,7 +279,7 @@ class ListAction extends BaseAction
     }
 
     protected function buildReferenceBatchConfig()
-    {   
+    {
         $routing = $this->getContext()->getRouting();
         $tm = $this->getContext()->getTranslationManager();
 
@@ -334,7 +334,7 @@ class ListAction extends BaseAction
         $routing = $this->getContext()->getRouting();
         $tm = $this->getContext()->getTranslationManager();
         $references = $referenceField->getOption(ReferenceField::OPT_REFERENCES);
-        
+
         $autoCompleteMappings = array();
         foreach ($references as $reference)
         {

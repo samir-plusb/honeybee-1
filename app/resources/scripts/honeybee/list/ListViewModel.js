@@ -40,6 +40,8 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
         this.all_selected.subscribe(this.toggleAllItemsSelection.bind(this));
         this.actionCountMap = {};
 
+        this.select_all_toggle = $('.select-all-toggle');
+
         var that = this;
         this.supported_batch_actions = {};
         this.ctrl.element.find('.batch_actions .honeybee-action').each(function(idx, dom_element)
@@ -159,6 +161,7 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
         this.dont_toggle = true;
         this.all_selected(this.list_items().length === this.selected_items().length);
         this.dont_toggle = false;
+        this.updateCheckmark();
     },
 
     toggleAllItemsSelection: function(selected_state)
@@ -169,7 +172,14 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
         ko.utils.arrayForEach(this.list_items(), function(item) {
             item.selected(selected_state);
         }.bind(this));
+        this.select_all_toggle.toggleClass('hb-icon-checkmark hb-icon-checkmark-2');
         this.dont_toggle = false;
+    },
+
+    selectAllToggle: function()
+    {
+        var all_selected = (this.list_items().length === this.selected_items().length);
+        this.all_selected(!all_selected);
     },
 
     invertAllSelected: function()
@@ -177,5 +187,20 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
         ko.utils.arrayForEach(this.list_items(), function(item) {
             item.selected(!item.selected());
         }.bind(this));
+        this.updateCheckmark();
+    },
+
+    updateCheckmark: function()
+    {
+        var num_selected = this.selected_items().length;
+        var num_all = this.list_items().length;
+        if (num_selected === num_all)
+        {
+            this.select_all_toggle.removeClass('hb-icon-checkmark-2').addClass('hb-icon-checkmark');
+        }
+        else
+        {
+            this.select_all_toggle.removeClass('hb-icon-checkmark').addClass('hb-icon-checkmark-2');
+        }
     }
 });

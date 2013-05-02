@@ -6,8 +6,7 @@
     <li id="{{data.identifier}}" class="child {% if data.children|length > 0 %}expandable{% endif %}">
         <span class="node-label">
             {% if data.children|length > 0 %}
-            {# <i class="icon-minus node-toggle"></i> #}
-            <span class="node-toggle">➖</span>
+            <span class="node-toggle hb-icon-minus"></span>
             {% else %}
             <span class="node-toggle">〉</span>
             {% endif %}

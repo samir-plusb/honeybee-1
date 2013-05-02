@@ -193,9 +193,9 @@ honeybee.widgets.KeyValuesList.DEFAULT_OPTIONS = {
 };
 
 honeybee.widgets.KeyValuesList.TPL = ''
-+'<a class="btn btn-success" ' // ** add button section **
++'<a class="btn btn-success hb-icon-plus" ' // ** add button section **
 +'   data-bind="click: addNewKeyValuesPair">'
-+'  <i class="icon-white icon-plus " ></i> Neue Eigenschaft'
++'   Neue Eigenschaft'
 +'</a>'
 +'<br /><br />'
 +'<table class="propertyExplorer table table-bordered table-striped">' // ** key-values pairs table section **
@@ -239,7 +239,7 @@ honeybee.widgets.KeyValuesList.TPL = ''
 +'                </ul>'
 +'            </td>'
 +'            <td>' // [remove icon cell]
-+'                <i class="icon-remove" '
++'                <i class="hb-icon-cancel" '
 +'                   data-bind="click: function(data){ $parent.removeKeyValuesPair(data); }">'
 +'                </i>'
 +'            </td>'

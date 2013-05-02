@@ -8,7 +8,7 @@
     <div class="navbar-inner">
         <div class="container-fluid upper-bar" style="width: auto;">
             <a class="brand" href="{{ro.gen('index')}}" title="{{tm._('brand-title', 'modules.labels')}}">
-                <span> {{tm._('brand-name', 'modules.labels')}}</span>
+                <span class="hb-icon-home"> {{tm._('brand-name', 'modules.labels')}}</span>
             </a>
 
             {% if us.isAuthenticated %}
@@ -21,15 +21,14 @@
                         </a>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
                             <li>
-                                <a tabindex="-1" href="{{module.create_link}}">
-                                <span class="icon-edit"></span> Neuer Eintrag</a>
+                                <a tabindex="-1" href="{{module.create_link}}" class="hb-icon-file-4"> Neuer Eintrag</a>
                             </li>
                             <li>
-                                <a tabindex="-1" href="{{module.list_link}}"><span class="icon-list"></span> Übersicht</a>
+                                <a tabindex="-1" href="{{module.list_link}}" class="hb-icon-list-3"> Übersicht</a>
                             </li>
                             {% if module.tree_link %}
                             <li>
-                                <a tabindex="-1" href="{{module.tree_link}}"><span class="icon-leaf"></span> Baumansicht</a>
+                                <a tabindex="-1" href="{{module.tree_link}}" class="hb-icon-tree"> Baumansicht</a>
                             </li>
                             {%endif%}
                         </ul>
@@ -46,7 +45,7 @@
                         <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
                             <li>
                                 <a href="{{ro.gen('user.logout')}}" title="Sitzung beenden">
-                                    <span class="icon-signout"></span> abmelden
+                                    <span class="hb-icon-exit"></span> abmelden
                                 </a>
                             </li>
                         </ul>

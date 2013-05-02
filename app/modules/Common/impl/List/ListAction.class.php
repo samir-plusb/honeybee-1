@@ -12,7 +12,7 @@
 class Common_ListAction extends CommonBaseAction
 {
     const PATH_DATA_PREFIX = 'data';
-    
+
     /**
      * Execute the read logic for this action, hence load our news items.
      *
@@ -54,7 +54,7 @@ class Common_ListAction extends CommonBaseAction
             ))
         );
         $clientSideOptions['options']['select_only_mode'] = $listState->isInSelectOnlyMode();
-        
+
         $this->setAttribute('client_side_controller', $clientSideOptions);
         $this->setAttribute('list_route', $listConfig->getRouteName());
         $this->setAttribute('translation_domain', $listConfig->getTranslationDomain());

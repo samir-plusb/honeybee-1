@@ -16,10 +16,10 @@
 <button class="btn btn-success tagslist-btn-add" href="#" 
         data-bind="enable: enabled, 
                    click: addCurrentTag">
-  <i class="icon-plus icon-white"></i>
+  <i class="hb-icon-plus"></i>
 </button>
 <ul data-bind="foreach: tags" class="tagslist-list">
     <li class="btn btn-info tagslist-tag">
-        <span data-bind="text: $data.label" /> <i data-bind="click: function(data) { $parent.removeTag(data); }" class="icon-remove icon-white"> </i>
+        <span data-bind="text: $data.label" /> <i data-bind="click: function(data) { $parent.removeTag(data); }" class="hb-icon-cancel"> </i>
     </li>
 </ul><br clear="all" />

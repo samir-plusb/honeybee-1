@@ -43,13 +43,13 @@ class EditInputView extends BaseView
             'text' => $moduleName,
             'link' => $routing->gen($module->getOption('prefix') . '.list'),
             'info' => $moduleName . ' - ' . $tm->_('List view (start)', 'modules.labels'),
-            'icon' => 'icon-list'
+            'icon' => 'hb-icon-list'
         );
 
         $breadcrumbs = $this->getContext()->getUser()->getAttribute('breadcrumbs', 'honeybee.breadcrumbs', array());
         foreach ($breadcrumbs as $crumb)
         {
-            if ('icon-pencil' === $crumb['icon'])
+            if ('hb-icon-pencil' === $crumb['icon'])
             {
                 return;
             }
@@ -57,9 +57,9 @@ class EditInputView extends BaseView
         $breadcrumbs[] = array(
             'text' => $tm->_('Edit', 'modules.labels'),
             'info' => $tm->_('Editing:', 'modules.labels') . ' ' . $this->getAttribute('document')->getIdentifier(),
-            'icon' => 'icon-pencil'
+            'icon' => 'hb-icon-pencil'
         );
-        
+
         $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'honeybee.breadcrumbs');
         $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'honeybee.breadcrumbs');
     }

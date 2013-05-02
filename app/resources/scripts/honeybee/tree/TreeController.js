@@ -19,10 +19,6 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         //this.parent();
         this.options = options;
 
-        this.options.leaf = options.leaf || '〉'; // &#x3009; &#x232a;  &#x27e9;
-        this.options.leaf_open = options.leaf_open || '➖'; // &#x2796; &#x2212;
-        this.options.leaf_closed = options.leaf_closed || '➕'; // &#x2795;
-
         this.domElement = options.domElement;
         this.renderTarget = this.domElement.find('.render-tree');
 
@@ -154,15 +150,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
             child.toggleClass('closed');
             if (child.hasClass('expandable'))
             {
-                var text = toggle.html();
-                if (text == that.options.leaf_open)
-                {
-                    toggle.html(that.options.leaf_closed);
-                }
-                else
-                {
-                    toggle.html(that.options.leaf_open);
-                }
+                toggle.toggleClass('hb-icon-minus hb-icon-plus');
             }
             ev.preventDefault();
             ev.stopPropagation();
@@ -297,11 +285,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
                 domContext.addClass('expandable');
                 if (domContext.hasClass('closed'))
                 {
-                    domContext.find('.node-toggle').html('➕');
-                }
-                else
-                {
-                    domContext.find('.node-toggle').html('➖');
+                    domContext.find('.node-toggle').toggleClass('hb-icon-plus hb-icon-minus');
                 }
                 domContext.children('ul').children('li').each(function(i, element)
                 {

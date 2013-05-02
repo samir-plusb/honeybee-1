@@ -8,8 +8,7 @@
     {% if false == select_only_mode %}draggable="true"{% endif %} data-document="{{document|json_encode}}">
         <label class="node-label">
             {% if data.children|length > 0 %}
-            {# <i class="icon-minus node-toggle"></i> #}
-            <span class="node-toggle">➖</span>
+            <span class="node-toggle hb-icon-minus"></span>
             {% else %}
             <span class="node-toggle">〉</span>
             {% endif %}
@@ -40,7 +39,7 @@
             <li class="control">
                 <a class="move">
                     <span class="control-label">Verschieben</span>
-                    <i class="icon-move"></i>
+                    <i class="hb-icon-move"></i>
                 </a>
                 <a class="move-cancel hide">
                     <span class="control-label">Abbrechen</span>
@@ -75,7 +74,7 @@
                             'alert-error': 'error' === type
                         }">
             <strong data-bind="text: message"></strong>
-            <i class="icon-remove icon-white close"
+            <i class="hb-icon-cancel close"
                data-bind="click: function(alert) { $parent.removeAlert(alert); }"> </i>
         </div>
     </section>
@@ -95,7 +94,7 @@
         {% if false == select_only_mode %}
         <div class="container-actions clearfix">
             <section>
-                <a class="btn" href="{{ro.gen(module_type_key ~ '.edit')}}">Neuer Eintrag</a>
+                <a class="btn hb-icon-file-4" href="{{ro.gen(module_type_key ~ '.edit')}}"> Neuer Eintrag</a>
             </section>
             <section>
                 <div class="btn-group">

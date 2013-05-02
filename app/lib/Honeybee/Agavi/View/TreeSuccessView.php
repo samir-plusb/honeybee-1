@@ -37,7 +37,7 @@ class TreeSuccessView extends BaseView
             'text' => $moduleName,
             'link' => $routing->gen($treeRouteName),
             'info' => $moduleName . ' - ' . $tm->_('Tree view', 'modules.labels'),
-            'icon' => 'icon-list'
+            'icon' => 'hb-icon-list'
         );
 
         $breadcrumbs = $this->getContext()->getUser()->getAttribute('breadcrumbs', 'honeybee.breadcrumbs', array());
@@ -48,7 +48,6 @@ class TreeSuccessView extends BaseView
 
         $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'honeybee.breadcrumbs');
         $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'honeybee.breadcrumbs');
-        
     }
 
     public function executeJson(\AgaviRequestDataHolder $requestData)

@@ -49,7 +49,7 @@ help:
 	@echo "install-vendor - install dependencies in vendor folder."
 	@echo "install-vendor-dev - install development dependencies in vendor folder."
 	@echo "link-project-modules - Symlink custom code into the honeybee submodule and update the local git/ingo/exclude settings."
-	@echo "twitter-bootstrap - build twitter-bootstrap with font-awesome."
+	@echo "twitter-bootstrap - build twitter-bootstrap."
 	@echo "update-node-deps - update nodejs dependencies in node_modules folder."
 	@echo "update-vendor - update dependencies in vendor folder."
 	@echo "update-vendor-dev - update development dependencies in vendor folder."
@@ -89,9 +89,6 @@ tail-logs:
 #
 twitter-bootstrap: 
 
-	@cp vendor/fortawesome/font-awesome/less/font-awesome.less vendor/twitter/bootstrap/less/
-	@sed -i 's/@import "sprites.less"/@import "font-awesome.less"/g' vendor/twitter/bootstrap/less/bootstrap.less
-	@sed -i 's/..\/font\/fontawesome-webfont/..\/binaries\/fontawesome-webfont/g' vendor/twitter/bootstrap/less/font-awesome.less
 	@export PATH="${PROJECT_ROOT}/node_modules/.bin/:$(PATH)"; cd vendor/twitter/bootstrap; make
 
 

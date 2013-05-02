@@ -6,13 +6,13 @@ body
 
 html
 {
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fefefe), to(#ffffff)); 
+/*  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fefefe), to(#ffffff)); 
   background: -webkit-linear-gradient(top, #fefefe, #ffffff); 
   background: -moz-linear-gradient(top, #fefefe, #ffffff); 
   background: -ms-linear-gradient(top, #fefefe, #ffffff);
   background: -o-linear-gradient(top, #fefefe, #ffffff);
   background: linear-gradient(top, #fefefe, #ffffff);
-  background-attachment: fixed;
+  background-attachment: fixed;*/
 }
 
 body
@@ -59,7 +59,7 @@ body
     margin-top: 10px;
 }
 
-.icon-remove
+.hb-icon-cancel
 {
   cursor: pointer;
 }
@@ -129,13 +129,25 @@ body
   cursor: default;
 }
 
-.tagslist-list .tagslist-tag .icon-remove
+.tagslist-list .tagslist-tag .hb-icon-cancel
 {
   display: block;
   position: absolute;
-  right: 1px;
-  top: 5px;
-  text-align: center;
+  right: 9px;
+  top: 6px;
+  cursor: pointer;
+}
+/*
+.tagslist-list .tagslist-tag .hb-icon-cancel
+{
+  display: inline-block;
+  padding: 0.3em 0.4em 0.3em 0.3em;
+  cursor: pointer;
+}*/
+.nav-stacked .tagslist-tag .hb-icon-cancel
+{
+  right: 18px;
+  top: 14px;
 }
 
 .tagslist-list .highlight-transition
@@ -188,19 +200,6 @@ body
   width: 
 }
 
-.tagslist-list .tagslist-tag .icon-remove
-{
-  display: inline-block;
-  padding: 0.3em 0.4em 0.3em 0.3em;
-  cursor: pointer;
-}
-
-.nav-stacked .tagslist-tag .icon-remove
-{
-  right: 10px;
-  top: 8px;
-}
-
 /**
  * ###############################
  * #    Tag Container: Pills     #
@@ -236,7 +235,8 @@ body
 
 .pill-container li a i:hover
 {
-  background-color: #005580;
+  background-color: #0088cc;
+/*  color: #005580;*/
 }
 
 .pill-container li a:hover
@@ -833,7 +833,7 @@ div.select2-container-multi .select2-choices .select2-search-field
 }
 
 .tree-target .disabled a,
-.toolbar .toolset .tool .disabled .icon-move
+.toolbar .toolset .tool .disabled .hb-icon-move
 {
   color: #ababab;
 }

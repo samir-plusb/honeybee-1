@@ -26,6 +26,7 @@
 
         .drag {
             color: #ccc;
+            cursor: default;
         }
 
     }
@@ -35,6 +36,9 @@
         overflow: auto;
     }
 
+    .drag {
+        cursor: ew-resize;
+    }
     .edge-handles {
         position:absolute;
         width: 15px;
@@ -47,21 +51,8 @@
         border-style: solid;
         border-color: black;
         */
-
-        .icon {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            font-size: 14px;
-            line-height: 14px;
-            text-align: center;
-            cursor: default;
-
-            &.drag {
-                cursor: ew-resize;
-            }
-        }
-
+        cursor: hand;
+        cursor: pointer;
     }
 
     .sidebar-slot {

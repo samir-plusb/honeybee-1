@@ -20,7 +20,7 @@
         <div class="container-actions clearfix">
             {% if false == select_only_mode %}
             <section>
-                <a class="btn" href="{{ro.gen(module_type_key ~ '.edit')}}">Neuer Eintrag</a>
+                <a class="btn hb-icon-file-4" href="{{ro.gen(module_type_key ~ '.edit')}}"> Neuer Eintrag</a>
             </section>
             <section>
                 <div class="btn-group batch_actions">
@@ -63,9 +63,7 @@
         <div class="alert search-message alert-info">
             <p>
                 Dein Filter trifft auf <strong><span data-bind="text: item_count"></span> Einträge zu</strong>.
-                <a class="clear-list-filter">
-                    <i class="icon-remove" data-bind="click: clearFilter"> Filter aufheben.</i>
-                </a>
+                <a class="clear-list-filter hb-icon-filter" data-bind="click: clearFilter"> Filter aufheben.</a>
             </p>
         </div>
     </section>
@@ -84,10 +82,10 @@
     <section class="well toolbar secondary">
         <ul class="toolset">
             <li class="tool select-all">
-                <label title="Alle Einträge dieser Seite ab-/auswählen"><input type="checkbox" id="select_all_rows_toggle" data-bind="checked: all_selected" /> {{tm._('Alle auswählen',  translation_domain)}}</label>
+                <a class="select-all-toggle hb-icon-checkmark-2" data-bind="click: selectAllToggle" title="Alle Einträge dieser Seite ab-/auswählen"> {{tm._('Alle auswählen',  translation_domain)}}</a>
             </li>
             <li class="tool select-invert">
-                <a data-bind="click: invertAllSelected">{{tm._('Auswahl umkehren',  translation_domain)}}</a>
+                <a data-bind="click: invertAllSelected" class="hb-icon-loop-alt2"> {{tm._('Auswahl umkehren',  translation_domain)}}</a>
             </li>
             {% if 0 < sidebar_tree_targets|length %}
             <li class="tool sidebar-tree-targets">
@@ -95,10 +93,10 @@
                     {% for sidebar_target in sidebar_tree_targets %}
                     <li class="tree-target">
                         <div class="reference-assign disabled" data-module="{{sidebar_target.module}}" data-action="{{sidebar_target.related_action}}">
-                            <a><i class="icon icon-move"></i> {{sidebar_target.labels.assign}}</a>
+                            <a class="hb-icon-move"> {{sidebar_target.labels.assign}}</a>
                         </div>
                         <div class="reference-abort" data-module="{{sidebar_target.module}}" data-action="{{sidebar_target.related_action}}" style="display: none">
-                            <a><i class="icon icon-remove"></i> {{sidebar_target.labels.abort}}</a>
+                            <a><i class="hb-icon-cancel"></i> {{sidebar_target.labels.abort}}</a>
                         </div>
                     </li>
                     {% endfor %}
@@ -118,9 +116,10 @@
         <table class="data-list table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>
+                    <th class="list_item_checkbox">
                         <!-- @todo These values should be places to the bottom of the document. -->
                         <input type="hidden" class="list-data" value="{{list_data|json_encode}}" />
+                        <label title="{{tm._('Alle auswählen', translation_domain)}}"><input type="checkbox" data-bind="checked: all_selected" /></label>
                     </th>
 
                     {% for fieldname, field in list_fields %}

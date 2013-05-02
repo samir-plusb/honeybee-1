@@ -204,7 +204,7 @@ honeybee.widgets.TimeTable.TPL = ''
 +'              <td><span data-bind="text: from.day"></span>, <span data-bind="text: from.time"></span> Uhr</td>' // [from cell]
 +'              <td><span data-bind="text: to.day"></span>, <span data-bind="text: to.time"></span> Uhr</td>' // [to cell]
 +'              <td>geöffnet</td>' // [state cell]
-+'              <td><i class="icon-remove" ' // [remove icon cell]
++'              <td><i class="hb-icon-cancel" ' // [remove icon cell]
 +'                     data-bind="click: function(data) { $parent.removeTimeSpan(data); }"></i>'
 +'              </td>'
 +'          </tr>'

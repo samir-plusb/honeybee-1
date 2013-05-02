@@ -82,7 +82,7 @@ class ListSuccessView extends BaseView
             'text' => $moduleName,
             'link' => $routing->gen($listRouteName),
             'info' => $moduleName . ' - ' . $tm->_('List view (start)', 'modules.labels'),
-            'icon' => 'icon-list'
+            'icon' => 'hb-icon-list'
         );
 
         $breadcrumbs = $this->getContext()->getUser()->getAttribute('breadcrumbs', 'honeybee.breadcrumbs', array());
@@ -106,7 +106,7 @@ class ListSuccessView extends BaseView
                 'text' => $moduleName,
                 'link' => $routing->gen($listRouteName, $routeParams),
                 'info' => $moduleName . ' (' . $tm->_('Page', 'modules.labels') . ' ' . $page . ')',
-                'icon' => 'icon-list'
+                'icon' => 'hb-icon-list'
             ));
         }
         else if ($listState->hasSearch())
@@ -116,7 +116,7 @@ class ListSuccessView extends BaseView
                 'text' => $moduleName,
                 'link' => $routing->gen($listRouteName, $routeParams),
                 'info' => $tm->_('Search for:', 'modules.labels') . ' ' . $listState->getSearch() . ' (' . $tm->_('Page', 'modules.labels') . ' ' . $page . ')',
-                'icon' => 'icon-search'
+                'icon' => 'hb-icon-search'
             );
         }
         else if ($listState->hasFilter())
@@ -126,7 +126,7 @@ class ListSuccessView extends BaseView
                 'text' => $moduleName,
                 'link' => $routing->gen($listRouteName, $routeParams),
                 'info' => $tm->_('Extended Search', 'modules.labels') . ' (' . $tm->_('Page', 'modules.labels') . ' ' . $page . ')',
-                'icon' => 'icon-search'
+                'icon' => 'hb-icon-search'
             );
         }
 
