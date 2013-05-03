@@ -200,20 +200,15 @@ honeybee.widgets.TagsList = honeybee.widgets.Widget.extend({
     highlightTag: function(tag_idx)
     {
         var fadein = true;
-        var el = $(this.element.find('.tagslist-list li')[tag_idx]);
+        var el = $(this.element.find('.tagslist-list .tagslist-tag')[tag_idx]);
         var reset_state = function()
         {
-            if (! fadein)
-            {
-                el.removeClass('highlight-transition');
-                el.unbind('webkitTransitionEnd transitionend msTransitionEnd oTransitionEnd', reset_state);
-                return;
-            }
-            fadein = false;
             el.removeClass('highlight');
+            el.unbind('webkitTransitionEnd transitionend msTransitionEnd oTransitionEnd', reset_state);
+            return;
         };
         el.bind('webkitTransitionEnd transitionend msTransitionEnd oTransitionEnd', reset_state);
-        el.addClass('highlight-transition').addClass('highlight');
+        el.addClass('highlight');
     }
 });
 

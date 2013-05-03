@@ -29,7 +29,8 @@ class TextCollectionFieldInputRenderer extends FieldInputRenderer
             'autobind' => TRUE,
             'fieldname' => $this->generateInputName($document),
             'max' => 0,
-            'tags' => $tags
+            'tags' => $tags,
+            'tpl' => 'Stack'
         );
     }
 }
