@@ -12,6 +12,8 @@
     <ae:configuration>
         <settings prefix="user.">
             <setting name="workflow">user.default</setting>
+            <setting name="module_active">false</setting>
+
             <!-- list integration {@see IListConfig} -->
             <setting name="list_config">
                 <!-- common list params -->

@@ -23,6 +23,8 @@ class User_LoginAction extends UserBaseAction
             return $this->executeWrite($parameters);
         }
 
+        $this->setAttribute('reset_support_enabled', \AgaviConfig::get('user.module_active', FALSE));
+
         return 'Input';
     }
 

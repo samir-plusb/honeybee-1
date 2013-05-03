@@ -32,5 +32,7 @@
             </div>
         </fieldset>
     </form>
+    {% if true == reset_support_enabled %}
     <a href="{{ ro.gen('user.reset') }}">{{ tm._('Reset password', 'user.ui') }}</a>
+    {% endif %}
 </div>

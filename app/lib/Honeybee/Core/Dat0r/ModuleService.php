@@ -21,6 +21,11 @@ class ModuleService
                     '', 
                     $file->getPathname()
                 );
+
+                if ('User' === $moduleName && ! \AgaviConfig::get('user.module_active', FALSE))
+                {
+                    continue;
+                }
                 // @todo refactor hardcoded namespace to be appropiately dynamic.
                 $implementor = sprintf('Honeybee\\Domain\\%1$s\\%1$sModule', $moduleName);
                 $factory = array($implementor, 'getInstance');
