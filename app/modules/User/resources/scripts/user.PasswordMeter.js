@@ -8,7 +8,7 @@ honeybee.user.PasswordMeter = honeybee.core.BaseObject.extend({
 
     password_repeat_input: null,
 
-    confirm_btn: null,
+    submit_btn: null,
 
     strength_scorebar: null,
 
@@ -23,7 +23,7 @@ honeybee.user.PasswordMeter = honeybee.core.BaseObject.extend({
 
         this.password_input = this.element.find('.input-password').first();
         this.password_repeat_input = this.element.find('.input-password-repeat').first();
-        this.confirm_btn = this.element.find('.btn-set-pwd').first();
+        this.submit_btn = this.element.find('.btn-set-pwd').first();
 
         this.password_spec = new honeybee.user.PasswordSpec();
         this.scoreboard = new honeybee.user.PasswordScoreboard(this.password_spec);
@@ -32,7 +32,7 @@ honeybee.user.PasswordMeter = honeybee.core.BaseObject.extend({
         this.initRequirmentsPopover();
         this.initInputEvents();
 
-        this.confirm_btn.prop('disabled', true);
+        this.submit_btn.prop('disabled', true);
     },
 
     initRequirmentsPopover: function()
@@ -186,11 +186,11 @@ honeybee.user.PasswordMeter = honeybee.core.BaseObject.extend({
 
         if (this.isPasswordValid() && this.isPasswordRepetitionValid())
         {
-            this.confirm_btn.prop('disabled', false);
+            this.submit_btn.prop('disabled', false);
         }
         else
         {
-            this.confirm_btn.prop('disabled', true);
+            this.submit_btn.prop('disabled', true);
         }
     },
 
