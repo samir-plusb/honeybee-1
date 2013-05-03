@@ -21,7 +21,10 @@ class TreeSuccessView extends BaseView
             ), NULL, 'read')
         );
 
-        $this->setBreadcrumb();
+        if (! $this->hasAttribute('referenceField'))
+        {
+            $this->setBreadcrumb();
+        }
     }
 
     protected function setBreadcrumb()
@@ -35,7 +38,7 @@ class TreeSuccessView extends BaseView
         $moduleName = $tm->_($module->getName(), 'modules.labels');
         $moduleCrumb = array(
             'text' => $moduleName,
-            'link' => $routing->gen($treeRouteName),
+            'link' => $routing->gen($treeRouteName, array(), array('omit_defaults' => TRUE)),
             'info' => $moduleName . ' - ' . $tm->_('Tree view', 'modules.labels'),
             'icon' => 'hb-icon-list'
         );

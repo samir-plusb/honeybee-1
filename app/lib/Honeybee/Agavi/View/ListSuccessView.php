@@ -48,7 +48,10 @@ class ListSuccessView extends BaseView
             }
         }
 
-        $this->setBreadcrumb();
+        if (! $this->hasAttribute('referenceField'))
+        {
+            $this->setBreadcrumb();
+        }
     }
 
     /**
