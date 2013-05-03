@@ -21,11 +21,14 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
         this.currentWidth = this.initialWidth;
 
         //this.domElement.parent().children().css('outline', '1px solid red');
-
         this.domElement.append($('<li id="more-menu" class="dropdown more"><a data-toggle="dropdown" class="dropdown-toggle" role="button" href="#" id="drop-more"> Mehr...<b class="caret"></b></a><ul aria-labelledby="drop-more" role="menu" class="dropdown-menu" id="overflow-modules"></ul></li>'));
         this.overflowElement = $('#more-menu');
         this.overflowListElement = $('#overflow-modules');
+        this.minimumWidthNeeded = this.overflowElement.outerWidth();
         this.overflowElement.hide();
+
+        this.loginText = $('#fat-menu > p');
+        this.loginTextWidth = this.loginText.outerWidth();
 
         this.handleResizeEvent();
 
@@ -44,31 +47,65 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
 
     handleResizeEvent: function (ev)
     {
-        this.availableWidth = this.getAvailableWidth();
         this.resizeToFit();
     },
 
     resizeToFit: function ()
     {
-        var lastElement, hiddenWidth;
+        var lastElement, addedWidth, removedWidth;
+        var counter = 0;
+
+        this.availableWidth = this.getAvailableWidth();
+        this.currentWidth = this.domElement.outerWidth();
+
+        if (this.currentWidth >= this.availableWidth)
+        {
+            this.loginText.hide();
+        }
+
+        this.availableWidth = this.getAvailableWidth();
+        this.currentWidth = this.domElement.outerWidth();
 
         if (this.currentWidth > this.availableWidth)
         {
-            this.hiddenWidths.push(this.hideNavElement());
-            this.currentWidth = this.domElement.outerWidth();
+            while (this.currentWidth > this.availableWidth)
+            {
+                counter++;
+                removedWidth = this.hideNavElement();
+                this.currentWidth = this.domElement.outerWidth();
+                if (removedWidth === 0 || counter > 50) // magic constant for maximum number of modules :-D
+                {
+                    break;
+                }
+                this.hiddenWidths.push(removedWidth);
+            }
         }
         else
         {
-            hiddenWidth = this.hiddenWidths.pop();
-            if (this.currentWidth + hiddenWidth < this.availableWidth)
+            addedWidth = this.hiddenWidths.pop() || 0;
+            while (this.currentWidth + addedWidth + 10 < this.availableWidth)
             {
-                this.showNavElement();
+                counter++;
+                addedWidth = this.showNavElement();
+                this.currentWidth = this.domElement.outerWidth();
+                this.availableWidth = this.getAvailableWidth();
+                addedWidth = this.hiddenWidths.pop() || 0;
+                if (addedWidth === 0 || counter > 50) // magic constant for maximum number of modules :-D
+                {
+                    break;
+                }
             }
-            else
+
+            if (counter === 0)
             {
-                this.hiddenWidths.push(hiddenWidth);
+                this.hiddenWidths.push(addedWidth);
             }
-            this.currentWidth = this.domElement.width();
+
+        }
+
+        if (this.getAvailableWidth() > (this.currentWidth + this.loginTextWidth + 10))
+        {
+            this.loginText.show();
         }
     },
 
@@ -90,9 +127,12 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
 
     hideNavElement: function()
     {
-        var width;
         element = this.domElement.children('li.dropdown').not('.more').last();
-        width = element.width();
+        var width = element.outerWidth() || 0;
+        if (width === 0)
+        {
+            return 0;
+        }
 
         element.removeClass('dropdown').addClass('dropdown-submenu pull-left');
         element.find('a > b.caret').hide();
@@ -108,10 +148,7 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
 
     showNavElement: function(element)
     {
-        var width;
         element = this.overflowListElement.children().first();
-        width = element.width();
-
         element.addClass('dropdown').removeClass('dropdown-submenu pull-left');
         element.find('a > b.caret').show();
         element.insertBefore(this.overflowElement);
@@ -121,7 +158,7 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
             this.overflowElement.hide();
         }
 
-        return width;
+        return element.outerWidth() || 0;
     },
 
     replaceAvatarImage: function()
