@@ -1,4 +1,4 @@
-<input type="text" class="tagslist-input"
+<input type="text" placeholder="Hinzufügen" class="span11 tagslist-input"
        data-bind='value: current_tag,
                    valueUpdate: "afterkeydown",
                    hasfocus: has_focus,
@@ -13,15 +13,12 @@
                         value: $data.value" />
   </li>
 </ul>
-<button class="btn btn-success tagslist-btn-add" href="#" 
-        data-bind="enable: enabled, 
-                   click: addCurrentTag">
-  <i class="hb-icon-plus"></i>
-</button>
-<ul data-bind="foreach: tags" class="tagslist-list nav nav-pills nav-stacked pill-container">
-    <li class="tagslist-tag">
-        <a href="#" onclick="return false;">
-            <span data-bind="text: $data.label" /> <i data-bind="click: function(data) { $parent.removeTag(data); }" class="hb-icon-cancel"></i>
-        </a>
-    </li>
-</ul><br clear="all" />
+<div class="pill-container">
+  <ul data-bind="foreach: tags" class="tagslist-list nav nav-pills nav-stacked">
+      <li class="tagslist-tag">
+          <a href="#" onclick="return false;">
+              <span data-bind="text: $data.label" /> <i data-bind="click: function(data) { $parent.removeTag(data); }" class="hb-icon-cancel"></i>
+          </a>
+      </li>
+  </ul>
+</div>

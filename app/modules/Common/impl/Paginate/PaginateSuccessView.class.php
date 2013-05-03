@@ -22,15 +22,15 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
-        $listConfig = $parameters->getParameter('config');
-
-        $this->setAttribute('links', $this->generatePagingLinks($listConfig->getRouteName()));
-        
+        $this->setAttribute('links', $this->generatePagingLinks($parameters));
         $this->setAttribute('list_filter', $this->getAttribute('filter'));
     }
 
-    protected function generatePagingLinks($listRoute)
+    protected function generatePagingLinks(AgaviRequestDataHolder $parameters)
     {
+        $listConfig = $parameters->getParameter('config');
+        $listState = $parameters->getParameter('state');
+        $listRoute = $listConfig->getRouteName();
         $routing = $this->getContext()->getRouting();
         $limit = $this->getAttribute('limit');
         $currentOffset = $this->getAttribute('offset');
@@ -66,6 +66,16 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
             )
         );
 
+        $referenceModule = $listState->getReferenceModule();
+        $referenceField = $listState->getReferenceField();
+
+        $defaultParams = array();
+        if ($referenceModule && $referenceField)
+        {
+            $defaultParams['referenceModule'] = $referenceModule;
+            $defaultParams['referenceField'] = $referenceField;
+        }
+
         $urls = array();
         foreach ($pageLinksData as $name => $pageLinkData)
         {
@@ -82,7 +92,7 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
                 $pageLinkData['sorting'] = $sorting;
             }
             $pageLinkData['selectOnlyMode'] = $this->getAttribute('select_only_mode', FALSE);
-            $urls[$name] = $routing->gen($listRoute, $pageLinkData);
+            $urls[$name] = $routing->gen($listRoute, array_merge($defaultParams, $pageLinkData));
         }
         return $urls;
     }

@@ -87,7 +87,9 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                 'list_url' => htmlspecialchars_decode(
                     urldecode($this->getRouteLink($listRouteName, array(
                         'referenceModule' => $document->getModule()->getName(),
-                        'referenceField' => $this->getField()->getName()
+                        'referenceField' => $this->getField()->getName(),
+                        'offset' => 0,
+                        'limit' => 10
                     )))
                 ),
                 'uri' => htmlspecialchars_decode(

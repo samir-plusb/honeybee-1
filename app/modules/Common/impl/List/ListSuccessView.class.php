@@ -24,19 +24,27 @@ class Common_List_ListSuccessView extends CommonBaseView
         $listState = $parameters->getParameter('state');
         $routing = $this->getContext()->getRouting();
         $listRoute = $listConfig->getRouteName();
+
+        $referenceModule = $listState->getReferenceModule();
+        $referenceField = $listState->getReferenceField();
+        $defaultParams = array(
+            'offset' => 0,
+            'limit' => $listState->getLimit()
+        );
+
+        if ($referenceModule && $referenceField)
+        {
+            $defaultParams['referenceModule'] = $referenceModule;
+            $defaultParams['referenceField'] = $referenceField;
+        }
+
         $searchWidgetOpts = array(
             'search' => $listState->getSearch(),
             'limit' => $listState->getLimit(),
             'sort_field' => $listState->getSortField(),
             'sort_direction' => $listState->getSortDirection(),
-            'search_url' => urldecode($routing->gen($listRoute, array(
-                'offset' => 0, 
-                'limit' => $listState->getLimit()
-            ))),
-            'filter_url' => urldecode($routing->gen($listRoute, array(
-                'offset' => 0, 
-                'limit' => $listState->getLimit()
-            )))
+            'search_url' => urldecode($routing->gen($listRoute, $defaultParams)),
+            'filter_url' => urldecode($routing->gen($listRoute, $defaultParams))
         );
 
         $this->setAttribute('is_filtered', $listState->hasFilter());
@@ -49,10 +57,7 @@ class Common_List_ListSuccessView extends CommonBaseView
         ));
         $this->setAttribute(
             'list_base_url',
-            $routing->gen($listRoute, array(
-                'offset' => 0, 
-                'limit' => $listState->getLimit()
-            ))
+            $routing->gen($listRoute, $defaultParams)
         );
 
         $this->setAttribute('select_only_mode', $listState->isInSelectOnlyMode());
@@ -63,10 +68,7 @@ class Common_List_ListSuccessView extends CommonBaseView
         $treeParams = array();
         if ($listState->isInSelectOnlyMode())
         {
-            $treeParams = array(
-                'referenceField' => $listState->getReferenceField(),
-                'referenceModule' => $listState->getReferenceModule()
-            );
+            $treeParams = array('referenceField' => $referenceField, 'referenceModule' => $referenceModule);
         }
         $this->setAttribute('tree_view_link', $routing->gen($modulePrefix . '.tree', $treeParams));
 
@@ -86,5 +88,3 @@ class Common_List_ListSuccessView extends CommonBaseView
         return json_encode($this->getAttribute('list_data'));
     }
 }
-
-

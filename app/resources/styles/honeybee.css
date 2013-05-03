@@ -157,7 +157,7 @@ body
 .nav-stacked .tagslist-tag .hb-icon-cancel
 {
   right: 18px;
-  top: 14px;
+  top: 12px;
 }
 
 .tagslist-list .tagslist-tag .label-display
@@ -198,12 +198,22 @@ body
  */
 .pill-container
 {
+  overflow: hidden;
   width: 91.4894%;
-  max-height: 150px;
-  overflow: auto;
   background: white;
-  margin-top: 10px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  height: 85px;
   padding: 0;
+}
+
+.pill-container .tagslist-list
+{
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 6px;
+  height: 83px;
+  overflow: auto;
+  margin-top: 0px;
 }
 
 .pill-container li a
@@ -245,6 +255,16 @@ body
   float: none;
   margin-top: 0px;
   margin-right: 0px;
+}
+
+.pill-container .nav-pills > li > a
+{
+  margin-top: 0px;
+}
+
+.pill-container .nav-pills > li:last-child > a
+{
+  margin-bottom: 0px;
 }
 
 /**
@@ -667,6 +687,11 @@ div.select2-drop
 /* 
  * Make select 2 look the way we think is right. Opinionated!
  */
+.select2-container
+{
+  margin-bottom: 8px;
+}
+
 div.select2-container-multi.select2-container-active ul.select2-choices,
 div.select2-container-multi ul.select2-choices
 {
