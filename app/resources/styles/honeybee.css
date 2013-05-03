@@ -890,6 +890,19 @@ div.select2-container-multi .select2-choices .select2-search-field
   font-size: 14px;
 }
 
+.form-password .hb-icon-checkbox-checked
+{
+  font-size: 14px;
+  color: green;
+  padding: 3px;
+  visibility: hidden;
+}
+
+.form-password .accepted .hb-icon-checkbox-checked
+{
+  visibility: visible;
+}
+
 .form-password .password_requirements
 {
   margin: 0;

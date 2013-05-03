@@ -1,5 +1,7 @@
 user.namespace.js
 user.ListController.js
 user.TreeController
-user.PasswordRequirementsController.js
+user.PasswordSpec.js
+user.PasswordScoreboard.js
+user.PasswordMeter.js
 user.init.js
