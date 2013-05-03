@@ -22,70 +22,21 @@ class User_Login_LoginSuccessView extends UserBaseView
      */
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $user = $this->getContext()->getUser();
-        $target = $this->getContext()->getRouting()->gen('index');
+        $routing = $this->getContext()->getRouting();
+        $attributes = $this->getContainer()->getAttributes('org.agavi.controller.forwards.login', array());
 
-        if ($user->hasAttribute('redirect', 'de.org.honeybee.user.login'))
+        if (isset($attributes['requested_module']))
         {
-            $target = $user->removeAttribute('redirect', 'de.org.honeybee.user.login');
+            /*
+            * Kein direkter Aufruf auf /user/login/ sondern ein Aufruf auf eine Action,
+            * welche mit isSecure() = true markiert ist und der User war bis gerade eben
+            * noch nicht eingeloggt.
+            */
+            $this->getResponse()->setRedirect($routing->gen(null));
         }
-
-        $this->getResponse()->setRedirect($target);
-    }
-
-    /**
-     * Prepares and sets our json data on our webresponse.
-     *
-     * @param       AgaviRequestDataHolder $parameters
-     */
-    public function executeJson(AgaviRequestDataHolder $parameters)
-    {
-        if (NULL !== ($container = $this->attemptForward($parameters)))
+        else
         {
-            return $container;
+           $this->getResponse()->setRedirect($routing->getBaseHref());
         }
-
-        $jsonData = json_encode(array('result' => 'success'));
-        $this->getContainer()->getResponse()->setContent($jsonData);
     }
-
-    /**
-     * Prepares and sets our json data on our console response.
-     *
-     * @param       AgaviRequestDataHolder $parameters
-     */
-    public function executeText(AgaviRequestDataHolder $parameters)
-    {
-        if (NULL !== ($container = $this->attemptForward($parameters)))
-        {
-            return $container;
-        }
-
-        $this->getContainer()->getResponse()->setContent('The userentication completed successfully.');
-    }
-
-    /**
-     * Create a forward container for the that was intentionally called before the login was executed.
-     *
-     * @return      AgaviExecutionContainer A new execution container instance,
-	 *                                      fully initialized.
-	 *
-	 * @see         AgaviExecutionContainer::createExecutionContainer()
-     */
-    protected function attemptForward()
-    {
-        $request = $this->getContext()->getRequest();
-        $requestedModule = $request->getAttribute('requested_module', 'org.agavi.controller.forwards.login');
-        $requestedAction = $request->getAttribute('requested_action', 'org.agavi.controller.forwards.login');
-
-        $container = NULL;
-
-        if (!empty($requestedModule) && !empty($requestedAction))
-        {
-            $container = $this->createForwardContainer($requestedModule, $requestedAction, NULL, NULL, 'read');
-        }
-
-        return $container;
-    }
-
 }

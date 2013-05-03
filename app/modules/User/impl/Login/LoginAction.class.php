@@ -17,7 +17,7 @@ class User_LoginAction extends UserBaseAction
      */
     public function executeRead(AgaviParameterHolder $parameters)
     {
-        // Forward to write if someone is passing our action the required parameters for logging in.
+        // Forward to write if someone is passing our action the required parameters for logging in. (basic auth)
         if ($parameters->hasParameter('username') && $parameters->hasParameter('password'))
         {
             return $this->executeWrite($parameters);

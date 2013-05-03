@@ -6,11 +6,6 @@
  */
 class User_Login_LoginInputView extends UserBaseView
 {
-    public function executeBinary(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
-    {
-        $this->getContext()->getController()->getGlobalResponse()->setHttpStatusCode(401);
-    }
-
     /**
      * Execute any html related presentation logic and sets up our template attributes.
      *
@@ -21,7 +16,6 @@ class User_Login_LoginInputView extends UserBaseView
         parent::setupHtml($parameters);
 
         $translationManager = $this->getContext()->getTranslationManager();
-        $this->memoizeLocationForLaterRedirect();
         $this->setAttribute('_title', $translationManager->_('Login', 'user.ui'));
     }
 
@@ -32,11 +26,6 @@ class User_Login_LoginInputView extends UserBaseView
      */
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
-        if (NULL != ($container = $this->attemptForward($parameters)))
-        {
-            return $container;
-        }
-
         $jsonData = json_encode(
             array(
                 'result'  => 'success',
@@ -45,6 +34,11 @@ class User_Login_LoginInputView extends UserBaseView
         );
 
         $this->getContainer()->getResponse()->setContent($jsonData);
+        $this->getContext()->getController()->getGlobalResponse()->setHttpStatusCode(401);
+    }
+
+    public function executeBinary(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
         $this->getContext()->getController()->getGlobalResponse()->setHttpStatusCode(401);
     }
 
@@ -67,21 +61,7 @@ class User_Login_LoginInputView extends UserBaseView
                 'user.messages'
             )
         );
-    }
 
-    protected function memoizeLocationForLaterRedirect()
-    {
-        if ($this->getContext()->getRequest()->hasAttributeNamespace('org.agavi.controller.forwards.login'))
-        {
-            // we were redirected to the login form by the controller because the requested action required security
-            // so store the input URL in the session for a redirect after login
-            $url = $this->getContext()->getRequest()->getUrl();
-            $this->getContext()->getUser()->setAttribute('redirect', $url, 'de.org.honeybee.user.login');
-        }
-        else
-        {
-            // clear the redirect URL just to be sure
-            $this->getContext()->getUser()->removeAttribute('redirect', 'de.org.honeybee.user.login');
-        }
+        return 1; // falsey shell return code
     }
 }
