@@ -23,14 +23,11 @@ class User_Login_LoginSuccessView extends UserBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $user = $this->getContext()->getUser();
+        $target = $this->getContext()->getRouting()->gen('index');
 
-        if ($user->hasAttribute('redirect', 'de.berlinonline.contentworker.login'))
+        if ($user->hasAttribute('redirect', 'de.org.honeybee.user.login'))
         {
-            $target = $user->removeAttribute('redirect', 'de.berlinonline.contentworker.login');
-        }
-        else
-        {
-            $target = $this->getContext()->getRouting()->gen('index');
+            $target = $user->removeAttribute('redirect', 'de.org.honeybee.user.login');
         }
 
         $this->getResponse()->setRedirect($target);
@@ -43,19 +40,13 @@ class User_Login_LoginSuccessView extends UserBaseView
      */
     public function executeJson(AgaviRequestDataHolder $parameters)
     {
-        if (NULL != ($container = $this->attemptForward($parameters)))
+        if (NULL !== ($container = $this->attemptForward($parameters)))
         {
             return $container;
         }
 
-        $this->getContainer()->getResponse()->setContent(
-            json_encode(
-                array(
-                    'result' => 'success',
-                    'token' => session_id()
-                )
-            )
-        );
+        $jsonData = json_encode(array('result' => 'success'));
+        $this->getContainer()->getResponse()->setContent($jsonData);
     }
 
     /**
@@ -65,14 +56,12 @@ class User_Login_LoginSuccessView extends UserBaseView
      */
     public function executeText(AgaviRequestDataHolder $parameters)
     {
-        if (NULL != ($container = $this->attemptForward($parameters)))
+        if (NULL !== ($container = $this->attemptForward($parameters)))
         {
             return $container;
         }
 
-        $this->getContainer()->getResponse()->setContent(
-            'The userentication completed successfully. The session token is: ' . "\n" . session_id() . "\n"
-        );
+        $this->getContainer()->getResponse()->setContent('The userentication completed successfully.');
     }
 
     /**

@@ -8,7 +8,6 @@ class User_Login_LoginInputView extends UserBaseView
 {
     public function executeBinary(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $this->memoizeLocationForLaterRedirect();
         $this->getContext()->getController()->getGlobalResponse()->setHttpStatusCode(401);
     }
 
@@ -23,7 +22,6 @@ class User_Login_LoginInputView extends UserBaseView
 
         $translationManager = $this->getContext()->getTranslationManager();
         $this->memoizeLocationForLaterRedirect();
-        // set the title
         $this->setAttribute('_title', $translationManager->_('Login', 'user.ui'));
     }
 
@@ -39,15 +37,15 @@ class User_Login_LoginInputView extends UserBaseView
             return $container;
         }
 
-        $this->getContainer()->getResponse()->setContent(
-            json_encode(
-                array(
-                    'result'  => 'success',
-                    'message' => 'You may post a username and a password' .
-                                 'to this uri in order to login to the application.'
-                )
+        $jsonData = json_encode(
+            array(
+                'result'  => 'success',
+                'message' => 'You may post a username and a password to this uri in order to login to the application.'
             )
         );
+
+        $this->getContainer()->getResponse()->setContent($jsonData);
+        $this->getContext()->getController()->getGlobalResponse()->setHttpStatusCode(401);
     }
 
     /**
@@ -78,19 +76,12 @@ class User_Login_LoginInputView extends UserBaseView
             // we were redirected to the login form by the controller because the requested action required security
             // so store the input URL in the session for a redirect after login
             $url = $this->getContext()->getRequest()->getUrl();
-
-            /**
-             * Prevent redirecting to strange urls after logging in (js, css files, ...)
-             */
-            if (!preg_match('#\.(jpe?g|css|js|png|gif|ico|swf)\??#', $url))
-            {
-                $this->getContext()->getUser()->setAttribute('redirect', $url, 'de.berlinonline.contentworker.login');
-            }
+            $this->getContext()->getUser()->setAttribute('redirect', $url, 'de.org.honeybee.user.login');
         }
         else
         {
             // clear the redirect URL just to be sure
-            $this->getContext()->getUser()->removeAttribute('redirect', 'de.berlinonline.contentworker.login');
+            $this->getContext()->getUser()->removeAttribute('redirect', 'de.org.honeybee.user.login');
         }
     }
 }
