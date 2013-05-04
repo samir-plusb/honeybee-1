@@ -58,6 +58,12 @@
                             <ae:parameter name="Category">Kategorien</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
+                    <ae:parameter name="list">
+                        <ae:parameter name="de">
+                            <ae:parameter name="Previous">Zurück</ae:parameter>
+                            <ae:parameter name="Next">Vor</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
                 </message_translator>
             </translator>
         </translators>

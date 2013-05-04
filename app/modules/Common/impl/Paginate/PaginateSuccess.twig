@@ -23,12 +23,12 @@
     <ul>
     {% if has_previous %}
         <li class="prev">
-            <a href="{{ links.previous_page|raw }}">&#8592; Previous</a>
+            <a href="{{ links.previous_page|raw }}">&#8592; {{ tm._('Previous', 'modules.list') }}</a>
         </li>
 
     {% else %}
         <li class="prev disabled">
-            <a>&#8592; Previous</a>
+            <a>&#8592; {{ tm._('Previous', 'modules.list') }}</a>
         </li>
     {% endif %}
 
@@ -128,12 +128,12 @@
     {% if has_next %}
     {# if there is a next page, display the "next page" link. #}
         <li class="next">
-            <a href="{{ links.next_page|raw }}">Next &#8594;</a>
+            <a href="{{ links.next_page|raw }}">{{ tm._('Next', 'modules.list') }} &#8594;</a>
         </li>
     {% else %}
     {# otherwise disable it. #}
         <li class="next disabled">
-            <a>Next &#8594;</a>
+            <a>{{ tm._('Next', 'modules.list') }} &#8594;</a>
         </li>
     {% endif %}
     </ul>
