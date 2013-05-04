@@ -1041,3 +1041,8 @@ div.select2-container-multi .select2-choices .select2-search-field
   margin-top: 10px;
   margin-bottom: 0px;
 }
+
+.list_item_checkbox
+{
+  width: 25px;
+}
