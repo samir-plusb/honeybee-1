@@ -91,11 +91,8 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
             {
                 $pageLinkData['sorting'] = $sorting;
             }
-            $pageLinkData['selectOnlyMode'] = $this->getAttribute('select_only_mode', FALSE);
             $urls[$name] = $routing->gen($listRoute, array_merge($defaultParams, $pageLinkData));
         }
         return $urls;
     }
 }
-
-?>
