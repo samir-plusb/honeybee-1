@@ -33,6 +33,13 @@ body
 {
     padding-bottom: 40px;
 }
+
+.render-tree
+{
+  margin-bottom: 20px;
+  border-radius: 6px;
+}
+
 .navbar .brand:hover
 {
   text-decoration: underline;
