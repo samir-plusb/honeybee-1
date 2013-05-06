@@ -1,4 +1,4 @@
 %%MODULE_PREFIX%%.namespace.js
 %%MODULE_PREFIX%%.ListController.js
-%%MODULE_PREFIX%%.TreeController
+%%MODULE_PREFIX%%.TreeController.js
 %%MODULE_PREFIX%%.init.js
