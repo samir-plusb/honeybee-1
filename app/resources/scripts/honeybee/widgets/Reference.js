@@ -258,12 +258,18 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         var loading_modal_el = this.element.find('.modal-reference-loading');
         var refbrowser_modal_el = this.element.find('.modal-reference-list');
         var refmodule = this.referenced_modules()[0];
+        var has_active_tab = false;
 
         if (! this.iframe)
         {
             this.initRefbrowser();
         }
         
+        $.each(this.referenced_modules(), function(index, refmodule)
+        {
+            refmodule.active(false);
+        });
+
         refmodule.active(true);
         this.showDialog(loading_modal_el);
         this.openReferenceListView(refmodule.list_url);
