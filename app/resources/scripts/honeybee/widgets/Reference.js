@@ -1,30 +1,30 @@
 honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
-    // #########################
-    // #     property defs     #
-    // #########################
     log_prefix: "Reference",
 
     select2_element: null,
 
-    // <knockout_props>
     fieldname: null,
 
     loading: null,
 
     realname: null,
 
+    referenced_modules: null,
+
+    iframe: null,
+
     tags: null,
-    // </knockout_props>
+
+    // --------------------
+    // widget implemenation
+    // --------------------
 
     init: function(element, options, ready_callback)
     {
         this.parent(element, options, ready_callback);
     },
 
-    // #################################
-    // #     widget implementation     #
-    // #################################
     getTemplate: function()
     {
         return 'static/widgets/Reference.' + this.options.tpl + '.html';
@@ -33,89 +33,33 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     initGui: function()
     {
         this.parent();
-        var that = this;
 
         if (this.options.autocomplete)
         {
             this.initAutoComplete();
         }
 
-        var messageEventHandler = function(event)
-        {
-            if(0 === that.options.event_origin.indexOf(event.origin))
-            {
-                var msg_data = JSON.parse(event.data);
-                if (msg_data.reference_field == that.options.realname)
-                {
-                    if (msg_data.event_type === 'item-removed')
-                    {
-                        var to_remove = null;
-                        for (var i = 0; i < that.tags().length && ! to_remove; i++)
-                        {
-                            if (that.tags()[i].id === msg_data.item.id)
-                            {
-                                to_remove = that.tags()[i];
-                            }
-                        }
-                        if (to_remove)
-                        {
-                            that.tags.remove(to_remove);
-                        }
-                    }
-                    else if(msg_data.event_type === 'item-added')
-                    {
-                        var allready_added = null;
-                        var item_data = {
-                            id: msg_data.item.id,
-                            text: msg_data.item.text,
-                            module_prefix: msg_data.item.module,
-                            label: msg_data.item.text 
-                        };
-                        for (var i = 0; i < that.tags().length && ! to_remove; i++)
-                        {
-                            if (that.tags()[i].id === item_data.id)
-                            {
-                                allready_added = that.tags()[i];
-                            }
-                        }
-                        if (! allready_added)
-                        {
-                            that.tags.push(item_data);
-                        }
-                    }
-                    else if (msg_data.event_type === 'list-loaded')
-                    {
-                        var doc_ids = [], i;
-                        for (i = 0; i < that.tags().length; i++)
-                        {
-                            doc_ids.push(that.tags()[i].id);
-                        }
-
-                        var iframe = that.element.find('.reference-list-access')[0];
-                        if (iframe)
-                        {
-                            iframe.contentWindow.postMessage(
-                                JSON.stringify({'selected_doc_ids': doc_ids}), 
-                                that.options.event_origin
-                            );
-                        }
-                        
-                    }
-                    
-                    that.element.find('.tagslist-input').select2('data', that.tags());
-                }
-            }
-        }
-        
-        window.addEventListener('message', messageEventHandler, false);
+        window.addEventListener('message', this.onDomMessagePostReceived.bind(this), false);
     },
 
     initKnockoutProperties: function()
     {
         var that = this;
+
         this.fieldname = ko.observable(this.options.fieldname);
         this.is_loading = ko.observable(false);
         this.tags = ko.observableArray(this.options.tags || []);
+        this.referenced_modules = ko.observableArray([]);
+
+        var refmodule_name, ref_module;
+
+        for (refmodule_name in this.options.autocomp_mappings)
+        {
+            ref_module = this.options.autocomp_mappings[refmodule_name];
+            ref_module.name = refmodule_name;
+            ref_module.active = ko.observable(false);
+            this.referenced_modules.push(ref_module);
+        }
     },
 
     removeTag: function(tag)
@@ -124,63 +68,10 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         this.element.find('.tagslist-input').select2('data', this.tags());
     },
 
-    openReferenceListView: function()
-    {
-        var that = this;
-        var iframe = this.element.find('.reference-list-access')[0];
-        var hideDialog = function(element)
-        {
-            if (that.options.disable_backdrop)
-            {
-                element.css('display', 'none');
-            }
-            else
-            {
-                element.modal('hide');
-            }
-        };
-        var showDialog = function(element)
-        {
-            if (that.options.disable_backdrop)
-            {
-                element.css('display', 'block');
-            }
-            else
-            {
-                element.modal({'show': true, 'backdrop': 'static'});
-            }
-        }
+    // -------------------------------------------
+    // autocomplete handling - select2 integration
+    // -------------------------------------------
 
-        iframe.onload = function()
-        {
-            hideDialog(that.element.find('.modal-reference-loading'));
-            showDialog(that.element.find('.modal-reference-list'));
-        };
-
-        showDialog(this.element.find('.modal-reference-loading'));
-        this.element.find('.modal-reference-loading .modal-header .close-dialog').click(function()
-        {
-            hideDialog(that.element.find('.modal-reference-loading'));
-        });
-
-        this.element.find('.modal-reference-list .modal-header .close-dialog').click(function()
-        {
-            hideDialog(that.element.find('.modal-reference-list'));
-        });
-
-        var refmodule_name;
-        for (refmodule_name in this.options.autocomp_mappings)
-        {
-            break;
-        }
-
-        // open refbrowser with first found referenced module selected by default.
-        iframe.src = this.options.autocomp_mappings[refmodule_name].list_url;
-    },
-
-    // #########################
-    // #     working funcs     #
-    // #########################
     initAutoComplete: function()
     {
         this.select2_element = this.element.find('.tagslist-input');
@@ -334,12 +225,203 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 }
             }());
         }
+    },
+
+    // --------------------------
+    // reference browser handling
+    // --------------------------
+
+    initRefbrowser: function()
+    {
+        var that = this;
+
+        this.iframe = this.element.find('.reference-list-access')[0];
+        this.iframe.onload = function()
+        {
+            that.hideDialog(that.element.find('.modal-reference-loading'));
+            that.showDialog(that.element.find('.modal-reference-list'));
+        };
+
+        this.element.find('.modal-reference-loading .modal-header .close-dialog').click(function()
+        {
+            that.hideDialog(that.element.find('.modal-reference-loading'));
+        });
+
+        this.element.find('.modal-reference-list .modal-header .close-dialog').click(function()
+        {
+            that.hideDialog(that.element.find('.modal-reference-list'));
+        });
+    },
+
+    launchReferenceBrowser: function()
+    {
+        var loading_modal_el = this.element.find('.modal-reference-loading');
+        var refbrowser_modal_el = this.element.find('.modal-reference-list');
+        var refmodule = this.referenced_modules()[0];
+
+        if (! this.iframe)
+        {
+            this.initRefbrowser();
+        }
+        
+        refmodule.active(true);
+        this.showDialog(loading_modal_el);
+        this.openReferenceListView(refmodule.list_url);
+
+        return false;
+    },
+
+    loadReferenceList: function(data, event)
+    {
+        if (data.active())
+        {
+            return false;
+        }
+        
+        $.each(this.referenced_modules(), function(index, refmodule)
+        {
+            refmodule.active(false);
+        });
+
+        data.active(true);
+
+        this.openReferenceListView(data.list_url);
+
+        return false;
+    },
+
+    openReferenceListView: function(list_url)
+    {
+        if (! this.iframe)
+        {
+            this.initRefbrowser();
+        }
+
+        this.iframe.src = list_url;
+    },
+
+    hideDialog: function(element)
+    {
+        if (this.options.disable_backdrop)
+        {
+            element.css('display', 'none');
+        }
+        else
+        {
+            element.modal('hide');
+        }
+    },
+    
+    showDialog: function(element)
+    {
+        if (this.options.disable_backdrop)
+        {
+            element.css('display', 'block');
+        }
+        else
+        {
+            element.modal({'show': true, 'backdrop': 'static'});
+        }
+    },
+
+    // -------------
+    // DOM Messaging
+    // -------------
+
+    onDomMessagePostReceived: function(event)
+    {
+        if(0 !== this.options.event_origin.indexOf(event.origin))
+        {
+            return;
+        }
+
+        var msg_data = JSON.parse(event.data);
+        if (msg_data.reference_field !== this.options.realname)
+        {
+            return;
+        }
+
+        if (msg_data.event_type === 'item-removed')
+        {
+            this.onReferenceItemRemoved(msg_data);
+        }
+        else if(msg_data.event_type === 'item-added')
+        {
+            this.onReferenceItemAdded(msg_data);
+        }
+        else if (msg_data.event_type === 'list-loaded')
+        {
+            this.onReferenceListLoaded(msg_data);
+        }
+            
+        this.element.find('.tagslist-input').select2('data', this.tags());
+    },
+
+    onReferenceListLoaded: function(msg_data)
+    {
+        var i, doc_ids = [];
+        for (i = 0; i < this.tags().length; i++)
+        {
+            doc_ids.push(this.tags()[i].id);
+        }
+
+        if (this.iframe)
+        {
+            this.iframe.contentWindow.postMessage(
+                JSON.stringify({'selected_doc_ids': doc_ids}), 
+                this.options.event_origin
+            );
+        }
+    },
+
+    onReferenceItemAdded: function(msg_data)
+    {
+        var i, allready_added = null;
+
+        var item_data = {
+            id: msg_data.item.id,
+            text: msg_data.item.text,
+            module_prefix: msg_data.item.module,
+            label: msg_data.item.text 
+        };
+
+        for (i = 0; i < this.tags().length && ! to_remove; i++)
+        {
+            if (this.tags()[i].id === item_data.id)
+            {
+                allready_added = this.tags()[i];
+            }
+        }
+
+        if (! allready_added)
+        {
+            this.tags.push(item_data);
+        }
+    },
+
+    onReferenceItemRemoved: function(msg_data)
+    {
+        var i, to_remove = null;
+
+        for (i = 0; i < this.tags().length && ! to_remove; i++)
+        {
+            if (this.tags()[i].id === msg_data.item.id)
+            {
+                to_remove = this.tags()[i];
+            }
+        }
+
+        if (to_remove)
+        {
+            this.tags.remove(to_remove);
+        }
     }
 });
 
-// #####################
-// #     constants     #
-// #####################
+// ---------
+// constants 
+// ---------
+
 honeybee.widgets.Reference.DEFAULT_OPTIONS = {
     autobind: true,
     max: 0,

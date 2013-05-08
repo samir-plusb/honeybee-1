@@ -796,7 +796,7 @@ div.select2-container-multi .select2-choices .select2-search-field
 {
   padding: 0px;
   width: 100%;
-  height: 94%;
+  height: 89.3%;
   max-height: 94%;
   margin: 0;
   position: relative;
@@ -829,8 +829,14 @@ div.select2-container-multi .select2-choices .select2-search-field
 }
 
 .modal-reference-list .modal-header,
+.assign-reference-modal .modal-reference-list .modal-header
+{
+  padding: 0px;
+}
+
 .assign-reference-modal .modal-header,
-.modal-reference-loading .modal-header
+.modal-reference-loading .modal-header,
+.modal-reference-list .modal-header .title-box
 {
   background-color: #f5f5f5;
   padding: 3px 20px;
@@ -840,9 +846,19 @@ div.select2-container-multi .select2-choices .select2-search-field
   border-bottom-right-radius: 0;
 }
 
-.modal-reference-list .modal-header h3,
+.modal-reference-list .modal-header .title-box
+{
+  border-bottom: 1px dotted #cdcdcd;
+}
+
+.modal-reference-list .modal-header
+{
+  border-bottom: none;
+}
+
 .assign-reference-modal .modal-header h3,
-.modal-reference-loading .modal-header h3
+.modal-reference-loading .modal-header h3,
+.modal-reference-list .modal-header h3
 {
   font-size: 16px;
   color: #9a9a9a;
@@ -1045,4 +1061,16 @@ div.select2-container-multi .select2-choices .select2-search-field
 .list_item_checkbox
 {
   width: 25px;
+}
+
+.referenced-modules-tabs
+{
+  margin: 0;
+  margin-top: -1px;
+  padding: 0px 20px;
+}
+
+.referenced-modules-tabs li
+{
+
 }
