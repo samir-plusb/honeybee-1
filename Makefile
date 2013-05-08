@@ -217,9 +217,8 @@ php-dependencies:
 
 
 php-docs:
-
-	@/bin/mkdir -p etc/integration/docs/serverside/
-	-@vendor/bin/phpdoc.php -c ${PROJECT_ROOT}/app/config/phpdocumentor.xml
+	@if [ -d ${BUILD_DIR}/logs/api/serverside/ ]; then rm -rf ${BUILD_DIR}/logs/api/serverside/; fi
+	@php vendor/bin/sami.php update app/config/sami.php
 
 
 php-metrics:

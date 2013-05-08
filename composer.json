@@ -38,21 +38,19 @@
         "kineticjs/kineticjs": "4.0.*",
         "twitter/bootstrap": "2.2.2",
         "ivaynberg/select2": "3.3.2",
-        "PhpDebugToolbar/php-debug-toolbar": "1.5.*"
+        "PhpDebugToolbar/php-debug-toolbar": "1.5.*",
+        "fzaninotto/faker": "v1.1.0",
+        "sami/sami": "1.0"
     },
 
-    "minimum-stability": "dev",
-
     "require-dev": {
-        "phpdocumentor/phpdocumentor": "dev-develop",
         "phpmd/phpmd": "1.4.1",
         "phploc/phploc": "dev-master",
         "pdepend/pdepend": "1.1.0",
         "zerkalica/php-code-browser": "dev-master",
         "squizlabs/php_codesniffer": "~1.4.4",
         "phpunit/phpunit": "3.7.*",
-        "shrink/phpcpd": "dev-master",
-        "fzaninotto/faker": "v1.1.0"
+        "shrink/phpcpd": "dev-master"
     },
 
     "repositories": [
