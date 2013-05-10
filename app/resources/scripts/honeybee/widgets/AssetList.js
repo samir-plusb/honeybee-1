@@ -460,6 +460,8 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
 
     supported_doc_types: ['application/pdf'],
 
+    supported_audio_types: ['audio/mp2', 'audio/mp3', 'audio/mpg', 'audio/mpeg'],
+
     allowed_types: null,
 
     init: function(options)
@@ -602,7 +604,7 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
         var that = this;
         var is_image = (-1 !== this.supported_image_types.indexOf(file.type));
         var is_doc = (-1 !== this.supported_doc_types.indexOf(file.type));
-
+        var is_audio = (-1 !== this.supported_audio_types.indexOf(file.type));
         if (-1 === this.allowed_types.indexOf(file.type))
         {
             alert("File type not supported and should not have landed in the queue in the first place.");
@@ -671,6 +673,11 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
         else if (is_doc)
         {
             img.src = 'static/deploy/_global/binaries/pdficon_large.png';
+        }
+        else if (is_audio)
+        {
+            console.log("waaat?!");
+            img.src = 'static/deploy/_global/binaries/audio.png';
         }
     }
 });

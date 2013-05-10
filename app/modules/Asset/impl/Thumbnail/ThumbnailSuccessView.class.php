@@ -28,12 +28,14 @@ class Asset_Thumbnail_ThumbnailSuccessView extends AssetBaseView
         $response = $this->getContainer()->getResponse();
         $binary = new AssetFile($assetInfo->getIdentifier());
         $filePath = $binary->getPath();
+        $isPdfFile = FALSE !== strpos($assetInfo->getMimeType(), 'application/pdf');
+        $isAudioFile = FALSE !== strpos($assetInfo->getMimeType(), 'audio');
 
         if (! $binary->fileExists())
         {
             $response->setHttpStatusCode(404);
         }
-        else if(FALSE === strpos($assetInfo->getMimeType(), 'application/pdf'))
+        else if(! $isPdfFile && ! $isAudioFile)
         {
             $lastModified = filemtime($filePath);
             $response->setHttpHeader('Last-Modified', gmdate('D, d M Y H:i:s', $lastModified).' GMT');
@@ -48,9 +50,13 @@ class Asset_Thumbnail_ThumbnailSuccessView extends AssetBaseView
                 $filePath = NULL;
             }
         }
-        else
+        else if (! $isAudioFile)
         {
             $filePath = AgaviConfig::get('core.app_dir') . '/../pub/static/deploy/_global/binaries/pdficon_large.png';
+        }
+        else
+        {
+            $filePath = AgaviConfig::get('core.app_dir') . '/../pub/static/deploy/_global/binaries/audio.png';
         }
 
         if (is_readable($filePath))
