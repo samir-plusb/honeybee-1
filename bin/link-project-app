@@ -5,10 +5,8 @@ PWD=`pwd`
 
 cd $BASEDIR
 
-APP_DIR="../project/app/"
-
-LINK_TARGET=$BASEDIR/../project/app
-LINK_LOCATION=app/project
+LINK_TARGET='../../project/app'
+LINK_LOCATION='app/project'
 
 if [ ! -L $LINK_LOCATION ]
 then
