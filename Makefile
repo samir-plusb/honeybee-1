@@ -217,7 +217,7 @@ php-dependencies:
 
 
 php-docs:
-	@if [ -d ${BUILD_DIR}/logs/api/serverside/ ]; then rm -rf ${BUILD_DIR}/logs/api/serverside/; fi
+	@if [ -d ${BUILD_DIR}/docs/api/serverside/ ]; then rm -rf ${BUILD_DIR}/docs/api/serverside/; fi
 	@php vendor/bin/sami.php update app/config/sami.php
 
 

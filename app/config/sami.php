@@ -9,6 +9,6 @@ return new Sami\Sami($baseDir . '/app/lib/Honeybee', array(
     'title'                 => 'Honeybee API',
     'theme'                 => 'enhanced',
     'default_opened_level'  => 2,
-    'build_dir'             => $baseDir . '/etc/integration/build/logs/api/serverside',
-    'cache_dir'             => $baseDir . '/etc/integration/build/logs/api/serverside/cache'
+    'build_dir'             => $baseDir . '/etc/integration/build/docs/api/serverside',
+    'cache_dir'             => $baseDir . '/etc/integration/build/docs/api/serverside/cache'
 ));
