@@ -31,6 +31,13 @@
                     </xi:include>
                 </acl>
             </role>
+            <xi:include 
+                href="%core.app_dir%/project/config/access_control.xml"
+                xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) 
+                          xmlns(acl=http://berlinonline.de/schemas/honeybee/config/access_control/1.0) 
+                          xpointer(/ae:configurations/ae:configuration/acl:roles/*)">
+                <xi:fallback />
+            </xi:include>
         </roles>
     </ae:configuration>
 </ae:configurations>

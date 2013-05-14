@@ -134,23 +134,32 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
         }
     }
 
-    protected function createAssertion($typeKey = NULL)
+    protected function createAssertion($assertionClass = NULL)
     {
-        if (!$typeKey)
+        $assertImplementor = $assertionClass;
+
+        if (! $assertionClass)
         {
             return NULL;
         }
 
-        $assertionClass = implode('', array_map('ucfirst', explode('_', $typeKey))) . 'Assertion';
-        $fqClassName = __NAMESPACE__ . '\\Assertions\\' . $assertionClass;
+        if (! class_exists($assertImplementor))
+        {
+            $assertImplementor = implode('', array_map('ucfirst', explode('_', $assertionClass))) . 'Assertion';
 
-        if (! class_exists($fqClassName))
+            if (! class_exists($assertImplementor))
+            {
+                $assertImplementor = __NAMESPACE__ . '\\Assertions\\' . $assertImplementor;
+            }
+        }
+
+        if (! class_exists($assertImplementor))
         {
             throw new \InvalidArgumentException(
-                "Invalid assertion type given in acl configuration. Can not resolve to class: " . $fqClassName
+                "Invalid assertion type given in acl configuration. Can not resolve to class: " . $assertImplementor
             );
         }
 
-        return new $fqClassName;
+        return new $assertImplementor;
     }
 }
