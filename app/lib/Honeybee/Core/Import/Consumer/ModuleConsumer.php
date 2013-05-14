@@ -18,7 +18,7 @@ class ModuleConsumer extends BaseConsumer
 {
     /**
      * Holds a reference to the module we are creating documents for.
-     * 
+     *
      * @var         Module
      */
     private $module;
@@ -46,7 +46,7 @@ class ModuleConsumer extends BaseConsumer
         $updateField = $this->getConfig()->get('update_field');
         $document = NULL;
 
-        if (($updateValue = Filter\RemapFilter::getArrayValue($data, $updateField)))
+        if (!empty($updateField) && ($updateValue = Filter\RemapFilter::getArrayValue($data, $updateField)))
         {
             $parsedPath = Filter\RemapFilter::getPartsFromPath($updateField);
             $updateFilterField = implode('.', $parsedPath['parts']);
@@ -74,7 +74,7 @@ class ModuleConsumer extends BaseConsumer
             // really import this stuff, if we couldn't find an update value (origin info)?
             $document = $this->module->createDocument($data);
         }
-        
+
         if ($document)
         {
             $this->module->getService()->save($document);

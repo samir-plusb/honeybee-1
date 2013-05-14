@@ -5,6 +5,35 @@
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0">
     <ae:configuration>
         <consumers>
+        <consumers>
+            <consumer name="fakedata" class="Honeybee\Core\Import\Consumer\ModuleConsumer">
+                <provider name="fake-provider" class="Honeybee\Core\Import\Provider\FakeProvider">
+                    <settings>
+                        <setting name="module">Honeybee\Domain\%%MODULE_NAME%%\%%MODULE_NAME%%Module</setting>
+                        <setting name="limit">50</setting>
+                        <setting name="locale">de_DE</setting>
+                        <setting name="excluded_fields">
+                            <settings>
+                                <setting>identifier</setting>
+                                <setting>uuid</setting>
+                                <setting>revision</setting>
+                                <setting>slug</setting>
+                                <setting>shortId</setting>
+                                <setting>language</setting>
+                                <setting>version</setting>
+                                <setting>workflowTicket</setting>
+                            </settings>
+                        </setting>
+                    </settings>
+                </provider>
+                <settings>
+                    <setting name="module">Honeybee\Domain\%%MODULE_NAME%%\%%MODULE_NAME%%Module</setting>
+                </settings>
+                <filters>
+                    <filter name="default" class="Honeybee\Core\Import\Filter\BaseFilter">
+                    </filter>
+                </filters>
+            </consumer>
             <!-- Example import consumer config:
             <consumer name="%%MODULE_PREFIX%%-csv" class="Honeybee\Core\Import\Consumer\ModuleConsumer">
                 <provider name="csv-provider" class="Honeybee\Core\Import\Provider\CsvProvider">

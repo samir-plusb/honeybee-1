@@ -13,7 +13,7 @@ class ImportAction extends BaseAction
         $service = $this->getModule()->getService('import');
 
         $report = $service->consume($consumerName);
-        
+
         return 'Success';
     }
 
