@@ -27,7 +27,7 @@ class AssetFilter extends BaseFilter
         $assetProps = $this->getConfig()->get('properties');
         $documentShortId = $document->getShortIdentifier();
 
-        foreach ($assetProps as $fieldname)
+        foreach ($assetProps as $fieldname => $exportFieldname)
         {
             $filterOutput[$fieldname] = array();
             $fieldAssetIds = $document->getValue($fieldname);
@@ -55,7 +55,7 @@ class AssetFilter extends BaseFilter
                     $exportValue[$exportKey] = $assetData[$metaDataKey];
                 }
 
-                $filterOutput[$fieldname][] = $exportValue;
+                $filterOutput[$exportFieldname][] = $exportValue;
             }
         }
 
