@@ -230,6 +230,12 @@ php-metrics:
 #
 # Project modules related tasks.
 #
+link-project-app:
+
+	@bin/link-project-app
+	@make config
+
+
 link-project-modules:
 
 	@bin/link-project-modules

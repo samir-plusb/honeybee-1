@@ -1,0 +1,18 @@
+#!/bin/bash
+
+BASEDIR=`readlink -f "$( dirname $0 )/.."`
+PWD=`pwd`
+
+cd $BASEDIR
+
+APP_DIR="../project/app/"
+
+LINK_TARGET=$BASEDIR/../project/app
+LINK_LOCATION=app/project
+
+if [ ! -L $LINK_LOCATION ]
+then
+    ln -s $LINK_TARGET $LINK_LOCATION
+fi
+
+cd $PWD
