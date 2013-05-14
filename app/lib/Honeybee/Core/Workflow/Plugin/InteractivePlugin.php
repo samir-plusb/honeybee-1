@@ -69,22 +69,21 @@ class InteractivePlugin extends BasePlugin
      */
     protected function doProcess()
     {
-        $pluginContainer = $this->prepareExecutionContainer();
-        $result = new InteractionResult();
-        $pluginContainer->setAttribute('resource', $this->getResource(), self::NS_PLUGIN_ATTRIBUTES);
-        $pluginContainer->setAttribute('plugin_result', $result, self::NS_PLUGIN_ATTRIBUTES);
-        $result->setResponse($pluginContainer->execute());
-
         $resource = $this->getResource();
         $ticket = $resource->getWorkflowTicket();
+        $result = new InteractionResult();
 
-        if ('published' === $ticket->getWorkflowStep())
-        {
-            $exportService = $resource->getModule()->getService('export');
-            $exportService->revoke('pulq-fe', $resource);
-        }
+        $pluginContainer = $this->prepareExecutionContainer();
+        $pluginContainer->setAttribute('resource', $this->getResource(), self::NS_PLUGIN_ATTRIBUTES);
+        $pluginContainer->setAttribute('plugin_result', $result, self::NS_PLUGIN_ATTRIBUTES);
 
+        $result->setResponse($pluginContainer->execute());
         $result->freeze();
+
+        if ('write' === $pluginContainer->getRequestMethod() && 'published' === $ticket->getWorkflowStep())
+        {
+            $this->publishResource($resource);
+        }
 
         return $result;
     }
@@ -103,7 +102,7 @@ class InteractivePlugin extends BasePlugin
             $actionData['action'],
             $actionData['arguments'] ? $actionData['arguments'] : $container->getArguments(),
             $actionData['output'],
-            $actionData['method']
+            empty($actionData['method']) ? $container->getRequestMethod() : $actionData['method']
         );
 
         if (isset($actionData['parameters']) && is_array($actionData['parameters']))
@@ -151,6 +150,31 @@ class InteractivePlugin extends BasePlugin
         if ('published' === $ticket->getWorkflowStep())
         {
             $this->revokeResource($resource);
+        }
+    }
+
+    protected function publishResource(Workflow\IResource $resource)
+    {
+        /* @todo Reintegrate when we introduce queue in production:
+        $queue = new JobQueue('prio:1-jobs');
+        $jobData = array(
+            'moduleClass' => get_class($resource->getModule()),
+            'documentId' => $resource->getIdentifier(),
+            'exports' => $this->getParameter('exports')
+        );
+        $queue->push(new PublishJob($jobData));
+        $result->setState(Plugin\Result::STATE_EXPECT_INPUT);*/
+
+        $module = $resource->getModule();
+
+        $exports = $this->getParameter('exports');
+        $exports = is_array($exports) ? $exports : array();
+
+        $exportService = $module->getService('export');
+
+        foreach ($exports as $exportName)
+        {
+            $exportService->publish($exportName, $resource);
         }
     }
 
