@@ -1,4 +1,4 @@
-# Document Default and Null Values
+# Document default values and null values
 
 Each document field has a default and a null value.  
 A field's null value is normally also it's default value.  
