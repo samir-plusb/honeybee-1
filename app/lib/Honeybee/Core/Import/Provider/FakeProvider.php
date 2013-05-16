@@ -71,22 +71,22 @@ class FakeProvider extends BaseProvider
      */
     protected function fetchData()
     {
-        return DataGenerator::createDataFor($this->module, array(
+        $default_fields_to_exclude = $this->module->getDefaultFieldnames();
+        $default_fields_to_exclude[] = 'workflowTicket';
+        $module_fields_to_exclude = $this->getConfig()->get(self::OPTION_EXCLUDED_FIELDS, array());
+        $fields_to_exclude = array_merge($default_fields_to_exclude, $module_fields_to_exclude);
+
+        $data = DataGenerator::createDataFor($this->module, array(
             DataGenerator::OPTION_LOCALE => $this->getConfig()->get(self::OPTION_LOCALE, 'de_DE'),
-            DataGenerator::OPTION_FIELD_VALUES => array(
-                'language' => $this->getConfig()->get(self::OPTION_LOCALE, 'de_DE')
-            ),
-            DataGenerator::OPTION_EXCLUDED_FIELDS => $this->getConfig()->get(self::OPTION_EXCLUDED_FIELDS, array(
-                'identifier',
-                'revision',
-                'uuid',
-                'shortId',
-                'slug',
-                'language',
-                'version',
-                'workflowTicket'
-            ))
+            /*
+             * DataGenerator::OPTION_FIELD_VALUES => array(
+             *     'language' => $this->getConfig()->get(self::OPTION_LOCALE, 'de_DE')
+             * ),
+             */
+            DataGenerator::OPTION_EXCLUDED_FIELDS => $fields_to_exclude
         ));
+
+        return $data;
     }
 
     /**
