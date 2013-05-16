@@ -2,8 +2,6 @@
 
 namespace Honeybee\Core\Import\Provider;
 
-use \Dat0r\Core\Runtime\Sham\DataGenerator;
-
 /**
  * The FakeProvider class generates fake document data.
  *
@@ -76,15 +74,21 @@ class FakeProvider extends BaseProvider
         $module_fields_to_exclude = $this->getConfig()->get(self::OPTION_EXCLUDED_FIELDS, array());
         $fields_to_exclude = array_merge($default_fields_to_exclude, $module_fields_to_exclude);
 
-        $data = DataGenerator::createDataFor($this->module, array(
-            DataGenerator::OPTION_LOCALE => $this->getConfig()->get(self::OPTION_LOCALE, 'de_DE'),
+        $options = array(
+            FakeDataGenerator::OPTION_LOCALE => $this->getConfig()->get(self::OPTION_LOCALE, 'de_DE'),
             /*
-             * DataGenerator::OPTION_FIELD_VALUES => array(
+             * FakeDataGenerator::OPTION_FIELD_VALUES => array(
              *     'language' => $this->getConfig()->get(self::OPTION_LOCALE, 'de_DE')
              * ),
              */
-            DataGenerator::OPTION_EXCLUDED_FIELDS => $fields_to_exclude
-        ));
+            FakeDataGenerator::OPTION_EXCLUDED_FIELDS => $fields_to_exclude
+        );
+
+        /*
+         * $generator = new FakeDataGenerator();
+         * $data = $generator->fakeData($this->module, $options);
+         */
+        $data = FakeDataGenerator::createDataFor($this->module, $options);
 
         return $data;
     }
