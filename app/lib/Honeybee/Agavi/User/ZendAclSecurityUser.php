@@ -104,31 +104,33 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
     {
         try
         {
-            if ($credential instanceof \Zend_Acl_Resource_Interface)
+            if ($credential instanceof Acl\Resource\ResourceInterface)
             {
                 // an object instance was given; perform an access check on this (without an operation)
                 return $this->isAllowed($credential);
             }
 
-            if (!is_scalar($credential))
+            if (! is_scalar($credential))
             {
                 // can't do much with this...
                 return FALSE;
             }
 
-            $credential = explode('.', $credential, 2);
-            if (count($credential) == 2)
+            $splitCred = explode('::', $credential, 2);
+            $resource = explode('.', $splitCred[0]);
+
+            if (count($splitCred) == 2)
             {
                 // a string like "product.create"; check the ACL
-                return $this->isAllowed($credential[0], $credential[1]);
+                return $this->isAllowed($resource[0], $credential);
             }
             else
             {
                 // something like "administrator"; let's see if that's our role or an ancestor of it
-                return $this->hasRole($credential[0]);
+                return $this->hasRole($credential);
             }
         }
-        catch (\Zend_Acl_Exception $e)
+        catch (\Exception $e)
         {
             return FALSE;
         }

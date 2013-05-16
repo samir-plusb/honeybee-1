@@ -23,7 +23,7 @@
  * @package         Default
  * @subpackage      Mvc
  */
-class Default_SecureSuccess_SecureSuccessView extends DefaultBaseView 
+class Default_Secure_SecureSuccessView extends DefaultBaseView 
 {
     /**
      * Execute any html related presentation logic and sets up our template attributes.

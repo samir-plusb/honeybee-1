@@ -36,7 +36,8 @@ class Common_ListAction extends CommonBaseAction
         $this->setAttribute('limit', $listState->getLimit());
         $this->setAttribute('module_type_key', $listConfig->getTypeKey());
         $this->setAttribute('sidebar_tree_targets', $listConfig->getSidebarTreeTargets());
-
+        $this->setAttribute('module', $this->getModule());
+        
         $clientSideOptions = $listConfig->getClientSideController();
         $clientSideOptions['options'] = isset($clientSideOptions['options']) ? $clientSideOptions['options'] : array();
         $clientSideOptions['options']['workflow_urls'] = array(

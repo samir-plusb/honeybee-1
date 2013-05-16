@@ -91,6 +91,14 @@ class ListAction extends BaseAction
         return 'Error';
     }
 
+    public function getCredentials()
+    {
+        return sprintf(
+            '%s::read',
+            $this->getModule()->getOption('prefix')
+        );
+    }
+
     protected function buildListConfig()
     {
         $settingsKey = sprintf('%s.list_config', $this->getModule()->getOption('prefix'));
@@ -238,11 +246,12 @@ class ListAction extends BaseAction
             }
 
             $isInteractive = $workflowManager->isInInteractiveState($document);
+            $mayRead = $user->isAllowed($document, sprintf('%s.%s::read', $module->getOption('prefix'), $workflowStep));
             // will be passed to the ListItemViewModel.js and is the data available inside all the
             // batch callbacks and item actions invoked upon an ListController.js
             $documentListItemData = array(
                 'data' => $document->toArray(),
-                'workflow' => array('gates' => $gates, 'interactive' => $isInteractive)
+                'workflow' => array('gates' => $gates, 'interactive' => ($isInteractive && $mayRead))
             );
             // for interactive workflow states we support custom item actions.
             // they are appended to the default system actions.

@@ -19,10 +19,11 @@
         </div>
         <div class="container-actions clearfix">
             {% if false == select_only_mode %}
-            <!-- @todo only if may create -->
+            {% if create_link %}
             <section>
-                <a class="btn hb-icon-file-4" href="{{ro.gen(module_type_key ~ '.edit')}}"> Neuer Eintrag</a>
+                <a class="btn hb-icon-file-4" href="{{ create_link }}"> Neuer Eintrag</a>
             </section>
+            {% endif %}
             <section>
                 <div class="btn-group batch_actions">
                     <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" data-bind="css: { 'disabled': ! has_selection() }">

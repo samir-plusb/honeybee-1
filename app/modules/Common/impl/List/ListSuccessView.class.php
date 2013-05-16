@@ -72,6 +72,15 @@ class Common_List_ListSuccessView extends CommonBaseView
         }
         $this->setAttribute('tree_view_link', $routing->gen($modulePrefix . '.tree', $treeParams));
 
+        $module = $this->getAttribute('module');
+        $writeAction = sprintf('%s::write', $module->getOption('prefix'));
+        if ($this->getContext()->getUser()->isAllowed($module, $writeAction))
+        {
+            $this->setAttribute('create_link', $routing->gen(
+                sprintf('%s.edit', $module->getOption('prefix'))
+            ));
+        }
+
         $this->getLayer('content')->setSlot(
             'pagination',
             $this->createSlotContainer('Common', 'Paginate', array('state' => $listState, 'config' => $listConfig))

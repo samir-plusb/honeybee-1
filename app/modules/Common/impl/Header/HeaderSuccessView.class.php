@@ -7,67 +7,78 @@ class Common_Header_HeaderSuccessView extends CommonBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters)
     {
         $this->setupHtml($parameters);
-
         $user = $this->getContext()->getUser();
-        $email = $user->getAttribute('email');
-        $url = AgaviConfig::get('core.gravatar_url_tpl');
-        $hash = md5('12345');
-        if ($email)
+
+        if ($user->isAuthenticated())
         {
-            $hash = md5(strtolower(trim($email)));
-        }
+            $email = $user->getAttribute('email');
+            $url = AgaviConfig::get('core.gravatar_url_tpl');
+            $hash = md5('12345');
 
-        $url = str_replace('{EMAIL_HASH}', $hash, $url);
-        $this->setAttribute('avatar_url', $url);
-
-        $routing = $this->getContext()->getRouting();
-        $service = new ModuleService();
-
-        $modules = array();
-        foreach ($service->getModules() as $module)
-        {
-            $module_links = array(
-                'list_link' => $routing->gen($module->getOption('prefix') . '.list'),
-                'create_link' => $routing->gen($module->getOption('prefix') . '.edit'),
-                'module_label' => $this->getContext()->getTranslationManager()->_($module->getName(), 'modules.labels')
-            );
-
-            if ($module->isActingAsTree())
+            if ($email)
             {
-                $module_links['tree_link'] = $routing->gen($module->getOption('prefix') . '.tree');
+                $hash = md5(strtolower(trim($email)));
             }
 
-            $modules[$module->getName()] = $module_links;
-        }
+            $url = str_replace('{EMAIL_HASH}', $hash, $url);
+            $this->setAttribute('avatar_url', $url);
 
-        // sort modules by their translated labels
-        uasort($modules, function($left, $right)
-        {
-            return strcmp($left['module_label'], $right['module_label']);
-        });
+            $routing = $this->getContext()->getRouting();
+            $service = new ModuleService();
 
-        // apply custom sort order if specified in project/config/settings.xml
-        $customModuleSortOrder = AgaviConfig::get('project.modules.sort_order', array());
-        $sortedModules = array();
-        foreach ($customModuleSortOrder as $moduleName)
-        {
-            if (isset($modules[$moduleName]))
+            $modules = array();
+            foreach ($service->getModules() as $module)
             {
-                $sortedModules[$moduleName] = $modules[$moduleName];
-            }   
-        }
+                $module_links = array(
+                    'module_label' => $this->getContext()->getTranslationManager()->_($module->getName(), 'modules.labels')
+                );
 
-        // add all modules that were not specified in project/config/settings.xml
-        foreach ($modules as $moduleName => $values)
-        {
-            if (!isset($sortedModules[$moduleName]))
-            {
-                $sortedModules[$moduleName] = $modules[$moduleName];
+                if ($user->isAllowed($module, $module->getOption('prefix') . '::read'))
+                {
+                    $module_links['list_link'] = $routing->gen($module->getOption('prefix') . '.list');
+
+                    if ($module->isActingAsTree())
+                    {
+                        $module_links['tree_link'] = $routing->gen($module->getOption('prefix') . '.tree');
+                    }
+                }
+                if ($user->isAllowed($module, $module->getOption('prefix') . '::write'))
+                {
+                    $module_links['create_link'] = $routing->gen($module->getOption('prefix') . '.edit');
+                }
+
+                $modules[$module->getName()] = $module_links;
             }
+
+            // sort modules by their translated labels
+            uasort($modules, function($left, $right)
+            {
+                return strcmp($left['module_label'], $right['module_label']);
+            });
+
+            // apply custom sort order if specified in project/config/settings.xml
+            $customModuleSortOrder = AgaviConfig::get('project.modules.sort_order', array());
+            $sortedModules = array();
+            foreach ($customModuleSortOrder as $moduleName)
+            {
+                if (isset($modules[$moduleName]))
+                {
+                    $sortedModules[$moduleName] = $modules[$moduleName];
+                }   
+            }
+
+            // add all modules that were not specified in project/config/settings.xml
+            foreach ($modules as $moduleName => $values)
+            {
+                if (!isset($sortedModules[$moduleName]))
+                {
+                    $sortedModules[$moduleName] = $modules[$moduleName];
+                }
+            }
+
+            unset($modules);
+
+            $this->setAttribute('modules', $sortedModules);
         }
-
-        unset($modules);
-
-        $this->setAttribute('modules', $sortedModules);
     }
 }

@@ -48,6 +48,15 @@ class EditAction extends BaseAction
         return $view;
     }
 
+    public function getCredentials()
+    {
+        return sprintf(
+            '%s::%s',
+            $this->getModule()->getOption('prefix'), 
+            $this->getContainer()->getRequestMethod()
+        );
+    }
+
     protected function setContainerPluginState()
     {
         $pluginResult = $this->getContainer()->getAttribute(
