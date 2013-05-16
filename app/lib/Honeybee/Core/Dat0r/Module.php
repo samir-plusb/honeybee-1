@@ -7,13 +7,13 @@ use Dat0r\Core\Runtime\Field\TextField;
 use Dat0r\Core\Runtime\Field\IntegerField;
 use Dat0r\Core\Runtime\Field\UuidField;
 use Honeybee\Core\Workflow;
-use Honeybee\Core\Storage\CouchDb\TreeStorage;
+use Zend\Permissions\Acl;
 
 /**
  * @todo We might want to merge the module settings.xml options,
  * with the options that result from the dat0r definition??
  */
-abstract class Module extends RootModule
+abstract class Module extends RootModule implements Acl\Resource\ResourceInterface
 {
     private $services;
 
@@ -78,6 +78,11 @@ abstract class Module extends RootModule
         return 'yes' === $this->getOption('act_as_tree');
     }
 
+    public function getResourceId()
+    {
+        return $this->getOption('prefix');
+    }
+
     /**
      * Returns the default fields that are initially added to a module upon creation.
      *
@@ -88,13 +93,13 @@ abstract class Module extends RootModule
         return array_merge(
             parent::getDefaultFields(),
             array(
-                TextField::create('identifier'),
-                TextField::create('revision'),
-                UuidField::create('uuid'),
-                IntegerField::create('shortId'),
-                TextField::create('slug'),
-                TextField::create('language', array('default_value' => 'de_DE')),
-                IntegerField::create('version', array('default_value' => 1))
+                'identifier' => TextField::create('identifier'),
+                'revision' => TextField::create('revision'),
+                'uuid' => UuidField::create('uuid'),
+                'shortId' => IntegerField::create('shortId'),
+                'slug' => TextField::create('slug'),
+                'language' => TextField::create('language', array('default_value' => 'de_DE')),
+                'version' => IntegerField::create('version', array('default_value' => 1))
             )
         );
     }
