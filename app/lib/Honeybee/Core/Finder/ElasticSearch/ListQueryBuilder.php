@@ -19,26 +19,24 @@ class ListQueryBuilder extends DefaultQueryBuilder
             ? $this->buildSearchQuery($state->getSearch())
             : new Elastica\Query\MatchAll();
 
-        $filter = NULL;
-        if($state->hasFilter())
-        {
-            $filter = $this->buildFilter(
-                $state->getFilter()
-            );
-        }
-
-        $query = Elastica\Query::create($innerQuery);
-
-        $query->addSort(
+        $query = Elastica\Query::create($innerQuery)->addSort(
             $this->prepareSortingParams($config, $state)
         );
 
         // @todo add filter for deleted documents here?
-
-        if ($filter)
+        $filter = new Elastica\Filter\BoolNot(
+            new Elastica\Filter\Term(array('meta.is_deleted' => TRUE))
+        );
+        if ($state->hasFilter())
         {
-            $query->setFilter($filter);
+            $container = new Elastica\Filter\BoolAnd();
+            $container->addFilter($filter);
+            $container->addFilter(
+                $this->buildFilter($state->getFilter())
+            );
+            $filter = $conainer;
         }
+        $query->setFilter($filter);
 
         return $query;
     }
