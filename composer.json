@@ -35,7 +35,7 @@
         "farhadi/html5sortable": "0.9",
         "knockoutjs/knockoutjs": "2.2.0",
         "underscorejs/underscorejs": "1.4.2",
-        "kineticjs/kineticjs": "4.0.*",
+        "kineticjs/kineticjs": "4.5.1",
         "twitter/bootstrap": "2.2.2",
         "ivaynberg/select2": "3.3.2",
         "PhpDebugToolbar/php-debug-toolbar": "1.5.*",
@@ -168,9 +168,9 @@
             "type": "package",
             "package": {
                 "name": "kineticjs/kineticjs",
-                "version": "4.0.5",
+                "version": "4.5.1",
                 "dist": {
-                    "url": "http://kineticjs.com/download/v4.0.5/kinetic-v4.0.5.min.js",
+                    "url": "http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.1.js",
                     "type": "file"
                 }
             }
