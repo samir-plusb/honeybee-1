@@ -250,7 +250,7 @@ class ListAction extends BaseAction
             // will be passed to the ListItemViewModel.js and is the data available inside all the
             // batch callbacks and item actions invoked upon an ListController.js
             $documentListItemData = array(
-                'data' => $document->toArray(),
+                'data' => $document->getValues(),
                 'workflow' => array('gates' => $gates, 'interactive' => ($isInteractive && $mayRead))
             );
             // for interactive workflow states we support custom item actions.
