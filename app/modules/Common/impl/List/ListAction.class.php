@@ -80,6 +80,11 @@ class Common_ListAction extends CommonBaseAction
         foreach ($listConfig->getFields() as $fieldname => $field)
         {
             $rendererClass = $field->getRenderer();
+            if (is_array($rendererClass))
+            {
+                $rendererClass = $rendererClass['implementor'];
+            }
+
             $renderer = NULL;
             if (! isset($rendererPool[$rendererClass]))
             {
@@ -121,6 +126,11 @@ class Common_ListAction extends CommonBaseAction
 
                 if ($field->hasRenderer())
                 {
+                    if (is_array($rendererClass))
+                    {
+                        $rendererClass = $rendererClass['implementor'];
+                    }
+
                     if (! isset($rendererPool[$rendererClass]))
                     {
                         $renderer = new $rendererClass($this->getModule());

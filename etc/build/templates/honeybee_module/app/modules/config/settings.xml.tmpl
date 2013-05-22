@@ -32,9 +32,16 @@
                         <ae:parameter name="valuefield">title</ae:parameter>
                         <ae:parameter name="sortfield">title.sort</ae:parameter>
                     </ae:parameter> 
-                     <ae:parameter name="state">
-                        <ae:parameter name="valuefield">workflowTicket.workflowStep</ae:parameter>
-                        <ae:parameter name="renderer">WorkflowStepListRenderer</ae:parameter>
+                    <ae:parameter name="state">
+                        <ae:parameter name="valuefield">workflowTicket</ae:parameter>
+                        <ae:parameter name="renderer">
+                            <ae:parameter name="implementor">AggregateListRenderer</ae:parameter>
+                            <ae:parameter name="options">
+                                <ae:parameter name="displayField">workflowStep</ae:parameter>
+                                <ae:parameter name="translate">true</ae:parameter>
+                                <ae:parameter name="domain">%%MODULE_PREFIX%%.workflow</ae:parameter>
+                            </ae:parameter>
+                        </ae:parameter>
                         <ae:parameter name="sortfield">workflowTicket.workflowStep.sort</ae:parameter>
                     </ae:parameter> 
                 </ae:parameter> -->
@@ -132,8 +139,18 @@
             <!-- Custom renderer configuration -->
             <setting name="rendering_config">
                 <!-- asset widget renderer example
-                <ae:parameter name="image">
-                    <ae:parameter name="input">ImageFieldInputRenderer</ae:parameter>
+                <ae:parameter name="images">
+                    <ae:parameter name="input">
+                        <ae:parameter name="type">ImageFieldInputRenderer</ae:parameter>
+                        <ae:parameter name="options">
+                            <ae:parameter name="max_files">20</ae:parameter>
+                            <ae:parameter name="allowed_types">
+                                <ae:parameter>image/jpeg</ae:parameter>
+                                <ae:parameter>image/png</ae:parameter>
+                                <ae:parameter>image/gif</ae:parameter>
+                            </ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
                 </ae:parameter>
                 -->
                 <ae:parameter name="identifier">
