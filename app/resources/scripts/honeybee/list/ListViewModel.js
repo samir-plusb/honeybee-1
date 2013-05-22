@@ -48,6 +48,7 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
         {
             var action_trigger = $(dom_element);
             var class_name, matches, i, classes = action_trigger.attr('class').split(/\s+/);
+
             for (i = 0; i < classes.length; i++)
             {
                 class_name = classes[i];
@@ -85,9 +86,13 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
                 {
                     incrementActionCount(selected_item.workflow.gates[n].name);
                 }
-                for (n = 0; n < selected_item.custom_actions.length; n++)
+
+                if (true === selected_item.workflow.interactive)
                 {
-                    incrementActionCount(selected_item.custom_actions[n].name);
+                    for (n = 0; n < selected_item.custom_actions.length; n++)
+                    {
+                        incrementActionCount(selected_item.custom_actions[n].name);
+                    }
                 }
             }
 

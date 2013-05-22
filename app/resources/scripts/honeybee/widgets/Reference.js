@@ -391,7 +391,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             label: msg_data.item.text 
         };
 
-        for (i = 0; i < this.tags().length && ! to_remove; i++)
+        for (i = 0; i < this.tags().length && ! allready_added; i++)
         {
             if (this.tags()[i].id === item_data.id)
             {
@@ -401,7 +401,16 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
         if (! allready_added)
         {
-            this.tags.push(item_data);
+            if (this.tags().length === this.options.max)
+            {
+                this.tags.pop();
+                this.tags.push(item_data);
+                this.onReferenceListLoaded();
+            }
+            else
+            {
+                this.tags.push(item_data);
+            }
         }
     },
 

@@ -60,6 +60,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         {
             if(0 === that.options.event_origin.indexOf(event.origin))
             {
+                console.log("lets go");
                 var msg_data = JSON.parse(event.data);
                 if (msg_data.source_type === that.type_key)
                 {
@@ -67,14 +68,12 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
                     return;
                 }
                 var cur_item, i;
-
                 for (i = 0; i < that.viewmodel.list_items().length; i++)
                 {
                     cur_item = that.viewmodel.list_items()[i];
-                    if (-1 !== msg_data.selected_doc_ids.indexOf(cur_item.data.identifier))
-                    {
-                        cur_item.selected(true);
-                    }
+                    cur_item.selected(
+                        (-1 !== msg_data.selected_doc_ids.indexOf(cur_item.data.identifier))
+                    );
                 }
             }
         }
@@ -234,6 +233,8 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
                 var append_references = reference_dialog.find(
                     '.setting-append-to-existing .setting-value'
                 ).is(':checked');
+
+                append_references = append_references && (1 !== reference_widget.options.max);
 
                 that.createAssignReferenceBatch(items, {
                     reference_field: reference_field,
