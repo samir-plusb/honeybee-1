@@ -22,10 +22,10 @@ use Honeybee\Core\Security\Auth;
  *     within the constraints given in the next two parameters.
  *     If this parameter is not defined, the similarity thresholds below are not
  *     taken into account as no comparisons are done.
- * - similarity_percentage_threshold: maximum allowed similarity of given
+ * - similarityPercentage_threshold: maximum allowed similarity of given
  *     similarity check arguments and the password, defaults to 80 percent
  *     (above that threshold the strings are deemed too similar)
- * - minimum_levenshtein_distance: minimum number of characters that must be
+ * - minimumLevenshteinDistance: minimum number of characters that must be
  *     different between similarity check arguments and the password
  *
  * - common_passwords_blacklist_file: optional parameter to specify a text file
@@ -56,8 +56,8 @@ use Honeybee\Core\Security\Auth;
  *             <ae:parameter>email</ae:parameter>
  *             <ae:parameter>company_name</ae:parameter>
  *         </ae:parameter>
- *         <ae:parameter name="similarity_percentage_threshold">80</ae:parameter>
- *         <ae:parameter name="minimum_levenshtein_distance">4</ae:parameter>
+ *         <ae:parameter name="similarityPercentage_threshold">80</ae:parameter>
+ *         <ae:parameter name="minimumLevenshteinDistance">4</ae:parameter>
  * 
  *         <ae:parameter name="common_passwords_blacklist_file">%core.app_dir%/path/to/common_or_blacklisted_passwords.txt</ae:parameter>
  *     </ae:parameters>
@@ -69,29 +69,42 @@ use Honeybee\Core\Security\Auth;
  */
 class PasswordValidator extends UserTokenValidator
 {
-    const ERROR_COMPLEXITY_FAILURE = 'complexity_failure';
+    const ERR_MISMATCH = 'repeat_password_mismatch';
+
+    const ERR_SIMILARITY = 'password_too_similar';
+
+    const ERR_UPPERCASE_TOKENS = 'not_enough_uppercase_tokens';
+
+    const ERR_LOWERCASE_TOKENS = 'not_enough_lowercase_tokens';
+
+    const ERR_NUMERIC_TOKENS = 'not_enough_lowercase_tokens';
+
+    const ERR_SPECIAL_CHARS = 'not_enough_special_chars';
+
+    const ERR_TOO_SHORT = 'too_short';
+
+    const ERR_TOO_LONG = 'too_long';
+
+    const ERR_EASY_GUESSABLE = 'too_easy_to_guess';
 
     protected function validate()
     {
-        $user = $this->loadUser();
+        $success = FALSE;
         $passwordCandidate = $this->getData($this->getArgument());
 
-        if ($this->isComplexEnough($user, $passwordCandidate))
+        if ($user = $this->loadUser())
         {
+            $this->checkPasswordComplexity($user, $passwordCandidate);
+
             if (($repeatPasswordArgumentName = $this->getParameter('repeat_password_argument_name')))
             {
                 $repeatPasswordArgument = $this->getData($repeatPasswordArgumentName);
 
                 if ($repeatPasswordArgument !== $passwordCandidate)
                 {
-                    return FALSE;
+                    $this->throwError(self::ERR_MISMATCH);
                 }
             }
-
-            $passwordHandler = new Auth\CryptedPasswordHandler();
-            $user->setPasswordHash($passwordHandler->hash($passwordCandidate));
-
-            $this->export($user, $this->getParameter('export', 'user'));
 
             if (TRUE === $this->getParameter('clear_password', TRUE))
             {
@@ -99,12 +112,19 @@ class PasswordValidator extends UserTokenValidator
                 $this->export(NULL, $this->getParameter('repeat_password_argument_name'));
             }
 
-            return TRUE;
+            $errors = $this->incident ? $this->incident->getErrors() : array();
+            $success = (count($errors) === 0);
+
+            if ($success)
+            {
+                $passwordHandler = new Auth\CryptedPasswordHandler();
+                $user->setPasswordHash($passwordHandler->hash($passwordCandidate));
+            }
         }
+        
+        $this->export($user, $this->getParameter('export', 'user'));
 
-        $this->throwError(self::ERROR_COMPLEXITY_FAILURE);
-
-        return FALSE;
+        return $success;
     }
 
     /**
@@ -115,55 +135,59 @@ class PasswordValidator extends UserTokenValidator
      * 
      * @return boolean True|FALSE whether string is complex enough according to given complexity rules.
      */
-    protected function isComplexEnough(UserDocument $user, $candidate)
+    protected function checkPasswordComplexity(UserDocument $user, $candidate)
     {
         $uppercaseRule = '/\p{Lu}/u'; // Unicode character with property "Upper case letter" -> simplified alternative: '/[A-Z]/'
         $minUppercaseNo = $this->getParameter('min_uppercase_chars', 0);
         if (preg_match_all($uppercaseRule, $candidate, $matches) < $minUppercaseNo)
         {
-            return FALSE;
+            $this->throwError(self::ERR_UPPERCASE_TOKENS);
         }
 
         $lowercaseRule = '/\p{Ll}/u'; // Unicode character with property "Lower case letter" -> simplified alternative: '/[a-z]/'
         $minLowercaseNo = $this->getParameter('min_lowercase_chars', 0);
         if (preg_match_all($lowercaseRule, $candidate, $matches) < $minLowercaseNo)
         {
-            return FALSE;
+            $this->throwError(self::ERR_LOWERCASE_TOKENS);
         }
 
         $numbersRule = '/\p{Nd}/u'; // Unicode character with property "Decimal number" -> simplified alternative: '/[0-9]/' or '/\d/';
         $minNumbersNo = $this->getParameter('min_decimal_numbers', 0);
         if (preg_match_all($numbersRule, $candidate, $matches) < $minNumbersNo)
         {
-            return FALSE;
+            $this->throwError(self::ERR_NUMERIC_TOKENS);
         }
 
         $minLength = $this->getParameter('min_string_length', 6);
         if (mb_strlen($candidate) < $minLength)
         {
-            return FALSE;
+            $this->throwError(self::ERR_TOO_SHORT);
         }
 
         $maxLength = $this->getParameter('max_string_length', 255);
         if (mb_strlen($candidate) > $maxLength)
         {
-            return FALSE;
+            $this->throwError(self::ERR_TOO_LONG);
         }
 
         if ($this->isCommonPassword($candidate))
         {
-            return FALSE;
+            $this->throwError(self::ERR_EASY_GUESSABLE);
         }
 
-        return $this->checkMinimumUserDistance($user, $candidate);
+        if(! $this->checkMinimumUserDistance($user, $candidate))
+        {
+            $this->throwError(self::ERR_SIMILARITY);
+        }
     }
 
     protected function checkMinimumUserDistance(UserDocument $user, $candidate)
     {
         $fieldNamesForSimilarityCheck = $this->getParameter('argument_names_for_similarity_check', FALSE);
+
         if ($fieldNamesForSimilarityCheck !== FALSE)
         {
-            if ( !is_array($fieldNamesForSimilarityCheck)) // single argument name given? => convert to array
+            if (! is_array($fieldNamesForSimilarityCheck)) // single argument name given? => convert to array
             {
                 $fieldNamesForSimilarityCheck = array(0 => $fieldNamesForSimilarityCheck);
             }
@@ -184,9 +208,9 @@ class PasswordValidator extends UserTokenValidator
 
     /**
      * Uses similar_text() and levenshtein() to compute string differences and
-     * return true if both strings are too similar according to the thresholds
-     * defined as validator parameters ('similarity_percentage_threshold' and
-     * 'minimum_levenshtein_distance').
+     * return TRUE if both strings are too similar according to the thresholds
+     * defined as validator parameters ('similarityPercentage_threshold' and
+     * 'minimumLevenshteinDistance').
      * 
      * @param string $first
      * @param string $second
@@ -195,24 +219,24 @@ class PasswordValidator extends UserTokenValidator
      */
     protected function isTooSimilar($first, $second)
     {
-        $similarity_threshold = $this->getParameter('similarity_percentage_threshold', 80);
-        $minimum_levenshtein_distance = $this->getParameter('minimum_levenshtein_distance', 4);
+        $similarityThreshold = $this->getParameter('similarity_percentage_threshold', 80);
+        $minimumLevenshteinDistance = $this->getParameter('minimum_levenshtein_distance', 4);
 
         if (mb_strtolower($first) === mb_strtolower($second))
         {
-            return true;
+            return TRUE;
         }
 
-        $similar_chars_count = similar_text($first, $second, $similarity_percentage);
-        $actual_levenshtein_distance = levenshtein($first, $second);
+        $similarCharsCount = similar_text($first, $second, $similarityPercentage);
+        $actualLevenshteinDistance = levenshtein($first, $second);
 
         // check whether too similar or too less different characters
-        if (($similarity_percentage >= $similarity_threshold) || ($actual_levenshtein_distance < $minimum_levenshtein_distance))
+        if (($similarityPercentage >= $similarityThreshold) || ($actualLevenshteinDistance < $minimumLevenshteinDistance))
         {
-            return true;
+            return TRUE;
         }
 
-        return false;
+        return FALSE;
     }
 
     /**
@@ -226,18 +250,18 @@ class PasswordValidator extends UserTokenValidator
      */
     protected function isCommonPassword($pwd)
     {
-        $file_name = $this->getParameter('common_passwords_blacklist_file', FALSE);
-        if ($file_name === FALSE)
+        $fileName = $this->getParameter('common_passwords_blacklist_file', FALSE);
+        if ($fileName === FALSE)
         {
             return FALSE;
         }
 
-        if (!is_readable($file_name))
+        if (! is_readable($fileName))
         {
-            throw new FileNotFoundException('File "' . $file_name . '" is not readable.');
+            throw new FileNotFoundException('File "' . $fileName . '" is not readable.');
         }
 
-        $file = new SplFileObject($file_name);
+        $file = new SplFileObject($fileName);
         foreach ($file as $line)
         {
             if (FALSE !== mb_strpos($line, $pwd)) // TODO: case insensitive comparison switch as parameter?

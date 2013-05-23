@@ -22,12 +22,14 @@ class UserTokenValidator extends AgaviValidator
 
         if (! $tokenArgumentName)
         {
+            $this->throwError('missing_token_argument_parameter');
             return FAlSE;
         }
 
         $token = $this->getData($tokenArgumentName);
         if (! $token)
         {
+            $this->throwError('missing_token');
             return FALSE;
         }
 
@@ -46,11 +48,13 @@ class UserTokenValidator extends AgaviValidator
 
             if (1 === $dateDiff->invert)
             {
+                $this->throwError('invalid_token');
                 return FALSE;
             }
         }
         else
         {
+            $this->throwError('invalid_token');
             return FALSE;
         }
 

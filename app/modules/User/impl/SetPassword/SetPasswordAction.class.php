@@ -25,7 +25,21 @@ class User_SetPasswordAction extends UserBaseAction
     {
         parent::handleError($parameters);
 
-        return 'Error';
+        $errors = array();
+        $view = 'Input';
+
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
+        {
+            if ($errMsg['errors'][0] === 'token')
+            {
+                $view = 'Error';
+            }
+            $errors[] = $errMsg['message'];
+        }
+
+        $this->setAttribute('errors', $errors);
+        
+        return $view;
     }
 
     public function isSecure()

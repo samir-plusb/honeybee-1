@@ -40,9 +40,9 @@ honeybee.user.PasswordMeter = honeybee.core.BaseObject.extend({
         this.password_input.popover({
             trigger: 'manual',
             html: true,
-            content: $(this.options.popover_tpl_selector).html(),
-            title: this.options.popover_title,
-            placement: this.options.popover_pos
+            content: $(this.options.popover.tpl_selector).html(),
+            title: this.options.popover.title,
+            placement: this.options.popover.pos
         });
     },
 
@@ -79,8 +79,9 @@ honeybee.user.PasswordMeter = honeybee.core.BaseObject.extend({
 
     updateRequirementLists: function()
     {
+        var req = this.options.requirements;
         var lowercase_chars_list_item = $('li.lowercase-chars');
-        if (this.password_spec.getLowercaseCharsCount() > 0)
+        if (this.password_spec.getLowercaseCharsCount() >= req.min_lowercase_chars)
         {
             lowercase_chars_list_item.addClass('accomplished');
         }
@@ -100,7 +101,7 @@ honeybee.user.PasswordMeter = honeybee.core.BaseObject.extend({
         }
 
         var numeric_chars_list_item = $('li.numeric-chars');
-        if (this.password_spec.getNumericCharsCount() > 0)
+        if (this.password_spec.getNumericCharsCount() >= req.min_decimal_numbers)
         {
             numeric_chars_list_item.addClass('accomplished');
         }
@@ -120,7 +121,7 @@ honeybee.user.PasswordMeter = honeybee.core.BaseObject.extend({
         }
 
         var length_list_item = $('li.length-chars');
-        if (this.password_spec.getLength() >= 8)
+        if (this.password_spec.getLength() >= req.min_string_length)
         {
             length_list_item.addClass('accomplished');
         }

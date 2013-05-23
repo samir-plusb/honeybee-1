@@ -61,10 +61,7 @@
 
     if(1 === password_form.length)
     {
-        new honeybee.user.PasswordMeter(password_form, {
-            popover_pos: 'right',
-            popover_title: 'Kennwortrichtlinien',
-            popover_tpl_selector: '#password_requirements'
-        });
+        var options = JSON.parse($('#password_meter_options').val());
+        new honeybee.user.PasswordMeter(password_form, options);
     }
 })(honeybee.user);

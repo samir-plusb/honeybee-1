@@ -3,6 +3,9 @@
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
     xmlns="http://agavi.org/agavi/config/parts/settings/1.0"
     xmlns:xi="http://www.w3.org/2001/XInclude">
+    <!--
+        APPLICATION DEFAULT SETTINGS
+    -->
     <ae:configuration>
         <system_actions>
             <system_action name="default">
@@ -39,10 +42,20 @@
             <setting name="use_database">true</setting>
             <setting name="use_logging">true</setting>
             <setting name="use_security">true</setting>
-            <setting name="auth_provider">Honeybee\Core\Security\Auth\SimpleAuthProvider</setting>
             <setting name="use_translation">true</setting>
             <setting name="test_bootstrap_tpl">%core.app_dir%/../testing/TestCaseMethod.tpl</setting>
             <setting name="gravatar_url_tpl">http://www.gravatar.com/avatar/{EMAIL_HASH}?s=41</setting>
+            <setting name="auth_provider">Honeybee\Core\Security\Auth\StandardAuthProvider</setting>
+        </settings>
+
+        <settings prefix="pwd_security.">
+            <setting name="min_decimal_numbers">1</setting>
+            <setting name="min_uppercase_chars">0</setting>
+            <setting name="min_lowercase_chars">1</setting>
+            <setting name="min_string_length">10</setting>
+            <setting name="max_string_length">32</setting>
+            <setting name="similarity_percentage_threshold">70</setting>
+            <setting name="minimum_levenshtein_distance">5</setting>
         </settings>
 
         <settings prefix="service.short_ids.">
@@ -62,22 +75,19 @@
     </ae:configuration>
 
     <!--
-    ####################
-    DEVELOPMENT COMMONS
-    ####################
+        DEVELOPMENT ENVIRONMENT SETTINGS
     -->
     <ae:configuration environment="development.*">
         <settings>
             <setting name="debug">true</setting>
-        </settings>
-        <settings prefix="curl.">
-            <setting name="timeout">10</setting>
         </settings>
     </ae:configuration>
 
     <ae:configuration environment="development-vagrant">
         <settings>
             <setting name="auth_provider">Honeybee\Core\Security\Auth\StandardAuthProvider</setting>
+        <!-- 
+            <setting name="auth_provider">Honeybee\Core\Security\Auth\SimpleAuthProvider</setting>
             <setting name="simple_logins">
                 <ae:parameters>
                     <ae:parameter name="vagrant">
@@ -90,7 +100,8 @@
                         </ae:parameter>
                     </ae:parameter>
                 </ae:parameters>
-            </setting>
+            </setting>  
+        -->
         </settings>
     </ae:configuration>
 
@@ -114,13 +125,11 @@
     </ae:configuration>
 
     <!--
-    ####################
-    TESTING
-    ####################
+        TESTING ENVIRONMENT SETTINGS
     -->
     <ae:configuration environment="testing.*">
         <settings>
-            <setting name="fixtures_dir">%core.app_dir%/../testing/fixtures/</setting><!-- Testing only setting -->
+            <setting name="fixtures_dir">%core.app_dir%/../testing/fixtures/</setting>
             <setting name="default_context">web</setting>
             <setting name="auth_provider">Honeybee\Core\Security\Auth\SimpleAuthProvider</setting>
             <setting name="simple_logins">
@@ -143,12 +152,12 @@
         </settings>
     </ae:configuration>
 
-    <!-- custom settings.xml files from all project modules -->
+    <!-- custom settings.xml files from all dat0r modules -->
     <xi:include href="%core.app_dir%/config/includes/settings.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
         <xi:fallback />
     </xi:include>
 
-    <!-- custom project settings.xml that may override everything imported from project modules and honeybee-core -->
+    <!-- custom project settings.xml that may override both the app defaults and module specific settings -->
     <xi:include href="%core.app_dir%/../../project/app/config/settings.xml" xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
         <xi:fallback />
     </xi:include>
