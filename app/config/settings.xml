@@ -33,6 +33,7 @@
 
         <settings>
             <setting name="app_name">Honeybee CMF</setting>
+            <setting name="project_prefix">honeybee</setting>
             <setting name="available">true</setting>
             <setting name="debug">false</setting>
             <setting name="use_database">true</setting>
