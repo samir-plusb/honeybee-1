@@ -74,5 +74,5 @@ interface IPlugin
      */
     public function onResourceEntered($prevStepName);
 
-    public function iBreakPoint();
+    public function isBreakPoint();
 }

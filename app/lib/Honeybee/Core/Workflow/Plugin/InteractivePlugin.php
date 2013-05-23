@@ -64,7 +64,7 @@ class InteractivePlugin extends BasePlugin
         return TRUE;
     }
 
-    public function iBreakPoint() 
+    public function isBreakPoint() 
     {   
         return $this->getParameter('is_breakpoint', TRUE);
     }
