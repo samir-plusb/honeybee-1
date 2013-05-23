@@ -200,12 +200,19 @@ class Process
             {
                 $shallExecute = TRUE;
             }
-            else
+            else if ($plugin->iBreakPoint())
             {
                 $this->getTicket()->setBlocked(FALSE);
                 $result = new Plugin\Result();
                 $result->setState(Plugin\Result::STATE_EXPECT_INPUT);
                 $result->setMessage("waiting for input ...");
+            }
+            else
+            {
+                $result = new Plugin\Result();
+                $result->setState(Plugin\Result::STATE_OK);
+                $result->setGate('promote');
+                $result->setMessage("skipping plugin ...");
             }
         }
         else

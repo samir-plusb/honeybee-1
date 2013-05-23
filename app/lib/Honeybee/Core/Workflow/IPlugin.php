@@ -48,6 +48,8 @@ interface IPlugin
      */
     public function getParameters();
 
+    public function getParameter($name, $default = NULL);
+
     /**
      * process the ticket
      *
@@ -71,4 +73,6 @@ interface IPlugin
      * Invoked when the plugin is entered by a resourced.
      */
     public function onResourceEntered($prevStepName);
+
+    public function iBreakPoint();
 }

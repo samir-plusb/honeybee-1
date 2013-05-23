@@ -64,6 +64,11 @@ class InteractivePlugin extends BasePlugin
         return TRUE;
     }
 
+    public function iBreakPoint() 
+    {   
+        return $this->getParameter('is_breakpoint', TRUE);
+    }
+
     /**
      * Execute this plugin, hence run our nested action.
      */

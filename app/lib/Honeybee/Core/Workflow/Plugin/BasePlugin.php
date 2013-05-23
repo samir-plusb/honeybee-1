@@ -143,9 +143,14 @@ abstract class BasePlugin implements Workflow\IPlugin
         return $this->parameters;
     }
 
-    public function getParameter($name)
+    public function getParameter($name, $default = NULL)
     {
-        return isset($this->parameters[$name]) ? $this->parameters[$name] : NULL;
+        return isset($this->parameters[$name]) ? $this->parameters[$name] : $default;
+    }
+
+    public function iBreakPoint() 
+    {   
+        return $this->getParameter('is_breakpoint', FALSE);
     }
 
     /**
