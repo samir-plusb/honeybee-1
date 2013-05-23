@@ -42,7 +42,7 @@ class Common_Header_HeaderSuccessView extends CommonBaseView
                         $module_links['tree_link'] = $routing->gen($module->getOption('prefix') . '.tree');
                     }
                 }
-                if ($user->isAllowed($module, $module->getOption('prefix') . '::write'))
+                if ($user->isAllowed($module, $module->getOption('prefix') . '::create'))
                 {
                     $module_links['create_link'] = $routing->gen($module->getOption('prefix') . '.edit');
                 }

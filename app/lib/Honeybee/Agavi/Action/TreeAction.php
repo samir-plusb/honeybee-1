@@ -99,6 +99,15 @@ class TreeAction extends BaseAction
         return $treeSettings;
     }
 
+    public function getCredentials()
+    {
+        return sprintf(
+            '%s::%s',
+            $this->getModule()->getOption('prefix'), 
+            $this->getContainer()->getRequestMethod()
+        );
+    }
+
     protected function buildTreeConfigKey()
     {
         return sprintf(

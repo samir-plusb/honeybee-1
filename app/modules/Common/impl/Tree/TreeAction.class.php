@@ -23,6 +23,18 @@ class Common_TreeAction extends CommonBaseAction
         $treeConfig = $parameters->getParameter('config');
         $this->setAttribute('batch_actions', $treeConfig->getBatchActions());
 
+        $module = $this->getModule();
+        $writeAction = sprintf('%s::write', $module->getOption('prefix'));
+        $this->setAttribute('readonly', !$this->getContext()->getUser()->isAllowed($module, $writeAction));
+
+        $createAction = sprintf('%s::create', $module->getOption('prefix'));
+        if ($this->getContext()->getUser()->isAllowed($module, $createAction))
+        {
+            $this->setAttribute('create_link', $this->getContext()->getRouting()->gen(
+                sprintf('%s.edit', $module->getOption('prefix'))
+            ));
+        }
+
         /*
          * Here we call the Listaction of the current module
          * to get the complete document data so we can render the correct wirkflow buttons in our GUI

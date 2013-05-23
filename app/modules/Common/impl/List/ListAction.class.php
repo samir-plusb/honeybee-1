@@ -1,5 +1,9 @@
 <?php
 
+use Dat0r\Core\Runtime\Document\IDocument;
+use Dat0r\Core\Runtime\Field\ReferenceField;
+use Dat0r\Core\Runtime\Field\AggregateField;
+
 /**
  * The Common_ListAction is repsonseable for rendering list data in a reusable way :).
  *
@@ -148,9 +152,13 @@ class Common_ListAction extends CommonBaseAction
                 }
             }
 
-            $row['display_data'] = $renderedData;
-            $row['css_classes'] = isset($row['css_classes']) ? $row['css_classes'] : array();
-            $listData[] = $row;
+            $listData[] = array(
+                'workflow' => $row['workflow'],
+                'display_data' => $renderedData,
+                'custom_actions' => $row['custom_actions'],
+                'data' => $this->scalarizeDocumentData($row['data']),
+                'css_classes' => isset($row['css_classes']) ? $row['css_classes'] : array()
+            );
         }
 
         return array(
@@ -161,5 +169,51 @@ class Common_ListAction extends CommonBaseAction
                 'item_count' => $listState->getTotalCount()
             )
         );
+    }
+
+    protected function scalarizeDocumentData(array $inData)
+    {
+        $outData = array();
+        $module = $this->getModule();
+
+        foreach ($inData as $fieldname => $value)
+        {
+            $field = $module->getField($fieldname);
+
+            if ($field instanceof ReferenceField)
+            {
+                if (! empty($value))
+                {
+                    $refMap = array();
+                    $references = $field->getOption(ReferenceField::OPT_REFERENCES);
+                    $identityField = $references[0][ReferenceField::OPT_IDENTITY_FIELD];
+                    $refIdentifiers = array();
+
+                    foreach ($value as $document)
+                    {
+                        $refModule = $document->getModule();
+                        $refIdentifiers[] = array(
+                            'id' => $document->getValue($identityField),
+                            'module' => $refModule->getOption('prefix', strtolower($refModule->getName()))
+                        );
+                    }
+                    
+                    $outData[$field->getName()] = $refIdentifiers;
+                }
+            }
+            else if ($field instanceof AggregateField)
+            {
+                if ($value instanceof IDocument)
+                {
+                    $outData[$field->getName()] = $value->toArray();
+                }
+            }
+            else
+            {
+                $outData[$field->getName()] = $value;
+            }
+        }
+
+        return $outData;
     }
 }

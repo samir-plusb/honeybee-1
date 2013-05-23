@@ -55,4 +55,12 @@ class SuggestAction extends BaseAction
 
         return 'Error';
     }
+
+    public function getCredentials()
+    {
+        return sprintf(
+            '%s::read',
+            $this->getModule()->getOption('prefix')
+        );
+    }
 }

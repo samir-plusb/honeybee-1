@@ -16,6 +16,10 @@
             <resource name="user">
                 <description>Defines a resource that represents user documents.</description>
                 <actions>
+                    <action>user::read</action>
+                    <action>user::write</action>
+                    <action>user::create</action>
+
                     <action>user.edit::read</action>
                     <action>user.edit::write</action>
                     <action>user.edit::promote</action>

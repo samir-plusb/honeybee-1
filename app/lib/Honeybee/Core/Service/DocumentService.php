@@ -135,4 +135,9 @@ class DocumentService implements IService
 
         return $repository->find($query, 50, 0);
     }
+
+    public function getModule()
+    {
+        return $this->module;
+    }
 }

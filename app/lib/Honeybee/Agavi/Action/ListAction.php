@@ -196,7 +196,25 @@ class ListAction extends BaseAction
                     }
                 }
             }
+
             $listSettings['sidebarTreeTargets'] = $sidebarTreeTargets;
+            $batchActions = array();
+            $coreWorkflowActions = array('promote', 'demote', 'delete');
+            foreach ($listSettings['batchActions'] as $actionName => $cfg)
+            {
+                if (in_array($actionName, $coreWorkflowActions))
+                {
+                    $batchActions[$actionName] = $cfg;
+                    continue;
+                }
+
+                $aclAction = $this->getModule()->getOption('prefix') . '::' . $actionName;
+                if ($this->getContext()->getUser()->isAllowed($this->getModule(), $aclAction))
+                {
+                    $batchActions[$actionName] = $cfg;
+                }
+            }
+            $listSettings['batchActions'] = $batchActions;
         }
 
         return $listSettings;
@@ -266,16 +284,19 @@ class ListAction extends BaseAction
                     // or is it enough to just check write access for the current state?
                     $promptLangKey = sprintf('%s.%s.prompt', $workflowStep, $actionName);
                     $promptMsg = $tm->_($promptLangKey, $translationDomain);
-
-                    $customActions[] = array(
-                        'label' => $tm->_($actionName, $translationDomain),
-                        'name' => $actionName,
-                        'prompt' => ($promptMsg === $promptLangKey) ? FALSE : $promptMsg,
-                        'binding' => array(
-                            'method' => $actionDefinition['action'],
-                            'parameters' => isset($actionDefinition['parameters']) ? $actionDefinition['parameters'] : array()
-                        ) 
-                    );
+                    $aclAction = sprintf('%s::%s', $module->getOption('prefix'), $actionName);
+                    if ($user->isAllowed($document, $aclAction))
+                    {
+                        $customActions[] = array(
+                            'label' => $tm->_($actionName, $translationDomain),
+                            'name' => $actionName,
+                            'prompt' => ($promptMsg === $promptLangKey) ? FALSE : $promptMsg,
+                            'binding' => array(
+                                'method' => $actionDefinition['action'],
+                                'parameters' => isset($actionDefinition['parameters']) ? $actionDefinition['parameters'] : array()
+                            ) 
+                        );
+                    }
                 }
 
                 $documentListItemData['custom_actions'] = $customActions;

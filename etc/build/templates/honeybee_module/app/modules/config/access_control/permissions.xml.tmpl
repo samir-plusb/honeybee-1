@@ -17,6 +17,10 @@
             -->
             <role name="default-permissions">
                 <acl>
+                    <grant>%%MODULE_PREFIX%%::read</grant>
+                    <grant>%%MODULE_PREFIX%%::write</grant>
+                    <grant>%%MODULE_PREFIX%%::create</grant>
+
                     <!-- edit state perms -->
                     <grant>%%MODULE_PREFIX%%.edit::read</grant>
                     <grant>%%MODULE_PREFIX%%.edit::write</grant>

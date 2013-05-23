@@ -22,11 +22,10 @@ class ListQueryBuilder extends DefaultQueryBuilder
         $query = Elastica\Query::create($innerQuery)->addSort(
             $this->prepareSortingParams($config, $state)
         );
-
-        // @todo add filter for deleted documents here?
         $filter = new Elastica\Filter\BoolNot(
             new Elastica\Filter\Term(array('meta.is_deleted' => TRUE))
         );
+
         if ($state->hasFilter())
         {
             $container = new Elastica\Filter\BoolAnd();
@@ -34,11 +33,10 @@ class ListQueryBuilder extends DefaultQueryBuilder
             $container->addFilter(
                 $this->buildFilter($state->getFilter())
             );
-            $filter = $conainer;
+            $filter = $container;
         }
-        $query->setFilter($filter);
 
-        return $query;
+        return $query->setFilter($filter);
     }
 
     protected function prepareSortingParams(IListConfig $config, IListState $state)

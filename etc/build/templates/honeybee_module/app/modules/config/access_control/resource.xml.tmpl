@@ -16,6 +16,10 @@
             <resource name="%%MODULE_PREFIX%%">
                 <description>Defines a resource that represents %%MODULE_PREFIX%% documents.</description>
                 <actions>
+                    <action>%%MODULE_PREFIX%%::read</action>
+                    <action>%%MODULE_PREFIX%%::write</action>
+                    <action>%%MODULE_PREFIX%%::create</action>
+
                     <action>%%MODULE_PREFIX%%.edit::read</action>
                     <action>%%MODULE_PREFIX%%.edit::write</action>
                     <action>%%MODULE_PREFIX%%.edit::promote</action>

@@ -61,7 +61,7 @@ class WorkflowAction extends BaseAction
 
         foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $err)
         {
-            if (! empty($err['message']))
+            if (!empty($err['message']))
             {
                 $errors[] = $err['message'];
             }
@@ -80,5 +80,14 @@ class WorkflowAction extends BaseAction
         $this->setAttribute('errors', $errors);
 
         return 'Error';
+    }
+
+    public function getCredentials()
+    {
+        return sprintf(
+            '%s::%s',
+            $this->getModule()->getOption('prefix'),
+            $this->getContainer()->getRequestMethod()
+        );
     }
 }

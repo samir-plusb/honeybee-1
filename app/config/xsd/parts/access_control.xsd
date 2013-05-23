@@ -76,9 +76,10 @@
     </xs:simpleType>
 
     <xs:complexType name="AclType">
-        <xs:sequence>
-            <xs:element name="grant" type="RuleType" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
+        <xs:choice  minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="grant" type="RuleType" />
+            <xs:element name="deny" type="RuleType" />
+        </xs:choice>
     </xs:complexType>
 
     <xs:complexType name="RuleType" mixed="true">

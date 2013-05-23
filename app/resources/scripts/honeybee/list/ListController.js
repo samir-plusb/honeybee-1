@@ -60,7 +60,6 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         {
             if(0 === that.options.event_origin.indexOf(event.origin))
             {
-                console.log("lets go");
                 var msg_data = JSON.parse(event.data);
                 if (msg_data.source_type === that.type_key)
                 {

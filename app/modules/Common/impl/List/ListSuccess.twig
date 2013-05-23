@@ -19,11 +19,12 @@
         </div>
         <div class="container-actions clearfix">
             {% if false == select_only_mode %}
-            {% if create_link %}
+                {% if create_link %}
             <section>
                 <a class="btn hb-icon-file-4" href="{{ create_link }}"> Neuer Eintrag</a>
             </section>
-            {% endif %}
+                {% endif %}
+                {% if false == readonly %}
             <section>
                 <div class="btn-group batch_actions">
                     <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" data-bind="css: { 'disabled': ! has_selection() }">
@@ -45,6 +46,7 @@
                     </ul>
                 </div>
             </section>
+                {% endif %}
             {% endif %}
             <section class="search-widget" data-search-widget-options="{{search_widget_opts|raw}}">
             </section>
@@ -158,7 +160,7 @@
 
                     {% endfor %}
 
-                    {% if false == select_only_mode %}
+                    {% if false == select_only_mode and false == readonly %}
                     <th class="header-actions">
                         {{tm._('actions', translation_domain)}}
                     </th>
@@ -170,10 +172,12 @@
     ListData Table Body
 ************************************************** #}
             <tbody data-bind="foreach: list_items">
-                <tr data-bind='attr: { 
-                    "class":  $data.css_classes }, 
-                        event:{ dragstart: dragStart }, 
-                        attr: { "draggable": ({{ sidebar_tree_targets|length }} > 0 && $data.workflow.interactive) ? "true" : "false" }'>
+                <tr data-bind='event:{ dragstart: dragStart }, 
+                        attr: { 
+                            "draggable": ({{ sidebar_tree_targets|length }} > 0 && $data.workflow.interactive) ? "true" : "false",
+                            "id": $data.data.identifier, 
+                            "class":  $data.css_classes 
+                        }'>
 
                     <td class="list_item_checkbox">
                         <label title="{{tm._('Eintrag wählen', translation_domain)}}"><input type="checkbox" data-bind="checked: selected" /></label>
@@ -183,7 +187,7 @@
                         {{list_template|raw}}
                     {% endfor %}
 
-                    {% if false == select_only_mode %}
+                    {% if false == select_only_mode and false == readonly %}
                     <td class="actions">
                         <div class="btn-group dropdown">
                             <!-- ko if: $data.workflow.interactive === true -->

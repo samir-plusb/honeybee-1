@@ -54,7 +54,8 @@ class StandardAuthProvider implements IAuthProvider
                     'login' => $user->getUsername(),
                     'email' => $user->getEmail(),
                     'acl_role' => $user->getRole(),
-                    'name' => $user->getFirstname() . ' ' . $user->getLastname()
+                    'name' => $user->getFirstname() . ' ' . $user->getLastname(),
+                    'identifier' => $user->getIdentifier()
                 )
             );
         }

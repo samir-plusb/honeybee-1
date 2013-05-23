@@ -12,6 +12,8 @@ use Zend\Permissions\Acl;
  */
 class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInterface
 {
+    const ALL_USERS_ID = NULL;
+
     protected $zendAcl;
 
     protected $accessConfig;
@@ -36,7 +38,7 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
             // deny all actions to all users per default to require explicit grants.
             foreach ($def['actions'] as $action)
             {
-                $zendAcl->deny(NULL, $resource, $action);
+                $zendAcl->deny(self::ALL_USERS_ID, $resource, $action);
             }
         }
 
@@ -49,6 +51,11 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
             {
                 $operation = $grant['action'];
                 $assertionTypeKey = $grant['constraint'];
+
+                if (!isset($this->accessConfig['resource_actions'][$operation]))
+                {
+                    throw new \InvalidArgumentException("Undefined acl resource action '$operation' found in credential config!");
+                }
                 $resource = $this->accessConfig['resource_actions'][$operation];
                 $zendAcl->allow($role, $resource, $operation, $this->createAssertion($assertionTypeKey));
             }
@@ -57,10 +64,15 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
             {
                 $operation = $deny['action'];
                 $assertionTypeKey = $deny['constraint'];
+                if (!isset($this->accessConfig['resource_actions'][$operation]))
+                {
+                    throw new \InvalidArgumentException("Undefined acl resource action '$operation' found in credential config!");
+                }
                 $resource = $this->accessConfig['resource_actions'][$operation];
                 $zendAcl->deny($role, $resource, $operation, $this->createAssertion($assertionTypeKey));
             }
         }
+
         return $zendAcl;
     }
 
@@ -104,10 +116,12 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
     {
         try
         {
+            // @todo Probably non-executed code, check if it is executed and if not if we want it to execute ^^
             if ($credential instanceof Acl\Resource\ResourceInterface)
             {
                 // an object instance was given; perform an access check on this (without an operation)
-                return $this->isAllowed($credential);
+                // return $this->isAllowed($credential);
+                return FALSE; // comment back in when we actually need this.
             }
 
             if (! is_scalar($credential))
@@ -126,12 +140,15 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
             }
             else
             {
+                // @todo Probably non-executed code, check if it is executed and if not if we want it to execute
                 // something like "administrator"; let's see if that's our role or an ancestor of it
-                return $this->hasRole($credential);
+                // return $this->hasRole($credential);
+                return FALSE; // comment back in when we actually need this.
             }
         }
         catch (\Exception $e)
         {
+            // @todo Logging!
             return FALSE;
         }
     }
