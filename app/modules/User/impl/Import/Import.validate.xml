@@ -5,13 +5,10 @@
     parent="%core.module_dir%/User/config/validators.xml">
     <ae:configuration>
         <validators>
-            <validator class="string" name="invalid_consumer_name" required="true">
+            <validator class="ModuleImportConsumer" name="consumer">
                 <arguments>
                     <argument>consumer</argument>
                 </arguments>
-                <ae:parameters>
-                    <ae:parameter name="min">5</ae:parameter>
-                </ae:parameters>
             </validator>
         </validators>
     </ae:configuration>

@@ -28,16 +28,21 @@
         </request>
 
         <response class="AgaviWebResponse">
-            <ae:parameter name="send_content_length">false</ae:parameter>
-            <ae:parameter name="expose_agavi">false</ae:parameter>
+            <ae:parameter name="send_content_length">false</ae:parameter> <!-- in HTTP 1.1 it's no longer necessary and in development var_dump() or similar could break correct content response length -->
+            <ae:parameter name="expose_agavi">false</ae:parameter> <!-- disable X-Agavi header -->
+            <!-- TODO: <ae:parameter name="use_sendfile_header">false</ae:parameter>
+            <ae:parameter name="sendfile_header_name">false</ae:parameter> -->
         </response>
 
         <routing class="AgaviWebRouting">
-            <!-- as we do not just output HTML with set base_href via PHP,
-                 we need correct URLs that other services can consume. -->
+            <!-- As we do not just output HTML with set base_href via PHP,
+                 we need correct URLs that other services can consume. The
+                 following allows direct inclusion of generated URLs in other
+                 output types like JSON. It's not a problem as all variables
+                 should be escaped according to their output type's needs. -->
             <ae:parameter name="default_gen_options">
                 <ae:parameter name="separator">&amp;</ae:parameter>
-                <ae:parameter name="relative">false</ae:parameter>
+                <ae:parameter name="relative">false</ae:parameter> <!-- it's more bytes over the wire, but a safer default for e.g. JSON APIs or HTML without base_href -->
             </ae:parameter>
         </routing>
 
@@ -70,14 +75,12 @@
             <ae:parameter name="read_stdin">on</ae:parameter>
             <ae:parameter name="stdin_file_name">stdin_buffer_filepath</ae:parameter>
         </request>
-
         <response class="AgaviConsoleResponse">
             <ae:parameter name="append_eol">false</ae:parameter>
         </response>
-
         <routing class="AgaviConsoleRouting" />
-
         <user class="Honeybee\Agavi\User\ZendAclSecurityUser" />
+        <storage class="AgaviNullStorage"/>
     </ae:configuration>
 
 
@@ -92,6 +95,11 @@
 
 
     <ae:configuration context="web" environment="testing.*">
+        <execution_filter class="AgaviExecutionFilter">
+            <ae:parameters>
+                <ae:parameter name="enable_caching">false</ae:parameter>
+            </ae:parameters>
+        </execution_filter>
         <request class="AgaviWebRequest">
             <!-- static values for unit tests -->
             <ae:parameter name="sources">

@@ -18,6 +18,9 @@ namespace Honeybee\Agavi\Renderer;
  *      </ae:parameter>
  *  </renderer>
  * </pre>
+ *
+ * @author Jan Schütze <jans@dracoblue.de>
+ * @author Steffen Gransow <graste@mivesto.de>
  */
 class ProxyRenderer extends \AgaviRenderer
 {
@@ -33,10 +36,9 @@ class ProxyRenderer extends \AgaviRenderer
         }
         $container = $moreAssigns['container'];
         $output_type = $container->getOutputType();
-        
-        
+
         $layer_extension = $layer->getParameter('extension');
-        
+
         $attempts = array();
 
         foreach ($this->getParameter('renderers') as $renderer_name)
@@ -52,7 +54,7 @@ class ProxyRenderer extends \AgaviRenderer
                  * renderer-property to get the the default extension.
                  */
                 $layer->setRenderer($renderer);
-                
+
                 /*
                  * Setting the renderer is not enough, because we may have the extension set in a previous
                  * iteration. So we have to remove the parameter, if we want to rely on agavi's default
@@ -68,7 +70,7 @@ class ProxyRenderer extends \AgaviRenderer
                     $attempts[] = '"' . $renderer_name . '" with extension: ' . $renderer->getDefaultExtension();
                     $layer->removeParameter('extension');
                 }
-                
+
                 return $renderer->render($layer, $attributes, $slots, $moreAssigns);
             }
             catch (\AgaviException $exception)
@@ -83,9 +85,9 @@ class ProxyRenderer extends \AgaviRenderer
                 }
             }
         }
-        
+
         /*
-         * no template found, time to throw an exception
+         * No template found, time to throw an exception.
          */ 
         throw new \AgaviException('Loading the template "' . $layer->getTemplate() . '" with ' . get_class($this) . ' failed. ' . "\n\n" . 'Renderers tried:' . "\n - " . implode("\n - ", $attempts));
     }

@@ -10,9 +10,6 @@ use \Dat0r\Core\Runtime\Sham\DataGenerator;
 /**
  * The FakeDataGenerator extends the Dat0r Sham\DataGenerator to handle
  * references a bit more sophisticated (that is, store them).
- *
- * @author Steffen Gransow <graste@mivesto.de>
- * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  */
 class FakeDataGenerator extends DataGenerator
 {

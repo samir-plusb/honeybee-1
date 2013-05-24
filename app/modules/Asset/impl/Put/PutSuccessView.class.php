@@ -47,7 +47,7 @@ class Asset_Put_PutSuccessView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeConsole(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $msg = "Successfully stored your asset." . PHP_EOL;
         $msg .= "Asset Information: " . PHP_EOL;

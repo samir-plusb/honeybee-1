@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
-    xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
     <ae:configuration context="web">
         <routes>
             <route name=".login" pattern="^/login$" action="Login" />
@@ -13,7 +11,7 @@
             <route name=".suggest" pattern="/suggest" action="Suggest" method="read" />
             <route name=".edit" pattern="/edit" action="Edit" />
             <route name=".tree" pattern="/tree" action="Tree" />
-            
+
             <route name=".workflow" pattern="/workflow">
                 <route name=".checkout" pattern="/checkout" action="Workflow_Checkout" />
                 <route name=".execute" pattern="/execute" action="Workflow_Execute" />
@@ -24,18 +22,13 @@
 
     <ae:configuration context="console">
         <routes>
-            <route pattern="user.export" module="User" action="Export" method="write">
-                <ae:parameter name="implementor">Honeybee\Domain\User\UserModule</ae:parameter>
-                <callbacks>
-                  <callback class="Honeybee\Agavi\Routing\ModuleRoutingCallback"/>
-                </callbacks>
+            <route pattern="^import$" action="Import" method="write">
+                <ae:parameter name="description">Import data into the User module via specified consumers.</ae:parameter>
             </route>
-            <route pattern="user.import" module="User" action="Import" method="write">
-                <ae:parameter name="implementor">Honeybee\Domain\User\UserModule</ae:parameter>
-                <callbacks>
-                  <callback class="Honeybee\Agavi\Routing\ModuleRoutingCallback"/>
-                </callbacks>
+            <route pattern="^export$" action="Export" method="write">
+                <ae:parameter name="description">Export data from the User module as specified in exports.xml file.</ae:parameter>
             </route>
         </routes>
     </ae:configuration>
+
 </ae:configurations>

@@ -49,7 +49,7 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
         }
 
         $this->setAttribute('modules', $modules);
-        $this->setAttribute('_title', $this->translationManager->_('Welcome to the Honeybee web frontend.'));
+        $this->setAttribute('_title', $this->translation_manager->_('Welcome to the Honeybee web frontend.'));
 
         $this->setBreadcrumb();
     }
@@ -88,7 +88,7 @@ class Default_Index_IndexSuccessView extends DefaultBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeConsole(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $msg = 'Welcome to the Honeybee CLI Interface.' . PHP_EOL;
 

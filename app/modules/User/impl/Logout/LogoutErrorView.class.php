@@ -51,7 +51,7 @@ class User_Logout_LogoutErrorView extends UserBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeConsole(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->getContainer()->getResponse()->setContent(
             "An unexpected error occured during logout.\n"

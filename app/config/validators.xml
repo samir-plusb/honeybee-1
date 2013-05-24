@@ -5,6 +5,18 @@
 	parent="%core.agavi_dir%/config/defaults/validators.xml">
     <ae:configuration>
         <validator_definitions>
+
+            <validator_definition name="ModuleImportConsumer" class="AgaviStringValidator">
+                <errors>
+                    <error>Please specify a %name$s defined in the module's imports.xml file.</error>
+                    <error for="min">A valid %name$s needs at least %min$s characters.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="min">4</ae:parameter>
+                    <ae:parameter name="description">Name of a consumer from the module's imports.xml file.</ae:parameter>
+                </ae:parameters>
+            </validator_definition>
+
         </validator_definitions>
     </ae:configuration>
 </ae:configurations>

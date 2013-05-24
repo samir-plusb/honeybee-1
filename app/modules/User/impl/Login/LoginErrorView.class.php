@@ -61,7 +61,7 @@ class User_Login_LoginErrorView extends UserBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeConsole(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $translationManager = $this->getContext()->getTranslationManager();
 

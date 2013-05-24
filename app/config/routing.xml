@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
-    xmlns="http://agavi.org/agavi/config/parts/routing/1.0" 
-    xmlns:xi="http://www.w3.org/2001/XInclude">
+<!DOCTYPE namespaces [
+    <!ENTITY aer "xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)">
+]>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+
     <ae:configuration context="web">
         <routes>
             <!-- matches "/de" or "/en" at the beginning of the URL and uses either value to set the locale,
@@ -12,7 +13,7 @@
                  call does not explicitly mention it. The matched "language" parameter will not be available
                  as a request parameter in the code, because it's "ignore"d
             -->
-            <route pattern="^/({locale:[a-z]{2}(_[A-Z]{2})?})" stop="false" imply="true" cut="true" locale="${locale}">
+            <route name="locale" pattern="^/({locale:[a-z]{2}(_[A-Z]{2})?})" stop="false" imply="true" cut="true" locale="${locale}">
                 <callbacks>
                     <callback class="Honeybee\Agavi\Routing\LanguageRoutingCallback" />
                 </callbacks>
@@ -26,17 +27,14 @@
                 set the output type to "json". Look at output_types.xml for the declaration of that output type.
                 Execution will not stop if this route matches. This is nice for making XMLHTTPRequest calls.
             -->
-            <route pattern="application/json" source="_SERVER[HTTP_ACCEPT]" output_type="json" stop="false" />
-            <route pattern="application/xml" source="_SERVER[HTTP_ACCEPT]" output_type="xml" stop="false" />
-            <route pattern="text/html" source="_SERVER[HTTP_ACCEPT]" output_type="html" stop="false" />
-            <route pattern="application/xhtml+xml" source="_SERVER[HTTP_ACCEPT]" output_type="html" stop="false" />
+            <route name="ot_json" pattern="application/json" source="_SERVER[HTTP_ACCEPT]" output_type="json" stop="false" />
+            <route name="ot_xml" pattern="application/xml" source="_SERVER[HTTP_ACCEPT]" output_type="xml" stop="false" />
+            <route name="ot_html" pattern="text/html" source="_SERVER[HTTP_ACCEPT]" output_type="html" stop="false" />
+            <route name="ot_xhtml" pattern="application/xhtml+xml" source="_SERVER[HTTP_ACCEPT]" output_type="html" stop="false" />
 
             <route name="disabled" pattern="^/disabled$" module="Disabled" action="Index" />
 
-            <xi:include 
-                href="%core.app_dir%/config/includes/routing.xml"
-                xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                xpointer(//ae:configuration[@context='web']/r:routes/r:route)/">
+            <xi:include href="%core.app_dir%/config/includes/routing.xml" xpointer="&aer; xpointer(//ae:configuration[@context='web']/r:routes/*)">
                 <xi:fallback />
             </xi:include>
 
@@ -50,13 +48,36 @@
     </ae:configuration>
 
     <ae:configuration context="console">
-        <routes>
-            <xi:include 
-                href="%core.app_dir%/config/includes/routing.xml"
-                xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(r=http://agavi.org/agavi/config/parts/routing/1.0)
-                xpointer(//ae:configuration[@context='console']/r:routes/r:route)/">
-                <xi:fallback />
-            </xi:include>
-        </routes>
+        <xi:include href="%core.app_dir%/config/includes/routing.xml" xpointer="&aer; xpointer(//ae:configuration[@context='console']/*)">
+            <xi:fallback />
+        </xi:include>
     </ae:configuration>
+
+    <!--
+        Create a routing.xml in app/project/config/ and redefine routes as you want. It should be easily possible to
+        redefine all routes you don't like or want to point to other modules and actions. To just continue route
+        matching on routes that otherwise would break add stop="false" as an attribute. To override routing callbacks
+        add the NoOpRoutingCallback to the redefinition of the route to prevent matching and generation of such routes.
+
+        You can use the normal Agavi merging of context and environment specific config blocks to your advantage as well.
+
+        Examples:
+
+        <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+            <ae:configuration context="web" environment="development-trololo">
+                <routes>
+                    <route name="locale" pattern="^/({locale:[a-z]{2}(_[A-Z]{2})?})" stop="false" imply="true" cut="true" locale="${locale}">
+                        <callbacks>
+                            <callback class="Honeybee\Agavi\Routing\NoOpRoutingCallback" />
+                        </callbacks>
+                    </route>
+                    <route name="index" pattern="^/$" module="User" action="Logout" stop="false" />
+                </routes>
+            </ae:configuration>
+        </ae:configurations>
+    -->
+    <xi:include href="%project.config_dir%/routing.xml" xpointer="&aer; xpointer(/ae:configurations/*)">
+        <xi:fallback />
+    </xi:include>
+
 </ae:configurations>

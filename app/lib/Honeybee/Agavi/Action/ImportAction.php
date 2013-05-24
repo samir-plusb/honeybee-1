@@ -6,9 +6,9 @@ use Honeybee\Core\Import\Service;
 
 class ImportAction extends BaseAction
 {
-    public function executeWrite(\AgaviRequestDataHolder $parameters)
+    public function executeWrite(\AgaviRequestDataHolder $request_data)
     {
-        $consumerName = $parameters->getParameter('consumer');
+        $consumerName = $request_data->getParameter('consumer');
 
         $service = $this->getModule()->getService('import');
 
@@ -19,6 +19,6 @@ class ImportAction extends BaseAction
 
     public function isSecure()
     {
-        return FALSE;
+        return false;
     }
 }

@@ -37,6 +37,33 @@ class BaseAction extends \AgaviAction
         return TRUE;
     }
 
+    /**
+     * Returns an array to use in an actions handleError or getDefaultViewName
+     * methods to forward to the default Error404 success view.
+     *
+     * @param string message message to display to user
+     * @param string title title to display to user
+     *
+     * @return array of modulename and action/view name
+     */
+    public function getNotFoundView($message, $title)
+    {
+        if (!empty($message))
+        {
+            $this->setAttribute('org.honeybee.error404.message', $message);
+        }
+
+        if (!empty($title))
+        {
+            $this->setAttribute('org.honeybee.error404.title', $title);
+        }
+
+        return array(
+            \AgaviConfig::get('actions.error_404_module'), 
+            \AgaviConfig::get('actions.error_404_action') . '/' . \AgaviConfig::get('actions.error_404_action') . 'Success'
+        );
+    }
+
     protected function getModule()
     {
         $module = $this->getContext()->getRequest()->getAttribute('module', 'org.honeybee.env');

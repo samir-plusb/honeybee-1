@@ -4,9 +4,6 @@ namespace Honeybee\Core\Import\Provider;
 
 /**
  * The FakeProvider class generates fake document data.
- *
- * @author Steffen Gransow <graste@mivesto.de>
- * @copyright BerlinOnline Stadtportal GmbH & Co. KG
  */
 class FakeProvider extends BaseProvider
 {

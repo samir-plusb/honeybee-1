@@ -62,21 +62,21 @@
     {% for cur_page in range(start_at, end_at) if cur_page < end_at %}
     <!-- {{cur_page}} -->
 
-        {% if search %}
+        {% if search is defined %}
             {% set routing_data_search = search %}
-        {% elseif filter %}
-            {% set routing_data_filter = list_filter%}
+        {% elseif filter is defined %}
+            {% set routing_data_filter = list_filter %}
         {% endif %}
 
-        {% if sorting %}
+        {% if sorting is defined %}
             {% set routing_data_sorting = sorting %}
         {% endif %}
 
         {% set route_data = {
             'limit': limit,
             'offset': cur_page * limit,
-            'search': routing_data_search,
-            'filter': routing_data_filter,
+            'search': routing_data_search|default(''),
+            'filter': routing_data_filter|default(''),
             'sorting': routing_data_sorting
         } %}
 

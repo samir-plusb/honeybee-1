@@ -11,7 +11,9 @@
 
     <ae:configuration context="console">
         <routes>
-            <route pattern="queue.spinner" module="Common" action="Queue_Spinner" />
+            <route pattern="queue.spinner" action="Queue_Spinner">
+                <ae:parameter name="description">Start job queue spinner.</ae:parameter>
+            </route>
         </routes>
     </ae:configuration>
 </ae:configurations>

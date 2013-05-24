@@ -2,8 +2,8 @@
 
 class User_Export_ExportSuccessView extends UserBaseView
 {
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeConsole(AgaviRequestDataHolder $parameters)
     {
-        $this->getResponse()->setContent("Finished exporting ur User documents.");
+        $this->getResponse()->setContent("Finished exporting User documents.");
     }
 }

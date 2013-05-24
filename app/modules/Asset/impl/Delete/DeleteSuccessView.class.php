@@ -35,7 +35,7 @@ class Asset_Delete_DeleteSuccessView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeConsole(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $msg = "Successfully deleted your asset from path:" . PHP_EOL;
         $msg .= $this->getAttribute('asset_info')->getFullPath();

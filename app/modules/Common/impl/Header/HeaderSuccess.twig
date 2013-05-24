@@ -45,7 +45,7 @@
                                 </a>
                             </li>
                         </ul>
-                        {% if avatar_url %}
+                        {% if avatar_url is defined %}
                             <div class="avatar-image-wrapper img-rounded" data-honeybee-avatar-url="{{avatar_url}}" />
                         {% endif %}
                     </li>

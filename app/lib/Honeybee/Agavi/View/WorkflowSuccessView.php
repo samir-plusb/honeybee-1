@@ -6,17 +6,17 @@ use Honeybee\Core\Workflow\Plugin\InteractionResult;
 
 class WorkflowSuccessView extends BaseView
 {
-    public function executeHtml(\AgaviRequestDataHolder $parameters) 
+    public function executeHtml(\AgaviRequestDataHolder $parameters)
     {
         return $this->getAttribute('content');
     }
 
-    public function executeText(\AgaviRequestDataHolder $parameters) 
+    public function executeConsole(\AgaviRequestDataHolder $parameters)
     {
         return $this->getAttribute('content');
     }
 
-    public function executeJson(\AgaviRequestDataHolder $parameters) 
+    public function executeJson(\AgaviRequestDataHolder $parameters)
     {
         $result = $this->getAttribute('result');
 

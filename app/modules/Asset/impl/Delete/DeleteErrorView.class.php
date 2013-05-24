@@ -35,7 +35,7 @@ class Asset_Delete_DeleteErrorView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeConsole(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $msg = "An arror occured while trying to delete your asset:" . PHP_EOL;
         $msg .= '- ' . implode(PHP_EOL . '- ', $this->getErrorMessages());

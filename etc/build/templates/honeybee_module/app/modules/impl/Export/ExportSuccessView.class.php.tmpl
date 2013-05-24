@@ -2,8 +2,8 @@
 
 class %%MODULE_NAME%%_Export_ExportSuccessView extends %%MODULE_NAME%%BaseView
 {
-    public function executeText(AgaviRequestDataHolder $parameters)
+    public function executeConsole(\AgaviRequestDataHolder $request_data)
     {
-        $this->getResponse()->setContent("Finished exporting ur %%MODULE_NAME%% documents.");
+        $this->getResponse()->setContent("Finished exporting %%MODULE_NAME%% documents.");
     }
 }

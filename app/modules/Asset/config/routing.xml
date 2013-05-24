@@ -14,12 +14,10 @@
 
     <ae:configuration context="console">
         <routes>
-            <route pattern="asset" module="Asset">
-                <route pattern=".get" action="Get" method="read" />
-                <route pattern=".put" action="Put" method="write" />
-                <route pattern=".delete" action="Delete" method="write" />
-                <route pattern=".update" action="Update" method="write" />
-            </route>
+            <route pattern="get" action="Get" method="read" />
+            <route pattern="put" action="Put" method="write" />
+            <route pattern="delete" action="Delete" method="write" />
+            <route pattern="update" action="Update" method="write" />
         </routes>
     </ae:configuration>
 

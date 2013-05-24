@@ -11,12 +11,12 @@ class WorkflowErrorView extends BaseView
         return $this->getAttribute('content');
     }
 
-    public function executeText(\AgaviRequestDataHolder $parameters) 
+    public function executeConsole(\AgaviRequestDataHolder $parameters)
     {
         return $this->getAttribute('content');
     }
 
-    public function executeJson(\AgaviRequestDataHolder $parameters) 
+    public function executeJson(\AgaviRequestDataHolder $parameters)
     {
         $result = $this->getAttribute('result');
 

@@ -43,25 +43,23 @@ class User_Login_LoginInputView extends UserBaseView
     }
 
     /**
-     * Prepares and sets our json data on our console response.
-     *
-     * @param       AgaviRequestDataHolder $parameters
+     * @param AgaviRequestDataHolder $request_data
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeConsole(AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
         $translationManager = $this->getContext()->getTranslationManager();
 
         $this->getContainer()->getResponse()->setContent(
             $translationManager->_(
-                'Please provide username and password as commandline arguments when calling secure actions.' .
+                'Please provide username and password as commandline arguments when calling secure actions. ' .
                 'Use --username {user} --password {pass}.',
                 'user.messages'
-            )
+            ) . PHP_EOL
         );
 
-        return 1; // falsey shell return code
+        $this->getResponse()->setExitCode(1);
     }
 }

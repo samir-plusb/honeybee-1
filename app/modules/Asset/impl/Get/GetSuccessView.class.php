@@ -35,7 +35,7 @@ class Asset_Get_GetSuccessView extends AssetBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeText(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeConsole(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $msg = "Found your asset." . PHP_EOL;
         $msg .= "Asset Information: " . PHP_EOL;

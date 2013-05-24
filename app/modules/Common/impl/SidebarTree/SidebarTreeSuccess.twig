@@ -22,7 +22,7 @@
         {% if data.children|length > 0 %}
         <ul class="children">
         {% for child in data.children %}
-            {{ self.treenode(child, documents, translation_domain) }}
+            {{ self.treenode(child) }}
         {% endfor %}
         </ul>
         {% endif %}
