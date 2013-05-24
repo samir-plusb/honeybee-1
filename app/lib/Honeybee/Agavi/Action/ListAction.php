@@ -39,7 +39,7 @@ class ListAction extends BaseAction
 
         $service = $module->getService();
 
-        $listConfig = ListConfig::create($this->buildListConfig());
+        $listConfig = ListConfig::create($this->buildListConfig($parameters));
         $listState = $parameters->getParameter('state');
 
         $this->setAttribute('config', $listConfig);
@@ -99,7 +99,7 @@ class ListAction extends BaseAction
         );
     }
 
-    protected function buildListConfig()
+    protected function buildListConfig(\AgaviRequestDataHolder $parameters)
     {
         $settingsKey = sprintf('%s.list_config', $this->getModule()->getOption('prefix'));
         $listSettings = \AgaviConfig::get($settingsKey, array());

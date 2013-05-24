@@ -188,7 +188,7 @@
                     <renderer name="twig" class="Honeybee\Agavi\Renderer\TwigRenderer">
                         <ae:parameter name="options">
                             <xi:include xpointer="&aeot; xpointer(/ae:configurations/ae:sandbox/ot:renderers/ot:renderer[@name='twig']/ae:parameter[@name='options']/*)" />
-                            <ae:parameter name="strict_variables">true</ae:parameter> <!-- throw exception instead of silently using null for invalid variables, attributes or methods -->
+                            <ae:parameter name="strict_variables">false</ae:parameter> <!-- throw exception instead of silently using null for invalid variables, attributes or methods -->
                         </ae:parameter>
                         <xi:include xpointer="&aeot; xpointer(/ae:configurations/ae:sandbox/ot:renderers/ot:renderer[@name='twig']/ae:parameter[@name='assigns'])" />
                         <xi:include xpointer="&aeot; xpointer(/ae:configurations/ae:sandbox/ot:renderers/ot:renderer[@name='twig']/ae:parameter[@name='template_dirs'])" />

@@ -113,10 +113,9 @@ class DocumentService implements IService
     public function fetchListData(ListConfig $config, IListState $state)
     {
         // @todo Introduce a factory setting to allow inject the implementor for building queries.
-        $queryBuilder = new ElasticSearch\ListQueryBuilder();
-        $query = $queryBuilder->build(
-            array('config' => $config, 'state' => $state)
-        );
+        $queryBuilderClass = $config->getQueryBuilder();
+        $queryBuilder = new $queryBuilderClass();
+        $query = $queryBuilder->build(array('config' => $config, 'state' => $state));
 
         $offset = $state->getOffset();
         $limit = $state->getLimit();

@@ -71,7 +71,7 @@ class MenuDataProvider
                 'name' => 'create_link', 
                 'url' => $routing->gen($module->getOption('prefix') . '.edit'),
                 'icon_class' => 'hb-icon-file-4',
-                'label' => $translationManager->_('neuer Eintrag')
+                'label' => $translationManager->_('Neuer Eintrag')
             );
         }
 

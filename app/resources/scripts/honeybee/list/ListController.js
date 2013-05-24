@@ -95,10 +95,14 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
     {
         var that = this;
         var href;
-
+        parameters = parameters || {};
         if (parameters)
         {
             href = document.location.href.split('?')[0];
+            if ($.url().param('only_assigned_docs'))
+            {
+                parameters.only_assigned_docs = true;
+            }
             history.pushState(parameters, 'list_reload', href + '?' + $.param(parameters));
         }
         else

@@ -26,6 +26,8 @@ class ListConfig implements IListConfig
 
     protected $sidebarTreeTargets = array();
 
+    protected $queryBuilder = 'Honeybee\\Core\\Finder\\ElasticSearch\\ListQueryBuilder';
+
     public static function create(array $data = array())
     {
         return empty($data) ? new static : new static($data);
@@ -94,6 +96,11 @@ class ListConfig implements IListConfig
     public function getSidebarTreeTargets()
     {
         return $this->sidebarTreeTargets;
+    }
+
+    public function getQueryBuilder()
+    {
+        return $this->queryBuilder;
     }
 
     // Hydrate Setters

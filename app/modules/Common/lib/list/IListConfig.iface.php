@@ -21,4 +21,6 @@ interface IListConfig
     public function getPagingRange();
 
     public function getFields();
+
+    public function getQueryBuilder();
 }
