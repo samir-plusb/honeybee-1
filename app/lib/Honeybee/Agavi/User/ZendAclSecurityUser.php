@@ -46,19 +46,7 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
         foreach ($this->accessConfig['roles'] as $role => $def)
         {
             $zendAcl->addRole($role, $def['parent']);
-            // apply all grants for the current role.
-            foreach ($def['acl']['grant'] as $grant)
-            {
-                $operation = $grant['action'];
-                $assertionTypeKey = $grant['constraint'];
 
-                if (!isset($this->accessConfig['resource_actions'][$operation]))
-                {
-                    throw new \InvalidArgumentException("Undefined acl resource action '$operation' found in credential config!");
-                }
-                $resource = $this->accessConfig['resource_actions'][$operation];
-                $zendAcl->allow($role, $resource, $operation, $this->createAssertion($assertionTypeKey));
-            }
             // apply all denies for the current role.
             foreach ($def['acl']['deny'] as $deny)
             {
@@ -70,6 +58,21 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
                 }
                 $resource = $this->accessConfig['resource_actions'][$operation];
                 $zendAcl->deny($role, $resource, $operation, $this->createAssertion($assertionTypeKey));
+            }
+            
+            // apply all grants for the current role.
+            foreach ($def['acl']['grant'] as $grant)
+            {
+                $operation = $grant['action'];
+                $assertionTypeKey = $grant['constraint'];
+
+                if (!isset($this->accessConfig['resource_actions'][$operation]))
+                {
+                    throw new \InvalidArgumentException("Undefined acl resource action '$operation' found in credential config!");
+                }
+                $resource = $this->accessConfig['resource_actions'][$operation];
+
+                $zendAcl->allow($role, $resource, $operation, $this->createAssertion($assertionTypeKey));
             }
         }
 
@@ -93,7 +96,6 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
 
     public function isAllowed($resource, $operation = NULL)
     {
-        
         return $this->getZendAcl()->isAllowed($this, $resource, $operation);
     }
 
