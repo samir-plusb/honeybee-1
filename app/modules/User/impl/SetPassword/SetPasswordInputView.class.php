@@ -14,11 +14,11 @@ class User_SetPassword_SetPasswordInputView extends UserBaseView
         $this->setAttribute('_title', 'Passwort setzen');
 
         $pwdRequirements = array(
-            'min_decimal_numbers' => AgaviConfig::get('password_constraints.min_decimal_numbers'),
-            'min_uppercase_chars' => AgaviConfig::get('password_constraints.min_uppercase_chars'),
-            'min_lowercase_chars' => AgaviConfig::get('password_constraints.min_lowercase_chars'),
-            'min_string_length' => AgaviConfig::get('password_constraints.min_string_length'),
-            'max_string_length' => AgaviConfig::get('password_constraints.max_string_length')
+            'min_decimal_numbers' => (int)AgaviConfig::get('password_constraints.min_decimal_numbers', 2),
+            'min_uppercase_chars' => (int)AgaviConfig::get('password_constraints.min_uppercase_chars', 2),
+            'min_lowercase_chars' => (int)AgaviConfig::get('password_constraints.min_lowercase_chars', 2),
+            'min_string_length' => (int)AgaviConfig::get('password_constraints.min_string_length', 10),
+            'max_string_length' => (int)AgaviConfig::get('password_constraints.max_string_length', 32)
         );
 
         $passwordMeterOptions = array(

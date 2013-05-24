@@ -107,9 +107,12 @@
                             <ae:parameter name="Please enter your email or username."><![CDATA[Bitte Nutzernamen <b>oder</b> Emailadresse eingeben.]]></ae:parameter>
                             <ae:parameter name="Min. %d characters long">Mind. %d Zeichen lang</ae:parameter>
                             <ae:parameter name="Min. %d lowercase letters">Mind. %d Kleinbuchstaben</ae:parameter>
-                            <ae:parameter name="Contains uppercase letters">Grossbuchstaben und</ae:parameter>
+                            <ae:parameter name="Min. %d uppercase characters">Mind. %d Grossbuchstaben</ae:parameter>
                             <ae:parameter name="Min. %d numeric characters">Mind. %d Ziffern</ae:parameter>
-                            <ae:parameter name="Contains special characters">Sonderzeichen</ae:parameter>
+                            <ae:parameter name="special characters">Sonderzeichen</ae:parameter>
+                            <ae:parameter name="numeric characters">Ziffern</ae:parameter>
+                            <ae:parameter name="uppercase letters">Grossbuchstaben</ae:parameter>
+                            <ae:parameter name="lowercase letters">Kleinbuchstaben</ae:parameter>
                             <ae:parameter name="weak">schwach</ae:parameter>
                             <ae:parameter name="medium">mittel</ae:parameter>
                             <ae:parameter name="strong">stark</ae:parameter>

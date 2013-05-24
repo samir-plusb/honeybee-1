@@ -48,7 +48,7 @@
             <setting name="auth_provider">Honeybee\Core\Security\Auth\StandardAuthProvider</setting>
         </settings>
 
-        <settings prefix="pwd_security.">
+        <settings prefix="password_constraints.">
             <setting name="min_decimal_numbers">1</setting>
             <setting name="min_uppercase_chars">0</setting>
             <setting name="min_lowercase_chars">1</setting>

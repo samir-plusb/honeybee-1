@@ -80,30 +80,72 @@ honeybee.user.PasswordMeter = honeybee.core.BaseObject.extend({
     updateRequirementLists: function()
     {
         var req = this.options.requirements;
-        var lowercase_chars_list_item = $('li.lowercase-chars');
-        if (this.password_spec.getLowercaseCharsCount() >= req.min_lowercase_chars)
+        var lowercase_chars_list_item = $('.password_requirements.mandatory .min_lowercase_chars');
+        var optional_list_item = $('.password_requirements-optional .min_lowercase_chars');
+        if (this.password_spec.getLowercaseCharsCount() >= req.min_lowercase_chars && req.min_lowercase_chars > 0)
         {
             lowercase_chars_list_item.addClass('accomplished');
+        }
+        else if (req.min_lowercase_chars == 0)
+        {
+            lowercase_chars_list_item.css('display', 'none');
+            optional_list_item.css('display', 'block');
+            if (this.password_spec.getLowercaseCharsCount() > 0)
+            {
+                optional_list_item.addClass('accomplished');
+            }
+            else
+            {
+                optional_list_item.removeClass('accomplished');
+            }
         }
         else
         {
             lowercase_chars_list_item.removeClass('accomplished');
         }
 
-        var uppercase_chars_list_item = $('li.uppercase-chars');
-        if (this.password_spec.getUppercaseCharsCount() > 0)
+        var uppercase_chars_list_item = $('.password_requirements.mandatory .min_uppercase_chars');
+        optional_list_item = $('.password_requirements-optional .min_uppercase_chars');
+        if (this.password_spec.getUppercaseCharsCount() >= req.min_uppercase_chars && req.min_uppercase_chars > 0)
         {
             uppercase_chars_list_item.addClass('accomplished');
+        }
+        else if (req.min_uppercase_chars == 0)
+        {
+            uppercase_chars_list_item.css('display', 'none');
+            optional_list_item.css('display', 'block');
+            if (this.password_spec.getUppercaseCharsCount() > 0)
+            {
+                optional_list_item.addClass('accomplished');
+            }
+            else
+            {
+                optional_list_item.removeClass('accomplished');
+            }
         }
         else
         {
             uppercase_chars_list_item.removeClass('accomplished');
         }
 
-        var numeric_chars_list_item = $('li.numeric-chars');
-        if (this.password_spec.getNumericCharsCount() >= req.min_decimal_numbers)
+        var numeric_chars_list_item = $('.password_requirements.mandatory .min_decimal_numbers');
+        optional_list_item = $('.password_requirements-optional .min_decimal_numbers');
+        if (this.password_spec.getNumericCharsCount() >= req.min_decimal_numbers && req.min_decimal_numbers > 0)
         {
             numeric_chars_list_item.addClass('accomplished');
+        }
+        else if (req.min_decimal_numbers == 0)
+        {
+            numeric_chars_list_item.css('display', 'none');
+            optional_list_item.css('display', 'block');
+            if (this.password_spec.getNumericCharsCount() > 0)
+            {
+                optional_list_item.addClass('accomplished');
+            }
+            else
+            {
+                optional_list_item.removeClass('accomplished');
+            }
         }
         else
         {
@@ -120,8 +162,8 @@ honeybee.user.PasswordMeter = honeybee.core.BaseObject.extend({
             password_special_chars_list_item.removeClass('accomplished');
         }
 
-        var length_list_item = $('li.length-chars');
-        if (this.password_spec.getLength() >= req.min_string_length)
+        var length_list_item = $('.password_requirements.mandatory .min_string_length');
+        if (this.password_spec.getLength() >= req.min_string_length && req.min_string_length > 0)
         {
             length_list_item.addClass('accomplished');
         }

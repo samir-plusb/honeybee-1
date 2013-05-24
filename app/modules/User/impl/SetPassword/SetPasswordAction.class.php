@@ -9,6 +9,11 @@ class User_SetPasswordAction extends UserBaseAction
 {
     public function executeRead(AgaviRequestDataHolder $parameters)
     {
+        if (! $this->hasAttribute('errors'))
+        {
+            $this->setAttribute('errors', array());
+        }
+        
         return 'Input';
     }
 
