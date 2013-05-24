@@ -200,7 +200,7 @@ class Process
             {
                 $shallExecute = TRUE;
             }
-            else if ($plugin->iBreakPoint())
+            else if ($plugin->isBreakPoint())
             {
                 $this->getTicket()->setBlocked(FALSE);
                 $result = new Plugin\Result();
