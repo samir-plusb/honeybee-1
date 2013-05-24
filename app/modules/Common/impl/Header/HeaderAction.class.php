@@ -8,11 +8,14 @@ class Common_HeaderAction extends CommonBaseAction
     {
         $user = $this->getContext()->getUser();
         $breadcrumbs = array();
+
         if ($user->isAuthenticated())
         {
             $breadcrumbs = $user->getAttribute('breadcrumbs', self::BREADCRUMB_NAMESPACE, array());
         }
+
         $this->setAttribute('breadcrumbs', $breadcrumbs);
+        
         return 'Success';
     }
 
@@ -21,5 +24,3 @@ class Common_HeaderAction extends CommonBaseAction
         return FALSE;
     }
 }
-
-?>

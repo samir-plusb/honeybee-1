@@ -16,6 +16,8 @@
             <autoload name="ListField">%core.module_dir%/Common/lib/list/ListField.class.php</autoload>
             <autoload name="ListState">%core.module_dir%/Common/lib/list/ListState.class.php</autoload>
 
+            <autoload name="MenuDataProvider">%core.module_dir%/Common/lib/header/MenuDataProvider.class.php</autoload>
+
             <autoload name="TreeConfigValidator">%core.module_dir%/Common/lib/agavi/validator/TreeConfigValidator.class.php</autoload>
             <autoload name="SidebarTreeModuleValidator">%core.module_dir%/Common/lib/agavi/validator/SidebarTreeModuleValidator.class.php</autoload>
             <autoload name="TreeConfig">%core.module_dir%/Common/lib/tree/TreeConfig.class.php</autoload>
