@@ -5,6 +5,11 @@ namespace Honeybee\Agavi\Routing;
 class ModuleRoutingCallback extends \AgaviRoutingCallback
 {
     /**
+     * Namespace used to read/write request attributes.
+     */
+    const ATTRIBUTE_NAMESPACE = 'org.honeybee.env';
+
+    /**
      * Routing callback that is invoked when the root we are applied to matches (routing runtime).
      *
      * @param       array $parameters
@@ -30,7 +35,7 @@ class ModuleRoutingCallback extends \AgaviRoutingCallback
         if (is_callable($factory))
         {
             $module = $implementor::getInstance();
-            $this->context->getRequest()->setAttribute('module', $module, 'org.honeybee.env');
+            $this->context->getRequest()->setAttribute('module', $module, self::ATTRIBUTE_NAMESPACE);
         }
         else
         {

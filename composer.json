@@ -40,7 +40,9 @@
         "ivaynberg/select2": "3.3.2",
         "PhpDebugToolbar/php-debug-toolbar": "1.5.*",
         "fzaninotto/faker": "v1.1.0",
-        "sami/sami": "1.0"
+        "sami/sami": "1.0",
+        "psr/log": "1.0.0",
+        "monolog/monolog": "1.5"
     },
 
     "require-dev": {

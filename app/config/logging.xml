@@ -4,30 +4,56 @@
     xmlns="http://agavi.org/agavi/config/parts/logging/1.0">
     <ae:configuration>
         <loggers default="app">
-            <!-- logs only DEBUG messages -->
-            <logger name="app" class="AgaviLogger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG">
+
+            <!-- log all except for DEBUG messages -->
+            <logger name="app" class="Honeybee\Agavi\Logging\Logger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG">
                 <appenders>
                     <appender>ApplicationLogAppender</appender>
                 </appenders>
             </logger>
-            <logger name="debug" class="AgaviLogger" level="AgaviLogger::DEBUG">
+
+            <!-- log only DEBUG messages -->
+            <logger name="debug" class="Honeybee\Agavi\Logging\Logger" level="AgaviLogger::DEBUG">
                 <appenders>
                     <appender>DebugLogAppender</appender>
                 </appenders>
             </logger>
-            <logger name="error" class="AgaviLogger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG ^ AgaviLogger::INFO">
+
+            <!-- log all except for DEBUG and INFO messages -->
+            <logger name="error" class="Honeybee\Agavi\Logging\Logger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG ^ AgaviLogger::INFO">
                 <appenders>
                     <appender>ErrorLogAppender</appender>
                 </appenders>
             </logger>
-            <logger name="login" class="AgaviLogger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG">
+
+            <!-- log all except for DEBUG messages -->
+            <logger name="login" class="Honeybee\Agavi\Logging\Logger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG">
                 <appenders>
                     <appender>LoginLogAppender</appender>
                 </appenders>
             </logger>
+
+            <!-- log all messages, appenders decide if they actually want to log at all -->
+            <logger name="default" class="Honeybee\Agavi\Logging\Logger" level="AgaviLogger::ALL">
+                <appenders>
+                    <appender>ApplicationLogAppender</appender>
+                    <appender>fingers_crossed</appender>
+                </appenders>
+            </logger>
+
         </loggers>
 
         <appenders>
+
+            <!-- DefaultSetup specifies a Monolog\Logger with FingersCrossedHandler that logs all messages above DEBUG
+                 level to syslog and file when a CRITICAL log message appears. For parameters see the source. -->
+            <appender name="fingers_crossed" class="Honeybee\Agavi\Logging\MonologLoggerAppender" layout="DateTimeLayout">
+                <ae:parameters>
+                    <ae:parameter name="channel">critical</ae:parameter>
+                    <ae:parameter name="setup">Honeybee\Agavi\Logging\Monolog\DefaultSetup</ae:parameter>
+                </ae:parameters>
+            </appender>
+
             <!--
                 Debug logs are rotated in a 7 day (AgaviRotatingFileLoggerAppender default) cycle
                 Use 'cycle' parameter to alter the cycle.
@@ -61,5 +87,6 @@
         <layouts>
             <layout name="DateTimeLayout" class="AgaviTimestampLoggerLayout"/>
         </layouts>
+
     </ae:configuration>
 </ae:configurations>

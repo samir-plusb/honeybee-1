@@ -7,8 +7,8 @@
  */
 class %%MODULE_NAME%%_%%ACTION_NAME%%_%%ACTION_NAME%%SuccessView extends %%MODULE_NAME%%BaseView
 {
-    public function executeHtml(AgaviRequestDataHolder $parameters)
+    public function executeHtml(\AgaviRequestDataHolder $request_data)
     {
-        $this->setupHtml($parameters);
+        $this->setupHtml($request_data);
     }
 }

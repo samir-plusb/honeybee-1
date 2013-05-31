@@ -3,6 +3,9 @@
 namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Dat0r\Module;
+use Honeybee\Agavi\Routing\ModuleRoutingCallback;
+use Honeybee\Core\Log\ILogger;
+use Honeybee\Core\Log\Logger;
 
 /**
  * The BaseAction serves as the base action to all actions implemented inside of honeybee.
@@ -10,7 +13,7 @@ use Honeybee\Core\Dat0r\Module;
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  */
-class BaseAction extends \AgaviAction
+class BaseAction extends \AgaviAction implements ILogger
 {
     /**
      * Default error handling for method Read (GET Requests)
@@ -50,12 +53,12 @@ class BaseAction extends \AgaviAction
     {
         if (!empty($message))
         {
-            $this->setAttribute('org.honeybee.error404.message', $message);
+            $this->setAttribute('org.honeybee.error_404.message', $message);
         }
 
         if (!empty($title))
         {
-            $this->setAttribute('org.honeybee.error404.title', $title);
+            $this->setAttribute('org.honeybee.error_404.title', $title);
         }
 
         return array(
@@ -66,35 +69,17 @@ class BaseAction extends \AgaviAction
 
     protected function getModule()
     {
-        $module = $this->getContext()->getRequest()->getAttribute('module', 'org.honeybee.env');
+        $module = $this->getContext()->getRequest()->getAttribute('module', ModuleRoutingCallback::ATTRIBUTE_NAMESPACE);
 
-        if (! ($module instanceof Module))
+        if (!($module instanceof Module))
         {
             throw new \Exception(
-                "Unable to determine honebee-module for the current action's scope." . PHP_EOL . 
-                "Make sure that the HoneybeeModuleRoutingCallback is executed for the related route."
+                "Unable to determine the Honebee module for the current action's scope." . PHP_EOL .
+                "Make sure that the Honeybee ModuleRoutingCallback is executed for the related route."
             );
         }
 
         return $module;
-    }
-
-    protected function logError($msg)
-    {
-        $logger = $this->getContext()->getLoggerManager()->getLogger('error');
-        $errMsg = sprintf("[%s] %s", get_class($this), $msg);
-        $logger->log(
-            new \AgaviLoggerMessage($errMsg, \AgaviLogger::ERROR)
-        );
-    }
-
-    protected function logInfo($msg)
-    {
-        $logger = $this->getContext()->getLoggerManager()->getLogger('app');
-        $infoMsg = sprintf("[%s] %s", get_class($this), $msg);
-        $logger->log(
-            new \AgaviLoggerMessage($infoMsg, \AgaviLogger::INFO)
-        );
     }
 
     /**
@@ -114,4 +99,56 @@ class BaseAction extends \AgaviAction
 
         return $incident;
     }
+
+    // @codeCoverageIgnoreStart
+    public function getLoggerName()
+    {
+        return 'default';
+    }
+
+    public function logTrace()
+    {
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::TRACE, get_class($this), func_get_args());
+    }
+
+    public function logDebug()
+    {
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::DEBUG, get_class($this), func_get_args());
+    }
+
+    public function logInfo()
+    {
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::INFO, get_class($this), func_get_args());
+    }
+
+    public function logNotice()
+    {
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::NOTICE, get_class($this), func_get_args());
+    }
+
+    public function logWarning()
+    {
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::WARNING, get_class($this), func_get_args());
+    }
+
+    public function logError()
+    {
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::ERROR, get_class($this), func_get_args());
+    }
+
+    public function logCritical()
+    {
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::CRITICAL, get_class($this), func_get_args());
+    }
+
+    public function logAlert()
+    {
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::ALERT, get_class($this), func_get_args());
+    }
+
+    public function logEmergency()
+    {
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::EMERGENCY, get_class($this), func_get_args());
+    }
+    // @codeCoverageIgnoreEnd
 }

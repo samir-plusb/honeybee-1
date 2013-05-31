@@ -25,12 +25,12 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
 
         $this->getContext()->getUser()->setAttribute('breadcrumbs', array(), 'honeybee.breadcrumbs');
 
-        $this->setAttribute('_title', $this->getAttribute('org.honeybee.error404.title', $this->getAttribute('_title', $this->translation_manager->_(self::DEFAULT_404_TITLE))));
-        //$this->setAttribute('_description', $this->getAttribute('org.honeybee.error404.message'));
+        $this->setAttribute('_title', $this->getAttribute('org.honeybee.error_404.title', $this->getAttribute('_title', $this->translation_manager->_(self::DEFAULT_404_TITLE))));
+        //$this->setAttribute('_description', $this->getAttribute('org.honeybee.error_404.message'));
 
         $this->setupHtml($request_data);
 
-        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error404.http_status', '404'));
+        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error_404.http_status', '404'));
     }
 
     /**
@@ -47,7 +47,7 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
     public function executeJson(\AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
         $this->logMatchedRoute();
-        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error404.http_status', '404'));
+        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error_404.http_status', '404'));
         return json_encode(array('message' => self::DEFAULT_404_TITLE));
     }
 
@@ -74,8 +74,8 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
             $error_message .= PHP_EOL . 'No route matched the given command line arguments: ' . $this->routing->getInput() . PHP_EOL;
         }
 
-        $title = $this->controller->getParameter('org.honeybee.error404.title', $this->getAttribute('org.honeybee.error404.title'));
-        $message = $this->controller->getParameter('org.honeybee.error404.message', $this->getAttribute('org.honeybee.error404.message'));
+        $title = $this->controller->getParameter('org.honeybee.error_404.title', $this->getAttribute('org.honeybee.error_404.title'));
+        $message = $this->controller->getParameter('org.honeybee.error_404.message', $this->getAttribute('org.honeybee.error_404.message'));
         if (!empty($message) || !empty($title))
         {
             $error_message .= PHP_EOL . 'Details about the error:' . PHP_EOL;
@@ -161,7 +161,7 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
             $error_message .= PHP_EOL;
         }
 
-        $error_message .= 'Usage: bin/cli <routename> [parameters]' . PHP_EOL . PHP_EOL;
+        $error_message .= 'Usage: bin/cli <routename> [parameters]' . PHP_EOL;
 
         if (!$this->getResponse()->getParameter('append_eol', true))
         {
@@ -200,7 +200,7 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
     public function executeBinary(\AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
         $this->logMatchedRoute();
-        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error404.http_status', '404'));
+        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error_404.http_status', '404'));
         $this->getResponse()->setContentType('text/plain');
         $this->getResponse()->setHttpHeader('Content-Disposition', 'inline');
         $this->getResponse()->setContent($this->translation_manager->_(self::DEFAULT_404_TITLE));
@@ -220,7 +220,7 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
     public function executePdf(\AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
         $this->logMatchedRoute();
-        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error404.http_status', '404'));
+        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error_404.http_status', '404'));
         $this->getResponse()->setContentType('text/plain');
         $this->getResponse()->setHttpHeader('Content-Disposition', 'inline');
         $this->getResponse()->setContent($this->translation_manager->_(self::DEFAULT_404_TITLE));
@@ -240,7 +240,7 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
     public function executeXml(\AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
         $this->logMatchedRoute();
-        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error404.http_status', '404'));
+        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error_404.http_status', '404'));
         return '<?xml version="1.0" encoding="UTF-8"?><message>' . $this->translation_manager->_(self::DEFAULT_404_TITLE) . '</message>';
     }
 
@@ -258,7 +258,7 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
     public function executeAtomxml(\AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
         $this->logMatchedRoute();
-        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error404.http_status', '404'));
+        $this->getResponse()->setHttpStatusCode($this->getAttribute('org.honeybee.error_404.http_status', '404'));
         return '<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>' . $this->translation_manager->_(self::DEFAULT_404_TITLE) . '</title></feed>';
     }
 
@@ -422,7 +422,7 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
             $log_message = "No route matched (request method '$request_method', output type '$output_type') $uri" . $origin;
         }
 
-        $this->getContext()->getLoggerManager()->log($log_message, AgaviLogger::DEBUG);
+        $this->logDebug($log_message);
     }
 
     /**
