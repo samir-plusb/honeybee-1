@@ -3,7 +3,7 @@
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
     xmlns="http://agavi.org/agavi/config/parts/logging/1.0">
     <ae:configuration>
-        <loggers default="app">
+        <loggers default="default">
 
             <!-- log all except for DEBUG messages -->
             <logger name="app" class="Honeybee\Agavi\Logging\Logger" level="AgaviLogger::ALL ^ AgaviLogger::DEBUG">
@@ -54,6 +54,15 @@
                 </ae:parameters>
             </appender>
 
+            <!-- FirePhpSetup specifies a Monolog\Logger with FirePHPHandler that logs all messages above DEBUG
+                 level via FirePHP and thus you may see those messages in Firefox etc. For parameters see source. -->
+            <appender name="firephp" class="Honeybee\Agavi\Logging\MonologLoggerAppender" layout="DateTimeLayout">
+                <ae:parameters>
+                    <ae:parameter name="channel">%core.environment%</ae:parameter>
+                    <ae:parameter name="setup">Honeybee\Agavi\Logging\Monolog\FirePhpSetup</ae:parameter>
+                </ae:parameters>
+            </appender>
+
             <!--
                 Debug logs are rotated in a 7 day (AgaviRotatingFileLoggerAppender default) cycle
                 Use 'cycle' parameter to alter the cycle.
@@ -89,4 +98,16 @@
         </layouts>
 
     </ae:configuration>
+
+    <ae:configuration environment="development.*">
+        <loggers default="default">
+            <!-- log all messages, appenders decide if they actually want to log at all -->
+            <logger name="default" class="Honeybee\Agavi\Logging\Logger" level="AgaviLogger::ALL">
+                <appenders>
+                    <appender>firephp</appender>
+                </appenders>
+            </logger>
+        </loggers>
+    </ae:configuration>
+
 </ae:configurations>
