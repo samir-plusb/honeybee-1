@@ -5,6 +5,9 @@ namespace Honeybee\Agavi\Logging;
 use \Psr\Log\LoggerInterface;
 use \Psr\Log\LogLevel;
 
+use Honeybee\Agavi\Logging\LoggerManager;
+use Honeybee\Agavi\Logging\Logger;
+
 /**
  * PSR-3 compatibile logger instance that wraps an \AgaviLogger.
  */
@@ -199,7 +202,7 @@ class Psr3Logger implements LoggerInterface
 
             $message = self::replacePlaceholders($message, $context);
 
-            $level = $this->logger->mapPsr3LogLevelToAgavi($level, \AgaviLogger::WARNING);
+            $level = Logger::getAgaviLogLevel($level);
 
             $class_name = $logger_manager->getDefaultMessageClass();
 
@@ -207,6 +210,8 @@ class Psr3Logger implements LoggerInterface
             $logger_message = new $class_name();
             $logger_message->setLevel($level);
             $logger_message->setMessage($message);
+            $logger_message->setParameter('psr3.context', $context);
+            $logger_message->setParameter('scope', isset($context['scope']) ? $context['scope'] : LoggerManager::DEFAULT_MESSAGE_SCOPE);
         }
 
         $this->logger->log($logger_message);
@@ -222,34 +227,17 @@ class Psr3Logger implements LoggerInterface
      */
     public static function replacePlaceholders($message, array $context = array ())
     {
-        if (is_array($message))
+        if (is_array($message) || (false === strpos($message, '{')))
         {
             return $message;
         }
 
-        $replacements = array ();
+        $replacements = array();
 
         // build the replacement array with braces around the context keys
         foreach ($context as $key => $value)
         {
-            if (is_object($value) && get_class($value) === 'DateTime')
-            {
-                $value = $value->format('c'); // ISO 8601 date
-            }
-            elseif (is_object($value))
-            {
-                $value = json_encode($value);
-            }
-            elseif (is_array($value))
-            {
-                $value = json_encode($value);
-            }
-            elseif (is_resource($value))
-            {
-                $value = (string)$value;
-            }
-
-            $replacements['{' . $key . '}'] = $value;
+            $replacements['{' . $key . '}'] = LoggerManager::getAsString($value);
         }
 
         // replace placeholders and return the message

@@ -38,7 +38,7 @@
         "kineticjs/kineticjs": "4.5.1",
         "twitter/bootstrap": "2.2.2",
         "ivaynberg/select2": "3.3.2",
-        "PhpDebugToolbar/php-debug-toolbar": "1.5.*",
+        "graste/PhpDebugToolbar": "dev-master",
         "fzaninotto/faker": "v1.1.0",
         "sami/sami": "1.0",
         "psr/log": "1.0.0",
@@ -80,6 +80,21 @@
                 },
                 "autoload": {
                     "classmap": ["php/Craur.class.php"]
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "graste/PhpDebugToolbar",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/graste/PhpDebugToolbar.git",
+                    "type": "git",
+                    "reference": "63b1b518e559b7e2995cda91a8edb707048c79a6"
+                },
+                "autoload": {
+                    "classmap": ["lib/agavi/", "PhpDebugToolbar.class.php"]
                 }
             }
         },

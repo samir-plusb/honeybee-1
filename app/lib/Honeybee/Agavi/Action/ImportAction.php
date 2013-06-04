@@ -12,16 +12,24 @@ class ImportAction extends BaseAction
 
         $service = $this->getModule()->getService('import');
 
+        $this->logDebug('Trying to import entries into', $this->getModule(), "for the specified consumer '$consumer_name'.");
+
         try
         {
             $report = $service->consume($consumer_name);
         }
         catch (\Exception $e)
         {
-            $this->logError($e);
-            //$this->logTrace('Details aus Validierung:', $this->getContainer()->getValidationManager(), $e, PHP_EOL . "\nwoohooo\n\n");
-            //$this->logDebug($this->getModule(), 'ist ungültig');
-            //$this->getContext()->getLoggerManager()->getLogger('default')->getPsr3Logger()->log(\Psr\Log\LogLevel::CRITICAL, 'Everybody get down, this {beep}', array('beep' => 'is a robbery!!!11'));
+            $this->logError(
+                'Import for {module} and consumer {consumer} failed. Exception: {cause}',
+                array(
+                    'module' => $this->getModule(),
+                    'consumer' => $consumer_name,
+                    'cause' => $e,
+                    //'scope' => 'Import'
+                )
+            );
+
             return 'Error';
         }
 

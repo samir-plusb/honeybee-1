@@ -4,16 +4,20 @@ namespace Honeybee\Agavi\Logging;
 
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Dat0r\Document;
+use Honeybee\Agavi\Logging\Logger;
+use Honeybee\Agavi\Logging\Psr3Logger;
 
 /**
  * Extends \AgaviLoggerManager with log level specific convenience methods.
  */
 class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\LoggerAwareInterface
 {
+    private static $pid;
+
     /**
      * @var string to use as default scope in log message
      */
-    const DEFAULT_MESSAGE_SCOPE = 'default';
+    const DEFAULT_MESSAGE_SCOPE = 'Honeybee';
 
     public function logTrace()
     {
@@ -68,10 +72,13 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
      * The log message parts need to be either strings, arrays or objects
      * implementing __toString(). Instances of the following classes are
      * treated in a special way automatically:
-     * - \Exception (see method self::getExceptionAsStringWithAgaviInformation())
+     * - \Exception
      * - Honeybee\Core\Dat0r\Module - name of module
      * - Honeybee\Core\Dat0r\Document - uuid of document
      * - \AgaviValidationManager - messages of all incidents
+     * - \DateTime - ISO-8601 representation
+     *
+     * @see self::getAsString()
      *
      * @param int $log_level Agavi log level to use
      * @param string $scope name for the scope to use
@@ -84,65 +91,64 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
     public function createLoggerMessage($log_level, $scope, array $log_message_parts = array())
     {
         $text_message_parts = array();
-
-        $scope = trim($scope);
-        if (!empty($scope))
-        {
-            $text_message_parts = array('[' . $scope . ']');
-        }
-
-        foreach ($log_message_parts as $log_message_part)
-        {
-            if ($log_message_part instanceof \Exception)
-            {
-                $log_message_part = $this->getExceptionAsStringWithAgaviInformation($log_message_part);
-            }
-            elseif (is_object($log_message_part))
-            {
-                if ($log_message_part instanceof Module)
-                {
-                    $log_message_part = 'Module (Name=' . $log_message_part->getName() . ')';
-                }
-                elseif ($log_message_part instanceof Document)
-                {
-                    $log_message_part = 'Document (Identifier=' . $log_message_part->getIdentifier() . ')';
-                }
-                elseif ($log_message_part instanceof \AgaviValidationManager)
-                {
-                    $validation_messages = array();
-                    foreach ($log_message_part->getErrorMessages() as $incident)
-                    {
-                        if (!empty($incident['message']))
-                        {
-                            $validation_messages[] = $incident['message'];
-                        }
-                    }
-
-                    $log_message_part = 'Validation Errors (' . implode(', ', $validation_messages) . ')';
-                }
-                else
-                {
-                    if (!is_callable(array($log_message_part, '__toString')))
-                    {
-                        throw new \InvalidArgumentException("Can't log object '" . get_class($log_message_part) . "' as it's neither a known class nor does it have a '__toString()' method.");
-                    }
-                }
-            }
-            elseif (is_array($log_message_part))
-            {
-                $log_message_part = print_r($log_message_part, true);
-            }
-
-            $text_message_parts[] = (string) $log_message_part;
-        }
-
         $class_name = $this->getDefaultMessageClass();
-
         $logger_message = new $class_name();
         $logger_message->setLevel($log_level);
+        $logger_message->setParameter('scope', trim($scope));
+
+        if (2 === count($log_message_parts) && is_string($log_message_parts[0]) && self::isAssoc($log_message_parts[1]) && (false !== strpos($log_message_parts[0], '{')))
+        {
+            // might be a PSR-3 compatible log call with templated message and context array
+            $logger_message->setParameter('psr3.context', $log_message_parts[1]);
+            $logger_message->setLevel(Logger::getAgaviLogLevel($log_level));
+            $logger_message->setMessage(Psr3Logger::replacePlaceholders($log_message_parts[0], $log_message_parts[1]));
+            if (isset($log_message_parts[1]['scope']))
+            {
+                $logger_message->setParameter('scope', $log_message_parts[1]['scope']);
+            }
+            return $logger_message;
+        }
+
+        // normal Agavi logging - analyse log_message_parts to get nicely formatted strings for known classes etc.
+        foreach ($log_message_parts as $log_message_part)
+        {
+            $text_message_parts[] = self::getAsString($log_message_part);
+        }
+
         $logger_message->setMessage(implode(' ', $text_message_parts));
 
         return $logger_message;
+    }
+
+    /**
+     * Returns a string representation for the given argument. Specifically
+     * handles known types like exceptions, ValidationManager instances or
+     * Honeybee Module and Document instances.
+     *
+     * @param mixed $log_message_part object, array or string to create textual representation for
+     *
+     * @return string for the given log message part
+     */
+    public static function getAsString($log_message_part)
+    {
+        if ($log_message_part instanceof \Exception)
+        {
+            return self::getExceptionAsString($log_message_part);
+        }
+        elseif (is_object($log_message_part))
+        {
+            return self::getObjectAsString($log_message_part);
+        }
+        elseif (is_array($log_message_part))
+        {
+            return print_r($log_message_part, true);
+        }
+        elseif (is_resource($log_message_part))
+        {
+            return (string) $log_message_part;
+        }
+
+        return (string) $log_message_part;
     }
 
     /**
@@ -153,46 +159,99 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
      *
      * @return string with exception message and further information
      */
-    public function getExceptionAsStringWithAgaviInformation(\Exception $exception)
+    public static function getExceptionAsString(\Exception $exception)
     {
-        $misc_data = array();
+        $extra = array();
 
-        $misc_data['Agavi Version'] = \AgaviConfig::get('agavi.version');
-        $misc_data['PHP Version'] = phpversion();
-        $misc_data['System'] = php_uname();
-        $misc_data['Timestamp'] = gmdate(DATE_ISO8601);
+        $extra['Timestamp'] = \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)))->format('Y-m-d\TH:i:s.uP');
+        $extra['Application Name'] = \AgaviConfig::get('core.app_name');
+        $extra['Agavi Environment'] = \AgaviConfig::get('core.environment');
+        $extra['Agavi Version'] = \AgaviConfig::get('agavi.version');
+        $extra['PHP Version'] = phpversion();
+        $extra['System'] = php_uname();
+        $extra['Process ID'] = getmypid();
+        $extra['Memory Usage'] = self::formatBytes(memory_get_usage(true));
+        $extra['Memory Peak Usage'] = self::formatBytes(memory_get_peak_usage(true));
 
-        if (null !== ($request = $this->getContext()->getRequest()))
+        $agavi_context = \AgaviContext::getInstance();
+        if (null !== ($request = $agavi_context->getRequest()))
         {
             if ($request instanceof \AgaviWebRequest)
             {
-                $misc_data['Request URL'] = $request->getUrl();
-                $misc_data['Request Method'] = $request->getMethod();
+                $extra['Request URL'] = $request->getUrl();
+                $extra['Request Method'] = $request->getMethod();
             }
             elseif ($request instanceof \AgaviConsoleRequest)
             {
-                $misc_data['Input'] = $request->getInput();
+                $extra['Input'] = $request->getInput();
             }
 
             $matched_routes = $request->getAttribute('matched_routes', 'org.agavi.routing');
 
             if ($matched_routes)
             {
-                $misc_data['Matched Routes (' . count($matched_routes) . ')'] = implode(', ', $matched_routes);
+                $extra['Matched Routes (' . count($matched_routes) . ')'] = implode(', ', $matched_routes);
             }
 
             if (!$request->isLocked())
             {
-                $misc_data['Parameter Names (Request)'] = implode(', ', array_keys($request->getRequestData()->getParameters()));
+                $extra['Parameter Names (Request)'] = implode(', ', array_keys($request->getRequestData()->getParameters()));
             }
         }
 
-        foreach ($misc_data as $key => $value)
+        foreach ($extra as $key => $value)
         {
             $message_parts[] = str_pad(' ', 30 - strlen($key)) . $key . ': ' . $value;
         }
 
         return (string) $exception . PHP_EOL . implode(PHP_EOL, $message_parts);
+    }
+
+    /**
+     * Returns a string for the given object enhanced by various information if
+     * the object is of a known type like \AgaviValidationManager, Honeybee
+     * Module or Document. The given object should implement a `__toString()`
+     * method as otherwise the json representation might be empty.
+     *
+     * @param mixed $obj object to create a log message string for
+     *
+     * @return string with object representation
+     */
+    public static function getObjectAsString($obj)
+    {
+        if ($obj instanceof Module)
+        {
+            return 'Module (Name=' . $obj->getName() . ')';
+        }
+        elseif ($obj instanceof Document)
+        {
+            return 'Document (Identifier=' . $obj->getIdentifier() . ')';
+        }
+        elseif ($obj instanceof \DateTime)
+        {
+            return $obj->format('c');
+        }
+        elseif ($obj instanceof \AgaviValidationManager)
+        {
+            $validation_messages = array();
+            foreach ($obj->getErrorMessages() as $incident)
+            {
+                if (!empty($incident['message']))
+                {
+                    $validation_messages[] = $incident['message'];
+                }
+            }
+
+            return 'Validation Errors (' . implode(', ', $validation_messages) . ')';
+        }
+        elseif (is_callable(array($obj, '__toString')))
+        {
+            return $obj->__toString();
+        }
+        else
+        {
+            return json_encode($obj);
+        }
     }
 
     /**
@@ -263,5 +322,42 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
         $logger_message = $this->createLoggerMessage($log_level, $scope, $args);
 
         $logger->log($logger_message);
+    }
+
+    /**
+     * Formats bytes into a human readable string.
+     *
+     * @param int $bytes
+     *
+     * @return string
+     */
+    protected static function formatBytes($bytes)
+    {
+        $bytes = (int) $bytes;
+
+        $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
+
+        return round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), 3) . ' ' . $units[$i];
+    }
+
+    /**
+     * @return bool true if argument is an associative array. False otherwise.
+     */
+    public static function isAssoc($a)
+    {
+        if (!is_array($a) || empty($a))
+        {
+            return false;
+        }
+
+        foreach (array_keys($a) as $k => $v)
+        {
+            if ($k !== $v)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

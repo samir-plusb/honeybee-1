@@ -59,7 +59,7 @@ class MonologLoggerAppender extends \AgaviLoggerAppender
 
         $monolog_level = $this->convertAgaviLevelToMonologLevel($message->getLevel());
         $monolog_message = (string)$this->getLayout()->format($message);
-        $monolog_context = $message->getParameter('monolog.context', array());
+        $monolog_context = $message->getParameter('psr3.context', array());
 
         $this->getMonologInstance()->log($monolog_level, $monolog_message, $monolog_context);
     }

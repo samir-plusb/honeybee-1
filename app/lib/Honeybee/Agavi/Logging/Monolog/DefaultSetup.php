@@ -7,6 +7,8 @@ use Monolog\Handler\FingersCrossedHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogHandler;
 use Monolog\Handler\GroupHandler;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Processor\PsrLogMessageProcessor;
 
 /**
  * Returns a configured \Monolog\Logger instance that logs all messages above
@@ -34,6 +36,18 @@ use Monolog\Handler\GroupHandler;
  *                    to LOG_USER (user-level messages).
  * - bubble: Boolean value to specify whether messages that are handled should
  *           bubble up the stack or not. Defaults to true.
+ * - formatter_template: String to use with placeholders for the LineFormatter.
+ *                       "%message% [%channel%.%level_name%] %context% %extra%\n"
+ *                       if the default, as the timestamp is already provided
+ *                       by the Agavi log message. Available placeholders are:
+ *                       - %datetime%
+ *                       - %message%
+ *                       - %channel%
+ *                       - %level_name%
+ *                       - %context%
+ *                       - %extra%
+ * - formatter_datetime_format: Datetime format to use for "%datetime%" in the
+ *                              template. Defaults to "Y-m-d\TH:i:s.uP".
  */
 class DefaultSetup implements IMonologSetup
 {
@@ -54,14 +68,41 @@ class DefaultSetup implements IMonologSetup
         $file_path = preg_replace('/[^a-zA-Z0-9-_\.\/]/', '', $appender->getParameter('destination', $default_file_path));
         $syslog_identifier = $appender->getParameter('syslog_identifier', \AgaviConfig::get('core.app_name', __METHOD__));
         $syslog_facility = $appender->getParameter('syslog_facility', LOG_USER);
+        $formatter_template = $appender->getParameter('formatter_template', "%message% [%channel%.%level_name%] %context% %extra%\n");
+        $formatter_datetime_format = $appender->getParameter('formatter_datetime_format', 'Y-m-d\TH:i:s.uP');
 
         // create a new \Monolog\Logger instance
         $logger = new Logger($channel_name);
 
+        // LineFormatter defaults to "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n", but we don't
+        // need the datetime string as we already have that from our own Agavi log message
+        $formatter = new LineFormatter($formatter_template, $formatter_datetime_format);
+
+        // define default processors to be added to handlers
+        $processors = array();
+        $processors[] = new DefaultProcessor();
+        $processors[] = new PsrLogMessageProcessor();
+
         // define syslog and file handlers and group them together
         $stream_handler = new StreamHandler($file_path, $minimum_level);
+        $stream_handler->setFormatter($formatter);
+
         $syslog_handler = new SyslogHandler($syslog_identifier, $syslog_facility, $minimum_level);
-        $group_handler = new GroupHandler(array($syslog_handler, $stream_handler), $bubble);
+        $syslog_handler->setFormatter($formatter);
+
+        $handlers = array($syslog_handler, $stream_handler);
+
+        // add default processors to all handlers
+        foreach ($handlers as $handler)
+        {
+            foreach ($processors as $processor)
+            {
+                $handler->pushProcessor($processor);
+            }
+        }
+
+        // group handlers to have every handler handle all messages
+        $group_handler = new GroupHandler($handlers, $bubble);
 
         // define fingers crossed handler to use the group handler
         $fingers_crossed_handler = new FingersCrossedHandler($group_handler, $trigger_level, $buffer_size, $bubble);
