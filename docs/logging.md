@@ -1,5 +1,17 @@
 # Logging
 
+- [Logging](#logging)
+  - [Usage examples](#usage-examples)
+  - [Logging to specific loggers](#logging-to-specific-loggers)
+  - [Logging via Monolog](#logging-via-monolog)
+  - [Additional debugging information](#additional-debugging-information)
+  - [Logging in development environments](#logging-in-development-environments)
+  - [Text representation of well known types](#text-representation-of-well-known-types)
+  - [PSR-3 compatible logging](#psr-3-compatible-logging)
+  - [Support for other logging libraries](#support-for-other-logging-libraries)
+  - [Suggestions](#suggestions)
+  - [TBD / Ideas / Misc](#tbd--ideas--misc)
+
 Logging is configured via `app/config/logging.xml`. This file includes the file
 `app/project/config/logging.xml` if it exists. In that file you may specify your
 own loggers, logger appenders and layouts. If the provided loggers and appenders
@@ -36,7 +48,7 @@ for all logging calls via the `$this->log<Level>()` methods.
 
 ## Usage examples
 
-The following are a few ways to log messages in actions and views:
+The following are a few ways to log messages in _actions_ and _views_:
 
 ```php
     $this->logDebug('Trying to import entries into', $this->getModule(), "for the specified consumer '$consumer_name'.");
@@ -230,6 +242,73 @@ defined in the `app/project/config/logging.xml` file. Beware that it's currently
 not possible to remove appenders from already defined loggers or add appenders
 with names that already exist.
 
+## Text representation of well known types
+
+By default the log methods accept various types as arguments. Usually strings or
+objects with a ```__toString()``` method should be fine. Other types are
+supported as well. At least the following special objects get a simple string
+representation:
+
+- `Honeybee\Dat0r\Module`: ```Module (Name=<Name>)```
+- `Honeybee\Dat0r\Document`: ```Document (Identifier=<UUID of the document>)```
+- `\DateTime`: ISO-8601 representation like ```2013-06-06T09:47:04+00:00```
+- `\AgaviValidationManager`: ```Validation Errors (<error messages>)```
+- `array`: ```print_r``` of the content
+
+Other types are converted via ```json_encode``` or just casted to `string` which
+may result in empty strings or brackets `[]`.
+
+The PSR-3 compatible logger replaces occurances of known types in the same way
+the default `Honeybee` logger does. This means, that exceptions will get their
+stacktraces logged, `\DateTime` instances get an ISO-8601 representation etc.
+
+There is a builtin convenience for the default log methods to use the logging
+conventions of the PSR-3 `LoggerInterface`. You can use a template string as a
+message and supply the second method argument as an associative array with keys
+as placeholder names for the templated string and their values as replacements.
+
+The following will log an error to the default logger with scope `FOO` and the
+message text `This will be replaced.`:
+
+```php
+$this->getContext()->getLoggerManager->logError(
+    "This will be {foo}",
+    array(
+        'foo' => 'replaced.',
+        'scope' => 'FOO'
+    )
+);
+```
+
+## PSR-3 compatible logging
+
+As the PSR-3 standard seems to get some traction there is support for this as
+well. As the log levels Honeybee uses via Agavi differ a bit from PSR-3 and e.g.
+`Monolog` log levels there are some ways to use PSR-3 compatible logging with
+the default setup.
+
+There is a `Honeybee\Agavi\Logging\Psr3Logger` class available that wraps an
+`\AgaviLogger` instance. The `Honeybee\Agavi\Logging\Logger` has a convenience
+method `getPsr3Logger()` that you can call to get the Agavi logger as a PSR-3
+compatible logger instance:
+
+```php
+$this->getContext()->getLoggerManager()
+->getLogger('default')
+->getPsr3Logger()
+->log(
+    \Psr\Log\LogLevel::CRITICAL,
+    'Everybody get down, this {beep}',
+    array(
+        'beep' => 'is a robbery!!!11'
+    )
+);
+```
+
+You get the logger you wish from the logger manager, ask it for a PSR-3
+compatible instance of itself and log a message with the appropriate PSR-3 log
+level and context needed.
+
 ## Support for other logging libraries
 
 If you want to use other logging libraries you can create loggers, logger
@@ -327,73 +406,6 @@ it's possible to use custom logger classes and custom layouts as well. You may
 as well format and create the given messages directly in your appender or even
 logger when you override those used by default. Further on it's possible to
 change the default `AgaviLoggerMessage` class via `factories.xml` file.
-
-## PSR-3 compatible logging
-
-As the PSR-3 standard seems to get some traction there is support for this as
-well. As the log levels Honeybee uses via Agavi differ a bit from PSR-3 and e.g.
-`Monolog` log levels there are some ways to use PSR-3 compatible logging with
-the default setup.
-
-There is a `Honeybee\Agavi\Logging\Psr3Logger` class available that wraps an
-`\AgaviLogger` instance. The `Honeybee\Agavi\Logging\Logger` has a convenience
-method `getPsr3Logger()` that you can call to get the Agavi logger as a PSR-3
-compatible logger instance:
-
-```php
-$this->getContext()->getLoggerManager()
-->getLogger('default')
-->getPsr3Logger()
-->log(
-    \Psr\Log\LogLevel::CRITICAL,
-    'Everybody get down, this {beep}',
-    array(
-        'beep' => 'is a robbery!!!11'
-    )
-);
-```
-
-You get the logger you wish from the logger manager, ask it for a PSR-3
-compatible instance of itself and log a message with the appropriate PSR-3 log
-level and context needed.
-
-## Text representation of well known types
-
-By default the log methods accept various types as arguments. Usually strings or
-objects with a ```__toString()``` method should be fine. Other types are
-supported as well. At least the following special objects get a simple string
-representation:
-
-- `Honeybee\Dat0r\Module`: ```Module (Name=<Name>)```
-- `Honeybee\Dat0r\Document`: ```Document (Identifier=<UUID of the document>)```
-- `\DateTime`: ISO-8601 representation like ```2013-06-06T09:47:04+00:00```
-- `\AgaviValidationManager`: ```Validation Errors (<error messages>)```
-- `array`: ```print_r``` of the content
-
-Other types are converted via ```json_encode``` or just casted to `string` which
-may result in empty strings or brackets `[]`.
-
-The PSR-3 compatible logger replaces occurances of known types in the same way
-the default `Honeybee` logger does. This means, that exceptions will get their
-stacktraces logged, `\DateTime` instances get an ISO-8601 representation etc.
-
-There is a builtin convenience for the default log methods to use the logging
-conventions of the PSR-3 `LoggerInterface`. You can use a template string as a
-message and supply the second method argument as an associative array with keys
-as placeholder names for the templated string and their values as replacements.
-
-The following will log an error to the default logger with scope `FOO` and the
-message text `This will be replaced.`:
-
-```php
-$this->getContext()->getLoggerManager->logError(
-    "This will be {foo}",
-    array(
-        'foo' => 'replaced.',
-        'scope' => 'FOO'
-    )
-);
-```
 
 ## Suggestions
 
