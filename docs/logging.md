@@ -114,6 +114,36 @@ developers to see log messages with their browser (or other application) that
 supports `FirePHP` or `ChromePHP` capabilities. This includes Firebug as an
 extension of Firefox and the ChromeLogger extension in Chrome or Chromium.
 
+The default setup uses the `DefaultProcessor` that adds several system, Agavi
+and application specific information to the `$extra` array of Monolog to ease
+debugging in case of critical errors:
+
+```
+{
+  "app_name":"Honeybee CMF",
+  "agavi_context":"web",
+  "agavi_environment":"development-vagrant",
+  "agavi_version":"1.0.7",
+  "php_version":"5.4.6-1ubuntu1.2",
+  "system":"Linux honeybee-showcase.dev 3.5.0-17-generic #28-Ubuntu SMP Tue Oct 9 19:31:23 UTC 2012 x86_64",
+  "pid":1254,
+  "memory_usage":"13.75 MB",
+  "memory_peak_usage":"14 MB",
+  "remote_addr":"33.33.33.1",
+  "x_forwarded_for":"",
+  "request_uri":"/de/user/list",
+  "request_method":"read",
+  "matched_module_and_action":"/",
+  "matched_routes":"locale, ot_xml, ot_html, ot_xhtml, user, user.list",
+  "raw_user_agent":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) Gecko/20100101 Firefox/21.0",
+  "raw_referer":"http://honeybee-showcase.dev/de/"
+}
+```
+
+Similar additional infos are added for authentication related log messages via
+the `VerboseLoggerAppender` that is used for the `auth` logger. You can reuse
+that verbose appender for other loggers as well.
+
 ## Logging via other logging libraries
 
 If you want to use other logging libraries you can create loggers, logger

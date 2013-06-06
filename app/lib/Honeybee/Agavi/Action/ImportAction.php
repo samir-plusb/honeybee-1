@@ -20,6 +20,8 @@ class ImportAction extends BaseAction
         }
         catch (\Exception $e)
         {
+            $this->setAttribute('message', $e->getMessage());
+
             $this->logError(
                 'Import for {module} and consumer {consumer} failed. Exception: {cause}',
                 array(

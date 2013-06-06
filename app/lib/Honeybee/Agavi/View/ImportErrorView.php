@@ -8,6 +8,11 @@ class ImportErrorView extends BaseView
     {
         $error_message = "Error while trying to import.";
 
+        if ($this->hasAttribute('message'))
+        {
+            $error_message .= ' Message: ' . $this->getAttribute('message', '');
+        }
+
         if ($this->hasAttribute('errors'))
         {
             $error_message .= PHP_EOL . PHP_EOL . "Details: " . PHP_EOL;

@@ -18,6 +18,10 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
 
     protected $accessConfig;
 
+    protected $raw_referer = '';
+
+    protected $raw_user_agent = '';
+
     public function initialize(\AgaviContext $context, array $parameters = array())
     {
         parent::initialize($context, $parameters);
@@ -25,7 +29,20 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
         $this->accessConfig = include \AgaviConfigCache::checkConfig(
             \AgaviConfig::get('core.config_dir') . '/access_control.xml'
         );
+
         $this->zendAcl = $this->createZendAcl();
+
+        $request = $this->getContext()->getRequest();
+        if ($this->getContext()->getName() == 'console')
+        {
+            $this->raw_user_agent = 'console';
+            $this->raw_referer = '';
+        }
+        else
+        {
+            $this->raw_user_agent = $request->getRequestData()->getHeader('User-Agent', '');
+            $this->raw_referer = $request->getRequestData()->getHeader('Referer', '');
+        }
     }
 
     protected function createZendAcl()
@@ -59,7 +76,7 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
                 $resource = $this->accessConfig['resource_actions'][$operation];
                 $zendAcl->deny($role, $resource, $operation, $this->createAssertion($assertionTypeKey));
             }
-            
+
             // apply all grants for the current role.
             foreach ($def['acl']['grant'] as $grant)
             {
@@ -182,5 +199,21 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
         }
 
         return new $assertImplementor;
+    }
+
+    /**
+     * @return string UNTRUSTED USER-AGENT header value (prior validation!)
+     */
+    public function getRawUserAgent()
+    {
+        return $this->raw_user_agent;
+    }
+
+    /**
+     * @return string UNTRUSTED REFERER header value (prior validation!)
+     */
+    public function getRawReferer()
+    {
+        return $this->raw_referer;
     }
 }

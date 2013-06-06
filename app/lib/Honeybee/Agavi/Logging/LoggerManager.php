@@ -337,8 +337,11 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
     {
         $extra = array();
 
+        $agavi_context = \AgaviContext::getInstance();
+
         $extra['Timestamp'] = \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)))->format('Y-m-d\TH:i:s.uP');
         $extra['Application Name'] = \AgaviConfig::get('core.app_name');
+        $extra['Agavi Context'] = $agavi_context->getName();
         $extra['Agavi Environment'] = \AgaviConfig::get('core.environment');
         $extra['Agavi Version'] = \AgaviConfig::get('agavi.version');
         $extra['PHP Version'] = phpversion();
@@ -346,8 +349,13 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
         $extra['Process ID'] = getmypid();
         $extra['Memory Usage'] = self::formatBytes(memory_get_usage(true));
         $extra['Memory Peak Usage'] = self::formatBytes(memory_get_peak_usage(true));
+        $extra['Remote Address'] = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'console';
 
-        $agavi_context = \AgaviContext::getInstance();
+        if (isset($_SERVER['X_FORWARDED_FOR']))
+        {
+            $extra['X-Forwarded-For'] = $_SERVER['X_FORWARDED_FOR'];
+        }
+
         if (null !== ($request = $agavi_context->getRequest()))
         {
             if ($request instanceof \AgaviWebRequest)
