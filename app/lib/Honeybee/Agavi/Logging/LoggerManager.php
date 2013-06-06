@@ -19,49 +19,165 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
      */
     const DEFAULT_MESSAGE_SCOPE = 'Honeybee';
 
+    /**
+     * Logs a TRACE level message composited from all given arguments (as a
+     * concatenated string) to all loggers interested in TRACE level messages.
+     */
     public function logTrace()
     {
         $this->log($this->createLoggerMessage(\AgaviLogger::TRACE, self::DEFAULT_MESSAGE_SCOPE, func_get_args()));
     }
 
+    /**
+     * Logs a DEBUG level message composited from all given arguments (as a
+     * concatenated string) to all loggers interested in DEBUG level messages.
+     */
     public function logDebug()
     {
         $this->log($this->createLoggerMessage(\AgaviLogger::DEBUG, self::DEFAULT_MESSAGE_SCOPE, func_get_args()));
     }
 
+    /**
+     * Logs a INFO level message composited from all given arguments (as a
+     * concatenated string) to all loggers interested in INFO level messages.
+     */
     public function logInfo()
     {
         $this->log($this->createLoggerMessage(\AgaviLogger::INFO, self::DEFAULT_MESSAGE_SCOPE, func_get_args()));
     }
 
+    /**
+     * Logs a NOTICE level message composited from all given arguments (as a
+     * concatenated string) to all loggers interested in NOTICE level messages.
+     */
     public function logNotice()
     {
         $this->log($this->createLoggerMessage(\AgaviLogger::NOTICE, self::DEFAULT_MESSAGE_SCOPE, func_get_args()));
     }
 
+    /**
+     * Logs a WARNING level message composited from all given arguments (as a
+     * concatenated string) to all loggers interested in WARNING level messages.
+     */
     public function logWarning()
     {
         $this->log($this->createLoggerMessage(\AgaviLogger::WARNING, self::DEFAULT_MESSAGE_SCOPE, func_get_args()));
     }
 
+    /**
+     * Logs an ERROR level message composited from all given arguments (as a
+     * concatenated string) to all loggers interested in ERROR level messages.
+     */
     public function logError()
     {
         $this->log($this->createLoggerMessage(\AgaviLogger::ERROR, self::DEFAULT_MESSAGE_SCOPE, func_get_args()));
     }
 
+    /**
+     * Logs a CRITICAL level message composited from all given arguments (as a
+     * concatenated string) to all loggers interested in CRITICAL level messages.
+     */
     public function logCritical()
     {
         $this->log($this->createLoggerMessage(\AgaviLogger::CRITICAL, self::DEFAULT_MESSAGE_SCOPE, func_get_args()));
     }
 
+    /**
+     * Logs an ALERT level message composited from all given arguments (as a
+     * concatenated string) to all loggers interested in ALERT level messages.
+     */
     public function logAlert()
     {
         $this->log($this->createLoggerMessage(\AgaviLogger::ALERT, self::DEFAULT_MESSAGE_SCOPE, func_get_args()));
     }
 
+    /**
+     * Logs an EMERGENCY level message composited from all given arguments (as a
+     * concatenated string) to all loggers interested in EMERGENCY level messages.
+     */
     public function logEmergency()
     {
         $this->log($this->createLoggerMessage(\AgaviLogger::EMERGENCY, self::DEFAULT_MESSAGE_SCOPE, func_get_args()));
+    }
+
+    /**
+     * Logs all given log message parts as a string to the given logger with
+     * the specifed log level and scope name.
+     *
+     * @param string $logger_name log channel name (logger name defined in logging.xml), NULL should fallback to the default logger
+     * @param int $log_level log level to use for logger message creation
+     * @param string $scope string or object implementing __toString() for scope of log message (e.g. callee class name or sub channel name)
+     * @param mixed $log_message_parts string or object to log or array that contains log message parts ($log_message_parts or its array entries need to be of known types or implement __toString())
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException when there's no logger configured for the given logger name
+     */
+    public function logTo($logger_name = null, $log_level = \AgaviLogger::INFO, $scope = self::DEFAULT_MESSAGE_SCOPE, $log_message_parts = "")
+    {
+        if (!\AgaviConfig::get('core.use_logging', true))
+        {
+            return;
+        }
+
+        /* @var $logger Honeybee\Agavi\Logging\Logger */
+        $logger = $this->getLogger($logger_name);
+
+        if (!$logger)
+        {
+            throw new \InvalidArgumentException("Can't find logger with name '$logger_name'. Please specify another name or define the logger in the logging.xml file.");
+        }
+
+        $logger_message = $this->createLoggerMessage($log_level, $scope, $log_message_parts);
+
+        $logger->log($logger_message);
+    }
+
+    /**
+     * Logs the given log message parts as a string to ALL loggers that are
+     * interested in a message of that log level.
+     *
+     * @param int $log_level log level of the message
+     * @param string $scope string for scope of log message (e.g. callee class name or sub channel name)
+     * @param mixed $log_message_parts string or object to log or array that contains log message parts ($log_message_parts or its array entries need to be of known types or implement __toString())
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException when there's no logger configured for the given logger name
+     */
+    public function logToAll($log_level = \AgaviLogger::INFO, $scope = self::DEFAULT_MESSAGE_SCOPE, $log_message_parts = "")
+    {
+        if (!\AgaviConfig::get('core.use_logging', true))
+        {
+            return;
+        }
+
+        $class_name = $this->getDefaultMessageClass();
+        $logger_message = new $class_name();
+        $logger_message->setLevel($log_level);
+        $logger_message->setParameter('scope', trim($scope));
+
+        $text = '';
+        if (is_array($log_message_parts))
+        {
+            // analyse log_message_parts to get nicely formatted strings for known classes etc.
+            $text_message_parts = array();
+            foreach ($log_message_parts as $log_message_part)
+            {
+                $text_message_parts[] = self::getAsString($log_message_part);
+            }
+
+            $text = implode(' ', $text_message_parts);
+        }
+        else
+        {
+            $text = self::getAsString($log_message_parts);
+        }
+
+        $logger_message->setMessage($text);
+
+        // log this message to ALL loggers
+        $this->log($logger_message);
     }
 
     /**
@@ -80,15 +196,23 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
      *
      * @see self::getAsString()
      *
+     * If the log message consists of exactly two parts while the first is a
+     * string and the second an associative array it is used as a PSR-3
+     * compatible call and templating with the given context array according to
+     * PSR-3 via {placeholders} is supported. This usage still includes getting
+     * supported known types as strings. The given Agavi log level is being
+     * converted to a PSR-3 compatible log level and the given scope is added
+     * as a parameter to the message.
+     *
      * @param int $log_level Agavi log level to use
      * @param string $scope name for the scope to use
-     * @param array $log_message_parts array of strings, arrays and objects that should be part of the message created
+     * @param mixed $log_message_parts string or object to log or array that contains log message parts ($log_message_parts or its array entries need to be of known types or implement __toString())
      *
      * @return \AgaviLoggerMessage
      *
      * @throws \InvalidArgumentException if __toString() is not callable on a log message part object
      */
-    public function createLoggerMessage($log_level, $scope, array $log_message_parts = array())
+    public function createLoggerMessage($log_level, $scope = self::DEFAULT_MESSAGE_SCOPE, $log_message_parts = "")
     {
         $text_message_parts = array();
         $class_name = $this->getDefaultMessageClass();
@@ -96,9 +220,9 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
         $logger_message->setLevel($log_level);
         $logger_message->setParameter('scope', trim($scope));
 
+        // might be a PSR-3 compatible log call with templated message and context array
         if (2 === count($log_message_parts) && is_string($log_message_parts[0]) && self::isAssoc($log_message_parts[1]) && (false !== strpos($log_message_parts[0], '{')))
         {
-            // might be a PSR-3 compatible log call with templated message and context array
             $logger_message->setParameter('psr3.context', $log_message_parts[1]);
             $logger_message->setLevel(Logger::getAgaviLogLevel($log_level));
             $logger_message->setMessage(Psr3Logger::replacePlaceholders($log_message_parts[0], $log_message_parts[1]));
@@ -109,15 +233,65 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
             return $logger_message;
         }
 
-        // normal Agavi logging - analyse log_message_parts to get nicely formatted strings for known classes etc.
-        foreach ($log_message_parts as $log_message_part)
+        $text = '';
+        if (is_array($log_message_parts))
         {
-            $text_message_parts[] = self::getAsString($log_message_part);
+            // analyse log_message_parts to get nicely formatted strings for known classes etc.
+            $text_message_parts = array();
+            foreach ($log_message_parts as $log_message_part)
+            {
+                $text_message_parts[] = self::getAsString($log_message_part);
+            }
+
+            $text = implode(' ', $text_message_parts);
+        }
+        else
+        {
+            $text = self::getAsString($log_message_parts);
         }
 
-        $logger_message->setMessage(implode(' ', $text_message_parts));
+        $logger_message->setMessage($text);
 
         return $logger_message;
+    }
+
+    /**
+     * Logs all given log message parts as string to the given logger with the
+     * specifed log level and scope name.
+     *
+     * @param string $logger_name log channel name (logger name defined in logging.xml)
+     * @param int $log_level log level to use for logger message creation
+     * @param string $scope string or object implementing __toString() for scope of log message (e.g. callee class name or sub channel name)
+     * @param mixed $log_message_parts string or object to log or array that contains log message parts ($log_message_parts or its array entries need to be of known types or implement __toString())
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException when there's no logger configured for the given logger name
+     */
+    public static function logLoggerAndLevel($logger_name = null, $log_level = \AgaviLogger::INFO, $scope = self::DEFAULT_MESSAGE_SCOPE, $log_message_parts = "")
+    {
+        if (!\AgaviConfig::get('core.use_logging', true))
+        {
+            return;
+        }
+
+        /* @var $agavi_context \AgaviContext */
+        $agavi_context = \AgaviContext::getInstance();
+
+        /* @var $logger_manager Honeybee\Agavi\Logging\LoggerManager */
+        $logger_manager = $agavi_context->getLoggerManager();
+
+        /* @var $logger Honeybee\Agavi\Logging\Logger */
+        $logger = $logger_manager->getLogger($logger_name);
+
+        if (!$logger)
+        {
+            throw new \InvalidArgumentException("Can't find logger with name '$logger_name'. Please specify another name or define the logger in the logging.xml file.");
+        }
+
+        $logger_message = $logger_manager->createLoggerMessage($log_level, $scope, $log_message_parts);
+
+        $logger->log($logger_message);
     }
 
     /**
@@ -252,76 +426,6 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
         {
             return json_encode($obj);
         }
-    }
-
-    /**
-     * Logs all given $args to the given logger with the specifed log level and scope name.
-     *
-     * @param string $logger_name log channel name (logger name defined in logging.xml)
-     * @param int $log_level log level to use for logger message creation
-     * @param string $scope string or object implementing __toString() for scope of log message (e.g. callee class name or sub channel name)
-     * @param array $args arbitrary number of parameters to log (need to be of known type or implement __toString())
-     *
-     * @return void
-     *
-     * @throws \InvalidArgumentException when there's no logger configured for the given logger name
-     */
-    public static function logLoggerAndLevel($logger_name, $log_level, $scope, $args)
-    {
-        if (!\AgaviConfig::get('core.use_logging', true))
-        {
-            return;
-        }
-
-        /* @var $agavi_context \AgaviContext */
-        $agavi_context = \AgaviContext::getInstance();
-
-        /* @var $logger_manager Honeybee\Agavi\Logging\LoggerManager */
-        $logger_manager = $agavi_context->getLoggerManager();
-
-        /* @var $logger Honeybee\Agavi\Logging\Logger */
-        $logger = $logger_manager->getLogger($logger_name);
-
-        if (!$logger)
-        {
-            throw new \InvalidArgumentException("Can't find logger with name '$logger_name'. Please specify another name or define the logger in the logging.xml file.");
-        }
-
-        $logger_message = $logger_manager->createLoggerMessage($log_level, $scope, $args);
-
-        $logger->log($logger_message);
-    }
-
-    /**
-     * Logs all given $args to the given logger with the specifed log level and scope name.
-     *
-     * @param string $logger_name log channel name (logger name defined in logging.xml)
-     * @param int $log_level log level to use for logger message creation
-     * @param string $scope string or object implementing __toString() for scope of log message (e.g. callee class name or sub channel name)
-     * @param array $args arbitrary number of parameters to log (need to be of known type or implement __toString())
-     *
-     * @return void
-     *
-     * @throws \InvalidArgumentException when there's no logger configured for the given logger name
-     */
-    public function logTo($logger_name, $log_level, $scope, $args)
-    {
-        if (!\AgaviConfig::get('core.use_logging', true))
-        {
-            return;
-        }
-
-        /* @var $logger Honeybee\Agavi\Logging\Logger */
-        $logger = $this->getLogger($logger_name);
-
-        if (!$logger)
-        {
-            throw new \InvalidArgumentException("Can't find logger with name '$logger_name'. Please specify another name or define the logger in the logging.xml file.");
-        }
-
-        $logger_message = $this->createLoggerMessage($log_level, $scope, $args);
-
-        $logger->log($logger_message);
     }
 
     /**

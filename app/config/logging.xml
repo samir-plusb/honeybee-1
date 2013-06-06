@@ -29,10 +29,11 @@
                 </appenders>
             </logger>
 
-            <!-- log all login related messages -->
-            <logger name="login" class="Honeybee\Agavi\Logging\Logger">
+            <!-- log all authentication related messages -->
+            <logger name="auth" class="Honeybee\Agavi\Logging\Logger">
                 <appenders>
-                    <appender>login</appender>
+                    <appender>auth</appender>
+                    <appender>fingers_crossed</appender>
                 </appenders>
             </logger>
 
@@ -71,7 +72,7 @@
             <appender name="default" class="Honeybee\Agavi\Logging\FileLoggerAppender" layout="default" />
 
             <!-- log all messages to %core.app_dir%/log/login.log -->
-            <appender name="login" class="Honeybee\Agavi\Logging\FileLoggerAppender" layout="default" />
+            <appender name="auth" class="Honeybee\Agavi\Logging\FileLoggerAppender" layout="default" />
 
             <!-- log all messages to %core.app_dir%/log/trace.log -->
             <appender name="trace" class="Honeybee\Agavi\Logging\FileLoggerAppender" layout="default" />

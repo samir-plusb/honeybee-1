@@ -3,6 +3,7 @@
 namespace Honeybee\Agavi\Logging;
 
 use Monolog\Logger;
+use Honeybee\Agavi\Logging\LoggerManager;
 
 /**
  * Sends AgaviLoggerMessages to a \Monolog\Logger instance.
@@ -58,8 +59,12 @@ class MonologLoggerAppender extends \AgaviLoggerAppender
         }
 
         $monolog_level = $this->convertAgaviLevelToMonologLevel($message->getLevel());
-        $monolog_message = (string)$this->getLayout()->format($message);
+        $monolog_message = (string) $this->getLayout()->format($message);
         $monolog_context = $message->getParameter('psr3.context', array());
+        if ($message->hasParameter('scope'))
+        {
+            $monolog_context['scope'] = $message->getParameter('scope', LoggerManager::DEFAULT_MESSAGE_SCOPE);
+        }
 
         $this->getMonologInstance()->log($monolog_level, $monolog_message, $monolog_context);
     }

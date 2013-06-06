@@ -7,20 +7,20 @@
  */
 class User_Login_LoginSuccessView extends UserBaseView
 {
-    public function executeBinary(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeBinary(AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
-        $this->executeHtml($parameters);
+        $this->executeHtml($request_data);
     }
 
     /**
      * Execute any html related presentation logic and sets up our template attributes.
      *
-     * @param       AgaviRequestDataHolder $parameters
+     * @param AgaviRequestDataHolder $request_data
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeHtml(AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
         $routing = $this->getContext()->getRouting();
         $attributes = $this->getContainer()->getAttributes('org.agavi.controller.forwards.login', array());

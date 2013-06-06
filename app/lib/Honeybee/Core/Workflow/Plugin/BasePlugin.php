@@ -207,30 +207,24 @@ abstract class BasePlugin implements Workflow\IPlugin
     }
 
     /**
-     * Convenience method for logging errors to the application's error log.
+     * Convenience method for logging errors to the application's default and
+     * error log.
      *
      * @param string $msg
      */
     protected function logError($msg)
     {
-        $logger = $this->getContext()->getLoggerManager()->getLogger('error');
-        $errMsg = sprintf("[%s] %s", get_class($this), $msg);
-        $logger->log(
-            new \AgaviLoggerMessage($errMsg, \AgaviLogger::ERROR)
-        );
+        $this->getContext()->getLoggerManager()->logTo(null, \AgaviLogger::ERROR, get_class($this), $msg);
+        $this->getContext()->getLoggerManager()->logTo('error', \AgaviLogger::ERROR, get_class($this), $msg);
     }
 
     /**
-     * Convenience method for logging messages to the application's info log.
+     * Convenience method for logging messages to the default application log.
      *
      * @param string $msg
      */
     protected function logInfo($msg)
     {
-        $logger = $this->getContext()->getLoggerManager()->getLogger('app');
-        $infoMsg = sprintf("[%s] %s", get_class($this), $msg);
-        $logger->log(
-            new \AgaviLoggerMessage($infoMsg, \AgaviLogger::INFO)
-        );
+        $this->getContext()->getLoggerManager()->logTo(null, \AgaviLogger::ERROR, get_class($this), $msg);
     }
 }

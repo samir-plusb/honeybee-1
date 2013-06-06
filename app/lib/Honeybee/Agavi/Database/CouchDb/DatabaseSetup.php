@@ -121,14 +121,16 @@ class DatabaseSetup implements IDatabaseSetup
      */
     protected function initViews()
     {
-        if (! is_dir($this->getScriptsLocation()))
+        $logger_manager = \AgaviContext::getInstance()->getLoggerManager();
+
+        if (!is_dir($this->getScriptsLocation()))
         {
-            error_log("Database view src-directory does not exist " . $this->getScriptsLocation());
+            $logger_manager->logToAll(\AgaviLogger::CRITICAL, get_class($this), "Database view src-directory does not exist " . $this->getScriptsLocation());
             return;
         }
 
         $glob = glob($this->getScriptsLocation().'/*.{map,reduce,filters}.js', GLOB_BRACE);
-        if (! is_array($glob))
+        if (!is_array($glob))
         {
             return;
         }
@@ -163,36 +165,22 @@ class DatabaseSetup implements IDatabaseSetup
             }
 
             $stat = $this->getClient()->createDesignDocument(NULL, $docid, $doc);
-            $loggerManager = \AgaviContext::getInstance()->getLoggerManager();
             if (isset($stat['ok']))
             {
-                $loggerManager->getLogger()->log(
-                    new \AgaviLoggerMessage(
-                        sprintf(
-                            '[%s] Successfully saved %s _design/%s',
-                            get_class($this),
-                            $this->getClient()->getDatabaseName(),
-                            $docid
-                        ),
-                        \AgaviLogger::INFO
-                    )
-                );
+                $logger_manager->logInfo('Successfully saved ' . $this->getClient()->getDatabaseName() . " _design/$docid");
             }
             else
             {
-                $loggerManager->getLogger('error')->log(
-                    new \AgaviLoggerMessage(
-                        sprintf(
-                            "[%s]%s::%s:%s:%s\n%s",
-                            get_class($this),
-                            __METHOD__,
-                            __LINE__,
-                            __FILE__,
-                            print_r($stat, TRUE)
-                        ),
-                        \AgaviLogger::ERROR
-                    )
-                );
+                $log_message = sprintf(
+                    "[%s]%s::%s:%s:%s\n%s",
+                    get_class($this),
+                    __METHOD__,
+                    __LINE__,
+                    __FILE__,
+                     print_r($stat, TRUE)
+                 );
+
+                $logger_manager->logError($log_message);
             }
         }
     }
