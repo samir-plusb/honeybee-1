@@ -188,6 +188,48 @@ developers to see log messages within their browser (or other application) that
 supports `FirePHP` or `ChromePHP` capabilities. This includes `Firebug` as an
 extension of `Firefox` and the `ChromeLogger` extension in `Chrome`.
 
+An example on how to define an use `FirePHP and `ChromePHP` as appenders for
+development environments can be found in the `app/config/logging.xml` file:
+
+Create a `logging.xml` in `app/project/config/` and extend the configuration to
+add `FirePHP` and `ChromePHP` capabilities to the default logger in environments
+whose names start with `development` for all contexts (e.g. `console` and `web`)
+and add the `PhpDebugToolbarLoggerAppender` to development environments without
+`-testing` as a name suffix in the web context only (as that appender modifies
+the HTML source code):
+
+```xml
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+    xmlns="http://agavi.org/agavi/config/parts/logging/1.0"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <ae:configuration environment="^development.*">
+        <loggers default="default">
+            <logger name="default" class="Honeybee\Agavi\Logging\Logger">
+                <appenders>
+                    <appender>firephp</appender>
+                    <appender>chromephp</appender>
+                </appenders>
+            </logger>
+        </loggers>
+    </ae:configuration>
+    <ae:configuration environment="^development.-(?!-testing)$" context="web">
+        <loggers default="default">
+            <logger name="default" class="Honeybee\Agavi\Logging\Logger">
+                <appenders>
+                    <appender>phpdebugtoolbar</appender>
+                </appenders>
+            </logger>
+        </loggers>
+    </ae:configuration>
+</ae:configurations>
+```
+
+Please note, that the `firephp`, `chromephp` and `phpdebugtoolbar` appenders are
+already defined in the `app/config/logging.xml` and thus don't need to be
+defined in the `app/project/config/logging.xml` file. Beware that it's currently
+not possible to remove appenders from already defined loggers or add appenders
+with names that already exist.
+
 ## Support for other logging libraries
 
 If you want to use other logging libraries you can create loggers, logger
@@ -198,7 +240,7 @@ to the appropriate format you want to use for your custom loggers.
 
 To include e.g. an `Analog` handler for FirePHP logging you could do:
 
-```
+```php
 <?php
 namespace Your\Namespace\Logging;
 
@@ -298,15 +340,17 @@ There is a `Honeybee\Agavi\Logging\Psr3Logger` class available that wraps an
 method `getPsr3Logger()` that you can call to get the Agavi logger as a PSR-3
 compatible logger instance:
 
-```
-    $this->getContext()->getLoggerManager()
-    ->getLogger('default')
-    ->getPsr3Logger()
-    ->log(
-        \Psr\Log\LogLevel::CRITICAL,
-        'Everybody get down, this {beep}',
-        array('beep' => 'is a robbery!!!11')
-    );
+```php
+$this->getContext()->getLoggerManager()
+->getLogger('default')
+->getPsr3Logger()
+->log(
+    \Psr\Log\LogLevel::CRITICAL,
+    'Everybody get down, this {beep}',
+    array(
+        'beep' => 'is a robbery!!!11'
+    )
+);
 ```
 
 You get the logger you wish from the logger manager, ask it for a PSR-3
@@ -341,8 +385,14 @@ as placeholder names for the templated string and their values as replacements.
 The following will log an error to the default logger with scope `FOO` and the
 message text `This will be replaced.`:
 
-```
-    $this->getContext()->getLoggerManager->logError("This will be {foo}", array('foo' => 'replaced.', 'scope' => 'FOO'));
+```php
+$this->getContext()->getLoggerManager->logError(
+    "This will be {foo}",
+    array(
+        'foo' => 'replaced.',
+        'scope' => 'FOO'
+    )
+);
 ```
 
 ## Suggestions
