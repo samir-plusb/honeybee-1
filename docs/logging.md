@@ -49,6 +49,7 @@ for all logging calls via the `$this->log<Level>()` methods.
 ## Usage examples
 
 The following are a few ways to log messages in _actions_ and _views_:
+
 ```php
 $this->logDebug('Trying to import entries into', $this->getModule(), "for the specified consumer '$consumer_name'.");
 
@@ -71,18 +72,29 @@ $this->logTrace('Everybody get down, this {beep}', array('beep' => 'is a robbery
 $this->logCritical('{fail}', array('fail' => $e));
 $this->logCritical($e);
 ```
+
 All of the above method calls are convenience shortcuts of the default Agavi
 way of logging which usually is: get the logger manager from the context and
 then log to a specific logger or log a message to all loggers.
+
 ```php
-    $this->getContext()->getLoggerManager()->getLogger('special')->log('This error message goes to the special logger and its appenders', \AgaviLogger::ERROR);
-    $this->getContext()->getLoggerManager()->log('This debug message goes to all loggers and its appenders', \AgaviLogger::DEBUG);
+$lm = $this->getContext()->getLoggerManager();
+$lm->log(
+    'This debug message goes to all loggers and its appenders',
+    \AgaviLogger::DEBUG
+);
+$lm->getLogger('special')->log(
+    'This error message goes to the special logger and its appenders',
+    \AgaviLogger::ERROR
+);
 ```
 
 The method signature of the `\AgaviLoggerManager` log method is as follows:
+
 ```php
 public function log($message, $loggerOrSeverity = null)
 ```
+
 When you specify just a message it will be logged to all loggers as there is no
 log level or severity given. When you specify a message and an Agavi log level a
 message with that log level is created and logged to all loggers. If you supply
@@ -97,11 +109,13 @@ layout.
 
 Log an `ERROR` message to the default logger with the default scope of
 `Honeybee` (see `Honeybee\Agavi\Logging\LoggerManager`):
+
 ```php
 $logger_manager->logError($log_message);
 ```
 
 Log an `ERROR` message to the `error` logger with scope `SCOPE`:
+
 ```php
 $logger_manager->logTo('error', \AgaviLogger::ERROR, 'SCOPE', $log_message);
 ```
@@ -111,6 +125,7 @@ with a scope set to the current classname and a log message content that
 consists of a simple string, an exception string representation (including a
 stacktrace and some system information) and a `Honeybee\Dat0r\Document` string
 representation (that includes it's identifier):
+
 ```php
 $logger_manager->logTo(null, \AgaviLogger::ERROR, get_class($this), array(
     "some hints", $exception, $honeybee_document)
@@ -119,6 +134,7 @@ $logger_manager->logTo(null, \AgaviLogger::ERROR, get_class($this), array(
 
 Log an `ERROR` message with scope set to the current classname to all loggers
 that are responsible for `ERROR` messages.
+
 ```php
 $logger_manager->logToAll(\AgaviLogger::ERROR, get_class($this), $log_message);
 ```
@@ -158,6 +174,7 @@ a request. When the logger logs it logs all messages from that request.
 The default Monolog setup uses the `DefaultProcessor` that adds several system,
 Agavi and application specific information to the `$extra` array of Monolog to
 ease debugging in case of critical errors:
+
 ```json
 {
   "app_name":"Honeybee CMF",
@@ -179,6 +196,7 @@ ease debugging in case of critical errors:
   "raw_referer":"http://honeybee-showcase.dev/de/"
 }
 ```
+
 Similar additional infos are added for authentication related log messages via
 the `VerboseLoggerAppender` that is used for the `auth` logger. You can reuse
 that verbose appender for other loggers as well.
@@ -199,6 +217,7 @@ whose names start with `development` for all contexts (e.g. `console` and `web`)
 and add the `PhpDebugToolbarLoggerAppender` to development environments without
 `-testing` as a name suffix in the web context only (as that appender modifies
 the HTML source code):
+
 ```xml
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     xmlns="http://agavi.org/agavi/config/parts/logging/1.0"
@@ -224,6 +243,7 @@ the HTML source code):
     </ae:configuration>
 </ae:configurations>
 ```
+
 Please note, that the `firephp`, `chromephp` and `phpdebugtoolbar` appenders are
 already defined in the `app/config/logging.xml` and thus don't need to be
 defined in the `app/project/config/logging.xml` file. Beware that it's currently
@@ -257,6 +277,7 @@ as placeholder names for the templated string and their values as replacements.
 
 The following will log an error to the default logger with scope `FOO` and the
 message text `This will be replaced.`:
+
 ```php
 $this->getContext()->getLoggerManager->logError(
     "This will be {foo}",
@@ -278,6 +299,7 @@ There is a `Honeybee\Agavi\Logging\Psr3Logger` class available that wraps an
 `\AgaviLogger` instance. The `Honeybee\Agavi\Logging\Logger` has a convenience
 method `getPsr3Logger()` that you can call to get the Agavi logger as a PSR-3
 compatible logger instance:
+
 ```php
 $this->getContext()->getLoggerManager()
 ->getLogger('default')
@@ -290,6 +312,7 @@ $this->getContext()->getLoggerManager()
     )
 );
 ```
+
 You get the logger you wish from the logger manager, ask it for a PSR-3
 compatible instance of itself and log a message with the appropriate PSR-3 log
 level and context needed.
@@ -303,6 +326,7 @@ a logger appender for your library that converts the given Agavi logger message
 to the appropriate format you want to use for your custom loggers.
 
 To include e.g. an `Analog` handler for FirePHP logging you could do:
+
 ```php
 <?php
 namespace Your\Namespace\Logging;
@@ -384,6 +408,7 @@ class AnalogLoggerAppender extends \AgaviLoggerAppender
     }
 }
 ```
+
 You are not tied to only use custom logger appenders. Via `logging.xml` file
 it's possible to use custom logger classes and custom layouts as well. You may
 as well format and create the given messages directly in your appender or even
@@ -401,7 +426,7 @@ you leave this file searching the web for "logging best practices":
 - use monitoring and alerting for your logs (certain conditions, file sizes)
 - put logs somewhere to visualize and query them (use e.g. logstash + kibana)
 - use different settings in production and development environments
-- ...<insert more here>...
+- ...insert more here...
 
 ## TBD / Ideas / Misc
 
