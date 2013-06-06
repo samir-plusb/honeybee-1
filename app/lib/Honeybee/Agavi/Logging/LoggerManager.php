@@ -339,6 +339,13 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
 
         $agavi_context = \AgaviContext::getInstance();
 
+        $remote_addr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+        $remote_addr .= isset($_SERVER['REMOTE_PORT']) ? ':' . $_SERVER['REMOTE_PORT'] : '';
+        $server_name = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
+        $server_name .= isset($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '';
+        $server_addr = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '';
+        $server_addr .= isset($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '';
+
         $extra['Timestamp'] = \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)))->format('Y-m-d\TH:i:s.uP');
         $extra['Application Name'] = \AgaviConfig::get('core.app_name');
         $extra['Agavi Context'] = $agavi_context->getName();
@@ -347,13 +354,46 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
         $extra['PHP Version'] = phpversion();
         $extra['System'] = php_uname();
         $extra['Process ID'] = getmypid();
+
+        $ssh_connection = getenv('SSH_CONNECTION');
+        if (!empty($ssh_connection))
+        {
+            $extra['SSH Connection'] = $ssh_connection;
+        }
+
+        $user = getenv('USER');
+        if (!empty($user))
+        {
+            $extra['CLI User'] = $user;
+            $extra['CLI Home'] = getenv('HOME');
+        }
+
         $extra['Memory Usage'] = self::formatBytes(memory_get_usage(true));
         $extra['Memory Peak Usage'] = self::formatBytes(memory_get_peak_usage(true));
-        $extra['Remote Address'] = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'console';
 
-        if (isset($_SERVER['X_FORWARDED_FOR']))
+        if (!empty($_SERVER['SERVER_SOFTWARE']))
+        {
+            $extra['Server Software'] = $_SERVER['SERVER_SOFTWARE'];
+        }
+
+        if (!empty($remote_addr))
+        {
+            $extra['Remote Address'] = $remote_addr;
+        }
+
+        if (!empty($_SERVER['X_FORWARDED_FOR']))
         {
             $extra['X-Forwarded-For'] = $_SERVER['X_FORWARDED_FOR'];
+        }
+
+        if (!empty($server_name))
+        {
+            $extra['Server Name'] = $server_name;
+        }
+
+        if (!empty($server_addr))
+        {
+            $extra['Server Address'] = $server_addr;
         }
 
         if (null !== ($request = $agavi_context->getRequest()))
@@ -434,6 +474,114 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
         {
             return json_encode($obj);
         }
+    }
+
+    /**
+     * @return array with additional logging information as key => value
+     */
+    public static function getExtraInformation()
+    {
+        $agavi_context = \AgaviContext::getInstance();
+
+        $request_uri = '';
+        if (php_sapi_name() !== 'cli' && isset($_SERVER['REQUEST_URI']))
+        {
+            $request_uri = $_SERVER['REQUEST_URI'];
+        }
+        else
+        {
+            $request_uri = $agavi_context->getRouting()->getInput();
+        }
+
+        $matched_module_and_action = '';
+        $matched_routes = '';
+        $route_names_array = $agavi_context->getRequest()->getAttribute('matched_routes', 'org.agavi.routing');
+        if (!empty($route_names_array))
+        {
+            $main_route = $agavi_context->getRouting()->getRoute(reset($route_names_array));
+            $matched_module_and_action = $main_route['opt']['module'] . '/' . $main_route['opt']['action'];
+            $matched_routes = implode(', ', $route_names_array);
+        }
+
+        $server_name = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
+        $server_name .= isset($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '';
+
+        $server_addr = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '';
+        $server_addr .= isset($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '';
+
+        $remote_addr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+        $remote_addr .= isset($_SERVER['REMOTE_PORT']) ? ':' . $_SERVER['REMOTE_PORT'] : '';
+
+        $extra = array(
+            'app_name' => \AgaviConfig::get('core.app_name'),
+            'agavi_context' => $agavi_context->getName(),
+            'agavi_environment' => \AgaviConfig::get('core.environment'),
+            'agavi_version' => \AgaviConfig::get('agavi.version'),
+            'php_version' => phpversion(),
+            'system' => php_uname(),
+            'pid' => getmypid(),
+            'memory_usage' => self::formatBytes(memory_get_usage(true)),
+            'memory_peak_usage' => self::formatBytes(memory_get_peak_usage(true))
+        );
+
+        if (!empty($_SERVER['SERVER_SOFTWARE']))
+        {
+            $extra['server_software'] = $_SERVER['SERVER_SOFTWARE'];
+        }
+
+        $extra['remote_addr'] = $remote_addr;
+
+        if (!empty($_SERVER['X_FORWARDED_FOR']))
+        {
+            $extra['x_forwarded_for'] = $_SERVER['X_FORWARDED_FOR'];
+        }
+
+        if (!empty($server_name))
+        {
+            $extra['server_name'] = $server_name;
+        }
+
+        if (!empty($server_addr))
+        {
+            $extra['server_addr'] = $server_addr;
+        }
+
+        /*
+         * the following is only accessible validated or while initialization
+         */
+        /*
+        'http_host' => isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '',
+        'http_accept' => isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : '',
+        'http_accept_language' => isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '',
+        'http_accept_encoding' => isset($_SERVER['HTTP_ACCEPT_ENCODING']) ? $_SERVER['HTTP_ACCEPT_ENCODING'] : '',
+        'http_cookie' => isset($_SERVER['HTTP_COOKIE']) ? $_SERVER['HTTP_COOKIE'] : '',
+        'http_connection' => isset($_SERVER['HTTP_CONNECTION']) ? $_SERVER['HTTP_CONNECTION'] : '',
+        'http_cache_control' => isset($_SERVER['HTTP_CACHE_CONTROL']) ? $_SERVER['HTTP_CACHE_CONTROL'] : '',
+         */
+
+        $extra['request_uri'] = $request_uri;
+        $extra['request_method'] = $agavi_context->getRequest()->getMethod();
+        $extra['matched_module_and_action'] = $matched_module_and_action;
+        $extra['matched_routes'] = $matched_routes;
+
+        // see ZendAclSecurityUser or user class defined in factories.xml
+        $extra['raw_user_agent'] = $agavi_context->getUser()->getRawUserAgent();
+        $extra['raw_referer'] = $agavi_context->getUser()->getRawReferer();
+
+        $ssh_connection = getenv('SSH_CONNECTION');
+        if (!empty($ssh_connection))
+        {
+            $extra['ssh_connection'] = $ssh_connection;
+        }
+
+        $user = getenv('USER');
+        if (!empty($user))
+        {
+            $extra['CLI User'] = $user;
+            $extra['CLI Home'] = getenv('HOME');
+        }
+
+        return $extra;
     }
 
     /**
