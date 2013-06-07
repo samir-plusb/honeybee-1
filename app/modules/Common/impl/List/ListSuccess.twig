@@ -86,6 +86,7 @@
 <section class="row-fluid">
     <section class="well toolbar secondary">
         <ul class="toolset">
+            {% if true == select_only_mode or false == readonly %}
             <li class="tool select-all">
                 <a class="select-all-toggle hb-icon-checkmark-2" data-bind="click: selectAllToggle" title="Alle Einträge dieser Seite ab-/auswählen"> {{tm._('Alle auswählen',  translation_domain)}}</a>
             </li>
@@ -108,6 +109,7 @@
                 </ul>
             </li>
             {% endif %}
+            {% endif %}
         </ul>
 {# **************************************************
     ListData Pagination Top
@@ -121,12 +123,11 @@
         <table class="data-list table table-striped table-bordered">
             <thead>
                 <tr>
+                    {% if true == select_only_mode or false == readonly %}
                     <th class="list_item_checkbox">
-                        <!-- @todo These values should be places to the bottom of the document. -->
-                        <input type="hidden" class="list-data" value="{{list_data|json_encode}}" />
                         <label title="{{tm._('Alle auswählen', translation_domain)}}"><input type="checkbox" data-bind="checked: all_selected" /></label>
                     </th>
-
+                    {% endif %}
                     {% for fieldname, field in list_fields %}
                         {% set sorting_active = (sorting.field == fieldname) %}
 
@@ -179,11 +180,11 @@
                             "id": $data.data.identifier, 
                             "class":  $data.css_classes 
                         }'>
-
+                    {% if true == select_only_mode or false == readonly %}
                     <td class="list_item_checkbox">
                         <label title="{{tm._('Eintrag wählen', translation_domain)}}"><input type="checkbox" data-bind="checked: selected" /></label>
                     </td>
-
+                    {% endif %}
                     {% for list_template in templates%}
                         {{list_template|raw}}
                     {% endfor %}
@@ -252,6 +253,8 @@
     {% endif %}
     </section>
 </section>
+
+<input type="hidden" class="list-data" value="{{list_data|json_encode}}" />
 
 <!-- **************************************************
 Modal dialogs

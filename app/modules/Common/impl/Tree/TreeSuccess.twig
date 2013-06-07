@@ -12,7 +12,9 @@
             {% else %}
             <span class="node-toggle">〉</span>
             {% endif %}
+            {% if true == select_only_mode or false == readonly %}
             <input type="checkbox" class="check" />
+            {% endif %}
             <span class="name">{{data.label}}</span>
         </label>
         {% if false == select_only_mode and false == readonly %}
