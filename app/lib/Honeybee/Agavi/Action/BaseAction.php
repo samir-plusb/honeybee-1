@@ -4,8 +4,7 @@ namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Agavi\Routing\ModuleRoutingCallback;
-use Honeybee\Core\Log\ILogger;
-use Honeybee\Core\Log\Logger;
+use Honeybee\Agavi\Logging\ILogger;
 
 /**
  * The BaseAction serves as the base action to all actions implemented inside of honeybee.
