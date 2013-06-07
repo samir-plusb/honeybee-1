@@ -6,25 +6,7 @@ class FieldInputRenderer extends FieldRenderer
 {
     protected function doRender(Document $document)
     {
-        $tm = $this->getTranslationManager();
-        $td = $this->getTranslationDomain($document);
-
-        $fieldName = $this->getField()->getName();
-        $widgetType = $this->getWidgetType($document);
-
-        $payload = array( 
-            'fieldName' => $fieldName,
-            'field' => $this->getField(),
-            'inputName' => $this->generateInputName($document),
-            'fieldId' => 'input-' . $fieldName,
-            'placeholder' => $this->getField()->getOption('placesholder', ''),
-            'fieldValue' => $this->renderFieldValue($document),
-            'widgetType' => $widgetType,
-            'hasWidget' => ($widgetType !== NULL),
-            'widgetOptions' => $this->renderWidgetOptions($document),
-            'tm' => $tm,
-            'td' => $td
-        );
+        $payload = $this->getPayload($document);
 
         if (preg_match('/\.twig$/', $this->getTemplateName()))
         {
@@ -42,6 +24,29 @@ class FieldInputRenderer extends FieldRenderer
 
             return $content;
         }
+    }
+
+    protected function getPayload(Document $document)
+    {
+        $tm = $this->getTranslationManager();
+        $td = $this->getTranslationDomain($document);
+
+        $fieldName = $this->getField()->getName();
+        $widgetType = $this->getWidgetType($document);
+
+        return array( 
+            'fieldName' => $fieldName,
+            'field' => $this->getField(),
+            'inputName' => $this->generateInputName($document),
+            'fieldId' => 'input-' . $fieldName,
+            'placeholder' => $this->getField()->getOption('placesholder', ''),
+            'fieldValue' => $this->renderFieldValue($document),
+            'widgetType' => $widgetType,
+            'hasWidget' => ($widgetType !== NULL),
+            'widgetOptions' => $this->renderWidgetOptions($document),
+            'tm' => $tm,
+            'td' => $td
+        );
     }
 
     protected function getWidgetType(Document $document)

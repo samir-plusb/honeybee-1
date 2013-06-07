@@ -169,6 +169,9 @@
                 <ae:parameter name="version">
                     <ae:parameter name="input">KoReadOnlyFieldInputRenderer</ae:parameter>
                 </ae:parameter>
+                <ae:parameter name="role">
+                    <ae:parameter name="input">AclRoleSelectFieldInputRenderer</ae:parameter>
+                </ae:parameter>
             </setting>
 
             <!--

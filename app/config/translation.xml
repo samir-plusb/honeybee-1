@@ -66,8 +66,18 @@
                     </ae:parameter>
                 </message_translator>
             </translator>
+            <translator domain="user">
+                <message_translator class="AgaviSimpleTranslator">
+                     <ae:parameter name="roles">
+                        <ae:parameter name="de">
+                            <ae:parameter name="no-perms">Nutzer ohne Rechte</ae:parameter>
+                            <ae:parameter name="honeybee-editor">Nutzer mit allen Rechten (Administrator)</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+                </message_translator>
+            </translator>
         </translators>
-
+        
     </ae:configuration>
 
     <!-- custom translation.xml files from all project modules -->

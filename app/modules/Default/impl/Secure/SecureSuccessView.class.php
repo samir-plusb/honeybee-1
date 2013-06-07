@@ -15,9 +15,8 @@ class Default_Secure_SecureSuccessView extends DefaultBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeHtml(\AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
+    public function executeHtml(\AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
-        $this->setupHtml($parameters);
         $message = $this->translation_manager->_(self::DEFAULT_MESSAGE);
         $this->setAttribute('_title', $message);
         $this->getResponse()->setHttpStatusCode('503');

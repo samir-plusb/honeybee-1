@@ -1,0 +1,10 @@
+<div class="control-group field-wrapper-{{ fieldName }}">
+    <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td)|raw}}</label>
+    <div class="controls">
+        <select name="{{ inputName }}" id="{{ fieldId }}" title="{{ placeholder }}" class="span11">
+            {% for optVal, optLabel in selectValues %}
+            <option {% if optVal == fieldValue %} selected="selected" {% endif %} value="{{ optVak }}">{{ optLabel }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>

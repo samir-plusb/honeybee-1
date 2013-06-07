@@ -34,6 +34,7 @@
                             <ae:parameter name="state">Workflow Schritt</ae:parameter>
                             <ae:parameter name="edit">Bearbeiten</ae:parameter>
                             <ae:parameter name="delete">Löschen</ae:parameter>
+                            <ae:parameter name="role">Rolle</ae:parameter>
 
                             <!-- reference batch dialogs -->
                             <ae:parameter name="batch_actions">Stapelverarbeitung</ae:parameter>
@@ -82,6 +83,9 @@
                         <ae:parameter name="de">
                             <ae:parameter name="edit-form-title">User erstellen/bearbeiten</ae:parameter>
                             <ae:parameter name="meta">Metadaten</ae:parameter>
+                            <ae:parameter name="content">Inhalte</ae:parameter>
+                            <ae:parameter name="main">Stammdaten</ae:parameter>
+                            <ae:parameter name="privledges">Zugriffsrechte</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
 

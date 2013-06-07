@@ -24,6 +24,7 @@
             <autoload name="LocationInputRenderer">%core.lib_dir%/renderer/field/Input/LocationInputRenderer.class.php</autoload>
             <autoload name="KoReadOnlyFieldInputRenderer">%core.lib_dir%/renderer/field/Input/KoReadOnlyFieldInputRenderer.class.php</autoload>
             <autoload name="BooleanFieldInputRenderer">%core.lib_dir%/renderer/field/Input/BooleanFieldInputRenderer.class.php</autoload>
+            <autoload name="AclRoleSelectFieldInputRenderer">%core.lib_dir%/renderer/field/Input/AclRoleSelectFieldInputRenderer.class.php</autoload>
             <!-- 
                 third party face detection lib 
             -->

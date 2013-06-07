@@ -3,6 +3,7 @@
 namespace Honeybee\Agavi\User;
 
 use Zend\Permissions\Acl;
+use Honeybee\Core\Dat0r\Document;
 
 /**
  * The ZendAclSecurityUser is responseable for detecting required scripts and deploying them for your view.
@@ -45,6 +46,11 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
         }
     }
 
+    public function getAvailableRoles()
+    {
+        return array_keys(($this->accessConfig['roles']));
+    }
+
     protected function createZendAcl()
     {
         $zendAcl = new Acl\Acl();
@@ -52,18 +58,13 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
         foreach ($this->accessConfig['resources'] as $resource => $def)
         {
             $zendAcl->addResource($resource, $def['parent']);
-            // deny all actions to all users per default to require explicit grants.
-            foreach ($def['actions'] as $action)
-            {
-                $zendAcl->deny(self::ALL_USERS_ID, $resource, $action);
-            }
         }
+        $zendAcl->deny();
 
         // setup our roles
         foreach ($this->accessConfig['roles'] as $role => $def)
         {
             $zendAcl->addRole($role, $def['parent']);
-
             // apply all denies for the current role.
             foreach ($def['acl']['deny'] as $deny)
             {
@@ -88,7 +89,6 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
                     throw new \InvalidArgumentException("Undefined acl resource action '$operation' found in credential config!");
                 }
                 $resource = $this->accessConfig['resource_actions'][$operation];
-
                 $zendAcl->allow($role, $resource, $operation, $this->createAssertion($assertionTypeKey));
             }
         }
