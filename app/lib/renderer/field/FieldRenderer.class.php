@@ -68,4 +68,19 @@ abstract class FieldRenderer implements IRenderer
 
         return $baseDir . $templateName;
     }
+
+    protected function isReadonly(Document $document)
+    {
+        $user = AgaviContext::getInstance()->getUser();
+        $module = $document->getModule();
+        $workflowStep = $document->getWorkflowTicket()->getWorkflowStep();
+
+        $writeAction = sprintf('%s.%s::write', $module->getOption('prefix'), $workflowStep);
+        $createAction = sprintf('%s::create', $module->getOption('prefix'));
+
+        $shortId = $document->getShortId();
+        $requiredCredential = empty($shortId) ? $createAction : $writeAction;
+
+        return ! $user->isAllowed($document, $requiredCredential);
+    }
 }

@@ -24,16 +24,7 @@ class DocumentInputRenderer extends DocumentRenderer
 
     protected function doRender(Document $document)
     {
-        $payload = array(
-            'tabs' => $this->renderTabs($document),
-            'tm' => $this->getTranslationManager(),
-            'td' => $this->getTranslationDomain(),
-            'ro' => AgaviContext::getInstance()->getRouting(),
-            'modulePrefix' => $document->getModule()->getOption('prefix'),
-            'controllerOptions' => htmlspecialchars(json_encode($this->getControllerOptions($document))),
-            'editLink' => $this->getRouteLink('workflow.run'),
-            'listLink' => $this->getRouteLink('list'),
-        );
+        $payload = $this->getPayload($document);
 
         if (preg_match('/\.twig$/', $this->getTemplateName()))
         {
@@ -51,6 +42,21 @@ class DocumentInputRenderer extends DocumentRenderer
 
             return $content;
         }
+    }
+
+    protected function getPayload(Document $document)
+    {
+        return array(
+            'tabs' => $this->renderTabs($document),
+            'tm' => $this->getTranslationManager(),
+            'td' => $this->getTranslationDomain(),
+            'ro' => AgaviContext::getInstance()->getRouting(),
+            'modulePrefix' => $document->getModule()->getOption('prefix'),
+            'controllerOptions' => htmlspecialchars(json_encode($this->getControllerOptions($document))),
+            'editLink' => $this->getRouteLink('workflow.run'),
+            'listLink' => $this->getRouteLink('list'),
+            'readonly' => $this->isReadonly($document)
+        );
     }
 
     protected function renderTabs(Document $document)
@@ -191,6 +197,7 @@ class DocumentInputRenderer extends DocumentRenderer
 
     protected function getControllerOptions(Document $document)
     {
+
         return array(
             'autobind' => TRUE, 
             'identifier' => $document->getIdentifier(),
@@ -198,7 +205,8 @@ class DocumentInputRenderer extends DocumentRenderer
             'revision' => $document->getRevision(),
             'uuid' => $document->getValue('uuid'),
             'language' => $document->getValue('language'),
-            'version' => $document->getValue('version')
+            'version' => $document->getValue('version'),
+            'readonly' => $this->isReadonly($document)
         );
     }
 }

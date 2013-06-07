@@ -6,7 +6,8 @@
     {% else %}
         <div class="controls">
             <input type="text" name="{{ inputName }}" value="{{ fieldValue }}"
-                id="{{ fieldId }}" placeholder="{{ placeholder }}" class="span11" />
+                id="{{ fieldId }}" placeholder="{{ placeholder }}" class="span11" 
+                {% if true == readonly %} readonly="readonly" {% endif %} />
         </div>
     {% endif %}
 </div>

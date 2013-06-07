@@ -57,6 +57,11 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
 
     localize: function()
     {
+        if (this.options.readonly)
+        {
+            return;
+        }
+
         var req = honeybee.core.Request.curry(
             this.options.localize_url,
             this.location.values(), 'get', 'json'
@@ -98,6 +103,7 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
         {
             return;
         }
+
         this.hideSelectLocationDialog();
         this.location.longitude(location.longitude());
         this.location.latitude(location.latitude());
@@ -167,42 +173,45 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
         var geocoder = new google.maps.Geocoder();
 
         var that = this;
-        google.maps.event.addListener(map, 'click', function(event) {
-            marker.setPosition(event.latLng);
-            that.is_processing(true);
-            geocoder.geocode({'latLng': event.latLng}, function(results, status) 
-            {
-                if (status == google.maps.GeocoderStatus.OK) 
+        if (! this.options.readonly)
+        {
+            google.maps.event.addListener(map, 'click', function(event) {
+                marker.setPosition(event.latLng);
+                that.is_processing(true);
+                geocoder.geocode({'latLng': event.latLng}, function(results, status) 
                 {
-                    if (results[0]) 
+                    if (status == google.maps.GeocoderStatus.OK) 
                     {
-                        var components = results[0]['address_components'];
-                        var data = {};
-                        for (var i = 0; i < components.length; i++)
+                        if (results[0]) 
                         {
-                            var type = components[i].types[0];
-                            data[type] = components[i].long_name;
-                        }
+                            var components = results[0]['address_components'];
+                            var data = {};
+                            for (var i = 0; i < components.length; i++)
+                            {
+                                var type = components[i].types[0];
+                                data[type] = components[i].long_name;
+                            }
 
-                        that.onLocationSelected(
-                            honeybee.widgets.LocationWidget.Location.createFromServiceResp({
-                                street: data.route,
-                                housenumber: data.street_name,
-                                uzip: data.postal_code,
-                                city: data.locality,
-                                latitude: event.latLng.lat(),
-                                longitude: event.latLng.lng()
-                            })
-                        );
-                        that.is_processing(false);
+                            that.onLocationSelected(
+                                honeybee.widgets.LocationWidget.Location.createFromServiceResp({
+                                    street: data.route,
+                                    housenumber: data.street_name,
+                                    uzip: data.postal_code,
+                                    city: data.locality,
+                                    latitude: event.latLng.lat(),
+                                    longitude: event.latLng.lng()
+                                })
+                            );
+                            that.is_processing(false);
+                        }
+                    } 
+                    else 
+                    {
+                        alert("Geocoder failed due to: " + status);
                     }
-                } 
-                else 
-                {
-                    alert("Geocoder failed due to: " + status);
-                }
+                });
             });
-        });
+        }
     }
 });
 

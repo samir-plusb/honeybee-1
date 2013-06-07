@@ -78,6 +78,11 @@ honeybee.widgets.TagsList = honeybee.widgets.Widget.extend({
     // ##################################
     onInput: function(data, event)
     {
+        if (this.options.readonly)
+        {
+            return;
+        }
+
         if (13 === event.which)
         {
             if (this.is_valid())
@@ -117,6 +122,11 @@ honeybee.widgets.TagsList = honeybee.widgets.Widget.extend({
 
     addCurrentTag: function()
     {
+        if (this.options.readonly)
+        {
+            return;
+        }
+
         var tag = this.current_tag();
         var idx = -1;
         for (var i = 0; i < this.tags().length; i++) // search for tag inside allready added tags
@@ -146,16 +156,26 @@ honeybee.widgets.TagsList = honeybee.widgets.Widget.extend({
 
     removeTag: function(tag)
     {
+        if (this.options.readonly)
+        {
+            return;
+        }
+
         this.tags.remove(tag);
         this.has_focus(true);
         this.fire('tagschanged', [ this.fieldname(), this.tags()]);
     },
 
-    // #########################
-    // #     working funcs     #
-    // #########################
+    // ##############################
+    // #     autocomplete funcs     #
+    // ##############################
     initTypeahead: function()
     {
+        if (this.options.readonly)
+        {
+            return;
+        }
+
         var that = this;
         this.element.find('.tagslist-input').typeahead({
             property: this.options.autocomplete_display_prop,

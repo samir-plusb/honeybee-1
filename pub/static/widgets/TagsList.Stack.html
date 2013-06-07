@@ -1,8 +1,9 @@
 <input type="text" placeholder="Hinzufügen" class="span11 tagslist-input"
        data-bind='value: current_tag,
-                   valueUpdate: "afterkeydown",
-                   hasfocus: has_focus,
-                   event: { keypress: onInput }' />
+                  valueUpdate: "afterkeydown",
+                  hasfocus: has_focus,
+                  event: { keypress: onInput },
+                  disable: options.readonly' />
 <input type="hidden" value=""
        data-bind="attr: { name: fieldname }" />
 <ul class="tagslist-value-list" style="display: none;"
@@ -17,7 +18,7 @@
   <ul data-bind="foreach: tags" class="tagslist-list nav nav-pills nav-stacked">
       <li class="tagslist-tag">
           <a href="#" onclick="return false;">
-              <span data-bind="text: $data.label" /> <i data-bind="click: function(data) { $parent.removeTag(data); }" class="hb-icon-cancel"></i>
+              <span data-bind="text: $data.label" /> <i data-bind="click: function(data) { $parent.removeTag(data); }, visible: ! $parent.options.readonly" class="hb-icon-cancel"></i>
           </a>
       </li>
   </ul>

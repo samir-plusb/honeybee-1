@@ -29,7 +29,7 @@ abstract class DocumentRenderer implements IRenderer
         return $this->doRender($payload);
     }
 
-    protected function renderTwig( array $payload )
+    protected function renderTwig(array $payload)
     {
         $loader = new Twig_Loader_Filesystem($this->getTemplateDirectory());
         $twig = new Twig_Environment($loader);
@@ -56,12 +56,27 @@ abstract class DocumentRenderer implements IRenderer
     {
         $prefix = $this->getModule()->getOption('prefix');
         $route = sprintf('%s.%s', $prefix, $name);
-        
+
         return AgaviContext::getInstance()->getRouting()->gen($route);
     }
 
     public function getTranslationDomain()
     {
         return $this->getModule()->getOption('prefix') . '.rendering';
+    }
+
+    protected function isReadonly(Document $document)
+    {
+        $user = AgaviContext::getInstance()->getUser();
+        $module = $document->getModule();
+        $workflowStep = $document->getWorkflowTicket()->getWorkflowStep();
+
+        $writeAction = sprintf('%s.%s::write', $module->getOption('prefix'), $workflowStep);
+        $createAction = sprintf('%s::create', $module->getOption('prefix'));
+
+        $shortId = $document->getShortId();
+        $requiredCredential = empty($shortId) ? $createAction : $writeAction;
+
+        return ! $user->isAllowed($document, $requiredCredential);
     }
 }

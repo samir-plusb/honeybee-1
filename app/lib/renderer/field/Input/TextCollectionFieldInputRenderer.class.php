@@ -11,6 +11,8 @@ class TextCollectionFieldInputRenderer extends FieldInputRenderer
 
     protected function getWidgetOptions(Document $document)
     {
+        $parentOptions = parent::getWidgetOptions($document);
+
         $fieldname = $this->getField()->getName();
         $texts = $document->getValue($fieldname);
         $texts = is_array($texts) ? $texts : array();
@@ -25,12 +27,11 @@ class TextCollectionFieldInputRenderer extends FieldInputRenderer
             );
         }
 
-        return array(
-            'autobind' => TRUE,
+        return array_merge($parentOptions, array(
             'fieldname' => $this->generateInputName($document),
             'max' => 0,
             'tags' => $tags,
             'tpl' => 'Stack'
-        );
+        ));
     }
 }

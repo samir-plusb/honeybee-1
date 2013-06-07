@@ -34,12 +34,15 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     {
         this.parent();
 
-        if (this.options.autocomplete)
+        if (! this.options.readonly)
         {
-            this.initAutoComplete();
-        }
+            if (this.options.autocomplete)
+            {
+                this.initAutoComplete();
+            }
 
-        window.addEventListener('message', this.onDomMessagePostReceived.bind(this), false);
+            window.addEventListener('message', this.onDomMessagePostReceived.bind(this), false);
+        }
     },
 
     initKnockoutProperties: function()

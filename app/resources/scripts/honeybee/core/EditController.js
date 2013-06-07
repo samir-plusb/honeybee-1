@@ -29,6 +29,9 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         // basic member initialization
         this.element = element;
         this.options = options;
+
+        console.log(options);
+
         this.widgets = {};
         // setup knockout properties
         this.initKnockoutProperties();
@@ -46,9 +49,9 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
 
     onFormSubmit: function()
     {
-        if (this.request_pending())
+        if (this.request_pending() || this.options.readonly)
         {
-            return;
+            return false;
         }
 
         var that = this;

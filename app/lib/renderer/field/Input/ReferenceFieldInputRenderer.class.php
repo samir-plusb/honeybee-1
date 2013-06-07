@@ -12,6 +12,8 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
 
     protected function getWidgetOptions(Document $document)
     {
+        $parentOptions = parent::getWidgetOptions($document);
+
         $tm = AgaviContext::getInstance()->getTranslationManager();
         $references = $this->getField()->getOption(ReferenceField::OPT_REFERENCES);
 
@@ -43,8 +45,7 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
         }
         $routing = AgaviContext::getInstance()->getRouting();
         $maxCount = (int)$this->getField()->getOption(ReferenceField::OPT_MAX_REFERENCES, 0);
-        return array(
-            'autobind' => TRUE,
+        return array_merge($parentOptions, array(
             'event_origin' => $routing->getBaseHref(),
             'autocomplete' => TRUE,
             'autocomp_mappings' => $this->buildAutoCompleteOptions($document),
@@ -60,7 +61,7 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                 'too_long' => $tm->_('maximal erlaubte Anzahl an Verknüpfungen erreicht'),
                 'no_results' => $tm->_('Keine passenden Ergebnisse gefunden')
             )
-        );
+        ));
     }
 
     protected function buildAutoCompleteOptions(Document $document)

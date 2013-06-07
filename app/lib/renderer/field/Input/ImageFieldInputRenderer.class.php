@@ -11,6 +11,8 @@ class ImageFieldInputRenderer extends FieldInputRenderer
 
     protected function getWidgetOptions(Document $document)
     {
+        $parentOptions = parent::getWidgetOptions($document);
+
         $fieldname = $this->getField()->getName();
         $assetIds = $document->getValue($fieldname);
         $texts = is_array($assetIds) ? $assetIds : array();
@@ -36,8 +38,7 @@ class ImageFieldInputRenderer extends FieldInputRenderer
             );
         }
 
-        return array(
-            'autobind' => TRUE,
+        return array_merge($parentOptions, array(
             'fieldname' => $this->generateInputName($document),
             'post_url' => htmlspecialchars_decode(urldecode($routing->gen('asset.update'))),
             'put_url' => htmlspecialchars_decode(urldecode($routing->gen('asset.put'))),
@@ -46,7 +47,7 @@ class ImageFieldInputRenderer extends FieldInputRenderer
             'allowed_types' => isset($this->options['allowed_types']) ? $this->options['allowed_types'] : array('image/png'),
             'aoi_url' => $routing->gen('common.service.detect_face'),
             'popover_pos' => isset($this->options['popover_pos']) ? $this->options['popover_pos'] : 'top'
-        );
+        ));
     }
 
     protected function getTemplateName()

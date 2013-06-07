@@ -11,15 +11,16 @@ class KeyValuesCollectionFieldInputRenderer extends FieldInputRenderer
 
     protected function getWidgetOptions(Document $document)
     {
+        $parentOptions = parent::getWidgetOptions($document);
+
         $fieldname = $this->getField()->getName();
         $attributes = $document->getValue($fieldname);
         $attributes = empty($attributes) ? array() : $attributes;
 
-        return array(
-            'autobind' => TRUE,
+        return array_merge($parentOptions, array(
             'fieldname' => $this->generateInputName($document),
             'data' => $attributes
-        );
+        ));
     }
 
     protected function getTemplateName()

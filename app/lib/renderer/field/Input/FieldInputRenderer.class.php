@@ -44,6 +44,7 @@ class FieldInputRenderer extends FieldRenderer
             'widgetType' => $widgetType,
             'hasWidget' => ($widgetType !== NULL),
             'widgetOptions' => $this->renderWidgetOptions($document),
+            'readonly' => $this->isReadonly($document),
             'tm' => $tm,
             'td' => $td
         );
@@ -83,13 +84,16 @@ class FieldInputRenderer extends FieldRenderer
         $prefix = $document->getModule()->getOption('prefix');
         $widgetSettings = AgaviConfig::get(sprintf('%s.input_widgets', $prefix));
         $fieldname = $this->getField()->getName();
-        $widgetOptions = NULL;
+        $widgetOptions = array();
         
         if (isset($widgetSettings[$fieldname]))
         {
             $widgetDef = $widgetSettings[$fieldname];
             $widgetOptions = $widgetDef['options'];
         }
+
+        $widgetOptions['readonly'] = $this->isReadonly($document); 
+        $widgetOptions['autobind'] = TRUE;
 
         return $widgetOptions;
     }

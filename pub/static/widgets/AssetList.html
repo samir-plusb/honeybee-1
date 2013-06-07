@@ -17,7 +17,7 @@
                 left: $data.x() + 'px' 
             }" class="sortable-dragging" />
         </div>
-        <ul class="image-buttons">
+        <ul class="image-buttons" data-bind="visible: ! $parent.options.readonly">
             <li>
                 <button class="btn btn-success" data-bind="click: function() { $parent.onEditClicked($data); }">
                     <span class="hb-icon-pencil"/>
@@ -40,7 +40,7 @@
     </li>
 <!-- /ko -->
 <!-- ko if: true === $data.dropzone -->
-    <li data-bind="visible: $data.show()" class="dropzone">
+    <li data-bind="visible: $data.show() && ! $parent.options.readonly" class="dropzone">
         <p data-bind="text: $data.label()" />
     </li>
 <!-- /ko -->

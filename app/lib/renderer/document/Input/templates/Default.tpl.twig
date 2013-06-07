@@ -59,7 +59,9 @@
             </fieldset>
             <div class="form-actions">
                 <a href="{{ listLink }}" class="btn" style="margin-right: 20px;"><strong>Abbrechen</strong></a>
-                <button type="submit" class="btn btn-primary"><strong>Speichern</strong></button>
+                {% if readonly == false %}
+                <button type="submit" class="btn btn-primary action-save"><strong>Speichern</strong></button>
+                {% endif %}
             </div>
         </form>
     </div>
