@@ -224,6 +224,11 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         var widget_options = batch_options.widget_options;
         var reference_widget = new honeybee.widgets.Reference(widget_container, widget_options);
 
+        if (widget_options.max === 1)
+        {
+            reference_dialog.find('.settings-reference-batch').css('visibility', 'hidden');
+        }
+        
         assign_trigger.click(function()
         {
             reference_dialog.modal('hide');
