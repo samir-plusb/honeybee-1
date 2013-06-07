@@ -191,16 +191,22 @@
                     {% if false == select_only_mode and false == readonly %}
                     <td class="actions">
                         <div class="btn-group dropdown">
-                            <!-- ko if: $data.workflow.interactive === true -->
-                            <button class="btn btn-primary honeybee-action honeybee-action-edit"
-                                    data-bind="click: function(item, event) { $parent.ctrl.run(false, item); }">
-                                {{tm._('edit', translation_domain)}}
+                            <!-- ko if: $data.workflow.interactive === true && $data.workflow.readonly == true -->
+                            <button class="btn honeybee-action honeybee-action-edit" 
+                                data-bind="click: function(item, event) { $parent.ctrl.run(false, item); }">
+                                {{ tm._('view', translation_domain) }}
                             </button>
                             <!-- /ko -->
-                            <!-- ko if: $data.workflow.interactive !== true -->
-                                <button class="btn btn-primary honeybee-action honeybee-action-edit" disabled="disabled">
-                                    {{tm._('edit', translation_domain)}}
-                                </button>
+                            <!-- ko if: $data.workflow.interactive === true && $data.workflow.readonly == false -->
+                            <button class="btn btn-primary honeybee-action honeybee-action-edit" 
+                                data-bind="click: function(item, event) { $parent.ctrl.run(false, item); }">
+                                {{ tm._('edit', translation_domain) }}
+                            </button>
+                            <!-- /ko -->
+                            <!-- ko if: $data.workflow.interactive != true -->
+                            <button class="btn btn-primary honeybee-action honeybee-action-edit" disabled="disabled">
+                                {{tm._('disabled', translation_domain)}}
+                            </button>
                             <!-- /ko -->
                             <!-- ko if: $data.workflow.gates.length > 0 -->
                             <button class="btn dropdown-toggle btn-primary" data-toggle="dropdown">

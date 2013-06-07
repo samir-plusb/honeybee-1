@@ -270,7 +270,7 @@ class ListAction extends BaseAction
             // batch callbacks and item actions invoked upon an ListController.js
             $documentListItemData = array(
                 'data' => $document->getValues(),
-                'workflow' => array('gates' => $gates, 'interactive' => ($isInteractive && $mayRead))
+                'workflow' => array('gates' => $gates, 'interactive' => ($isInteractive && $mayRead), 'readonly' => !$mayWrite)
             );
             // for interactive workflow states we support custom item actions.
             // they are appended to the default system actions.
