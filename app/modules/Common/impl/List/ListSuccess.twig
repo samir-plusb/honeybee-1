@@ -175,7 +175,7 @@
             <tbody data-bind="foreach: list_items">
                 <tr data-bind='event:{ dragstart: dragStart }, 
                         attr: { 
-                            "draggable": ({{ sidebar_tree_targets|length }} > 0 && $data.workflow.interactive) ? "true" : "false",
+                            "draggable": ({{ sidebar_tree_targets|length }} > 0 && $data.workflow.interactive && ! $data.workflow.readonly) ? "true" : "false",
                             "id": $data.data.identifier, 
                             "class":  $data.css_classes 
                         }'>
