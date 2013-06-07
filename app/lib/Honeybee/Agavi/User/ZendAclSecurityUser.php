@@ -51,6 +51,11 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
         return array_keys(($this->accessConfig['roles']));
     }
 
+    public function getAvailableRoles()
+    {
+        return array_keys(($this->accessConfig['roles']));
+    }
+
     protected function createZendAcl()
     {
         $zendAcl = new Acl\Acl();
