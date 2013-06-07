@@ -240,8 +240,8 @@ honeybee.user.PasswordMeter = honeybee.core.BaseObject.extend({
     isPasswordValid: function()
     {
         return (
-            this.password_spec.getLowercaseCharsCount() > 0 && 
-            this.password_spec.getNumericCharsCount() > 0 && 
+            this.password_spec.getLowercaseCharsCount() >= 2 && 
+            this.password_spec.getUppercaseCharsCount() >= 2 && 
             this.password_spec.getLength() >= 8
         );
     },

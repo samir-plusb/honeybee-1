@@ -3,7 +3,7 @@
     <div class="controls">
         <select name="{{ inputName }}" id="{{ fieldId }}" title="{{ placeholder }}" class="span11">
             {% for optVal, optLabel in selectValues %}
-            <option {% if optVal == fieldValue %} selected="selected" {% endif %} value="{{ optVak }}">{{ optLabel }}</option>
+            <option {% if optVal == fieldValue %} selected="selected" {% endif %} value="{{ optVal }}">{{ optLabel }}</option>
             {% endfor %}
         </select>
     </div>
