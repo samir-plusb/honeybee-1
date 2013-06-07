@@ -265,6 +265,7 @@ class ListAction extends BaseAction
 
             $isInteractive = $workflowManager->isInInteractiveState($document);
             $mayRead = $user->isAllowed($document, sprintf('%s.%s::read', $module->getOption('prefix'), $workflowStep));
+            $mayWrite = $user->isAllowed($document, sprintf('%s.%s::write', $module->getOption('prefix'), $workflowStep));
             // will be passed to the ListItemViewModel.js and is the data available inside all the
             // batch callbacks and item actions invoked upon an ListController.js
             $documentListItemData = array(
@@ -285,7 +286,7 @@ class ListAction extends BaseAction
                     $promptLangKey = sprintf('%s.%s.prompt', $workflowStep, $actionName);
                     $promptMsg = $tm->_($promptLangKey, $translationDomain);
                     $aclAction = sprintf('%s::%s', $module->getOption('prefix'), $actionName);
-                    if ($user->isAllowed($document, $aclAction))
+                    if ($mayWrite && $user->isAllowed($document, $aclAction))
                     {
                         $customActions[] = array(
                             'label' => $tm->_($actionName, $translationDomain),
