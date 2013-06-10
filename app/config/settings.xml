@@ -86,8 +86,7 @@
 
     <ae:configuration environment="development-vagrant">
         <settings>
-            <setting name="auth_provider">Honeybee\Core\Security\Auth\StandardAuthProvider</setting>
-            <!--
+            <!-- <setting name="auth_provider">Honeybee\Core\Security\Auth\StandardAuthProvider</setting> -->
             <setting name="auth_provider">Honeybee\Core\Security\Auth\SimpleAuthProvider</setting>
             <setting name="simple_logins">
                 <ae:parameters>
@@ -102,7 +101,6 @@
                     </ae:parameter>
                 </ae:parameters>
             </setting>
-            -->
         </settings>
     </ae:configuration>
 
