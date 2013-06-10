@@ -6,9 +6,12 @@
   - [Logging via Monolog](#logging-via-monolog)
   - [Additional debugging information](#additional-debugging-information)
   - [Logging in development environments](#logging-in-development-environments)
+    - [Pitfalls of logging via HTTP headers](#pitfalls-of-logging-via-http-headers)
   - [Text representation of well known types](#text-representation-of-well-known-types)
   - [PSR-3 compatible logging](#psr-3-compatible-logging)
   - [Support for other logging libraries](#support-for-other-logging-libraries)
+  - [Logging of PHP errors on shutdown](#logging-of-php-errors-on-shutdown)
+  - [Custom shutdown handlers](#custom-shutdown-handlers)
   - [Suggestions](#suggestions)
   - [TBD / Ideas / Misc](#tbd--ideas--misc)
 
@@ -432,7 +435,7 @@ log levels to log errors according to there severity. Errors that are of type
 `NOTICE` (in case of PHP strict errors). See `Honeybee\Agavi\Context` for
 details.
 
-## Custom Shutdown handlers
+## Custom shutdown handlers
 
 The Honeybee context implementation enables all classes of the project to get a
 Notification when the application is being shut down. To enable the notification
