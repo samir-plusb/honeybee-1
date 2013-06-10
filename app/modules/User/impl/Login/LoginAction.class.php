@@ -37,6 +37,8 @@ class User_LoginAction extends UserBaseAction
      */
     public function executeWrite(AgaviParameterHolder $request_data)
     {
+        $this->setAttribute('reset_support_enabled', \AgaviConfig::get('user.module_active', FALSE));
+        
         $tm = $this->getContext()->getTranslationManager();
         $user = $this->getContext()->getUser();
 
