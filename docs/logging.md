@@ -212,30 +212,20 @@ An example on how to define an use `FirePHP and `ChromePHP` as appenders for
 development environments can be found in the `app/config/logging.xml` file:
 
 Create a `logging.xml` in `app/project/config/` and extend the configuration to
-add `FirePHP` and `ChromePHP` capabilities to the default logger in environments
-whose names start with `development` for all contexts (e.g. `console` and `web`)
-and add the `PhpDebugToolbarLoggerAppender` to development environments without
-`-testing` as a name suffix in the web context only (as that appender modifies
-the HTML source code):
+add `FirePHP`, `ChromePHP` and `PhpDebugToolbar` logging to the default logger
+in all environments whose names start with `development` for the `web` context
+(while the environment name must not have a `-testing` suffix).
 
 ```xml
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     xmlns="http://agavi.org/agavi/config/parts/logging/1.0"
     xmlns:xi="http://www.w3.org/2001/XInclude">
-    <ae:configuration environment="^development.*">
+    <ae:configuration environment="^development.+(?!-testing)$" context="web">
         <loggers default="default">
-            <logger name="default" class="Honeybee\Agavi\Logging\Logger">
+            <logger name="default">
                 <appenders>
                     <appender>firephp</appender>
                     <appender>chromephp</appender>
-                </appenders>
-            </logger>
-        </loggers>
-    </ae:configuration>
-    <ae:configuration environment="^development.-(?!-testing)$" context="web">
-        <loggers default="default">
-            <logger name="default" class="Honeybee\Agavi\Logging\Logger">
-                <appenders>
                     <appender>phpdebugtoolbar</appender>
                 </appenders>
             </logger>
@@ -245,10 +235,29 @@ the HTML source code):
 ```
 
 Please note, that the `firephp`, `chromephp` and `phpdebugtoolbar` appenders are
-already defined in the `app/config/logging.xml` and thus don't need to be
+already available for you in `app/config/logging.xml` and thus don't need to be
 defined in the `app/project/config/logging.xml` file. Beware that it's currently
 not possible to remove appenders from already defined loggers or add appenders
 with names that already exist.
+
+### Pitfalls of logging via HTTP headers
+
+One pitfall of `FirePHP` and `ChromePHP` is, that they work via HTTP headers.
+Usually server software does have limitations for the size of headers that it
+can handle. Fortunately the maximum supported header or buffer sizes are
+configurable in most cases (as many large cookies blow up headers a lot).
+
+For `nginx` and `PHP-FPM` via `FastCGI` you can increase the used buffer sizes
+in ```/etc/nginx/fastcgi_params``` like this:
+
+```
+fastcgi_buffers         256 16k;
+fastcgi_buffer_size     16k;
+```
+
+The above sets the buffer size to `16k + 256 * 16k` which is just above `4 MB`
+and should be plenty to get an exception including stacktrace to `FirePHP` and
+`ChromePHP` within the same request via HTTP headers.
 
 ## Text representation of well known types
 
@@ -414,6 +423,35 @@ it's possible to use custom logger classes and custom layouts as well. You may
 as well format and create the given messages directly in your appender or even
 logger when you override those used by default. Further on it's possible to
 change the default `AgaviLoggerMessage` class via `factories.xml` file.
+
+## Logging of PHP errors on shutdown
+
+The default shutdown handler of Honeybee has a map of PHP errors to Honeybee
+log levels to log errors according to there severity. Errors that are of type
+```E_ERROR``` or similar are `CRITICAL` errors. Others are `WARNING` level or
+`NOTICE` (in case of PHP strict errors). See `Honeybee\Agavi\Context` for
+details.
+
+## Custom Shutdown handlers
+
+The Honeybee context implementation enables all classes of the project to get a
+Notification when the application is being shut down. To enable the notification
+just implement the `Honeybee\Agavi\IShutdownListener` interface in your class.
+
+This may be of use e.g. to free resources or shutdown services gracefully when
+fatal errors occur in other parts of the application:
+
+```php
+// register yourself as a listener
+$this->getContext()->addShutdownListener($this);
+
+// implement shutdown handler in $this
+public function onShutdown($error)
+{
+    // handle shutdown here by freeing resources here or whatever
+}
+```
+
 
 ## Suggestions
 

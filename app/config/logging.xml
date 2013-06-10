@@ -26,6 +26,7 @@
             <logger name="error" class="Honeybee\Agavi\Logging\Logger">
                 <appenders>
                     <appender>error</appender> <!-- log ERROR and below (see appender) -->
+                    <appender>fingers_crossed</appender>
                 </appenders>
             </logger>
 

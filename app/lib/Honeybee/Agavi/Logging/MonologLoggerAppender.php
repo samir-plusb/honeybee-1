@@ -2,7 +2,7 @@
 
 namespace Honeybee\Agavi\Logging;
 
-use Monolog\Logger;
+use Monolog\Logger as MonologLogger;
 use Honeybee\Agavi\Logging\LoggerManager;
 
 /**
@@ -85,20 +85,20 @@ class MonologLoggerAppender extends \AgaviLoggerAppender
 
         // patched Agavi log level => Monolog log level
         $levels = array(
-            \AgaviLogger::TRACE => Logger::DEBUG,
-            \AgaviLogger::DEBUG => Logger::DEBUG,
-            \AgaviLogger::INFO => Logger::INFO,
-            \AgaviLogger::NOTICE => Logger::NOTICE,
-            \AgaviLogger::WARN => Logger::WARNING,
-            \AgaviLogger::WARNING => Logger::WARNING,
-            \AgaviLogger::ERROR => Logger::ERROR,
-            \AgaviLogger::FATAL => Logger::CRITICAL,
-            \AgaviLogger::CRITICAL => Logger::CRITICAL,
-            \AgaviLogger::ALERT => Logger::ALERT,
-            \AgaviLogger::EMERGENCY => Logger::EMERGENCY
+            \AgaviLogger::TRACE => MonologLogger::DEBUG,
+            \AgaviLogger::DEBUG => MonologLogger::DEBUG,
+            \AgaviLogger::INFO => MonologLogger::INFO,
+            \AgaviLogger::NOTICE => MonologLogger::NOTICE,
+            \AgaviLogger::WARN => MonologLogger::WARNING,
+            \AgaviLogger::WARNING => MonologLogger::WARNING,
+            \AgaviLogger::ERROR => MonologLogger::ERROR,
+            \AgaviLogger::FATAL => MonologLogger::CRITICAL,
+            \AgaviLogger::CRITICAL => MonologLogger::CRITICAL,
+            \AgaviLogger::ALERT => MonologLogger::ALERT,
+            \AgaviLogger::EMERGENCY => MonologLogger::EMERGENCY
         );
 
-        $level = Logger::INFO; // default
+        $level = MonologLogger::INFO; // default
 
         if (isset($levels[$log_level_or_severity]))
         {
@@ -109,11 +109,11 @@ class MonologLoggerAppender extends \AgaviLoggerAppender
             // default (unpatched) Agavi versions <= v1.0.7
             if ($log_level_or_severity > \AgaviLogger::FATAL && $log_level_or_severity <= \AgaviLogger::ALL)
             {
-                $level = Logger::ALERT; // integer values above FATAL are ALERTs for us
+                $level = MonologLogger::ALERT; // integer values above FATAL are ALERTs for us
             }
             else if ($log_level_or_severity > \AgaviLogger::INFO && $log_level_or_severity < \AgaviLogger::WARN)
             {
-                $level = Logger::NOTICE; // integer values between INFO and WARNING are NOTICEs for us
+                $level = MonologLogger::NOTICE; // integer values between INFO and WARNING are NOTICEs for us
             }
             else
             {

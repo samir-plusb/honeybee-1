@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+<ae:configurations
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     xmlns="http://agavi.org/agavi/config/parts/settings/1.0"
     xmlns:xi="http://www.w3.org/2001/XInclude">
     <!--
@@ -43,6 +43,7 @@
             <setting name="use_logging">true</setting>
             <setting name="use_security">true</setting>
             <setting name="use_translation">true</setting>
+            <setting name="context_implementation">Honeybee\Agavi\Context</setting>
             <setting name="test_bootstrap_tpl">%core.app_dir%/../testing/TestCaseMethod.tpl</setting>
             <setting name="gravatar_url_tpl">http://www.gravatar.com/avatar/{EMAIL_HASH}?s=41</setting>
             <setting name="auth_provider">Honeybee\Core\Security\Auth\StandardAuthProvider</setting>
@@ -60,7 +61,7 @@
 
         <settings prefix="service.short_ids.">
             <setting name="connection">Service.ShortIds</setting>
-            
+
         </settings>
 
         <settings prefix="assets.">

@@ -15,7 +15,7 @@ use Monolog\Handler\ChromePHPHandler;
  * - bubble: Boolean value to specify whether messages that are handled should
  *           bubble up the stack or not. Defaults to true.
  */
-class FirePhpSetup implements IMonologSetup
+class ChromePhpSetup implements IMonologSetup
 {
     /**
      * @param \AgaviLoggerAppender $appender Agavi logger appender instance to use for \Monolog\Logger instance creation

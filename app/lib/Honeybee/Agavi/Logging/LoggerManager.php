@@ -503,6 +503,11 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
             $matched_routes = implode(', ', $route_names_array);
         }
 
+        // the first container is the one returned from the \AgaviRouting::execute() call
+        $first_container =  $agavi_context->getRouting()->getContainer();
+        $first_output_type = $first_container->getOutputType()->getName();
+        $first_module_action_and_view = $first_container->getModuleName() . '/' . $first_container->getActionName() . ' => ' . $first_container->getViewModuleName() . '/' . $first_container->getViewName();
+
         $server_name = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
         $server_name .= isset($_SERVER['SERVER_PORT']) ? ':' . $_SERVER['SERVER_PORT'] : '';
 
@@ -563,6 +568,8 @@ class LoggerManager extends \AgaviLoggerManager implements ILogger//, \Psr\Log\L
         $extra['request_method'] = $agavi_context->getRequest()->getMethod();
         $extra['matched_module_and_action'] = $matched_module_and_action;
         $extra['matched_routes'] = $matched_routes;
+        $extra['first_container_output_type'] = $first_output_type;
+        $extra['first_container_module_action_and_view'] = $first_module_action_and_view;
 
         // see ZendAclSecurityUser or user class defined in factories.xml
         $extra['raw_user_agent'] = $agavi_context->getUser()->getRawUserAgent();

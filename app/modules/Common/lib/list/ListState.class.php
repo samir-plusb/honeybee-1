@@ -180,4 +180,24 @@ class ListState implements IListState
             }
         }
     }
+
+    public function __toString()
+    {
+        $property_names = array_keys(get_class_vars(get_class($this)));
+        $properties = array();
+        foreach ($property_names as $name)
+        {
+            $getter = 'get' . ucfirst($name);
+            if (is_callable(array($this, $getter)))
+            {
+                $properties[$name] = json_encode($this->$getter());
+            }
+            else
+            {
+                $properties[$name] = '';
+            }
+        }
+
+        return json_encode($properties);
+    }
 }
