@@ -42,23 +42,33 @@ class UserService extends DocumentService
 
     protected function getPasswordLostEmailBody(UserDocument $user)
     {
-        $expireDate = new DateTime($user->getTokenExpireDate());
-        $resetLink = \AgaviContext::getInstance()->getRouting()->gen('user.reset');
-        $setPasswordLink = \AgaviContext::getInstance()->getRouting()->gen(
+        $project_contact = AgaviConfig::get('core.project_contact');
+        $project_name = AgaviConfig::get('core.app_name');
+        $set_password_link = \AgaviContext::getInstance()->getRouting()->gen(
             'user.password', 
             array('token' => $user->getAuthToken())
         );
 
-        return sprintf(
-            "Bitte folgen sie dem Link anbei um ein neues Kennwort zu vergeben und den Vorgang abzuschließen.\n" .
-            "Kennwort setzen unter: %s\n" .
-            "Der Link ist für 20 Minuten gültig und invalidiert somit ab dem Zeitpunkt: %s.\n" .
-            "Sollte die Gültigkeitsdauer bereits überschritten sein, kann ein neuer Link angefordert werden.\n" . 
-            "Neuen Link anfordern unter: %s",
-            $setPasswordLink,
-            $expireDate->format('d.m.Y H:i:s'),
-            $resetLink,
-            $user->getTokenExpireDate()
+        $message = sprintf(
+            'Hallo,
+            Sie erhalten diese Nachricht, weil im Content Management System des Projekts "%s" ein neues Passwort für Sie angefordert wurde.
+            Um sich neues Passwort zu erstellen, klicken Sie bitte auf den unten stehenden Link. Auf der Internetseite, die sich hinter diesem Link verbirgt, haben Sie die Möglichkeit, das neue Passwort zu hinterlegen.
+            
+            %s
+            
+            Aus Sicherheitsgründen wir dieser Link nach 20 Minuten inaktiv. Danach können Sie sich diese E-Mail noch einmal zuschicken lassen.
+            Wichtig für Sie: Auch wenn Ihr Passwort verschlüsselt abgespeichert wird, sollten Sie darauf achten, stets schwer zu erratende Passwörter zu verwenden. 
+            Benutzen Sie beispielsweise niemals auf zwei Internetseiten dasselbe Passwort. 
+            Achten Sie außerdem darauf, möglichst eine Kombination aus Groß- und Kleinbuchstaben sowie mindestens eine Zahl zu verwenden.
+            Wenn Sie der Auffassung sind, dass Ihnen diese E-Mail irrtümlich zugeschickt wurde, wenden Sie sich bitte an %s (%s).
+
+            Diese E-Mail wurde automatisch erstellt.',
+            $project_name,
+            $set_password_link,
+            $project_contact['name'],
+            $project_contact['email']
         );
+    
+        return $message;
     }
 }

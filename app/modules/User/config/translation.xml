@@ -131,13 +131,15 @@
                             <ae:parameter name="invalid_login">Die Kombination aus Nutzername und Kennwort ist ungültig.</ae:parameter>
                             <ae:parameter name="invalid_account">Ungültige Kontodaten; bitte die angegebene Email oder den Nutzernamen auf Richtigkeit überprüfen.</ae:parameter>
                             <ae:parameter name="Login Error">Fehler während der Anmeldung</ae:parameter>
-                            <ae:parameter name="reset_success"><![CDATA[
-                                <p>Das Kennwort für das angegebene Nutzerkonto kann nun zurückgesetzt werden.</p>
-                                <p>Die hierfür notwendigen Schritte wurden via Email an die mit dem Nutzerkonto verknüpfte Adresse versendet.</p>
+                            <ae:parameter name="reset_success_title">Sie haben Post!</ae:parameter>
+                            <ae:parameter name="reset_success_msg"><![CDATA[
+                                <p>Wir haben eine Email an die Adresse verschickt, die mit dem angegebenen Nutzerkonto verküpft ist.</p>
+                                <p>Darin finden sie die erforderlichen Schritte um ihr Passwort zurück zu setzen.</p>
                             ]]></ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="en">
-                            <ae:parameter name="reset_success"><![CDATA[
+                            <ae:parameter name="reset_success_title">You have mail!</ae:parameter>
+                            <ae:parameter name="reset_success_msg"><![CDATA[
                                 <p>The password for the affected user account may be reset now.</p>
                                 <p>The necessary steps have been mailed to the email adress related to the latter user account.</p>
                             ]]></ae:parameter>
