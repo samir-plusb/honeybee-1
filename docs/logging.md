@@ -211,13 +211,10 @@ developers to see log messages within their browser (or other application) that
 supports `FirePHP` or `ChromePHP` capabilities. This includes `Firebug` as an
 extension of `Firefox` and the `ChromeLogger` extension in `Chrome`.
 
-An example on how to define an use `FirePHP` and `ChromePHP` as appenders for
-development environments can be found in the `app/config/logging.xml` file:
-
-Create a `logging.xml` in `app/project/config/` and extend the configuration to
-add `FirePHP`, `ChromePHP` and `PhpDebugToolbar` logging to the default logger
-in all environments whose names start with `development` for the `web` context
-(while the environment name must not have a `-testing` suffix).
+As an example create a `logging.xml` in `app/project/config/` and extend the
+configuration to add `FirePHP`, `ChromePHP` and `PhpDebugToolbar` logging to the
+default logger in all environments whose names start with `development` for the
+`web` context (while the environment name must not have a `-testing` suffix):
 
 ```xml
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
@@ -313,16 +310,15 @@ method `getPsr3Logger()` that you can call to get the Agavi logger as a PSR-3
 compatible logger instance:
 
 ```php
-$this->getContext()->getLoggerManager()
-->getLogger('default')
-->getPsr3Logger()
-->log(
-    \Psr\Log\LogLevel::CRITICAL,
-    'Everybody get down, this {beep}',
-    array(
-        'beep' => 'is a robbery!!!11'
-    )
-);
+$this->getContext()->getLoggerManager()->getLogger('default')
+    ->getPsr3Logger()
+    ->log(
+        \Psr\Log\LogLevel::CRITICAL,
+        'Everybody get down, this {beep}',
+        array(
+            'beep' => 'is a robbery!!!11'
+        )
+    );
 ```
 
 You get the logger you wish from the logger manager, ask it for a PSR-3
@@ -430,9 +426,9 @@ change the default `AgaviLoggerMessage` class via `factories.xml` file.
 ## Logging of PHP errors on shutdown
 
 The default shutdown handler of Honeybee has a map of PHP errors to Honeybee
-log levels to log errors according to there severity. Errors that are of type
-```E_ERROR``` or similar are `CRITICAL` errors. Others are `WARNING` level or
-`NOTICE` (in case of PHP strict errors). See `Honeybee\Agavi\Context` for
+log levels to log errors according to their severity. Errors that are of type
+```E_ERROR``` or similar are `CRITICAL` errors. Others are `WARNING` or
+`NOTICE` (in case of PHP strict errors) level. See `Honeybee\Agavi\Context` for
 details.
 
 ## Custom shutdown handlers
@@ -470,8 +466,6 @@ you leave this file searching the web for "logging best practices":
 
 ## TBD / Ideas / Misc
 
-- examples for `logging.xml` customization (contexts, environments, appenders)
 - `getDefaultLogger` vs. `scope` parameter
-- PSR-3 `LoggerInterface` vs. variable method arguments
+- PSR-3 `LoggerInterface` vs. variable number of method arguments
 - `\AgaviLogger` bit fields explanation and usage
-- table of contents
