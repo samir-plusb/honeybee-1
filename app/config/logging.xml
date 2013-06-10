@@ -125,21 +125,15 @@
         Example to add FirePHP and ChromePHP to default logger in development environments for all contexts (cli and web)
         and add the PhpDebugToolbarLoggerAppender to development environments in the web context (as it modifies HTML):
 
-        <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/logging/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
-            <ae:configuration environment="^development.*">
+        <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+            xmlns="http://agavi.org/agavi/config/parts/logging/1.0"
+            xmlns:xi="http://www.w3.org/2001/XInclude">
+            <ae:configuration environment="^development.+(?!-testing)$" context="web">
                 <loggers default="default">
-                    <logger name="default" class="Honeybee\Agavi\Logging\Logger">
+                    <logger name="default">
                         <appenders>
                             <appender>firephp</appender>
                             <appender>chromephp</appender>
-                        </appenders>
-                    </logger>
-                </loggers>
-            </ae:configuration>
-            <ae:configuration environment="^development.-(?!-testing)$" context="web">
-                <loggers default="default">
-                    <logger name="default" class="Honeybee\Agavi\Logging\Logger">
-                        <appenders>
                             <appender>phpdebugtoolbar</appender>
                         </appenders>
                     </logger>
