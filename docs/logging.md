@@ -173,7 +173,7 @@ a request. When the logger logs it logs all messages from that request.
 
 The default Monolog setup uses the `DefaultProcessor` that adds several system,
 Agavi and application specific information to the `$extra` array of Monolog to
-ease debugging in case of critical errors:
+ease debugging in case of critical errors. This may look something like this:
 
 ```json
 {
@@ -208,7 +208,7 @@ developers to see log messages within their browser (or other application) that
 supports `FirePHP` or `ChromePHP` capabilities. This includes `Firebug` as an
 extension of `Firefox` and the `ChromeLogger` extension in `Chrome`.
 
-An example on how to define an use `FirePHP and `ChromePHP` as appenders for
+An example on how to define an use `FirePHP` and `ChromePHP` as appenders for
 development environments can be found in the `app/config/logging.xml` file:
 
 Create a `logging.xml` in `app/project/config/` and extend the configuration to
@@ -451,7 +451,6 @@ public function onShutdown($error)
     // handle shutdown here by freeing resources here or whatever
 }
 ```
-
 
 ## Suggestions
 
