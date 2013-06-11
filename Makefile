@@ -88,7 +88,7 @@ tail-logs:
 # Compiling bootstrap and managing resource deployment.
 #
 twitter-bootstrap: 
-
+	@echo ${PROJECT_ROOT}
 	@export PATH="${PROJECT_ROOT}/node_modules/.bin/:$(PATH)"; cd vendor/twitter/bootstrap; make
 
 

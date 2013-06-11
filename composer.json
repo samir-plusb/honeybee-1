@@ -33,10 +33,9 @@
         "jquery/jquery": "1.8.2",
         "allmarkedup/jquery-url-parser": "2.2.1",
         "farhadi/html5sortable": "0.9",
-        "knockoutjs/knockoutjs": "2.2.0",
+        "knockoutjs/knockoutjs": "2.2.1",
         "underscorejs/underscorejs": "1.4.2",
         "kineticjs/kineticjs": "4.5.1",
-        "twitter/bootstrap": "2.2.2",
         "ivaynberg/select2": "3.3.2",
         "PhpDebugToolbar/php-debug-toolbar": "dev-master",
         "fzaninotto/faker": "v1.1.0",
@@ -135,22 +134,10 @@
         {
             "type": "package",
             "package": {
-                "name": "twitter/bootstrap",
-                "version": "2.2.2",
-                "source": {
-                    "url": "https://github.com/twitter/bootstrap.git",
-                    "type": "git",
-                    "reference": "9376a7c221a64c2bf508d02ea2ccd85748d10fcc"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
                 "name": "knockoutjs/knockoutjs",
-                "version": "2.2.0",
+                "version": "2.2.1",
                 "dist": {
-                    "url": "http://cloud.github.com/downloads/SteveSanderson/knockout/knockout-2.2.0.js",
+                    "url": "http://knockoutjs.com/downloads/knockout-2.2.1.js",
                     "type": "file"
                 }
             }
