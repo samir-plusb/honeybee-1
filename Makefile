@@ -49,7 +49,6 @@ help:
 	@echo "install-vendor - install dependencies in vendor folder."
 	@echo "install-vendor-dev - install development dependencies in vendor folder."
 	@echo "link-project-modules - Symlink custom code into the honeybee submodule and update the local git/ingo/exclude settings."
-	@echo "twitter-bootstrap - build twitter-bootstrap."
 	@echo "update-node-deps - update nodejs dependencies in node_modules folder."
 	@echo "update-vendor - update dependencies in vendor folder."
 	@echo "update-vendor-dev - update development dependencies in vendor folder."
@@ -87,10 +86,6 @@ tail-logs:
 #
 # Compiling bootstrap and managing resource deployment.
 #
-twitter-bootstrap: 
-	@echo ${PROJECT_ROOT}
-	@export PATH="${PROJECT_ROOT}/node_modules/.bin/:$(PATH)"; cd vendor/twitter/bootstrap; make
-
 
 deploy-resources:
 
@@ -105,7 +100,6 @@ deploy-resources:
 install: install-composer install-vendor install-node-deps cc
 
 	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
-	@make twitter-bootstrap
 	@make link-project-modules
 	@make deploy-resources
 
@@ -113,7 +107,6 @@ install: install-composer install-vendor install-node-deps cc
 install-dev: install-composer install-vendor-dev install-node-deps cc
 
 	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
-	@make twitter-bootstrap
 	@make link-project-modules
 	@make deploy-resources
 
