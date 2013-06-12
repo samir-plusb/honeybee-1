@@ -198,7 +198,7 @@ php-mess-detection:
 php-copy-paste-detection:
 
 	@/bin/mkdir -p ${BUILD_DIR}/logs
-	-@vendor/bin/phpcpd.php --log-pmd ${BUILD_DIR}/logs/pmd-cpd.xml app/
+	-@vendor/bin/phpcpd --log-pmd ${BUILD_DIR}/logs/pmd-cpd.xml app/
 
 
 php-dependencies:
@@ -206,7 +206,7 @@ php-dependencies:
 	@/bin/mkdir -p ${BUILD_DIR}/logs
 	-@vendor/bin/pdepend --jdepend-xml=${BUILD_DIR}/logs/jdepend.xml \
 		--jdepend-chart=${BUILD_DIR}/pdepend/dependencies.svg \
-		--overview-pyramid=${BUILD_DIR}/pdepend/overview-pyramid.svg app/
+		--overview-pyramid=${BUILD_DIR}/logs/overview-pyramid.svg app/
 
 
 php-docs:
