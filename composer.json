@@ -46,14 +46,14 @@
 
     "require-dev": {
         "phpmd/phpmd": "1.4.1",
-        "phploc/phploc": "dev-master",
+        "shrink/phploc": "1.7.5",
         "pdepend/pdepend": "1.1.0",
         "zerkalica/php-code-browser": "dev-master",
         "squizlabs/php_codesniffer": "~1.4.4",
         "phpunit/phpunit": "3.7.*",
-        "shrink/phpcpd": "dev-master"
+        "sebastian/phpcpd": "dev-master"
     },
-
+    
     "repositories": [
         {
             "type": "package",
