@@ -8,7 +8,7 @@
             <route name=".suggest" pattern="/suggest" action="Suggest" method="read" />
             <route name=".edit" pattern="/edit" action="Edit" />
             <route name=".tree" pattern="/tree(/{referenceModule:(\w+)})?(/{referenceField:(\w+)})?" action="Tree" />
-            
+
             <route name=".workflow" pattern="/workflow">
                 <route name=".checkout" pattern="/checkout" action="Workflow_Checkout" />
                 <route name=".execute" pattern="/execute" action="Workflow_Execute" />
@@ -19,17 +19,11 @@
 
     <ae:configuration context="console">
         <routes>
-            <route pattern="%%MODULE_PREFIX%%.export" module="%%MODULE_NAME%%" action="Export" method="write">
-                <ae:parameter name="implementor">Honeybee\Domain\%%MODULE_NAME%%\%%MODULE_NAME%%Module</ae:parameter>
-                <callbacks>
-                  <callback class="Honeybee\Agavi\Routing\ModuleRoutingCallback"/>
-                </callbacks>
+            <route pattern="^import$" action="Import" method="write">
+                <ae:parameter name="description">Import data into the %%MODULE_NAME%% module via specified consumers.</ae:parameter>
             </route>
-            <route pattern="%%MODULE_PREFIX%%.import" module="%%MODULE_NAME%%" action="Import" method="write">
-                <ae:parameter name="implementor">Honeybee\Domain\%%MODULE_NAME%%\%%MODULE_NAME%%Module</ae:parameter>
-                <callbacks>
-                  <callback class="Honeybee\Agavi\Routing\ModuleRoutingCallback"/>
-                </callbacks>
+            <route pattern="^export$" action="Export" method="write">
+                <ae:parameter name="description">Export data from the %%MODULE_NAME%% module as specified in exports.xml file.</ae:parameter>
             </route>
         </routes>
     </ae:configuration>
