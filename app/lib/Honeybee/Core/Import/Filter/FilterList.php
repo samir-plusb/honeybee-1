@@ -26,7 +26,7 @@ class FilterList implements \Countable, \ArrayAccess, \Iterator
 
     public function remove(IFilter $filter)
     {
-        $offset = array_search($filters, $this->filters, TRUE);
+        $offset = array_search($filter, $this->filters, TRUE);
 
         $this->offsetUnset($offset);
     }
@@ -58,7 +58,14 @@ class FilterList implements \Countable, \ArrayAccess, \Iterator
 
     public function offsetSet($offset, $value)
     {
-        $this->filters[$offset] = $value;
+        if (NULL === $offset)
+        {
+            $this->filters[] = $value;
+        }
+        else
+        {
+            $this->filters[$offset] = $value;
+        }
     }
 
     public function offsetUnset($offset)

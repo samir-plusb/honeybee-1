@@ -129,6 +129,13 @@ abstract class BaseConsumer implements IConsumer
             catch(\Exception $e)
             {
                 $this->report->addRecordError($item, $e->getMessage());
+
+                \AgaviContext::getInstance()->getLoggerManager()->logTo(
+                    'import',
+                    \AgaviLogger::ERROR,
+                    get_class($this),
+                    array('Error while creating document on import for data', $item, '- cause was:', $e)
+                );
             }
         }
 

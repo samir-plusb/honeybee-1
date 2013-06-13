@@ -4,7 +4,7 @@ namespace Honeybee\Core\Import\Provider;
 
 /**
  * The CsvProvider class is a concrete implementation of the BaseProvider base class.
- * It provides access to csv formatted data.
+ * It provides access to CSV formatted data.
  *
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
@@ -12,57 +12,71 @@ namespace Honeybee\Core\Import\Provider;
 class CsvProvider extends BaseProvider
 {
     /**
-     * Holds an array of fieldnames pulled from the csv file's first line.
-     *
-     * @var         array
+     * @var array of fieldnames from the CSV header row
      */
-    protected $fieldMap;
+    protected $field_map;
 
     /**
-     * Holds a file pointer that handles access to our csv source.
-     *
-     * @var         resource
+     * @var resource file pointer that handles access to the CSV source file
      */
-    protected $csvHandle;
+    protected $csv_handle;
 
     /**
-     * Holds the currently loaded csv row.
-     *
-     * @var         array
+     * @var array currently loaded row from CSV source file
      */
-    protected $currentRow;
+    protected $current_row;
+
+    /**
+     * @var int number of columns in a complete CSV import row
+     */
+    protected $correct_column_count;
+
+    /**
+     * @var string separator used in CSV file
+     */
+    protected $separator;
 
     /**
      * Initialize the provider with extrinsic parameters.
      *
-     * @param       array $parameters
+     * @param array $parameters
      */
     public function initialize(array $parameters = array())
     {
         parent::initialize($parameters);
 
-        $csvSource = realpath($this->getConfig()->get('filepath'));
-        $this->csvHandle = fopen($csvSource, 'r');
+        $csv_source_file = realpath($this->getConfig()->get('filepath'));
+        $this->csv_handle = fopen($csv_source_file, 'r');
 
-        if (FALSE === $this->csvHandle)
+        if (false === $this->csv_handle)
         {
-            throw new Exception("Unable to initialize handle for csv-source.");
+            throw new \Exception("Unable to initialize handle for CSV source file with path " . $this->getConfig()->get('filepath') . ".");
         }
 
-        $this->fieldMap = $this->buildFieldMap($this->csvHandle);
+        $this->separator = $this->getConfig()->get('separator', ';');
+
+        $this->field_map = $this->buildFieldMap($this->csv_handle);
     }
 
     /**
-     * Forward our current position inside the mail list
-     * that we are currently iterating.
+     * Forward current position inside the list we currently iterate (to the
+     * next row from the CSV source file).
      *
-     * @return      boolean
+     * @return boolean true if cursor was forwarded. False otherwise.
      */
     protected function forwardCursor()
     {
-        $this->currentRow = fgetcsv($this->csvHandle, 0, ';');
+        $this->current_row = fgetcsv($this->csv_handle, 0, $this->separator);
 
-        return !!$this->currentRow;
+        if ($this->getConfig()->get('ignore_incomplete_rows', false))
+        {
+            while ($this->current_row !== false && !$this->isRowComplete($this->current_row))
+            {
+                $this->current_row = fgetcsv($this->csv_handle, 0, $this->separator);
+            }
+        }
+
+        return !!$this->current_row;
     }
 
     /**
@@ -74,11 +88,11 @@ class CsvProvider extends BaseProvider
     {
         $data = array();
 
-        foreach ($this->fieldMap as $fieldName => $pos)
+        foreach ($this->field_map as $field_name => $pos)
         {
-            if (isset($this->currentRow[$pos]))
+            if (isset($this->current_row[$pos]))
             {
-                $data[$fieldName] = $this->currentRow[$pos];
+                $data[$field_name] = $this->current_row[$pos];
             }
         }
 
@@ -96,24 +110,39 @@ class CsvProvider extends BaseProvider
     }
 
     /**
-     * Return an assoc array that maps fieldnames t csv column indexes.
+     * Return an associative array that maps fieldnames to csv column indizes.
      *
-     * @return      array
+     * The mapping is either taken from the header row of the CSV file or
+     * read from the config via the 'fieldmap' setting.
+     *
+     * @return array assocative array of fieldname => CSV column index
      */
-    protected function buildFieldMap($csvHandle)
+    protected function buildFieldMap($csv_handle)
     {
-        $fieldMap = array();
+        $field_map = array();
 
         if ($this->getConfig()->has('fieldmap'))
         {
-            fgetcsv($csvHandle, 0, ';');
-            $fieldMap = $this->getConfig()->get('fieldmap');
+            fgetcsv($csv_handle, 0, ';');
+            $field_map = $this->getConfig()->get('fieldmap');
         }
         else
         {
-            $fieldMap = array_flip(fgetcsv($csvHandle, 0, ';'));
+            $field_map = array_flip(fgetcsv($csv_handle, 0, $this->separator));
         }
 
-        return $fieldMap;
+        $this->correct_column_count = count($field_map);
+
+        return $field_map;
+    }
+
+    /**
+     * @param array $row currently loaded row from CSV source file
+     *
+     * @return boolean true if row count is the same as the fieldmap column row count
+     */
+    protected function isRowComplete($row)
+    {
+        return (count($row) === $this->correct_column_count);
     }
 }
