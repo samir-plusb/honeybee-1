@@ -75,8 +75,8 @@
         {% set route_data = {
             'limit': limit,
             'offset': cur_page * limit,
-            'search': routing_data_search|default(''),
-            'filter': routing_data_filter|default(''),
+            'search': routing_data_search,
+            'filter': routing_data_filter,
             'sorting': routing_data_sorting
         } %}
 

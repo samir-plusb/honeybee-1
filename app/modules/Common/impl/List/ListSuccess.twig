@@ -144,8 +144,8 @@
                                 'field': fieldname,
                                 'direction': (sorting_active and sorting.direction == 'asc') ? 'desc' : 'asc'
                             },
-                            'search': routing_data_search|default(''),
-                            'filter': routing_data_filter|default('')
+                            'search': routing_data_search,
+                            'filter': routing_data_filter
                         }%}
 
                         {% if field.hasSortField %}
