@@ -1,6 +1,8 @@
 <?php
 
 use Guzzle\Http\Client;
+use Guzzle\Common\Event;
+use Guzzle\Http\Message\Response;
 
 /**
  * The AssetFile is a concrete implementation of the IAssetFile interface.
@@ -221,6 +223,14 @@ class AssetFile implements IAssetFile
         }
 
         $client = new Client($assetUri);
+
+	$client->getEventDispatcher()->addListener('request.error', function(Event $event)
+        {
+            $newResponse = new Response($event['response']->getStatusCode());
+            $event['response'] = $newResponse;
+            $event->stopPropagation();
+        });
+
         $request = $client->get(NULL, NULL, $filePtr);
         $response = $request->send();
 
