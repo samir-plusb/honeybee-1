@@ -38,6 +38,7 @@
         });
 
         stick();
+        setInterval(stick, 1000);
     };
 
     var edit_wrapper = $('.controller-edit');
