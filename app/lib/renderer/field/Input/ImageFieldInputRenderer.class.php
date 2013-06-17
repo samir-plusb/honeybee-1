@@ -42,6 +42,7 @@ class ImageFieldInputRenderer extends FieldInputRenderer
             'fieldname' => $this->generateInputName($document),
             'post_url' => htmlspecialchars_decode(urldecode($routing->gen('asset.update'))),
             'put_url' => htmlspecialchars_decode(urldecode($routing->gen('asset.put'))),
+            'download_url' =>  htmlspecialchars_decode(urldecode($routing->gen('asset.binary', array('aid' => '{AID}')))),
             'assets' => $assets,
             'max' => isset($this->options['max_files']) ? (int)$this->options['max_files'] : 20,
             'allowed_types' => isset($this->options['allowed_types']) ? $this->options['allowed_types'] : array('image/png'),

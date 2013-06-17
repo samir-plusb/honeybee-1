@@ -499,7 +499,7 @@ input.typeahead
   float: left;
   width: 140px;
   height: 130px;
-  margin-left: 25px;
+  margin-left: 0px;
   margin-bottom: 25px;
   position: relative;
   border: 1px solid #ababab;

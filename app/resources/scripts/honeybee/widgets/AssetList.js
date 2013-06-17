@@ -308,6 +308,11 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
                 Math.ceil(selection.bottom - selection.top)
             );
         }
+    },
+
+    getDownloadUrl: function(asset)
+    {
+        return this.options.download_url.replace('{AID}', asset.id());
     }
 });
 

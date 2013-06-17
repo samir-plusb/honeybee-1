@@ -19,6 +19,11 @@
         </div>
         <ul class="image-buttons" data-bind="visible: ! $parent.options.readonly">
             <li>
+                <a class="btn btn-info" data-bind="attr: { href: $parent.getDownloadUrl($data) }">
+                    <span class="hb-icon-download"/>
+                </a>
+            </li>
+            <li>
                 <button class="btn btn-success" data-bind="click: function() { $parent.onEditClicked($data); }">
                     <span class="hb-icon-pencil"/>
                 </button>
