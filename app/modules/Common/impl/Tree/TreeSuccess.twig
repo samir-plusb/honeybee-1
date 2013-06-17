@@ -4,7 +4,7 @@
     {% import _self as self %}
 
     {% set document = documents[data.identifier] %}
-    <li id="{{data.identifier}}" class="child {% if data.children|length > 0 %}expandable{% endif %}"
+    <li id="{{data.identifier}}" class="child {% if data.children|length > 0 %}expandable closed{% endif %}"
     {% if false == select_only_mode and false == readonly %}draggable="true"{% endif %} data-document="{{document|json_encode}}">
         <label class="node-label">
             {% if data.children|length > 0 %}

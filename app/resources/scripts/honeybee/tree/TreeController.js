@@ -272,21 +272,27 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
     refreshCss: function()
     {
-        var even = false;
         //encapsule in a function to avoid bloating mamory usage with "var that = this;" on every recursion
         var traverseAndRefresh = function(domContext)
         {
-            even = !even;
-            //domContext.removeClass('odd even').addClass(even ? 'even' : 'odd');
             var children = domContext.children('.children').children('.child');
 
             if (children.length > 0)
             {
                 domContext.addClass('expandable');
-                if (domContext.hasClass('closed'))
+
+                var nodeToggle = domContext.find('> .node-label > .node-toggle');
+                if (nodeToggle && domContext.hasClass('closed'))
                 {
-                    domContext.find('.node-toggle').toggleClass('hb-icon-plus hb-icon-minus');
+                    nodeToggle.addClass('hb-icon-plus').removeClass('hb-icon-minus');
                 }
+                else
+                {
+                    nodeToggle.addClass('hb-icon-minus').removeClass('hb-icon-plus');
+                }
+
+                nodeToggle.html('');
+
                 domContext.children('ul').children('li').each(function(i, element)
                 {
                     traverseAndRefresh($(element));
@@ -295,7 +301,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
             else
             {
                 domContext.removeClass('expandable open closed');
-                domContext.find('.node-toggle').html('〉');
+                domContext.find('> .node-label > .node-toggle').removeClass('hb-icon-minus hb-icon-plus').html('〉');
             }
 
         };
