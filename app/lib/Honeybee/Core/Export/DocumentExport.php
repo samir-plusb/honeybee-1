@@ -9,6 +9,8 @@ use Honeybee\Core\Config;
 
 class DocumentExport implements IExport
 {
+    const PUBLISHED_AT_FIELD = 'publishedAt';
+
     private $name;
 
     private $description;
@@ -27,10 +29,20 @@ class DocumentExport implements IExport
 
     public function publish(Document $document)
     {
+        if (! isset($metaData[self::PUBLISHED_AT_FIELD]))
+        {
+            $publishDate = new \DateTime();
+            $metaData[self::PUBLISHED_AT_FIELD] = $publishDate->format(DATE_ISO8601);
+            $document->setMeta($metaData);
+        }
+
         $data = $this->buildExportData($document);
         $data['identifier'] = $document->getShortIdentifier();
         $data['type'] = $document->getModule()->getOption('prefix');
-        
+
+        $metaData = $document->getMeta();
+        $data[self::PUBLISHED_AT_FIELD] = $metaData[self::PUBLISHED_AT_FIELD];
+
         $this->storage->write($data);
     }
 
