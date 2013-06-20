@@ -6,4 +6,4 @@ BerlinOnline Content Management Framework
 In order to create a new project use:
 https://gist.github.com/shrink/4444c5fc2b3d89955290
 
-```bash <(curl -s https://gist.github.com/shrink/4444c5fc2b3d89955290/raw/c218dfdb56e7f1fb1636d9a4521ba55a4ed17c0f/create_honeybee_project.sh)```
+```bash <(curl -s https://gist.github.com/shrink/4444c5fc2b3d89955290/raw/beef494bd0f8933e6bcfc91015830d8204472a87/create_honeybee_project.sh)```
