@@ -75,7 +75,7 @@ class EnvironmentConfigurator
 
         while (! $this->testPhp($php_command))
         {
-            $php_command = $this->readline('Enter path to php', $default_php_path);
+            $php_command = $this->readline('Enter path to php executable', $default_php_path);
         }
 
         return $php_command;
@@ -84,10 +84,15 @@ class EnvironmentConfigurator
     protected function promptBaseHref()
     {
         $base_href = NULL;
+        $default_base_href = getenv('HONEYBEE_DEFAULT_BASE_HREF');
+        if (false === $default_base_href)
+        {
+            $default_base_href = 'http://cms.' . gethostname() . '/';
+        }
 
         while (! trim($base_href))
         {
-            $base_href = $this->readline('Enter the project\'s base url');
+            $base_href = $this->readline('Enter the project\'s base url', $default_base_href);
         }
 
         return trim($base_href);
@@ -96,10 +101,15 @@ class EnvironmentConfigurator
     protected function promptEnvironment()
     {
         $environment = NULL;
+        $default_env = getenv('HONEYBEE_DEFAULT_ENVIRONMENT');
+        if (false === $default_env)
+        {
+            $default_env = 'development-vagrant';
+        }
 
         while (!$this->testEnvironment($environment))
         {
-            $environment = $this->readline('Enter environment');
+            $environment = $this->readline('Enter environment', $default_env);
         }
 
         $answer = $this->readline(
@@ -114,7 +124,7 @@ class EnvironmentConfigurator
         print(
             empty($default)
             ? sprintf("%s%s ", $label, $promptchar)
-            : sprintf("%s[%s]%s ", $label, $default, $promptchar)
+            : sprintf("%s [%s]%s ", $label, $default, $promptchar)
         );
 
         if ($hide_input)
