@@ -9,7 +9,6 @@
                 <ae:parameter name="database">%core.project_prefix%_%core.environment%_asset</ae:parameter>
                 <ae:parameter name="setup">true</ae:parameter>
                 <ae:parameter name="setup_class">AssetDatabaseSetup</ae:parameter>
-                <ae:parameter name="scripts_location">%core.modules_dir%/Asset/config/couchdb/</ae:parameter>
             </database>
             <database name="Assets.Read" class="Honeybee\Agavi\Database\ElasticSearch\Database">
                 <ae:parameter name="host">127.0.0.1</ae:parameter>
