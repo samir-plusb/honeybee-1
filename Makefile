@@ -119,10 +119,8 @@ update-dev: update-composer update-vendor-dev update-node-deps
 
 install-composer: 
 
-	@if [ -d vendor/agavi/agavi/ ]; then svn revert -R vendor/agavi/agavi/; fi
 	@if [ ! -f bin/composer.phar ]; then curl -s http://getcomposer.org/installer \
 	| php -d allow_url_fopen=1 -d date.timezone="Europe/Berlin" -- --install-dir=./bin; fi
-	-@bin/apply-patches
 
 	
 update-composer:
@@ -132,13 +130,17 @@ update-composer:
 
 install-vendor:
 
+	@if [ -d vendor/agavi/agavi/ ]; then svn revert -R vendor/agavi/agavi/; fi
 	@php -d allow_url_fopen=1 bin/composer.phar install --no-dev
+	-@bin/apply-patches
 
 
 install-vendor-dev:
 
+	@if [ -d vendor/agavi/agavi/ ]; then svn revert -R vendor/agavi/agavi/; fi
 	@php -d allow_url_fopen=1 bin/composer.phar install --dev
-
+	-@bin/apply-patches
+	
 
 update-vendor:
 

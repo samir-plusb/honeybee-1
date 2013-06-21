@@ -84,47 +84,6 @@
         </settings>
     </ae:configuration>
 
-    <ae:configuration environment="development-vagrant">
-        <settings>
-            <setting name="auth_provider">Honeybee\Core\Security\Auth\StandardAuthProvider</setting>
-            <!--
-            <setting name="auth_provider">Honeybee\Core\Security\Auth\SimpleAuthProvider</setting>
-            <setting name="simple_logins">
-                <ae:parameters>
-                    <ae:parameter name="vagrant">
-                        <ae:parameter name="pwd_hash">$2a$07$E/54/L2GTjXJyX.KmopXuONCpRSr3jGhMrS3oBFX1T0Jv1VnDIza2</ae:parameter>
-                        <ae:parameter name="attributes">
-                            <ae:parameter name="acl_role">honeybee-editor</ae:parameter>
-                            <ae:parameter name="login">vagrant</ae:parameter>
-                            <ae:parameter name="name">Vagrant Box</ae:parameter>
-                            <ae:parameter name="email">no-reply@nowhere.com</ae:parameter>
-                        </ae:parameter>
-                    </ae:parameter>
-                </ae:parameters>
-            </setting>
-        -->
-        </settings>
-    </ae:configuration>
-
-    <ae:configuration environment="development-leon">
-        <settings>
-            <setting name="auth_provider">Honeybee\Core\Security\Auth\SimpleAuthProvider</setting>
-            <setting name="simple_logins">
-                <ae:parameters>
-                    <ae:parameter name="leonweidauer">
-                        <ae:parameter name="pwd_hash">$2a$07$wiSSsfV243WvCbEHIwNlmeOMhFJifVTLSwNbM6pACBKJ7MougdJca</ae:parameter>
-                        <ae:parameter name="attributes">
-                            <ae:parameter name="acl_role">honeybee-editor</ae:parameter>
-                            <ae:parameter name="login">leonweidauer</ae:parameter>
-                            <ae:parameter name="name">Leon Weidauer</ae:parameter>
-                            <ae:parameter name="email">leon.weidauer@berlinonline.de</ae:parameter>
-                        </ae:parameter>
-                    </ae:parameter>
-                </ae:parameters>
-            </setting>
-        </settings>
-    </ae:configuration>
-
     <!--
         TESTING ENVIRONMENT SETTINGS
     -->
@@ -141,7 +100,7 @@
                             <ae:parameter name="acl_role">honeybee-editor</ae:parameter>
                             <ae:parameter name="login">test0r</ae:parameter>
                             <ae:parameter name="name">Testing Proccess</ae:parameter>
-                            <ae:parameter name="email">no-reply@nowhere.com</ae:parameter>
+                            <ae:parameter name="email">no-reply@example.com</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
                 </ae:parameters>

@@ -28,6 +28,9 @@
             <route pattern="^export$" action="Export" method="write">
                 <ae:parameter name="description">Export data from the User module as specified in exports.xml file.</ae:parameter>
             </route>
+            <route pattern="^create$" action="Edit" method="write">
+                <ae:parameter name="description">Create a new user with the given role.</ae:parameter>
+            </route>
         </routes>
     </ae:configuration>
 

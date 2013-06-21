@@ -13,5 +13,13 @@ use \Honeybee\Agavi\Action\EditAction;
  */
 class User_EditAction extends EditAction
 {
-    
+    public function isSecure()
+    {
+        if ('console' === $this->getContext()->getName())
+        {
+            return FALSE;
+        }
+
+        return parent::isSecure();
+    }
 }
