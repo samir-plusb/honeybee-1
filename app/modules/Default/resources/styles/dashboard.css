@@ -6,7 +6,7 @@
  {
     height: 100%;
  }
-
+/*
 html
 {
     background: url('../binaries/dashboard_bg.jpg') no-repeat bottom right fixed;
@@ -16,7 +16,7 @@ html.error-page
 {
     background: url('../binaries/recovery.jpg') no-repeat bottom right fixed;
 }
-
+*/
 body
 {
     padding: 0;
