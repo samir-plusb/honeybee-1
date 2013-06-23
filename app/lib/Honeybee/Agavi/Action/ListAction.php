@@ -311,7 +311,10 @@ class ListAction extends BaseAction
 
                 $documentListItemData['custom_actions'] = $customActions;
             }
-
+            else
+            {
+                $documentListItemData['custom_actions'] = array();
+            }
             $data[] = $documentListItemData;
         }
 
