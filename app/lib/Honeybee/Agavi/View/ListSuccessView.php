@@ -70,6 +70,15 @@ class ListSuccessView extends BaseView
         ), NULL, 'read');
     }
 
+    public function executeZip(\AgaviRequestDataHolder $parameters)
+    {
+        $response = $this->getResponse();
+        $archiveName = $this->getAttribute('module')->getName() . '-List.zip';
+        $response->setHttpHeader('Content-disposition', 'attachment; filename=' . $archiveName);
+
+        return fopen($this->getAttribute('zip_file'), 'r');
+    }
+
     protected function setBreadcrumb()
     {
         $listState = $this->getAttribute('state');

@@ -3,6 +3,7 @@
 namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Dat0r\DocumentCollection;
+use Honeybee\Core\Dat0r\Document;
 use Dat0r\Core\Runtime\Field\ReferenceField;
 use Honeybee\Core\Import;
 use ListConfig;
@@ -65,6 +66,14 @@ class ListAction extends BaseAction
         $listState->setData(
             $this->prepareListData($data['documents'])
         );
+
+        if ('xml_zipped' === $parameters->getParameter('export_format'))
+        {
+            $outputType = $this->getContext()->getController()->getOutputType('zip');
+            $this->getContainer()->setOutputType($outputType);
+
+            $this->setAttribute('zip_file', $this->createXmlZipArchive($data['documents']));
+        }
 
         return 'Success';
     }
@@ -398,5 +407,90 @@ class ListAction extends BaseAction
         }
 
         return $autoCompleteMappings;
+    }
+
+    /*
+     * Tmp. location for creating a zip-archive containing an xml file
+     * for each document in the list.
+     */
+    protected function createXmlZipArchive(DocumentCollection $documents)
+    {
+        $tmpPath = \AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR .
+            'xml-zip-' . md5(microtime());
+
+        if (! mkdir($tmpPath))
+        {
+            throw new \Exception("Unable to create zip tmp-directory.");
+        }
+
+        $zipPath = $tmpPath . DIRECTORY_SEPARATOR .
+            $this->getModule()->getName() . '-List.zip';
+
+        $zip = new \ZipArchive();
+        if (TRUE !== $zip->open($zipPath, \ZipArchive::OVERWRITE))
+        {
+            throw new \Exception("Unable to open zip archive: " . $zipPath);
+        }
+
+        foreach ($documents as $document)
+        {
+            $domDoc = $this->serializeDocumentToXml($document);
+            $domDoc->formatOutput = true;
+
+            $filePath = $tmpPath . DIRECTORY_SEPARATOR . $document->getIdentifier() . '.xml'; 
+            $domDoc->save($filePath);
+
+            $archiveInternalName = sprintf(
+                '%s-List/%s.xml',
+                $this->getModule()->getName(),
+                $document->getIdentifier()
+            );
+
+            $zip->addFile($filePath, $archiveInternalName);
+        }
+
+        $zip->close();
+
+        return $zipPath;
+    }
+
+    protected function serializeDocumentToXml(Document $document)
+    {
+        $domDoc = new \DOMDocument('1.0', 'utf-8');
+        $docData = $document->toArray();
+        $dataElement = $this->createDomElementFromArray($domDoc, 'document', $docData);
+        $domDoc->appendChild($dataElement); 
+
+        return $domDoc;
+    }
+
+    protected function createDomElementFromArray(\DOMDocument $domDoc, $nodeName, array $data)
+    {
+        $element = $domDoc->createElement($nodeName);
+
+        foreach ($data as $key => $value)
+        {
+            $childElement = NULL;
+            $childElementName = $key;
+
+            if(is_numeric($childElementName))
+            {
+                $childElementName = \AgaviInflector::singularize($nodeName);
+            }
+
+            if (is_array($value))
+            {
+                $childElement = $this->createDomElementFromArray($domDoc, $childElementName, $value);
+            }
+            else
+            {
+                $childElement = $domDoc->createElement($childElementName);
+                $childElement->nodeValue = $value;
+            }
+
+            $element->appendChild($childElement);
+        }
+
+        return $element;
     }
 }

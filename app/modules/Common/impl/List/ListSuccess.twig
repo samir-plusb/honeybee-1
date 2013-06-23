@@ -18,6 +18,23 @@
             {% endif %}
         </div>
         <div class="container-actions clearfix">
+            {% if zip_export_url %}
+            <section>
+                <div class="btn-group batch_actions">
+                    <a class="btn dropdown-toggle hb-icon-upload" data-toggle="dropdown">
+                        {{ tm._('Export', translation_domain) }}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="honeybee-export honeybee-export-xml hb-icon-file-zip" href="{{ zip_export_url }}">
+                               {{ tm._("ZIP Archiv mit XML-Dateien", translation_domain) }}
+                           </a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            {% endif %}
             {% if false == select_only_mode %}
                 {% if create_link %}
             <section>
