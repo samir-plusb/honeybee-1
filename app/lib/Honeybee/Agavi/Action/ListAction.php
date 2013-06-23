@@ -463,6 +463,10 @@ class ListAction extends BaseAction
         $domDoc = new \DOMDocument('1.0', 'utf-8');
         $docData = $document->toArray();
         $docData = array_merge($docData, $this->prepareFileData($document));
+        
+        unset($docData['workflowTicket']);
+        unset($docData['meta']);
+
         $dataElement = $this->createDomElementFromArray($domDoc, 'document', $docData);
         $domDoc->appendChild($dataElement); 
 
