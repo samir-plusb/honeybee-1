@@ -412,6 +412,7 @@ class ListAction extends BaseAction
     /*
      * Tmp. location for creating a zip-archive containing an xml file
      * for each document in the list.
+     * This should probally become an export.
      */
     protected function createXmlZipArchive(DocumentCollection $documents)
     {
@@ -458,10 +459,45 @@ class ListAction extends BaseAction
     {
         $domDoc = new \DOMDocument('1.0', 'utf-8');
         $docData = $document->toArray();
+        $docData = array_merge($docData, $this->prepareFileData($document));
         $dataElement = $this->createDomElementFromArray($domDoc, 'document', $docData);
         $domDoc->appendChild($dataElement); 
 
         return $domDoc;
+    }
+
+    protected function prepareFileData(Document $document)
+    {
+        $fileData = array();
+        $assetService = \ProjectAssetService::getInstance();
+
+        foreach ($this->getModule()->getFields() as $field)
+        {
+            if ($field->hasOption('file_type'))
+            {
+                $fileIds = $document->getValue($field->getName());
+                $files = array();
+
+                if (! empty($fileIds))
+                {
+                    foreach ($fileIds as $fileId)
+                    {
+                        $asset = $assetService->get($fileId);
+                        $files[] = array(
+                            'type' => $field->getOption('file_type'),
+                            'name' => $asset->getFullName(),
+                            'base64' => base64_encode(
+                                file_get_contents($asset->getFullPath())
+                            )
+                        );
+                    }
+                }
+
+                $fileData[$field->getName()] = $files;
+            }
+        }
+
+        return $fileData;
     }
 
     protected function createDomElementFromArray(\DOMDocument $domDoc, $nodeName, array $data)
