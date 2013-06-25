@@ -17,7 +17,7 @@ class DocumentExport implements IExport
 
     private $settings;
 
-    private $storage;
+    protected $storage;
 
     public function __construct(Config\ArrayConfig $settings, IStorage $storage, $name, $description)
     {

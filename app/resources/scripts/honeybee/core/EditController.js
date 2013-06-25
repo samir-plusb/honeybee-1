@@ -30,8 +30,6 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         this.element = element;
         this.options = options;
 
-        console.log(options);
-
         this.widgets = {};
         // setup knockout properties
         this.initKnockoutProperties();
