@@ -11,6 +11,7 @@
     xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
     <ae:configuration>
         <settings prefix="user.">
+            <setting name="enable_export">false</setting>
             <setting name="workflow">user.default</setting>
             <setting name="module_active">true</setting>
 

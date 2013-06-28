@@ -26,16 +26,16 @@
 
                 <step name="publish">
                     <description>Tries to publish a given %%MODULE_PREFIX%% document.</description>
-                    <!-- Register your exports (publishing) here
-                    <ae:parameters>
-                        <ae:parameter name="exports">
-                            <ae:parameters>
-                                <ae:parameter>pulq-fe</ae:parameter>
-                            </ae:parameters>
-                        </ae:parameter>
-                    </ae:parameters> 
-                    -->
                     <plugin type="Honeybee\Core\Workflow\Plugin\PublishPlugin">
+                        <!-- Register your exports (publishing) here
+                        <ae:parameters>
+                            <ae:parameter name="exports">
+                                <ae:parameters>
+                                    <ae:parameter>pulq-fe</ae:parameter>
+                                </ae:parameters>
+                            </ae:parameter>
+                        </ae:parameters> 
+                        -->
                         <gates>
                             <gate_step label="publishing ok" name="promote">published</gate_step>
                             <gate_step label="publishing error" name="demote">edit</gate_step>
@@ -50,13 +50,11 @@
                             <ae:parameter name="module">%%MODULE_NAME%%</ae:parameter>
                             <ae:parameter name="action">Edit</ae:parameter>
                             <!-- Register your exports (revoking) here
-                            <ae:parameters>
-                                <ae:parameter name="exports">
-                                    <ae:parameters>
-                                        <ae:parameter>pulq-fe</ae:parameter>
-                                    </ae:parameters>
-                                </ae:parameter>
-                            </ae:parameters> 
+                            <ae:parameter name="exports">
+                                <ae:parameters>
+                                    <ae:parameter>pulq-fe</ae:parameter>
+                                </ae:parameters>
+                            </ae:parameter> 
                             -->
                         </ae:parameters>
                         <gates>
