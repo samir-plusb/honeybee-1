@@ -13,4 +13,6 @@ interface ITree
     public function getRootNode();
 
     public function toArray();
+
+    public function getIterator();
 }

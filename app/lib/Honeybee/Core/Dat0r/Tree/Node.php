@@ -8,6 +8,8 @@ abstract class Node implements INode
 
     protected $children;
 
+    protected $depth = 0;
+
     public function __construct(array $children = array())
     {
         $this->children = array();
@@ -31,11 +33,27 @@ abstract class Node implements INode
     public function setParent(INode $parent)
     {
         $this->parent = $parent;
+        $this->setDepth($parent->getDepth() + 1);
+    }
+
+    public function getDepth()
+    {
+        return $this->depth;
+    }
+
+    public function setDepth($depth)
+    {
+        $this->depth = $depth;
+
+        foreach ($this->getChildren() as $child)
+        {
+            $child->setDepth($this->depth + 1);
+        }
     }
 
     public function hasChildren()
     {
-        return !empty($this->children);
+        return ! empty($this->children);
     }
 
     public function getChildren()
@@ -66,6 +84,7 @@ abstract class Node implements INode
     {
         if (($pos = array_search($child, $this->children)))
         {
+            $child->setParent(NULL);
             array_splice($this->children, $pos, 1);
         }
     }
@@ -92,5 +111,10 @@ abstract class Node implements INode
             $expandedData,
             array('identifier' => $this->getIdentifier(), 'children' => $children)
         );
+    }
+
+    public function getIterator()
+    {
+        return new RecursiveNodeIterator($this);
     }
 }

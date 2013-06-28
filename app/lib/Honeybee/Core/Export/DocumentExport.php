@@ -29,6 +29,8 @@ class DocumentExport implements IExport
 
     public function publish(Document $document)
     {
+        $metaData = $document->getMeta();
+
         if (! isset($metaData[self::PUBLISHED_AT_FIELD]))
         {
             $publishDate = new \DateTime();
@@ -39,8 +41,6 @@ class DocumentExport implements IExport
         $data = $this->buildExportData($document);
         $data['identifier'] = $document->getShortIdentifier();
         $data['type'] = $document->getModule()->getOption('prefix');
-
-        $metaData = $document->getMeta();
         $data[self::PUBLISHED_AT_FIELD] = $metaData[self::PUBLISHED_AT_FIELD];
 
         $this->storage->write($data);
@@ -74,6 +74,11 @@ class DocumentExport implements IExport
     public function getDescription()
     {
         return $this->description;
+    }
+
+    public function getSettings()
+    {
+        return $this->settings;
     }
 
     protected function buildExportData(Document $document)

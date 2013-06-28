@@ -3,7 +3,6 @@
 namespace Honeybee\Core\Dat0r\Tree;
 
 use Honeybee\Core\Dat0r\Module;
-use Elastica;
 
 class Tree implements ITree
 {
@@ -48,6 +47,14 @@ class Tree implements ITree
     public function getRootNode()
     {
         return $this->rootNode;
+    }
+
+    public function getIterator()
+    {
+        return new \RecursiveIteratorIterator(
+            $this->getRootNode()->getIterator(),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
     }
 
     public function toArray($level = NULL, $expand = TRUE)
