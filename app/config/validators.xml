@@ -17,6 +17,30 @@
                 </ae:parameters>
             </validator_definition>
 
+            <validator_definition class="AgaviInarrayValidator" name="valid_save_action">
+                <errors>
+                    <error>Only specific types are allowed as submit button values.</error>
+                    <error for="type">Only strings are allowed as submit button values.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="type">string</ae:parameter>
+                    <ae:parameter name="case">true</ae:parameter>
+                    <ae:parameter name="values">
+                        <ae:parameter>save_and_continue</ae:parameter>
+                        <ae:parameter>save_and_new</ae:parameter>
+                    </ae:parameter>
+                </ae:parameters>
+            </validator_definition>
+
         </validator_definitions>
+
+        <validators method="write">
+            <validator class="valid_save_action" required="false">
+                <arguments>
+                    <argument>save_type</argument>
+                </arguments>
+            </validator>
+        </validators>
+
     </ae:configuration>
 </ae:configurations>

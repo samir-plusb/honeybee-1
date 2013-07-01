@@ -45,16 +45,22 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
     // #     knockoutjs bound funcs     #
     // ##################################
 
-    onFormSubmit: function()
+    onFormSubmit: function(form, event)
     {
+        var that = this;
+        var form = this.element.find('form');
+        var post_url = form.attr('action');
+
+        if (event)
+        {
+            form.append($('<input type="hidden" name="save_type" value="save_and_new" />'));
+        }
+
         if (this.request_pending() || this.options.readonly)
         {
             return false;
         }
 
-        var that = this;
-        var form = this.element.find('form');
-        var post_url = form.attr('action');
         // make sure all ckeditor values are correctly populated.
         // this is workaround for values sometimes not being updated for whatever reason ...
         $('textarea.ckeditor').each(function () {
@@ -93,6 +99,10 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
                 that.revision(resp_data.data.revision);
                 that.shortId(resp_data.data.shortId);
 
+                if (resp_data.redirect_url)
+                {
+                    window.location.href = resp_data.redirect_url;
+                }
                 // @todo history.pushState nice 2 have here
             }
             else if('error' === resp_data.state)
@@ -185,6 +195,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         this.shortId = ko.observable(this.options.shortId || "");
         this.language = ko.observable(this.options.language || "");
         this.version = ko.observable(this.options.version || "");
+        this.redirect_after_request = ko.observable(false);
     },
 
     registerWidgets: function()
