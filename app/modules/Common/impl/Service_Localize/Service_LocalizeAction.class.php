@@ -22,21 +22,36 @@ class Common_Service_LocalizeAction extends CommonBaseAction
     public function fetchGeoCoordinates(array $queryValues)
     {
         $client = new Client(\AgaviConfig::get('common.geo_service.url'));
+
+        $client->getEventDispatcher()->addListener('request.error', function(Event $event)
+        {
+            $newResponse = new Response($event['response']->getStatusCode());
+            $event['response'] = $newResponse;
+            $event->stopPropagation();
+        });
+
         $auth = \AgaviConfig::get('common.geo_service.auth');
 
         $request = $client->get()->setAuth(
             $auth['user'], $auth['pwd']
         );
         $request->getQuery()->merge($queryValues);
+
         $response = $request->send();
 
         if (200 > $response->getStatusCode() || 300 <= $response->getStatusCode())
         {
+            $this->logError(
+                'Failed localizing payload {payload} at url: {url}',
+                array(
+                    'payload' => $queryValues,
+                    'url' => \AgaviConfig::get('common.geo_service.url')
+                )
+            );
+
             return FALSE;
         }
 
-        $this->logInfo("Received following response for localization of '" . $request->getUrl() . "': " . PHP_EOL . $response->getBody());
-        
         $location = array('item_count' => 0);
     
         $jdata = $response->json();
