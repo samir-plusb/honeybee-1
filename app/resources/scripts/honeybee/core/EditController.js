@@ -39,6 +39,8 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
             ko.applyBindings(this, this.element[0]);
             this.registerWidgets();
         }
+
+        window.addEventListener('message', this.onDomMessagePostReceived.bind(this), false);
     },
 
     // ##################################
@@ -179,6 +181,29 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
             {
                 $(elem).remove();
             } });
+        }
+    },
+
+    onDomMessagePostReceived: function(event)
+    {
+        if (0 !== this.options.event_origin.indexOf(event.origin))
+        {
+            return;
+        }
+
+        var msg_data = JSON.parse(event.data);
+
+        if (! msg_data.event_type)
+        {
+            return;
+        }
+
+        if (msg_data.event_type === 'info-message')
+        {
+            this.addAlert({
+                type: 'success',
+                message: msg_data.message
+            });
         }
     },
 

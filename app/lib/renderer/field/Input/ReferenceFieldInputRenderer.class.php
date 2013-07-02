@@ -59,7 +59,8 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                 'searching' => $tm->_('Suche ...'),
                 'too_short' => $tm->_('Bitte mindestens ein Zeichen eingeben'),
                 'too_long' => $tm->_('maximal erlaubte Anzahl an Verknüpfungen erreicht'),
-                'no_results' => $tm->_('Keine passenden Ergebnisse gefunden')
+                'no_results' => $tm->_('Keine passenden Ergebnisse gefunden'),
+                'inline_create_label' => $tm->_('Verknüpfungsziel direkt erzeugen')
             )
         ));
     }
@@ -80,11 +81,14 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
             $modulePrefix = $referencedModule->getOption('prefix');
             $suggestRouteName = sprintf('%s.suggest', $modulePrefix);
             $listRouteName = sprintf('%s.list', $modulePrefix);
+            $createRouteName = sprintf('%s.edit', $modulePrefix);
 
             $autoCompleteMappings[$modulePrefix] = array(
                 'display_field' => $displayField,
                 'identity_field' => $identityField,
                 'module_label' => $tm->_($referencedModule->getName(), 'modules.labels'),
+                'create_label' => $tm->_($modulePrefix.'_create', $modulePrefix.'.rendering.input.document'),
+                'success_label' => $tm->_($modulePrefix.'_create_success', $modulePrefix.'.rendering.input.document'),
                 'list_url' => htmlspecialchars_decode(
                     urldecode($this->getRouteLink($listRouteName, array(
                         'referenceModule' => $document->getModule()->getName(),
@@ -92,6 +96,9 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                         'offset' => 0,
                         'limit' => 10
                     )))
+                ),
+                'create_url' => htmlspecialchars_decode(
+                    urldecode($this->getRouteLink($createRouteName))
                 ),
                 'uri' => htmlspecialchars_decode(
                     urldecode($this->getRouteLink($suggestRouteName, array(

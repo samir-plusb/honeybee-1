@@ -1,7 +1,11 @@
 <div class="tagslist-input-wrapper">
   <input type="hidden" value="" data-bind="attr: { name: fieldname() + '[]' }" />
-  <input type="text" placeholder="Verknüpfen" data-bind="disable: options.readonly, css: { 'tagslist-input': true, 'span12': options.readonly }" />
-  <a href="#" class="refbrowser-open tagslist-list-view" data-bind="click: function() { $data.launchReferenceBrowser(); }, visible: ! options.readonly">
+  <input type="text" placeholder="Verknüpfen" data-html="true" data-animation="true" 
+    data-placement="right" data-trigger="manual"
+    data-bind="disable: options.readonly, 
+      css: { 'tagslist-input': true, 'span12': options.readonly },
+      attr: { 'data-content': $data.popover_content, 'data-title': $data.options.texts.inline_create_label }" />
+  <a href="#open_reference_browser" class="refbrowser-open tagslist-list-view" data-bind="click: function() { $data.launchReferenceBrowser(); }, visible: ! options.readonly">
     <img data-bind="visible: is_loading" src="static/deploy/_global/binaries/select2-spinner.gif" />
     <span class="hb-icon-new-window" />
   </a>

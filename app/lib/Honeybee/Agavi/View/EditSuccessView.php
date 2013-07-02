@@ -14,11 +14,7 @@ class EditSuccessView extends BaseView
             'state' => 'ok',
             'messages' => array($this->getContext()->getTranslationManager()->_('The document was saved successfully.', 'modules.labels')),
             'errors' => $this->getAttribute('errors', array()),
-            'data' => array(
-                'identifier' => $document->getIdentifier(),
-                'revision' => $document->getRevision(),
-                'shortId' => $document->getShortId()
-            )
+            'data' => $document->toArray()
         );
         
         if ('save_and_new' === $requestData->getParameter('save_type'))

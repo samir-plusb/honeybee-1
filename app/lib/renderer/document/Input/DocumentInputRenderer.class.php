@@ -197,6 +197,7 @@ class DocumentInputRenderer extends DocumentRenderer
 
     protected function getControllerOptions(Document $document)
     {
+        $routing = AgaviContext::getInstance()->getRouting();
 
         return array(
             'autobind' => TRUE, 
@@ -206,7 +207,8 @@ class DocumentInputRenderer extends DocumentRenderer
             'uuid' => $document->getValue('uuid'),
             'language' => $document->getValue('language'),
             'version' => $document->getValue('version'),
-            'readonly' => $this->isReadonly($document)
+            'readonly' => $this->isReadonly($document),
+            'event_origin' => $routing->getBaseHref()
         );
     }
 }
