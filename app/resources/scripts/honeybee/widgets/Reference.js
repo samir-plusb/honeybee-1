@@ -148,50 +148,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     {
         this.select2_element = this.element.find('.tagslist-input');
 
-        var formatResult = function(result, element, query) 
-        {
-            if (! result.id)
-            {
-                return '<strong style="color: rgb(0, 136, 204);">' + result.text + '</strong>';
-            }
-
-            var match = query ? result.text.toUpperCase().indexOf(
-                query.term.toUpperCase()
-            ) : -1;
-
-            if (match < 0) 
-            {
-                return result.text;
-            }
-
-            var parts = result.text.split(' ');
-            var markup = [], i;
-
-            for (i = 0; i < parts.length; i++)
-            {
-                if (0 === parts[i].toUpperCase().indexOf(query.term.toUpperCase()))
-                {
-                    parts[i] = "<b>" + parts[i].substring(0, query.term.length) + "</b>" +
-                        parts[i].substring(query.term.length, parts[i].length);
-                }
-                markup.push(parts[i]);
-            }
-
-            return markup.join(' ');
-        };
-
-        var formatSelection = function(result, element, query)
-        {
-            if (! result.id)
-            {
-                return '<strong style="color: rgb(0, 136, 204);">' + result.text + '</strong>';
-            }
-
-            return result.text;
-        };
-
         var that = this, autocomplete_timer;
-
         var select2_options = {
             placeholder: this.options.texts.placeholder,
             minimumInputLength: 0,
@@ -209,8 +166,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                     that.fetchData(query.term, query.callback);
                 }, 250);
             },
-            formatResult: formatResult,
-            formatSelection: formatSelection 
+            formatResult: this.formatResult,
+            formatSelection: this.formatSelection 
         };
 
         if (this.options.max && 0 < this.options.max)
@@ -250,6 +207,48 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         });
 
         this.select2_element.select2('data', this.tags());
+    },
+
+    formatSelect2Result: function(result, element, query) 
+    {
+        if (! result.id)
+        {
+            return '<strong style="color: rgb(0, 136, 204);">' + result.text + '</strong>';
+        }
+
+        var match = query ? result.text.toUpperCase().indexOf(
+            query.term.toUpperCase()
+        ) : -1;
+
+        if (match < 0) 
+        {
+            return result.text;
+        }
+
+        var parts = result.text.split(' ');
+        var markup = [], i;
+
+        for (i = 0; i < parts.length; i++)
+        {
+            if (0 === parts[i].toUpperCase().indexOf(query.term.toUpperCase()))
+            {
+                parts[i] = "<b>" + parts[i].substring(0, query.term.length) + "</b>" +
+                    parts[i].substring(query.term.length, parts[i].length);
+            }
+            markup.push(parts[i]);
+        }
+
+        return markup.join(' ');
+    },
+
+    formatSelect2Selection: function(result, element, query)
+    {
+        if (! result.id)
+        {
+            return '<strong style="color: rgb(0, 136, 204);">' + result.text + '</strong>';
+        }
+
+        return result.text;
     },
 
     fetchData: function(phrase, callback)
@@ -476,7 +475,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             this.element.find('.refwidget-container').popover('show');
 
             popover_links = this.element.find('.popover .create-reference-trigger');
-            popover_links.click(function(event)
+            popover_links.mousedown(function(event)
             {
                 that.createReferenceDocument($(event.currentTarget));
                 return false;
@@ -522,18 +521,18 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         var input = this.element.find('.refwidget-container');
         var edge_distance_right = $(window).width() - (input.width() + input.offset().left);
         var edge_distance_left = input.offset().left;
+        var css_adjsutments = {
+            'top': (-(popover_el.height() / 2) + 10) + 'px'
+        };
 
         if (edge_distance_left > edge_distance_right)
         {
             var delta_width = popover_max_width - prev_width;
             var new_left = popover_el.position().left - delta_width;
-            var top = -(popover_el.height() / 2) + 10;
-
-            popover_el.css({
-                'left': new_left + 'px', 
-                'top': top + 'px' 
-            });
+            css_adjsutments.left = new_left + 'px';
         }
+        
+        popover_el.css(css_adjsutments);
     },
 
     hideCreatePopover: function()
@@ -561,12 +560,11 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             this.element.find('.select2-input')[0].focus();
             return;
         }
+        create_link_element.addClass('disabled');
 
         var that = this;
-        
         var ref_module_name = create_link_element.attr('data-referenced-module');
         var ref_module_settings = this.options.autocomp_mappings[ref_module_name];
-
         var module_data = {};
         module_data[ref_module_settings.display_field] = this.phrase();
 
@@ -593,7 +591,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             var reference_id = response.data[ref_module_settings.identity_field];
             var displayed_text = ref_module_settings.module_label + ': ' + text;
 
-            this.element.find('.select2-input')[0].focus();
+            that.element.find('.select2-input')[0].focus();
 
             that.tags.push({ 
                 id: reference_id,
