@@ -71,6 +71,7 @@ class TextExcerptFilter extends BaseFilter
         $settings['strip_newlines'] = $cfg->get('strip_newlines');
         $settings['strip_tabs'] = $cfg->get('strip_tabs');
         $settings['strip_excessive_whitespace'] = $cfg->get('strip_excessive_whitespace');
+        $settings['only_full_sentences'] = $cfg->get('only_full_sentences');
 
         return $settings;
     }
@@ -85,6 +86,7 @@ class TextExcerptFilter extends BaseFilter
         $stripNewlines = isset($settings['strip_newlines']) ? $settings['strip_newlines'] : TRUE;
         $stripTabs = isset($settings['strip_tabs']) ? $settings['strip_tabs'] : TRUE;
         $stripExcessiveWhitespace = isset($settings['strip_excessive_whitespace']) ? $settings['strip_excessive_whitespace'] : TRUE;
+        $onlyFullSentences = isset($settings['only_full_sentences']) ? $settings['only_full_sentences'] : FALSE;
 
         $maxCharacters = isset($settings['characters']) ? $settings['characters'] : 0;
         $maxWords = isset($settings['words']) ? $settings['words'] : 0;
@@ -142,36 +144,24 @@ class TextExcerptFilter extends BaseFilter
 
         if ($maxCharacters) // cut to maximum number of characters
         {
-            $excerpt = mb_substr($excerpt, $skip, $maxCharacters);
-            $excerpt = mb_substr($excerpt, 0, strrpos($excerpt," "));
+            $excerpt = $this->extractCharacters($excerpt, $settings);
+
+            if ($onlyFullSentences)
+            {
+                $excerpt = $this->extractSentences($excerpt, $settings);
+            }
         }
         else if ($maxWords) // cut to maximum number of words
         {
-            $excerpt = implode(' ', array_slice(explode(' ', $excerpt), $skip, $maxWords));
+            $excerpt = $this->extractWords($excerpt, $settings);
         }
         else if ($maxSentences) // cut to maximum number of sentences
         {
-            // remove sentences that should be skipped
-            $regex = '!^((?:.*?[\.\!\?](?= )){' . $skip . '})!sm';
-            $excerpt = preg_replace($regex, '', $excerpt);
-            // get number of sentences that we need
-            $regex = '!^((?:.*?[\.\!\?](?= )){' . $maxSentences . '})!sm';
-            if (preg_match_all($regex, $excerpt, $matches))
-            {
-                $excerpt = $matches[0][0];
-            }
-            else
-            {
-                // fallback, probably not necessary as there are no sentences left anyways...
-                $excerpt = implode('. ', array_slice(explode('.', $excerpt), $skip, $maxSentences)) . '.';
-                $excerpt = preg_replace('#\s\s+#', ' ', $excerpt);
-            }
+            $excerpt = $this->extractSentences($excerpt, $settings);
         }
         else if ($maxParagraphs) // cut to maximum number of paragraphs
         {
-            $excerpt = implode('</p>', array_slice(explode('</p>', $excerpt), $skip, $maxParagraphs)) . '</p>';
-            $excerpt = preg_replace('#^(.*?)<p#', '<p', $excerpt); // strip content before first paragraph
-            $excerpt = preg_replace('#</p>(.*?)<p#', '</p><p', $excerpt); // strip content between paragraphs
+            $excerpt = $this->extractParagraphs($excerpt, $settings);
         }
 
         if ($appendEllipsis)
@@ -184,7 +174,60 @@ class TextExcerptFilter extends BaseFilter
 
             $excerpt .= $ellipsis;
         }
-
+var_dump($excerpt);
         return $excerpt;
+    }
+
+    protected function extractSentences($text, array $settings)
+    {
+        $skip = isset($settings['skip']) ? $settings['skip'] : 0;
+        $maxSentences = isset($settings['sentences']) ? $settings['sentences'] : 0;
+
+        // remove sentences that should be skipped
+        $regex = '!^((?:.*?[\.\!\?](?= )){' . $skip . '})!sm';
+        $text = preg_replace($regex, '', $text);
+        // get number of sentences that we need
+        $regex = '!^((?:.*?[\.\!\?](?= )){' . $maxSentences . '})!sm';
+        if (preg_match_all($regex, $text, $matches))
+        {
+            $text = $matches[0][0];
+        }
+        else
+        {
+            // fallback, probably not necessary as there are no sentences left anyways...
+            $text = implode('. ', array_slice(explode('.', $text), $skip, $maxSentences)) . '.';
+            $text = preg_replace('#\s\s+#', ' ', $text);
+        }
+
+        return $text;
+    }
+
+    protected function extractCharacters($text, array $settings)
+    {
+        $skip = isset($settings['skip']) ? $settings['skip'] : 0;
+        $maxCharacters = isset($settings['characters']) ? $settings['characters'] : 0;
+
+        $text = mb_substr($text, $skip, $maxCharacters);
+
+        return mb_substr($text, 0, strrpos($text," "));
+    }
+
+    protected function extractWords($text, array $settings)
+    {
+        $skip = isset($settings['skip']) ? $settings['skip'] : 0;
+        $maxWords = isset($settings['words']) ? $settings['words'] : 0;
+
+        return implode(' ', array_slice(explode(' ', $excerpt), $skip, $maxWords));
+    }
+
+    protected function extractParagraphs($text, array $settings)
+    {
+        $skip = isset($settings['skip']) ? $settings['skip'] : 0;
+        $maxParagraphs = isset($settings['paragraphs']) ? $settings['paragraphs'] : 0;
+
+        $excerpt = implode('</p>', array_slice(explode('</p>', $excerpt), $skip, $maxParagraphs)) . '</p>';
+        $excerpt = preg_replace('#^(.*?)<p#', '<p', $excerpt); // strip content before first paragraph
+
+        return preg_replace('#</p>(.*?)<p#', '</p><p', $excerpt); // strip content between paragraphs
     }
 }
