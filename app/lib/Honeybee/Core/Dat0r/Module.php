@@ -83,6 +83,11 @@ abstract class Module extends RootModule implements Acl\Resource\ResourceInterfa
         return $this->getOption('prefix');
     }
 
+    public function getDocumentType()
+    {
+        return $this->getDocumentImplementor();
+    }
+
     /**
      * Returns the default fields that are initially added to a module upon creation.
      *
