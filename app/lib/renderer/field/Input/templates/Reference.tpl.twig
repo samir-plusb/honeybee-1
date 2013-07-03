@@ -1,5 +1,10 @@
 <div class="control-group">
     <label class="control-label" for="{{fieldId}}">{{ tm._(fieldName, td) }}</label>
-    <section class="honeybee-widget widget-tags-list" data-tags-list-options="{{ widgetOptions|raw }}">
+    <section class="controls honeybee-widget widget-reference" data-reference-options="{{ widgetOptions|raw }}">
     </section>
+    {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}
+    <span class="hb-icon-info help-trigger field-help" 
+        data-title="{{ tm._('field_level_help') }}" data-content="{{ tm._(fieldName ~ '_help', td) }}"
+        data-animation="false" data-placement="left" data-trigger="manual" />
+    {% endif %}
 </div>

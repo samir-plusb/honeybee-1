@@ -1,13 +1,25 @@
 <div class="control-group field-wrapper-{{ fieldName }}">
-    <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td)|raw}}</label>
+    <label class="control-label" for="{{ fieldId }}">
+        {{ tm._(fieldName, td)|raw}}
+    </label>
     {% if hasWidget %}
         <section class="controls honeybee-widget {{widgetType}}" 
             data-{{ widgetType|replace({'widget-': ''}) }}-options="{{widgetOptions|raw}}" ></section>
+        {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}
+        <span class="hb-icon-info help-trigger" 
+            data-title="{{ tm._('field_level_help') }}" data-content="{{ tm._(fieldName ~ '_help', td) }}"
+            data-animation="false" data-placement="left" data-trigger="manual"  />
+        {% endif %}
     {% else %}
         <div class="controls">
             <input type="text" name="{{ inputName }}" value="{{ fieldValue }}"
                 id="{{ fieldId }}" placeholder="{{ placeholder }}" class="span11" 
                 {% if true == readonly %} readonly="readonly" {% endif %} />
+            {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}
+            <span class="hb-icon-info help-trigger field-help" 
+                data-title="{{ tm._('field_level_help') }}" data-content="{{ tm._(fieldName ~ '_help', td) }}"
+                data-animation="false" data-placement="left" data-trigger="manual"  />
+            {% endif %}
         </div>
     {% endif %}
 </div>

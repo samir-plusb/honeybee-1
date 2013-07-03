@@ -47,6 +47,8 @@
                             <ae:parameter name="Editing:">Bearbeitung von:</ae:parameter>
                             <ae:parameter name="Page">Seite</ae:parameter>
                             <ae:parameter name="Search for:">Suche nach:</ae:parameter>
+                            <ae:parameter name="field_level_help">Feld-Informationen</ae:parameter>
+                            <ae:parameter name="group_level_help">Group-Informationen</ae:parameter>
                             <ae:parameter name="Extended Search">Erweiterte Suche</ae:parameter>
                             <ae:parameter name="The document was saved successfully.">Das Dokument wurde erfolgreich gespeichert.</ae:parameter>
                         </ae:parameter>

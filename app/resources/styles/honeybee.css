@@ -630,6 +630,11 @@ input.typeahead
  * Templating - Input Form
  */
 
+.controller-edit .tab-content
+{
+  overflow: visible;
+}
+
 .field-group
 {
   border: 1px solid #d2d2d2;
@@ -661,9 +666,56 @@ input.typeahead
   padding: 0 20px;
 }
 
-.controls
+.controls,
+.control-group,
+.field-group
 {
+  position: relative;
+  overflow: visible;
+}
 
+.controls .help-trigger,
+.control-group .help-trigger,
+.field-group .help-trigger
+{
+  cursor: pointer;
+  font-size: 12pt;
+  right: 10px;
+  top: 17px;
+  position: absolute;
+  opacity: 0.2;
+  color: rgb(0, 136, 204);
+  transition: opacity 350ms ease;
+}
+
+.controls .help-trigger,
+.control-group .help-trigger
+{
+  top: 6px;
+}
+
+.help-trigger.active,
+.field-group:hover .controls .help-trigger.active,
+.field-group:hover .control-group .help-trigger.active
+{
+  font-size: 14pt;
+  right: 9px;
+  opacity: 1.0;
+}
+
+.field-group:hover .controls:hover .help-trigger,
+.field-group:hover .control-group:hover .help-trigger,
+.controls:hover .help-trigger,
+.control-group:hover .help-trigger,
+.field-group:hover .help-trigger
+{
+  opacity: 1.0;
+}
+
+.field-group:hover .controls .help-trigger,
+.field-group:hover .control-group .help-trigger
+{
+  opacity: 0.2;
 }
 
 .controls .honeybee-input

@@ -39,6 +39,60 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
             ko.applyBindings(this, this.element[0]);
             this.registerWidgets();
         }
+        var that = this;
+        var hide = function(help_trigger)
+        {
+            help_trigger.data('visible', false);
+            help_trigger.removeClass('active');
+            help_trigger.popover('hide');
+        };
+
+        var show = function(help_trigger)
+        {
+            that.element.find('.help-trigger.active').each(function(idx, active_trigger)
+            {
+                hide($(active_trigger));
+            });
+
+            help_trigger.data('visible', true);
+            help_trigger.popover('show');
+            help_trigger.addClass('active');
+
+            var popover = that.element.find('.popover');
+            popover.css('width', 400);
+
+            var element_pos = help_trigger.position();
+            var position_top = -(popover.height() / 2) + 15;
+            if (help_trigger.hasClass('group-help'))
+            {
+                position_top += 10;
+            }
+
+            popover.css({
+                'left': element_pos.left - popover.width() - 5,
+                'top': position_top
+            });
+        };
+
+        this.element.find('.help-trigger').each(function(idx, element)
+        {
+            element = $(element);
+            element.popover();
+            element.data('visible', false);
+
+            element.click(function()
+            {
+                var visible = element.data('visible');
+                if (visible)
+                {
+                    hide(element);
+                }
+                else
+                {
+                    show(element);
+                }
+            });
+        });
 
         window.addEventListener('message', this.onDomMessagePostReceived.bind(this), false);
     },

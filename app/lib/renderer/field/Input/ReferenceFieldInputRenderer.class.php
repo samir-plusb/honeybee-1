@@ -10,6 +10,11 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
         return 'widget-reference';
     }
 
+    protected function getTemplateName()
+    {
+        return "Reference.tpl.twig";
+    }
+
     protected function getWidgetOptions(Document $document)
     {
         $parentOptions = parent::getWidgetOptions($document);

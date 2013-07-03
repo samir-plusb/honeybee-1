@@ -44,10 +44,17 @@
                             {% for groupName, groupDef in rowGroups %}
                             <div class="span{{groupDef['width']}} group">
                                 <div class="field-group field-group-{{groupName}}">
-                                    <h3>{{tm._(groupName, td)}}</h3>
+                                    <h3 class="input-group-label">
+                                        {{tm._(groupName, td)}}
+                                    </h3>
                                     {% for field in groupDef.fields %}
                                         {{field|raw}}
                                     {% endfor %}
+                                    {% if tm._(groupName ~ '_help', td) != groupName ~ '_help' %}
+                                    <span class="hb-icon-info help-trigger group-help"
+                                        data-title="{{ tm._('group_level_help') }}" data-content="{{ tm._(groupName ~ '_help', td) }}"
+                                        data-animation="false" data-placement="left" data-trigger="manual" />
+                                    {% endif %}
                                 </div>
                             </div>
                             {% endfor %}
