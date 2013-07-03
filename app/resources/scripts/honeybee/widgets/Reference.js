@@ -22,9 +22,11 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
     is_visible: null,
 
-    popover_content: null,
-
     create_reference_click_handle: null,
+
+    pending_request: null,
+
+    queued_requests: null,
 
     // --------------------
     // widget implemenation
@@ -34,6 +36,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     {
         this.parent(element, options, ready_callback);
         this.is_create_popover_visible = false;
+        this.pending_request = null;
+        this.queued_requests = null;
     },
 
     getTemplate: function()
@@ -55,7 +59,49 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             window.addEventListener('message', this.onDomMessagePostReceived.bind(this), false);
         }
 
-        this.select2_element.popover();
+        if (this.options.enable_inline_create)
+        {
+            var input = this.element.find('.refwidget-container');
+            var edge_distance_right = $(window).width() - (input.width() + input.offset().left);
+            var edge_distance_left = input.offset().left;
+
+            input.popover({
+                trigger: 'manual',
+                animation: true,
+                html: true,
+                title: this.options.texts.inline_create_label,
+                placement: (edge_distance_left > edge_distance_right) ? 'left' : 'right',
+                content: this.buildPopover()
+            });
+        }
+    },
+
+    buildPopover: function()
+    {
+        var refmodule_name, ref_module;
+
+        var inline_create_targets_list = $('<ul>');
+        var inline_create_target_item, inline_create_link;
+
+        for (refmodule_name in this.options.autocomp_mappings)
+        {
+            ref_module = this.options.autocomp_mappings[refmodule_name];
+
+            inline_create_link = $('<a>');
+            inline_create_link.append($('<i class="hb-icon-plus-alt" />'));
+            inline_create_link.addClass('create-reference-trigger btn btn-success');
+            inline_create_link.attr('href', ref_module.create_url);
+            inline_create_link.attr('data-referenced-module', refmodule_name);
+            inline_create_link.html(
+                '<i class="hb-icon-plus-alt" /><span>' + ref_module.create_label + '</span>'
+            );
+
+            inline_create_target_item = $('<li>');
+            inline_create_target_item.append(inline_create_link);
+            inline_create_targets_list.append(inline_create_target_item);
+        }
+
+        return $('<div>').append(inline_create_targets_list).html();
     },
 
     initKnockoutProperties: function()
@@ -79,39 +125,19 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         });
 
         var refmodule_name, ref_module;
-
-        var inline_create_targets_list = $('<ul>');
-        var inline_create_target_item, inline_create_link;
-
         for (refmodule_name in this.options.autocomp_mappings)
         {
             ref_module = this.options.autocomp_mappings[refmodule_name];
             ref_module.name = refmodule_name;
             ref_module.active = ko.observable(false);
             this.referenced_modules.push(ref_module);
-
-            inline_create_link = $('<a>');
-            inline_create_link.append($('<i class="hb-icon-plus-alt" />'));
-            inline_create_link.addClass('create-reference-trigger btn btn-success');
-            inline_create_link.attr('href', ref_module.create_url);
-            inline_create_link.attr('data-referenced-module', refmodule_name);
-            // @todo use ref_module.create_label and replace {phrase}
-            inline_create_link.html(
-                '<i class="hb-icon-plus-alt" /> ' + ' Kategorie "' + this.phrase() + '" erstellen'
-            );
-
-            inline_create_target_item = $('<li>');
-            inline_create_target_item.append(inline_create_link);
-            inline_create_targets_list.append(inline_create_target_item);
         }
-
-        this.popover_content = $('<div>').append(inline_create_targets_list).html();
     },
 
     removeTag: function(tag)
     {
         this.tags.remove(tag);
-        this.element.find('.tagslist-input').select2('data', this.tags());
+        this.select2_element.select2('data', this.tags());
     },
 
     // -------------------------------------------
@@ -223,95 +249,107 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             }
         });
 
-        this.element.find('.tagslist-input').select2('data', this.tags());
+        this.select2_element.select2('data', this.tags());
     },
 
     fetchData: function(phrase, callback)
     {
+        if (this.pending_request)
+        {
+            this.pending_request.abort();
+            this.pending_request = null;
+        }
+        this.queued_requests = [];
+        this.enabled_create_targets([]);
+
         var module_name, autocomp, that = this;
         var data = { results: [] };
-        var is_processing = false;
-        var exact_match_found = false;
-        var response_count = 0;
 
         for (module_name in this.options.autocomp_mappings)
         {
             autocomp = this.options.autocomp_mappings[module_name];
-
-            var process_response = function(response, module, options)
-            {
-                response_count++;
-
-                var label_field = options.display_field;
-                var id_field = options.identity_field;
-
-                if (response_count === 1)
-                {
-                    that.enabled_create_targets([]);
-                }
-
-                if (0 < response.data.length)
-                {
-                    data.results.push({ text: options.module_label });
-                }
-
-                var i, entry;
-                for (i = 0; i < response.data.length; i++)
-                {
-                    entry = response.data[i];
-                    if (entry[label_field].toLowerCase() == phrase.toLowerCase())
-                    {
-                        exact_match_found = true;
-                    }
-
-                    data.results.push({ 
-                        id: entry[id_field],
-                        text: entry[label_field],
-                        label: options.module_label + ': ' + entry[label_field],
-                        module_prefix: module
-                    });
-                }
-
-                if (!exact_match_found && phrase.length > 0)
-                {
-                    that.enabled_create_targets.push(module);
-                }
-
-                if (that.enabled_create_targets().length === 0)
-                {
-                    that.hideCreatePopover();
-                }
-                else
-                {
-                    that.showCreatePopover();
-                }
-
-                callback(data);
-            };
-
-            this.is_loading(true);
-
-            honeybee.core.Request.curry(
-                autocomp.uri.replace('{PHRASE}', encodeURIComponent(phrase))
-            )(function()
+            
+            // need to conserve the current values for module_name 
+            // inside a closure as it changes for every loop.
+            var response_handle = (function()
             {
                 var module = module_name;
-                var options = autocomp;
-
                 return function(resp)
                 {
-                    if (is_processing)
-                    {
-                        setTimeout(function(){ process_response(resp); }, 50);
-                        return;
-                    }
+                    var select2_state = { data: data, callback: callback };
+                    that.proccessSuggestResponse(resp, phrase, module, select2_state);
 
-                    is_processing = true;
-                    process_response(resp, module, options);
-                    is_processing = false;
-                    that.is_loading(false);
+                    if (that.queued_requests.length > 0)
+                    {
+                        var request = that.queued_requests.shift();
+                        that.pending_request = request.send(request.handle);
+                    }
+                    else
+                    {   
+                        that.is_loading(false);
+                    }
                 }
-            }());
+            })();
+            // queue up groups of each a request and it's related repsonse handle.
+            this.queued_requests.push({
+                'send': honeybee.core.Request.curry(
+                    autocomp.uri.replace('{PHRASE}', encodeURIComponent(phrase))
+                ),
+                'handle': response_handle
+            });
+        }
+        // then start processing the request queue
+        this.is_loading(true);
+        var request = this.queued_requests.shift();
+        this.pending_request = request.send(request.handle);
+    },
+
+    proccessSuggestResponse: function(response, phrase, module_name, select2_state)
+    {
+        var exact_match_found = false;
+        var options = this.options.autocomp_mappings[module_name];
+        var label_field = options.display_field;
+        var id_field = options.identity_field;
+
+        if (0 < response.data.length)
+        {
+            select2_state.data.results.push({ text: options.module_label });
+        }
+
+        var i, entry;
+        for (i = 0; i < response.data.length; i++)
+        {
+            entry = response.data[i];
+            if (entry[label_field].toLowerCase() == phrase.toLowerCase())
+            {
+                exact_match_found = true;
+            }
+
+            select2_state.data.results.push({ 
+                id: entry[id_field],
+                text: entry[label_field],
+                label: options.module_label + ': ' + entry[label_field],
+                module_prefix: module_name
+            });
+        }
+
+        if (!exact_match_found && phrase.length > 0)
+        {
+            this.enabled_create_targets.push(module_name);
+        }
+
+        if (this.queued_requests.length === 0)
+        {
+            if (this.enabled_create_targets().length === 0)
+            {
+                this.hideCreatePopover();
+            }
+            else
+            {
+                this.showCreatePopover();
+            }
+
+            select2_state.callback(select2_state.data);
         }
     },
 
@@ -427,10 +465,15 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         var that = this;
         var popover_links;
 
+        if (! this.options.enable_inline_create)
+        {
+            return;
+        }
+
         if (! this.is_create_popover_visible)
         {
             this.is_create_popover_visible = true;
-            this.select2_element.popover('show');
+            this.element.find('.refwidget-container').popover('show');
 
             popover_links = this.element.find('.popover .create-reference-trigger');
             popover_links.click(function(event)
@@ -439,23 +482,69 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 return false;
             });
         }
-        // @todo consider multiple target modules e.g.: foreach popover_link as link ...
-        popover_links = this.element.find('.popover .create-reference-trigger');
-        var link_text = 'Kategorie "' + this.phrase() + '" erstellen';
-        var html = '<i class="hb-icon-plus-alt" /><span>' + link_text + '</span>';
-        var pos_div = $('<div style="visibility:hidden; float: left; overflow: hidden; height: 0px;" />').append(html);
-        $(document.body).append(pos_div);
-        var calculated_width = pos_div.width() + 60;
 
-        this.element.find('.popover').css('width', (calculated_width > 250 ? calculated_width : 250) + 'px');
-        popover_links.html(html);
-        pos_div.remove();
+        var popover_max_width = 250;
+        this.element.find('.popover .create-reference-trigger').each(function(index, link_element)
+        {
+            link_element = $(link_element);
+            var module_name = link_element.attr('data-referenced-module');
+
+            if (that.enabled_create_targets().indexOf(module_name) > -1)
+            {
+                link_element.removeClass('disabled');
+            }
+            else
+            {
+                link_element.addClass('disabled');
+            }
+
+            var settings = that.options.autocomp_mappings[module_name];
+            var link_text = settings.create_label.replace('{phrase}', that.phrase());
+            var html = '<i class="hb-icon-plus-alt" /><span>' + link_text + '</span>';
+            // render the create button offscreen to find out how wide it will be.
+            var pos_div = $(
+                '<div style="visibility:hidden; float: left; overflow: hidden; height: 0px;" />'
+            ).append(html);
+
+            $(document.body).append(pos_div);
+
+            // then calculate the resulting popover width and inject the button.
+            var calculated_width = pos_div.width() + 60;
+            popover_max_width = (popover_max_width > calculated_width) ? popover_max_width : calculated_width;
+            link_element.html(html);
+            pos_div.remove();
+        });
+        
+        var popover_el = this.element.find('.popover');
+        var prev_width = popover_el.width();
+        popover_el.css('width', popover_max_width + 'px');
+
+        var input = this.element.find('.refwidget-container');
+        var edge_distance_right = $(window).width() - (input.width() + input.offset().left);
+        var edge_distance_left = input.offset().left;
+
+        if (edge_distance_left > edge_distance_right)
+        {
+            var delta_width = popover_max_width - prev_width;
+            var new_left = popover_el.position().left - delta_width;
+            var top = -(popover_el.height() / 2) + 10;
+
+            popover_el.css({
+                'left': new_left + 'px', 
+                'top': top + 'px' 
+            });
+        }
     },
 
     hideCreatePopover: function()
     {
+        if (! this.options.enable_inline_create)
+        {
+            return;
+        }
+
         this.is_create_popover_visible = false;
-        this.select2_element.popover('hide');
+        this.element.find('.refwidget-container').popover('hide');
 
         if (this.create_reference_click_handle)
         {
@@ -467,6 +556,12 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
     createReferenceDocument: function(create_link_element)
     {   
+        if (create_link_element.hasClass('disabled'))
+        {
+            this.element.find('.select2-input')[0].focus();
+            return;
+        }
+
         var that = this;
         
         var ref_module_name = create_link_element.attr('data-referenced-module');
@@ -482,13 +577,11 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             ref_module_settings.create_url, post_data, 'post' 
         );
 
-        var referenced_modules_count = 0;
-        $.map(this.options.autocomp_mappings, function(settings, name) {
-            referenced_modules_count++;
-        });
-
+        this.is_loading(true);
         create_request(function(response)
         {
+            that.is_loading(false);
+
             window.postMessage(
                 JSON.stringify({
                     'event_type': 'info-message', 'message': ref_module_settings.success_label
@@ -498,12 +591,9 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
             var text = response.data[ref_module_settings.display_field];
             var reference_id = response.data[ref_module_settings.identity_field];
-            var displayed_text = text;
+            var displayed_text = ref_module_settings.module_label + ': ' + text;
 
-            if (referenced_modules_count > 1)
-            {
-                displayed_text = ref_module_settings.module_label + ': ' + displayed_text;
-            }
+            this.element.find('.select2-input')[0].focus();
 
             that.tags.push({ 
                 id: reference_id,
@@ -512,8 +602,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 module_prefix: ref_module_name
             });
 
-            that.select2_element.val('');
-            that.select2_element[0].focus();
+            that.select2_element.select2('data', that.tags());
         });
     },
 

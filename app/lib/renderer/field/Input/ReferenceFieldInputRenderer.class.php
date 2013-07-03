@@ -49,6 +49,7 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
             'event_origin' => $routing->getBaseHref(),
             'autocomplete' => TRUE,
             'autocomp_mappings' => $this->buildAutoCompleteOptions($document),
+            'enable_inline_create' => $this->getField()->getOption('enable_inline_create', false),
             'fieldname' => $this->generateInputName($document),
             'realname' => $this->getField()->getName(),
             'max' => $maxCount,
@@ -87,8 +88,6 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                 'display_field' => $displayField,
                 'identity_field' => $identityField,
                 'module_label' => $tm->_($referencedModule->getName(), 'modules.labels'),
-                'create_label' => $tm->_($modulePrefix.'_create', $modulePrefix.'.rendering.input.document'),
-                'success_label' => $tm->_($modulePrefix.'_create_success', $modulePrefix.'.rendering.input.document'),
                 'list_url' => htmlspecialchars_decode(
                     urldecode($this->getRouteLink($listRouteName, array(
                         'referenceModule' => $document->getModule()->getName(),
@@ -97,9 +96,6 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                         'limit' => 10
                     )))
                 ),
-                'create_url' => htmlspecialchars_decode(
-                    urldecode($this->getRouteLink($createRouteName))
-                ),
                 'uri' => htmlspecialchars_decode(
                     urldecode($this->getRouteLink($suggestRouteName, array(
                         'term' => '{PHRASE}',
@@ -107,7 +103,21 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                         'identity_field' => $identityField
                     )))
                 )
-            ); 
+            );
+            
+            if ($this->getField()->getOption('enable_inline_create', false))
+            {
+                $autoCompleteMappings[$modulePrefix] = array_merge(
+                    $autoCompleteMappings[$modulePrefix],
+                    array(
+                        'create_label' => $tm->_($modulePrefix.'_create', $modulePrefix.'.rendering.input.document'),
+                        'success_label' => $tm->_($modulePrefix.'_create_success', $modulePrefix.'.rendering.input.document'),
+                        'create_url' => htmlspecialchars_decode(
+                            urldecode($this->getRouteLink($createRouteName))
+                        )
+                    )
+                );
+            }
         }
 
         return $autoCompleteMappings;

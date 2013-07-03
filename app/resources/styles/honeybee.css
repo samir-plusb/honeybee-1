@@ -782,6 +782,11 @@ div.select2-container-multi .select2-choices .select2-search-field
   margin-right: 5px;
 }
 
+.popover .create-reference-trigger:nth-child(n+1)
+{
+  margin-bottom: 5px;
+}
+
 .popover ul
 {
   list-style: none;
