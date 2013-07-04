@@ -14,7 +14,7 @@ class DocumentRepository extends BaseRepository
     {
         $documents = new DocumentCollection();
 
-        $result = (NULL === $query) 
+        $result = (NULL === $query)
             ? $this->getFinder()->fetchAll($limit, $offset)
             : $this->getFinder()->find($query, $limit, $offset);
 
@@ -30,7 +30,7 @@ class DocumentRepository extends BaseRepository
             'totalCount' => $result['totalCount']
         );
     }
-    
+
     // @todo add a get method to the finder and use it instead of the storage here.
     public function read($identifier)
     {
@@ -54,7 +54,7 @@ class DocumentRepository extends BaseRepository
                 $this->getModule()->createDocument($data)
             );
         }
-        
+
         return $documents;
     }
 
@@ -62,8 +62,9 @@ class DocumentRepository extends BaseRepository
     {
         if ($document instanceof Document)
         {
+            $document->checkMandatoryFields();
             $document->onBeforeWrite();
-            
+
             $data = $document->toArray();
             $data['type'] = get_class($document);
             $revision = $this->getStorage()->write($data);
@@ -82,7 +83,7 @@ class DocumentRepository extends BaseRepository
         if ($document instanceof Document)
         {
             $this->getStorage()->delete(
-                $document->getIdentifier(), 
+                $document->getIdentifier(),
                 $document->getRevision()
             );
         }

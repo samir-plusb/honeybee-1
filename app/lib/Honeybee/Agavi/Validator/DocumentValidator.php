@@ -4,14 +4,16 @@ namespace Honeybee\Agavi\Validator;
 
 use Honeybee\Core\Dat0r\RelationManager;
 use Honeybee\Core\Dat0r\Module;
-
-use Dat0r\Core\Runtime\Document\InvalidValueException;
+use Dat0r\Core\Runtime\Document;
+use Dat0r\Core\Runtime\Error;
 use Dat0r\Core\Runtime\Field\ReferenceField;
 
 class DocumentValidator extends \AgaviValidator
 {
     protected function validate()
     {
+        $tranlsationManager = $this->getContext()->getTranslationManager();
+
         $data = $this->getData($this->getArgument());
         $module = $this->getModule();
         $service = $module->getService();
@@ -27,12 +29,32 @@ class DocumentValidator extends \AgaviValidator
                     $success = FALSE;
                     $this->throwError('non_existant');
                 }
+                $document->checkMandatoryFields();
             }
-            catch(InvalidValueException $error)
+            catch(Document\InvalidValueException $error)
+            {
+                $domain = sprintf('%s.list', $this->getModule()->getOption('prefix'));
+                $this->setParameter('fieldname', $tranlsationManager->_($error->getFieldname(), $domain));
+                $this->setParameter('value', $error->getValue());
+                $this->throwError('invalid_values');
+
+                $document = NULL;
+                $success = FALSE;
+            }
+            catch(Document\MandatoryValueMissingException $error)
+            {
+                $domain = sprintf('%s.list', $this->getModule()->getOption('prefix'));
+                $this->setParameter('fieldname', $tranlsationManager->_($error->getFieldname(), $domain));
+                $this->throwError('missing_mandatory_values');
+
+                $document = NULL;
+                $success = FALSE;
+            }
+            catch(\Exception $error)
             {
                 $document = NULL;
                 $success = FALSE;
-                $this->throwError('invalid_values', $error->getFieldname());
+                $this->throwError();
             }
         }
         else if (! ($document = $service->get($data)))

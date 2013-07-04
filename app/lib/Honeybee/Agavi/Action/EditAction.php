@@ -2,6 +2,8 @@
 
 namespace Honeybee\Agavi\Action;
 
+use Dat0r\Core\Runtime\Document;
+use Dat0r\Core\Runtime\Error;
 use Honeybee\Core\Workflow\Plugin;
 
 class EditAction extends BaseAction
@@ -18,7 +20,7 @@ class EditAction extends BaseAction
         $this->setAttribute('module', $module);
         $this->setAttribute('document', $document);
 
-        $this->setContainerPluginState();
+        $this->setContainerPluginState(Plugin\Result::STATE_EXPECT_INPUT);
 
         return 'Input';
     }
@@ -33,17 +35,50 @@ class EditAction extends BaseAction
         try
         {
             $module->getService()->save(
-                 $requestData->getParameter('document')
+                $requestData->getParameter('document')
             );
         }
-        catch(\Exception $e)
+        catch(Document\InvalidValueException $error)
         {
-            $this->setAttribute('errors', array($e->getMessage()));
-            // @todo very detailed log and if in development then throw $e
+            $this->setAttribute('errors', array($error->__toString()));
+            $view = 'Error';
+        }
+        catch(Document\MandatoryValueMissingException $error)
+        {
+            $translationManager = $this->getContext()->getTranslationManager();
+            $fieldName = $translationManager->_(
+                $error->getFieldName(),
+                $this->getModule()->getOption('prefix') . '.list'
+            );
+
+            $errorMsg = $translationManager->_(
+                "Missing value for field '%s'.",
+                $this->getModule()->getOption('prefix') . '.errors',
+                null,
+                array($fieldName)
+            );
+            $this->setAttribute('errors', array($errorMsg));
+            $view = 'Error';
+        }
+        catch(Error\BadValueException $error)
+        {
+            $this->setAttribute('errors', array($error->__toString()));
+            $view = 'Error';
+        }
+        catch(\Exception $error)
+        {
+            $this->setAttribute('errors', array($error->getMessage()));
             $view = 'Error';
         }
 
-        $this->setContainerPluginState();
+        if ($view === 'Success')
+        {
+            $this->setContainerPluginState(Plugin\Result::STATE_EXPECT_INPUT);
+        }
+        else
+        {
+            $this->setContainerPluginState(Plugin\Result::STATE_ERROR);
+        }
 
         return $view;
     }
@@ -52,25 +87,41 @@ class EditAction extends BaseAction
     {
         return sprintf(
             '%s::%s',
-            $this->getModule()->getOption('prefix'), 
+            $this->getModule()->getOption('prefix'),
             $this->getContainer()->getRequestMethod()
         );
     }
 
-    protected function setContainerPluginState()
+    public function handleWriteError(\AgaviRequestDataHolder $parameters)
+    {
+        $errors = array();
+
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
+        {
+            $errors[] = $errMsg['message'];
+        }
+
+        $this->setContainerPluginState(Plugin\Result::STATE_ERROR);
+
+        $this->setAttribute('errors', $errors);
+
+        return 'Error';
+    }
+
+    protected function setContainerPluginState($state, $message = '')
     {
         $pluginResult = $this->getContainer()->getAttribute(
             Plugin\InteractivePlugin::ATTR_RESULT,
             Plugin\InteractivePlugin::NS_PLUGIN_ATTRIBUTES
         );
-        
+
         if ($pluginResult)
         {
-            $pluginResult->setState(Plugin\Result::STATE_EXPECT_INPUT);
-            $pluginResult->setMessage(
-                "Processed: " . get_class($this) 
-                .' - ' . ucfirst($this->getContext()->getRequest()->getMethod())
-            );
+            $pluginResult->setState($state);
+            if (!empty($message))
+            {
+                $pluginResult->setMessage($message);
+            }
         }
     }
 }

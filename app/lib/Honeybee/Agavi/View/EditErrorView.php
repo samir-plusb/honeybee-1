@@ -8,9 +8,11 @@ class EditErrorView extends BaseView
     {
         $data = array(
             'state' => 'error',
-            'errors' => $this->getAttribute('errors', array())
+            'messages' => array(),
+            'errors' => $this->getAttribute('errors', array()),
+            'data' => array()
         );
-        
+
         $this->getResponse()->setContent(json_encode($data));
     }
 }

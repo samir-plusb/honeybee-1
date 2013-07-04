@@ -1,5 +1,5 @@
 <div class="control-group">
-    <label class="control-label" for="{{fieldId}}">{{ tm._(fieldName, td) }}</label>
+    <label class="control-label" for="{{fieldId}}">{{ tm._(fieldName, td)|raw }}</label>
     <section class="controls honeybee-widget widget-reference" data-reference-options="{{ widgetOptions|raw }}">
     </section>
     {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}

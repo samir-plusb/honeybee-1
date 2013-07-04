@@ -93,15 +93,6 @@ class Manager
             $pluginResult = $resultData['result'];
         }
 
-        if (Process::STATE_ERROR === $code)
-        {
-            $message = $pluginResult->getMessage()
-                ? $pluginResult->getMessage()
-                : 'Process halted with error'; // Default err-message in case whoever forgot to provide one.
-
-            throw new Exception($message, Exception::UNEXPECTED_EXIT_CODE);
-        }
-
         $resource->getWorkflowTicket()->setLastResult(array(
             'state' => $pluginResult->getState(),
             'gate' => $pluginResult->getGate(),

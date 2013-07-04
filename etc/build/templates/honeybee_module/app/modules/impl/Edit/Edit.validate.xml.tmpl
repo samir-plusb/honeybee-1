@@ -12,11 +12,13 @@
             </validator>
         </validators>
 
-        <validators method="write">
+        <validators method="write" translation_domain="%%MODULE_PREFIX%%.errors>
             <validator class="%%MODULE_NAME%%DocumentValidator" name="invalid_%%MODULE_PREFIX%%" required="false">
                 <arguments>
                     <argument>%%MODULE_PREFIX%%</argument>
                 </arguments>
+                <error for="invalid_values">The value '%value$s' given for field '%fieldname$s' does not comply.</error>
+                <error for="missing_mandatory_values">Missing required value for field '%fieldname$s'</error>
             </validator>
         </validators>
     </ae:configuration>
