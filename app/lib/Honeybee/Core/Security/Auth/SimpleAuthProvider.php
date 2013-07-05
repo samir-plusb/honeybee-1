@@ -2,6 +2,8 @@
 
 namespace Honeybee\Core\Security\Auth;
 
+use Honeybee\Core\Config\IConfig;
+
 /**
  * The SimpleAuthProvider provides authentication against xml based account information.
  * The accounts used by te simple auth provider are configured inside the settings.xml.
@@ -15,8 +17,11 @@ class SimpleAuthProvider implements IAuthProvider
 
     private $accounts;
 
-    public function __construct()
+    protected $config;
+
+    public function __construct(IConfig $config)
     {
+        $this->config = $config;
         $this->accounts = \AgaviConfig::get('core.simple_logins', array());
     }
 
@@ -31,9 +36,10 @@ class SimpleAuthProvider implements IAuthProvider
      */
     public function authenticate($username, $password, $options = array()) // @codingStandardsIgnoreEnd
     {
+var_dump("asdasddas");exit;
         $errors = array();
         $passwordHandler = new CryptedPasswordHandler();
- 
+
         if (isset($this->accounts[$username]) &&
             isset($this->accounts[$username]['pwd_hash']) &&
             $passwordHandler->verify($password, $this->accounts[$username]['pwd_hash'])

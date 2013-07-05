@@ -1,6 +1,7 @@
 <?php
 
 use Honeybee\Core\Security\Auth;
+use Honeybee\Core\Config;
 
 /**
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
@@ -23,7 +24,7 @@ class User_LoginAction extends UserBaseAction
             return $this->executeWrite($request_data);
         }
 
-        $this->setAttribute('reset_support_enabled', \AgaviConfig::get('user.module_active', FALSE));
+        $this->setAttribute('reset_support_enabled', \AgaviConfig::get('user.module_active', false));
 
         return 'Input';
     }
@@ -37,73 +38,64 @@ class User_LoginAction extends UserBaseAction
      */
     public function executeWrite(AgaviParameterHolder $request_data)
     {
-        $this->setAttribute('reset_support_enabled', \AgaviConfig::get('user.module_active', FALSE));
-        
-        $tm = $this->getContext()->getTranslationManager();
+        $view_name = '';
+        $this->setAttribute('reset_support_enabled', \AgaviConfig::get('user.module_active', false));
+
+        $translation_manager = $this->getContext()->getTranslationManager();
         $user = $this->getContext()->getUser();
 
+        $auth_provider = $this->getAuthProvider();
         $username = $request_data->getParameter('username');
-        $password = $request_data->getParameter('password');
-        $authProviderClass = AgaviConfig::get('core.auth_provider');
+        $auth_response = $auth_provider->authenticate($username, $request_data->getParameter('password'));
 
-        if (! class_exists($authProviderClass, TRUE))
+        $log_message_part = sprintf(
+            "for username '$username' via auth provider %s.",
+            get_class($auth_provider)
+        );
+        if ($auth_response->getState() === Auth\AuthResponse::STATE_AUTHORIZED)
         {
-            throw new InvalidArgumentException('The configured auth_provider can not be loaded.');
-        }
+            $user->setAuthenticated(true);
+            $view_name = 'Success';
 
-        $authProvider = new $authProviderClass();
-        $authResponse = $authProvider->authenticate($username, $password);
-
-        $log_message_part = "for username '$username' via auth provider '$authProviderClass'.";
-        if (Auth\AuthResponse::STATE_AUTHORIZED === $authResponse->getState())
-        {
             $this->logInfo("[AUTHORIZED] Successful authentication attempt " . $log_message_part);
 
-            $userAttributes = array_merge(
-                array('acl_role' => 'user'),
-                $authResponse->getAttributes()
+            $user_attributes = $this->getUserAttributes($auth_provider, $auth_response);
+            $user->setAttributes($user_attributes);
+        }
+        else if ($auth_response->getState() === Auth\AuthResponse::STATE_UNAUTHORIZED)
+        {
+            $user->setAuthenticated(false);
+            $view_name = 'Error';
+
+            $this->logError(
+                sprintf(
+                    "[UNAUTHORIZED] Authentication attempt failed %s\nErrors are: %s",
+                    $log_message_part,
+                    join(PHP_EOL, $auth_response->getErrors())
+                )
             );
 
-            if (isset($userAttributes['external_roles']) && is_array($userAttributes['external_roles']))
-            {
-                foreach ($userAttributes['external_roles'] as $externalRole)
-                {
-                    $domainRole = $user->mapExternalRoleToDomain(
-                        $authProvider->getTypeIdentifier(),
-                        $externalRole
-                    );
-
-                    if ($domainRole)
-                    {
-                        $userAttributes['acl_role'] = $domainRole;
-                        break;
-                    }
-                }
-            }
-
-            $user->setAttributes($userAttributes);
-            $user->setAuthenticated(TRUE);
-
-            return 'Success';
+            $error_message = $translation_manager->_('invalid_login', 'user.messages');
+            $this->setAttribute('errors', array('auth' => $error_message));
         }
-        else if (Auth\AuthResponse::STATE_UNAUTHORIZED === $authResponse->getState())
+        else
         {
-            $user->setAuthenticated(FALSE);
+            $user->setAuthenticated(false);
+            $view_name = 'Error';
 
-            $this->logError("[UNAUTHORIZED] Authentication attempt failed " . $log_message_part . " Errors are: " . join(PHP_EOL, $authResponse->getErrors()));
+            $this->logError(
+                sprintf(
+                    "[UNAUTHORIZED] Authentication attempt failed with auth response being '%s' %s\nErrors are: %s",
+                    $auth_response->getState(),
+                    $log_message_part,
+                    join(PHP_EOL, $auth_response->getErrors())
+                )
+            );
 
-            $errorMessage = $tm->_('invalid_login', 'user.messages');
-            $this->setAttribute('errors', array('auth' => $errorMessage));
-
-            return 'Error';
+            $this->setAttribute('errors', array('auth' => $auth_response->getMessage()));
         }
 
-        $this->logError("[UNAUTHORIZED] Authentication attempt failed with auth response being '" . $authResponse->getState() . "' " . $log_message_part . " Errors are: " . join(PHP_EOL, $authResponse->getErrors()));
-
-        $this->setAttribute('error', array('auth' => $authResponse->getMessage()));
-        $user->setAuthenticated(FALSE);
-
-        return 'Error';
+        return $view_name;
     }
 
     /**
@@ -115,18 +107,25 @@ class User_LoginAction extends UserBaseAction
      */
     public function handleError(AgaviRequestDataHolder $request_data)
     {
-        $tm = $this->getContext()->getTranslationManager();
-        $vm = $this->getContainer()->getValidationManager();
+        $this->setAttribute('reset_support_enabled', \AgaviConfig::get('user.module_active', FALSE));
 
-        $this->logError("[UNAUTHORIZED] Failed authentication attempt for username '", $request_data->getParameter('username'), "' - validation failed:", $vm);
+        $translation_manager = $this->getContext()->getTranslationManager();
+        $validation_manager = $this->getContainer()->getValidationManager();
+
+        $this->logError(
+            "[UNAUTHORIZED] Failed authentication attempt for username '",
+            $request_data->getParameter('username'),
+            "' - validation failed:",
+            $validation_manager
+        );
 
         $errors = array();
-        foreach ($vm->getErrors() as $field => $error)
+        foreach ($validation_manager->getErrors() as $field => $error)
         {
             $errors[$field] = $error['messages'][0];
         }
 
-        $errors['auth'] = $tm->_('invalid_login', 'user.messages');
+        $errors['auth'] = $translation_manager->_('invalid_login', 'user.messages');
         $this->setAttribute('errors', $errors);
 
         return 'Error';
@@ -140,7 +139,7 @@ class User_LoginAction extends UserBaseAction
      */
     public function isSecure()
     {
-        return FALSE;
+        return false;
     }
 
     /**
@@ -149,5 +148,66 @@ class User_LoginAction extends UserBaseAction
     public function getLoggerName()
     {
         return 'auth';
+    }
+
+    protected function getAuthProvider()
+    {
+        $auth_provider_info = AgaviConfig::get('core.auth_provider');
+        $options = array();
+        $auth_provider_class = '';
+
+        if (is_array($auth_provider_info))
+        {
+            if (! isset($auth_provider_info['class']))
+            {
+                throw new InvalidArgumentException("Missing 'class' setting for auth provider config.");
+            }
+
+            $auth_provider_class = $auth_provider_info['class'];
+            unset($auth_provider_info['class']);
+            $options = $auth_provider_info;
+        }
+        else
+        {
+            $auth_provider_class = $auth_provider_info;
+        }
+
+        if (! class_exists($auth_provider_class, true))
+        {
+            throw new InvalidArgumentException('The configured auth_provider can not be loaded.');
+        }
+
+        return new $auth_provider_class(
+            new Config\ArrayConfig($options)
+        );
+    }
+
+    protected function getUserAttributes(Auth\IAuthProvider $auth_provider, Auth\IAuthResponse $auth_response)
+    {
+        $user = $this->getContext()->getUser();
+
+        $user_attributes = array_merge(
+            array('acl_role' => 'user'),
+            $auth_response->getAttributes()
+        );
+
+        if (isset($user_attributes['external_roles']) && is_array($user_attributes['external_roles']))
+        {
+            foreach ($user_attributes['external_roles'] as $external_role)
+            {
+                $external_role = $user->mapExternalRoleToDomain(
+                    $auth_provider->getTypeIdentifier(),
+                    $external_role
+                );
+
+                if ($domain_role)
+                {
+                    $user_attributes['acl_role'] = $domain_role;
+                    break;
+                }
+            }
+        }
+
+        return $user_attributes;
     }
 }

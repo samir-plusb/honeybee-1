@@ -3,6 +3,7 @@
 namespace Honeybee\Core\Security\Auth;
 
 use Honeybee\Domain\User\UserModule;
+use Honeybee\Core\Config\IConfig;
 
 /**
  * The StandardAuthProvider provides authentication against account information coming from the User module.
@@ -13,6 +14,13 @@ use Honeybee\Domain\User\UserModule;
 class StandardAuthProvider implements IAuthProvider
 {
     const TYPE_KEY = 'standard-auth';
+
+    protected $config;
+
+    public function __construct(IConfig $config)
+    {
+        $this->config = $config;
+    }
 
     public function getTypeKey()
     {

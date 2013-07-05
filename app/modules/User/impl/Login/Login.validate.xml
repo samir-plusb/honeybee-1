@@ -16,7 +16,7 @@
             <validator class="string" translation_domain='user.messages'>
                 <argument>password</argument>
                 <ae:parameter name="min">7</ae:parameter>
-                <ae:parameter name="max">50</ae:parameter>
+                <ae:parameter name="max">100</ae:parameter>
                 <error>The password is either missing or invalid.</error>
             </validator>
 
@@ -33,7 +33,7 @@
             <validator class="string" translation_domain='user.messages' required="false">
                 <argument>password</argument>
                 <ae:parameter name="min">7</ae:parameter>
-                <ae:parameter name="max">50</ae:parameter>
+                <ae:parameter name="max">100</ae:parameter>
                 <error>The password is invalid.</error>
             </validator>
 
