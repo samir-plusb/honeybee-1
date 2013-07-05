@@ -36,7 +36,6 @@ class SimpleAuthProvider implements IAuthProvider
      */
     public function authenticate($username, $password, $options = array()) // @codingStandardsIgnoreEnd
     {
-var_dump("asdasddas");exit;
         $errors = array();
         $passwordHandler = new CryptedPasswordHandler();
 
