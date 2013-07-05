@@ -9,6 +9,9 @@
                 <arguments>
                     <argument>id</argument>
                 </arguments>
+                <errors>
+                    <error>An error occurred. Please check the given arguments.</error>
+                </errors>            
             </validator>
         </validators>
 
@@ -17,8 +20,12 @@
                 <arguments>
                     <argument>user</argument>
                 </arguments>
-                <error for="invalid_values">The value '%value$s' given for field '%fieldname$s' does not comply.</error>
-                <error for="missing_mandatory_values">Missing required value for field '%fieldname$s'</error>
+                <errors>
+                    <error>An error occurred. Please check the given arguments.</error>
+                    <error for="non_existant">There is no such document.</error>
+                    <error for="invalid_values">The value '%value$s' given for field '%fieldname$s' does not comply.</error>
+                    <error for="missing_mandatory_values">Missing required value for field '%fieldname$s'</error>
+                </errors>                
             </validator>
         </validators>
     </ae:configuration>
@@ -30,8 +37,12 @@
                     <argument>username</argument>
                     <argument>email</argument>
                 </arguments>
-                <error for="invalid_values">The value '%value$s' given for field '%fieldname$s' does not comply.</error>
-                <error for="missing_mandatory_values">Missing required value for field '%fieldname$s'</error>
+                <errors>
+                    <error>An error occurred. Please check the given arguments.</error>
+                    <error for="non_existant">There is no such document.</error>
+                    <error for="invalid_values">The value '%value$s' given for field '%fieldname$s' does not comply.</error>
+                    <error for="missing_mandatory_values">Missing required value for field '%fieldname$s'</error>
+                </errors>
             </validator>
         </validators>
     </ae:configuration>

@@ -2,12 +2,15 @@
 
 namespace Honeybee\Core\Config;
 
+use Honeybee\Core\Config\ConfigException;
+
 /**
  * The ArrayConfig class is an abstract implementation of the BaseConfig base.
- * It's job is to provide a strategy for handling simple, data-based configuration.
- * In short, this guy wraps assoc arrays into config objects.
- * Just extend this class, provide your required settings via {@see BaseConfig::getRequiredSettings()}
- * and pass in your settings-data to the constructor.
+ *
+ * Its job is to provide a strategy for handling simple data configuration as
+ * an associative array. Just extend this class, provide your required settings
+ * via {@see BaseConfig::getRequiredSettings()} and pass in your settings data
+ * to the constructor.
  *
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
@@ -15,21 +18,29 @@ namespace Honeybee\Core\Config;
 class ArrayConfig extends BaseConfig
 {
     /**
-     * Load the given $configSource and return an array representation.
+     * Load the given $config_source and return an array representation.
      *
-     * @return      array
+     * @param array $config_source
      *
-     * @throws      ConfigException
+     * @return array
+     *
+     * @throws ConfigException if $config_source is not an array
      */
-    protected function load($configSrc)
+    protected function load($config_source)
     {
-        if (!is_array($configSrc))
+        if (!is_array($config_source))
         {
-            throw new ConfigException(
-                "The given config source is expected to be by the type of 'array' but is not."
-            );
+            throw new ConfigException("The given config source must be an array.");
         }
 
-        return $configSrc;
+        return $config_source;
+    }
+
+    /**
+     * @return array of all settings
+     */
+    public function toArray()
+    {
+        return $this->settings;
     }
 }

@@ -38,6 +38,13 @@
                     <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/imports/1.0</ae:parameter>
                 </ae:parameters>
             </handler>
+
+            <handler pattern="mail.xml" class="Honeybee\Agavi\ConfigHandler\MailConfigHandler">
+                <validation>%core.config_dir%/xsd/mail.xsd</validation>
+                <ae:parameters>
+                    <ae:parameter name="namespace_uri">http://berlinonline.de/schemas/honeybee/mail/1.0</ae:parameter>
+                </ae:parameters>
+            </handler>
             
         </handlers>
     </ae:configuration>

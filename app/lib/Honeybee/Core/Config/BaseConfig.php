@@ -2,6 +2,8 @@
 
 namespace Honeybee\Core\Config;
 
+use Honeybee\Core\Config\ConfigException;
+
 /**
  * The BaseConfig class is an abstract implementation of the IConfig interface.
  * It fully exposes the required interface methods and defines the strategy for loading
@@ -15,39 +17,40 @@ abstract class BaseConfig implements IConfig
     /**
      * An assoc array that holds our settings.
      *
-     * @var         array
+     * @var array
      */
-    private $settings;
+    protected $settings;
 
     /**
      * Load the given $configSource and return an array representation.
      *
-     * @return      array
+     * @return array
      */
-    abstract protected function load($configSource);
+    abstract protected function load($config_source);
 
     /**
-     * Create a new BaseConfig instance for the given $configSource.
+     * Create a new BaseConfig instance for the given $config_source.
      *
-     * @param       mixed $configSource
+     * @param mixed $config_source
      */
-    public function __construct($configSource)
+    public function __construct($config_source)
     {
-        $this->init($configSource);
+        $this->init($config_source);
     }
 
     /**
      * Fetch the value for the given setting.
+     *
      * If the setting does not exist the provided default is returned.
      *
-     * @param       string $setting
-     * @param       mixed $default
+     * @param string $setting name of setting to get a value for
+     * @param mixed $default default value to return if setting does not exist; defaults to null.
      *
-     * @return      mixed
+     * @return mixed value of the setting or the given default value (may be null)
      */
-    public function get($setting = NULL, $default = NULL)
+    public function get($setting = null, $default = null)
     {
-        if (! $setting)
+        if (!$setting)
         {
             return $this->settings;
         }
@@ -65,9 +68,9 @@ abstract class BaseConfig implements IConfig
     /**
      * Tells if we have a value for a given setting.
      *
-     * @param       string $setting
+     * @param string $setting name of setting to check
      *
-     * @return      bool
+     * @return boolean true if setting exists, false otherwise
      */
     public function has($setting)
     {
@@ -75,14 +78,14 @@ abstract class BaseConfig implements IConfig
     }
 
     /**
-     * Initialize this BaseConfig instance with the given $configSource.
+     * Initialize this BaseConfig instance with the given $config_source.
      * After this method has completed we are ready to provide settings.
      *
-     * @param       mixed $configSource
+     * @param mixed $config_source
      */
-    protected function init($configSource)
+    protected function init($config_source)
     {
-        $settings = $this->load($configSource);
+        $settings = $this->load($config_source);
 
         $this->validateConfig($settings);
 
@@ -94,9 +97,9 @@ abstract class BaseConfig implements IConfig
      * This basic implementation just makes sure,
      * that all required settings are in place.
      *
-     * @param       array $settings
+     * @param array $settings
      *
-     * @throws      ConfigException
+     * @throws ConfigException
      */
     protected function validateConfig(array $settings)
     {
@@ -105,7 +108,7 @@ abstract class BaseConfig implements IConfig
             if (!isset($settings[$required_setting]))
             {
                 throw new ConfigException(
-                    "Missing setting '" . $required_setting . "' for config."
+                    "Missing mandatory setting '" . $required_setting . "' for config."
                 );
             }
         }
@@ -116,7 +119,7 @@ abstract class BaseConfig implements IConfig
      * An exception will occur upon initialization,
      * if a required setting is not available after loading.
      *
-     * @return      array
+     * @return array
      */
     protected function getRequiredSettings()
     {

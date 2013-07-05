@@ -9,7 +9,7 @@ namespace Honeybee\Core\Config;
  * @copyright       BerlinOnline Stadtportal GmbH & Co. KG
  * @author          Thorsten Schmitt-Rink <tschmittrink@gmail.com>
  */
-class ConfigException extends Exception
+class ConfigException extends \Exception
 {
 
 }

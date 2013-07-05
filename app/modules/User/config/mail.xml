@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://berlinonline.de/schemas/honeybee/mail/1.0"
+    xmlns:env="http://berlinonline.de/schemas/honeybee/config/envelope/definition/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+    parent="%core.config_dir%/mail.xml"
+>
+    
+    <ae:configuration>
+        <mailers default="default">
+            <mailer name="default">
+                <settings>
+<!--
+                    <setting name="override_all_recipients">%core.project_prefix%+%core.environment%@example.com</setting>
+                    <setting name="address_defaults">
+                        <settings>
+                            <setting name="sender">system@example.com</setting>
+                            <setting name="reply_to">contact_us@example.com</setting>
+                        </settings>
+                    </setting>
+                    <setting name="address_overrides">
+                        <settings>
+                            <setting name="return_path">override-return-path@example.com</setting>
+                        </settings>
+                    </setting>
+-->
+                </settings>
+            </mailer>
+        </mailers>
+    </ae:configuration>
+
+</ae:configurations>

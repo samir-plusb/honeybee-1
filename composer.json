@@ -7,15 +7,24 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Leon Weidauer",
-            "name": "Steffen Gransow",
-            "name": "Thorsten Schmitt-Rink",
+            "name": "Thorsten Schmitt-Rink"
+        },
+        {
+            "name": "Leon Weidauer"
+        },
+        {
+            "name": "Steffen Gransow"
+        },
+        {
             "name": "Tom Anheyer"
         }
     ],
 
     "autoload": {
-        "psr-0": {"Honeybee" : "app/lib" }
+        "psr-0": {
+            "Honeybee" : "app/lib",
+            "Testing" : "testing/tests"
+        }
     },
 
     "require": {

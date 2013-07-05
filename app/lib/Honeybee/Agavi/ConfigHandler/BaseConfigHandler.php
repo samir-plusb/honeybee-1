@@ -4,6 +4,14 @@ namespace Honeybee\Agavi\ConfigHandler;
 
 abstract class BaseConfigHandler extends \AgaviXmlConfigHandler
 {
+    /**
+     * Parses the given 'settings' XML element into an associative
+     * nested array of settings.
+     *
+     * @param \AgaviXmlConfigDomElement $settingsParent
+     *
+     * @return array associative nested array with settings
+     */
     protected function parseSettings(\AgaviXmlConfigDomElement $settingsParent)
     {
         $settings = array();

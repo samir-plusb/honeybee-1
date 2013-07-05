@@ -98,7 +98,7 @@ class EditAction extends BaseAction
 
         foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
         {
-            $errors[] = $errMsg['message'];
+            $errors[] = implode(', ', $errMsg['errors']) . ': ' . $errMsg['message'];
         }
 
         $this->setContainerPluginState(Plugin\Result::STATE_ERROR);

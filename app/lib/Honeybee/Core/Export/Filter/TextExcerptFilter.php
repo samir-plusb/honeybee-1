@@ -3,8 +3,6 @@
 namespace Honeybee\Core\Export\Filter;
 
 use Honeybee\Core\Dat0r\Document;
-use Dat0r\Core\Runtime\Document as Dat0r;
-use Dat0r\Core\Runtime\Field\ReferenceField;
 
 /**
  * Creates excerpts from (rich) text properties. The following settings are
@@ -41,7 +39,7 @@ class TextExcerptFilter extends BaseFilter
 
         foreach ($propertyMap as $fieldname => $targetKey)
         {
-            $field = $module->getField($fieldname);
+            //$field = $module->getField($fieldname);
             $propValue = $document->getValue($fieldname);
             $filterOutput[$targetKey] = $this->createExcerptFor($propValue, $settings);
         }

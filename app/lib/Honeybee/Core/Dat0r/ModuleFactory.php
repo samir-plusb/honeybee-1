@@ -158,6 +158,9 @@ class ModuleFactory
             case 'short-id':
                 $default = 'Honeybee\\Core\\Service\\ShortIdService';
                 break;
+            case 'mail':
+                $default = 'Honeybee\\Core\\Mail\\Service';
+                break;
             default:
                 $default = sprintf('%sService', $module->getName());
         }

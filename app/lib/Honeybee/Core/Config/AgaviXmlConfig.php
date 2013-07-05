@@ -12,16 +12,18 @@ namespace Honeybee\Core\Config;
 class AgaviXmlConfig extends ArrayConfig
 {
     /**
-     * Load the given $configSource and return an array representation.
+     * Load the given $config_source and returns an array representation.
      *
-     * @return      array
+     * @param mixed $config_source path to configuration file to load
      *
-     * @throws      ConfigException
+     * @return array of settings loaded from given source
+     *
+     * @throws Honeybee\Core\Config\ConfigException when loading fails
      */
-    protected function load($configSrc)
+    protected function load($config_source)
     {
         return parent::load(
-            include \AgaviConfigCache::checkConfig($configSrc)
+            include \AgaviConfigCache::checkConfig($config_source, \AgaviConfig::get('core.default_context'))
         );
     }
 }
