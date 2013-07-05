@@ -166,6 +166,7 @@ class ModuleFactory
         }
 
         $settingName = $module->getOption('prefix') . '.service';
+        $settingName = $module->getOption('prefix') . '.service.' . $context;
 
         return \AgaviConfig::get($settingName, $default);
     }

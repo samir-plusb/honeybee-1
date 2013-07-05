@@ -12,8 +12,8 @@
 
 To send emails you usually have to get a `Honeybee\Core\Mail\Service` instance
 from a Honeybee module. That service has a `send()` method that accepts a
-`Honeybee\Core\Mail\IMail` implementing message. There is a class to create
-mails called `Honeybee\Core\Mail\Message` to ease the creation of simple mails.
+`Honeybee\Core\Mail\IMail` implementing message. There is a class holding
+mails called `Honeybee\Core\Mail\Message` that eases the creation of mails.
 
 By default the mail service uses the `SwiftMailer` library to create mails and
 sends them via the ```\Swift_SendmailTransport```. Email fields like `To`, `Cc`
@@ -32,8 +32,8 @@ $info = $mail_service->send($mail);
 ```
 
 To create a Honeybee mail message you instantiate a `Honeybee\Core\Mail\Message`
-and set the fields you like. The following create a text only email that has to
-recipients and a return path set for bounce handling:
+and set the fields you like. The following creates a text only email that has
+two recipients and a return path set for bounce handling:
 
 ```php
 $mail = new Message();
@@ -80,16 +80,17 @@ this is dependent on the support of email clients.
 
 ## Email addresses
 
-The `Mail\Message` has a method ```isValidEmail($address)``` that you may use to
-validate email addresses elsewhere in the system. When you try to set fields on
-the email like `from`, `to` etc. the given addresses are validated using that
-method. The method uses the PHP internal ```FILTER_VALIDATE_EMAIL```
-```filter_var``` method.
+The `Mail\Message` has a static method ```isValidEmail($address)``` that you may
+use to check the validity of email addresses according to the system's rules.
+When you try to set fields on the email like `From`, `To` etc. the given
+addresses are validated using that method. If you try to set parameters, that
+are invalid a `MessageConfigurationException` is thrown. The method uses the
+PHP internal ```FILTER_VALIDATE_EMAIL``` with the ```filter_var``` method.
 
 The emails in the `Mail\Message` are consolidated into a SwiftMailer compatible
 array format with the key being the email address and the value being the
-display name. If no display name is given or supported (for `Return-Path`) the
-display name will be null.
+display name. If no display name is given or supported (as for `Return-Path`)
+the display name will be `null`.
 
 ```php
 $mail = new Message();
@@ -124,7 +125,7 @@ will always return a maximum of one email address. All other fields like `To`,
 # Configuration
 
 The `Mail\Service` uses sensible default settings (like `utf-8` as the default
-charset for everything). The settings are grouped via a named mailer. Each
+charset for everything). The settings are grouped in named mailers. Each
 mailer is a set of settings that is known under a ```name``` attribute on the
 ```mailer``` element in the mail configuration. There is a ```default```
 attribute on the ```mailers``` element to specify the default set of settings to
@@ -135,26 +136,27 @@ has its own ```<module_name>/config/mail.xml``` file that may define default
 settings for that module. The `mail.xml` file from a module usually specifies a
 ```parent="%core.config_dir%/mail.xml"``` attribute that leads to the inclusion
 of the default ```app/config/mail.xml``` that can contain specific mailer
-settings for the application. That file usually XIncludes the concrete
+settings for Honeybee. That file usually XIncludes the concrete project and
 application specific `app/project/config/mail.xml` file. You should either use
 the module's `mail.xml` or create and customize project wide mailer settings in
 that `app/project/config/mail.xml` file.
 
 The configuration files are merged and then the containing `configuration`
-elements are merged according to the natural order after merging while
+elements are handled according to the natural order after merging while
 maintaining the following priorities according to the presence of the
 `environment` and/or `context` attributes: Configuration blocks that contain
 both an `environment` and `context` attribute are preferred over `context` only
-blocks which have higher precedence than `environment` only block that have
-higher priority than normal attribute less blocks. This means, that more
-specific blocks according to their attributes are winning when settings of all
-blocks are merged into a representation for the mail service.
+blocks which have higher precedence than `environment` only blocks that have
+higher priority than normal vanilla blocks (without `context` or `environment`).
+This means, that more specific blocks according to their attributes are winning
+when settings of all blocks are merged into a representation for the mail
+service.
 
 ## Settings
 
 There are some default settings that are supported by the default mail service:
 
-- ```override_all_recipients```: email address to use for TO, CC and BCC regardless of other settings when those fields are set in a message
+- ```override_all_recipients```: email address to use for `To`, `Cc` and `Bcc` regardless of other settings when those fields are set in a message
 - ```default_subject```: string to use as the default subject if none is set for the message
 - ```default_body_text```: string to use as the default plain text part of the mail body if none is set in a message
 - ```default_body_html```: string to use as the default html part of the mail body if none is set in a message
@@ -235,7 +237,7 @@ the `mail.xml` files similar to something like this:
 
 ```xml
 <ae:configuration>
-    <mailers name="default"
+    <mailers name="default">
         <mailer name="system_mails">
             <settings>
                 <setting name="charset">utf-8</setting>
@@ -262,6 +264,7 @@ or context (depending on the configuration block attributes and merging):
 $mail = new Message();
 $mail->setBodyText('You should log in more often.');
 $this->getModule()->getService('mail')->send($mail, 'system_mails');
+// sent mail contains reply_to, return_path etc. from settings
 ```
 
 # Transport modification
@@ -274,9 +277,9 @@ transport class via the ```swift_transport_class``` setting.
 <setting name="swift_transport_class">\Swift_NullTransport</setting>
 ```
 
-As other transports may need to be configured, you can create your own Honeybee
-mail service class, that extends `Honeybee\Core\Mail\Service` and overwrites the
-```initSwiftMailer``` method appropriately. To e.g. use a SMTP transport one
+As other transports may need to be configured, you can create your own mail
+service class, that extends `Honeybee\Core\Mail\Service` and overwrites the
+```initSwiftMailer()``` method appropriately. To e.g. use a SMTP transport one
 could do this:
 
 ```php
@@ -304,11 +307,11 @@ class YourMailService extends \Honeybee\Core\Mail\Service
 }
 ```
 
-and then switch the Agavi setting in the `settings.xml` file. You could do it
-like this prior getting the service:
+and then switch the Agavi setting ```<module_prefix>.service.mail```in the
+`settings.xml` file. You could do it like this prior getting the service:
 
 ```php
-AgaviConfig::set($module->getOption('prefix') . '.service', 'YourMailService');
+AgaviConfig::set($module->getOption('prefix') . '.service.mail', 'YourMailService');
 $module->getService('mail')->send($mail);
 ```
 
@@ -321,4 +324,4 @@ can of course always use whatever library you like.
 ## TBD / Ideas / Misc
 
 - configure and use SwiftMailer plugins?
-
+- more settings (like transport configuration w/o an own mail service)?
