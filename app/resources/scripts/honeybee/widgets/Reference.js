@@ -479,6 +479,9 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             {
                 that.createReferenceDocument($(event.currentTarget));
                 return false;
+            }).click(function()
+            {
+                return false;
             });
         }
 
