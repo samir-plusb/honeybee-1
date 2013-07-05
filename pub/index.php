@@ -1,9 +1,7 @@
 <?php
 
-$default_context = // @todo do we really need/want this magic/stunt?
-    preg_match('/\/binaries/i', $_SERVER['QUERY_STRING'])
-    ? 'web_binaries'
-    : 'web';
+$default_context = 'web';
+$environment_modifier = '';
 
 $rootDir = dirname(__DIR__);
 require $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
