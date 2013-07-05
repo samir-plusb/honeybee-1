@@ -165,7 +165,6 @@ class ModuleFactory
                 $default = sprintf('%sService', $module->getName());
         }
 
-        $settingName = $module->getOption('prefix') . '.service';
         $settingName = $module->getOption('prefix') . '.service.' . $context;
 
         return \AgaviConfig::get($settingName, $default);
@@ -179,7 +178,7 @@ class ModuleFactory
             $default = 'Honeybee\\Core\\Repository\\TreeRepository';
         }
 
-        $settingName = $module->getOption('prefix') . '.repository';
+        $settingName = $module->getOption('prefix') . '.repository.' . $context;
 
         return \AgaviConfig::get($settingName, $default);
     }
@@ -192,7 +191,7 @@ class ModuleFactory
             $default = 'Honeybee\\Core\\Storage\\CouchDb\\TreeStorage';
         }
 
-        $settingName = $module->getOption('prefix') . '.storage';
+        $settingName = $module->getOption('prefix') . '.storage.' . $context;
 
         return \AgaviConfig::get($settingName, $default);
     }
@@ -205,7 +204,7 @@ class ModuleFactory
             $default = 'Honeybee\\Core\\Finder\\ElasticSearch\\TreeFinder';
         }
 
-        $settingName = $module->getOption('prefix') . '.finder';
+        $settingName = $module->getOption('prefix') . '.finder.' . $context;
         
         return \AgaviConfig::get($settingName, $default);
     }
