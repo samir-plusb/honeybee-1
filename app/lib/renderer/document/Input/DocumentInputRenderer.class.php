@@ -133,15 +133,43 @@ class DocumentInputRenderer extends DocumentRenderer
     protected function renderFields(Document $document, array $fields)
     {
         $renderedFields = array();
-
-        //@todo verify that all affected fields may be rendered for the current context (user, module, intent etc.)
-        foreach ($this->getModule()->getFields($fields) as $field)
+        $fieldsToRender = array();
+        //@todo verify that all affected fields
+        // may be rendered for the current context (user, module, intent etc.)
+        foreach ($fields as $fieldName)
         {
-            $renderer = $this->getFactory()->createRenderer($field, FieldRendererFactory::CTX_INPUT);
-            $renderedFields[$field->getName()] = $renderer->render($document);
+            $renderer = NULL;
+            $fieldParts = explode('.', $fieldName);
+            $options = array('fieldpath' => $fieldName);
+
+            if (count($fieldParts) > 1)
+            {
+                $field = $this->getField($fieldParts);
+                $renderer = $this->getFactory()->createRenderer($field, FieldRendererFactory::CTX_INPUT, $options);
+                $renderedFields[$field->getName()] = $renderer->render($document);
+            }
+            else
+            {
+                $field = $this->getModule()->getField($fieldName);
+                $renderer = $this->getFactory()->createRenderer($field, FieldRendererFactory::CTX_INPUT, $options);
+                $renderedFields[$field->getName()] = $renderer->render($document);
+            }
         }
 
         return $renderedFields;
+    }
+
+    protected function getField(array $fieldParts)
+    {
+        $module = $this->getModule();
+
+        while (count($fieldParts) > 1)
+        {
+            $fieldName = array_shift($fieldParts);
+            $field = $module->getField($fieldName);
+            $module = $field->getAggregateModule();
+        }
+        return $module->getField($fieldParts[0]);
     }
 
     protected function getTemplate(Document $document = NULL)

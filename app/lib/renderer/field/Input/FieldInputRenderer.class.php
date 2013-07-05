@@ -75,7 +75,25 @@ class FieldInputRenderer extends FieldRenderer
 
     protected function renderFieldValue(Document $document)
     {
-        $value = $document->getValue($this->getField()->getName());
+        $value = '';
+        if (isset($this->options['fieldpath']))
+        {
+            $fieldParts = explode('.', $this->options['fieldpath']);
+            $module = $document->getModule();
+            $curDoc = $document;
+
+            while (count($fieldParts) > 1)
+            {
+                $fieldName = array_shift($fieldParts);
+                $curDoc = $curDoc->getValue($fieldName);
+            }
+            $value = $curDoc->getValue($fieldParts[0]);
+        }
+        else
+        {
+            $value = $document->getValue($this->getField()->getName());
+        }
+
         return is_scalar($value) ? $value : '';
     }
 
@@ -100,13 +118,38 @@ class FieldInputRenderer extends FieldRenderer
 
     protected function generateInputName(Document $document)
     {
-        // @todo introduce a further structure level, let's call it 'groups'.
-        // this would allow to render the same form multiple times without value collusions.
-        return sprintf(
-            '%s[%s]', 
-            $document->getModule()->getOption('prefix'),
-            $this->getField()->getName()
-        );
+        $name = '';
+
+        if (isset($this->options['fieldpath']))
+        {
+            $first = true;
+            foreach(explode('.', $this->options['fieldpath']) as $part)
+            {
+                if ($first)
+                {
+                    $name = sprintf(
+                        '%s[%s]', 
+                        $document->getModule()->getOption('prefix'),
+                        $part
+                    );
+                    $first = FALSE;
+                }
+                else
+                {
+                    $name .= sprintf('[%s]', $part);
+                }
+            }
+        }
+        else
+        {
+            $name = sprintf(
+                '%s[%s]', 
+                $document->getModule()->getOption('prefix'),
+                $this->getField()->getName()
+            );
+        }
+
+        return $name;
     }
 
     protected function getTemplateName()

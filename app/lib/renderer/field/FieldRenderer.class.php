@@ -81,6 +81,7 @@ abstract class FieldRenderer implements IRenderer
         $shortId = $document->getShortId();
         $requiredCredential = empty($shortId) ? $createAction : $writeAction;
 
-        return ! $user->isAllowed($document, $requiredCredential);
+        return ! $user->isAllowed($document, $requiredCredential)
+            || isset($this->options['readonly']) && $this->options['readonly'] === TRUE;
     }
 }

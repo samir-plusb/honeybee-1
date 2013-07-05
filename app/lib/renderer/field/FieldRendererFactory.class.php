@@ -14,11 +14,11 @@ class FieldRendererFactory
         $this->module = $module;
     }
 
-    public function createRenderer(IField $field, $renderingContext)
+    public function createRenderer(IField $field, $renderingContext, array $options = array())
     {
         $factoryInfo = $this->determineImplementor($field, $renderingContext);
 
-        return new $factoryInfo['implementor']($field, $factoryInfo['options']);
+        return new $factoryInfo['implementor']($field, array_merge($factoryInfo['options'], $options));
     }   
 
     protected function determineImplementor(IField $field, $renderingContext)
