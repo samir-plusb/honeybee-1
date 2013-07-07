@@ -12,7 +12,7 @@
         {% endif %}
     {% else %}
         <div class="controls">
-            <input type="text" name="{{ inputName }}" value="{{ fieldValue }}"
+            <input type="text" {% if false == readonly %} name="{{ inputName }}" {% endif %} value="{{ fieldValue }}"
                 id="{{ fieldId }}" placeholder="{{ placeholder }}" class="span11" 
                 {% if true == readonly %} readonly="readonly" {% endif %} />
             {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}
