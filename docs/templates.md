@@ -14,18 +14,18 @@ renderers that are used to render templates. By default the
 ```output_types.xml``` file defines two renderers to be tried:
 
 1. ```Honeybee\Agavi\Renderer\TwigRenderer``` using `Twig` for templates and
-1. ```Honeybee\Agavi\Renderer\PhpRenderer``` using PHP for templates
+1. ```Honeybee\Agavi\Renderer\PhpRenderer``` using `PHP` for templates
 
 The default filename extensions are
 
 - `.twig` for the `TwigRenderer` and
 - `.php` for the `PhpRenderer`.
 
-The `ProxyRenderer` tries the `TwigRenderer` first. If that renderer did not
-succeed, the `PhpRenderer` will be tried. If both renderers did not succeed
+The `ProxyRenderer` tries the `TwigRenderer` first. If that renderer does not
+succeed, the `PhpRenderer` will be tried. If both renderers do not succeed
 (e.g. because of missing templates) an exception is thrown. This means, that
-you can use PHP and Twig templates side by side. If there are both a PHP and a
-twig template for a single iew the twig template is rendered.
+you can use PHP and Twig templates side by side and interchangingly. If there
+are both a PHP and a Twig template for a single view the twig template is used.
 
 ## Template lookup paths
 
