@@ -106,10 +106,7 @@ override the builtin macro with your own version.
 
 TBD: This does not work as described, as the ```output_types.xml``` file does
 not have working XIncludes. Thus the config handler has to be changed or the
-`Pulq` approach with a sandbox file has to be adopted. See:
-- https://github.com/berlinonline/pulq/blob/master/app/config/output_types.xml
-- https://github.com/berlinonline/pulq/blob/master/app/config/ot_sandbox.xml
-- https://github.com/berlinonline/familienportal/blob/master/applications/portal/project/app/config/output_types.xml
+`Pulq` approach with a sandbox file has to be adopted.
 
 If you want to use other template libraries or languages you can do so by
 overriding the default renderers specified in the ```output_types.xml``` file.
@@ -121,9 +118,9 @@ and then specify it as a (default) renderer in the ```output_types.xml``` file:
 
 ```xml
 <renderers default="custom">
-    <renderer name="custom" class="Honeybee\Agavi\Renderer\ProxyRenderer">
+    <renderer name="custom" class="CustomRenderer">
         <ae:parameters>
-            <ae:parameter name="some_path">%project.dir%</ae:parameter>
+            <ae:parameter name="some_setting">%project.dir%</ae:parameter>
         </ae:parameters>
     </renderer>
 </renderers>
