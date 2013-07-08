@@ -315,6 +315,34 @@ AgaviConfig::set($module->getOption('prefix') . '.service.mail', 'YourMailServic
 $module->getService('mail')->send($mail);
 ```
 
+## Using Swiftmailer plugins
+
+As the mail service uses Swiftmailer by default you can make use of existing
+plugins for that library. Just get the service and then register plugins via
+the ```registerPlugin()``` method prior to calling ```send()``` on the service.
+
+Here are some examples that may be useful:
+
+```php
+$mail_service = $module->getService('mail');
+
+// re-connect after 100 emails
+$mail_service->getMailer()->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(100));
+
+// pause for 30 seconds after 100 mails
+$mail_service->getMailer()->registerPlugin(new Swift_Plugins_AntiFloodPlugin(100, 30));
+
+// rate limit to 100 emails per-minute
+$mail_service->getMailer()->registerPlugin(new \Swift_Plugins_ThrottlerPlugin(
+    100, \Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE
+));
+
+// rate limit to 10MB per-minute
+$mail_service->getMailer()->registerPlugin(new \Swift_Plugins_ThrottlerPlugin(
+    1024 * 1024 * 10, \Swift_Plugins_ThrottlerPlugin::BYTES_PER_MINUTE
+));
+```
+
 ## Support for other mailing libraries
 
 As mentioned in the last paragraph you can create your own mail service instance
@@ -323,5 +351,6 @@ can of course always use whatever library you like.
 
 ## TBD / Ideas / Misc
 
-- configure and use SwiftMailer plugins?
+- configure and use SwiftMailer plugins by default?
 - more settings (like transport configuration w/o an own mail service)?
+- perhaps use https://github.com/egulias/EmailValidator for email validation?
