@@ -84,15 +84,15 @@ templates of the project. There is a sub directory `macros` for Twig macros. The
 `TwigRenderer` has the following lookup paths for Twig templates:
 
 1. paths from the ```template_dirs``` parameter of the `TwigRenderer` (or the ```core.template_dir``` as a default; usually ```app/templates```)
-1. path to the directory the current template is in (e.g. ```app/modules/impl/Login/```)
+1. path to the directory the current template is in (e.g. ```app/modules/User/impl/Login/```)
 1. path to the module's template directory (via ```agavi.template.directory``` parameter from the modules's `module.xml` file; e.g. ```app/modules/impl```)
 
 The default configuration in the ```output_types.xml``` file for the
 ```template_dirs``` parameter of the default `TwigRenderer` leads to the
 following lookups:
 
-1. ```<project_dir>/templates/macros```
-1. ```<project_dir>/templates```
+1. ```app/project/templates/macros```
+1. ```app/project/templates```
 1. ```app/modules/<module_name>/templates/macros```
 1. ```app/modules/<module_name>/templates```
 1. ```app/templates/macros```
