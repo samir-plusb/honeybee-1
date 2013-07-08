@@ -55,9 +55,9 @@ templates:
 1. ```app/modules/<module_name>/impl/<action_name/<action_name><view_name>.<locale_short_identifier><extension>```
 1. ```app/modules/<module_name>/impl/<action_name/<action_name><view_name><extension>```
 
-This means, for the Agavi module `User` with the action `Login` assuming a
-current locale of ```de_DE``` using the `TwigRenderer` the following paths are
-checked for templates before an exception is thrown:
+This means, for the Agavi module `User` with the action `Login` and the view
+`Input` assuming a current locale of ```de_DE``` and using the `TwigRenderer`
+the following paths are checked for templates before an exception is thrown:
 
 ```
 app/project/module_templates/User/de_DE/Login/LoginInput.twig
