@@ -41,11 +41,11 @@ name and the current renderers default extension.
 In addition to that the current locale is taken into account when searching for
 templates:
 
-1. ```app/project/module_templates/<module_name>/<locale_identifier>/<action_name/<action_name><view_name><extension>```
-1. ```app/project/module_templates/<module_name>/<locale_short_identifier>/<action_name/<action_name><view_name><extension>```
-1. ```app/project/module_templates/<module_name>/<action_name/<action_name><view_name>.<locale_identifier><extension>```
-1. ```app/project/module_templates/<module_name>/<action_name/<action_name><view_name>.<locale_short_identifier><extension>```
-1. ```app/project/module_templates/<module_name>/<action_name/<action_name><view_name><extension>```
+1. ```app/project/templates/modules/<module_name>/<locale_identifier>/<action_name/<action_name><view_name><extension>```
+1. ```app/project/templates/modules/<module_name>/<locale_short_identifier>/<action_name/<action_name><view_name><extension>```
+1. ```app/project/templates/modules/<module_name>/<action_name/<action_name><view_name>.<locale_identifier><extension>```
+1. ```app/project/templates/modules/<module_name>/<action_name/<action_name><view_name>.<locale_short_identifier><extension>```
+1. ```app/project/templates/modules/<module_name>/<action_name/<action_name><view_name><extension>```
 1. ```app/modules/<module_name>/templates/<locale_identifier>/<action_name/<action_name><view_name><extension>```
 1. ```app/modules/<module_name>/templates/<locale_short_identifier>/<action_name/<action_name><view_name><extension>```
 1. ```app/modules/<module_name>/templates/<action_name/<action_name><view_name>.<locale_identifier><extension>```
@@ -60,11 +60,11 @@ This means, for the Agavi module `User` with the action `Login` and the view
 the following paths are checked for templates before an exception is thrown:
 
 ```
-app/project/module_templates/User/de_DE/Login/LoginInput.twig
-app/project/module_templates/User/de/Login/LoginInput.twig
-app/project/module_templates/User/Login/LoginInput.de_DE.twig
-app/project/module_templates/User/Login/LoginInput.de.twig
-app/project/module_templates/User/Login/LoginInput.twig
+app/project/templates/modules/User/de_DE/Login/LoginInput.twig
+app/project/templates/modules/User/de/Login/LoginInput.twig
+app/project/templates/modules/User/Login/LoginInput.de_DE.twig
+app/project/templates/modules/User/Login/LoginInput.de.twig
+app/project/templates/modules/User/Login/LoginInput.twig
 
 app/modules/User/templates/de_DE/Login/LoginInput.twig
 app/modules/User/templates/de/Login/LoginInput.twig
