@@ -13,8 +13,8 @@ There is a `Honeybee\Agavi\Renderer\ProxyRenderer` that defines a chain of
 renderers that are used to render templates. By default the
 ```output_types.xml``` file defines two renderers to be tried:
 
-- ```Honeybee\Agavi\Renderer\TwigRenderer``` using `Twig` for templates and
-- ```Honeybee\Agavi\Renderer\PhpRenderer``` using PHP for templates
+1. ```Honeybee\Agavi\Renderer\TwigRenderer``` using `Twig` for templates and
+1. ```Honeybee\Agavi\Renderer\PhpRenderer``` using PHP for templates
 
 The default filename extensions are
 
@@ -31,9 +31,9 @@ twig template for a single iew the twig template is rendered.
 
 The basic template lookup path structure is:
 
-- ```app/project/module_templates/<module_name>/<view_name>```
-- ```app/modules/<module_name>/templates/<view_name>```
-- ```app/modules/<module_name>/impl/<view_name>```
+1. ```app/project/module_templates/<module_name>/<view_name>```
+1. ```app/modules/<module_name>/templates/<view_name>```
+1. ```app/modules/<module_name>/impl/<view_name>```
 
 The lookup path is expanded using the current action's name, the current view's
 name and the current renderers default extension.
@@ -41,24 +41,19 @@ name and the current renderers default extension.
 In addition to that the current locale is taken into account when searching for
 templates:
 
-- ```app/project/module_templates/<module_name>/<view_name>```:
-  - ```app/project/module_templates/<module_name>/<locale_identifier>/<action_name/<action_name><view_name><extension>```
-  - ```app/project/module_templates/<module_name>/<locale_short_identifier>/<action_name/<action_name><view_name><extension>```
-  - ```app/project/module_templates/<module_name>/<action_name/<action_name><view_name>.<locale_identifier><extension>```
-  - ```app/project/module_templates/<module_name>/<action_name/<action_name><view_name>.<locale_short_identifier><extension>```
-  - ```app/project/module_templates/<module_name>/<action_name/<action_name><view_name><extension>```
-
-- ```app/modules/<module_name>/templates/<view_name>```:
-  - ```app/modules/<module_name>/templates/<locale_identifier>/<action_name/<action_name><view_name><extension>```
-  - ```app/modules/<module_name>/templates/<locale_short_identifier>/<action_name/<action_name><view_name><extension>```
-  - ```app/modules/<module_name>/templates/<action_name/<action_name><view_name>.<locale_identifier><extension>```
-  - ```app/modules/<module_name>/templates/<action_name/<action_name><view_name>.<locale_short_identifier><extension>```
-  - ```app/modules/<module_name>/templates/<action_name/<action_name><view_name><extension>```
-
-- ```app/modules/<module_name>/impl/<view_name>```:
-  - ```app/modules/<module_name>/impl/<action_name/<action_name><view_name>.<locale_identifier><extension>```
-  - ```app/modules/<module_name>/impl/<action_name/<action_name><view_name>.<locale_short_identifier><extension>```
-  - ```app/modules/<module_name>/impl/<action_name/<action_name><view_name><extension>```
+1. ```app/project/module_templates/<module_name>/<locale_identifier>/<action_name/<action_name><view_name><extension>```
+1. ```app/project/module_templates/<module_name>/<locale_short_identifier>/<action_name/<action_name><view_name><extension>```
+1. ```app/project/module_templates/<module_name>/<action_name/<action_name><view_name>.<locale_identifier><extension>```
+1. ```app/project/module_templates/<module_name>/<action_name/<action_name><view_name>.<locale_short_identifier><extension>```
+1. ```app/project/module_templates/<module_name>/<action_name/<action_name><view_name><extension>```
+1. ```app/modules/<module_name>/templates/<locale_identifier>/<action_name/<action_name><view_name><extension>```
+1. ```app/modules/<module_name>/templates/<locale_short_identifier>/<action_name/<action_name><view_name><extension>```
+1. ```app/modules/<module_name>/templates/<action_name/<action_name><view_name>.<locale_identifier><extension>```
+1. ```app/modules/<module_name>/templates/<action_name/<action_name><view_name>.<locale_short_identifier><extension>```
+1. ```app/modules/<module_name>/templates/<action_name/<action_name><view_name><extension>```
+1. ```app/modules/<module_name>/impl/<action_name/<action_name><view_name>.<locale_identifier><extension>```
+1. ```app/modules/<module_name>/impl/<action_name/<action_name><view_name>.<locale_short_identifier><extension>```
+1. ```app/modules/<module_name>/impl/<action_name/<action_name><view_name><extension>```
 
 This means, for the Agavi module `User` with the action `Login` assuming a
 current locale of ```de_DE``` using the `TwigRenderer` the following paths are
