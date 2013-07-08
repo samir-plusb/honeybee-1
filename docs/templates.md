@@ -31,7 +31,7 @@ twig template for a single iew the twig template is rendered.
 
 The basic template lookup path structure is:
 
-1. ```app/project/module_templates/<module_name>/<view_name>```
+1. ```app/project/templates/modules/<module_name>/<view_name>```
 1. ```app/modules/<module_name>/templates/<view_name>```
 1. ```app/modules/<module_name>/impl/<view_name>```
 
