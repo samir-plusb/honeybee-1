@@ -7,6 +7,7 @@
     - [Settings](#settings)
   - [Using custom mailer settings](#using-custom-mailer-settings)
   - [Transport modification](#transport-modification)
+  - [Using Swiftmailer plugins](#using-swiftmailer-plugins)
   - [Support for other mailing libraries](#support-for-other-mailing-libraries)
   - [TBD / Ideas / Misc](#tbd--ideas--misc)
 

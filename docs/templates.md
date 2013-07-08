@@ -4,10 +4,10 @@
   - [Output type renderer](#output-type-renderer)
   - [Template lookup paths](#template-lookup-paths)
   - [Master templates and Twig macros](#master-templates-and-twig-macros)
-- [Support for other template libraries](#support-for-other-template-libraries)
-- [TBD / Ideas / Misc](#tbd--ideas--misc)
+  - [Support for other template libraries](#support-for-other-template-libraries)
+  - [TBD / Ideas / Misc](#tbd--ideas--misc)
 
-# Output type renderer
+## Output type renderer
 
 There is a `Honeybee\Agavi\Renderer\ProxyRenderer` that defines a chain of
 renderers that are used to render templates. By default the
@@ -27,7 +27,7 @@ succeed, the `PhpRenderer` will be tried. If both renderers did not succeed
 you can use PHP and Twig templates side by side. If there are both a PHP and a
 twig template for a single iew the twig template is rendered.
 
-# Template lookup paths
+## Template lookup paths
 
 The basic template lookup path structure is:
 
@@ -82,7 +82,7 @@ app/modules/User/impl/Login/LoginInput.de.twig
 app/modules/User/impl/Login/LoginInput.twig
 ```
 
-# Master templates and Twig macros
+## Master templates and Twig macros
 
 The Agavi setting ```core.template_dir``` specifies the path to the master
 templates of the project. There is a sub directory `macros` for Twig macros. The
@@ -107,7 +107,7 @@ If there is a default twig macro in `app/templates/macros` you can put a macro
 with the same name into one of the directories with higher precendence and thus
 override the builtin macro with your own version.
 
-# Support for other template libraries
+## Support for other template libraries
 
 TBD: This does not work as described, as the ```output_types.xml``` file does
 not have working XIncludes. Thus the config handler has to be changed or the
@@ -134,6 +134,6 @@ and then specify it as a (default) renderer in the ```output_types.xml``` file:
 </renderers>
 ```
 
-# TBD / Ideas / Misc
+## TBD / Ideas / Misc
 
 - make introduction and overriding of output types work flawlessly
