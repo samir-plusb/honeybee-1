@@ -195,12 +195,10 @@ class MailConfigHandler extends BaseConfigHandler
         {
             if (is_array($value) && isset($merged[$key]) && is_array($merged[$key]))
             {
-                error_log('1 - '.$key);
                 $merged[$key] = self::mergeSettings($merged[$key], $value);
             }
             else
             {
-                error_log('3 - '.$key . ' - ' . print_r($value, true));
                 $merged[$key] = $value;
             }
         }

@@ -55,7 +55,7 @@ class Message implements IMail
 
     /**
      * Create new simplified email message.
-     * 
+     *
      * @param boolean $silent set this to true to ignore validation errors (and prevent exceptions on failed address validation)
      */
     public function __construct($silent = false)
@@ -92,13 +92,13 @@ class Message implements IMail
      * @param string $name filename to use for content
      * @param string $content_type mime type of content, e.g. "application/pdf"; defaults to "application/octet-stream"
      * @param string $content_disposition defines whether the attachment should be inline or attached; defaults to CONTENT_DISPOSITION_ATTACHMENT
-     * 
+     *
      * @return Message instance for fluent API support
      */
     public function addAttachment($content, $name, $content_type, $content_disposition)
     {
         $this->attachments[] = $this->createAttachment($content, $name, $content_type, $content_disposition, self::ATTACHMENT_TYPE_DATA);
-        
+
         return $this;
     }
 
@@ -114,9 +114,9 @@ class Message implements IMail
      * @param string $name filename to use for the file; defaults to basename of the given file path
      * @param string $content_type mime type of content, e.g. "application/pdf"; defaults to "application/octet-stream"
      * @param string $content_disposition defines whether the attachment should be inline or attached; defaults to CONTENT_DISPOSITION_ATTACHMENT
-     * 
+     *
      * @return Message instance for fluent API support
-     * 
+     *
      * @throws MessageConfigurationException if given path is not readable
      */
     public function addFile($path, $name, $content_type, $content_disposition)
@@ -137,7 +137,7 @@ class Message implements IMail
         }
 
         $this->attachments[] = $this->createAttachment($path, $name, $content_type, $content_disposition, self::ATTACHMENT_TYPE_PATH);
-        
+
         return $this;
     }
 
@@ -299,13 +299,13 @@ class Message implements IMail
      * their receipt of it.
      *
      * @param mixed $addresses string with email address(es) or multiple element associative array with email addresses and their display name (e.g. array('email@example.com' => 'Some Name', 'email2@example.com' => 'Some Other Name'))
-     * 
+     *
      * @return Message instance for fluent API support
      */
     public function setBcc($addresses)
     {
         $this->bcc = $this->getConsolidated($addresses);
-        
+
         return $this;
     }
 
@@ -313,13 +313,13 @@ class Message implements IMail
      * Set the main html body part of the message.
      *
      * @param string $html html content of the main body part of the message
-     * 
+     *
      * @return Message instance for fluent API support
      */
     public function setBodyHtml($html)
     {
         $this->body_html = trim($html);
-        
+
         return $this;
     }
 
@@ -327,13 +327,13 @@ class Message implements IMail
      * Set the main text body part of the message.
      *
      * @param string $text plain text content of the alternative or main body part of the message
-     * 
+     *
      * @return Message instance for fluent API support
      */
     public function setBodyText($text)
     {
         $this->body_text = trim($text);
-        
+
         return $this;
     }
 
@@ -342,25 +342,25 @@ class Message implements IMail
      * 'carbon-copy' of this message.
      *
      * @param mixed $addresses string with email address(es) or multiple element associative array with email addresses and their display name (e.g. array('email@example.com' => 'Some Name', 'email2@example.com' => 'Some Other Name'))
-     * 
+     *
      * @return Message instance for fluent API support
      */
     public function setCc($addresses)
     {
         $this->cc = $this->getConsolidated($addresses);
-        
+
         return $this;
     }
 
     /**
      * @param mixed $date origination date of the message as a UNIX timestamp or strtotime() compatible string
-     * 
+     *
      * @return Message instance for fluent API support
      */
     public function setDate($date)
     {
         $this->date = $this->getUnixTimestamp($date);
-        
+
         return $this;
     }
 
@@ -372,13 +372,13 @@ class Message implements IMail
      * may have been written by multiple persons.
      *
      * @param mixed $addresses string with email address(es) or multiple element associative array with email addresses and their display name (e.g. array('email@example.com' => 'Some Name', 'email2@example.com' => 'Some Other Name'))
-     * 
+     *
      * @return Message instance for fluent API support
      */
     public function setFrom($addresses)
     {
         $this->from = $this->getConsolidated($addresses);
-        
+
         return $this;
     }
 
@@ -387,13 +387,13 @@ class Message implements IMail
      * sent to this address.
      *
      * @param mixed $addresses string with email address(es) or multiple element associative array with email addresses and their display name (e.g. array('email@example.com' => 'Some Name', 'email2@example.com' => 'Some Other Name'))
-     * 
+     *
      * @return Message instance for fluent API support
      */
     public function setReplyTo($addresses)
     {
         $this->reply_to = $this->getConsolidated($addresses);
-        
+
         return $this;
     }
 
@@ -404,13 +404,13 @@ class Message implements IMail
      * valid one will be used.
      *
      * @param string $address return-path address for bounce handling as string or single element associative array with email address and display name (e.g. array('email@example.com' => 'Some Name'))
-     * 
+     *
      * @return Message instance for fluent API support
      */
     public function setReturnPath($address)
     {
         $this->return_path = $this->getSingleConsolidated($address);
-        
+
         return $this;
     }
 
@@ -421,18 +421,18 @@ class Message implements IMail
      * as only one person can physically send a message while it
      * may have been written by multiple persons. The sender has
      * a higher significance than the From address.
-     * 
+     *
      * If you give multiple addresses to this method, only the first
      * one will be used.
      *
      * @param mixed $address string with email address or single element associative array with email address and display name (e.g. array('email@example.com' => 'Some Name'))
-     * 
+     *
      * @return Message instance for fluent API support
      */
     public function setSender($address)
     {
         $this->sender = $this->getSingleConsolidated($address);
-        
+
         return $this;
     }
 
@@ -446,7 +446,7 @@ class Message implements IMail
     public function setSubject($subject)
     {
         $this->subject = $subject;
-        
+
         return $this;
     }
 
@@ -455,23 +455,23 @@ class Message implements IMail
      * copy of this message.
      *
      * @param mixed $addresses string with email address(es) or multiple element associative array with email addresses and their display name (e.g. array('email@example.com' => 'Some Name', 'email2@example.com' => 'Some Other Name'))
-     * 
+     *
      * @return Message instance for fluent API support
      */
     public function setTo($addresses)
     {
         $this->to = $this->getConsolidated($addresses);
-        
+
         return $this;
     }
 
     /**
      * Return the first valid email address as array.
-     * 
+     *
      * @param mixed $addresses string or array
-     * 
+     *
      * @return array with key being the email address and value being the display name (display name may be null)
-     * 
+     *
      * @throws MessageConfigurationException if given values (email address or display name) are not valid
      */
     protected function getSingleConsolidated($addresses)
@@ -481,7 +481,7 @@ class Message implements IMail
 
     /**
      * Return all valid email addresses as array.
-     * 
+     *
      * @param mixed $addresses string or array
      * @param boolean $only_return_first set this to true to only get the first of all valid email addresses
      *
@@ -544,7 +544,7 @@ class Message implements IMail
                 }
             }
         }
-        
+
         // we only need one of the valid addresses
         if ($only_return_first === true && count($valid_addresses) > 1)
         {
@@ -610,11 +610,11 @@ class Message implements IMail
 
     /**
      * Returns a valid integer unix timestamp.
-     * 
+     *
      * @param mixed $date strtotime compatible string or integer unix timestamp
-     * 
+     *
      * @return integer unix timestamp
-     * 
+     *
      * @throws MessageConfigurationException in case of invalid arguments
      */
     protected function getUnixTimestamp($date)
@@ -623,7 +623,7 @@ class Message implements IMail
         {
             throw new MessageConfigurationException('The given date must be a unix timestamp (integer) or a date string that can be transformed via strtotime().');
         }
-        
+
         if (is_string($date))
         {
             $date = strtotime($date);
@@ -635,13 +635,13 @@ class Message implements IMail
 
         return $date;
     }
-    
+
     /**
      * This method does not recognize emails like "user@localhost" as valid.
      * Nor does it find emails with IDN hosts being valid. If you want to use
      * e.g. umlaut domains just try to call something like
      * "idn_to_ascii(explode('@', $email)[1])" on the email first.
-     * 
+     *
      * Valid local part characters are: A-Za-z0-9.!#$%&'*+-/=?^_`{|}~
      *
      * @param string $email Email address to validate. This uses the FILTER_VALIDATE_EMAIL of PHP
@@ -650,20 +650,18 @@ class Message implements IMail
      */
     public static function isValidEmail($email)
     {
-        //$parts = explode('@', $email);
-        //return ( (count($parts) === 2) && (filter_var($parts[0].'@'.idn_to_ascii($parts[1]), FILTER_VALIDATE_EMAIL) !== false) );
         return (filter_var($email, FILTER_VALIDATE_EMAIL) !== false);
     }
 
     /**
      * Create a new message instance.
-     * 
+     *
      * @param mixed $from From address as string or array of email address => display name pairs
      * @param mixed $to To address as string or array of email address => display name pairs
      * @param string $subject subject of the message
      * @param string $body_html HTML part of the message
      * @param string $body_text plain text part of the message
-     * 
+     *
      * @return Message instance to customize further
      */
     public static function create($from, $to, $subject, $body_html, $body_text)
@@ -677,6 +675,82 @@ class Message implements IMail
         $message->setBodyText($body_text);
 
         return $message;
+    }
+
+    /**
+     * Returns a simple array representation of the message.
+     *
+     * @return array of all message properties
+     */
+    public function toArray()
+    {
+        return array(
+            'from' => $this->getFrom(),
+            'sender' => $this->getSender(),
+            'to' => $this->getTo(),
+            'cc' => $this->getCc(),
+            'bcc' => $this->getBcc(),
+            'reply_to' => $this->getReplyTo(),
+            'return_path' => $this->getReturnPath(),
+            'body_text' => $this->getBodyText(),
+            'body_html' => $this->getBodyHtml(),
+            'attachments' => $this->getAttachments()
+        );
+    }
+
+    /**
+     * Returns a simple string representation of the message.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $str = "Message:\n";
+        $arr = $this->toArray();
+        foreach ($arr as $key => $value)
+        {
+            $str .= $key . ' = ' . $this->getAsString($value) . "\n";
+        }
+        return $str;
+    }
+
+    /**
+     * @param mixed $value object, array or string to create textual representation for
+     *
+     * @return string for the given value
+     */
+    protected function getAsString($value)
+    {
+        if (is_object($value))
+        {
+            if (is_callable(array($value, '__toString')))
+            {
+                return (string) $value->__toString();
+            }
+            else
+            {
+                return json_encode($value);
+            }
+        }
+        elseif (is_array($value))
+        {
+            $arr = array();
+            foreach ($value as $key => $value) // emails; attachments will look weird
+            {
+                if (null === $value)
+                {
+                    $arr[] = $key;
+                }
+                else
+                {
+                    $arr[] = '"' . $value . '" <' . $key . '>';
+                }
+            }
+
+            return implode(', ', $arr);
+        }
+
+        return (string) $value;
     }
 
 }

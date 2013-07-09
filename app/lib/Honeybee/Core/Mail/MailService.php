@@ -7,11 +7,12 @@ use Honeybee\Core\Config;
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Mail\MessageConfigurationException;
 use Honeybee\Core\Service\IService;
+use Honeybee\Core\Mail\MailTemplateService;
 
 /**
  * Handles the sending of mails for a module.
  */
-class Service implements IService, IMailer
+class MailService implements IService, IMailer
 {
     /**
      * Key for 'number of sent mails' in return array of the send method.
@@ -39,14 +40,23 @@ class Service implements IService, IMailer
     protected $mailer = null;
 
     /**
+     * @var Honeybee\Core\Dat0r\Module if the service was constructed with a module
+     */
+    protected $module;
+
+    /**
      * @param mixed $mixed module to get mail config from or Config\ArrayConfig instance with mailers settings
      */
     public function __construct($mixed)
     {
         if ($mixed instanceof Module)
         {
-            $config = new Config\AgaviXmlConfig(\AgaviConfig::get('core.modules_dir') . '/' . $mixed->getName() . '/config/mail.xml');
-            $this->mailer_configs = new Config\ArrayConfig($config->toArray());
+            $this->module = $mixed;
+            $config = new Config\AgaviXmlConfig(\AgaviConfig::get('core.modules_dir') . '/' . $this->module->getName() . '/config/mail.xml');
+            $data = $config->toArray();
+            $data['module_name'] = $this->module->getName();
+            $this->mailer_configs = new Config\ArrayConfig($data);
+
         }
         elseif ($mixed instanceof Config\ArrayConfig)
         {
@@ -63,7 +73,7 @@ class Service implements IService, IMailer
 
         $this->initSwiftMailer();
     }
-    
+
     /**
      * Initializes a \Swift_Mailer instance with a transport and
      * sets the default charset.
@@ -95,7 +105,7 @@ class Service implements IService, IMailer
         {
             return new Config\ArrayConfig($this->mailer_configs->get(MailConfigHandler::KEY_DEFAULT_MAILER, array()));
         }
-        
+
         $all_mailers = $this->mailer_configs->get(MailConfigHandler::KEY_MAILERS, array());
         if (!isset($all_mailers[$mailer_name]))
         {
@@ -141,6 +151,30 @@ class Service implements IService, IMailer
     }
 
     /**
+     * Convenience proxy method for the MailTemplateService that
+     * creates a new message instance from a twig mail template.
+     *
+     * @param mixed $identifier template name
+     * @param array $variables array of placeholders for the twig template
+     * @param array $options array of additional options for the renderer like 'template_extension' or 'add_agavi_assigns'
+     *
+     * @return Message instance to customize further
+     */
+    public function createMessageFromTemplate($identifier, array $variables = array(), array $options = array())
+    {
+        if (!empty($this->module))
+        {
+            $mail_template_service = $this->module->getService('mail-template');
+        }
+        else
+        {
+            $mail_template_service = new MailTemplateService($this->mailer_configs);
+        }
+
+        return $mail_template_service->createMessageFromTemplate($identifier, $variables, $options);
+    }
+
+    /**
      * Create Swift_Message instance from the given IMail instance.
      * 
      * @param IMail $message
@@ -151,7 +185,7 @@ class Service implements IService, IMailer
      * @throws MessageConfigurationException in case of misconfigured message
      * @throws \InvalidArgumentException in case of unknown mailer name from config
      */
-    protected function createSwiftMessage(IMail $message, $mailer_config_name = null)
+    public function createSwiftMessage(IMail $message, $mailer_config_name = null)
     {
         $settings = $this->getMailerSettings($mailer_config_name);
         $message_defaults = new Config\ArrayConfig($settings->get('address_defaults', array()));
@@ -291,13 +325,13 @@ class Service implements IService, IMailer
         // do not allow to long text lines
         if ($settings->has('max_line_length'))
         {
-            $mail->setMaxLineLength((int)$settings->get('max_line_length', 78));
+            $mail->setMaxLineLength((int) $settings->get('max_line_length', 78));
         }
-        
+
         // add X-Priority header
         if ($settings->has('priority'))
         {
-            $mail->setPriority((int)$settings->get('priority', 3));
+            $mail->setPriority((int) $settings->get('priority', 3));
         }
 
         // request read receipts if necessary
@@ -351,4 +385,3 @@ class Service implements IService, IMailer
         return $file;
     }
 }
-

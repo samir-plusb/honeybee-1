@@ -18,7 +18,7 @@ class TwigRenderer extends \AgaviTwigRenderer
     /**
      * Return an initialized Twig instance.
      *
-     * @return Twig_Environment
+     * @return \Twig_Environment
      */
     protected function getEngine()
     {
@@ -59,7 +59,52 @@ class TwigRenderer extends \AgaviTwigRenderer
      */
     public function render(\AgaviTemplateLayer $layer, array &$attributes = array(), array &$slots = array(), array &$moreAssigns = array())
     {
+        $twig_template = $this->loadTemplate($layer);
+
+        $data = array();
+
+        // template vars
+        if ($this->extractVars)
+        {
+            foreach ($attributes as $name => $value)
+            {
+                $data[$name] = $value;
+            }
+        }
+        else
+        {
+            $data[$this->varName] = $attributes;
+        }
+
+        // slots
+        $data[$this->slotsVarName] = $slots;
+
+        // dynamic assigns (global ones were set in getEngine())
+        $finalMoreAssigns = self::buildMoreAssigns($moreAssigns, $this->moreAssignNames);
+        foreach ($finalMoreAssigns as $key => $value)
+        {
+            $data[$key] = $value;
+        }
+
+        return $twig_template->render($data);
+    }
+
+    /**
+     * @param \AgaviTemplateLayer $layer
+     *
+     * @return \Twig_Template
+     */
+    public function loadTemplate(\AgaviTemplateLayer $layer)
+    {
+        $source = $this->getSource($layer);
+
+        return $this->getEngine()->loadTemplate($source);
+    }
+
+    protected function getSource(\AgaviTemplateLayer $layer)
+    {
         $twig = $this->getEngine();
+
         $template_dirs = (array) $this->getParameter('template_dirs', array(\AgaviConfig::get('core.template_dir')));
         $path = $layer->getResourceStreamIdentifier();
 
@@ -97,35 +142,6 @@ class TwigRenderer extends \AgaviTwigRenderer
             $source = file_get_contents($path);
         }
 
-        $template = $twig->loadTemplate($source);
-
-        $data = array();
-
-        // template vars
-        if ($this->extractVars)
-        {
-            foreach ($attributes as $name => $value)
-            {
-                $data[$name] = $value;
-            }
-        }
-        else
-        {
-            $data[$this->varName] = $attributes;
-        }
-
-        // slots
-        $data[$this->slotsVarName] = $slots;
-
-        // dynamic assigns (global ones were set in getEngine())
-        $finalMoreAssigns = self::buildMoreAssigns($moreAssigns, $this->moreAssignNames);
-        foreach ($finalMoreAssigns as $key => $value)
-        {
-            $data[$key] = $value;
-        }
-
-        return $template->render($data);
+        return $source;
     }
-
 }
-

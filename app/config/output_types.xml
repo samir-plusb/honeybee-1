@@ -18,7 +18,7 @@
             <ae:parameter name="X-Frame-Options">SAMEORIGIN</ae:parameter>
         </ae:parameter>
 
-        <!-- default layers that may be of use in several layouts -->
+        <!-- default layers that may be of use in several layouts, the targets should always be paths to files (not directories!) -->
         <layers>
             <layer name="content">
                 <ae:parameters>
@@ -51,8 +51,6 @@
                     <ae:parameter name="controller">ct</ae:parameter>
                     <ae:parameter name="user">us</ae:parameter>
                     <ae:parameter name="translation_manager">tm</ae:parameter>
-                    <ae:parameter name="validation_manager">vm</ae:parameter>
-                    <ae:parameter name="request_data">rd</ae:parameter>
                 </ae:parameter>
                 <ae:parameter name="default_extension">.twig</ae:parameter>
                 <ae:parameter name="extract_vars">true</ae:parameter> <!-- template variables will be available directly; $this->setAttribute('foo', $value) will be available as {{ foo }} -->
@@ -63,7 +61,7 @@
                     <ae:parameter name="auto_reload">true</ae:parameter> <!-- recompile template whenever source code changes -->
                     <ae:parameter name="strict_variables">false</ae:parameter> <!-- do not throw exception instead of silently using null for invalid variables, attributes or methods -->
                 </ae:parameter>
-                <ae:parameter name="template_dirs">
+                <ae:parameter name="template_dirs"><!-- lookup paths for twig templates and macros -->
                     <ae:parameters>
                         <ae:parameter>%project.dir%/templates/macros</ae:parameter>
                         <ae:parameter>%project.dir%/templates</ae:parameter>
@@ -87,6 +85,21 @@
     </ae:sandbox>
 
 
+    <!-- general output types to render (mail) templates using twig -->
+    <ae:configuration>
+        <output_types default="template">
+            <output_type name="template">
+                <xi:include xpointer="&aeot; xpointer(/ae:configurations/ae:sandbox/ot:renderers)" />
+                <layouts default="default">
+                    <layout name="default">
+                        <layer name="content" renderer="twig">
+                            <xi:include xpointer="&aeot; xpointer(/ae:configurations/ae:sandbox/ot:layers/ot:layer[@name='content']/*)" />
+                        </layer>
+                    </layout>
+                </layouts>
+            </output_type>
+        </output_types>
+    </ae:configuration>
 
     <!-- output types and their configuration for web applications -->
     <ae:configuration context="web">

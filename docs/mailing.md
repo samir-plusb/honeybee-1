@@ -2,19 +2,24 @@
 
 - [Mailing](#mailing)
   - [Usage examples](#usage-examples)
+    - [Message creation](#message-creation)
     - [Email addresses](#email-addresses)
   - [Configuration](#configuration)
     - [Settings](#settings)
   - [Using custom mailer settings](#using-custom-mailer-settings)
+  - [Twig email templates](#twig-email-templates)
+    - [Email template example](#email-template-example)
+    - [Default variables and options](#default-variables-and-options)
+    - [Verbose example with overriding](#verbose-example-with-overriding)
   - [Transport modification](#transport-modification)
   - [Using Swiftmailer plugins](#using-swiftmailer-plugins)
   - [Support for other mailing libraries](#support-for-other-mailing-libraries)
   - [TBD / Ideas / Misc](#tbd--ideas--misc)
 
-To send emails you usually have to get a `Honeybee\Core\Mail\Service` instance
-from a Honeybee module. That service has a `send()` method that accepts a
-`Honeybee\Core\Mail\IMail` implementing message. There is a class holding
-mails called `Honeybee\Core\Mail\Message` that eases the creation of mails.
+To send emails you usually have to get a `Honeybee\Core\Mail\MailService`
+instance from a Honeybee module. That service has a `send()` method that
+accepts a `Honeybee\Core\Mail\IMail` implementing message. There is a class
+called `Honeybee\Core\Mail\Message` that eases the creation of mails.
 
 By default the mail service uses the `SwiftMailer` library to create mails and
 sends them via the ```\Swift_SendmailTransport```. Email fields like `To`, `Cc`
@@ -29,8 +34,24 @@ Honeybee module and send a created message like this:
 
 ```php
 $mail = Message::create('from@example.com', 'to@example.com', 'Subject', '<h1>HTML-Body-Part</h1>', 'Text body part');
-$info = $mail_service->send($mail);
+$mail_service->send($mail);
 ```
+
+You can use mail templates based on Twig:
+
+```php
+$mail_service = $this->getModule()->getService('mail');
+$message = $mail_service->createMessageFromTemplate(
+    'ResetPassword',
+    array('recipient' => $user_document)
+);
+$mail_service->send($message);
+```
+
+The [Twig templates paragraph](#twig-templates) has more information
+about how to use and configure Twig email templates.
+
+## Message creation
 
 To create a Honeybee mail message you instantiate a `Honeybee\Core\Mail\Message`
 and set the fields you like. The following creates a text only email that has
@@ -125,7 +146,7 @@ will always return a maximum of one email address. All other fields like `To`,
 
 # Configuration
 
-The `Mail\Service` uses sensible default settings (like `utf-8` as the default
+The `MailService` uses sensible default settings (like `utf-8` as the default
 charset for everything). The settings are grouped in named mailers. Each
 mailer is a set of settings that is known under a ```name``` attribute on the
 ```mailer``` element in the mail configuration. There is a ```default```
@@ -268,6 +289,258 @@ $this->getModule()->getService('mail')->send($mail, 'system_mails');
 // sent mail contains reply_to, return_path etc. from settings
 ```
 
+# Twig mail templates
+
+It is possible to use Twig templates for the preparation of emails.
+This eases a few aspects like message translation and with certain
+email header fields being prefilled it may also save on some typing.
+
+The mail templates usually have a file extension of `.mail.twig` and
+should be created next to the normal view templates or in the normal
+template lookup paths. More about the default lookup paths for
+templates can be found in the [templates documentation](templates.md).
+
+To create a mail from a template ask the `MailTemplateService`:
+```php
+$mail_template_service = $this->getModule()->getService('mail-template');
+$message = $mail_template_service->createMessageFromTemplate('ResetPassword/ResetPassword', array('user' => $user));
+```
+
+The `MailService` has a same signature proxy method that can be used
+as well. The first parameter is the identifier a.k.a. template name.
+Let's assume the above `ResetPassword` template is from the `User`
+module and the current locale is `en_UK`. This leads to the search
+for that template in the following locations:
+
+```
+app/project/templates/modules/User/en_UK/ResetPassword/ResetPassword.mail.twig
+app/project/templates/modules/User/en/ResetPassword/ResetPassword.mail.twig
+app/project/templates/modules/User/ResetPassword/ResetPassword.en_UK.mail.twig
+app/project/templates/modules/User/ResetPassword/ResetPassword.en.mail.twig
+app/project/templates/modules/User/ResetPassword/ResetPassword.mail.twig
+app/modules/User/templates/en_UK/ResetPassword/ResetPassword.mail.twig
+app/modules/User/templates/en/ResetPassword/ResetPassword.mail.twig
+app/modules/User/templates/ResetPassword/ResetPassword.en_UK.mail.twig
+app/modules/User/templates/ResetPassword/ResetPassword.en.mail.twig
+app/modules/User/templates/ResetPassword/ResetPassword.mail.twig
+app/modules/User/impl/ResetPassword/ResetPassword.en_UK.mail.twig
+app/modules/User/impl/ResetPassword/ResetPassword.en.mail.twig
+app/modules/User/impl/ResetPassword/ResetPassword.mail.twig
+```
+
+As you can see the template identifier is just substituted and the
+most specific locale version wins. Further on it's possible to just
+override the default template from the `ResetPassword` action by
+creating a file in one of the higher prioritized directories.
+
+## Email template example
+
+The Twig email templates will not be rendered in complete, but
+single well known _blocks_ are found and rendered. The supported
+block names are the following:
+
+- `subject`: Subject of the message
+- `from`: email address of message creator
+- `to`: recipient email address
+- `cc`: carbon-copy recipient email address
+- `bcc`: blind-carbon-copy recipient email address
+- `sender`: sender email address (if creator is different from sender)
+- `reply_to`: email address for answers
+- `return_path`: email address for bounce handling
+- `body_text`: HTML body part of the message
+- `body_html`: plain text body part of the message
+
+Please notice, that the above email header fields (like `from` or `to`)
+can only take a simple, single email address without display names.
+This is merely a convenience for e.g. system notifications. If you
+need more functionality you have to customize the message further
+after creation. The mentioned blocks don't all have to be present.
+
+## Default variables and options
+
+By default the `MailTemplateService` renders the blocks by using
+the given variables and the default globals that are available to
+the Honeybee `TwigRenderer` from the ```output_types.xml``` file:
+
+- `ro`: current `AgaviRouting` instance (e.g. `AgaviWebRouting`)
+- `rq`: current `AgaviRequest` instance (e.g. `AgaviWebRequest`)
+- `ct`: current `AgaviController` instance
+- `us`: current `AgaviUser` instance (e.g. `ZendAclSecurityUser`)
+- `tm`: current `AgaviTranslationManager` instance
+- `ac`: array with all `AgaviConfig` settings
+
+This means you can create routes, get session information or
+config settings without problems. If you do not want to include
+those Agavi related variables when rendering your blocks, you
+need to specify an option `add_agavi_assigns` set to `false`:
+
+```php
+$message = $mail_service->createMessageFromTemplate(
+    $template_name,
+    $variables,
+    array(
+        'module_name' => null,
+        'add_agavi_assigns' => true
+    )
+);
+```
+
+As the services are usually retrieved via the `ModuleFactory` (and
+thus module specific) the current Honeybee module's name is taken
+into account when looking up the templates. To modify the name you
+can specify the `module_name` option. This allows you the change
+the lookup path and e.g. get a mail template from another module or
+even to specify `null` and get a mail template from a common path
+like `app/project/templates` without the ```modules/<module_name>```
+part in your way.
+
+## Verbose example with overriding
+
+Let's assume you have a file called `example.mail.twig` that
+is situated in the `app/project/templates` directory.
+
+You are in an action of the `User` module and want to send an
+email based on that template. You want to set another recipient
+and take into account the `custom` mailer settings you specified
+in the project's `mail.xml` file.
+
+The content of the `example.mail.twig` is:
+
+```twig
+This is an example for an email template. For email templates only the well
+known blocks are rendered with variables and then used for message creation.
+
+That's the reason you can simply write stuff here to explain more about this
+email template or what placeholders should be given to it as variables.
+
+{% block subject -%}A subject from a twig template: {{topic}}{%- endblock %}
+{% block from -%}{{sender.email}}{%- endblock %}
+{% block to -%}{{recipient.email}}{%- endblock %}
+{% block cc -%}cc@example.com{%- endblock %}
+{% block bcc -%}bcc@example.com{%- endblock %}
+{% block sender -%}sender@example.com{%- endblock %}
+{% block reply_to -%}contact@example.com{%- endblock %}
+{% block return_path -%}bounces@example.com{%- endblock %}
+
+{% block body_text -%}
+Hello {{recipient.username}},
+
+this is the plain text part of the mail.
+
+List of users: {{ ro.gen('user.list') }}
+
+Project name: {{ ac['core.app_name'] }}
+
+Greetings,
+
+{{sender.username}}
+--
+Email: {{sender.email}}
+{%- endblock %}
+
+{% block body_html -%}
+<h1>Hello {{recipient.username}}!</h1>
+<p style="color: red">This is the HTML part of the mail.</p>
+<p>List of users: {{ ro.gen('user.list') }}</p>
+<p>Project name: {{ ac['core.app_name'] }}</p>
+<p>Greetings,<br />
+{{sender.username}}
+</p>
+<hr />
+<p>Email: {{sender.email}}</p>
+{%- endblock %}
+```
+
+The `custom` mailer settings are defined as follows:
+
+```xml
+<mailer name="custom">
+    <settings>
+        <setting name="override_all_recipients">%core.project_prefix%+%core.environment%@example.com</setting>
+        <setting name="address_overrides">
+            <settings>
+                <setting name="return_path">override-return-path@example.com</setting>
+            </settings>
+        </setting>
+    </settings>
+</mailer>
+```
+
+Your source code looks like this (`$user` and `$recipient`
+are objects for the template):
+
+```php
+$mail_service = $this->getModule()->getService('mail');
+$message = $mail_service->createMessageFromTemplate(
+    'example',
+    array('topic' => 'COOL', 'sender' => $user, 'recipient' => $recipient),
+    array('module_name' => null)
+);
+$message->setTo('trololo@example.com'); // override twig template settings
+$mail_service->send($message, 'custom'); // override everything on the message depending on 'custom' settings and then send it
+```
+
+With the above sources the Swift mail will look something like
+that (notice the different email addresses etc.):
+
+```
+Return-Path: <override-return-path@example.com>
+Sender: sender@example.com
+Message-ID: <632b5180dad1ce9b3fc0c247ae989a73@honeybee-showcase.dev>
+Date: Tue, 09 Jul 2013 18:40:19 +0200
+Subject: A subject from a twig template: COOL
+From: sender@example.com
+Reply-To: contact@example.com
+To: honeybee+development-vagrant@example.com
+Cc: honeybee+development-vagrant@example.com
+Bcc: honeybee+development-vagrant@example.com
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_v4_1373388019_1e622693238a910ac687cd0fcd96c7f5_=_"
+
+
+--_=_swift_v4_1373388019_1e622693238a910ac687cd0fcd96c7f5_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<h1>Hello Recipient Name!</h1>
+<p style=3D"color: red">This is the HTML par=
+t of the mail.</p>
+<p>List of users: http://honeybee-showcase.dev/en=
+/user/list</p>
+<p>Project name: Honeybee CMF</p>
+<p>Greetings,<b=
+r />
+Sender Name
+</p>
+<hr />
+<p>Email: sender@example.c=
+om</p>
+
+--_=_swift_v4_1373388019_1e622693238a910ac687cd0fcd96c7f5_=_
+Content-Type: plain/text; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hello User Name,
+
+this is the plain text part of the mai=
+l.
+
+List of users: http://honeybee-showcase.dev/en/user/l=
+ist
+
+Project name: Honeybee CMF
+
+Greetings=
+,
+
+Sender Name
+--=20
+Email: sender@example.com
+
+--_=_swift_v4_1373388019_1e622693238a910ac687cd0fcd96c7f5_=_--
+```
+
 # Transport modification
 
 By default the ```Swift_SendmailTransport``` is used to send mail to the local
@@ -279,12 +552,12 @@ transport class via the ```swift_transport_class``` setting.
 ```
 
 As other transports may need to be configured, you can create your own mail
-service class, that extends `Honeybee\Core\Mail\Service` and overwrites the
+service class, that extends `Honeybee\Core\Mail\MailService` and overwrites the
 ```initSwiftMailer()``` method appropriately. To e.g. use a SMTP transport one
 could do this:
 
 ```php
-class YourMailService extends \Honeybee\Core\Mail\Service
+class YourMailService extends \Honeybee\Core\Mail\MailService
 {
     /**
      * Initializes a \Swift_Mailer instance with a SMTP transport.
