@@ -7,7 +7,7 @@ use Honeybee\Core\Mail\IMail;
 /**
  * Handles the sending of mails for a module.
  */
-class TestService extends \Honeybee\Core\Mail\Service
+class TestService extends \Honeybee\Core\Mail\MailService
 {
     protected $sent_mails = array();
 
