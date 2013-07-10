@@ -48,7 +48,7 @@ $message = $mail_service->createMessageFromTemplate(
 $mail_service->send($message);
 ```
 
-The [Twig templates paragraph](#twig-templates) has more information
+The [Twig templates paragraph](#twig-email-templates) has more information
 about how to use and configure Twig email templates.
 
 ## Message creation
@@ -380,7 +380,7 @@ $message = $mail_service->createMessageFromTemplate(
     $variables,
     array(
         'module_name' => null,
-        'add_agavi_assigns' => true
+        'add_agavi_assigns' => false
     )
 );
 ```
