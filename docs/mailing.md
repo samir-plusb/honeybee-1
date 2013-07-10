@@ -240,8 +240,8 @@ A very extensive example could look like this:
 
 Address default will be used to set fields if they are empty upon sending a
 message. Address overrides are used to override the field values or their
-default values. If you do not want to redirect emails in any case to an address
-of your choice, just set the ```override_all_recipients``` setting with an email
+default values. If you want to force emails in any case to an address of your
+choice, just set the ```override_all_recipients``` setting with an email
 address. It will then be used to override `To`, `Cc` and `Bcc` if present.
 
 # Using custom mailer settings
