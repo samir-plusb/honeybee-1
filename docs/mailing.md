@@ -7,7 +7,7 @@
   - [Configuration](#configuration)
     - [Settings](#settings)
   - [Using custom mailer settings](#using-custom-mailer-settings)
-  - [Twig email templates](#twig-email-templates)
+  - [Twig mail templates](#twig-mail-templates)
     - [Email template example](#email-template-example)
     - [Default variables and options](#default-variables-and-options)
     - [Verbose example with overriding](#verbose-example-with-overriding)
@@ -48,7 +48,7 @@ $message = $mail_service->createMessageFromTemplate(
 $mail_service->send($message);
 ```
 
-The [Twig templates paragraph](#twig-email-templates) has more information
+The [Twig templates paragraph](#twig-mail-templates) has more information
 about how to use and configure Twig email templates.
 
 ## Message creation
