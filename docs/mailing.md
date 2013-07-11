@@ -178,20 +178,23 @@ service.
 
 There are some default settings that are supported by the default mail service:
 
-- ```override_all_recipients```: email address to use for `To`, `Cc` and `Bcc` regardless of other settings when those fields are set in a message
-- ```default_subject```: string to use as the default subject if none is set for the message
-- ```default_body_text```: string to use as the default plain text part of the mail body if none is set in a message
-- ```default_body_html```: string to use as the default html part of the mail body if none is set in a message
-- ```default_date```: default (unix) timestamp to set in a message if none is set - you may use a ```strtotime()``` compatible string like ```+2 weeks```
-- ```address_defaults```: contains settings with "email field" => "email address(es)" pairs to use as defaults if a message does not set them
-  - you can either specify an email address as string or a nested settings block with multiple addresses as settings
-  - supported email field identifiers are: `to`, `from`, `cc`, `bcc`, ```reply_to```, ```return_path```, `sender`
-- ```address_overrides```: contains settings with "email field" => "email address(es)" pairs to use instead of addresses already set on the message
-  - you can either specify an email address as string or a nested settings block with multiple addresses as settings
-  - supported email field identifiers are: `to`, `from`, `cc`, `bcc`, ```reply_to```, ```return_path```, `sender`
-- ```max_line_length```: maximum length of lines in the plain text email part, defaults to 78 characters historically
-- ```priority```: priority from 1 (highest) to 5 (lowest) used for mails, defaults to 3 (normal). Sets `X-Priority` header on the email.
-- ```read_receipt_to```: email address to use for read receipt functionality
+- ```override_all_recipients```: Email address to use for `To`, `Cc` and `Bcc` regardless of other settings when those fields are set in a message.
+- ```default_subject```: String to use as the default subject if none is set for the message.
+- ```default_body_text```: String to use as the default plain text part of the mail body if none is set in a message.
+- ```default_body_html```: String to use as the default html part of the mail body if none is set in a message.
+- ```default_date```: Default (unix) timestamp to set in a message if none is set - you may use a ```strtotime()``` compatible string like ```+2 weeks```.
+- ```address_defaults```: Contains settings with "email field" => "email address(es)" pairs to use as defaults if a message does not set them.
+  - You can either specify an email address as string or a nested settings block with multiple addresses as settings.
+  - Supported email field identifiers are: `to`, `from`, `cc`, `bcc`, ```reply_to```, ```return_path```, `sender`.
+- ```address_overrides```: Contains settings with "email field" => "email address(es)" pairs to use instead of addresses already set on the message.
+  - You can either specify an email address as string or a nested settings block with multiple addresses as settings.
+  - Supported email field identifiers are: `to`, `from`, `cc`, `bcc`, ```reply_to```, ```return_path```, `sender`.
+- ```max_line_length```: Maximum length of lines in the plain text email part, defaults to 78 characters historically.
+- ```priority```: Priority from 1 (highest) to 5 (lowest) used for mails, defaults to 3 (normal). Sets `X-Priority` header on the email.
+- ```read_receipt_to```: Email address to use for read receipt functionality.
+- ```logging_enabled```: Set this to `true` to enable logging within the mail service.
+- ```logger_name```: Name of the logger to use for logging. Defaults to `mail`. For logger configuration see [logging.md](Logging docs).
+- ```log_messages```: Set this to true, to enable the verbose logging of concrete email messages sent. Defaults to `false`.
 
 A very extensive example could look like this:
 
@@ -200,13 +203,10 @@ A very extensive example could look like this:
     <mailers default="default">
         <mailer name="default">
             <settings>
+                <setting name="logging_enabled">true</setting>
+                <setting name="logger_name">mail</setting>
+                <setting name="log_messages">true</setting>
                 <setting name="override_all_recipients">%core.project_prefix%+%core.environment%@example.com</setting>
-                <setting name="override_all_recipients">
-                    <settings>
-                        <setting>OVERRIDE_ALL@example.com</setting>
-                        <setting>OVERRIDE_ALWAYS@example.com</setting>
-                    </settings>
-                </setting>
                 <setting name="default_date">+2 weeks</setting>
                 <setting name="default_body_html"><![CDATA[<h1>Hello from mail.xml!</h1>]]></setting>
                 <setting name="default_body_text">Hello from the default_body_text in mail.xml. :-)</setting>
@@ -285,7 +285,7 @@ or context (depending on the configuration block attributes and merging):
 ```php
 $mail = new Message();
 $mail->setBodyText('You should log in more often.');
-$this->getModule()->getService('mail')->send($mail, 'system_mails');
+$mail_service->send($mail, 'system_mails');
 // sent mail contains reply_to, return_path etc. from settings
 ```
 
@@ -294,6 +294,8 @@ $this->getModule()->getService('mail')->send($mail, 'system_mails');
 It is possible to use Twig templates for the preparation of emails.
 This eases a few aspects like message translation and with certain
 email header fields being prefilled it may also save on some typing.
+Further on enables the usage of Twig advanced functionality for the
+creation and reuse of email templates and parts of them.
 
 The mail templates usually have a file extension of `.mail.twig` and
 should be created next to the normal view templates or in the normal
@@ -394,6 +396,38 @@ even to specify `null` and get a mail template from a common path
 like `app/project/templates` without the ```modules/<module_name>```
 part in your way.
 
+## HTML email template
+
+Honeybee comes with a default HTML email structure template that
+eases the creation of HTML emails. When you create email templates
+you can _embed_ the HTML template in your ```body_html```. This
+saves developers from repeating the same HTML layout elements in
+each email template. The HTML template is located in the file
+`app/templates/Html.mail.twig`. To make use of it embed it in a
+block as follows:
+
+```twig
+...
+{% block body_html -%}
+    {% embed "Html.mail.twig" %}
+
+        {% block html_head_title %}{{ subject | default("Hello from Honeybee") }}{% endblock %}
+
+        {% block html_content -%}
+
+        <p>Hello!</p>
+
+        {%- endblock %}
+
+    {% endembed %}
+{%- endblock %}
+...
+```
+
+To override the default `Html.mail.twig` template, put your own version
+with the same name in your project's `app/project/templates` directory.
+You can of course just create other layouts or themes and embed those.
+
 ## Verbose example with overriding
 
 Let's assume you have a file called `example.mail.twig` that
@@ -407,11 +441,14 @@ in the project's `mail.xml` file.
 The content of the `example.mail.twig` is:
 
 ```twig
+{#
 This is an example for an email template. For email templates only the well
 known blocks are rendered with variables and then used for message creation.
 
 That's the reason you can simply write stuff here to explain more about this
-email template or what placeholders should be given to it as variables.
+email template or what placeholders should be given to it as variables. Twig
+comments wouldn't even be necessary for this text.
+#}
 
 {% block subject -%}A subject from a twig template: {{topic}}{%- endblock %}
 {% block from -%}{{sender.email}}{%- endblock %}
@@ -439,6 +476,9 @@ Email: {{sender.email}}
 {%- endblock %}
 
 {% block body_html -%}
+    {% embed "Html.mail.twig" %}
+        {% block html_head_title %}A subject from a twig template: {{topic}}{% endblock %}
+        {% block html_content -%}
 <h1>Hello {{recipient.username}}!</h1>
 <p style="color: red">This is the HTML part of the mail.</p>
 <p>List of users: {{ ro.gen('user.list') }}</p>
@@ -448,6 +488,8 @@ Email: {{sender.email}}
 </p>
 <hr />
 <p>Email: {{sender.email}}</p>
+        {%- endblock %}
+    {% endembed %}
 {%- endblock %}
 ```
 
@@ -503,6 +545,7 @@ Content-Type: multipart/alternative;
 Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
+...HERE WOULD CODE taken from Html.mail.twig...
 <h1>Hello Recipient Name!</h1>
 <p style=3D"color: red">This is the HTML par=
 t of the mail.</p>
@@ -516,6 +559,7 @@ Sender Name
 <hr />
 <p>Email: sender@example.c=
 om</p>
+...HERE WOULD CODE taken from Html.mail.twig...
 
 --_=_swift_v4_1373388019_1e622693238a910ac687cd0fcd96c7f5_=_
 Content-Type: plain/text; charset=utf-8
@@ -564,7 +608,7 @@ class YourMailService extends \Honeybee\Core\Mail\MailService
      *
      * @param string $mailer_name name of mailer to get settings for (if omitted, the settings of the default mailer are used)
      */
-    public function initSwiftMailer($mailer_config_name = null)
+    protected function initSwiftMailer($mailer_config_name = null)
     {
         $settings = $this->getMailerSettings($mailer_config_name);
 

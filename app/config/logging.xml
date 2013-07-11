@@ -38,6 +38,14 @@
                 </appenders>
             </logger>
 
+            <!-- accept all messages -->
+            <logger name="mail" class="Honeybee\Agavi\Logging\Logger">
+                <appenders>
+                    <appender>mail</appender>
+                    <appender>fingers_crossed</appender>
+                </appenders>
+            </logger>
+
             <!-- log all authentication related messages -->
             <logger name="auth" class="Honeybee\Agavi\Logging\Logger">
                 <appenders>
@@ -88,6 +96,9 @@
 
             <!-- log all messages to %core.app_dir%/log/import.log -->
             <appender name="import" class="Honeybee\Agavi\Logging\FileLoggerAppender" layout="default" />
+
+            <!-- log all messages to %core.app_dir%/log/mail.log -->
+            <appender name="mail" class="Honeybee\Agavi\Logging\FileLoggerAppender" layout="default" />
 
             <!-- log all messages to %core.app_dir%/log/debug.log -->
             <appender name="debug-only" class="Honeybee\Agavi\Logging\FileLoggerAppender" layout="default">

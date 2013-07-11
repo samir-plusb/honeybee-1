@@ -5,7 +5,6 @@ namespace Honeybee\Core\Dat0r;
 use Zend\Permissions\Acl;
 use Dat0r\Core\Runtime\Document\Document as BaseDocument;
 use Honeybee\Core\Workflow\IResource;
-use Dat0r\Core\Runtime\Module\IModule;
 use Dat0r\Core\Runtime\Field\ReferenceField;
 
 abstract class Document extends BaseDocument implements IResource, Acl\Resource\ResourceInterface
@@ -27,6 +26,11 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
     public function getIdentifier()
     {
         return $this->getValue('identifier');
+    }
+
+    public function getLanguage()
+    {
+        return $this->getValue('language');
     }
 
     public function getShortIdentifier()
@@ -84,9 +88,7 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
             );
         }
 
-        $slug = $this->getSlug();
-            $this->setSlug($this->buildSlug()
-        );
+        $this->setSlug($this->buildSlug());
     }
 
     protected function hydrate(array $values = array(), $applyDefaults = FALSE)

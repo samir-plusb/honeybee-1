@@ -3,6 +3,7 @@
 namespace Honeybee\Core\Mail;
 
 use Honeybee\Agavi\ConfigHandler\MailConfigHandler;
+use Honeybee\Agavi\Logging;
 use Honeybee\Core\Config;
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Mail\MessageConfigurationException;
@@ -80,7 +81,7 @@ class MailService implements IService, IMailer
      *
      * @param string $mailer_name name of mailer to get settings for (if omitted, the settings of the default mailer are used)
      */
-    public function initSwiftMailer($mailer_config_name = null)
+    protected function initSwiftMailer($mailer_config_name = null)
     {
         $settings = $this->getMailerSettings($mailer_config_name);
 
@@ -90,6 +91,12 @@ class MailService implements IService, IMailer
         $this->mailer = \Swift_Mailer::newInstance($this->connection);
 
         \Swift_Preferences::getInstance()->setCharset($settings->get('charset', 'utf-8'));
+
+        // to enable logging of communication and sent messages
+        $this->logger = new \Swift_Plugins_Loggers_ArrayLogger();
+        $this->message_logger = new \Swift_Plugins_MessageLogger();
+        $this->mailer->registerPlugin(new \Swift_Plugins_LoggerPlugin($this->logger));
+        $this->mailer->registerPlugin($this->message_logger);
     }
 
     /**
@@ -139,10 +146,26 @@ class MailService implements IService, IMailer
      */
     public function send(IMail $message, $mailer_config_name = null)
     {
+        $settings = $this->getMailerSettings($mailer_config_name);
+
         $mail = $this->createSwiftMessage($message, $mailer_config_name);
 
         $failed_recipients = array();
         $sent_mails = $this->mailer->send($mail, $failed_recipients);
+
+        if (false !== $settings->get('logging_enabled', false))
+        {
+            $logger_name = $settings->get('logger_name', 'mail');
+            $logger_manager = \AgaviContext::getInstance()->getLoggerManager();
+            $logger_manager->logTo($logger_name, Logging\Logger::INFO, __METHOD__, $this->logger->dump());
+            if (false !== $settings->get('log_messages', false))
+            {
+                foreach ($this->message_logger->getMessages() as $message)
+                {
+                    $logger_manager->logTo($logger_name, Logging\Logger::INFO, 'EMAIL', $message);
+                }
+            }
+        }
 
         return array(
             self::SENT_MAILS => $sent_mails,

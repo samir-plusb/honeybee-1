@@ -2,6 +2,8 @@
 
 use Honeybee\Core\Service\DocumentService;
 use Honeybee\Core\Security\Auth\TokenGenerator;
+use Honeybee\Core\Mail\MailService;
+use Honeybee\Agavi\Logging;
 
 use Honeybee\Domain\User\UserDocument;
 
@@ -19,58 +21,42 @@ class UserService extends DocumentService
         $user->setTokenExpireDate($expireDate->format(DATE_ISO8601));
         $this->save($user);
 
-        $fullname = $user->getFirstname() . ' ' . $user->getLastname();
-        $projectName = \AgaviConfig::get('core.app_name');
-        // @todo What shall we take for the 'from' field here?
-        // we need some kind of web(cms)master-email setting ...
-        $message = \Swift_Message::newInstance()
-            ->setSubject($projectName . ' CMS - Kennwort zurücksetzen')
-            ->setFrom(array('no-reply@honeybee.de' => $projectName . ' CMS'))
-            ->setTo(array($user->getEmail() => $fullname))
-            ->setBody($this->getPasswordLostEmailBody($user));
-
-        $transport = \Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
-        $mailer = \Swift_Mailer::newInstance($transport);
-        
-        if (! $mailer->send($message))
+        $current_language = \AgaviContext::getInstance()->getTranslationManager()->getCurrentLocaleIdentifier();
+        $user_language = $user->getLanguage();
+        if (empty($user_language))
         {
-            throw new \Exception(
-                "Unable to deliver mail. Please try again later or contact the reponseable staff."
-            );
+            $user_language = $current_language;
         }
-    }
 
-    protected function getPasswordLostEmailBody(UserDocument $user)
-    {
-        $project_contact = AgaviConfig::get('core.project_contact');
-        $project_name = AgaviConfig::get('core.app_name');
-        $set_password_link = \AgaviContext::getInstance()->getRouting()->gen(
-            'user.password', 
-            array('token' => $user->getAuthToken())
-        );
+        // TODO use locale of user instead of language of the user document?
+        \AgaviContext::getInstance()->getTranslationManager()->setLocale($user_language);
 
-        $message = sprintf('
-Hallo,
+        $user_password_link = \AgaviContext::getInstance()->getRouting()->gen('user.password', array('token' => $user->getAuthToken()));
 
-Sie erhalten diese Nachricht, weil im Content Management System des Projekts "%s" ein neues Passwort für Sie angefordert wurde.
-Um sich neues Passwort zu erstellen, klicken Sie bitte auf den unten stehenden Link. Auf der Internetseite, die sich hinter diesem Link verbirgt, haben Sie die Möglichkeit, das neue Passwort zu hinterlegen.
-            
-%s
-            
-Aus Sicherheitsgründen wir dieser Link nach 20 Minuten inaktiv. Danach können Sie sich diese E-Mail noch einmal zuschicken lassen.
-Wichtig für Sie: Auch wenn Ihr Passwort verschlüsselt abgespeichert wird, sollten Sie darauf achten, stets schwer zu erratende Passwörter zu verwenden. 
-Benutzen Sie beispielsweise niemals auf zwei Internetseiten dasselbe Passwort. 
+        $mail_service = $user->getModule()->getService('mail');
 
-Achten Sie außerdem darauf, möglichst eine Kombination aus Groß- und Kleinbuchstaben sowie mindestens eine Zahl zu verwenden.
-Wenn Sie der Auffassung sind, dass Ihnen diese E-Mail irrtümlich zugeschickt wurde, wenden Sie sich bitte an %s (%s).
+        $message = $mail_service->createMessageFromTemplate('ResetPassword/ResetPassword', array(
+            'user_password_link' => $user_password_link,
+            'user' => $user,
+        ));
 
-Diese E-Mail wurde automatisch erstellt.',
-            $project_name,
-            $set_password_link,
-            $project_contact['name'],
-            $project_contact['email']
-        );
-    
-        return $message;
+        $message->setFrom(array('no-reply@honeybee.de' => \AgaviConfig::get('core.app_name') . ' CMS'));
+        $message->setTo(array($user->getEmail() => $user->getFirstname() . ' ' . $user->getLastname()));
+
+        $info = $mail_service->send($message);
+
+        if (count($info[MailService::FAILED_RECIPIENTS]) !== 0)
+        {
+            \AgaviContext::getInstance()->getLoggerManager()->logTo(
+                null,
+                Logging\Logger::ERROR,
+                __METHOD__,
+                array("Failed to send ResetPassword email for", $user, "- return value was:", $info)
+            );
+
+            throw new \Exception("Unable to deliver mail correctly. Please try again later or contact the responsible staff.");
+        }
+
+        \AgaviContext::getInstance()->getTranslationManager()->setLocale($current_language);
     }
 }

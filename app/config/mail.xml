@@ -44,11 +44,22 @@ The following settings are supported for mailer settings:
             <mailer name="default">
                 <settings>
                     <setting name="charset">utf-8</setting>
+                    <setting name="logging_enabled">true</setting>
+                    <setting name="log_messages">false</setting>
                 </settings>
             </mailer>
         </mailers>
     </ae:configuration>
 
+    <ae:configuration environment="development.*">
+        <mailers default="default">
+            <mailer name="default">
+                <settings>
+                    <setting name="log_messages">true</setting>
+                </settings>
+            </mailer>
+        </mailers>
+    </ae:configuration>
 <!--
     <ae:configuration environment="development.*">
         <mailers default="default">
