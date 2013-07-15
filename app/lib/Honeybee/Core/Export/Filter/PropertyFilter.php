@@ -10,38 +10,70 @@ class PropertyFilter extends BaseFilter
 {
     public function execute(Document $document)
     {
-        $filterOutput = array();
+        $filter_output = array();
 
-        $propertyMap = $this->getConfig()->get('properties');
+        $property_map = $this->getConfig()->get('properties');
         $module = $document->getModule();
 
-        foreach ($propertyMap as $fieldname => $targetKey)
+        foreach ($property_map as $fieldname => $key)
         {
+            $export_key = $key;
             $field = $module->getField($fieldname);
-            $propValue = $document->getValue($fieldname);
+            $prop_value = $document->getValue($fieldname);
 
             $value = NULL;
-            
+
             if ($field instanceof ReferenceField)
             {
-                $value = array();
-                foreach ($propValue as $refDocument)
+                $display_fields = array();
+                if (is_array($key))
                 {
-                    $value[] = array('id' => $refDocument->getShortIdentifier());
+                    $export_key = $key['export_key'];
+                    $display_fields = $key['display_fields'];
+
+                    if ($key['flatten'] && count($display_fields) > 0)
+                    {
+                        $display_fields = array($key['display_fields'][0]);
+                    }
+                }
+
+                $value = array();
+                foreach ($prop_value as $ref_document)
+                {
+                    if (empty($display_fields))
+                    {
+                        $value[] = array('id' => $ref_document->getShortIdentifier());
+                    }
+                    else
+                    {
+                        if ($key['flatten'])
+                        {
+                             $value[] = $ref_document->getValue($display_fields[0]);
+                        }
+                        else
+                        {
+                            $next_value = array();
+                            foreach ($display_fields as $display_field)
+                            {
+                                $next_value[$display_field] = $ref_document->getValue($display_field);
+                            }
+                            $value[] = $next_value;
+                        }
+                    }
                 }
             }
-            else if ($propValue instanceof Dat0r\Document)
+            else if ($prop_value instanceof Dat0r\Document)
             {
-                $value = $propValue->toArray();
+                $value = $prop_value->toArray();
             }
             else
             {
-                $value = $propValue;
+                $value = $prop_value;
             }
 
-            $filterOutput[$targetKey] = $value;
+            $filter_output[$export_key] = $value;
         }
 
-        return $filterOutput;
+        return $filter_output;
     }
 }

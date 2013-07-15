@@ -172,7 +172,7 @@ class TextExcerptFilter extends BaseFilter
 
             $excerpt .= $ellipsis;
         }
-var_dump($excerpt);
+
         return $excerpt;
     }
 
