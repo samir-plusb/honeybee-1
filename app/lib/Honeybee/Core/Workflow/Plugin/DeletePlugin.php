@@ -18,7 +18,6 @@ class DeletePlugin extends BasePlugin
             $resource = $this->getResource();
             $service = $resource->getModule()->getService();
             $service->delete($resource);
-            
             $result->setState(Plugin\Result::STATE_EXPECT_INPUT);
             $result->setGate('suspend');
             
@@ -32,8 +31,8 @@ class DeletePlugin extends BasePlugin
             $this->logError(sprintf(
                 "An error occured while deleting: %s from the database\n
                 The couchdb client threw the following exception: \n%s",
-                $workflowItem->getIdentifier(),
-                $e->getMessage()
+                $resource->getIdentifier(),
+                $e->toString()
             ));
 
             $result->setState(Plugin\Result::STATE_ERROR);

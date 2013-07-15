@@ -214,7 +214,6 @@ abstract class BasePlugin implements Workflow\IPlugin
      */
     protected function logError($msg)
     {
-        $this->getContext()->getLoggerManager()->logTo(null, \AgaviLogger::ERROR, get_class($this), $msg);
         $this->getContext()->getLoggerManager()->logTo('error', \AgaviLogger::ERROR, get_class($this), $msg);
     }
 
@@ -225,6 +224,6 @@ abstract class BasePlugin implements Workflow\IPlugin
      */
     protected function logInfo($msg)
     {
-        $this->getContext()->getLoggerManager()->logTo(null, \AgaviLogger::ERROR, get_class($this), $msg);
+        $this->getContext()->getLoggerManager()->logTo('default', \AgaviLogger::ERROR, get_class($this), $msg);
     }
 }

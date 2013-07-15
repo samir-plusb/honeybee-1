@@ -25,6 +25,11 @@ class User_Login_LoginSuccessView extends UserBaseView
         $routing = $this->getContext()->getRouting();
         $attributes = $this->getContainer()->getAttributes('org.agavi.controller.forwards.login', array());
 
+        if (null != ($container = $this->attemptForward($request_data)))
+        {
+            return $container;
+        }
+
         if (isset($attributes['requested_module']))
         {
             /*
@@ -38,5 +43,20 @@ class User_Login_LoginSuccessView extends UserBaseView
         {
            $this->getResponse()->setRedirect($routing->getBaseHref());
         }
+    }
+
+    protected function attemptForward(AgaviRequestDataHolder $request_data)
+    {
+        $request = $this->getContext()->getRequest();
+        $requested_module = $request->getAttribute('requested_module', 'org.agavi.controller.forwards.login');
+        $requested_action = $request->getAttribute('requested_action', 'org.agavi.controller.forwards.login');
+
+        $container = null;
+        if (!empty($requested_module) && !empty($requested_action))
+        {
+            $container = $this->createForwardContainer($requested_module, $requested_action);
+        }
+
+        return $container;
     }
 }
