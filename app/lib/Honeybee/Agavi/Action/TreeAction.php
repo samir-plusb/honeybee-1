@@ -35,13 +35,45 @@ class TreeAction extends BaseAction
     public function executeWrite(\AgaviRequestDataHolder $requestData)
     {
         $module = $this->getModule();
+        $treeService = $module->getService('tree');
+        $previousTree = $treeService->get();
 
         $tree = new Tree\Tree(
-            $module, 
+            $module,
             $requestData->getParameter('structure')
         );
 
-        $module->getService('tree')->save($tree);
+        $movedNodes = array();
+
+        $iterator = $tree->getIterator();
+        $iterator->next();
+
+        foreach ($previousTree->getIterator() as $node)
+        {
+            if (!$iterator->valid())
+            {
+                break;
+            }
+
+            $curDepth = $node->getDepth();
+            $lastDepth = $iterator->current()->getDepth();
+            $curIdentifier = $node->getIdentifier();
+            $lastIdentifier = $iterator->current()->getIdentifier();
+
+            if ($curDepth !== $lastDepth || $curIdentifier !== $lastIdentifier)
+            {
+                $movedNodes[] = $iterator->current();
+            }
+
+            $iterator->next();
+        }
+
+        $treeService->save($tree);
+
+        foreach ($movedNodes as $movedNode)
+        {
+            $movedNode->getDocument()->onTreePositionChanged();
+        }
 
         $this->setAttribute('module', $module);
         $this->setAttribute('tree', $tree);

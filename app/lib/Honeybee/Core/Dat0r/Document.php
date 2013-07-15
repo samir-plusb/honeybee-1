@@ -75,6 +75,10 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
         return $this->getModule()->getOption('prefix');
     }
 
+    public function onTreePositionChanged()
+    {
+    }
+
     public function onBeforeWrite()
     {
         $shortId = $this->getShortId();
