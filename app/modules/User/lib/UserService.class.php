@@ -34,14 +34,17 @@ class UserService extends DocumentService
         $user_password_link = \AgaviContext::getInstance()->getRouting()->gen('user.password', array('token' => $user->getAuthToken()));
 
         $mail_service = $user->getModule()->getService('mail');
+        $project_contact = AgaviConfig::get('core.project_contact');
 
         $message = $mail_service->createMessageFromTemplate('ResetPassword/ResetPassword', array(
             'user_password_link' => $user_password_link,
             'user' => $user,
+            'project_contact' => $project_contact
         ));
 
-        $message->setFrom(array('no-reply@honeybee.de' => \AgaviConfig::get('core.app_name') . ' CMS'));
+        $message->setFrom(array('no-reply@honeybee-cms.de' => \AgaviConfig::get('core.app_name') . ' CMS'));
         $message->setTo(array($user->getEmail() => $user->getFirstname() . ' ' . $user->getLastname()));
+        $message->setReplyTo(array($project_contact['email'] => $project_contact['name']));
 
         $info = $mail_service->send($message);
 
