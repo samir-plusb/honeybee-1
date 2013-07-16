@@ -299,7 +299,7 @@ class MailService implements IService, IMailer
         $body_text = $message->getBodyText($message_defaults->get('default_body_text'));
         if (!empty($body_text))
         {
-            $mail->addPart($body_text, "plain/text");
+            $mail->addPart($body_text, "text/plain");
         }
 
         $attachments = $message->getAttachments();
