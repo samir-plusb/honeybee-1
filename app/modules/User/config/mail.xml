@@ -11,7 +11,7 @@
             <mailer name="default">
                 <settings>
 <!--
-                    <setting name="override_all_recipients">%core.project_prefix%+%core.environment%@example.com</setting>
+                    <setting name="override_all_recipients">%core.project_prefix%+%core.clean_environment%@example.com</setting>
                     <setting name="address_defaults">
                         <settings>
                             <setting name="sender">system@example.com</setting>

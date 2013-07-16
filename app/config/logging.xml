@@ -71,7 +71,7 @@
                  level via FirePHP and thus you may see those messages in Firefox etc. For parameters see source. -->
             <appender name="firephp" class="Honeybee\Agavi\Logging\MonologLoggerAppender" layout="default">
                 <ae:parameters>
-                    <ae:parameter name="channel">%core.environment%</ae:parameter>
+                    <ae:parameter name="channel">%core.clean_environment%</ae:parameter>
                     <ae:parameter name="setup">Honeybee\Agavi\Logging\Monolog\FirePhpSetup</ae:parameter>
                 </ae:parameters>
             </appender>
@@ -80,7 +80,7 @@
                  level via ChromePHP and thus you may see those messages in Chrome etc. For parameters see source. -->
             <appender name="chromephp" class="Honeybee\Agavi\Logging\MonologLoggerAppender" layout="default">
                 <ae:parameters>
-                    <ae:parameter name="channel">%core.environment%</ae:parameter>
+                    <ae:parameter name="channel">%core.clean_environment%</ae:parameter>
                     <ae:parameter name="setup">Honeybee\Agavi\Logging\Monolog\ChromePhpSetup</ae:parameter>
                 </ae:parameters>
             </appender>

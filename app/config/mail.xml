@@ -65,7 +65,7 @@ The following settings are supported for mailer settings:
         <mailers default="default">
             <mailer name="default">
                 <settings>
-                    <setting name="override_all_recipients">%core.project_prefix%+%core.environment%@example.com</setting>
+                    <setting name="override_all_recipients">%core.project_prefix%+%core.clean_environment%@example.com</setting>
                     <setting name="override_all_recipients">
                         <settings>
                             <setting>OVERRIDE_ALL@example.com</setting>
@@ -77,7 +77,7 @@ The following settings are supported for mailer settings:
                     <setting name="default_body_text">Hello from the default_body_text in mail.xml. :-)</setting>
                     <setting name="address_defaults">
                         <settings>
-                            <setting name="bcc">default-bcc-%core.project_prefix%+%core.environment%@example.com</setting>
+                            <setting name="bcc">default-bcc-%core.project_prefix%+%core.clean_environment%@example.com</setting>
                             <setting name="sender">default-sender@example.com</setting>
                             <setting name="reply_to">default-reply-to@example.com</setting>
                         </settings>
