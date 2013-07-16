@@ -64,7 +64,15 @@ class PropertyFilter extends BaseFilter
             }
             else if ($prop_value instanceof Dat0r\Document)
             {
-                $value = $prop_value->toArray();
+                if (is_array($key))
+                {
+                    $export_key = $key['export_key'];
+                    $value = $prop_value->getValue($key['display_field']);
+                }
+                else
+                {
+                    $value = $prop_value->toArray();
+                }
             }
             else
             {
