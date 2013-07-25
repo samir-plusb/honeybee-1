@@ -31,7 +31,7 @@
         "php": ">=5.3.3",
         "agavi/agavi": "1.0.*",
         "phing/phing": "2.4.12",
-        "berlinonline/dat0r": "dev-master",
+        "berlinonline/dat0r": "dev-aggregates",
         "ruflin/Elastica": "v0.20.5.0.RC1",
         "zendframework/zend-permissions-acl": "2.2.0",
         "guzzle/guzzle": "~3.1",
@@ -62,7 +62,7 @@
         "phpunit/phpunit": "3.7.*",
         "sebastian/phpcpd": "dev-master"
     },
-    
+
     "repositories": [
         {
             "type": "package",
