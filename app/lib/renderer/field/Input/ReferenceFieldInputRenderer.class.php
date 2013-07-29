@@ -1,6 +1,6 @@
 <?php
 
-use Dat0r\Core\Runtime\Field\ReferenceField;
+use Dat0r\Core\Field\ReferenceField;
 use Honeybee\Core\Dat0r\Document;
 
 class ReferenceFieldInputRenderer extends FieldInputRenderer

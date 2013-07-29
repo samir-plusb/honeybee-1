@@ -10,7 +10,7 @@ namespace Honeybee\Domain\User\Base;
 /**
  * Serves as the base class to the 'PluginResult'' module skeleton.
  */
-abstract class PluginResultModule extends \Dat0r\Core\Runtime\Module\AggregateModule
+abstract class PluginResultModule extends \Dat0r\Core\Module\AggregateModule
 {
     /**
      * Creates a new PluginResultModule instance.
@@ -18,9 +18,9 @@ abstract class PluginResultModule extends \Dat0r\Core\Runtime\Module\AggregateMo
     protected function __construct()
     {
         parent::__construct('PluginResult', array( 
-            \Dat0r\Core\Runtime\Field\IntegerField::create('state'), 
-            \Dat0r\Core\Runtime\Field\TextField::create('gate'), 
-            \Dat0r\Core\Runtime\Field\TextField::create('message'), 
+            \Dat0r\Core\Field\IntegerField::create('state'), 
+            \Dat0r\Core\Field\TextField::create('gate'), 
+            \Dat0r\Core\Field\TextField::create('message'), 
         ));
     }
 

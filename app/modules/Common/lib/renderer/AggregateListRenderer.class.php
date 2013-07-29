@@ -1,7 +1,7 @@
 <?php
 
-use Dat0r\Core\Runtime\Document\IDocument;
-use Dat0r\Core\Runtime\Module\AggregateModule;
+use Dat0r\Core\Document\IDocument;
+use Dat0r\Core\Module\AggregateModule;
 
 class AggregateListRenderer extends DefaultListValueRenderer
 {

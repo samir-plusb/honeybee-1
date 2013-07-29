@@ -1,6 +1,6 @@
 <?php
 
-use Dat0r\Core\Runtime\Document\DocumentCollection;
+use Dat0r\Core\Document\DocumentCollection;
 
 class ReferenceListValueRenderer extends DefaultListValueRenderer
 {

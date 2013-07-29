@@ -1,6 +1,6 @@
 <?php
 
-use Dat0r\Core\Runtime\Field\IField;
+use Dat0r\Core\Field\IField;
 use Honeybee\Core\Dat0r\Document;
 
 abstract class FieldRenderer implements IRenderer

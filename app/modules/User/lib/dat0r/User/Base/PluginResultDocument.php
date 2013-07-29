@@ -10,8 +10,8 @@ namespace Honeybee\Domain\User\Base;
 /**
  * Serves as the base class to the 'PluginResult' document skeleton.
  */
-abstract class PluginResultDocument extends \Dat0r\Core\Runtime\Document\Document
-{ 
+abstract class PluginResultDocument extends \Dat0r\Core\Document\Document
+{
     /**
      * Returns an 'PluginResult' document's state.
      *

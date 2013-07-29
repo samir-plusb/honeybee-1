@@ -3,7 +3,7 @@
 namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Dat0r\Tree;
-use Dat0r\Core\Runtime\Field\ReferenceField;
+use Dat0r\Core\Field\ReferenceField;
 use TreeConfig;
 
 class TreeAction extends BaseAction

@@ -117,12 +117,12 @@ update: update-composer update-vendor update-node-deps
 update-dev: update-composer update-vendor-dev update-node-deps
 
 
-install-composer: 
+install-composer:
 
 	@if [ ! -f bin/composer.phar ]; then curl -s http://getcomposer.org/installer \
 	| php -d allow_url_fopen=1 -d date.timezone="Europe/Berlin" -- --install-dir=./bin; fi
 
-	
+
 update-composer:
 
 	@bin/composer.phar self-update
@@ -140,7 +140,7 @@ install-vendor-dev:
 	@if [ -d vendor/agavi/agavi/ ]; then svn revert -R vendor/agavi/agavi/; fi
 	@php -d allow_url_fopen=1 bin/composer.phar install --dev
 	-@bin/apply-patches
-	
+
 
 update-vendor:
 
@@ -267,7 +267,7 @@ module-code:
 	@bin/agavi module-list
 	@read -p "Enter Module Name:" module; \
     	dator_dir=app/modules/$$module/config/dat0r; \
-		vendor/bin/dat0r.console generate $$dator_dir/codegen.ini $$dator_dir/module.xml gen+dep
+		vendor/bin/dat0r.console generate_code gen+dep -c $$dator_dir/codegen.ini -s $$dator_dir/module.xml
 	@make config
 	@curl -XDELETE localhost:9200/
 	@echo "\n"

@@ -4,7 +4,7 @@ namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Dat0r\DocumentCollection;
 use Honeybee\Core\Dat0r\Document;
-use Dat0r\Core\Runtime\Field\ReferenceField;
+use Dat0r\Core\Field\ReferenceField;
 use Honeybee\Core\Import;
 use ListConfig;
 
@@ -177,7 +177,7 @@ class ListAction extends BaseAction
                 }
             }
 
-            $referenceFields = $this->getModule()->getFields(array(), array('Dat0r\Core\Runtime\Field\ReferenceField'));
+            $referenceFields = $this->getModule()->getFields(array(), array('Dat0r\Core\Field\ReferenceField'));
             // all targets available to the list for enabling/disabling tree-modules within the sidebar.
             $sidebarTreeTargets = array();
             foreach ($referenceFields as $referenceField)
@@ -326,7 +326,7 @@ class ListAction extends BaseAction
         $routing = $this->getContext()->getRouting();
         $tm = $this->getContext()->getTranslationManager();
 
-        $referenceFields = $this->getModule()->getFields(array(), array('Dat0r\Core\Runtime\Field\ReferenceField'));
+        $referenceFields = $this->getModule()->getFields(array(), array('Dat0r\Core\Field\ReferenceField'));
         $referenceBatchConfigs = array();
 
         foreach ($referenceFields as $referenceField)

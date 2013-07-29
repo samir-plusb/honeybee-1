@@ -1,8 +1,8 @@
 <?php
 
-use Dat0r\Core\Runtime\Document\IDocument;
-use Dat0r\Core\Runtime\Field\ReferenceField;
-use Dat0r\Core\Runtime\Field\AggregateField;
+use Dat0r\Core\Document\IDocument;
+use Dat0r\Core\Field\ReferenceField;
+use Dat0r\Core\Field\AggregateField;
 
 /**
  * The Common_ListAction is repsonseable for rendering list data in a reusable way :).

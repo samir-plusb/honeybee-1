@@ -3,9 +3,9 @@
 namespace Honeybee\Core\Dat0r;
 
 use Zend\Permissions\Acl;
-use Dat0r\Core\Runtime\Document\Document as BaseDocument;
+use Dat0r\Core\Document\Document as BaseDocument;
 use Honeybee\Core\Workflow\IResource;
-use Dat0r\Core\Runtime\Field\ReferenceField;
+use Dat0r\Core\Field\ReferenceField;
 
 abstract class Document extends BaseDocument implements IResource, Acl\Resource\ResourceInterface
 {

@@ -3,13 +3,14 @@
 use Honeybee\Agavi\Filter;
 
 $default_context = 'web';
-$rootDir = dirname(dirname(__FILE__));
-require  $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+$environment_modifier = '';
+$root_dir = dirname(dirname(__FILE__));
+require $root_dir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 require(
     str_replace(
         '/', DIRECTORY_SEPARATOR, 
-        $rootDir.'/vendor/agavi/agavi/src/build/agavi/build.php'
+        $root_dir.'/vendor/agavi/agavi/src/build/agavi/build.php'
     )
 );
 AgaviBuild::bootstrap();
@@ -42,7 +43,7 @@ $packer = new Filter\ResourcePacker(
     new Filter\ResourceFilterConfig(array(
         Filter\ResourceFilterConfig::CFG_OUTPUT_TYPES => array('html'),
         Filter\ResourceFilterConfig::CFG_BASE_DIR => str_replace(
-            '/', DIRECTORY_SEPARATOR, $rootDir.'/pub/static'
+            '/', DIRECTORY_SEPARATOR, $root_dir.'/pub/static'
         ),
         Filter\ResourceFilterConfig::CFG_ENABLE_COMBINE => TRUE,
         Filter\ResourceFilterConfig::CFG_ENABLE_COMPRESS => TRUE

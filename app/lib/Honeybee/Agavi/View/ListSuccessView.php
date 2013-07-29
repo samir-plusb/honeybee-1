@@ -2,7 +2,7 @@
 
 namespace Honeybee\Agavi\View;
 
-use Dat0r\Core\Runtime\Field\ReferenceField;
+use Dat0r\Core\Field\ReferenceField;
 
 class ListSuccessView extends BaseView
 {
@@ -150,7 +150,7 @@ class ListSuccessView extends BaseView
     {
         $module = $this->getAttribute('module');
         $treeRelationData = array();
-        $referenceFields = $module->getFields(array(), array('Dat0r\Core\Runtime\Field\ReferenceField'));
+        $referenceFields = $module->getFields(array(), array('Dat0r\Core\Field\ReferenceField'));
 
         foreach ($referenceFields as $referenceField)
         {

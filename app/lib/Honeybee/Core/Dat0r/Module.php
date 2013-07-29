@@ -2,10 +2,10 @@
 
 namespace Honeybee\Core\Dat0r;
 
-use Dat0r\Core\Runtime\Module\RootModule;
-use Dat0r\Core\Runtime\Field\TextField;
-use Dat0r\Core\Runtime\Field\IntegerField;
-use Dat0r\Core\Runtime\Field\UuidField;
+use Dat0r\Core\Module\RootModule;
+use Dat0r\Core\Field\TextField;
+use Dat0r\Core\Field\IntegerField;
+use Dat0r\Core\Field\UuidField;
 use Honeybee\Core\Workflow;
 use Zend\Permissions\Acl;
 

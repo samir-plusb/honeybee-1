@@ -6,15 +6,17 @@ use \Honeybee\CodeGen\Config\RoutingXmlConfigGenerator;
 use \Honeybee\CodeGen\Config\Dat0rAutoloadGenerator;
 use \Honeybee\CodeGen\Config\AccessControlXmlConfigGenerator;
 
-$rootDir = dirname(dirname(__FILE__));
+$root_dir = dirname(dirname(__FILE__));
 $default_context = 'web';
-require  $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+$environment_modifier = '';
+
+require  $root_dir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 // bootstrap the agavi build env, so we can use the autoloader code
 // and have the AgaviModuleCheck class available.
 require(
     str_replace(
-        '/', DIRECTORY_SEPARATOR, 
-        $rootDir.'/vendor/agavi/agavi/src/build/agavi/build.php'
+        '/', DIRECTORY_SEPARATOR,
+        $root_dir.'/vendor/agavi/agavi/src/build/agavi/build.php'
     )
 );
 AgaviBuild::bootstrap();
@@ -29,7 +31,7 @@ foreach ($scanner->scan() as $name => $files)
         case 'routing':
             $generator = new RoutingXmlConfigGenerator();
             break;
-            
+
         case 'dat0r';
             $generator = new Dat0rAutoloadGenerator();
             break;

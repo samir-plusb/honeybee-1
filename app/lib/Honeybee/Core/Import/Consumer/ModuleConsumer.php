@@ -5,7 +5,7 @@ namespace Honeybee\Core\Import\Consumer;
 use Honeybee\Core\Config;
 use Honeybee\Core\Import\Provider;
 use Honeybee\Core\Import\Filter;
-use Dat0r\Core\Runtime\Module;
+use Dat0r\Core\Module;
 
 /**
  * The ModuleConsumer class is a concrete implementation of the BaseConsumer base class.

@@ -1,7 +1,7 @@
 <?php
 
 use Honeybee\Core\Dat0r\Module;
-use Dat0r\Core\Runtime\Field\IField;
+use Dat0r\Core\Field\IField;
 
 class FieldRendererFactory
 {

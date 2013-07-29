@@ -3,8 +3,8 @@
 namespace Honeybee\Core\Export\Filter;
 
 use Honeybee\Core\Dat0r\Document;
-use Dat0r\Core\Runtime\Document as Dat0r;
-use Dat0r\Core\Runtime\Field\ReferenceField;
+use Dat0r\Core\Document as Dat0r;
+use Dat0r\Core\Field\ReferenceField;
 
 class PropertyFilter extends BaseFilter
 {

@@ -2,9 +2,9 @@
 
 namespace Honeybee\Core\Dat0r;
 
-use Dat0r\Core\Runtime\Field\ReferenceField;
-use Dat0r\Core\Runtime\Document\InvalidValueException;
-use Dat0r\Core\Runtime\Document\DocumentSet;
+use Dat0r\Core\Field\ReferenceField;
+use Dat0r\Core\Document\InvalidValueException;
+use Dat0r\Core\Document\DocumentSet;
 
 class RelationManager
 {
@@ -25,7 +25,7 @@ class RelationManager
         self::$referencePool[$document->getIdentifier()] = $document;
 
         $referenceFields = $document->getModule()->getFields(
-            array(), array('Dat0r\Core\Runtime\Field\ReferenceField')
+            array(), array('Dat0r\Core\Field\ReferenceField')
         );
 
         foreach ($referenceFields as $referenceField)

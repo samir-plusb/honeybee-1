@@ -2,8 +2,8 @@
 
 namespace Honeybee\Agavi\Action;
 
-use Dat0r\Core\Runtime\Document;
-use Dat0r\Core\Runtime\Error;
+use Dat0r\Core\Document;
+use Dat0r\Core\Error;
 use Honeybee\Core\Workflow\Plugin;
 
 class EditAction extends BaseAction

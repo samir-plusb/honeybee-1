@@ -2,7 +2,7 @@
 
 namespace Honeybee\Core\Dat0r;
 
-use Dat0r\Core\Runtime\Document\Document as BaseDocument;
+use Dat0r\Core\Document\Document as BaseDocument;
 use Honeybee\Core\Workflow\ITicket;
 
 abstract class WorkflowTicket extends BaseDocument implements ITicket

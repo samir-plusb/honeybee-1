@@ -3,7 +3,7 @@
 namespace Honeybee\Core\Export\Filter;
 
 use Honeybee\Core\Dat0r\Document;
-use Dat0r\Core\Runtime\Field\IField;
+use Dat0r\Core\Field\IField;
 
 class CombineFilter extends BaseFilter
 {

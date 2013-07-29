@@ -2,10 +2,10 @@
 
 namespace Honeybee\Core\Import\Provider;
 
-use \Dat0r\Core\Runtime\Module\IModule;
-use \Dat0r\Core\Runtime\Document\IDocument;
-use \Dat0r\Core\Runtime\Field\IField;
-use \Dat0r\Core\Runtime\Sham\DataGenerator;
+use \Dat0r\Core\Module\IModule;
+use \Dat0r\Core\Document\IDocument;
+use \Dat0r\Core\Field\IField;
+use \Dat0r\Core\Sham\DataGenerator;
 
 /**
  * The FakeDataGenerator extends the Dat0r Sham\DataGenerator to handle
