@@ -80,7 +80,14 @@ abstract class FieldRenderer implements IRenderer
             return false;
         }
 
-        $workflowStep = $document->getWorkflowTicket()->first()->getWorkflowStep();
+        $workflowTicket = $document->getWorkflowTicket()->first();
+
+        if (!$workflowTicket)
+        {
+            return (isset($this->options['readonly']) && $this->options['readonly'] === TRUE);
+        }
+
+        $workflowStep = $workflowTicket->getWorkflowStep();
 
         $writeAction = sprintf('%s.%s::write', $module->getOption('prefix'), $workflowStep);
         $createAction = sprintf('%s::create', $module->getOption('prefix'));

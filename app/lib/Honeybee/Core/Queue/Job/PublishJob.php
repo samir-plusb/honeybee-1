@@ -13,7 +13,7 @@ class PublishJob extends BaseJob
         $document = $this->loadDocument();
         $module = $document->getModule();
 
-        $workflowStep = $document->getWorkflowTicket()->getWorkflowStep();
+        $workflowStep = $document->getWorkflowTicket()->first()->getWorkflowStep();
 
         if ('publish' === $workflowStep)
         {

@@ -30,7 +30,6 @@ class PropertyFilter extends BaseFilter
                 {
                     $export_key = $key['export_key'];
                     $display_fields = $key['display_fields'];
-
                     if ($key['flatten'] && count($display_fields) > 0)
                     {
                         $display_fields = array($key['display_fields'][0]);
@@ -62,23 +61,27 @@ class PropertyFilter extends BaseFilter
                     }
                 }
             }
-            else if ($prop_value instanceof Dat0r\Document)
+            else if ($prop_value instanceof Dat0r\DocumentCollection)
             {
-                if (is_array($key))
+                $value = array();
+                $export_key = is_array($key) ? $key['export_key'] : $key;
+
+                foreach ($prop_value as $aggregate)
                 {
-                    $export_key = $key['export_key'];
-                    $value = $prop_value->getValue($key['display_field']);
-                }
-                else
-                {
-                    $value = $prop_value->toArray();
+                    if (is_array($key))
+                    {
+                        $value[] = $aggregate->getValue($key['display_field']);
+                    }
+                    else
+                    {
+                        $value[] = $aggregate->toArray();
+                    }
                 }
             }
             else
             {
                 $value = $prop_value;
             }
-
             $filter_output[$export_key] = $value;
         }
 

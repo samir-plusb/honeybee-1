@@ -82,12 +82,13 @@ class FieldInputRenderer extends FieldRenderer
             $module = $document->getModule();
             $curDoc = $document;
 
-            while (count($fieldParts) > 1)
+            while (count($fieldParts) > 1 && $curDoc)
             {
                 $fieldName = array_shift($fieldParts);
                 $curDoc = $curDoc->getValue($fieldName)->first();
             }
-            $value = $curDoc->getValue($fieldParts[0]);
+
+            $value = $curDoc ? $curDoc->getValue($fieldParts[0]) : '';
         }
         else
         {

@@ -75,7 +75,7 @@ abstract class Module extends RootModule implements Acl\Resource\ResourceInterfa
 
     public function isActingAsTree()
     {
-        return 'yes' === $this->getOption('act_as_tree');
+        return true === $this->getOption('act_as_tree');
     }
 
     public function getResourceId()

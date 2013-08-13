@@ -150,7 +150,7 @@ class InteractivePlugin extends BasePlugin
     public function onResourceLeaving($gateName)
     {
         $resource = $this->getResource();
-        $ticket = $resource->getWorkflowTicket();
+        $ticket = $resource->getWorkflowTicket()->first();
 
         if ('published' === $ticket->getWorkflowStep())
         {
@@ -194,7 +194,7 @@ class InteractivePlugin extends BasePlugin
         );
         $queue->push(new RevokeJob($jobData));
         $result->setState(Plugin\Result::STATE_EXPECT_INPUT);*/
-        
+
         $module = $resource->getModule();
 
         $exports = $this->getParameter('exports');

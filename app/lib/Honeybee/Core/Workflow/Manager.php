@@ -35,13 +35,13 @@ class Manager
         $workflowName = \AgaviConfig::get(
             sprintf('%s.workflow', $this->getModule()->getOption('prefix'))
         );
-        $execution = $this->fetchCleanWorkflow($workflowName, $resource);
+        $workflow = $this->fetchCleanWorkflow($workflowName, $resource);
 
         $resource->setWorkflowTicket(array(
             array(
-                'workflowName' => $execution->getName(),
+                'workflowName' => $workflow->getName(),
                 'owner' => 'nobody',
-                'workflowStep' => $execution->getFirstStep(),
+                'workflowStep' => $workflow->getFirstStep(),
                 'stepCounts' => NULL,
                 'lastResult' => array(
                     array(
@@ -49,13 +49,13 @@ class Manager
                         'gate' => NULL,
                         'message' =>  NULL,
                         'type' => sprintf(
-                            'Honeybee\\Domain\\%s\\PluginResult',
+                            'Honeybee\\Domain\\%s\\PluginResultDocument',
                             $resource->getModule()->getName()
                         )
                     )
                 ),
                 'type' => sprintf(
-                    'Honeybee\\Domain\\%s\\WorkflowTicket',
+                    'Honeybee\\Domain\\%s\\WorkflowTicketDocument',
                     $resource->getModule()->getName()
                 )
             )
@@ -65,16 +65,16 @@ class Manager
     public function getPossibleGates(IResource $resource)
     {
         $ticket = $resource->getWorkflowTicket()->first();
-        $execution = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
+        $workflow = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
 
-        return $execution->getGatesForStep($ticket->getWorkflowStep());
+        return $workflow->getGatesForStep($ticket->getWorkflowStep());
     }
 
     public function isInInteractiveState(IResource $resource)
     {
         $ticket = $resource->getWorkflowTicket()->first();
-        $execution = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
-        $plugin = $execution->getPluginFor($ticket->getWorkflowStep());
+        $workflow = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
+        $plugin = $workflow->getPluginFor($ticket->getWorkflowStep());
 
         return $plugin instanceof Plugin\InteractivePlugin;
     }
