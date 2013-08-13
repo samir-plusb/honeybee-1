@@ -1,10 +1,10 @@
 <?php
 
-use Honeybee\Core\Dat0r\Document;
+use Dat0r\Core\Document\IDocument;
 
 class AclRoleSelectFieldInputRenderer extends FieldInputRenderer
 {
-    protected function getPayload(Document $document)
+    protected function getPayload(IDocument $document)
     {
         $context = AgaviContext::getInstance();
         $user = $context->getUser();

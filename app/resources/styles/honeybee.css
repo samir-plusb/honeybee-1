@@ -450,12 +450,6 @@ input.typeahead
   transition: opacity 0.6s;
 }
 
-.widget-location-widget
-{
-  overflow: hidden;
-  margin-top: -71px;
-}
-
 .container-vertical-item table
 {
   background: rgb(251, 251, 251);
@@ -1124,7 +1118,7 @@ div.select2-container-multi .select2-choices .select2-search-field
 
 .form-password .password_requirements-optional li:last-child
 {
-    margin-bottom: 0.3em; 
+    margin-bottom: 0.3em;
 }
 
 .form-password .password-strengths
@@ -1160,4 +1154,130 @@ div.select2-container-multi .select2-choices .select2-search-field
 .referenced-modules-tabs li
 {
 
+}
+
+/**
+ * Aggregate Widget
+ */
+
+.aggregate-widget-root .collapse-actions
+{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  float: right;
+}
+
+.aggregate-widget-root .aggregate-selector
+{
+  float: left;
+}
+
+.aggregate-widget-root .collapse-actions li
+{
+  float: left;
+  margin-left: 10px;
+}
+
+.aggregates-list
+{
+  list-style: none;
+  overflow: hidden;
+  margin: 0;
+  padding: none;
+  float: none;
+  clear: both;
+}
+
+.aggregates-list .aggregate
+{
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.aggregates-list .aggregate.collapsed
+{
+  height: 55px;
+}
+
+.aggregates-list .aggregate .aggregate-expand
+{
+  display: none;
+}
+
+.aggregates-list .aggregate.collapsed .aggregate-expand
+{
+  display: block;
+}
+
+.aggregates-list .aggregate .aggregate-collapse
+{
+  display: block;
+}
+.aggregates-list .aggregate.collapsed .aggregate-collapse
+{
+  display: none;
+}
+
+.aggregates-list .aggregate .field-group
+{
+  margin-bottom: 0px;
+}
+
+.aggregate-tpl
+{
+  display: none;
+}
+
+.aggregate-selector
+{
+  margin-bottom: 20px;
+}
+
+.aggregates-list .remove-aggregate
+{
+  margin-top: 10px;
+  margin-right: 7px;
+}
+
+.aggregate .input-group-label .actions
+{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  float: right;
+  margin-top: 9px;
+}
+
+
+.aggregate .input-group-label .actions li
+{
+  float: left;
+  margin-right: 15px;
+  color: rgba(0, 136, 204, 0.2);
+  cursor: pointer;
+}
+
+.aggregate .input-group-label .displayed_text
+{
+  font-size: 12pt;
+  font-style: italic;
+}
+
+.aggregate:hover .input-group-label .actions li
+{
+  color: rgb(0, 136, 204);
+}
+
+/* location aggregate widget style */
+.widget-location-widget
+{
+  overflow: hidden;
+  margin-top: -71px;
+}
+
+.widget-location-widget .aggregate .input-group-label .actions
+{
+  margin-right: 50px;
 }

@@ -398,7 +398,7 @@ class Process
     protected function setResource(IResource $resource)
     {
         $this->resource = $resource;
-        $ticket = $this->resource->getWorkflowTicket();
+        $ticket = $this->resource->getWorkflowTicket()->first();
 
         if ($ticket->isReset())
         {
@@ -456,7 +456,7 @@ class Process
 
     public function getTicket()
     {
-        return $this->resource->getWorkflowTicket();
+        return $this->resource->getWorkflowTicket()->first();
     }
 
     public function getResource()

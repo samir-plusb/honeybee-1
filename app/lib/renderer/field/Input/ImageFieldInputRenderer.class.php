@@ -1,15 +1,15 @@
 <?php
 
-use Honeybee\Core\Dat0r\Document;
+use Dat0r\Core\Document\IDocument;
 
 class ImageFieldInputRenderer extends FieldInputRenderer
 {
-    protected function getWidgetType(Document $document)
+    protected function getWidgetType(IDocument $document)
     {
         return 'widget-asset-list';
     }
 
-    protected function getWidgetOptions(Document $document)
+    protected function getWidgetOptions(IDocument $document)
     {
         $parentOptions = parent::getWidgetOptions($document);
 
@@ -56,7 +56,7 @@ class ImageFieldInputRenderer extends FieldInputRenderer
         return 'PlainWidget.tpl.twig';
     }
 
-    protected function generateInputName(Document $document)
+    protected function generateInputName(IDocument $document)
     {
         return parent::generateInputName($document) . '[]';
     }

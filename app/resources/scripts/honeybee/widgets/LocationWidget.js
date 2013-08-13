@@ -1,3 +1,75 @@
+honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
+
+    log_prefix: "LocationAggregate",
+
+    initializing: null,
+
+    init: function(element, options, ready_callback)
+    {
+        this.initializing = true;
+        this.parent(element, options, ready_callback);
+        this.initializing = false;
+    },
+
+    initAggregateListItem: function(aggregate_element)
+    {
+        this.parent(aggregate_element);
+
+        var that = this;
+        var type = aggregate_element.find('.honeybee-js-type').val();
+        var position = this.aggregate_list.find('> .aggregate').index(aggregate_element);
+        var fields_section = aggregate_element.find('section.aggregate-fields');
+        var location = {};
+
+        if (!type.match(this.options.location_type))
+        {
+            return;
+        }
+
+        fields_section.find('input').each(function(idx, input)
+        {
+            input = $(input);
+            location[input.attr('id').replace(/input\-/, '')] = input.val();
+        });
+
+        var ready_callback = function()
+        {
+            that.registerDisplayedTextInputs(aggregate_element);
+        };
+        if (!this.initializing)
+        {
+            ready_callback = function()
+            {
+                var first_input = aggregate_element.find('input').first();
+                first_input.focus();
+                that.registerDisplayedTextInputs(aggregate_element);
+                $('html, body').animate({scrollTop: first_input.offset().top}, 350);
+            };
+        }
+
+        aggregate_element.widget = new honeybee.widgets.LocationWidget(
+            fields_section, {
+                autobind: true,
+                localize_url: this.options.localize_url,
+                fieldname: this.options.fieldname + '[' + position + ']',
+                location: location
+            },
+            ready_callback
+        );
+
+        aggregate_element.find('.actions').css({
+            'margin-right': '60px',
+            'z-index': 200
+        });
+    },
+
+    addAggregate: function(module_item_markup)
+    {
+        var that = this;
+        this.parent(module_item_markup);
+    }
+});
+
 honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
 
     // #########################
@@ -21,9 +93,9 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
     fieldname: null,
     // </knockout_props>
 
-    init: function(element, options)
+    init: function(element, options, ready_callback)
     {
-        this.parent(element, options);
+        this.parent(element, options, ready_callback);
     },
 
     // #################################
@@ -77,6 +149,7 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
                 var loc = data.location[i];
                 if (loc && "Außerhalb Berlins" != loc['administrative district'])
                 {
+                    loc.type = that.options.implementor;
                     that.found_locations.push(
                         honeybee.widgets.LocationWidget.Location.createFromServiceResp(loc)
                     );
@@ -105,8 +178,8 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
         }
 
         this.hideSelectLocationDialog();
-        this.location.longitude(location.longitude());
-        this.location.latitude(location.latitude());
+        this.location.lon(location.lon());
+        this.location.lat(location.lat());
         this.location.zipcode(location.zipcode());
         this.location.neighborhood(location.neighborhood());
         this.location.district(location.district());
@@ -154,8 +227,8 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
     renderLocationOnMap: function()
     {
         var latlng = new google.maps.LatLng(
-            this.location.latitude(),
-            this.location.longitude()
+            this.location.lat(),
+            this.location.lon()
         );
         var marker = new google.maps.Marker({
             position: latlng,
@@ -178,11 +251,11 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
             google.maps.event.addListener(map, 'click', function(event) {
                 marker.setPosition(event.latLng);
                 that.is_processing(true);
-                geocoder.geocode({'latLng': event.latLng}, function(results, status) 
+                geocoder.geocode({'latLng': event.latLng}, function(results, status)
                 {
-                    if (status == google.maps.GeocoderStatus.OK) 
+                    if (status == google.maps.GeocoderStatus.OK)
                     {
-                        if (results[0]) 
+                        if (results[0])
                         {
                             var components = results[0]['address_components'];
                             var data = {};
@@ -198,14 +271,14 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
                                     housenumber: data.street_name,
                                     uzip: data.postal_code,
                                     city: data.locality,
-                                    latitude: event.latLng.lat(),
-                                    longitude: event.latLng.lng()
+                                    lat: event.latLng.lat(),
+                                    lon: event.latLng.lng()
                                 })
                             );
                             that.is_processing(false);
                         }
-                    } 
-                    else 
+                    }
+                    else
                     {
                         alert("Geocoder failed due to: " + status);
                     }
@@ -244,9 +317,9 @@ honeybee.widgets.LocationWidget.Location = honeybee.core.BaseObject.extend({
 
     neighborhood: null,
 
-    longitude: null,
+    lon: null,
 
-    latitude: null,
+    lat: null,
 
     init: function(l)
     {
@@ -261,13 +334,13 @@ honeybee.widgets.LocationWidget.Location = honeybee.core.BaseObject.extend({
         this.neighborhood = ko.observable(l.neighborhood || '');
         if (l.coordinates)
         {
-            this.longitude = ko.observable(l.coordinates.lon || '');
-            this.latitude = ko.observable(l.coordinates.lat || '');
+            this.lon = ko.observable(l.coordinates.lon || '');
+            this.lat = ko.observable(l.coordinates.lat || '');
         }
         else
         {
-            this.longitude = ko.observable(l.lon || '');
-            this.latitude = ko.observable(l.lat || '');
+            this.lon = ko.observable(l.lon || '');
+            this.lat = ko.observable(l.lat || '');
         }
     },
 
@@ -296,14 +369,19 @@ honeybee.widgets.LocationWidget.Location.createFromServiceResp = function(locati
         postalCode: location.uzip || null,
         street: location.street || null,
         city: location.city || null,
-        housenumber: location.housenumber || null
+        housenumber: location.housenumber || null,
+        type: location.type || null
     };
+
     if (location.latitude && location.longitude)
     {
-        data.coordinates = {
-            lon: location.longitude,
-            lat: location.latitude
-        };
+        data.lon = location.longitude;
+        data.lat = location.latitude;
+    }
+    else
+    {
+        data.lon = location.lon;
+        data.lat = location.lat;
     }
     return new honeybee.widgets.LocationWidget.Location(data);
 };

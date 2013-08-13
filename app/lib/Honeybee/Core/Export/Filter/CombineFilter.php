@@ -8,8 +8,8 @@ use Dat0r\Core\Field\IField;
 class CombineFilter extends BaseFilter
 {
     protected static $supportedFields = array(
-        'Dat0r\\Core\\Runtime\\Field\\TextField',
-        'Dat0r\\Core\\Runtime\\Field\\TextCollectionField'
+        'Dat0r\\Core\\Field\\TextField',
+        'Dat0r\\Core\\Field\\TextCollectionField'
     );
 
     public function execute(Document $document)

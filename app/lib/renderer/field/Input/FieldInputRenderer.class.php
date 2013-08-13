@@ -1,10 +1,10 @@
 <?php
 
-use Honeybee\Core\Dat0r\Document;
+use Dat0r\Core\Document\IDocument;
 
 class FieldInputRenderer extends FieldRenderer
 {
-    protected function doRender(Document $document)
+    protected function doRender(IDocument $document)
     {
         $payload = $this->getPayload($document);
 
@@ -26,7 +26,7 @@ class FieldInputRenderer extends FieldRenderer
         }
     }
 
-    protected function getPayload(Document $document)
+    protected function getPayload(IDocument $document)
     {
         $tm = $this->getTranslationManager();
         $td = $this->getTranslationDomain($document);
@@ -34,7 +34,7 @@ class FieldInputRenderer extends FieldRenderer
         $fieldName = $this->getField()->getName();
         $widgetType = $this->getWidgetType($document);
 
-        return array( 
+        return array(
             'fieldName' => $fieldName,
             'field' => $this->getField(),
             'inputName' => $this->generateInputName($document),
@@ -50,7 +50,7 @@ class FieldInputRenderer extends FieldRenderer
         );
     }
 
-    protected function getWidgetType(Document $document)
+    protected function getWidgetType(IDocument $document)
     {
         $prefix = $document->getModule()->getOption('prefix');
         $widgetSettings = AgaviConfig::get(sprintf('%s.input_widgets', $prefix));
@@ -66,14 +66,14 @@ class FieldInputRenderer extends FieldRenderer
         return $widget;
     }
 
-    protected function renderWidgetOptions(Document $document)
+    protected function renderWidgetOptions(IDocument $document)
     {
         return htmlspecialchars(
             json_encode($this->getWidgetOptions($document))
         );
     }
 
-    protected function renderFieldValue(Document $document)
+    protected function renderFieldValue(IDocument $document)
     {
         $value = '';
         if (isset($this->options['fieldpath']))
@@ -85,7 +85,7 @@ class FieldInputRenderer extends FieldRenderer
             while (count($fieldParts) > 1)
             {
                 $fieldName = array_shift($fieldParts);
-                $curDoc = $curDoc->getValue($fieldName);
+                $curDoc = $curDoc->getValue($fieldName)->first();
             }
             $value = $curDoc->getValue($fieldParts[0]);
         }
@@ -97,26 +97,26 @@ class FieldInputRenderer extends FieldRenderer
         return is_scalar($value) ? $value : '';
     }
 
-    protected function getWidgetOptions(Document $document)
+    protected function getWidgetOptions(IDocument $document)
     {
         $prefix = $document->getModule()->getOption('prefix');
         $widgetSettings = AgaviConfig::get(sprintf('%s.input_widgets', $prefix));
         $fieldname = $this->getField()->getName();
         $widgetOptions = array();
-        
+
         if (isset($widgetSettings[$fieldname]))
         {
             $widgetDef = $widgetSettings[$fieldname];
             $widgetOptions = $widgetDef['options'];
         }
 
-        $widgetOptions['readonly'] = $this->isReadonly($document); 
+        $widgetOptions['readonly'] = $this->isReadonly($document);
         $widgetOptions['autobind'] = TRUE;
 
         return $widgetOptions;
     }
 
-    protected function generateInputName(Document $document)
+    protected function generateInputName(IDocument $document)
     {
         $name = '';
 
@@ -127,11 +127,13 @@ class FieldInputRenderer extends FieldRenderer
             {
                 if ($first)
                 {
-                    $name = sprintf(
-                        '%s[%s]', 
-                        $document->getModule()->getOption('prefix'),
-                        $part
-                    );
+                    $group = $document->getModule()->getOption('prefix');
+                    if (isset($this->options['group']))
+                    {
+                        $first_part = array_shift($this->options['group']);
+                        $group = sprintf('%s[%s]', $first_part, implode('][', $this->options['group']));
+                    }
+                    $name = sprintf('%s[%s]', $group, $part);
                     $first = FALSE;
                 }
                 else
@@ -143,7 +145,7 @@ class FieldInputRenderer extends FieldRenderer
         else
         {
             $name = sprintf(
-                '%s[%s]', 
+                '%s[%s]',
                 $document->getModule()->getOption('prefix'),
                 $this->getField()->getName()
             );
@@ -167,7 +169,7 @@ class FieldInputRenderer extends FieldRenderer
         return AgaviContext::getInstance()->getTranslationManager();
     }
 
-    public function getTranslationDomain(Document $document)
+    public function getTranslationDomain(IDocument $document)
     {
         return parent::getTranslationDomain($document) . '.input.field';
     }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
-    xmlns="http://agavi.org/agavi/config/parts/autoload/1.0" 
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
-    xmlns:xi="http://www.w3.org/2001/XInclude" 
+<ae:configurations
+    xmlns="http://agavi.org/agavi/config/parts/autoload/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
     parent="%core.system_config_dir%/autoload.xml">
     <ae:configuration>
         <autoloads>
-            <!-- 
+            <!--
                 Rendering - Rendering GUI for documents and modules.
             -->
             <autoload name="IRenderer">%core.lib_dir%/renderer/IRenderer.iface.php</autoload>
@@ -22,16 +22,17 @@
             <autoload name="KeyValuesCollectionFieldInputRenderer">%core.lib_dir%/renderer/field/Input/KeyValuesCollectionFieldInputRenderer.class.php</autoload>
             <autoload name="DateFieldInputRenderer">%core.lib_dir%/renderer/field/Input/DateFieldInputRenderer.class.php</autoload>
             <autoload name="LocationInputRenderer">%core.lib_dir%/renderer/field/Input/LocationInputRenderer.class.php</autoload>
+            <autoload name="AggregateFieldInputRenderer">%core.lib_dir%/renderer/field/Input/AggregateFieldInputRenderer.class.php</autoload>
             <autoload name="KoReadOnlyFieldInputRenderer">%core.lib_dir%/renderer/field/Input/KoReadOnlyFieldInputRenderer.class.php</autoload>
             <autoload name="BooleanFieldInputRenderer">%core.lib_dir%/renderer/field/Input/BooleanFieldInputRenderer.class.php</autoload>
             <autoload name="AclRoleSelectFieldInputRenderer">%core.lib_dir%/renderer/field/Input/AclRoleSelectFieldInputRenderer.class.php</autoload>
-            <!-- 
-                third party face detection lib 
+            <!--
+                third party face detection lib
             -->
             <autoload name="Face_Detector">%core.lib_dir%/php-facedetection/FaceDetector.php</autoload>
         </autoloads>
     </ae:configuration>
-    
+
     <xi:include href="%core.app_dir%/config/includes/autoload.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
         <xi:fallback />

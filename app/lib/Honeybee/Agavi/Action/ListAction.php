@@ -241,8 +241,8 @@ class ListAction extends BaseAction
         foreach ($documents as $document)
         {
             $gates = array();
-            $workflowStep = $document->getWorkflowTicket()->getWorkflowStep();
-            // iterate over all the gates of the current workflow step 
+            $workflowStep = $document->getWorkflowTicket()->first()->getWorkflowStep();
+            // iterate over all the gates of the current workflow step
             // and check if the current user may access them.
             foreach ($workflowManager->getPossibleGates($document) as $gateName)
             {

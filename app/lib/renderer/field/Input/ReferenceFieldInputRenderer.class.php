@@ -1,11 +1,11 @@
 <?php
 
 use Dat0r\Core\Field\ReferenceField;
-use Honeybee\Core\Dat0r\Document;
+use Dat0r\Core\Document\IDocument;
 
 class ReferenceFieldInputRenderer extends FieldInputRenderer
 {
-    protected function getWidgetType(Document $document)
+    protected function getWidgetType(IDocument $document)
     {
         return 'widget-reference';
     }
@@ -15,7 +15,7 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
         return "Reference.tpl.twig";
     }
 
-    protected function getWidgetOptions(Document $document)
+    protected function getWidgetOptions(IDocument $document)
     {
         $parentOptions = parent::getWidgetOptions($document);
 
@@ -71,11 +71,11 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
         ));
     }
 
-    protected function buildAutoCompleteOptions(Document $document)
+    protected function buildAutoCompleteOptions(IDocument $document)
     {
         $tm = AgaviContext::getInstance()->getTranslationManager();
         $references = $this->getField()->getOption(ReferenceField::OPT_REFERENCES);
-        
+
         $autoCompleteMappings = array();
 
         foreach ($references as $reference)
@@ -109,7 +109,7 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                     )))
                 )
             );
-            
+
             if ($this->getField()->getOption('enable_inline_create', false))
             {
                 $autoCompleteMappings[$modulePrefix] = array_merge(

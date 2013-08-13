@@ -122,6 +122,7 @@ class DocumentInputRenderer extends DocumentRenderer
             $parts = explode(':', $groupName);
             $name = $parts[0];
             $renderedGroups[$name] = array(
+                'boxed' => (strpos($name, '-') !== 0),
                 'width' => (2 === count($parts)) ? $parts[1] : 6,
                 'fields' => $this->renderFields($document, $fields)
             );
@@ -167,7 +168,8 @@ class DocumentInputRenderer extends DocumentRenderer
         {
             $fieldName = array_shift($fieldParts);
             $field = $module->getField($fieldName);
-            $module = $field->getAggregateModule();
+            $modules = $field->getAggregateModules();
+            $module = reset($modules);
         }
         return $module->getField($fieldParts[0]);
     }

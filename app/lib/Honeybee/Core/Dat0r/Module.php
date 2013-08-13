@@ -24,8 +24,8 @@ abstract class Module extends RootModule implements Acl\Resource\ResourceInterfa
     public function createDocument(array $data = array())
     {
         $document = parent::createDocument($data);
-        
-        if (! ($workflowName = $document->getWorkflowTicket()->getWorkflowName()))
+        $workflowTicket = $document->getWorkflowTicket()->first();
+        if (!$workflowTicket || !($workflowName = $workflowTicket->getWorkflowName()))
         {
             $this->getWorkflowManager()->initWorkflowFor($document);
         }
@@ -83,9 +83,9 @@ abstract class Module extends RootModule implements Acl\Resource\ResourceInterfa
         return $this->getOption('prefix');
     }
 
-    public function getDocumentType()
+    public function getIdentifierField()
     {
-        return $this->getDocumentImplementor();
+        return $this->getField('identifier');
     }
 
     /**
@@ -93,7 +93,7 @@ abstract class Module extends RootModule implements Acl\Resource\ResourceInterfa
      *
      * @return array A list of IField implemenations.
      */
-    protected function getDefaultFields() 
+    protected function getDefaultFields()
     {
         return array_merge(
             parent::getDefaultFields(),

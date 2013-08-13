@@ -75,7 +75,7 @@ class InteractivePlugin extends BasePlugin
     protected function doProcess()
     {
         $resource = $this->getResource();
-        $ticket = $resource->getWorkflowTicket();
+        $ticket = $resource->getWorkflowTicket()->first();
         $result = new InteractionResult();
 
         $pluginContainer = $this->prepareExecutionContainer();

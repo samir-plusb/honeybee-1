@@ -1,5 +1,6 @@
 widgets.js
 Widget.js
+Aggregate.js
 SearchWidget.js
 TagsList.js
 KeyValuesList.js

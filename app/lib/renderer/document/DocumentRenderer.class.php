@@ -69,7 +69,7 @@ abstract class DocumentRenderer implements IRenderer
     {
         $user = AgaviContext::getInstance()->getUser();
         $module = $document->getModule();
-        $workflowStep = $document->getWorkflowTicket()->getWorkflowStep();
+        $workflowStep = $document->getWorkflowTicket()->first()->getWorkflowStep();
 
         $writeAction = sprintf('%s.%s::write', $module->getOption('prefix'), $workflowStep);
         $createAction = sprintf('%s::create', $module->getOption('prefix'));

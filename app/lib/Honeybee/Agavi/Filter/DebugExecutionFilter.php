@@ -2,14 +2,14 @@
 
 namespace Honeybee\Agavi\Filter;
 
-class DebugExecutionFilter extends \PhpDebugToolbarAgaviExecutionFilter
+class DebugExecutionFilter extends \AgaviExecutionFilter
 {
     protected function executeView(\AgaviExecutionContainer $container)
     {
         $viewResult = parent::executeView($container);
 
         ResourceFilter::addModule(
-            $container->getViewModuleName(), 
+            $container->getViewModuleName(),
             $container->getOutputType()->getName()
         );
 

@@ -1,30 +1,38 @@
 <?php
 
 use Dat0r\Core\Document\IDocument;
+use Dat0r\Core\Document\DocumentCollection;
 use Dat0r\Core\Module\AggregateModule;
 
 class AggregateListRenderer extends DefaultListValueRenderer
 {
     public function renderValue($value, $field, array $data = array())
     {
-        if ($value instanceof IDocument)
+        if ($value instanceof DocumentCollection)
         {
-            $module = $value->getModule();
+            $displayTokens = array();
+            foreach ($value as $aggregate_document)
+            {
+                $module = $aggregate_document->getModule();
+                if ($module instanceof AggregateModule)
+                {
+                    $rendererDef = $field->getRenderer();
+                    $displayField = isset($rendererDef['options']['displayField'])
+                        ? $rendererDef['options']['displayField']
+                        : 'identifier';
 
-            if ($module instanceof AggregateModule)
-            {
-                $rendererDef = $field->getRenderer();
-                $displayField = isset($rendererDef['options']['displayField']) ? $rendererDef['options']['displayField'] : 'identifier';
-                $value = $value->getValue($displayField);
+                    $displayTokens[] = $aggregate_document->getValue($displayField);
+                }
+                else
+                {
+                    throw new Exception("Only aggregate modules supported by the AggregateListRenderer.");
+                }
             }
-            else
-            {
-                throw new Exception("Only aggregate modules supported by the AggregateListRenderer.");
-            }
+            $value = implode(', ', $displayTokens);
         }
         else
         {
-            throw new Exception("Only aggregate documents may be rendered by the AggregateListRenderer.");
+            throw new Exception("Only aggregate DocumentCollections may be rendered by the AggregateListRenderer.");
         }
 
         $translate = isset($rendererDef['options']['translate']) ? (bool)$rendererDef['options']['translate'] : FALSE;
@@ -34,7 +42,7 @@ class AggregateListRenderer extends DefaultListValueRenderer
             $domain = isset($rendererDef['options']['domain']) ? $rendererDef['options']['domain'] : $defaultDomain;
             $tm = AgaviContext::getInstance()->getTranslationManager();
             $value = $tm->_($value, $domain);
-        } 
+        }
 
         return $value;
     }

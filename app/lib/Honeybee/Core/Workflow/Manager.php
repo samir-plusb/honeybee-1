@@ -38,21 +38,33 @@ class Manager
         $execution = $this->fetchCleanWorkflow($workflowName, $resource);
 
         $resource->setWorkflowTicket(array(
-            'workflowName' => $execution->getName(),
-            'owner' => 'nobody',
-            'workflowStep' => $execution->getFirstStep(),
-            'stepCounts' => NULL,
-            'lastResult' => array(
-                'state' => NULL,
-                'gate' => NULL,
-                'message' =>  NULL
+            array(
+                'workflowName' => $execution->getName(),
+                'owner' => 'nobody',
+                'workflowStep' => $execution->getFirstStep(),
+                'stepCounts' => NULL,
+                'lastResult' => array(
+                    array(
+                        'state' => NULL,
+                        'gate' => NULL,
+                        'message' =>  NULL,
+                        'type' => sprintf(
+                            'Honeybee\\Domain\\%s\\PluginResult',
+                            $resource->getModule()->getName()
+                        )
+                    )
+                ),
+                'type' => sprintf(
+                    'Honeybee\\Domain\\%s\\WorkflowTicket',
+                    $resource->getModule()->getName()
+                )
             )
         ));
     }
 
     public function getPossibleGates(IResource $resource)
     {
-        $ticket = $resource->getWorkflowTicket();
+        $ticket = $resource->getWorkflowTicket()->first();
         $execution = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
 
         return $execution->getGatesForStep($ticket->getWorkflowStep());
@@ -60,7 +72,7 @@ class Manager
 
     public function isInInteractiveState(IResource $resource)
     {
-        $ticket = $resource->getWorkflowTicket();
+        $ticket = $resource->getWorkflowTicket()->first();
         $execution = $this->fetchCleanWorkflow($ticket->getWorkflowName(), $resource);
         $plugin = $execution->getPluginFor($ticket->getWorkflowStep());
 
@@ -83,7 +95,7 @@ class Manager
     {
         $code = Process::STATE_NEXT_WORKFLOW;
         $pluginResult = NULL;
-        $ticket = $resource->getWorkflowTicket();
+        $ticket = $resource->getWorkflowTicket()->first();
 
         while (Process::STATE_NEXT_WORKFLOW === $code)
         {
@@ -92,8 +104,7 @@ class Manager
             $code = $resultData['code'];
             $pluginResult = $resultData['result'];
         }
-
-        $resource->getWorkflowTicket()->setLastResult(array(
+        $ticket->getLastResult()->first()->setValues(array(
             'state' => $pluginResult->getState(),
             'gate' => $pluginResult->getGate(),
             'message' => $pluginResult->getMessage()

@@ -1,6 +1,6 @@
 <?php
 
-use Honeybee\Core\Dat0r\Module;
+use Dat0r\Core\Module\IModule;
 use Dat0r\Core\Field\IField;
 
 class FieldRendererFactory
@@ -9,7 +9,7 @@ class FieldRendererFactory
 
     private $module;
 
-    public function __construct(Module $module)
+    public function __construct(IModule $module)
     {
         $this->module = $module;
     }
@@ -19,7 +19,7 @@ class FieldRendererFactory
         $factoryInfo = $this->determineImplementor($field, $renderingContext);
 
         return new $factoryInfo['implementor']($field, array_merge($factoryInfo['options'], $options));
-    }   
+    }
 
     protected function determineImplementor(IField $field, $renderingContext)
     {
@@ -34,7 +34,7 @@ class FieldRendererFactory
                 'implementor' => is_array($rendererConfig[$fieldname]['input'])
                     ? $rendererConfig[$fieldname]['input']['type']
                     : $rendererConfig[$fieldname]['input'],
-                'options' => is_array($rendererConfig[$fieldname]['input']) 
+                'options' => is_array($rendererConfig[$fieldname]['input'])
                     && isset($rendererConfig[$fieldname]['input']['options'])
                     ? $rendererConfig[$fieldname]['input']['options']
                     : array()
@@ -55,11 +55,11 @@ class FieldRendererFactory
             $implementor = $buildImplementor($curFieldClass, $renderingContext);
         }
 
-        if (! class_exists($implementor))
+        if (!class_exists($implementor))
         {
             throw new Exception(
                 sprintf(
-                    "Unable to find %s renderer for field type %s.", 
+                    "Unable to find %s renderer for field type %s.",
                     $renderingContext, get_class($field)
                 )
             );

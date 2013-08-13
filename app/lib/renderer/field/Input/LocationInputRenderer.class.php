@@ -1,32 +1,26 @@
 <?php
 
-use Honeybee\Core\Dat0r\Document;
+use Dat0r\Core\Document\IDocument;
 
-class LocationInputRenderer extends FieldInputRenderer
+class LocationInputRenderer extends AggregateFieldInputRenderer
 {
-    protected function getWidgetType(Document $document)
+    protected function getWidgetType(IDocument $document)
     {
-        return 'widget-location-widget';
+        return 'widget-location-aggregate';
     }
 
-    protected function getWidgetOptions(Document $document)
+    protected function getWidgetOptions(IDocument $document)
     {
-        $parentOptions = parent::getWidgetOptions($document);
-
-        $location = $document->getValue($this->getField()->getName());
         $routing = AgaviContext::getInstance()->getRouting();
 
         $widgetOptions = array(
-            'localize_url' => urldecode(htmlspecialchars($routing->gen('common.service.localize'))),
-            'location' => $location ? $location->toArray() : array(),
-            'fieldname' => $this->generateInputName($document)
+            'fieldname' => $this->generateInputName($document),
+            'location_type' => $this->options['location_type'],
+            'localize_url' => urldecode(htmlspecialchars(
+                $routing->gen('common.service.localize')
+            ))
         );
 
-        return array_merge($widgetOptions, $parentOptions);
-    }
-
-    protected function getTemplateName()
-    {
-        return 'PlainWidget.tpl.twig';
+        return array_merge(parent::getWidgetOptions($document), $widgetOptions);
     }
 }

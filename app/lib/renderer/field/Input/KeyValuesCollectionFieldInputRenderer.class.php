@@ -1,15 +1,15 @@
 <?php
 
-use Honeybee\Core\Dat0r\Document;
+use Dat0r\Core\Document\IDocument;
 
 class KeyValuesCollectionFieldInputRenderer extends FieldInputRenderer
 {
-    protected function getWidgetType(Document $document)
+    protected function getWidgetType(IDocument $document)
     {
         return 'widget-key-values-list';
     }
 
-    protected function getWidgetOptions(Document $document)
+    protected function getWidgetOptions(IDocument $document)
     {
         $parentOptions = parent::getWidgetOptions($document);
 

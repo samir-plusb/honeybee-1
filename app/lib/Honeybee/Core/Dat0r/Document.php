@@ -11,10 +11,10 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
 {
     public function getWorkflowConfigPath()
     {
-        $moduleDir = \AgaviConfig::get('core.modules_dir') 
+        $moduleDir = \AgaviConfig::get('core.modules_dir')
             . DIRECTORY_SEPARATOR . $this->getModule()->getName();
 
-        return $moduleDir . DIRECTORY_SEPARATOR . 'config' 
+        return $moduleDir . DIRECTORY_SEPARATOR . 'config'
             . DIRECTORY_SEPARATOR . 'workflows.xml';
     }
 
@@ -36,7 +36,7 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
     public function getShortIdentifier()
     {
         $type = $this->getModule()->getOption('prefix');
-        
+
         return sprintf('%s-%s', $type, $this->getShortId());
     }
 
@@ -119,12 +119,12 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
             {
                 $this->setValue('uuid', $this->getValue('uuid'));
             }
-        
+
             $this->setIdentifier(sprintf(
                 '%s-%s-%s-%s',
                 $this->getModule()->getOption('prefix'),
-                $this->getValue('uuid'), 
-                $this->getValue('language'), 
+                $this->getValue('uuid'),
+                $this->getValue('language'),
                 $this->getValue('version')
             ));
         }
@@ -176,8 +176,8 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
         $text = trim($text, '-');
         // transliterate
         $text = str_replace(
-            array('Ä', 'ä', 'Ö', 'ö', 'Ü', 'ü', 'ß'), 
-            array('Ae', 'ae', 'Oe', 'oe', 'Ue', 'ue', 'ss'), 
+            array('Ä', 'ä', 'Ö', 'ö', 'Ü', 'ü', 'ß'),
+            array('Ae', 'ae', 'Oe', 'oe', 'Ue', 'ue', 'ss'),
             $text
         );
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
@@ -192,5 +192,14 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
         }
 
         return $text;
+    }
+
+    public function toArray()
+    {
+        $data = parent::toArray();
+
+        $data['type'] = get_class($this);
+
+        return $data;
     }
 }

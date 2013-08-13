@@ -1,0 +1,87 @@
+<section class="honeybee-widget aggregate-widget-root {{widgetType}}"
+    data-{{ widgetType|replace({'widget-': ''}) }}-options="{{widgetOptions|raw}}">
+<!--
+    add aggregate dropdown
+-->
+    <div class="btn-group aggregate-selector">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            Add Aggregate <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+        {% for aggregate_module in aggregate_modules %}
+            <li class="aggregate-module-item">
+                <a href="#">{{ tm._(aggregate_module.label, td) }}</a>
+                <div class="row-fluid aggregate-tpl aggregate">
+                    <div class="span{{group['width']}} group">
+                        <div class="field-group field-group-{{ name|lower }}">
+                            <h3 class="input-group-label">
+                                <span class="position"></span> {{ aggregate_module.label }}
+                                <span class="displayed_text"></span>
+                                <ul class="actions">
+                                    <li><i class="hb-icon hb-icon-fullscreen-alt aggregate-expand"></i></li>
+                                    <li><i class="hb-icon hb-icon-fullscreen-exit-alt aggregate-collapse"></i></li>
+                                    <li><i class="hb-icon hb-icon-arrow-down-2 aggregate-down"></i></li>
+                                    <li><i class="hb-icon hb-icon-arrow-up-2 aggregate-up"></i></li>
+                                    <li><i class="hb-icon hb-icon-remove aggregate-remove"></i></li>
+                                </ul>
+                            </h3>
+                            <section class="aggregate-fields">
+                            {% for field in aggregate_module.rendered_fields %}
+                                {{field|raw}}
+                            {% endfor %}
+                            </section>
+                            <input type="hidden" class="honeybee-js-type" name="{{ aggregate_module.type_field }}" value="{{ aggregate_module.type }}" />
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    <ul class="collapse-actions">
+        <li><button type="button" class="btn hb-icon hb-icon-fullscreen-alt aggregate-expand-all"> Expand all</button></li>
+        <li><button type="button" class="btn hb-icon hb-icon-fullscreen-exit-alt aggregate-collapse-all"> Collapse all</button></li>
+    </ul>
+<!--
+    field help icon
+-->
+
+    {% if tm._(name ~ '_help', td) != name ~ '_help' %}
+    <span class="hb-icon-info help-trigger group-help"
+                    data-title="{{ tm._('group_level_help') }}" data-content="{{ tm._(name ~ '_help', td) }}"
+                    data-animation="false" data-placement="left" data-trigger="manual" />
+    {% endif %}
+
+<input type="hidden" name="{{ inputName }}[]" value="" />
+<!--
+    actual aggregate list
+-->
+    <ul class="aggregates-list">
+        {% for pos, aggregate in aggregates %}
+        <li class="row-fluid aggregate collapsed">
+            <div class="span{{group['width']}} group">
+                <div class="field-group field-group-{{name}}">
+                    <h3 class="input-group-label">
+                        <span class="position">#{{ pos + 1 }}</span> {{tm._(aggregate.label, td)}}
+                        <span class="displayed_text"></span>
+                        <ul class="actions">
+                            <li><i class="hb-icon hb-icon-fullscreen-alt aggregate-expand"></i></li>
+                            <li><i class="hb-icon hb-icon-fullscreen-exit-alt aggregate-collapse"></i></li>
+                            <li><i class="hb-icon hb-icon-arrow-down-2 aggregate-down"></i></li>
+                            <li><i class="hb-icon hb-icon-arrow-up-2 aggregate-up"></i></li>
+                            <li><i class="hb-icon hb-icon-remove aggregate-remove"></i></li>
+                        </ul>
+                    </h3>
+                    <section class="aggregate-fields">
+                    {% for field in aggregate.rendered_fields %}
+                        {{field|raw}}
+                    {% endfor %}
+                    </section>
+                    <input type="hidden" class="honeybee-js-type" name="{{ aggregate.type_field }}" value="{{ aggregate.type }}" />
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+</section>

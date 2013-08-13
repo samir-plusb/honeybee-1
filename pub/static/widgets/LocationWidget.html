@@ -1,8 +1,8 @@
-<div style="height: 50px; margin-bottom: 0; position: relative;">
-    <button style="position: absolute; right: 10px; top: 10px;" class="btn btn-primary" 
+<div style="height: 1px; margin-bottom: 0; position: relative;">
+    <button style="position: absolute; right: 10px; top: -60px;" class="btn btn-primary"
             data-bind="click: localize, visible: !is_processing(), disable: options.readonly">Verorten</button>
-    <img src="static/deploy/_global/binaries/loading-small.gif" title="Adressdaten werden lokalisiert" 
-         data-bind="visible: is_processing" style="position: absolute; top: 14px; right: 10px;" />
+    <img src="static/deploy/_global/binaries/loading-small.gif" title="Adressdaten werden lokalisiert"
+         data-bind="visible: is_processing" style="position: absolute; top: -57px; right: 35px;" />
 </div>
 
  <div style="float: left; width: 100%; height: 200px; position: relative; margin-bottom: 20px;">
@@ -12,29 +12,28 @@
 <div class="control-group">
     <label class="control-label">Straße, Hnr.</label>
     <div class="controls">
-        <input type="text" class="span8" 
+        <input type="text" class="span8"
             data-bind="value: location.street, attr: { name: fieldname() + '[street]' }, disable: options.readonly" />
-        <input type="text" class="span3" 
+        <input type="text" class="span3"
             data-bind="value: location.housenumber, attr: { name: fieldname() + '[housenumber]' }, disable: options.readonly" />
     </div>
 </div>
 <div class="control-group">
     <label class="control-label">PLZ</label>
     <div class="controls">
-        <input type="text" class="span11" 
+        <input type="text" class="span11"
             data-bind="value: location.zipcode, attr: { name: fieldname() + '[zipcode]' }, disable: options.readonly" />
     </div>
 </div>
 <div class="control-group">
     <label class="control-label">Stadt</label>
     <div class="controls">
-        <input type="text" class="span11" 
+        <input type="text" class="span11"
             data-bind="value: location.city, attr: { name: fieldname() + '[city]' }, disable: options.readonly" />
     </div>
 </div>
-        
-<input type="hidden" data-bind="value: location.longitude, attr: { name: fieldname() + '[lon]' }, disable: options.readonly" />
-<input type="hidden" data-bind="value: location.latitude, attr: { name: fieldname() + '[lat]' }, disable: options.readonly" />
+<input type="hidden" data-bind="value: location.lon, attr: { name: fieldname() + '[lon]' }, disable: options.readonly" />
+<input type="hidden" data-bind="value: location.lat, attr: { name: fieldname() + '[lat]' }, disable: options.readonly" />
 
 <div class="modal dialog-select-location" style="display:none">
     <div class="modal-header">
