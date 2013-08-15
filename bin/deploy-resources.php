@@ -10,24 +10,24 @@ require $root_dir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstr
 require(
     str_replace(
         '/', DIRECTORY_SEPARATOR, 
-        $root_dir.'/vendor/agavi/agavi/src/build/agavi/build.php'
+       $root_dir.'/vendor/agavi/agavi/src/build/agavi/build.php'
     )
 );
 AgaviBuild::bootstrap();
 
 $modules = array();
-foreach(new DirectoryIterator(AgaviConfig::get('core.modules_dir')) as $file) 
+foreach(new DirectoryIterator(AgaviConfig::get('core.modules_dir')) as $file)
 {
-    if($file->isDot()) 
+    if($file->isDot())
     {
         continue;
     }
-    
+
     $check = new AgaviModuleFilesystemCheck();
     $check->setConfigDirectory('config');
     $check->setPath($file->getPathname());
 
-    if($check->check()) 
+    if($check->check())
     {
         $modules[] = (string)$file;
     }
@@ -38,8 +38,8 @@ echo implode(', ', $modules) . PHP_EOL;
 echo PHP_EOL . "2. Starting resource deployment ..." . PHP_EOL;
 
 $packer = new Filter\ResourcePacker(
-    array('html' => $modules), 
-    'html', 
+    array('html' => $modules),
+    'html',
     new Filter\ResourceFilterConfig(array(
         Filter\ResourceFilterConfig::CFG_OUTPUT_TYPES => array('html'),
         Filter\ResourceFilterConfig::CFG_BASE_DIR => str_replace(

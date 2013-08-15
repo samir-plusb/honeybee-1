@@ -1,9 +1,9 @@
 <?php
 
-$rootDir = dirname(__DIR__);
-require_once $rootDir . '/etc/configure/EnvironmentConfigurator.class.php';
-require_once $rootDir . '/etc/configure/ConfigureEnvScript.class.php';
-require_once $rootDir . '/vendor/autoload.php';
+$root_dir = dirname(__DIR__);
+require_once $root_dir . '/etc/configure/EnvironmentConfigurator.class.php';
+require_once $root_dir . '/etc/configure/ConfigureEnvScript.class.php';
+require_once $root_dir . '/vendor/autoload.php';
 
 echo "Check environment and extensions ...\n";
 if (ini_get('safe_mode'))
