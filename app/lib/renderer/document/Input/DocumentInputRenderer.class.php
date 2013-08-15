@@ -102,7 +102,20 @@ class DocumentInputRenderer extends DocumentRenderer
             $renderedRows = array();
             foreach ($tabDeclaration['rows'] as $row)
             {
-                $renderedRows[] = $this->renderGroups($document, $row['groups']);
+                if (isset($row['type']) && $row['type'] === 'custom')
+                {
+                    $renderedRows[] = array(
+                        'type' => 'custom',
+                        'content' => $this->renderCustomRow($document, $row)
+                    );
+                }
+                else
+                {
+                    $renderedRows[] = array(
+                        'type' => 'default',
+                        'groups' => $this->renderGroups($document, $row['groups'])
+                    );
+                }
             }
             $renderedTabs[$tabName] = array(
                 'rows' => $renderedRows,
@@ -111,6 +124,18 @@ class DocumentInputRenderer extends DocumentRenderer
         }
 
         return $renderedTabs;
+    }
+
+    protected function renderCustomRow(Document $document, array $rowConfig)
+    {
+        $twig = new Twig_Environment(
+            new Twig_Loader_Filesystem(dirname($rowConfig['template']))
+        );
+
+        return $twig->render(
+            basename($rowConfig['template']),
+            array()
+        );
     }
 
     protected function renderGroups(Document $document, array $groups)

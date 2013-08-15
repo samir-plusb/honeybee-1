@@ -39,9 +39,10 @@
                     {% for tabName, tabDef in tabs %}
                     <div class="tab-pane tab-{{ tabName }} {{ tabDef.is_default ? 'active in' : '' }} fade"
                         id="tab-{{ tabName }}">
-                        {% for rowGroups in tabDef.rows %}
+                        {% for row in tabDef.rows %}
+                        {% if row.type == 'default' %}
                         <div class="row-fluid">
-                            {% for groupName, groupDef in rowGroups %}
+                            {% for groupName, groupDef in row.groups %}
                             <div class="span{{groupDef['width']}} group">
 
                                 {% if groupDef.boxed == true %}
@@ -67,7 +68,10 @@
                             </div>
                             {% endfor %}
                         </div>
-                        {%endfor%}
+                        {% elseif row.type == 'custom' %}
+                            {{ row.content|raw }}
+                        {% endif %}
+                        {% endfor %}
                     </div>
                     {% endfor %}
                 </div>

@@ -5,7 +5,7 @@
 -->
     <div class="btn-group aggregate-selector">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-            Add Aggregate <span class="caret"></span>
+            {{ tm._('Add aggregate', td) }} <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
         {% for aggregate_module in aggregate_modules %}
@@ -15,7 +15,7 @@
                     <div class="span{{group['width']}} group">
                         <div class="field-group field-group-{{ name|lower }}">
                             <h3 class="input-group-label">
-                                <span class="position"></span> {{ aggregate_module.label }}
+                                <span class="position"></span> {{ tm._(aggregate_module.label, td) }}
                                 <span class="displayed_text"></span>
                                 <ul class="actions">
                                     <li><i class="hb-icon hb-icon-fullscreen-alt aggregate-expand"></i></li>
@@ -39,8 +39,8 @@
         </ul>
     </div>
     <ul class="collapse-actions">
-        <li><button type="button" class="btn hb-icon hb-icon-fullscreen-alt aggregate-expand-all"> Expand all</button></li>
-        <li><button type="button" class="btn hb-icon hb-icon-fullscreen-exit-alt aggregate-collapse-all"> Collapse all</button></li>
+        <li><button type="button" class="btn hb-icon hb-icon-fullscreen-alt aggregate-expand-all"> {{ tm._('Expand all', td) }}</button></li>
+        <li><button type="button" class="btn hb-icon hb-icon-fullscreen-exit-alt aggregate-collapse-all"> {{ tm._('Collapse all', td) }}</button></li>
     </ul>
 <!--
     field help icon

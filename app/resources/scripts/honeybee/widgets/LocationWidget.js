@@ -11,6 +11,22 @@ honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
         this.initializing = false;
     },
 
+    initGui: function()
+    {
+        this.parent();
+        if (this.options.single_entry === true)
+        {
+            var controls_to_hide = [
+                '.aggregate-selector',
+                '.collapse-actions',
+                '.aggregate .actions',
+                '.aggregate .position'
+            ];
+            this.element.find(controls_to_hide.join(',')).hide();
+            this.element.find('.aggregate').removeClass('collapsed');
+        }
+    },
+
     initAggregateListItem: function(aggregate_element)
     {
         this.parent(aggregate_element);

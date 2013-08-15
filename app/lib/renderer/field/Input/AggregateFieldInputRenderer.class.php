@@ -8,10 +8,22 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
 {
     protected function getPayload(IDocument $document)
     {
-        $aggregateDocuments = $document->getValue(
-            $this->getField()->getName()
-        );
+        $aggregateDocuments = $document->getValue($this->getField()->getName());
         $aggregates = array();
+
+        if (count($aggregateDocuments) === 0 && isset($this->options['default_aggregate']))
+        {
+            $defaultAggregate = $this->options['default_aggregate'];
+            foreach ($this->getField()->getAggregateModules() as $aggregateModule)
+            {
+                $typeParts = explode('\\', $aggregateModule->getDocumentType());
+                $documentType = array_pop($typeParts);
+                if ($documentType === $defaultAggregate)
+                {
+                    $aggregateDocuments->add($aggregateModule->createDocument());
+                }
+            }
+        }
 
         foreach ($aggregateDocuments as $pos => $aggregateDocument)
         {

@@ -11,6 +11,8 @@ class MappingGeneratorPlugin
 {
     private $options;
 
+    private $schema;
+
     private static $typeMap = array(
         'text' => 'string',
         'textarea' => 'string',
@@ -27,8 +29,10 @@ class MappingGeneratorPlugin
         $this->options = $options;
     }
 
-    public function execute($moduleDefinition)
+    public function execute($moduleSchema)
     {
+        $this->schema = $moduleSchema;
+
         $indexDefinition = array(
             "index_analyzer" => "DefaultAnalyzer",
             "search_analyzer" => "DefaultAnalyzer",
@@ -61,35 +65,36 @@ class MappingGeneratorPlugin
             )
         );
 
-        foreach ($moduleDefinition->getFields() as $name => $field)
+        $moduleDefinition = $moduleSchema->getModuleDefinition();
+        foreach ($moduleDefinition->getFields() as $field)
         {
             $handlerFunc = sprintf(
-                'map%s', 
-                implode('', array_map('ucfirst', explode('-', $field['type'])))
+                'map%s',
+                implode('', array_map('ucfirst', explode('-', $field->getShortName())))
             );
 
             if (is_callable(array($this, $handlerFunc)))
             {
-                $defaultProperties[$name] = $this->$handlerFunc($name, $field, $moduleDefinition);
+                $defaultProperties[$field->getName()] = $this->$handlerFunc($field->getName(), $field, $moduleDefinition);
             }
         }
         $indexDefinition['properties'] = (object)$defaultProperties;
 
-        $deployPath = $this->options['deployPath'];
+        $deployPath = $this->options['deploy_path'];
         if (0 !== strpos($deployPath, DIRECTORY_SEPARATOR))
         {
-            $deployPath = Dat0r\Core\CodeGenerator\Configuration::normalizePath(
-                $this->options['basePath'] . DIRECTORY_SEPARATOR . $deployPath
-            );
+            $deployPath = $this->resolveRelativePath($deployPath, $this->options['base_bath']);
         }
 
         $jsonString = $this->formatJson(json_encode($indexDefinition));
         file_put_contents($deployPath, $jsonString);
+
+        $this->schema = null;
     }
 
-    protected function mapText($fieldName, array $field, $moduleDefinition)
+    protected function mapText($fieldName, $field, $moduleDefinition)
     {
-        $esType = self::$typeMap[$field['type']];
+        $esType = self::$typeMap[$field->getShortName()];
 
         return array('type' => 'multi_field', 'fields' => array(
             $fieldName => array('type' => $esType),
@@ -110,33 +115,33 @@ class MappingGeneratorPlugin
         ));
     }
 
-    protected function mapTextarea($fieldName, array $field, $moduleDefinition)
+    protected function mapTextarea($fieldName, $field, $moduleDefinition)
     {
-        $esType = self::$typeMap[$field['type']];
+        $esType = self::$typeMap[$field->getShortName()];
 
         return array('type' => $esType);
     }
 
-    protected function mapInteger($fieldName, array $field, $moduleDefinition)
-    {   
-        $esType = self::$typeMap[$field['type']];
+    protected function mapInteger($fieldName, $field, $moduleDefinition)
+    {
+        $esType = self::$typeMap[$field->getShortName()];
 
         return array('type' => $esType);
     }
 
-    protected function mapIntegerCollection($fieldName, array $field, $moduleDefinition)
-    {   
-        $esType = self::$typeMap[$field['type']];
+    protected function mapIntegerCollection($fieldName, $field, $moduleDefinition)
+    {
+        $esType = self::$typeMap[$field->getShortName()];
 
         return array('type' => $esType);
     }
 
-    protected function mapReference($fieldName, array $field, $moduleDefinition)
-    {   
-        $esType = self::$typeMap[$field['type']];
+    protected function mapReference($fieldName, $field, $moduleDefinition)
+    {
+        $esType = self::$typeMap[$field->getShortName()];
 
         return array(
-            'type' => $esType, 
+            'type' => $esType,
             'properties' => array(
                 'id' => array(
                     'type' => 'string',
@@ -150,56 +155,51 @@ class MappingGeneratorPlugin
         );
     }
 
-    protected function mapBoolean($fieldName, array $field, $moduleDefinition)
-    {   
-        $esType = self::$typeMap[$field['type']];
+    protected function mapBoolean($fieldName, $field, $moduleDefinition)
+    {
+        $esType = self::$typeMap[$field->getShortName()];
 
         return array('type' => $esType);
     }
 
-    protected function mapKeyValue($fieldName, array $field, $moduleDefinition)
-    {   
-        $esType = self::$typeMap[$field['type']];
+    protected function mapKeyValue($fieldName, $field, $moduleDefinition)
+    {
+        $esType = self::$typeMap[$field->getShortName()];
 
         return array('type' => $esType, 'dynamic' => TRUE);
     }
 
-    protected function mapAggregate($fieldName, array $field, $moduleDefinition)
+    protected function mapAggregate($fieldName, $field, $moduleDefinition)
     {
-        $parts = explode('\\', $field['options']['aggregate_module']);
-        $aggregateName = str_replace('Module' , '', array_pop($parts));
-        $aggregates = $moduleDefinition->getAggregates();
+        $aggregate_classes = $field->getOptions()->filterByName('modules')->getValue()->toArray();
 
-        if (! isset($aggregates[$aggregateName]))
-        {
-            throw new Exception(
-                "Unable to find aggregate definition for $aggregateName."
-            );
-        }
+        $parts = explode('\\', $aggregate_classes[0]);
+        $aggregateName = str_replace('Module' , '', array_pop($parts));
+        $aggregateDefs = $this->schema->getAggregateDefinitions(array($aggregateName));
+        $aggregateDef = $aggregateDefs[0];
 
         $properties = array();
-        $aggregateDef = $aggregates[$aggregateName];
-        foreach ($aggregateDef->getFields() as $fieldname => $aggregateField)
+        foreach ($aggregateDef->getFields() as $aggregateField)
         {
-            $handlerFunc = sprintf('map%s', ucfirst($aggregateField['type']));
+            $handlerFunc = sprintf('map%s', ucfirst($aggregateField->getShortName()));
             if (is_callable(array($this, $handlerFunc)))
             {
-                $properties[$fieldname] = $this->$handlerFunc(
-                    $fieldname, 
-                    $aggregateField, 
+                $properties[$aggregateField->getName()] = $this->$handlerFunc(
+                    $aggregateField->getName(),
+                    $aggregateField,
                     $aggregateDef
                 );
             }
         }
 
-        $esType = self::$typeMap[$field['type']];
+        $esType = self::$typeMap[$field->getShortName()];
 
         return array('type' => $esType, 'properties' => (object)$properties);
     }
 
     // copy & paste from here:
     // http://recursive-design.com/blog/2008/03/11/format-json-with-php/
-    protected function formatJson($json) 
+    protected function formatJson($json)
     {
         $result = '';
         $pos = 0;
@@ -209,38 +209,38 @@ class MappingGeneratorPlugin
         $prevChar = '';
         $outOfQuotes = true;
 
-        for ($i = 0; $i <= $strLen; $i++) 
+        for ($i = 0; $i <= $strLen; $i++)
         {
             // Grab the next character in the string.
             $char = substr($json, $i, 1);
             // Are we inside a quoted string?
-            if ($char == '"' && $prevChar != '\\') 
+            if ($char == '"' && $prevChar != '\\')
             {
                 $outOfQuotes = !$outOfQuotes;
-                // If this character is the end of an element, 
+                // If this character is the end of an element,
                 // output a new line and indent the next line.
-            } 
-            else if(($char == '}' || $char == ']') && $outOfQuotes) 
+            }
+            else if(($char == '}' || $char == ']') && $outOfQuotes)
             {
                 $result .= $newLine;
                 $pos --;
-                for ($j=0; $j<$pos; $j++) 
+                for ($j=0; $j<$pos; $j++)
                 {
                     $result .= $indentStr;
                 }
             }
             // Add the character to the result string.
             $result .= $char;
-            // If the last character was the beginning of an element, 
+            // If the last character was the beginning of an element,
             // output a new line and indent the next line.
-            if (($char == ',' || $char == '{' || $char == '[') && $outOfQuotes) 
+            if (($char == ',' || $char == '{' || $char == '[') && $outOfQuotes)
             {
                 $result .= $newLine;
-                if ($char == '{' || $char == '[') 
+                if ($char == '{' || $char == '[')
                 {
                     $pos ++;
                 }
-                for ($j = 0; $j < $pos; $j++) 
+                for ($j = 0; $j < $pos; $j++)
                 {
                     $result .= $indentStr;
                 }
@@ -249,5 +249,21 @@ class MappingGeneratorPlugin
         }
 
         return $result;
+    }
+
+    protected function resolveRelativePath($path, $base)
+    {
+        $path_parts = explode(DIRECTORY_SEPARATOR, $base . DIRECTORY_SEPARATOR . $path);
+        $parents = array();
+
+        foreach ($path_parts as $path_part) {
+            if ($path_part === '..') {
+                array_pop($parents);
+            } elseif ($path_part !== '.') {
+                $parents[] = $path_part;
+            }
+        }
+
+        return implode(DIRECTORY_SEPARATOR, $parents);
     }
 }

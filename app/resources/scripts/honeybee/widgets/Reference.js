@@ -73,6 +73,15 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 content: this.buildPopover()
             });
         }
+
+        window.postMessage(
+            JSON.stringify({
+                'type': 'references-rendered',
+                'field': this.options.realname,
+                'references': this.tags()
+            }),
+            this.options.event_origin
+        );
     },
 
     buildPopover: function()
@@ -137,6 +146,14 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     {
         this.tags.remove(tag);
         this.select2_element.select2('data', this.tags());
+        window.postMessage(
+            JSON.stringify({
+                'type': 'reference-removed',
+                'reference': tag,
+                'field': this.options.realname
+            }),
+            this.options.event_origin
+        );
     },
 
     // -------------------------------------------
@@ -205,6 +222,14 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             if (event.added)
             {
                 that.tags.push(event.added);
+                window.postMessage(
+                    JSON.stringify({
+                        'type': 'reference-added',
+                        'reference': event.added,
+                        'field': that.options.realname
+                    }),
+                    that.options.event_origin
+                );
             }
         }).on('close', function()
         {
@@ -625,17 +650,14 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
     onDomMessagePostReceived: function(event)
     {
-        console.log("Reference::onDomMessagePostReceived", "start");
         if(0 !== this.options.event_origin.indexOf(event.origin))
         {
-            console.log("Reference::onDomMessagePostReceived", "wrong origin", event.origin);
             return;
         }
 
         var msg_data = JSON.parse(event.data);
         if (msg_data.reference_field !== this.options.realname)
         {
-            console.log("Reference::onDomMessagePostReceived", "wrong fieldname", msg_data.reference_field, msg_data);
             return;
         }
 
@@ -650,10 +672,6 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         else if (msg_data.event_type === 'list-loaded')
         {
             this.onReferenceListLoaded(msg_data);
-        }
-        else
-        {
-            console.log("Reference::onDomMessagePostReceived", "unknown action", msg_data.event_type);
         }
 
         this.element.find('.tagslist-input').select2('data', this.tags());
