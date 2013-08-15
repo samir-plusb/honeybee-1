@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
     This file holds the (gui) settings for the %%MODULE_NAME%% module.
-    Stuff in here will be used to satisfy configuring view behaviour, 
+    Stuff in here will be used to satisfy configuring view behaviour,
     for example the list view and the edit view.
     Settings that are tightly coupled to the structure or core-domain belong into the module.xml
     and shall be accessed via the corresponding (honeybee) module instance.
 -->
-<ae:configurations 
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+<ae:configurations
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
     <ae:configuration>
         <settings prefix="%%MODULE_PREFIX%%.">
@@ -20,18 +20,18 @@
                 <ae:parameter name="pagingRange">9</ae:parameter>
                 <ae:parameter name="routeName">%%MODULE_PREFIX%%.list</ae:parameter>
                 <ae:parameter name="typeKey">%%MODULE_PREFIX%%</ae:parameter>
-                <!-- enter your desire field for autosuggests here. 
+                <!-- enter your desire field for autosuggests here.
                 <ae:parameter name="suggestField">title</ae:parameter> -->
 
                 <!--
                     define which list data shall be displayed
                     the names are fully qualified paths referring to values inside the list data
-                
+
                 <ae:parameter name="fields">
                     <ae:parameter name="title">
                         <ae:parameter name="valuefield">title</ae:parameter>
                         <ae:parameter name="sortfield">title.sort</ae:parameter>
-                    </ae:parameter> 
+                    </ae:parameter>
                     <ae:parameter name="state">
                         <ae:parameter name="valuefield">workflowTicket</ae:parameter>
                         <ae:parameter name="renderer">
@@ -43,7 +43,7 @@
                             </ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="sortfield">workflowTicket.workflowStep.sort</ae:parameter>
-                    </ae:parameter> 
+                    </ae:parameter>
                 </ae:parameter> -->
 
                 <!-- define our clientside controller along with some options -->
@@ -58,7 +58,7 @@
                     define the actions that are available for the batch processing:
                     - you can choose to delegate actions to the workflow handler or the configured client-side controller
                     - actions are assigned using a simple invocation syntax refering to either the workflow handler or controller.
-                    - whereas the workflow handler only provides a proceed and a run method, 
+                    - whereas the workflow handler only provides a proceed and a run method,
                       by changing the controller implementation you can easily pluck in new actions by extending the base controller.
                     by convention the first two parameters of your controller's action callbacks should always be "is_batch" and "item".
                     @todo convert batchActions to the same format as itemActions, requires clientside adjustments etc.
@@ -85,7 +85,7 @@
                 -->
             </setting>
 
-            <!-- 
+            <!--
                 Holds the definition of the edit template.
                 Templates are separated into tabs.
                 Each tab can holds an arbitary number of number of rows; at least one.
@@ -99,8 +99,8 @@
                 <ae:parameter name="tabs">
                     <ae:parameter name="content">
                         <ae:parameter name="rows">
-                            <ae:parameter> 
-                                <ae:parameter name="groups"> 
+                            <ae:parameter>
+                                <ae:parameter name="groups">
                                     <ae:parameter name="main">
                                         <ae:parameter>firstname</ae:parameter>
                                         <ae:parameter>lastname</ae:parameter>
@@ -122,7 +122,7 @@
             </setting>
             -->
 
-            <!-- 
+            <!--
             You may provide custom widgets here, but not override 'hardwired'
             widget implementations such as the one for the reference field.
             <setting name="input_widgets">
