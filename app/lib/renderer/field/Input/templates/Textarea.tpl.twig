@@ -1,11 +1,11 @@
-<div class="control-group">
+<div class="control-group field-wrapper-{{ fieldName }}">
 {% if field.getOption('use_richtext') %}
     <textarea type="text" name="{{ inputName }}" id="{{fieldId}}" placeholder="{{ placeholder }}" class="ckeditor"
         {% if true == readonly %} disabled="disabled" {% endif %}>{{fieldValue}}</textarea>
 {% else %}
     <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td) }}</label>
     <div class="controls">
-        <textarea type="text" class="span11" name="{{ inputName }}" id="{{ fieldId }}"
+        <textarea type="text" class="span11 field-textarea" name="{{ inputName }}" id="{{ fieldId }}"
             placeholder="{{ placeholder }}" class="input-xlarge"
             {% if true == readonly %} readonly="readonly" {% endif %}>{{ fieldValue }}</textarea>
     </div>

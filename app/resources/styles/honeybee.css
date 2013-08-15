@@ -29,6 +29,11 @@ body
     position: relative;
 }
 
+fieldset .control-group .field-textarea
+{
+  min-height: 100px;
+}
+
 .container-list-data
 {
     padding-bottom: 40px;
