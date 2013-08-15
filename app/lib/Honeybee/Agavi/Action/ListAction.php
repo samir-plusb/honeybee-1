@@ -149,7 +149,7 @@ class ListAction extends BaseAction
 
             foreach ($referenceField->getOption(ReferenceField::OPT_REFERENCES) as $reference)
             {
-                if (get_class($this->getModule()) === $reference[ReferenceField::OPT_MODULE])
+                if ('\\' . get_class($this->getModule()) === $reference[ReferenceField::OPT_MODULE])
                 {
                     $listSettings['clientSideController']['options']['reference_field'] = $referenceField->getName();
                     $listSettings['clientSideController']['options']['reference_module'] = $referenceModule->getName();
@@ -161,7 +161,6 @@ class ListAction extends BaseAction
                 }
             }
         }
-
         $enableFoldersSetting = sprintf('%s.sidebar.folders.enabled', $this->getModule()->getOption('prefix'));
 
         if (! $this->hasAttribute('referenceField') && TRUE === \AgaviConfig::get($enableFoldersSetting, FALSE))

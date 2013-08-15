@@ -77,12 +77,8 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             }
         }
 
-        console.log("ListController::attach", "register dom messaging");
         window.addEventListener('message', messageEventHandler,false);
-
         honeybee.core.events.on('clearFilter', function() { that.reloadList({}); });
-
-        console.log("ListController::attach", "fire loaded event", this.options);
         window.top.postMessage(
             JSON.stringify({
                 'event_type': 'list-loaded',

@@ -259,6 +259,13 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
                 message: msg_data.message
             });
         }
+        else if (msg_data.event_type === 'error-message')
+        {
+            this.addAlert({
+                type: 'error',
+                message: msg_data.message
+            });
+        }
     },
 
     // ###########################

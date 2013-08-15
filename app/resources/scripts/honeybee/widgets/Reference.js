@@ -616,9 +616,22 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         {
             that.is_loading(false);
 
+            if (response.state === 'error')
+            {
+                window.postMessage(
+                    JSON.stringify({
+                        'event_type': 'error-message',
+                        'message': response.errors[0]
+                    }),
+                    that.options.event_origin
+                );
+                return;
+            }
+
             window.postMessage(
                 JSON.stringify({
-                    'event_type': 'info-message', 'message': ref_module_settings.success_label
+                    'event_type': 'info-message',
+                    'message': ref_module_settings.success_label
                 }),
                 that.options.event_origin
             );
@@ -635,6 +648,15 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 label: displayed_text,
                 module_prefix: ref_module_name
             });
+
+            window.postMessage(
+                JSON.stringify({
+                    'type': 'reference-added',
+                    'reference': event.added,
+                    'field': that.options.realname
+                }),
+                that.options.event_origin
+            );
 
             that.select2_element.select2('data', that.tags());
             that.highlightTag(that.tags().length - 1, function()
@@ -715,9 +737,17 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
         if (! allready_added)
         {
-            if (this.tags().length === this.options.max)
+            if (this.options.max > 0 && this.tags().length === this.options.max)
             {
-                this.tags.pop();
+                var removed = this.tags.pop();
+                window.postMessage(
+                    JSON.stringify({
+                        'type': 'reference-removed',
+                        'reference': removed,
+                        'field': this.options.realname
+                    }),
+                    this.options.event_origin
+                );
                 this.tags.push(item_data);
                 this.onReferenceListLoaded();
             }
@@ -725,6 +755,14 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             {
                 this.tags.push(item_data);
             }
+            window.postMessage(
+                JSON.stringify({
+                    'type': 'reference-added',
+                    'reference': item_data,
+                    'field': this.options.realname
+                }),
+                this.options.event_origin
+            );
         }
     },
 
