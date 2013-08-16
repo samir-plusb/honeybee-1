@@ -6,8 +6,11 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     aggregate_list: null,
 
+    templates: null,
+
     init: function(element, options, ready_callback)
     {
+        this.templates = {};
         this.parent(element, options, ready_callback);
     },
 
@@ -20,12 +23,18 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         {
             aggregate_module_item = $(aggregate_module_item);
             var tpl_element = aggregate_module_item.find('.aggregate-tpl');
-            var module_item_markup = tpl_element.html();
+            var doc_type = aggregate_module_item
+                .find('.honeybee-js-type')
+                .val()
+                .split('\\')
+                .pop()
+                .toLowerCase();
 
+            that.templates[doc_type] = tpl_element.html();
             aggregate_module_item.click(function(add_event)
             {
                 add_event.preventDefault();
-                that.addAggregate(module_item_markup);
+                that.addAggregate(doc_type);
             });
 
             tpl_element.remove();
@@ -83,8 +92,9 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         }
     },
 
-    addAggregate: function(module_item_markup)
+    addAggregate: function(doc_type)
     {
+        var module_item_markup = this.templates[doc_type];
         var list_item = $('<li class="row-fluid aggregate"></li>');
         list_item.html(module_item_markup);
         this.aggregate_list.append(list_item);
@@ -95,6 +105,8 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         var first_input = list_item.find('input').first();
         first_input.focus();
         $('html, body').animate({scrollTop: first_input.offset().top}, 350);
+
+        return list_item;
     },
 
     initAggregateListItem: function(aggregate_element)
@@ -110,6 +122,11 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         {
             item.remove();
             that.renderAggregatePositions();
+
+            that.fire('aggregate-removed', [{
+                'field': that.options.fieldname,
+                'element': item[0]
+            }]);
         });
 
         item.find('.actions .aggregate-up').click(function(move_up_event)
@@ -145,7 +162,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         {
             $(element).find('.input-group-label .position').text('#' + (idx + 1));
             // @todo include select, radio etc.
-            $(element).find('input').each(function(pos, input)
+            $(element).find('input, textarea').each(function(pos, input)
             {
                 $(input).attr(
                     'name',

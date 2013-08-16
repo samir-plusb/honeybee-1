@@ -112,6 +112,16 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
         return $renderedFields;
     }
 
+    protected function getWidgetOptions(IDocument $document)
+    {
+        $widgetOptions = array(
+            'inputname' => $this->generateInputName($document),
+            'fieldname' => $this->getField()->getName()
+        );
+
+        return array_merge(parent::getWidgetOptions($document), $widgetOptions);
+    }
+
     protected function getTemplateName()
     {
         return "Aggregate.tpl.twig";

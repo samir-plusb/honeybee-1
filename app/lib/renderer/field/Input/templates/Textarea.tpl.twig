@@ -5,7 +5,7 @@
 {% else %}
     <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td) }}</label>
     <div class="controls">
-        <textarea type="text" class="span11 field-textarea" name="{{ inputName }}" id="{{ fieldId }}"
+        <textarea type="text" class="span11 field-textarea textarea-{{ fieldName }}" name="{{ inputName }}" id="{{ fieldId }}"
             placeholder="{{ placeholder }}" class="input-xlarge"
             {% if true == readonly %} readonly="readonly" {% endif %}>{{ fieldValue }}</textarea>
     </div>

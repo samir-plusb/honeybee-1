@@ -23,6 +23,8 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
     request_pending: null,
     // </knockout_properties>
 
+    widgets: null,
+
     init: function(element, options)
     {
         this.parent();
@@ -30,7 +32,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         this.element = element;
         this.options = options;
 
-        this.widgets = {};
+        this.widgets = [];
         // setup knockout properties
         this.initKnockoutProperties();
         // then bind this instance to the (rendered)widget gui.
@@ -303,7 +305,9 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
 
             if (type_key)
             {
-                honeybee.widgets.Widget.factory(element, type_key);
+                that.widgets.push(
+                    honeybee.widgets.Widget.factory(element, type_key)
+                );
             }
         });
     }
