@@ -1,5 +1,5 @@
 honeybee.widgets.Widget = honeybee.core.BaseObject.extend({
-    
+
     // #########################
     // #     property defs     #
     // #########################
@@ -53,7 +53,7 @@ honeybee.widgets.Widget = honeybee.core.BaseObject.extend({
     initKnockoutProperties: function() { },
 
     /**
-     * Override this method to provide your widget's template, 
+     * Override this method to provide your widget's template,
      * which will be rendered inside the widgets container.
      */
     getTemplate: function()
@@ -65,16 +65,17 @@ honeybee.widgets.Widget = honeybee.core.BaseObject.extend({
  * @todo Test for instanceof honeybee.widgets.Widget
  * @todo Move all widgets to the honeybee.widgets namespace by default.
  */
-honeybee.widgets.Widget.factory = function(element, type_key, namespace)
+honeybee.widgets.Widget.factory = function(element, type_key, namespace, ready_callback)
 {
+    ready_callback = ready_callback || function(){};
     // resolve hyphen separated class keys to real class names
     var implementor = type_key.replace(
-        /(\-[a-z])/g, 
-        function($1) 
+        /(\-[a-z])/g,
+        function($1)
         {
             return $1.toUpperCase().replace('-','');
         }
-    ); 
+    );
     implementor = implementor.charAt(0).toUpperCase() + implementor.slice(1);
 
     namespace = namespace || honeybee.widgets;
@@ -86,7 +87,7 @@ honeybee.widgets.Widget.factory = function(element, type_key, namespace)
     }
     // create type key to query options
     var dash_case_impl_name = implementor.replace(
-        /([A-Z])/g, 
+        /([A-Z])/g,
         function($1) { return "-" + $1.toLowerCase(); }
     );
     var opt_attr_name = 'data' + dash_case_impl_name + '-options';
@@ -106,5 +107,5 @@ honeybee.widgets.Widget.factory = function(element, type_key, namespace)
         return;
     }
     // ... and create instance.
-    return new widget_class(element, options);
+    return new widget_class(element, options, ready_callback);
 };

@@ -58,6 +58,7 @@ class ImageFieldInputRenderer extends FieldInputRenderer
 
     protected function generateInputName(IDocument $document)
     {
+        error_log("Fobar: " . get_class($this) . ' - ' . print_r($this->options, true));
         return parent::generateInputName($document) . '[]';
     }
 }

@@ -15,7 +15,6 @@ class DocumentValidator extends \AgaviValidator
         $tranlsationManager = $this->getContext()->getTranslationManager();
 
         $data = $this->getData($this->getArgument());
-//error_log(print_r($data, true));exit;
         $module = $this->getModule();
         $service = $module->getService();
         $document = NULL;

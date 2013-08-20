@@ -1,9 +1,20 @@
 <?php
 
 use Dat0r\Core\Document\IDocument;
+use Dat0r\Core\Field\IField;
 
 class FieldInputRenderer extends FieldRenderer
 {
+    public function __construct(IField $field, array $options = array())
+    {
+        if (! isset($options['field_key']))
+        {
+            $options['field_key'] = $field->getName();
+        }
+
+        parent::__construct($field, $options);
+    }
+
     protected function doRender(IDocument $document)
     {
         $payload = $this->getPayload($document);
@@ -36,6 +47,7 @@ class FieldInputRenderer extends FieldRenderer
 
         return array(
             'fieldName' => $fieldName,
+            'fieldKey' => $this->options['field_key'],
             'field' => $this->getField(),
             'inputName' => $this->generateInputName($document),
             'fieldId' => 'input-' . $fieldName,
@@ -53,13 +65,17 @@ class FieldInputRenderer extends FieldRenderer
     protected function getWidgetType(IDocument $document)
     {
         $prefix = $document->getModule()->getOption('prefix');
-        $widgetSettings = AgaviConfig::get(sprintf('%s.input_widgets', $prefix));
-        $fieldname = $this->getField()->getName();
-        $widget = NULL;
 
-        if (isset($widgetSettings[$fieldname]))
+        if (isset($this->options['group']))
         {
-            $widgetDef = $widgetSettings[$fieldname];
+            $prefix = $this->options['group'][0];
+        }
+        $widgetSettings = AgaviConfig::get(sprintf('%s.input_widgets', $prefix));
+        $fieldkey = $this->options['field_key'];
+        $widget = NULL;
+        if (isset($widgetSettings[$fieldkey]))
+        {
+            $widgetDef = $widgetSettings[$fieldkey];
             $widget = $widgetDef['type'];
         }
 
@@ -102,12 +118,12 @@ class FieldInputRenderer extends FieldRenderer
     {
         $prefix = $document->getModule()->getOption('prefix');
         $widgetSettings = AgaviConfig::get(sprintf('%s.input_widgets', $prefix));
-        $fieldname = $this->getField()->getName();
+        $fieldkey = $this->options['field_key'];
         $widgetOptions = array();
 
-        if (isset($widgetSettings[$fieldname]))
+        if (isset($widgetSettings[$fieldkey]))
         {
-            $widgetDef = $widgetSettings[$fieldname];
+            $widgetDef = $widgetSettings[$fieldkey];
             $widgetOptions = $widgetDef['options'];
         }
 
@@ -124,15 +140,17 @@ class FieldInputRenderer extends FieldRenderer
         if (isset($this->options['fieldpath']))
         {
             $first = true;
-            foreach(explode('.', $this->options['fieldpath']) as $part)
+            $fieldpath_parts = explode('.', $this->options['fieldpath']);
+            foreach($fieldpath_parts as $part)
             {
                 if ($first)
                 {
                     $group = $document->getModule()->getOption('prefix');
-                    if (isset($this->options['group']))
+                    $group_parts = isset($this->options['group']) ? $this->options['group'] : null;
+                    if (is_array($group_parts))
                     {
-                        $first_part = array_shift($this->options['group']);
-                        $group = sprintf('%s[%s]', $first_part, implode('][', $this->options['group']));
+                        $first_part = array_shift($group_parts);
+                        $group = sprintf('%s[%s]', $first_part, implode('][', $group_parts));
                     }
                     $name = sprintf('%s[%s]', $group, $part);
                     $first = FALSE;
@@ -172,6 +190,13 @@ class FieldInputRenderer extends FieldRenderer
 
     public function getTranslationDomain(IDocument $document)
     {
-        return parent::getTranslationDomain($document) . '.input.field';
+        if (isset($this->options['translation_domain']))
+        {
+            return $this->options['translation_domain'];
+        }
+        else
+        {
+            return parent::getTranslationDomain($document) . '.input.field';
+        }
     }
 }

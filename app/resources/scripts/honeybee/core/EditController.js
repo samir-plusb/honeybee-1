@@ -1,5 +1,5 @@
 honeybee.core.EditController = honeybee.core.BaseObject.extend({
-    
+
     // #########################
     // #     property defs     #
     // #########################
@@ -300,7 +300,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
                 if (css_class.match(/^widget-/))
                 {
                     type_key = css_class.replace('widget-', '');
-                } 
+                }
             });
 
             if (type_key)

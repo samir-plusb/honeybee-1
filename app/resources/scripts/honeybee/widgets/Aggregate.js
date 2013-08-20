@@ -8,9 +8,12 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     templates: null,
 
+    widgets: null,
+
     init: function(element, options, ready_callback)
     {
         this.templates = {};
+        this.widgets = [];
         this.parent(element, options, ready_callback);
     },
 
@@ -64,7 +67,6 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     registerDisplayedTextInputs: function(aggregate)
     {
-
         var first_input = aggregate.find('input').first();
         first_input.change(function()
         {
@@ -111,8 +113,40 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     initAggregateListItem: function(aggregate_element)
     {
+        var loading_widgets_cnt = 0;
+        var that = this;
+
         this.registerAggregateEvents(aggregate_element);
         this.registerDisplayedTextInputs(aggregate_element);
+        aggregate_element[0].widgets = [];
+        aggregate_element.find('.honeybee-widget').each(function(idx, element)
+        {
+            var type_key;
+
+            $.each($(element).attr('class').split(' '), function(index, css_class)
+            {
+                css_class = css_class.trim();
+                if (css_class.match(/^widget-/))
+                {
+                    type_key = css_class.replace('widget-', '');
+                }
+            });
+
+            if (type_key)
+            {
+                loading_widgets_cnt++;
+                aggregate_element[0].widgets.push(
+                    honeybee.widgets.Widget.factory(element, type_key, honeybee.widgets, function()
+                    {
+                        loading_widgets_cnt--;
+                        if (loading_widgets_cnt === 0)
+                        {
+                            that.renderAggregatePositions();
+                        }
+                    })
+                );
+            }
+        });
     },
 
     registerAggregateEvents: function(item)
@@ -158,17 +192,37 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     renderAggregatePositions: function()
     {
+        console.log("renderAggregatePositions");
         this.element.find('> .aggregates-list .aggregate').each(function(idx, element)
         {
             $(element).find('.input-group-label .position').text('#' + (idx + 1));
             // @todo include select, radio etc.
             $(element).find('input, textarea').each(function(pos, input)
             {
-                $(input).attr(
-                    'name',
-                    $(input).attr('name').replace(/\[\d+\]/, '[' + idx + ']')
-                );
+                var input = $(input);
+                var name = input.attr('name');
+                if (name)
+                {
+                    input.attr(
+                        'name',
+                        name.replace(/\[\d+\]/, '[' + idx + ']')
+                    );
+                }
+                else
+                {
+                    console.log("no fieldname found for aggregate field: ", input);
+                }
             });
+
+            var i = 0;
+            var cur_widget, fieldname;
+            for (; i < element.widgets.length; i++)
+            {
+                cur_widget = element.widgets[i];
+                fieldname = cur_widget.fieldname();
+                fieldname = fieldname.replace(/\[\d+\]/, '[' + idx + ']');
+                cur_widget.fieldname(fieldname);
+            }
         });
     },
 

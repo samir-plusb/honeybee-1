@@ -16,18 +16,17 @@ class FieldRendererFactory
 
     public function createRenderer(IField $field, $renderingContext, array $options = array())
     {
-        $factoryInfo = $this->determineImplementor($field, $renderingContext);
+        $factoryInfo = $this->determineImplementor($field, $renderingContext, $options);
 
         return new $factoryInfo['implementor']($field, array_merge($factoryInfo['options'], $options));
     }
 
-    protected function determineImplementor(IField $field, $renderingContext)
+    protected function determineImplementor(IField $field, $renderingContext, array $options = array())
     {
-        $prefix = $this->getModule()->getOption('prefix');
+        $prefix = isset($options['group']) ? $options['group'][0] : $this->getModule()->getOption('prefix');
         $settingName = sprintf('%s.rendering_config', $prefix);
         $rendererConfig = AgaviConfig::get($settingName);
-
-        $fieldname = $field->getName();
+        $fieldname = isset($options['field_key']) ? $options['field_key'] : $field->getName();
         if (isset($rendererConfig[$fieldname]) && isset($rendererConfig[$fieldname]['input']))
         {
             return array(
@@ -46,7 +45,7 @@ class FieldRendererFactory
             $parts = explode('\\', $fieldClass);
             return sprintf('%s%sRenderer', $parts[count($parts) - 1], $context);
         };
-        $implementor = $buildImplementor(get_class($field), $renderingContext);
+        $implementor = $buildImplementor(get_class($field), 'Input');
         $curFieldClass = get_class($field);
 
         while (! class_exists($implementor) && FALSE !== $curFieldClass)
@@ -64,7 +63,6 @@ class FieldRendererFactory
                 )
             );
         }
-
         return array('implementor' => $implementor, 'options' => array());
     }
 

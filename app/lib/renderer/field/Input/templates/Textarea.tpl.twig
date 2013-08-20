@@ -3,7 +3,7 @@
     <textarea type="text" name="{{ inputName }}" id="{{fieldId}}" placeholder="{{ placeholder }}" class="ckeditor"
         {% if true == readonly %} disabled="disabled" {% endif %}>{{fieldValue}}</textarea>
 {% else %}
-    <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td) }}</label>
+    <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldKey, td) }}</label>
     <div class="controls">
         <textarea type="text" class="span11 field-textarea textarea-{{ fieldName }}" name="{{ inputName }}" id="{{ fieldId }}"
             placeholder="{{ placeholder }}" class="input-xlarge"

@@ -27,11 +27,13 @@
                 <div class="tabbable" style="margin-top: 20px;">
                     <ul class="nav nav-tabs">
                     {% for tabName, tabDef in tabs %}
+                        {% if tabDef.visibility == 'visible' %}
                         <li class="{{tabDef.is_default ? 'active' : ''}}">
                             <a data-toggle="tab" href="#tab-{{tabName}}">
                                 {{tm._(tabName, td)}}
                             </a>
                         </li>
+                        {% endif %}
                     {% endfor %}
                     </ul>
                 </div>

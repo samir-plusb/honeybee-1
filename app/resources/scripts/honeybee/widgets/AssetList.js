@@ -2,7 +2,7 @@
  * honeybee.widgets
  **/
 honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
-    
+
     log_prefix: "AssetList",
 
     assets: null,
@@ -31,9 +31,9 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
 
     face_detect_feat_on: null,
 
-    init: function(element, options)
+    init: function(element, options, ready_callback)
     {
-        this.parent(element, options);
+        this.parent(element, options, ready_callback);
     },
 
     getTemplate: function()
@@ -62,7 +62,7 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
                 }
             }
         });
-        
+
         /*this.element.find('ul').sortable().bind('sortupdate', function() {
             console.log('Yay, we\'ve a new sorting!');
         });*/
@@ -89,9 +89,9 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
             );
         }
         this.dropzone = {
-            dropzone: true, 
-            show: ko.observable(true), 
-            label: ko.observable('Datei(en) hier ablegen') 
+            dropzone: true,
+            show: ko.observable(true),
+            label: ko.observable('Datei(en) hier ablegen')
         };
 
         this.assets.push(this.dropzone);
@@ -392,7 +392,7 @@ honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
 
         this.aoi_enabled = ko.observable(!!data.aoi);
         this.progress = ko.observable(0);
-        
+
         this.caption_txt = ko.computed(function()
         {
             return 0 === that.caption().length ? ' - ' : that.caption();
@@ -414,7 +414,7 @@ honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
 
         this.popover_content = ko.computed(function()
         {
-            return '<p><b>Titel</b> ' + that.caption_txt() + 
+            return '<p><b>Titel</b> ' + that.caption_txt() +
                 '</p><p><b>Copyright</b> ' + that.copyright_txt() +
                 '</p><p><b>Copyright Url</b> ' + that.copyright_url_txt()
         });
@@ -488,7 +488,7 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
         var dropbox = this.drop_target[0];
         var body = $(document.body);
         document.addEventListener('dragenter', function(evt) {
-            evt.stopPropagation();                                                                                                                                                          
+            evt.stopPropagation();
             evt.preventDefault();
             if (that.enabled)
             {
@@ -496,57 +496,57 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
             }
         }, false);
         document.addEventListener('dragexit', function(evt) {
-            evt.stopPropagation();                                                                                                                                                          
-            evt.preventDefault();    
+            evt.stopPropagation();
+            evt.preventDefault();
             body.removeClass('drag-enabled');
         }, false);
         document.addEventListener('drop', function(evt) {
-            evt.stopPropagation();                                                                                                                                                          
+            evt.stopPropagation();
             evt.preventDefault();
             body.removeClass('drag-enabled');
         }, false);
         document.addEventListener('dragover', function(evt) {
-            evt.stopPropagation();                                                                                                                                                          
-            evt.preventDefault();    
+            evt.stopPropagation();
+            evt.preventDefault();
         }, false);
         dropbox.addEventListener('dragover', this.dragHover.bind(this), false);
         dropbox.addEventListener('drop', this.dragDropped.bind(this), false);
     },
 
-    dragHover: function(evt) 
-    {                         
-        evt.stopPropagation();                                                                                                                                                          
+    dragHover: function(evt)
+    {
+        evt.stopPropagation();
         evt.preventDefault();
-    }, 
-                                                                                                                                                                       
-    dragDropped: function(evt) 
-    {                            
+    },
+
+    dragDropped: function(evt)
+    {
         $(document.body).removeClass('drag-enabled');
         if (this.enabled)
         {
-            evt.stopPropagation();                                       
+            evt.stopPropagation();
             evt.preventDefault();
-            var files = evt.dataTransfer.files;                                                                                                                                 
-            if (0 < files.length) 
-            {                                                                                                                                                          
-                this.handleFiles(files);                                                                                                                                                    
-            }   
+            var files = evt.dataTransfer.files;
+            if (0 < files.length)
+            {
+                this.handleFiles(files);
+            }
         }
     },
 
-    handleFiles: function(files) 
+    handleFiles: function(files)
     {
         var that = this;
 
-        for (i = 0; i < files.length; i++) 
+        for (i = 0; i < files.length; i++)
         {
             var file = files[i];
-            var is_allowed = (-1 !== this.allowed_types.indexOf(file.type));    
+            var is_allowed = (-1 !== this.allowed_types.indexOf(file.type));
 
             if (is_allowed)
             {
                 this.queue.push(file);
-            }           
+            }
             else
             {
                 alert("File type: '" + file.type + "'' not supported.");
@@ -555,19 +555,19 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
         if (! this.is_running)
         {
             this.shiftQueue();
-        }                                                                                                                  
-    },                                                                                                                                                                              
-                                                                                                                                                                                   
-    handleReaderProgress: function(evt) 
-    {                         
-        if (evt.lengthComputable) 
-        {                   
-            this.fire('readfile::progress', [ (evt.loaded / evt.total) ]);                                                                                                                                  
         }
-    },                                                                                                                                                                              
-                                                                                                                                                                                  
+    },
+
+    handleReaderProgress: function(evt)
+    {
+        if (evt.lengthComputable)
+        {
+            this.fire('readfile::progress', [ (evt.loaded / evt.total) ]);
+        }
+    },
+
     handleReaderLoadComplete: function(evt, file)
-    {            
+    {
         this.fire('readfile::complete', [ file ]);
         this.uploadFile(file, evt.target.result);
     },
@@ -582,7 +582,7 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
             this.is_running = false;
             return;
         }
-        
+
         var file = this.queue.shift();
         if (file)
         {
@@ -618,7 +618,7 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
 
         var img = new Image;
 
-        img.onload = function() 
+        img.onload = function()
         {
             var fd = new FormData();
             var asset = null;
@@ -648,8 +648,8 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
 
             xhr.onload = function(evt)
             {
-                if (xhr.status == 200) 
-                {  
+                if (xhr.status == 200)
+                {
                     var json = JSON.parse(xhr.responseText);
                     that.fire('upload::complete', [ asset, json.data ]);
                     that.shiftQueue();
@@ -659,15 +659,15 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
             xhr.upload.addEventListener("progress", function(evt)
             {
                 if (evt.lengthComputable)
-                {                                                                                                                                                 
+                {
                     that.fire('upload::progress', [ asset, (evt.loaded / evt.total) ]);                                                                                                
                 }
             }, false);
 
-            that.fire('upload::start', [ asset ]);  
+            that.fire('upload::start', [ asset ]);
 
             xhr.open('post', that.put_url, true);
-            xhr.setRequestHeader("Accept", "application/json");                                                                                              
+            xhr.setRequestHeader("Accept", "application/json");
             xhr.send(fd);
         };
 

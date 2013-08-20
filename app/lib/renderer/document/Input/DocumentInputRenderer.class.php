@@ -5,8 +5,9 @@ use Honeybee\Core\Dat0r\Document;
 class DocumentInputRenderer extends DocumentRenderer
 {
     static protected $standardTabs = array(
-        'meta' => array(
+        '_internal_meta' => array(
             'is_default' => FALSE,
+            'visibility' => 'hidden',
             'rows' => array(
                 array(
                     'groups' => array(
@@ -87,7 +88,7 @@ class DocumentInputRenderer extends DocumentRenderer
 
         if (! $defaultTab && empty($inputTpl))
         {
-            $defaultTab =  'meta';
+            $defaultTab =  '_internal_meta';
         }
         else if(! empty($inputTpl))
         {
@@ -97,9 +98,13 @@ class DocumentInputRenderer extends DocumentRenderer
         $tplTabs = array_merge(self::$standardTabs, $inputTpl);
         $tplTabs[$defaultTab]['is_default'] = TRUE;
 
-        foreach ($tplTabs as $tabName => $tabDeclaration)
+        foreach ($tplTabs as $tabName => &$tabDeclaration)
         {
             $renderedRows = array();
+            if (!isset($tabDeclaration['visibility']))
+            {
+                $tabDeclaration['visibility'] = 'visible';
+            }
             foreach ($tabDeclaration['rows'] as $row)
             {
                 if (isset($row['type']) && $row['type'] === 'custom')
@@ -119,10 +124,10 @@ class DocumentInputRenderer extends DocumentRenderer
             }
             $renderedTabs[$tabName] = array(
                 'rows' => $renderedRows,
+                'visibility' => $tabDeclaration['visibility'],
                 'is_default' => ($defaultTab === $tabName)
             );
         }
-
         return $renderedTabs;
     }
 

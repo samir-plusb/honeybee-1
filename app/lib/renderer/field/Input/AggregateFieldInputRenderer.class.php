@@ -103,6 +103,8 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
         {
             $options = array(
                 'fieldpath' => $field->getName(),
+                'field_key' => $this->getField()->getName().'.'.strtolower($document->getModule()->getName()).'.'.$field->getName(),
+                'translation_domain' => $parentGroup[0] . '.rendering.input.field',
                 'group' => $parentGroup
             );
             $renderer = $factory->createRenderer($field, FieldRendererFactory::CTX_INPUT, $options);

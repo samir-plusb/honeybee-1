@@ -29,7 +29,7 @@ honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
 
     initAggregateListItem: function(aggregate_element)
     {
-        this.parent(aggregate_element);
+        this.registerAggregateEvents(aggregate_element);
 
         var that = this;
         var type = aggregate_element.find('.honeybee-js-type').val();

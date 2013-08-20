@@ -1188,7 +1188,7 @@ div.select2-container-multi .select2-choices .select2-search-field
 .aggregates-list
 {
   list-style: none;
-  overflow: hidden;
+  overflow: visible;
   margin: 0;
   padding: none;
   float: none;
@@ -1197,13 +1197,14 @@ div.select2-container-multi .select2-choices .select2-search-field
 
 .aggregates-list .aggregate
 {
-  overflow: hidden;
+  overflow: visible;
   margin-bottom: 20px;
 }
 
 .aggregates-list .aggregate.collapsed
 {
   height: 55px;
+  overflow: hidden;
 }
 
 .aggregates-list .aggregate .aggregate-expand
