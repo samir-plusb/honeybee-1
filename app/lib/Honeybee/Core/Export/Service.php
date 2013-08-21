@@ -74,10 +74,9 @@ class Service implements IService
         $implementor = $params['class'];
         $description = $params['description'];
         $settings = new Config\ArrayConfig($params['settings']);
-
-        // @todo get rid of being specific about couchdb here and generalize storage creation.
-        $database = \AgaviContext::getInstance()->getDatabaseManager()->getDatabase($settings->get('connection'));
-        $storage = new CouchDb\GenericStorage($database);
+        $storage_def = $settings->get('storage');
+        $database = \AgaviContext::getInstance()->getDatabaseManager()->getDatabase($storage_def['connection']);
+        $storage = new $storage_def['implementor']($database);
 
         $export = new $implementor($settings, $storage, $name, $description);
         $filters = new Filter\FilterList();
@@ -86,7 +85,7 @@ class Service implements IService
         {
             $filters->add(
                 new $filterParams['class'](
-                    $filterName, 
+                    $filterName,
                     new Config\ArrayConfig($filterParams['settings'])
                 )
             );

@@ -4,7 +4,7 @@ namespace Honeybee\Core\Export\Filter;
 
 class FilterList implements \Countable, \ArrayAccess, \Iterator
 {
-    private $filters;
+    private $filters = array();
 
     public function __construct(array $filters = array())
     {
