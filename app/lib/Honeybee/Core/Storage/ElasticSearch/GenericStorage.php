@@ -4,6 +4,8 @@ namespace Honeybee\Core\Storage\ElasticSearch;
 
 use Honeybee\Core\Storage\IStorage;
 use Honeybee\Agavi\Database\ElasticSearch\Database;
+use Elastica\Exception\NotFoundException;
+use Elastica\Exception\AbstractException;
 use Elastica;
 
 class GenericStorage implements IStorage
@@ -39,7 +41,7 @@ class GenericStorage implements IStorage
         {
             $document = $type->getDocument($id);
         }
-        catch(Elastica\NotFoundException $e)
+        catch(NotFoundException $e)
         {
             $document = new Elastica\Document($id);
         }
@@ -74,7 +76,7 @@ class GenericStorage implements IStorage
                 $document = $type->getDocument($key['_id']);
             }
         }
-        catch(Elastica\AbstractException $e)
+        catch(AbstractException $e)
         {
             error_log($e->__toString());
         }
@@ -84,23 +86,21 @@ class GenericStorage implements IStorage
 
     public function delete($key, $revision = NULL)
     {
-        if (!is_array($key))
-        {
-            return false;
-        }
-
-        if (isset($key['_id']) || !isset($key['_type']))
-        {
-            return false;
-        }
-
         try
         {
-            $index = $this->database->getResource();
-            $type = $index->getType($key['_type']);
-            $resp_data = $type->deleteById($key['_id'])->getData();
+            if (is_array($key) && isset($key['_id']) && isset($key['_type']))
+            {
+                $index = $this->database->getResource();
+                $type = $index->getType($key['_type']);
+                $resp_data = $type->deleteById($key['_id'])->getData();
+            }
+            else
+            {
+                error_log("Insufficient key data given to storage-delete: " . print_r($key, true));
+                return false;
+            }
         }
-        catch(Elastica\AbstractException $e)
+        catch(AbstractException $e)
         {
             error_log($e->__toString());
             return false;
