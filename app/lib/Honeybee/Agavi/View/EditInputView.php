@@ -41,16 +41,8 @@ class EditInputView extends BaseView
             'icon' => 'hb-icon-list'
         );
 
-        $breadcrumbs = $this->getContext()->getUser()->getAttribute('breadcrumbs', 'honeybee.breadcrumbs', array());
-        
-        foreach ($breadcrumbs as $crumb)
-        {
-            if ('hb-icon-pencil' === $crumb['icon'])
-            {
-                return;
-            }
-        }
-
+        $breadcrumbs = array();
+        $breadcrumbs[] = $moduleCrumb;
         $breadcrumbs[] = array(
             'text' => $tm->_('Edit', 'modules.labels'),
             'info' => $tm->_('Editing:', 'modules.labels') . ' ' . $this->getAttribute('document')->getIdentifier(),
