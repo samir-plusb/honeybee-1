@@ -94,8 +94,12 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         }
     },
 
-    addAggregate: function(doc_type)
+    addAggregate: function(doc_type, focus)
     {
+        if ('undefined' === typeof focus)
+        {
+            focus = true;
+        }
         var module_item_markup = this.templates[doc_type];
         var list_item = $('<li class="row-fluid aggregate"></li>');
         list_item.html(module_item_markup);
@@ -104,9 +108,12 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         this.initAggregateListItem(list_item);
         this.renderAggregatePositions();
 
-        var first_input = list_item.find('input').first();
-        first_input.focus();
-        $('html, body').animate({scrollTop: first_input.offset().top}, 350);
+        if (focus)
+        {
+            var first_input = list_item.find('input').first();
+            first_input.focus();
+            $('html, body').animate({scrollTop: first_input.offset().top}, 350);
+        }
 
         return list_item;
     },
@@ -192,7 +199,6 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     renderAggregatePositions: function()
     {
-        console.log("renderAggregatePositions");
         this.element.find('> .aggregates-list .aggregate').each(function(idx, element)
         {
             $(element).find('.input-group-label .position').text('#' + (idx + 1));
