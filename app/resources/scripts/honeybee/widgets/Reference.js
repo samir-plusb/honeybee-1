@@ -748,6 +748,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                     }),
                     this.options.event_origin
                 );
+
                 this.tags.push(item_data);
                 this.onReferenceListLoaded();
             }
@@ -781,6 +782,14 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         if (to_remove)
         {
             this.tags.remove(to_remove);
+            window.postMessage(
+                JSON.stringify({
+                    'type': 'reference-removed',
+                    'reference': to_remove,
+                    'field': this.options.realname
+                }),
+                this.options.event_origin
+            );
         }
     },
 
