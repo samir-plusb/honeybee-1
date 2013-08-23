@@ -112,7 +112,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         {
             var first_input = list_item.find('input').first();
             first_input.focus();
-            $('html, body').animate({scrollTop: first_input.offset().top}, 350);
+            $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350);
         }
 
         return list_item;
@@ -188,7 +188,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
             var first_input = item.find('input').first();
             first_input.focus();
-            $('html, body').animate({scrollTop: first_input.offset().top}, 350);
+            $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350);
         });
 
         item.find('.actions .aggregate-collapse').click(function(collapse_event)
