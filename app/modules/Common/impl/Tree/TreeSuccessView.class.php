@@ -51,6 +51,7 @@ class Common_Tree_TreeSuccessView extends CommonBaseView
                 $routing->gen(sprintf('%s.edit', $treeConfig->getTypeKey()))
             ))
         );
+        $clientSideOptions['options']['select_only_mode'] = $this->getAttribute('select_only_mode', true);
 
         $this->setAttribute('client_side_controller', $clientSideOptions);
     }

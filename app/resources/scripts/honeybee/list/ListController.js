@@ -21,12 +21,12 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         this.parent();
 
         this.options = $.extend(true, {}, options);
-
-        this.bindSidebarEvents();
     },
 
     attach: function()
     {
+        this.bindSidebarEvents();
+
         this.element = $('.container-list-data');
 
         this.workflow_handler = new honeybee.list.WorkflowHandler(

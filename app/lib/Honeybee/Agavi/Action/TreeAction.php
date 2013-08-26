@@ -9,7 +9,7 @@ use TreeConfig;
 class TreeAction extends BaseAction
 {
     public function executeRead(\AgaviRequestDataHolder $requestData)
-    {   
+    {
         $module = $this->getModule();
 
         if ($requestData->hasParameter('referenceField') && $requestData->hasParameter('referenceModule'))
@@ -114,7 +114,7 @@ class TreeAction extends BaseAction
 
             foreach ($referenceField->getOption(ReferenceField::OPT_REFERENCES) as $reference)
             {
-                if (get_class($this->getModule()) === $reference[ReferenceField::OPT_MODULE])
+                if ('\\' . get_class($this->getModule()) === $reference[ReferenceField::OPT_MODULE])
                 {
                     $treeSettings['clientSideController']['options']['reference_field'] = $referenceField->getName();
                     $treeSettings['clientSideController']['options']['select_only_mode'] = TRUE;

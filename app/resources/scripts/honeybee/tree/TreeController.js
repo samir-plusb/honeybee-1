@@ -2,8 +2,6 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
     log_prefix: "TreeController",
 
-    options: null,
-
     dropMode: null,
 
     currentMoveNode: null,
@@ -16,9 +14,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
     init: function(options)
     {
-        //this.parent();
-        this.options = options;
-
+        this.parent(options);
         this.domElement = options.domElement;
         this.renderTarget = this.domElement.find('.render-tree');
 
@@ -239,7 +235,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
             var borderAreaHeight = 8;
 
-            if (dragY < elementY + borderAreaHeight) 
+            if (dragY < elementY + borderAreaHeight)
             {
                 that.dropMode = 'before';
             }
