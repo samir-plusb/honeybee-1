@@ -8,18 +8,46 @@ class RemapFilter extends BaseFilter
     {
         $mappedOutput = array();
 
-        $keyMap = $this->getConfig()->get('map', array());
+        $propertyMap = $this->getConfig()->get('map', array());
         $includeUnmapped = $this->getConfig()->get('include_unmapped', FALSE);
 
-        foreach ($keyMap as $inputKey => $outputKey)
+        foreach ($propertyMap as $inputKey => $outputMapping)
         {
-            $inputData = self::getArrayValue($input, $inputKey);
+            $inputData = null;
+            $outputKey = $outputMapping;
+
+            if (is_array($outputMapping) && isset($outputMapping['static_value']))
+            {
+                $inputData = $outputMapping['static_value'];
+                $outputKey = $inputKey;
+                if (!$this->getConfig()->get('static_values_in_empty_arrays', FALSE))
+                {
+                    $arrayKey = preg_replace('~\[\w+\]$~is', '', $outputKey);
+                    if ($arrayKey !== $outputKey)
+                    {
+                        $parentArray = array_filter(self::getArrayValue($mappedOutput, $arrayKey));
+                        if (empty($parentArray))
+                        {
+                            continue;
+                        }
+                    }
+                }
+            }
+            else if (!is_array($outputMapping))
+            {
+                $inputData = self::getArrayValue($input, $inputKey);
+            }
+            else
+            {
+                throw new \Exception("Invalid (re)mapping configuration given to " . __METHOD__);
+            }
+
             self::setArrayValue($mappedOutput, $outputKey, $inputData);
         }
-        
+
         if (TRUE === $includeUnmapped)
         {
-            foreach (array_diff(array_keys($input), array_keys($keyMap)) as $unmappedKey)
+            foreach (array_diff(array_keys($input), array_keys($propertyMap)) as $unmappedKey)
             {
                 $mappedOutput[$unmappedKey] = $input[$unmappedKey];
             }
@@ -55,7 +83,7 @@ class RemapFilter extends BaseFilter
         }
         $valuePath = &$array[$curPart];
         $pathPartCount = count($parsedPath['parts']);
-        
+
         for ($i = 1; $i < $pathPartCount; $i++)
         {
             $curPart = $parsedPath['parts'][$i];
@@ -71,7 +99,7 @@ class RemapFilter extends BaseFilter
 
     public static function getPartsFromPath($path)
     {
-        if (strlen($path) == 0) 
+        if (strlen($path) == 0)
         {
             return array('parts' => array(), 'absolute' => TRUE);
         }
@@ -79,40 +107,40 @@ class RemapFilter extends BaseFilter
         $parts = array();
         $absolute = ($path[0] != '[');
 
-        if (($pos = strpos($path, '[')) === FALSE) 
+        if (($pos = strpos($path, '[')) === FALSE)
         {
-            if (strpos($path, ']') !== FALSE) 
+            if (strpos($path, ']') !== FALSE)
             {
                 throw new \InvalidArgumentException('Invalid "]" without opening "[" found');
             }
 
             $parts[] = $path;
-        } 
-        else 
+        }
+        else
         {
             $state = 0;
             $cur = '';
 
-            foreach (str_split($path) as $c) 
+            foreach (str_split($path) as $c)
             {
                 // this is the fastest way to loop over an string
-                switch ($state) 
+                switch ($state)
                 {
                     // the order is significant for performance
                     case 2:
                     {
                         // match all characters between []
-                        if ($c == ']') 
+                        if ($c == ']')
                         {
                             $parts[] = $cur;
                             $cur = '';
                             $state = 1;
-                        } 
-                        else if ($c == '[') 
+                        }
+                        else if ($c == '[')
                         {
                             throw new \InvalidArgumentException('Invalid "[[" found');
-                        } 
-                        else 
+                        }
+                        else
                         {
                             $cur .= $c;
                         }
@@ -121,13 +149,13 @@ class RemapFilter extends BaseFilter
                     case 0:
                     {
                         // match everything to the first '['
-                        if ($c != '[') 
+                        if ($c != '[')
                         {
                             $cur .= $c;
-                        } 
-                        else 
+                        }
+                        else
                         {
-                            if ($cur !== '') 
+                            if ($cur !== '')
                             {
                                 $parts[] = $cur;
                                 $cur = '';
@@ -139,11 +167,11 @@ class RemapFilter extends BaseFilter
                     case 1:
                     {
                         // match exactly '['
-                        if ($c == '[') 
+                        if ($c == '[')
                         {
                             $state = 2;
-                        } 
-                        else 
+                        }
+                        else
                         {
                             throw new \InvalidArgumentException('Invalid character after "]" found');
                         }
@@ -152,11 +180,11 @@ class RemapFilter extends BaseFilter
                 }
             }
 
-            if ($state == 0) 
+            if ($state == 0)
             {
                 $parts[] = $cur;
-            } 
-            else if ($state == 2) 
+            }
+            else if ($state == 2)
             {
                 throw new \InvalidArgumentException('Missing "]" after opening "["');
             }

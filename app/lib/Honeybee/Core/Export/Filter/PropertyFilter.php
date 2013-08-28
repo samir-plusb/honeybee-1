@@ -3,6 +3,7 @@
 namespace Honeybee\Core\Export\Filter;
 
 use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Import\Filter;
 use Dat0r\Core\Document as Dat0r;
 use Dat0r\Core\Field\ReferenceField;
 
@@ -82,9 +83,35 @@ class PropertyFilter extends BaseFilter
             {
                 $value = $prop_value;
             }
-            $filter_output[$export_key] = $value;
+
+            $array_key = preg_replace('~\[\d+\]\[\w+\]$~is', '', $export_key);
+            if ($array_key !== $export_key)
+            {
+                $parent_array = Filter\RemapFilter::getArrayValue($filter_output, $array_key);
+                if (empty($value) && empty($parent_array))
+                {
+                    $value = array();
+                    $export_key = $array_key;
+                }
+                else if (empty($value))
+                {
+                    continue;
+                }
+            }
+
+            Filter\RemapFilter::setArrayValue($filter_output, $export_key, $value);
         }
 
         return $filter_output;
+    }
+
+    static public function filterEmptyValues($item)
+    {
+        if (is_array($item))
+        {
+            return array_filter($item, array(__CLASS__, 'filterEmptyValues'));
+        }
+
+        return !empty($item);
     }
 }
