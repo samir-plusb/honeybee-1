@@ -25,6 +25,7 @@
             <fieldset>
                 <legend style="display: none;">{{tm._('edit-form-title', td)}}</legend>
                 <div class="tabbable" style="margin-top: 20px;">
+                    {% if tabs|length > 2 %}
                     <ul class="nav nav-tabs">
                     {% for tabName, tabDef in tabs %}
                         {% if tabDef.visibility == 'visible' and tabs|length > 2 %}
@@ -36,6 +37,7 @@
                         {% endif %}
                     {% endfor %}
                     </ul>
+                    {% endif %}
                 </div>
                 <div class="tab-content">
                     {% for tabName, tabDef in tabs %}
