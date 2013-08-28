@@ -62,7 +62,10 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
 
     public function setSlug($slug)
     {
-        $this->setValue('slug', $slug);
+        if (empty($slug))
+        {
+            $this->setValue('slug', $this->buildSlug());
+        }
     }
 
     public function getSlug()
