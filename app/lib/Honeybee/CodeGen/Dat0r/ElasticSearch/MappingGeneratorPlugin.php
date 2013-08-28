@@ -81,11 +81,6 @@ class MappingGeneratorPlugin
         $indexDefinition['properties'] = (object)$defaultProperties;
 
         $deployPath = $this->options['deploy_path'];
-        if (0 !== strpos($deployPath, DIRECTORY_SEPARATOR))
-        {
-            $deployPath = $this->resolveRelativePath($deployPath, $this->options['base_bath']);
-        }
-
         $jsonString = $this->formatJson(json_encode($indexDefinition));
         file_put_contents($deployPath, $jsonString);
 
@@ -249,21 +244,5 @@ class MappingGeneratorPlugin
         }
 
         return $result;
-    }
-
-    protected function resolveRelativePath($path, $base)
-    {
-        $path_parts = explode(DIRECTORY_SEPARATOR, $base . DIRECTORY_SEPARATOR . $path);
-        $parents = array();
-
-        foreach ($path_parts as $path_part) {
-            if ($path_part === '..') {
-                array_pop($parents);
-            } elseif ($path_part !== '.') {
-                $parents[] = $path_part;
-            }
-        }
-
-        return implode(DIRECTORY_SEPARATOR, $parents);
     }
 }
