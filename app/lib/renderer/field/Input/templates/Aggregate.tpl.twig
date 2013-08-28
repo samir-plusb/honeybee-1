@@ -3,6 +3,7 @@
 <!--
     add aggregate dropdown
 -->
+    {% if aggregate_modules|length > 1 %}
     <div class="btn-group aggregate-selector">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
             {{ tm._('Add aggregate', td) }} <span class="caret"></span>
@@ -38,6 +39,35 @@
         {% endfor %}
         </ul>
     </div>
+    {% else %}
+    <div class="aggregate-module-item">
+        <a href="#" class="btn btn-default"> {{ tm._('Add aggregate', td) }}</a>
+        {% set aggregate_module = aggregate_modules[0] %}
+        <div class="row-fluid aggregate-tpl aggregate">
+            <div class="span{{group['width']}} group">
+                <div class="field-group field-group-{{ name|lower }}">
+                    <h3 class="input-group-label">
+                        <span class="position"></span> {{ tm._(aggregate_module.label, td) }}
+                        <span class="displayed_text"></span>
+                        <ul class="actions">
+                            <li><i class="hb-icon hb-icon-fullscreen-alt aggregate-expand"></i></li>
+                            <li><i class="hb-icon hb-icon-fullscreen-exit-alt aggregate-collapse"></i></li>
+                            <li><i class="hb-icon hb-icon-arrow-down-2 aggregate-down"></i></li>
+                            <li><i class="hb-icon hb-icon-arrow-up-2 aggregate-up"></i></li>
+                            <li><i class="hb-icon hb-icon-remove aggregate-remove"></i></li>
+                        </ul>
+                    </h3>
+                    <section class="aggregate-fields">
+                    {% for field in aggregate_module.rendered_fields %}
+                        {{field|raw}}
+                    {% endfor %}
+                    </section>
+                    <input type="hidden" class="honeybee-js-type" name="{{ aggregate_module.type_field }}" value="{{ aggregate_module.type }}" />
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <ul class="collapse-actions">
         <li><button type="button" class="btn hb-icon hb-icon-fullscreen-alt aggregate-expand-all"> {{ tm._('Expand all', td) }}</button></li>
         <li><button type="button" class="btn hb-icon hb-icon-fullscreen-exit-alt aggregate-collapse-all"> {{ tm._('Collapse all', td) }}</button></li>

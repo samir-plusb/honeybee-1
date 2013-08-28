@@ -1276,6 +1276,12 @@ div.select2-container-multi .select2-choices .select2-search-field
   color: rgb(0, 136, 204);
 }
 
+div.aggregate-module-item
+{
+  float: left;
+  margin-bottom: 20px;
+}
+
 /* location aggregate widget style */
 .widget-location-widget
 {
