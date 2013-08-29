@@ -71,8 +71,13 @@ class ListAction extends BaseAction
         {
             $outputType = $this->getContext()->getController()->getOutputType('zip');
             $this->getContainer()->setOutputType($outputType);
-
             $this->setAttribute('zip_file', $this->createXmlZipArchive($data['documents']));
+        }
+        else if ('csv' === $parameters->getParameter('export_format'))
+        {
+            $outputType = $this->getContext()->getController()->getOutputType('csv');
+            $this->getContainer()->setOutputType($outputType);
+            $this->setAttribute('csv_file', $this->createCsvFile($data['documents']));
         }
 
         return 'Success';
@@ -192,7 +197,7 @@ class ListAction extends BaseAction
                             'related_action' => $itemActionReferenceFields[$referenceField->getName()],
                             'labels' => array(
                                 'assign' => $translationManager->_(
-                                    'assign_' . $referenceField->getName(), 
+                                    'assign_' . $referenceField->getName(),
                                     $modulePrefix . '.list'
                                 ),
                                 'abort' => $translationManager->_(
@@ -289,7 +294,7 @@ class ListAction extends BaseAction
 
                 foreach ($this->getAttribute('config')->getItemActions() as $actionName => $actionDefinition)
                 {
-                    // @todo individual permission for custom actions 
+                    // @todo individual permission for custom actions
                     // or is it enough to just check write access for the current state?
                     $promptLangKey = sprintf('%s.%s.prompt', $workflowStep, $actionName);
                     $promptMsg = $tm->_($promptLangKey, $translationDomain);
@@ -303,7 +308,7 @@ class ListAction extends BaseAction
                             'binding' => array(
                                 'method' => $actionDefinition['action'],
                                 'parameters' => isset($actionDefinition['parameters']) ? $actionDefinition['parameters'] : array()
-                            ) 
+                            )
                         );
                     }
                 }
@@ -405,134 +410,33 @@ class ListAction extends BaseAction
                         'identity_field' => $identityField
                     )))
                 )
-            ); 
+            );
         }
 
         return $autoCompleteMappings;
     }
 
-    /*
-     * Tmp. location for creating a zip-archive containing an xml file
-     * for each document in the list.
-     * This should probally become an export.
-     */
     protected function createXmlZipArchive(DocumentCollection $documents)
     {
-        $tmpPath = \AgaviConfig::get('core.cache_dir') . DIRECTORY_SEPARATOR .
-            'xml-zip-' . md5(microtime());
-
-        if (! mkdir($tmpPath))
-        {
-            throw new \Exception("Unable to create zip tmp-directory.");
-        }
-
-        $zipPath = $tmpPath . DIRECTORY_SEPARATOR .
-            $this->getModule()->getName() . '-List.zip';
-
-        $zip = new \ZipArchive();
-        if (TRUE !== $zip->open($zipPath, \ZipArchive::OVERWRITE))
-        {
-            throw new \Exception("Unable to open zip archive: " . $zipPath);
-        }
-
+        $export = $this->getModule()->getService('export')->getExport('list-xml-zip');
         foreach ($documents as $document)
         {
-            $domDoc = $this->serializeDocumentToXml($document);
-            $domDoc->formatOutput = true;
-
-            $filePath = $tmpPath . DIRECTORY_SEPARATOR . $document->getIdentifier() . '.xml'; 
-            $domDoc->save($filePath);
-
-            $archiveInternalName = sprintf(
-                '%s-List/%s.xml',
-                $this->getModule()->getName(),
-                $document->getIdentifier()
-            );
-
-            $zip->addFile($filePath, $archiveInternalName);
+            $export->publish($document);
         }
 
-        $zip->close();
+        $export->getStorage()->getResource()->close();
 
-        return $zipPath;
+        return $export->getStorage()->getResource();
     }
 
-    protected function serializeDocumentToXml(Document $document)
+    protected function createCsvFile(DocumentCollection $documents)
     {
-        $domDoc = new \DOMDocument('1.0', 'utf-8');
-        $docData = $document->toArray();
-        $docData = array_merge($docData, $this->prepareFileData($document));
-        
-        unset($docData['workflowTicket']);
-        unset($docData['meta']);
-
-        $dataElement = $this->createDomElementFromArray($domDoc, 'document', $docData);
-        $domDoc->appendChild($dataElement); 
-
-        return $domDoc;
-    }
-
-    protected function prepareFileData(Document $document)
-    {
-        $fileData = array();
-        $assetService = \ProjectAssetService::getInstance();
-
-        foreach ($this->getModule()->getFields() as $field)
+        $export = $this->getModule()->getService('export')->getExport('list-csv');
+        foreach ($documents as $document)
         {
-            if ($field->hasOption('file_type'))
-            {
-                $fileIds = $document->getValue($field->getName());
-                $files = array();
-
-                if (! empty($fileIds))
-                {
-                    foreach ($fileIds as $fileId)
-                    {
-                        $asset = $assetService->get($fileId);
-                        $files[] = array(
-                            'type' => $field->getOption('file_type'),
-                            'name' => $asset->getFullName(),
-                            'base64' => base64_encode(
-                                file_get_contents($asset->getFullPath())
-                            )
-                        );
-                    }
-                }
-
-                $fileData[$field->getName()] = $files;
-            }
+            $export->publish($document);
         }
 
-        return $fileData;
-    }
-
-    protected function createDomElementFromArray(\DOMDocument $domDoc, $nodeName, array $data)
-    {
-        $element = $domDoc->createElement($nodeName);
-
-        foreach ($data as $key => $value)
-        {
-            $childElement = NULL;
-            $childElementName = $key;
-
-            if(is_numeric($childElementName))
-            {
-                $childElementName = \AgaviInflector::singularize($nodeName);
-            }
-
-            if (is_array($value))
-            {
-                $childElement = $this->createDomElementFromArray($domDoc, $childElementName, $value);
-            }
-            else
-            {
-                $childElement = $domDoc->createElement($childElementName);
-                $childElement->nodeValue = $value;
-            }
-
-            $element->appendChild($childElement);
-        }
-
-        return $element;
+        return $export->getStorage()->getResource();
     }
 }

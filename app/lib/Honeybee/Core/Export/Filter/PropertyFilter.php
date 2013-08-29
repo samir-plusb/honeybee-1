@@ -15,9 +15,16 @@ class PropertyFilter extends BaseFilter
 
         $property_map = $this->getConfig()->get('properties');
         $module = $document->getModule();
+        $document_data = $document->toArray();
 
-        foreach ($property_map as $fieldname => $key)
+        foreach ($property_map as $source_key => $key)
         {
+            $fieldname = $source_key;
+            if (preg_match('~([\w-_]+)(\[.+\])+~is', $source_key, $matches))
+            {
+                $fieldname = $matches[1];
+            }
+
             $export_key = $key;
             $field = $module->getField($fieldname);
             $prop_value = $document->getValue($fieldname);
@@ -64,20 +71,7 @@ class PropertyFilter extends BaseFilter
             }
             else if ($prop_value instanceof Dat0r\DocumentCollection)
             {
-                $value = array();
-                $export_key = is_array($key) ? $key['export_key'] : $key;
-
-                foreach ($prop_value as $aggregate)
-                {
-                    if (is_array($key))
-                    {
-                        $value[] = $aggregate->getValue($key['display_field']);
-                    }
-                    else
-                    {
-                        $value[] = $aggregate->toArray();
-                    }
-                }
+                $value = Filter\RemapFilter::getArrayValue($document_data, $source_key);
             }
             else
             {
@@ -99,6 +93,10 @@ class PropertyFilter extends BaseFilter
                 }
             }
 
+            if (is_scalar($value))
+            {
+                $value = trim($value);
+            }
             Filter\RemapFilter::setArrayValue($filter_output, $export_key, $value);
         }
 

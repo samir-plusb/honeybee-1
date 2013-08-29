@@ -81,13 +81,16 @@ class Common_List_ListSuccessView extends CommonBaseView
             ));
         }
 
-        $exportSetting = sprintf('%s.enable_export', $module->getOption('prefix'));
-
-        if (AgaviConfig::get($exportSetting, TRUE))
+        $exportSetting = sprintf('%s.enabled_exports', $module->getOption('prefix'));
+        $exportData = array();
+        if (($exports = AgaviConfig::get($exportSetting, FALSE)))
         {
-            $exportZipUrl = $routing->gen(null, array('export_format' => 'xml_zipped'));
-            $this->setAttribute('zip_export_url', $exportZipUrl);
+            foreach ($exports as $exportName)
+            {
+                $exportData[$exportName] = $routing->gen($module->getOption('prefix') .'.list', array('limit' => 60000, 'offset' => 0, 'export_format' => $exportName));
+            }
         }
+        $this->setAttribute('export_data', $exportData);
 
         $writeAction = sprintf('%s::write', $module->getOption('prefix'));
         $this->setAttribute('readonly', !$this->getContext()->getUser()->isAllowed($module, $writeAction));

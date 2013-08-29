@@ -76,7 +76,20 @@ class ListSuccessView extends BaseView
         $archiveName = $this->getAttribute('module')->getName() . '-List.zip';
         $response->setHttpHeader('Content-disposition', 'attachment; filename=' . $archiveName);
 
-        return fopen($this->getAttribute('zip_file'), 'r');
+        $zipArchive = $this->getAttribute('zip_file');
+
+        return fopen($zipArchive->getArchivePath(), 'r+');
+    }
+
+    public function executeCsv(\AgaviRequestDataHolder $parameters)
+    {
+        $response = $this->getResponse();
+        $csvFileName = $this->getAttribute('module')->getName() . '-List.csv';
+        $response->setHttpHeader('Content-disposition', 'attachment; filename=' . $csvFileName);
+
+        $csvFileHandle = $this->getAttribute('csv_file');
+        rewind($csvFileHandle);
+        return $csvFileHandle;
     }
 
     protected function setBreadcrumb()

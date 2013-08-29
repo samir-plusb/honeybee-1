@@ -180,10 +180,17 @@
                     <xi:include xpointer="&aeot; xpointer(/ae:configurations/ae:sandbox/ae:parameter[@name='default_http_headers']/*)" />
                 </ae:parameter>
             </output_type>
-            
+
              <output_type name="zip">
                 <ae:parameter name="http_headers">
                     <ae:parameter name="Content-Type">application/octet-stream</ae:parameter>
+                    <xi:include xpointer="&aeot; xpointer(/ae:configurations/ae:sandbox/ae:parameter[@name='default_http_headers']/*)" />
+                </ae:parameter>
+            </output_type>
+
+            <output_type name="csv">
+                <ae:parameter name="http_headers">
+                    <ae:parameter name="Content-Type">text/csv</ae:parameter>
                     <xi:include xpointer="&aeot; xpointer(/ae:configurations/ae:sandbox/ae:parameter[@name='default_http_headers']/*)" />
                 </ae:parameter>
             </output_type>

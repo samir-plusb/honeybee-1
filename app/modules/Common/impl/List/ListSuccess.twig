@@ -18,19 +18,21 @@
             {% endif %}
         </div>
         <div class="container-actions clearfix">
-            {% if zip_export_url %}
+            {% if export_data|length > 0 %}
             <section>
                 <div class="btn-group batch_actions">
-                    <a class="btn dropdown-toggle hb-icon-upload" data-toggle="dropdown">
+                    <a class="btn dropdown-toggle hb-icon-download" data-toggle="dropdown">
                         {{ tm._('Export', translation_domain) }}
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
+                        {% for export_name, export_url in export_data %}
                         <li>
-                            <a class="honeybee-export honeybee-export-xml hb-icon-file-zip" href="{{ zip_export_url }}">
-                               {{ tm._("ZIP Archiv mit XML-Dateien", translation_domain) }}
+                            <a class="honeybee-export honeybee-{{ export_name }}" href="{{ export_url }}">
+                               {{ tm._("export-" ~ export_name, translation_domain) }}
                            </a>
                         </li>
+                        {% endfor %}
                     </ul>
                 </div>
             </section>

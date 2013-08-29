@@ -75,8 +75,25 @@ class Service implements IService
         $description = $params['description'];
         $settings = new Config\ArrayConfig($params['settings']);
         $storage_def = $settings->get('storage');
-        $database = \AgaviContext::getInstance()->getDatabaseManager()->getDatabase($storage_def['connection']);
-        $storage = new $storage_def['implementor']($database);
+        $database = null;
+        if (isset($storage_def['connection']))
+        {
+            $database = \AgaviContext::getInstance()->getDatabaseManager()->getDatabase($storage_def['connection']);
+        }
+
+        $storage = null;
+        if ($database)
+        {
+            $storage = new $storage_def['implementor']($database);
+        }
+        else
+        {
+            $storage = new $storage_def['implementor'](
+                new Config\ArrayConfig(
+                    isset($storage_def['options']) ? $storage_def['options'] : array()
+                )
+            );
+        }
 
         $export = new $implementor($settings, $storage, $name, $description);
         $filters = new Filter\FilterList();
