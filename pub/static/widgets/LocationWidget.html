@@ -10,6 +10,20 @@
 </div>
 
 <div class="control-group">
+    <label class="control-label">Name</label>
+    <div class="controls">
+        <input type="text" class="span11"
+            data-bind="value: location.name, attr: { name: fieldname() + '[name]' }, disable: options.readonly" />
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label">Zus&auml;tzliche Bezeichnung</label>
+    <div class="controls">
+        <input type="text" class="span11"
+            data-bind="value: location.name_detail, attr: { name: fieldname() + '[name_detail]' }, disable: options.readonly" />
+    </div>
+</div>
+<div class="control-group">
     <label class="control-label">Straße, Hnr.</label>
     <div class="controls">
         <input type="text" class="span8"
@@ -30,6 +44,13 @@
     <div class="controls">
         <input type="text" class="span11"
             data-bind="value: location.city, attr: { name: fieldname() + '[city]' }, disable: options.readonly" />
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label">Beschreibung</label>
+    <div class="controls">
+        <textarea type="text" class="span11"
+            data-bind="text: location.description, attr: { name: fieldname() + '[description]' }, disable: options.readonly" />
     </div>
 </div>
 <input type="hidden" data-bind="value: location.lon, attr: { name: fieldname() + '[lon]' }, disable: options.readonly" />

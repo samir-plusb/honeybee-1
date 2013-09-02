@@ -225,6 +225,9 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             for (; i < element.widgets.length; i++)
             {
                 cur_widget = element.widgets[i];
+                console.log(cur_widget);
+                console.log(cur_widget.fieldname);
+                console.log("------------------");
                 fieldname = cur_widget.fieldname();
                 fieldname = fieldname.replace(/\[\d+\]/, '[' + idx + ']');
                 cur_widget.fieldname(fieldname);

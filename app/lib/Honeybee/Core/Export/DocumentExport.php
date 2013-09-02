@@ -20,10 +20,7 @@ class DocumentExport extends GenericExport
 
     protected function buildExportData(Document $document)
     {
-        $data = parent::buildExportData($document);
-
         $metaData = $document->getMeta();
-
         if (! isset($metaData[self::PUBLISHED_AT_FIELD]))
         {
             $publishDate = new \DateTime();
@@ -31,7 +28,7 @@ class DocumentExport extends GenericExport
             $document->setMeta($metaData);
         }
 
-        $data = $this->buildExportData($document);
+        $data = parent::buildExportData($document);
         $data['identifier'] = $document->getShortIdentifier();
         $data['type'] = $document->getModule()->getOption('prefix');
         $data[self::PUBLISHED_AT_FIELD] = $metaData[self::PUBLISHED_AT_FIELD];

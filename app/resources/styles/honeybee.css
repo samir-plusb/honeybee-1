@@ -200,7 +200,6 @@ fieldset .control-group .field-textarea
 {
   width: 91.4894%;
   position: relative;
-  width: 
 }
 
 /**
@@ -215,7 +214,6 @@ fieldset .control-group .field-textarea
   background: white;
   margin-top: 8px;
   margin-bottom: 0px;
-  height: 85px;
   padding: 0;
 }
 
@@ -223,7 +221,8 @@ fieldset .control-group .field-textarea
 {
   border: 1px solid rgb(204, 204, 204);
   border-radius: 6px;
-  height: 83px;
+  min-height: 83px;
+  max-height: 170px;
   overflow: auto;
   margin-top: 0px;
 }

@@ -42,7 +42,7 @@ honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
             return;
         }
 
-        fields_section.find('input').each(function(idx, input)
+        fields_section.find('input, textarea').each(function(idx, input)
         {
             input = $(input);
             location[input.attr('id').replace(/input\-/, '')] = input.val();
@@ -62,19 +62,22 @@ honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
                 $('html, body').animate({scrollTop: first_input.offset().top}, 350);
             };
         }
+        aggregate_element[0].widgets = [];
 
-        aggregate_element.widget = new honeybee.widgets.LocationWidget(
-            fields_section, {
-                autobind: true,
-                localize_url: this.options.localize_url,
-                fieldname: this.options.fieldname + '[' + position + ']',
-                location: location
-            },
-            ready_callback
+        aggregate_element[0].widgets.push(
+            new honeybee.widgets.LocationWidget(
+                fields_section, {
+                    autobind: true,
+                    localize_url: this.options.localize_url,
+                    fieldname: this.options.fieldname + '[' + position + ']',
+                    location: location
+                },
+                ready_callback
+            )
         );
 
         aggregate_element.find('.actions').css({
-            'margin-right': '60px',
+            'margin-right': '100px',
             'z-index': 200
         });
     },
@@ -321,9 +324,11 @@ honeybee.widgets.LocationWidget.Location = honeybee.core.BaseObject.extend({
 
     housenumber: null,
 
-    details: null,
-
     zipcode: null,
+
+    name_detail: null,
+
+    description: null,
 
     city: null,
 
@@ -342,7 +347,8 @@ honeybee.widgets.LocationWidget.Location = honeybee.core.BaseObject.extend({
         this.name = ko.observable(l.name || '');
         this.street = ko.observable(l.street || '');
         this.housenumber = ko.observable(l.housenumber || '');
-        this.details = ko.observable(l.details || '');
+        this.name_detail = ko.observable(l.name_detail || '');
+        this.description = ko.observable(l.description || '');
         this.city = ko.observable(l.city || '');
         this.zipcode = ko.observable(l.postalCode || l.zipcode || '');
         this.administrative_district = ko.observable(l.administrativeDistrict || '');

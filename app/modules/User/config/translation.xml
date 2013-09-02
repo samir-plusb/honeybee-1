@@ -5,20 +5,20 @@
             <translator domain="user">
                 <message_translator class="AgaviSimpleTranslator">
 
-                    <!-- 
+                    <!--
                         Workflow state translations.
                     -->
                     <ae:parameter name="workflow">
                         <ae:parameter name="de">
-                            <ae:parameter name="edit">In Bearbeitung</ae:parameter>
-                            <ae:parameter name="publish">Publikation läuft</ae:parameter>
-                            <ae:parameter name="published">Publiziert</ae:parameter>
+                            <ae:parameter name="edit">Inaktiv</ae:parameter>
+                            <ae:parameter name="publish">Aktivierung läuft</ae:parameter>
+                            <ae:parameter name="published">Aktiv</ae:parameter>
                             <ae:parameter name="archived">Archiv</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
 
-                    <!-- 
-                        List translations for the User module go here. 
+                    <!--
+                        List translations for the User module go here.
                     -->
                     <ae:parameter name="list">
                         <ae:parameter name="de">
@@ -48,12 +48,12 @@
                             <ae:parameter name="view">Ansehen</ae:parameter>
                             <ae:parameter name="disabled">Gesperrt</ae:parameter>
                             <ae:parameter name="delete">Löschen</ae:parameter>
-                            
+
                             <!-- workflow transitions (context sensitive action names for promote and demote) -->
-                            <ae:parameter name="edit.promote">Publizieren</ae:parameter>
+                            <ae:parameter name="edit.promote">Aktivieren</ae:parameter>
                             <ae:parameter name="edit.delete">Löschen</ae:parameter>
                             <ae:parameter name="published.promote">Archivieren</ae:parameter>
-                            <ae:parameter name="published.demote">Depublizieren</ae:parameter>
+                            <ae:parameter name="published.demote">Deaktivieren</ae:parameter>
                             <ae:parameter name="published.delete">Löschen</ae:parameter>
                             <ae:parameter name="archived.demote">Reimportieren</ae:parameter>
                             <ae:parameter name="archived.delete">Löschen</ae:parameter>
@@ -66,8 +66,8 @@
                         </ae:parameter>
                     </ae:parameter>
 
-                    <!-- 
-                        Input translations for the User module go here. 
+                    <!--
+                        Input translations for the User module go here.
                     -->
                     <!-- Fieldnames -->
                     <ae:parameter name="rendering.input.field">
@@ -92,8 +92,8 @@
                         </ae:parameter>
                     </ae:parameter>
 
-                    <!-- 
-                        Error translations for the User module go here. 
+                    <!--
+                        Error translations for the User module go here.
                     -->
                     <ae:parameter name="errors">
                         <ae:parameter name="de">
