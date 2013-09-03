@@ -137,7 +137,7 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
     initDialog: function()
     {
         var that = this;
-        this.dialog = $('.modal-edit-asset').first().twodal({
+        this.dialog = this.element.find('.modal-edit-asset').twodal({
             backdrop: true,
             show: false,
             onhidden: function()
