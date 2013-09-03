@@ -115,6 +115,8 @@ abstract class Document extends BaseDocument implements IResource
                 $this->getValue('language'),
                 $this->getValue('version')
             ));
+
+            $this->setSlug(null);
         }
     }
 
