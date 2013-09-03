@@ -96,7 +96,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     addAggregate: function(doc_type, focus)
     {
-        if ('undefined' === typeof focus)
+        if ('undefined' === $.type(focus))
         {
             focus = true;
         }
@@ -111,7 +111,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         if (focus)
         {
             var first_input = list_item.find('input').first();
-            first_input.focus();
+            first_input[0].focus();
             $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350);
         }
 
@@ -214,10 +214,6 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
                         name.replace(/\[\d+\]/, '[' + idx + ']')
                     );
                 }
-                else
-                {
-                    console.log("no fieldname found for aggregate field: ", input);
-                }
             });
 
             var i = 0;
@@ -225,9 +221,11 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             for (; i < element.widgets.length; i++)
             {
                 cur_widget = element.widgets[i];
-                console.log(cur_widget);
-                console.log(cur_widget.fieldname);
-                console.log("------------------");
+                if (!cur_widget.fieldname) {
+                    // @todo shouldn't happen, but it does :S 
+                    // find out why ...
+                    continue;
+                }
                 fieldname = cur_widget.fieldname();
                 fieldname = fieldname.replace(/\[\d+\]/, '[' + idx + ']');
                 cur_widget.fieldname(fieldname);

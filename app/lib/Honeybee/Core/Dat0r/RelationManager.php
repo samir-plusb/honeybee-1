@@ -8,123 +8,105 @@ use Dat0r\Core\Document\DocumentSet;
 
 class RelationManager
 {
-    private static $referencePool;
+    private static $reference_pool;
 
-    private static $recursionDepth = 0;
+    private static $recursion_depth = 0;
 
-    public static function loadReferences(Document $document, array $data)
+    public static function loadReferences(BaseDocument $document, array $data)
     {
-        $referencedDocuments = array();
-
-        if (0 === self::$recursionDepth)
-        {
-            self::$referencePool = array();
+        $referenced_documents = array();
+        if (self::$recursion_depth === 0) {
+            self::$reference_pool = array();
         }
 
-        self::$recursionDepth++;
-        self::$referencePool[$document->getIdentifier()] = $document;
-
-        $referenceFields = $document->getModule()->getFields(
-            array(), array('Dat0r\Core\Field\ReferenceField')
+        self::$recursion_depth++;
+        if ($document instanceof Document) {
+            self::$reference_pool[$document->getIdentifier()] = $document;
+        }
+        $reference_fields = $document->getModule()->getFields(
+            array(),
+            array('Dat0r\Core\Field\ReferenceField')
         );
 
-        foreach ($referenceFields as $referenceField)
-        {
-            $fieldname = $referenceField->getName();
-            if (! isset($data[$fieldname]))
-            {
+        foreach ($reference_fields as $reference_field) {
+            $fieldname = $reference_field->getName();
+            if (!isset($data[$fieldname])) {
                 continue;
             }
 
-            $fieldData = $data[$fieldname];
-            if (! is_array($fieldData))
-            {
+            $field_data = $data[$fieldname];
+            if (!is_array($field_data)) {
                 $error = new InvalidValueException(
                     sprintf("Unable to load reference for field %s", $fieldname)
                 );
                 $error->setFieldname($fieldname);
-
                 throw $error;
             }
-
-            $referencedDocuments[$fieldname] = self::getReferenceDocuments($referenceField, $fieldData);
+            $referenced_documents[$fieldname] = self::getReferenceDocuments($reference_field, $field_data);
         }
+        self::$recursion_depth--;
 
-        self::$recursionDepth--;
-
-        return $referencedDocuments;
+        return $referenced_documents;
     }
 
-    protected static function getReferenceDocuments(ReferenceField $field, array $fieldData)
+    protected static function getReferenceDocuments(ReferenceField $field, array $field_data)
     {
-        self::loadFieldReferences($field, $fieldData);
+        self::loadFieldReferences($field, $field_data);
 
-        $referencedDocuments = new DocumentSet();
-        foreach ($fieldData as $reference)
-        {
-            if (isset($reference['id']) && isset(self::$referencePool[$reference['id']]))
-            {
-                $referencedDocuments->add(self::$referencePool[$reference['id']]);
-            }
-            else
-            {
+        $referenced_documents = new DocumentSet();
+        foreach ($field_data as $reference) {
+            if (isset($reference['id']) && isset(self::$reference_pool[$reference['id']])) {
+                $referenced_documents->add(self::$reference_pool[$reference['id']]);
+            } else {
                 // throw execpetion?
             }
         }
 
-        return $referencedDocuments;
+        return $referenced_documents;
     }
 
-    protected static function loadFieldReferences(ReferenceField $field, array $fieldData)
+    protected static function loadFieldReferences(ReferenceField $field, array $field_data)
     {
-        $mappedRefData = self::mapDataToModules($fieldData);
+        $mapped_reference_data = self::mapDataToModules($field_data);
 
-        foreach ($field->getReferencedModules() as $referencedModule)
-        {
-            $modulePrefix = $referencedModule->getOption('prefix');
-            if (! isset($mappedRefData[$modulePrefix]))
-            {
+        foreach ($field->getReferencedModules() as $referenced_module) {
+            $module_prefix = $referenced_module->getOption('prefix');
+            if (!isset($mapped_reference_data[$module_prefix])) {
                 continue;
             }
 
-            $pooledDocuments = self::$referencePool;
-            $idsToLoad = array_filter($mappedRefData[$modulePrefix], function($documentIdentifier) use ($pooledDocuments)
-            {
-                return ! isset($pooledDocuments[$documentIdentifier]);
-            });
-
-            if (! empty($idsToLoad))
-            {
-                sort($idsToLoad); // remove array-filter key artifacts o0
-                $referenceData = $referencedModule->getService()->getMany($idsToLoad);
-
-                foreach ($referenceData['documents'] as $referencedDocument)
+            $pooled_documents = self::$reference_pool;
+            $ids_to_load = array_filter(
+                $mapped_reference_data[$module_prefix],
+                function($document_identifier) use ($pooled_documents)
                 {
-                    self::$referencePool[$referencedDocument->getIdentifier()] = $referencedDocument;
+                    return !isset($pooled_documents[$document_identifier]);
+                }
+            );
+
+            if (!empty($ids_to_load)) {
+                sort($ids_to_load); // remove array-filter key artifacts o0
+                $reference_data = $referenced_module->getService()->getMany($ids_to_load);
+                foreach ($reference_data['documents'] as $referenced_document) {
+                    self::$reference_pool[$referenced_document->getIdentifier()] = $referenced_document;
                 }
             }
         }
     }
 
-    protected static function mapDataToModules(array $fieldData)
+    protected static function mapDataToModules(array $field_data)
     {
-        $mappedData = array();
-
-        foreach ($fieldData as $reference)
-        {
-            if (! isset($reference['module']))
-            {
+        $mapped_data = array();
+        foreach ($field_data as $reference) {
+            if (!isset($reference['module'])) {
                 continue;
             }
-
-            if (! isset($mappedData[$reference['module']]))
-            {
-                $mappedData[$reference['module']] = array();
+            if (!isset($mapped_data[$reference['module']])){
+                $mapped_data[$reference['module']] = array();
             }
-
-            $mappedData[$reference['module']][] = $reference['id'];
+            $mapped_data[$reference['module']][] = $reference['id'];
         }
 
-        return $mappedData;
+        return $mapped_data;
     }
 }

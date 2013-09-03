@@ -3,11 +3,10 @@
 namespace Honeybee\Core\Dat0r;
 
 use Zend\Permissions\Acl;
-use Dat0r\Core\Document\Document as BaseDocument;
 use Honeybee\Core\Workflow\IResource;
 use Dat0r\Core\Field\ReferenceField;
 
-abstract class Document extends BaseDocument implements IResource, Acl\Resource\ResourceInterface
+abstract class Document extends BaseDocument implements IResource
 {
     public function getWorkflowConfigPath()
     {
@@ -100,20 +99,6 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
 
     protected function hydrate(array $values = array(), $applyDefaults = FALSE)
     {
-        $referenceData = array();
-
-        if (! empty($values))
-        {
-            foreach ($this->getModule()->getFields() as $fieldname => $field)
-            {
-                if (($field instanceof ReferenceField) && isset($values[$fieldname]))
-                {
-                    $referenceData[$fieldname] = $values[$fieldname];
-                    unset($values[$fieldname]);
-                }
-            }
-        }
-
         parent::hydrate($values, $applyDefaults);
 
         if ($applyDefaults)
@@ -130,11 +115,6 @@ abstract class Document extends BaseDocument implements IResource, Acl\Resource\
                 $this->getValue('language'),
                 $this->getValue('version')
             ));
-        }
-
-        foreach (RelationManager::loadReferences($this, $referenceData) as $fieldname => $refDocuments)
-        {
-            $this->setValue($fieldname, $refDocuments);
         }
     }
 

@@ -2,13 +2,12 @@
 
 namespace Honeybee\Core\Dat0r;
 
-use Dat0r\Core\Document\Document as BaseDocument;
 use Honeybee\Core\Workflow\ITicket;
 
-abstract class WorkflowTicket extends BaseDocument implements ITicket
+abstract class WorkflowTicket extends \Dat0r\Core\Document\Document implements ITicket
 {
     public function reset()
-    {   
+    {
         $this->setWorkflowName(NULL);
         $this->setWorkflowStep(NULL);
         $this->setStepCounts(NULL);
@@ -42,7 +41,7 @@ abstract class WorkflowTicket extends BaseDocument implements ITicket
                 $execCountMap[$stepName] = 1;
             }
         }
-        
+
         $this->setStepCounts($execCountMap);
 
         return $execCountMap[$stepName];
