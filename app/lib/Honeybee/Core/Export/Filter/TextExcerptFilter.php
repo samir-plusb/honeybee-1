@@ -2,7 +2,7 @@
 
 namespace Honeybee\Core\Export\Filter;
 
-use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Dat0r\BaseDocument;
 
 /**
  * Creates excerpts from (rich) text properties. The following settings are
@@ -28,7 +28,7 @@ use Honeybee\Core\Dat0r\Document;
  */
 class TextExcerptFilter extends BaseFilter
 {
-    public function execute(Document $document)
+    public function execute(BaseDocument $document)
     {
         $filterOutput = array();
 

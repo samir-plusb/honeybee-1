@@ -2,7 +2,7 @@
 
 namespace Honeybee\Core\Export\Filter;
 
-use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Dat0r\BaseDocument;
 use Dat0r\Core\Field\IField;
 
 class CombineFilter extends BaseFilter
@@ -12,7 +12,7 @@ class CombineFilter extends BaseFilter
         'Dat0r\\Core\\Field\\TextCollectionField'
     );
 
-    public function execute(Document $document)
+    public function execute(BaseDocument $document)
     {
         $filterOutput = array();
 

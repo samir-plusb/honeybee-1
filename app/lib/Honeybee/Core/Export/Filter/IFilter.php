@@ -2,7 +2,7 @@
 
 namespace Honeybee\Core\Export\Filter;
 
-use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Dat0r\BaseDocument;
 
 /**
  * IFilter implementations are responseable for wrapping data manipulation during export such as 
@@ -21,19 +21,19 @@ interface IFilter
     public function getName();
 
     /**
-     * Process the given document in the context of building export data 
+     * Process the given document in the context of building export data
      * and return a corresponding deterministic output.
      *
-     * @param       Document $document
+     * @param       BaseDocument $document
      *
      * @return      array
      */
-    public function execute(Document $document);
+    public function execute(BaseDocument $document);
 
     /**
      * Hook that is invoked when a document is revoked from export.
      *
-     * @param       Document $document
+     * @param       BaseDocument $document
      */
-    public function onDocumentRevoked(Document $document);
+    public function onDocumentRevoked(BaseDocument $document);
 }

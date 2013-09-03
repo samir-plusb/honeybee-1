@@ -3,7 +3,7 @@
 namespace Honeybee\Core\Export\Filter;
 
 use Honeybee\Core\Config\IConfig;
-use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Dat0r\BaseDocument;
 
 /**
  * The BaseFilter class is an abstract implementation of the IFilter interface.
@@ -22,7 +22,7 @@ abstract class BaseFilter implements IFilter
 
     /**
      * Create a new filter instance from the the given config.
-     * 
+     *
      * @param IConfig $config
      */
     public function __construct($name, IConfig $config)
@@ -41,7 +41,7 @@ abstract class BaseFilter implements IFilter
         return $this->name;
     }
 
-    public function onDocumentRevoked(Document $document)
+    public function onDocumentRevoked(BaseDocument $document)
     {
 
     }

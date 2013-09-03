@@ -3,13 +3,13 @@
 namespace Honeybee\Core\Export\Filter;
 
 use Honeybee\Core\Dat0r\Tree;
-use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Dat0r\BaseDocument;
 use Dat0r\Core\Document as Dat0r;
 use Dat0r\Core\Field\ReferenceField;
 
 class HierachyPathFilter extends BaseFilter
 {
-    public function execute(Document $document)
+    public function execute(BaseDocument $document)
     {
         $filterOutput = array();
 

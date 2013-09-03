@@ -2,6 +2,7 @@
 
 namespace Honeybee\Core\Export\Filter;
 
+use Honeybee\Core\Dat0r\BaseDocument;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Config\IConfig;
 use Honeybee\Core\Storage\CouchDb;
@@ -21,15 +22,19 @@ class AssetFilter extends BaseFilter
         $this->storage = new CouchDb\GenericStorage($database);
     }
 
-    public function execute(Document $document)
+    public function execute(BaseDocument $document)
     {
         $filterOutput = array();
         $assetProps = $this->getConfig()->get('properties');
-        $documentShortId = $document->getShortIdentifier();
+        $documentShortId = null;
+
+        if ($document instanceof Document) {
+            $documentShortId = $document->getShortIdentifier();
+        }
 
         foreach ($assetProps as $fieldname => $exportFieldname)
         {
-            $filterOutput[$fieldname] = array();
+            $filterOutput[$exportFieldname] = array();
             $fieldAssetIds = $document->getValue($fieldname);
             $fieldAssetIds = is_array($fieldAssetIds) ? $fieldAssetIds : array();
 
@@ -43,7 +48,9 @@ class AssetFilter extends BaseFilter
                     continue;
                 }
 
-                $assetData['sourceDoc'] = $documentShortId;
+                if ($documentShortId) {
+                    $assetData['sourceDoc'] = $documentShortId;
+                }
 
                 $this->storage->write($assetData);
 
@@ -59,23 +66,24 @@ class AssetFilter extends BaseFilter
             }
         }
 
-        $this->cleanupOldAssets($document, $filterOutput);
-
+        if ($document instanceof Document) {
+            $this->cleanupOldAssets($document, $filterOutput);
+        }
         return $filterOutput;
     }
 
-    public function onDocumentRevoked(Document $document)
+    public function onDocumentRevoked(BaseDocument $document)
     {
-        foreach ($this->getReferencedAssetIds($document) as $assetId)
-        {
-            if (($asset = $this->storage->read($assetId)))
-            {
-                $this->storage->delete($asset['identifier'], $asset['revision']);
+        if ($document instanceof Document) {
+            foreach ($this->getReferencedAssetIds($document) as $assetId) {
+                if (($asset = $this->storage->read($assetId))) {
+                    $this->storage->delete($asset['identifier'], $asset['revision']);
+                }
             }
         }
     }
 
-    protected function cleanupOldAssets(Document $document, array $filterOutput)
+    protected function cleanupOldAssets(BaseDocument $document, array $filterOutput)
     {
         $previousAssetIds = $this->getReferencedAssetIds($document);
         $currentAssetIds = array();
@@ -100,7 +108,7 @@ class AssetFilter extends BaseFilter
     // this part is very couchdb specific, while using the 'couchdb views' feature to look up related assets.
     // this will be tricky to abstract if we dont want to call this a CouchDbAssetFilter,
     // which we would have to do right now if were strict about concise naming ^^.
-    protected function getReferencedAssetIds(Document $document)
+    protected function getReferencedAssetIds(BaseDocument $document)
     {
         if (! $this->getConfig()->has('document_asset_map_view'))
         {
@@ -142,7 +150,7 @@ class AssetFilter extends BaseFilter
 
             $metaData = $asset->getMetaData();
             $filePath = $asset->getFullPath();
-            
+
             $assetData = array(
                 'identifier' => "asset-" . $asset->getIdentifier(),
                 'data' => base64_encode(fread(fopen($filePath, 'r'), $asset->getSize())),
@@ -171,7 +179,7 @@ class AssetFilter extends BaseFilter
             error_log(__METHOD__ . ':' . $e->getMessage());
             $assetData = NULL;
         }
-        
+
         return $assetData;
     }
 
@@ -183,7 +191,7 @@ class AssetFilter extends BaseFilter
         $output = array();
 
         if (isset($metaData['aoi']) && is_array($metaData['aoi']) && 4 === count($metaData['aoi']))
-        {   
+        {
             $exifConfig = \AgaviConfig::get('core.config_dir') . DIRECTORY_SEPARATOR . 'exiftool.conf';
 
             $exifToolCommand = sprintf('exiftool -config %s -AOI="%s" %s',
@@ -194,21 +202,21 @@ class AssetFilter extends BaseFilter
 
             // @todo Use the LoggingService when it lands.
             file_put_contents(
-                \AgaviConfig::get('core.app_dir') . '/log/exif_tool.log', 
-                date('Y-m-d H:i:s') . ': ' . $exifToolCommand . ' -> ' . implode(PHP_EOL, $output) . PHP_EOL, 
+                \AgaviConfig::get('core.app_dir') . '/log/exif_tool.log',
+                date('Y-m-d H:i:s') . ': ' . $exifToolCommand . ' -> ' . implode(PHP_EOL, $output) . PHP_EOL,
                 FILE_APPEND
             );
-        }   
+        }
         else
-        {   
+        {
             $exifConfig = \AgaviConfig::get('core.config_dir') . DIRECTORY_SEPARATOR . 'exiftool.conf';
-            $exifToolCommand = sprintf('exiftool -config %s -AOI="" %s', $exifConfig, $filePath);  
+            $exifToolCommand = sprintf('exiftool -config %s -AOI="" %s', $exifConfig, $filePath);
 
             exec($exifToolCommand, $output, $exifStatus);
-        }   
+        }
 
         if ('1' == $exifStatus)
-        {   
+        {
             throw new \Exception("Unable to write aoi information to binary: " . implode(PHP_EOL, $output));
         }
     }

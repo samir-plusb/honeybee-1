@@ -2,11 +2,11 @@
 
 namespace Honeybee\Core\Export\Filter;
 
-use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Dat0r\BaseDocument;
 
 class ReferenceFilter extends BaseFilter
 {
-    public function execute(Document $document)
+    public function execute(BaseDocument $document)
     {
         $filterOutput = array();
 
@@ -27,7 +27,7 @@ class ReferenceFilter extends BaseFilter
                     {
                         $refData[$exportKey] = $refDocument->getShortIdentifier();
                     }
-                    else 
+                    else
                     {
                         $field = $refDocument->getModule()->getField($fieldname);
                         $actsAsAssetsField = (bool)$field->getOption('acts_as_assets_field', FALSE);

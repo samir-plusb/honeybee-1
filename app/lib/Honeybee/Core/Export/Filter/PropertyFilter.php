@@ -2,14 +2,14 @@
 
 namespace Honeybee\Core\Export\Filter;
 
-use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Dat0r\BaseDocument;
 use Honeybee\Core\Import\Filter;
 use Dat0r\Core\Document as Dat0r;
 use Dat0r\Core\Field\ReferenceField;
 
 class PropertyFilter extends BaseFilter
 {
-    public function execute(Document $document)
+    public function execute(BaseDocument $document)
     {
         $filter_output = array();
 
