@@ -41,6 +41,7 @@ class WorkflowAction extends BaseAction
         }
         catch (\Exception $e)
         {
+            throw $e;
             $this->setAttribute(
                 'content',
                 'An unexpected workflow error occured while processing: ' . $e->getMessage()

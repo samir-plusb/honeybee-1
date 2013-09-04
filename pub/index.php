@@ -1,5 +1,7 @@
 <?php
 
+ini_set('xdebug.max_nesting_level', '200');
+
 $default_context = 'web';
 $environment_modifier = '';
 

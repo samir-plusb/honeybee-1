@@ -271,6 +271,7 @@ class ListAction extends BaseAction
                     $gates[] = array(
                         'label' => $tm->_($workflowStep.'.'.$gateName, $translationDomain),
                         'name' => $gateName,
+                        'key' => $workflowStep.'.'.$gateName,
                         'prompt' => $promptMsg
                     );
                 }
@@ -304,6 +305,7 @@ class ListAction extends BaseAction
                         $customActions[] = array(
                             'label' => $tm->_($actionName, $translationDomain),
                             'name' => $actionName,
+                            'key' => $workflowStep . '.' . $actionName,
                             'prompt' => ($promptMsg === $promptLangKey) ? FALSE : $promptMsg,
                             'binding' => array(
                                 'method' => $actionDefinition['action'],

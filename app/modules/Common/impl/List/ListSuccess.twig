@@ -53,7 +53,7 @@
                     <ul class="dropdown-menu">
                     {% for action_name, action in batch_actions %}
                         <li>
-                            <a class="honeybee-action honeybee-action-{{action_name}}"
+                            <a class="honeybee-action honeybee-action-{{action_name}} key-{{action[key]}}"
                                data-bind="click: function(item, event) { var is_batch = true; {{action}} },">
                                {{ tm._(action_name, translation_domain) }}
                            </a>
@@ -193,11 +193,11 @@
     ListData Table Body
 ************************************************** #}
             <tbody data-bind="foreach: list_items">
-                <tr data-bind='event:{ dragstart: dragStart }, 
-                        attr: { 
+                <tr data-bind='event:{ dragstart: dragStart },
+                        attr: {
                             "draggable": ({{ sidebar_tree_targets|length }} > 0 && $data.workflow.interactive && ! $data.workflow.readonly) ? "true" : "false",
-                            "id": $data.data.identifier, 
-                            "class":  $data.css_classes 
+                            "id": $data.data.identifier,
+                            "class":  $data.css_classes
                         }'>
                     {% if true == select_only_mode or false == readonly %}
                     <td class="list_item_checkbox">
@@ -212,13 +212,13 @@
                     <td class="actions">
                         <div class="btn-group dropdown">
                             <!-- ko if: $data.workflow.interactive === true && $data.workflow.readonly == true -->
-                            <button class="btn honeybee-action honeybee-action-edit" 
+                            <button class="btn honeybee-action honeybee-action-edit"
                                 data-bind="click: function(item, event) { $parent.ctrl.run(false, item); }">
                                 {{ tm._('view', translation_domain) }}
                             </button>
                             <!-- /ko -->
                             <!-- ko if: $data.workflow.interactive === true && $data.workflow.readonly == false -->
-                            <button class="btn btn-primary honeybee-action honeybee-action-edit" 
+                            <button class="btn btn-primary honeybee-action honeybee-action-edit"
                                 data-bind="click: function(item, event) { $parent.ctrl.run(false, item); }">
                                 {{ tm._('edit', translation_domain) }}
                             </button>
@@ -235,23 +235,23 @@
                             <ul class="dropdown-menu pull-right">
                                 <!-- ko foreach: $data.workflow.gates -->
                                 <li>
-                                    <a data-bind="click: function(item, event) 
-                                    { 
-                                        $root.ctrl.proceed(false, $parent, $data.name, $data.prompt); 
-                                    }, text: $data.label, attr: { 'class': ('honeybee-action-' + $data.name) }"></a>
+                                    <a data-bind="click: function(item, event)
+                                    {
+                                        $root.ctrl.proceed(false, $parent, $data.name, $data.prompt);
+                                    }, text: $data.label, attr: { 'class': ('honeybee-action-' + $data.name + ' key-' + $data.key) }"></a>
                                 </li>
                                 <!-- /ko -->
                                 <!-- ko foreach: $data.custom_actions -->
                                 <li>
-                                    <a data-bind="click: function(item, event) 
-                                    { 
+                                    <a data-bind="click: function(item, event)
+                                    {
                                         var i, args = [false, $parent];
                                         for (i = 0; i < $data.binding.parameters.length; i++)
                                         {
                                             args.push($data.binding.parameters[i]);
                                         }
                                         $root.ctrl[$data.binding.method].apply($root.ctrl, args);
-                                    }, text: $data.label, attr: { 'class': ('honeybee-action-' + $data.name) }"></a>
+                                    }, text: $data.label, attr: { 'class': ('honeybee-action-' + $data.name + ' key-' + $data.key) }"></a>
                                 </li>
                                 <!-- /ko -->
                             </ul>

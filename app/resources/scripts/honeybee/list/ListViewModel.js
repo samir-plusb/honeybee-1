@@ -84,14 +84,14 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
 
                 for (n = 0; n < selected_item.workflow.gates.length; n++)
                 {
-                    incrementActionCount(selected_item.workflow.gates[n].name);
+                    incrementActionCount(selected_item.workflow.gates[n].key);
                 }
 
                 if (true === selected_item.workflow.interactive)
                 {
                     for (n = 0; n < selected_item.custom_actions.length; n++)
                     {
-                        incrementActionCount(selected_item.custom_actions[n].name);
+                        incrementActionCount(selected_item.custom_actions[n].key);
                     }
                 }
             }
