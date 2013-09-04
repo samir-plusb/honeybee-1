@@ -14,7 +14,14 @@ class DocumentExport extends GenericExport
 
         if ($data = $this->storage->read($identifier))
         {
-            parent::revoke($document);
+            $identifier = $data['identifier'];
+            $revision = $data['revision'];
+            $this->storage->delete($identifier, $revision);
+
+            foreach ($this->filters as $filter)
+            {
+                $filter->onDocumentRevoked($document);
+            }
         }
     }
 
