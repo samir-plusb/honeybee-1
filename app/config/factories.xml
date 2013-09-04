@@ -29,7 +29,7 @@
             </ae:parameter> -->
         </request>
 
-        <response class="AgaviWebResponse">
+        <response class="Honeybee\Agavi\Response\WebResponse">
             <ae:parameter name="send_content_length">false</ae:parameter> <!-- in HTTP 1.1 it's no longer necessary and in development var_dump() or similar could break correct content response length -->
             <ae:parameter name="expose_agavi">false</ae:parameter> <!-- disable X-Agavi header -->
             <!-- TODO: <ae:parameter name="use_sendfile_header">false</ae:parameter>
@@ -89,7 +89,7 @@
 
     <ae:configuration context="web" environment="development.*">
         <execution_filter class="Honeybee\Agavi\Filter\DebugExecutionFilter" />
-        <response class="AgaviWebResponse">
+        <response class="Honeybee\Agavi\Response\WebResponse">
             <ae:parameter name="expose_agavi">true</ae:parameter>
         </response>
     </ae:configuration>
