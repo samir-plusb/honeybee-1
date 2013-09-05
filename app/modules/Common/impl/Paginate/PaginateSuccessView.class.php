@@ -22,6 +22,13 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
     public function executeHtml(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
     {
         $this->setupHtml($parameters);
+
+        $listState = $parameters->getParameter('state');
+        $referenceModule = $listState->getReferenceModule();
+        $referenceField = $listState->getReferenceField();
+
+        $this->setAttribute('reference_field', $referenceField);
+        $this->setAttribute('reference_module', $referenceModule);
         $this->setAttribute('links', $this->generatePagingLinks($parameters));
         $this->setAttribute('list_filter', $this->getAttribute('filter'));
     }
@@ -82,7 +89,7 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
             if ($search)
             {
                 $pageLinkData['search'] = $search;
-            } 
+            }
             else if ($filter)
             {
                 $pageLinkData['filter'] = $filter;

@@ -80,6 +80,10 @@
             'sorting': routing_data_sorting
         } %}
 
+        {% if reference_field and reference_module %}
+            {% set route_data = route_data|merge({'referenceField': reference_field, 'referenceModule': reference_module}) %}
+        {% endif %}
+
         {% set link = ro.gen(route_name, route_data) %}
         {% if cur_page == current_page %}
             {% set active = true %}
@@ -88,7 +92,7 @@
         {% endif %}
 
         <li class="{{ active ? 'active' : ''}}">
-        
+
         {% if active %}
             <a>{{ cur_page + 1 }}</a>
         {% else %}
