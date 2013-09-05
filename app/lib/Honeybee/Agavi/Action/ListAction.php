@@ -321,6 +321,7 @@ class ListAction extends BaseAction
             {
                 $documentListItemData['custom_actions'] = array();
             }
+            $documentListItemData['css_classes'] = array('state-'.$workflowStep);
             $data[] = $documentListItemData;
         }
 

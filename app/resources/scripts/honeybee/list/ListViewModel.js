@@ -59,58 +59,73 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
             }
         });
 
+        var incrementActionCount = function (action_name)
+        {
+            if (typeof that.actionCountMap[action_name] === 'undefined')
+            {
+                that.actionCountMap[action_name] = 1;
+            }
+            else
+            {
+                that.actionCountMap[action_name]++;
+            }
+        };
+
         this.has_selection = ko.computed(function()
         {
             that.actionCountMap = {};
 
-            var enabled_actions_count = 0,
+            var enabled_actions = [], selected_states = [],
                 action, action_name, action_element, i, n;
-
-            function incrementActionCount(action_name)
-            {
-                if (typeof that.actionCountMap[action_name] === 'undefined')
-                {
-                    that.actionCountMap[action_name] = 1;
-                }
-                else
-                {
-                    that.actionCountMap[action_name]++;
-                }
-            };
-
+            // make sure only items with the same workflow state are selected
             for (i = 0; i < that.selected_items().length; i++)
             {
                 selected_item = that.selected_items()[i];
-
+                var matches = selected_item.css_classes.match(/state\-(\w+)/);
+                if (matches && selected_states.indexOf(matches[1]) == -1)
+                {
+                    selected_states.push(matches[1]);
+                }
+                if (i > 0 && selected_states.length > 1)
+                {
+                    return false;
+                }
+            }
+            // collect the various actions supported by the current selection
+            for (i = 0; i < that.selected_items().length; i++)
+            {
+                var action = selected_item.workflow.gates[n];
                 for (n = 0; n < selected_item.workflow.gates.length; n++)
                 {
-                    incrementActionCount(selected_item.workflow.gates[n].key);
+                    action = selected_item.workflow.gates[n];
+                    enabled_actions[action.name] = action.label;
                 }
-
                 if (true === selected_item.workflow.interactive)
                 {
                     for (n = 0; n < selected_item.custom_actions.length; n++)
                     {
-                        incrementActionCount(selected_item.custom_actions[n].key);
+                        action = selected_item.custom_actions[n];
+                        enabled_actions[action.name] = action.label;
                     }
                 }
             }
-
+            // enable/disable and translate the batchaction-picker's items
             for (action_name in that.supported_batch_actions)
             {
-                action_element = that.supported_batch_actions[action_name];
-                if (that.actionCountMap[action_name] === that.selected_items().length)
+                var action_item = that.supported_batch_actions[action_name];
+                var enabled_action = enabled_actions[action_name];
+                if (enabled_action)
                 {
-                    action_element.removeClass('disabled');
-                    enabled_actions_count++;
+                    action_item.removeClass('disabled');
+                    action_item.find('.honeybee-action').text(enabled_action);
                 }
                 else
                 {
-                    action_element.addClass('disabled');
+                    action_item.addClass('disabled');
                 }
             }
 
-            return 0 < that.selected_items().length && 0 < enabled_actions_count;
+            return 0 < that.selected_items().length;
         });
 
         this.has_filter = ko.observable(false);

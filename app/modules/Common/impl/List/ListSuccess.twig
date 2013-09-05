@@ -53,7 +53,7 @@
                     <ul class="dropdown-menu">
                     {% for action_name, action in batch_actions %}
                         <li>
-                            <a class="honeybee-action honeybee-action-{{action_name}} key-{{action[key]}}"
+                            <a class="honeybee-action honeybee-action-{{action_name}}"
                                data-bind="click: function(item, event) { var is_batch = true; {{action}} },">
                                {{ tm._(action_name, translation_domain) }}
                            </a>
