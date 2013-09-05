@@ -110,8 +110,8 @@ install-dev: install-composer install-vendor-dev install-node-deps cc
 
 	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
 	@make link-project-modules
-    @make link-project-app
-    @make config
+	@make link-project-app
+	@make config
 	@make deploy-resources
 
 
