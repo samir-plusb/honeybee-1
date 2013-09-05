@@ -865,29 +865,9 @@ div.select2-container-multi .select2-choices .select2-search-field
   margin-top: 20px;
 }
 
-.modal-reference-list
-{
-  width: 90%;
-  bottom: 5%;
-  margin-left: -45%;
-}
-
-.modal-reference-list .modal-header .close 
+.modal-reference-list .modal-header .close
 {
     margin-top: 5px;
-}
-
-.modal-reference-list .modal-body
-{
-  padding: 0px;
-  width: 100%;
-  height: 89.3%;
-  max-height: 94%;
-  margin: 0;
-  position: relative;
-  overflow: hidden;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
 }
 
 .modal-reference-list .modal-body iframe

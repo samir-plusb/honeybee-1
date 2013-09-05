@@ -391,12 +391,35 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     initRefbrowser: function()
     {
         var that = this;
+        var resizeDialog = function()
+        {
+            $reference_dialog = that.element.find('.modal-reference-list');
+            $dialog_body = $reference_dialog.find('.modal-body');
+            var refbrowser_width = $(window).width() - 100;
+            var refbrowser_height = $(window).height() - 100;
+            var center_margin = (refbrowser_width / 2);
+            var middle_margin = (refbrowser_height / 2);
+            var body_height = refbrowser_height - 82;
+            $reference_dialog.css({
+                'width': refbrowser_width,
+                'height': refbrowser_height,
+                'margin-top': -middle_margin,
+                'margin-left': -center_margin
+            });
+            $dialog_body.css({
+                'height': body_height,
+                'padding': 0,
+                'max-height': body_height
+            });
+        };
 
         this.iframe = this.element.find('.reference-list-access')[0];
         this.iframe.onload = function()
         {
             that.hideDialog(that.element.find('.modal-reference-loading'));
-            that.showDialog(that.element.find('.modal-reference-list'));
+            resizeDialog();
+            that.showDialog($reference_dialog);
+            window.onresize = resizeDialog;
         };
 
         this.element.find('.modal-reference-loading .modal-header .close-dialog').click(function()
