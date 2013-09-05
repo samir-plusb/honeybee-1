@@ -25,6 +25,41 @@ honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
             this.element.find(controls_to_hide.join(',')).hide();
             this.element.find('.aggregate').removeClass('collapsed');
         }
+
+        this.bindMapResetToParentTabClick();
+    },
+
+    bindMapResetToParentTabClick: function()
+    {
+        var that = this;
+        var $parent_tab = that.aggregate_list.parents('.tab-pane');
+        var tab_id = $parent_tab.attr('id');
+        $('.nav-tabs li a').each(function(idx, tab_item)
+        {
+            tab_item = $(tab_item);
+            if (tab_item.attr('href').match('#'+tab_id))
+            {
+                tab_item.click(function()
+                {
+                    setTimeout(function()
+                    {
+                        that.aggregate_list.find('> .aggregate').each(function(idx, aggregate)
+                        {
+                            var widget;
+                            if (aggregate.widgets.length > 0 && aggregate.widgets[0].map)
+                            {
+                                widget = aggregate.widgets[0];
+                                google.maps.event.trigger(widget.map, "resize");
+                                widget.map.setCenter(new google.maps.LatLng(
+                                    widget.location.lat(),
+                                    widget.location.lon()
+                                ));
+                            }
+                        });
+                    }, 500);
+                });
+            }
+        });
     },
 
     initAggregateListItem: function(aggregate_element)
@@ -77,7 +112,7 @@ honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
         );
 
         aggregate_element.find('.actions').css({
-            'margin-right': '100px',
+            'margin-right': '70px',
             'z-index': 200
         });
     },
@@ -130,9 +165,13 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
         this.map_canvas = this.element.find('.map-canvas').first();
         this.parent();
 
-        if (this.location)
+        if (this.location && this.location.lon() && this.location.lat())
         {
             this.renderLocationOnMap();
+        }
+        else
+        {
+            this.setDefaultMap();
         }
     },
 
@@ -243,67 +282,85 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
         }
     },
 
-    renderLocationOnMap: function()
+    setDefaultMap: function()
     {
-        var latlng = new google.maps.LatLng(
-            this.location.lat(),
-            this.location.lon()
-        );
-        var marker = new google.maps.Marker({
-            position: latlng,
-            title: this.location.name()
-        });
-
-        var map = new google.maps.Map(this.map_canvas[0], {
-            zoom: 16,
-            center: latlng,
+        this.map = new google.maps.Map(this.map_canvas[0], {
+            zoom: 6,
+            center: new google.maps.LatLng(52.519564, 13.408813),
             sensor:false,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
-        marker.setMap(map);
 
+        if (! this.options.readonly)
+        {
+            this.registerGeoCoder();
+        }
+    },
+
+    renderLocationOnMap: function()
+    {
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(
+                this.location.lat(),
+                this.location.lon()
+            ),
+            title: this.location.name()
+        });
+        this.map = new google.maps.Map(this.map_canvas[0], {
+            zoom: 16,
+            center: marker.getPosition(),
+            sensor:false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        marker.setMap(this.map);
+
+        if (! this.options.readonly)
+        {
+            this.registerGeoCoder();
+        }
+    },
+
+    registerGeoCoder: function()
+    {
         var geocoder = new google.maps.Geocoder();
 
         var that = this;
-        if (! this.options.readonly)
-        {
-            google.maps.event.addListener(map, 'click', function(event) {
-                marker.setPosition(event.latLng);
-                that.is_processing(true);
-                geocoder.geocode({'latLng': event.latLng}, function(results, status)
+        google.maps.event.addListener(this.map, 'click', function(event) {
+            marker.setPosition(event.latLng);
+            that.is_processing(true);
+            geocoder.geocode({'latLng': event.latLng}, function(results, status)
+            {
+                if (status == google.maps.GeocoderStatus.OK)
                 {
-                    if (status == google.maps.GeocoderStatus.OK)
+                    if (results[0])
                     {
-                        if (results[0])
+                        var components = results[0]['address_components'];
+                        var data = {};
+                        for (var i = 0; i < components.length; i++)
                         {
-                            var components = results[0]['address_components'];
-                            var data = {};
-                            for (var i = 0; i < components.length; i++)
-                            {
-                                var type = components[i].types[0];
-                                data[type] = components[i].long_name;
-                            }
-
-                            that.onLocationSelected(
-                                honeybee.widgets.LocationWidget.Location.createFromServiceResp({
-                                    street: data.route,
-                                    housenumber: data.street_name,
-                                    uzip: data.postal_code,
-                                    city: data.locality,
-                                    lat: event.latLng.lat(),
-                                    lon: event.latLng.lng()
-                                })
-                            );
-                            that.is_processing(false);
+                            var type = components[i].types[0];
+                            data[type] = components[i].long_name;
                         }
+
+                        that.onLocationSelected(
+                            honeybee.widgets.LocationWidget.Location.createFromServiceResp({
+                                street: data.route,
+                                housenumber: data.street_name,
+                                uzip: data.postal_code,
+                                city: data.locality,
+                                lat: event.latLng.lat(),
+                                lon: event.latLng.lng()
+                            })
+                        );
+                        that.is_processing(false);
                     }
-                    else
-                    {
-                        alert("Geocoder failed due to: " + status);
-                    }
-                });
+                }
+                else
+                {
+                    alert("Geocoder failed due to: " + status);
+                }
             });
-        }
+        });
     }
 });
 

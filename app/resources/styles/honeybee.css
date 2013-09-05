@@ -1268,6 +1268,12 @@ div.aggregate-module-item
   margin-top: -71px;
 }
 
+.widget-location-aggregate .input-group-label,
+.widget-location-widget .input-group-label
+{
+  margin-bottom: 0;
+}
+
 .widget-location-widget .aggregate .input-group-label .actions
 {
   margin-right: 50px;
