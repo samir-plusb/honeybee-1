@@ -28,8 +28,13 @@ class AssetFilter extends BaseFilter
         $assetProps = $this->getConfig()->get('properties');
         $documentShortId = null;
 
-        if ($document instanceof Document) {
+        if ($document instanceof Document)
+        {
             $documentShortId = $document->getShortIdentifier();
+        }
+        else
+        {
+            $documentShortId = $this->getConfig()->get('parent_identifier');
         }
 
         foreach ($assetProps as $fieldname => $exportFieldname)
@@ -41,19 +46,14 @@ class AssetFilter extends BaseFilter
             foreach ($fieldAssetIds as $assetId)
             {
                 $assetData = $this->buildAssetData(\ProjectAssetService::getInstance()->get($assetId));
-
                 if (! $assetData)
                 {
                     // broken asset ...
                     continue;
                 }
 
-                if ($documentShortId) {
-                    $assetData['sourceDoc'] = $documentShortId;
-                }
-
+                $assetData['sourceDoc'] = $documentShortId;
                 $this->storage->write($assetData);
-
                 $assetExportFields = $this->getConfig()->get('asset_fields', array('identifier' => 'id'));
 
                 $exportValue = array();
