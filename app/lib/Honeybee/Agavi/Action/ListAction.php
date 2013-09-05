@@ -154,7 +154,12 @@ class ListAction extends BaseAction
 
             foreach ($referenceField->getOption(ReferenceField::OPT_REFERENCES) as $reference)
             {
-                if ('\\' . get_class($this->getModule()) === $reference[ReferenceField::OPT_MODULE])
+                $referenceModuleName = $reference[ReferenceField::OPT_MODULE];
+                if ($referenceModuleName{0} !== '\\')
+                {
+                    $referenceModuleName = '\\' . $referenceModuleName;
+                }
+                if ('\\' . get_class($this->getModule()) === $referenceModuleName)
                 {
                     $listSettings['clientSideController']['options']['reference_field'] = $referenceField->getName();
                     $listSettings['clientSideController']['options']['reference_module'] = $referenceModule->getName();
