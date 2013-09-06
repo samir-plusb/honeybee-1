@@ -241,6 +241,9 @@
                                     }, text: $data.label, attr: { 'class': ('honeybee-action-' + $data.name + ' key-' + $data.key) }"></a>
                                 </li>
                                 <!-- /ko -->
+                                <!-- ko if: $data.custom_actions.length > 0 -->
+                                <li class="divider"></li>
+                                <!-- /ko -->
                                 <!-- ko foreach: $data.custom_actions -->
                                 <li>
                                     <a data-bind="click: function(item, event)

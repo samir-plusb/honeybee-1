@@ -64,8 +64,8 @@ class InteractivePlugin extends BasePlugin
         return TRUE;
     }
 
-    public function isBreakPoint() 
-    {   
+    public function isBreakPoint()
+    {
         return $this->getParameter('is_breakpoint', TRUE);
     }
 
@@ -84,8 +84,8 @@ class InteractivePlugin extends BasePlugin
 
         $result->setResponse($pluginContainer->execute());
         $result->freeze();
-
-        if ('write' === $pluginContainer->getRequestMethod() && 'published' === $ticket->getWorkflowStep())
+        $method = $this->getWorkflow()->getContainer()->getRequestMethod();
+        if ('write' === $method && 'published' === $ticket->getWorkflowStep())
         {
             $this->publishResource($resource);
         }
@@ -151,9 +151,10 @@ class InteractivePlugin extends BasePlugin
     {
         $resource = $this->getResource();
         $ticket = $resource->getWorkflowTicket()->first();
-
-        if ('published' === $ticket->getWorkflowStep())
-        {
+        // @todo read these workflow-step names from the plugin config.
+        if (('published' === $ticket->getWorkflowStep() && $gateName !== 'correction')
+            || ('correction' === $ticket->getWorkflowStep() && $gateName === 'demote')
+        ) {
             $this->revokeResource($resource);
         }
     }
