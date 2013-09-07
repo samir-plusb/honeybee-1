@@ -40,6 +40,7 @@
         "craur/craur": "1.6.*",
         "imagine/Imagine": "0.3.*",
         "jquery/jquery": "1.8.2",
+        "jquery/easing": "1.3",
         "allmarkedup/jquery-url-parser": "2.2.1",
         "farhadi/html5sortable": "0.9",
         "knockoutjs/knockoutjs": "2.2.1",

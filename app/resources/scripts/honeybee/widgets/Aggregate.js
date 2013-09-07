@@ -108,6 +108,12 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         this.initAggregateListItem(list_item);
         this.renderAggregatePositions();
 
+        list_item.find('textarea.ckeditor').each(function(idx, textarea)
+        {
+            $(textarea).css({'margin-left': '180px', 'margin-right': '50px'});
+            CKEDITOR.replace(textarea);
+        });
+
         if (focus)
         {
             var first_input = list_item.find('input').first();
@@ -154,6 +160,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
                 );
             }
         });
+
     },
 
     registerAggregateEvents: function(item)

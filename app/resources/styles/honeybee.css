@@ -1285,3 +1285,10 @@ div.aggregate-module-item
   display:inline;
   max-width: none;
 }
+
+.aggregates-list .aggregate .cke
+{
+  margin-left: 180px;
+  margin-right: 6.5%;
+  margin-bottom: 5px;
+}
