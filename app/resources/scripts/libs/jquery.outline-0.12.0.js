@@ -31,10 +31,10 @@
 				fillStyle: 'rgb(255,144,55)'
 			}],
 			viewportStyle: {
-				fillStyle: 'rgba(255,144,55,0.3)'
+				fillStyle: 'rgba(0, 136, 204, 0.2)'
 			},
 			viewportDragStyle: {
-				fillStyle: 'rgba(255,144,55,0.5)'
+				fillStyle: 'rgba(0, 136, 204, 0.4)'
 			},
 			invertViewport: false
 		};
