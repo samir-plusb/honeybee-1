@@ -1,7 +1,7 @@
 <div class="tagslist-input-wrapper">
   <input type="hidden" value="" data-bind="attr: { name: fieldname() + '[]' }" />
-  <input type="text" placeholder="Verknüpfen" data-bind="disable: options.readonly, 
-      css: { 'tagslist-input': true, 'span12': options.readonly }" />
+  <input type="text" placeholder="Verknüpfen" data-bind="disable: options.readonly,
+      css: { 'tagslist-input': true, 'span12': options.readonly }, attr: { 'id': options.field_id }" />
   <a href="#open_reference_browser" class="refbrowser-open tagslist-list-view" data-bind="click: function() { $data.launchReferenceBrowser(); }, visible: ! options.readonly">
     <span class="hb-icon-new-window" />
   </a>

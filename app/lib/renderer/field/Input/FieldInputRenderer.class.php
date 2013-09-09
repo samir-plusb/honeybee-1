@@ -50,7 +50,7 @@ class FieldInputRenderer extends FieldRenderer
             'fieldKey' => $this->options['field_key'],
             'field' => $this->getField(),
             'inputName' => $this->generateInputName($document),
-            'fieldId' => 'input-' . $fieldName,
+            'fieldId' => $this->generateInputId($document),
             'placeholder' => $this->getField()->getOption('placesholder', ''),
             'fieldValue' => $this->renderFieldValue($document),
             'widgetType' => $widgetType,
@@ -112,6 +112,14 @@ class FieldInputRenderer extends FieldRenderer
         }
 
         return is_scalar($value) ? $value : '';
+    }
+
+    protected function generateInputId(IDocument $document)
+    {
+        return sprintf(
+            'input-%s',
+            md5($this->generateInputName($document))
+        );
     }
 
     protected function getWidgetOptions(IDocument $document)

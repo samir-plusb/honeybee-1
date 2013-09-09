@@ -58,6 +58,7 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
             'autocomp_mappings' => $this->buildAutoCompleteOptions($document),
             'enable_inline_create' => $this->getField()->getOption('enable_inline_create', false),
             'fieldname' => $this->generateInputName($document),
+            'field_id' => $this->generateInputId($document),
             'realname' => $this->getField()->getName(),
             'max' => $maxCount,
             'tags' => $tags,
