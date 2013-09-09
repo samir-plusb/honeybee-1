@@ -5,6 +5,7 @@ namespace Honeybee\Agavi\Action;
 use Honeybee\Core\Dat0r\DocumentCollection;
 use Honeybee\Core\Dat0r\Document;
 use Dat0r\Core\Field\ReferenceField;
+use Dat0r\Core\Field\AggregateField;
 use Honeybee\Core\Import;
 use ListConfig;
 
@@ -30,12 +31,29 @@ class ListAction extends BaseAction
         if ($parameters->hasParameter('referenceField') && $parameters->hasParameter('referenceModule'))
         {
             $fieldname = $parameters->getParameter('referenceField');
+            $fieldparts = explode('.', $fieldname);
             $moduleClass = sprintf('Honeybee\\Domain\\%1$s\\%1$sModule', $parameters->getParameter('referenceModule'));
             $referenceModule = $moduleClass::getInstance();
-            $referenceField = $referenceModule->getField($fieldname);
-
-            $this->setAttribute('referenceModule', $referenceModule);
-            $this->setAttribute('referenceField', $referenceField);
+            $curModule = $referenceModule;
+            $curField = $curModule->getField(array_shift($fieldparts));
+            while (count($fieldparts) > 0)
+            {
+                if ($curField instanceof AggregateField)
+                {
+                    $aggregateModuleName = array_shift($fieldparts);
+                    foreach ($curField->getAggregateModules() as $aggregateModule)
+                    {
+                        if ($aggregateModule->getName() === $aggregateModuleName)
+                        {
+                            $curModule = $aggregateModule;
+                            break;
+                        }
+                    }
+                }
+                $curField = $curModule->getField(array_shift($fieldparts));
+            }
+            $this->setAttribute('referenceModule', $curModule);
+            $this->setAttribute('referenceField', $curField);
         }
 
         $service = $module->getService();

@@ -32,6 +32,7 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
                 'label' => $aggregateDocument->getModule()->getName(),
                 'type' => get_class($aggregateDocument),
                 'rendered_fields' => $this->renderAggregate(
+                    $document,
                     $aggregateDocument,
                     array(
                         $document->getModule()->getOption('prefix'),
@@ -60,6 +61,7 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
                 'label' => $aggregateModule->getName(),
                 'type' => $aggregateModule->getDocumentType(),
                 'rendered_fields' => $this->renderAggregateTemplate(
+                    $document,
                     $aggregateModule,
                     array(
                         $document->getModule()->getOption('prefix'),
@@ -87,12 +89,12 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
         );
     }
 
-    protected function renderAggregateTemplate(IModule $module, array $parentGroup = array())
+    protected function renderAggregateTemplate(IDocument $parentDocument, IModule $module, array $parentGroup = array())
     {
-        return $this->renderAggregate($module->createDocument(), $parentGroup);
+        return $this->renderAggregate($parentDocument, $module->createDocument(), $parentGroup);
     }
 
-    protected function renderAggregate(IDocument $document, array $parentGroup = array())
+    protected function renderAggregate(IDocument $parentDocument, IDocument $document, array $parentGroup = array())
     {
         $factory = new FieldRendererFactory($document->getModule());
 
@@ -105,7 +107,8 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
                 'fieldpath' => $field->getName(),
                 'field_key' => $this->getField()->getName().'.'.strtolower($document->getModule()->getName()).'.'.$field->getName(),
                 'translation_domain' => $parentGroup[0] . '.rendering.input.field',
-                'group' => $parentGroup
+                'group' => $parentGroup,
+                'parent_document' => $parentDocument
             );
             $renderer = $factory->createRenderer($field, FieldRendererFactory::CTX_INPUT, $options);
             $renderedFields[$field->getName()] = $renderer->render($document);

@@ -1,7 +1,9 @@
 <?php
 
 use Dat0r\Core\Field\ReferenceField;
+use Dat0r\Core\Field\AggregateField;
 use Dat0r\Core\Document\IDocument;
+
 
 class ReferenceFieldInputRenderer extends FieldInputRenderer
 {
@@ -94,12 +96,14 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                 'identity_field' => $identityField,
                 'module_label' => $tm->_($referencedModule->getName(), 'modules.labels'),
                 'list_url' => htmlspecialchars_decode(
-                    urldecode($this->getRouteLink($listRouteName, array(
-                        'referenceModule' => $document->getModule()->getName(),
-                        'referenceField' => $this->getField()->getName(),
+                    $this->getRouteLink($listRouteName, array(
+                        'referenceModule' => isset($this->options['parent_document'])
+                            ? $this->options['parent_document']->getModule()->getName()
+                            : $document->getModule()->getName(),
+                        'referenceField' => $this->generateReferenceName($document),
                         'offset' => 0,
                         'limit' => 10
-                    )))
+                    ))
                 ),
                 'uri' => htmlspecialchars_decode(
                     urldecode($this->getRouteLink($suggestRouteName, array(
@@ -124,7 +128,48 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                 );
             }
         }
-
         return $autoCompleteMappings;
+    }
+
+    protected function generateReferenceName(IDocument $document)
+    {
+        $name = '';
+        $group = isset($this->options['group']) ? $this->options['group'] : array();
+        $parent_document = isset($this->options['parent_document']) ? $this->options['parent_document'] : null;
+        if ($parent_document && isset($this->options['fieldpath']))
+        {
+            $fieldpath_parts = array_merge(
+                $group,
+                explode('.', $this->options['fieldpath'])
+            );
+            $nameparts = array();
+            $cur_module = $parent_document->getModule();
+            $cur_field = null;
+            array_shift($fieldpath_parts);
+            while(count($fieldpath_parts) > 0)
+            {
+                $fieldname = array_shift($fieldpath_parts);
+                $cur_field = $cur_module->getField($fieldname);
+                $nameparts[] = $fieldname;
+                if ($cur_field instanceof AggregateField)
+                {
+                    foreach ($cur_field->getAggregateModules() as $aggregate_module)
+                    {
+                        if ($aggregate_module === $document->getModule())
+                        {
+                            $cur_module = $aggregate_module;
+                            $nameparts[] = $cur_module->getName();
+                        }
+                    }
+                    array_shift($fieldpath_parts);
+                }
+            }
+            $name = implode('.', $nameparts);
+        }
+        else
+        {
+            $name = $this->getField()->getName();
+        }
+        return $name;
     }
 }

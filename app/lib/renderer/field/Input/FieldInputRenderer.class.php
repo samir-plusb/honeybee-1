@@ -141,25 +141,26 @@ class FieldInputRenderer extends FieldRenderer
         {
             $first = true;
             $fieldpath_parts = explode('.', $this->options['fieldpath']);
+            $name_parts = array();
             foreach($fieldpath_parts as $part)
             {
                 if ($first)
                 {
-                    $group = $document->getModule()->getOption('prefix');
+                    $name_parts = array($document->getModule()->getOption('prefix'));
                     $group_parts = isset($this->options['group']) ? $this->options['group'] : null;
                     if (is_array($group_parts))
                     {
-                        $first_part = array_shift($group_parts);
-                        $group = sprintf('%s[%s]', $first_part, implode('][', $group_parts));
+                        $name_parts = $group_parts;
                     }
-                    $name = sprintf('%s[%s]', $group, $part);
+                    $name_parts[] = $part;
                     $first = FALSE;
                 }
                 else
                 {
-                    $name .= sprintf('[%s]', $part);
+                    $name_parts[] = $part;
                 }
             }
+            $name = $this->generateArrayPath($name_parts);
         }
         else
         {
@@ -171,6 +172,12 @@ class FieldInputRenderer extends FieldRenderer
         }
 
         return $name;
+    }
+
+    protected function generateArrayPath(array $path_parts)
+    {
+        $first_part = array_shift($path_parts);
+        return sprintf('%s[%s]', $first_part, implode('][', $path_parts));
     }
 
     protected function getTemplateName()
