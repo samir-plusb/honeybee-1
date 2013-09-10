@@ -68,6 +68,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
     registerDisplayedTextInputs: function(aggregate)
     {
         var first_input = aggregate.find('input').first();
+        var that = this;
         first_input.change(function()
         {
             var text = first_input.val();
@@ -79,6 +80,11 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
                     short_text = short_text + ' ...';
                 }
                 aggregate.find('.input-group-label .displayed_text').text(' ' + short_text);
+
+                that.fire('aggregate-label-changed', [{
+                    'field': that.options.fieldname,
+                    'element': aggregate
+                }]);
             }
         });
 
@@ -117,9 +123,15 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         if (focus)
         {
             var first_input = list_item.find('input').first();
-            first_input[0].focus();
-            $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350);
+            $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350, function()
+            {
+                first_input.focus();
+            });
         }
+        this.fire('aggregate-added', [{
+            'field': this.options.fieldname,
+            'element': list_item
+        }]);
 
         return list_item;
     },
@@ -168,40 +180,70 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         var that = this;
         item.find('.actions .aggregate-remove').click(function(remove_event)
         {
-            item.remove();
-            that.renderAggregatePositions();
-
-            that.fire('aggregate-removed', [{
-                'field': that.options.fieldname,
-                'element': item[0]
-            }]);
+            that.removeItem(item);
+            return false;
         });
 
         item.find('.actions .aggregate-up').click(function(move_up_event)
         {
-            item.insertBefore(item.prev());
-            that.renderAggregatePositions();
+            that.moveItemUp(item);
+            return false;
         });
 
         item.find('.actions .aggregate-down').click(function(move_down_event)
         {
-            item.insertAfter(item.next());
-            that.renderAggregatePositions();
+            that.moveItemDown(item);
+            return false;
         });
 
-        item.find('.actions .aggregate-expand').click(function(expand_event)
+        item.find('.input-group-label').click(function(expand_event)
         {
-            item.removeClass('collapsed');
-
-            var first_input = item.find('input').first();
-            first_input.focus();
-            $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350);
+            if (item.hasClass('collapsed'))
+            {
+                item.removeClass('collapsed');
+                var first_input = item.find('input').first();
+                first_input.focus();
+                $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350, function()
+                {
+                    first_input.focus();
+                });
+            }
+            else
+            {
+                item.addClass('collapsed');
+            }
         });
+    },
 
-        item.find('.actions .aggregate-collapse').click(function(collapse_event)
-        {
-            item.addClass('collapsed');
-        });
+    moveItemUp: function(item)
+    {
+        item.insertBefore(item.prev());
+        this.renderAggregatePositions();
+        this.fire('aggregate-moved-up', [{
+            'field': this.options.fieldname,
+            'element': item
+        }]);
+    },
+
+    moveItemDown: function(item)
+    {
+        item.insertAfter(item.next());
+        this.renderAggregatePositions();
+        this.fire('aggregate-moved-down', [{
+            'field': this.options.fieldname,
+            'element': item
+        }]);
+    },
+
+    removeItem: function(item)
+    {
+        item.remove();
+        this.renderAggregatePositions();
+
+        this.fire('aggregate-removed', [{
+            'field': this.options.fieldname,
+            'element': item[0]
+        }]);
     },
 
     renderAggregatePositions: function()
@@ -229,7 +271,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             {
                 cur_widget = element.widgets[i];
                 if (!cur_widget.fieldname) {
-                    // @todo shouldn't happen, but it does :S 
+                    // @todo shouldn't happen, but it does :S
                     // find out why ...
                     continue;
                 }
