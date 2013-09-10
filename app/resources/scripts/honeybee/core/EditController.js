@@ -161,7 +161,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
                 {
                     window.location.href = resp_data.redirect_url;
                 }
-                // @todo history.pushState nice 2 have here
+                that.fire('document-stored');
             }
             else if('error' === resp_data.state)
             {
@@ -175,7 +175,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         this.request_pending(true);
         honeybee.core.Request.curry(
             post_url,
-            form.serialize(), 
+            form.serialize(),
             'post'
         )(handleResponse, handleResponse);
     },
