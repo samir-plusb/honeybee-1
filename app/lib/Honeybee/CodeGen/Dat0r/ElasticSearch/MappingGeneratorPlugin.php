@@ -134,19 +134,51 @@ class MappingGeneratorPlugin
     protected function mapReference($fieldName, $field, $moduleDefinition)
     {
         $esType = self::$typeMap[$field->getShortName()];
-
+        $properties = array(
+            'id' => array(
+                'type' => 'string',
+                'index' => 'not_analyzed'
+            ),
+            'module' => array(
+                'type' => 'string',
+                'index' => 'not_analyzed'
+            )
+        );
+        foreach ($field->getOptions()->filterByName('references')->getValue() as $reference_option)
+        {
+            $index_fields_option = $reference_option->getValue()->filterByName('index_fields');
+            if ($index_fields_option)
+            {
+                foreach ($index_fields_option->getValue()->toArray() as $index_fieldname)
+                {
+                    $properties[$index_fieldname] =  array(
+                        'type' => 'multi_field',
+                        'fields' => array(
+                            $index_fieldname => array(
+                                'type' => 'string'
+                            ),
+                            'sort' => array(
+                                'type' => 'string',
+                                'analyzer' => 'IcuAnalyzer_DE',
+                                'inlclude_in_all' => FALSE
+                            ),
+                            'filter' => array(
+                                'type' => 'string',
+                                'index' => 'not_analyzed'
+                            ),
+                            'suggest' => array(
+                                'type' => 'string',
+                                'analyzer' => 'AutoCompleteAnalyzer',
+                                'inlclude_in_all' => FALSE
+                            )
+                        )
+                    );
+                }
+            }
+        }
         return array(
             'type' => $esType,
-            'properties' => array(
-                'id' => array(
-                    'type' => 'string',
-                    'index' => 'not_analyzed'
-                ),
-                'module' => array(
-                    'type' => 'string',
-                    'index' => 'not_analyzed'
-                )
-            )
+            'properties' => $properties
         );
     }
 
