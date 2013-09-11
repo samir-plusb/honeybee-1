@@ -99,16 +99,16 @@ deploy-resources:
 #
 install: install-composer install-vendor install-node-deps cc
 
-	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
+	@make check-env
 	@make link-project-modules
 	@make link-project-app
 	@make config
 	@make deploy-resources
 
 
-install-dev: install-composer install-vendor-dev install-node-deps cc
+install-dev: install-composer install-vendor-dev install-node-deps
 
-	@if [ ! -f etc/local/local.config.sh ]; then bin/configure-env --init; fi
+	@make check-env
 	@make link-project-modules
 	@make link-project-app
 	@make config
@@ -163,6 +163,11 @@ update-vendor-dev:
 generate-autoloads:
 
 	@php bin/composer.phar dump-autoload
+
+
+check-env:
+
+	@vendor/bin/environaut check
 
 
 #

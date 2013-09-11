@@ -15,22 +15,22 @@ class Client
     const CMD_PEEK = '/peek';
 
     protected $connected = FALSE;
-        
+
     protected $servers = array();
-        
+
     protected $kestrelApi = NULL;
 
     public function __construct()
     {
-        $this->kestrelApi = new \memcached;
+        $this->kestrelApi = new \Memcached();
     }
-        
+
     public function addServer($host, $port)
     {
         $this->servers[] = array('host' => $host, 'port' => $port);
         $this->kestrelApi->addServer($host, $port);
     }
-    
+
     public function connect(array $servers)
     {
         if (! $this->isConnected())
@@ -48,37 +48,37 @@ class Client
     {
         return $this->connected;
     }
-    
+
     public function get($key, $reliable = FALSE)
     {
         if (TRUE === $reliable)
         {
             $key .= self::CMD_READ;
         }
-        
+
         return $this->kestrelApi->get($key);
     }
-    
+
     public function close($key)
     {
         return $this->kestrelApi->get($key . self::CMD_CLOSE);
     }
-    
+
     public function abort($key)
     {
         return $this->kestrelApi->get($key . self::CMD_ABORT);
     }
-    
+
     public function getNext($key) //always a reliable read. does a close and a get
     {
         return $this->kestrelApi->get($key . self::CMD_RELIABLE_READ);
     }
-    
+
     public function peek($key)
     {
         return $this->kestrelApi->get($key . self::CMD_PEEK);
     }
-    
+
     public function set($key, $value, $expire = 0)
     {
         return $this->kestrelApi->set($key, $value, $expire);
