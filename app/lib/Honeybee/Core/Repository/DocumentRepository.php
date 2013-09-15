@@ -5,6 +5,7 @@ namespace Honeybee\Core\Repository;
 use Honeybee\Core\Finder\IFinder;
 use Honeybee\Core\Storage\IStorage;
 use Honeybee\Core\Dat0r\Module;
+use Honeybee\Core\Dat0r\ModuleService;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\DocumentCollection;
 
@@ -64,7 +65,6 @@ class DocumentRepository extends BaseRepository
         {
             $document->checkMandatoryFields();
             $document->onBeforeWrite();
-
             $data = $document->toArray();
             $data['type'] = get_class($document);
             $revision = $this->getStorage()->write($data);

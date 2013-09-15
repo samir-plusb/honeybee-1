@@ -5,7 +5,7 @@ use Honeybee\Core\Dat0r\Module;
 class DefaultListValueRenderer implements IListValueRenderer
 {
     protected $module;
-    
+
     public function __construct(Module $module)
     {
         $this->module = $module;

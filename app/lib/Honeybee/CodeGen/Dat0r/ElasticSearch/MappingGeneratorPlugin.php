@@ -27,6 +27,9 @@ class MappingGeneratorPlugin
     public function __construct(array $options = array())
     {
         $this->options = $options;
+
+        $base_dir = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
+        require_once $base_dir . '/config/includes/autoload.php';
     }
 
     public function execute($moduleSchema)
@@ -82,6 +85,7 @@ class MappingGeneratorPlugin
 
         $deployPath = $this->options['deploy_path'];
         $jsonString = $this->formatJson(json_encode($indexDefinition));
+        error_log("deploying to: " . $deployPath);
         file_put_contents($deployPath, $jsonString);
 
         $this->schema = null;
@@ -149,12 +153,26 @@ class MappingGeneratorPlugin
             $index_fields_option = $reference_option->getValue()->filterByName('index_fields');
             if ($index_fields_option)
             {
+                $referenced_module_class = $reference_option->getValue()->filterByName('module')->getValue();
+
+                if (!class_exists($referenced_module_class))
+                {
+                    throw new Exception(
+                        sprintf(
+                            "Unable to load referenced module '%s' while generating reference index mappings for %s.",
+                            $referenced_module_class,
+                            $moduleDefinition->getName()
+                        )
+                    );
+                }
+                $referenced_module = $referenced_module_class::getInstance();
                 foreach ($index_fields_option->getValue()->toArray() as $index_fieldname)
                 {
-                    $properties[$index_fieldname] =  array(
+                    $referenced_index_fieldname = $referenced_module->getOption('prefix') . '.' . $index_fieldname;
+                    $properties[$referenced_index_fieldname] =  array(
                         'type' => 'multi_field',
                         'fields' => array(
-                            $index_fieldname => array(
+                            $referenced_index_fieldname => array(
                                 'type' => 'string'
                             ),
                             'sort' => array(

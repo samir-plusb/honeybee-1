@@ -22,7 +22,7 @@ class Client
 
     public function __construct()
     {
-        $this->kestrelApi = new \Memcached();
+        $this->kestrelApi = new \memcached();
     }
 
     public function addServer($host, $port)

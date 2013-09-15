@@ -3,6 +3,8 @@
 namespace Honeybee\Core\Workflow\Plugin;
 
 use Honeybee\Core\Workflow;
+use Honeybee\Core\Queue\Job\UpdateBackReferencesJob;
+use Honeybee\Core\Queue\Job\JobQueue;
 
 /**
  * The WorkflowInteractivePlugin serves as the base for interactive plugins.
@@ -85,9 +87,19 @@ class InteractivePlugin extends BasePlugin
         $result->setResponse($pluginContainer->execute());
         $result->freeze();
         $method = $this->getWorkflow()->getContainer()->getRequestMethod();
-        if ('write' === $method && 'published' === $ticket->getWorkflowStep())
+
+        if ('write' === $method)
         {
-            $this->publishResource($resource);
+            if ('published' === $ticket->getWorkflowStep())
+            {
+                $this->publishResource($resource);
+            }
+            $queue = new JobQueue('prio:1-default_queue');
+            $job_data = array(
+                'module_class' => get_class($resource->getModule()),
+                'document_identifier' => $resource->getIdentifier()
+            );
+            $queue->push(new UpdateBackReferencesJob($job_data));
         }
 
         return $result;

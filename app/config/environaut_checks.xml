@@ -134,7 +134,7 @@
             <check name="max_execution_time" value=">=30" comparison="integer" infinite="0" class="&phpsetting;" />
             <check name="enable_post_data_reading" value="1" class="&phpsetting;" />
             <check name="post_max_size" value=">=256M" comparison="integer" infinite="0" class="&phpsetting;" />
-            <check name="allow_url_fopen" value="0" class="&phpsetting;" />
+            <check name="allow_url_fopen" value="1" class="&phpsetting;" />
             <check name="allow_url_include" value="0" class="&phpsetting;" />
             <check name="log_errors" value="1" class="&phpsetting;" />
             <check name="error_log" comparison="notempty" class="&phpsetting;" />
@@ -227,7 +227,7 @@ If you set it to an empty string, PHP doesn't scan at all. The default is ".user
             </check>
             <check class="&executable;" name="php">
                 <parameter name="default">php</parameter>
-                <parameter name="version_mask" space="preserve" literalize="false">/^PHP (5.4.\d{1,2}).*/</parameter>
+                <parameter name="version_mask" space="preserve" literalize="false">/^PHP (5.3.\d{1,2}).*/</parameter>
             </check>
             <check class="&executable;" name="curl">
                 <parameter name="default">curl</parameter>

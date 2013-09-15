@@ -51,7 +51,7 @@ abstract class BaseJob implements IJob, IQueueItem
     public function setState($state)
     {
         static $validStates = array(
-            self::STATE_FRESH, self::STATE_SUCCESS, 
+            self::STATE_FRESH, self::STATE_SUCCESS,
             self::STATE_ERROR, self::STATE_FATAL
         );
 

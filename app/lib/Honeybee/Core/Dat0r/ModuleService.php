@@ -8,7 +8,7 @@ class ModuleService
     {
         $modules = array();
         $iter = new \DirectoryIterator(\AgaviConfig::get('core.modules_dir'));
-        
+
         foreach($iter as $file)
         {
             $configPath = $file->getPathname() .
@@ -17,15 +17,11 @@ class ModuleService
             if (is_readable($configPath))
             {
                 $moduleName = str_replace(
-                    \AgaviConfig::get('core.modules_dir') . DIRECTORY_SEPARATOR, 
-                    '', 
+                    \AgaviConfig::get('core.modules_dir') . DIRECTORY_SEPARATOR,
+                    '',
                     $file->getPathname()
                 );
 
-                if ('User' === $moduleName && ! \AgaviConfig::get('user.module_active', FALSE))
-                {
-                    continue;
-                }
                 // @todo refactor hardcoded namespace to be appropiately dynamic.
                 $implementor = sprintf('Honeybee\\Domain\\%1$s\\%1$sModule', $moduleName);
                 $factory = array($implementor, 'getInstance');

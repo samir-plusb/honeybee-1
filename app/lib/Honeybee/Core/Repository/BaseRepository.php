@@ -36,7 +36,7 @@ abstract class BaseRepository implements IRepository
     {
         return $this->storage;
     }
-    
+
     public function getModule()
     {
         return $this->module;

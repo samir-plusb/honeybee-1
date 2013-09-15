@@ -2,9 +2,7 @@
 
 namespace Honeybee\Core\Dat0r;
 
-use Zend\Permissions\Acl;
 use Honeybee\Core\Workflow\IResource;
-use Dat0r\Core\Field\ReferenceField;
 
 abstract class Document extends BaseDocument implements IResource
 {
