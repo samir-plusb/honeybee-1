@@ -3,21 +3,16 @@
 namespace Honeybee\Core\Queue\Job;
 
 // @todo register shutdown listener to notify parent process
-class JobQueueWorker
+class JobQueueWorker extends Runnable
 {
-    private static $supported_signals = array(SIGINT, SIGUSR1, SIGUSR2);
+    static protected $supported_signals = array(SIGINT, SIGUSR1, SIGUSR2);
 
-    private $running = false;
+    protected $stats;
 
-    private $ipc_messaging;
-
-    private $job_queue;
-
-    private $stats;
-
-    public function __construct($queue_name, $ipc_channel)
+    public function __construct($queue_name, $msg_queue_id, $ipc_channel)
     {
-        $this->running = false;
+        parent::__construct($queue_name, $msg_queue_id, $ipc_channel);
+
         $this->stats = array(
             'executed_jobs' => 0,
             'failed_jobs' => 0,
@@ -25,47 +20,14 @@ class JobQueueWorker
             'started_at' => null,
             'uptime' => 0
         );
-        $this->job_queue = new JobQueue($queue_name);
-        $this->initIpcMessaging($queue_name, $ipc_channel);
     }
 
-    public function start()
+    protected function getSupportedSignals()
     {
-        if ($this->running) {
-            return false;
-        }
-
-        declare(ticks = 1);
-
-        $this->running = true;
-        $this->log(
-            "Started jobqueue worker with pid: " . posix_getpid() . ", parent is: " . posix_getppid()
-        );
-        pcntl_sigprocmask(SIG_BLOCK, self::$supported_signals);
-
-        while ($this->running) {
-            $this->handleSignal(
-                pcntl_sigwaitinfo(self::$supported_signals)
-            );
-        }
-
-        $this->running = false;
-        $this->ipc_messaging->destroy();
+        return self::$supported_signals;
     }
 
-    protected function initIpcMessaging($queue_name, $ipc_channel)
-    {
-        $queue_path_parts = array(
-            dirname(\AgaviConfig::get('core.app_dir')),
-            'etc',
-            'local',
-            $queue_name . '.msg_q'
-        );
-        $queue_path = implode(DIRECTORY_SEPARATOR, $queue_path_parts);
-        $this->ipc_messaging = new IpcMessaging($queue_path, 'H', $ipc_channel);
-    }
-
-    protected function handleSignal($signo)
+    protected function onSignalReceived($signo)
     {
         switch ($signo) {
             case SIGINT:
@@ -79,9 +41,7 @@ class JobQueueWorker
                 } else {
                     $this->log("Didn't find a job.");
                     $this->ipc_messaging->send(
-                        json_encode(
-                            array('status' => 'idle', 'worker_pid' => posix_getpid())
-                        )
+                        json_encode(array('status' => 'idle', 'worker_pid' => posix_getpid()))
                     );
                     posix_kill(posix_getppid(), SIGUSR2);
                 }
@@ -100,26 +60,31 @@ class JobQueueWorker
         try {
             $this->log("Executing job-type: " . get_class($job));
             if (IJob::STATE_SUCCESS === $job->run()) {
-                $this->job_queue->closeCurrent();
-
-                $this->stats['executed_jobs']++;
-                $this->log("Successfully executed job-type: " . get_class($job));
-
-                $this->ipc_messaging->send(
-                    json_encode(
-                        array('status' => 'success', 'worker_pid' => posix_getpid())
-                    )
-                );
-                posix_kill(posix_getppid(), SIGUSR2);
+                $this->onJobSuccess($job);
             } else {
-                $this->handleFailedJob($job);
+                $this->onJobFailed($job);
             }
         } catch(Exception $e) {
-            $this->handleFailedJob($job);
+            $this->onJobFailed($job);
         }
     }
 
-    protected function handleFailedJob(IJob $job)
+    protected function onJobSuccess(IJob $job)
+    {
+        $this->job_queue->closeCurrent();
+
+        $this->stats['executed_jobs']++;
+        $this->log("Successfully executed job-type: " . get_class($job));
+
+        $this->ipc_messaging->send(
+            json_encode(
+                array('status' => 'success', 'worker_pid' => posix_getpid())
+            )
+        );
+        posix_kill(posix_getppid(), SIGUSR2);
+    }
+
+    protected function onJobFailed(IJob $job)
     {
         $this->log("An error occured while executing job-type: " . get_class($job));
         $this->job_queue->closeCurrent();
@@ -138,13 +103,5 @@ class JobQueueWorker
         }
         $this->ipc_messaging->send(json_encode($notify_info));
         posix_kill(posix_getppid(), SIGUSR2);
-    }
-
-    protected function log($message)
-    {
-        $now = new \DateTime();
-        error_log(
-            sprintf('[%s][%s][%s] %s', __CLASS__, posix_getpid(), $now->format('h:i:s.u'), $message)
-        );
     }
 }

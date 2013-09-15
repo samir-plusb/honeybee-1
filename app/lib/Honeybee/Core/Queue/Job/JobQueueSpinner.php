@@ -3,77 +3,49 @@
 namespace Honeybee\Core\Queue\Job;
 
 // @todo register shutdown listener to cleanup pid file
-class JobQueueSpinner
+class JobQueueSpinner extends Runnable
 {
-    const IPC_CHANNEL = 23;
+    static protected $supported_signals = array(SIGHUP, SIGINT, SIGTERM, SIGQUIT, SIGUSR1, SIGUSR2);
 
-    private static $supported_signals = array(
-        SIGHUP, SIGINT, SIGTERM, SIGQUIT, SIGUSR1, SIGUSR2
-    );
+    protected $stats;
 
-    private $running;
+    protected $worker_pool_size;
 
-    private $stats;
+    protected $busy_worker_pids;
 
-    private $job_queue;
+    protected $available_worker_pids;
 
-    private $ipc_messaging;
-
-    private $worker_pool_size;
-
-    private $busy_worker_pids;
-
-    private $available_worker_pids;
-
-    public function __construct()
+    public function __construct($queue_name, $msg_queue_id, $ipc_channel)
     {
-        $this->running = false;
+        parent::__construct($queue_name, $msg_queue_id, $ipc_channel);
+
         $this->busy_worker_pids = array();
         $this->available_worker_pids = array();
         $this->stats = array();
     }
 
-    public function start($queue_name, $pool_size = 3)
+    protected function setUp(array $parameters)
     {
-        if ($this->running === true) {
-            return;
-        }
-
-        declare(ticks = 1);
-
-        // block interupting signals, to allow for graceful shutdowns
-        // thereby letting a current loopcycle complete before terminating.
-        pcntl_sigprocmask(SIG_BLOCK, self::$supported_signals);
-        $this->log("Started jobqueue spinner with pid: " . posix_getpid());
-
-        $this->worker_pool_size = $pool_size;
+        $this->writePidFile();
         $this->stats['started_at'] = new \DateTime();
-        $this->running = true;
 
-        $this->writePidFile($queue_name);
-        $this->spawnWorkers($queue_name);
+        $this->spawnWorkers(isset($parameters['pool_size']) ? $parameters['pool_size'] : 3);
         $this->log("Finshed spawning workers, available pids: " . implode(',', $this->available_worker_pids));
 
-        $this->job_queue = new JobQueue($queue_name);
-        $this->initIpcMessaging($queue_name);
-        $this->run();
-
-        $this->removePidFile($queue_name);
-        $this->log("The spinner process is going to die now.");
-        $this->running = false;
-        $this->ipc_messaging->destroy();
+        parent::setUp($parameters);
     }
 
-    protected function spawnWorkers($queue_name)
+    protected function spawnWorkers($num_workers)
     {
+        $this->worker_pool_size = $num_workers;
         for ($i = 0; $i < $this->worker_pool_size; $i++)
         {
             $pid = pcntl_fork();
             if (-1 === $pid) {
                 $this->running = false;
             } elseif (0 === $pid) {
-                $worker = new JobQueueWorker($queue_name, self::IPC_CHANNEL);
-                $worker->start();
+                $worker = new JobQueueWorker($this->queue_name, $this->msg_queue_id, $this->ipc_channel);
+                $worker->run();
                 exit(0);
             } else {
                 $this->available_worker_pids[] = $pid;
@@ -81,30 +53,14 @@ class JobQueueSpinner
         }
     }
 
-    protected function initIpcMessaging($queue_name)
+    protected function tick(array $parameters)
     {
-        $queue_path_parts = array(
-            dirname(\AgaviConfig::get('core.app_dir')),
-            'etc',
-            'local',
-            $queue_name . '.msg_q'
-        );
-        $queue_path = implode(DIRECTORY_SEPARATOR, $queue_path_parts);
-        $this->ipc_messaging = new IpcMessaging($queue_path, 'H', self::IPC_CHANNEL);
-    }
-
-    protected function run()
-    {
-        while ($this->running) {
-            while (
-                $this->job_queue->hasJobs()
-                && count($this->busy_worker_pids) < $this->worker_pool_size
-            ) {
-                $this->log("There is work to be done, lets notify a worker");
-                $this->notifyFreeWorker();
-            }
-            $this->log("Waiting for next system signal ...");
-            $this->handleSignal(pcntl_sigwaitinfo(self::$supported_signals));
+        while (
+            $this->job_queue->hasJobs()
+            && count($this->busy_worker_pids) < $this->worker_pool_size
+        ) {
+            $this->log("There is work to be done, lets notify a worker");
+            $this->notifyFreeWorker();
         }
     }
 
@@ -116,7 +72,18 @@ class JobQueueSpinner
         $this->log("Notified worker with pid: " . $avail_worker_pid);
     }
 
-    protected function handleSignal($signo)
+    protected function tearDown(array $parameters)
+    {
+        $this->removePidFile();
+        parent::tearDown($parameters);
+    }
+
+    protected function getSupportedSignals()
+    {
+        return self::$supported_signals;
+    }
+
+    protected function onSignalReceived($signo)
     {
         switch ($signo) {
             case SIGUSR1:
@@ -176,27 +143,19 @@ class JobQueueSpinner
         echo PHP_EOL . implode(PHP_EOL, $lines) . PHP_EOL;
     }
 
-    protected function log($message)
-    {
-        $now = new \DateTime();
-        error_log(
-            sprintf('[%s][%s] %s', __CLASS__, $now->format('h:i:s.u'), $message)
-        );
-    }
-
-    protected function writePidFile($queue_name)
+    protected function writePidFile()
     {
         $pid = posix_getpid();
         $base_dir = dirname(\AgaviConfig::get('core.app_dir'));
-        $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $queue_name . '.pid';
+        $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
 
         file_put_contents($pid_file, $pid);
     }
 
-    protected function removePidFile($queue_name)
+    protected function removePidFile()
     {
         $base_dir = dirname(\AgaviConfig::get('core.app_dir'));
-        $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $queue_name . '.pid';
+        $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
 
         unlink($pid_file);
     }
