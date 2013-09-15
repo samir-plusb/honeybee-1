@@ -80,6 +80,12 @@ abstract class Runnable implements IRunnable
         $this->ipc_messaging = new IpcMessaging($queue_path, $this->msg_queue_id, $this->ipc_channel);
     }
 
+    protected function send(array $data, $receiver_pid)
+    {
+        $this->ipc_messaging->send(json_encode($data));
+        posix_kill($receiver_pid, SIGUSR2);
+    }
+
     protected function log($message)
     {
         $now = new \DateTime();

@@ -89,14 +89,12 @@ class JobQueueSpinner extends Runnable
             case SIGUSR1:
                 $this->log("... received SIGUSR1, checking job_queue for payload.");
                 break;
-
             case SIGUSR2:
                 $this->log("... received SIGUSR2, checking ipc_messaging and job_queue for payload.");
                 if ($worker_message = $this->ipc_messaging->read()) {
                     $this->onWorkerFinished(json_decode($worker_message, true));
                 }
                 break;
-
             case SIGQUIT:
                 $this->log("... received SIGQUIT, terminating!");
                 $now = new \DateTime();
@@ -104,14 +102,12 @@ class JobQueueSpinner extends Runnable
                 $this->printStats();
                 $this->running = false;
                 break;
-
             case SIGINT:
             case SIGHUP:
             case SIGTERM:
                 $this->log("... received SIGINT, SIGTERM or SIGHUP, terminating!");
                 $this->running = false;
                 break;
-
             default:
                 $this->log("Received unhandled system signal. Ignoring: " . print_r($info, true));
         }
@@ -139,7 +135,6 @@ class JobQueueSpinner extends Runnable
         $lines[] = "Executed Jobs: " . $this->stats['executed_jobs'];
         $lines[] = "  Failed Jobs: " . $this->stats['failed_jobs'];
         $lines[] = "   Fatal Jobs: " . $this->stats['fatal_jobs'];
-
         echo PHP_EOL . implode(PHP_EOL, $lines) . PHP_EOL;
     }
 
@@ -148,7 +143,6 @@ class JobQueueSpinner extends Runnable
         $pid = posix_getpid();
         $base_dir = dirname(\AgaviConfig::get('core.app_dir'));
         $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
-
         file_put_contents($pid_file, $pid);
     }
 
@@ -156,7 +150,6 @@ class JobQueueSpinner extends Runnable
     {
         $base_dir = dirname(\AgaviConfig::get('core.app_dir'));
         $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
-
         unlink($pid_file);
     }
 }

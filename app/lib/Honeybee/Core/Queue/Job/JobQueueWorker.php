@@ -75,13 +75,7 @@ class JobQueueWorker extends Runnable
 
         $this->stats['executed_jobs']++;
         $this->log("Successfully executed job-type: " . get_class($job));
-
-        $this->ipc_messaging->send(
-            json_encode(
-                array('status' => 'success', 'worker_pid' => posix_getpid())
-            )
-        );
-        posix_kill(posix_getppid(), SIGUSR2);
+        $this->send(array('status' => 'success', 'worker_pid' => posix_getpid()), posix_getppid());
     }
 
     protected function onJobFailed(IJob $job)
@@ -101,7 +95,6 @@ class JobQueueWorker extends Runnable
             $this->log("Dropping fatal job.");
             $notify_info['status'] = 'fatal';
         }
-        $this->ipc_messaging->send(json_encode($notify_info));
-        posix_kill(posix_getppid(), SIGUSR2);
+        $this->send($notify_info, posix_getppid());
     }
 }
