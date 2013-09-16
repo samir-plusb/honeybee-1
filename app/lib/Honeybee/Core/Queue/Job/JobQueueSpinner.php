@@ -88,6 +88,12 @@ class JobQueueSpinner extends Runnable
         switch ($signo) {
             case SIGUSR1:
                 $this->log("... received SIGUSR1, checking job_queue for payload.");
+                // @todo: This signal is often triggered after a job was pushed to kestrel, in order to get the spinner running again.
+                // Jobs are pushed to kestrel over tcp/ip, which is somewhat slower than sending a system signal.
+                // When jobs are dispatched from a web process the kestrel push and spinner notify are very close in time,
+                // causing the system signal to win the race in most cases and leaving the spinner with a couple of idle runs.
+                // These can  be prevented by giving a kestrel push that is 'on air' atm the possibilty to catch up.
+                usleep(250000);
                 break;
             case SIGUSR2:
                 $this->log("... received SIGUSR2, checking ipc_messaging and job_queue for payload.");
