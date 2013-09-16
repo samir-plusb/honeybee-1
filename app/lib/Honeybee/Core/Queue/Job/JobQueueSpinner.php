@@ -5,6 +5,8 @@ namespace Honeybee\Core\Queue\Job;
 // @todo register shutdown listener to cleanup pid file
 class JobQueueSpinner extends Runnable
 {
+    const WAIT_AFTER_TRIGGER = 250000;
+
     static protected $supported_signals = array(SIGHUP, SIGINT, SIGTERM, SIGQUIT, SIGUSR1, SIGUSR2);
 
     protected $stats;
@@ -59,7 +61,7 @@ class JobQueueSpinner extends Runnable
             $this->job_queue->hasJobs()
             && count($this->busy_worker_pids) < $this->worker_pool_size
         ) {
-            $this->log("There is work to be done, lets notify a worker");
+            $this->log("There is work to do, lets notify a worker");
             $this->notifyFreeWorker();
         }
     }
@@ -93,7 +95,7 @@ class JobQueueSpinner extends Runnable
                 // When jobs are dispatched from a web process the kestrel push and spinner notify are very close in time,
                 // causing the system signal to win the race in most cases and leaving the spinner with a couple of idle runs.
                 // These can  be prevented by giving a kestrel push that is 'on air' atm the possibilty to catch up.
-                usleep(250000);
+                usleep(self::WAIT_AFTER_TRIGGER);
                 break;
             case SIGUSR2:
                 $this->log("... received SIGUSR2, checking ipc_messaging and job_queue for payload.");
