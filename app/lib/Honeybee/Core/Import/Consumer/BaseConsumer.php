@@ -53,7 +53,7 @@ abstract class BaseConsumer implements IConsumer
 
     /**
      * Holds a list of filters that provider data is passed to.
-     * 
+     *
      * @var         FilterList
      */
     private $filters;

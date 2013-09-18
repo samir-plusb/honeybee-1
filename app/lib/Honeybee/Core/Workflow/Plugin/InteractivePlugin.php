@@ -94,6 +94,7 @@ class InteractivePlugin extends BasePlugin
             {
                 $this->publishResource($resource);
             }
+
             $queue = new JobQueue('prio:1-default_queue');
             $job_data = array(
                 'module_class' => get_class($resource->getModule()),

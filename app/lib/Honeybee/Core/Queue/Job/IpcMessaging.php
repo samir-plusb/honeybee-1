@@ -25,12 +25,9 @@ class IpcMessaging
         $msg_type = $msg_type ? $msg_type : $this->msg_type;
         $error_code = null;
 
-        if (msg_send($this->msg_queue, $msg_type, $message, false, true, $error_code))
-        {
+        if (msg_send($this->msg_queue, $msg_type, $message, false, true, $error_code)) {
             return true;
-        }
-        else
-        {
+        } else {
             // @todo handle error, need to find out what the msg_send error codes are.
             return false;
         }

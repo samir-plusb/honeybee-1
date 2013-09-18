@@ -5,6 +5,8 @@ namespace Honeybee\Core\Service;
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\Tree;
+use Honeybee\Core\Queue\Job\UpdateBackReferencesJob;
+use Honeybee\Core\Queue\Job\JobQueue;
 use Honeybee\Core\Finder\ElasticSearch;
 use Elastica;
 
@@ -22,27 +24,33 @@ class DocumentService implements IService
 
     public function save(Document $document)
     {
+        // @todo check if $this->module === $document->getModule() and throw exception if they dont match
+        $changed_fields = array();
+        foreach ($document->getChanges() as $change_event) {
+            $changed_fields[] = $change_event->getField()->getName();
+        }
+
         $repository = $this->module->getRepository();
         $errors = $repository->write($document);
 
-        if (! empty($errors))
-        {
+        if (!empty($errors)) {
             throw new Exception(
-                "Unexpected errors occured trying to store data." . 
+                "Unexpected errors occured trying to store data." .
                 PHP_EOL . implode("\n", $errors)
             );
         }
+
+        // $this->updateReferencingDocuments($document, $changed_fields);
     }
 
     public function get($identifier)
     {
-        $document = NULL;
+        $document = null;
 
         $repository = $this->module->getRepository();
         $documents = $repository->read($identifier);
 
-        if (1 === $documents->count())
-        {
+        if (1 === $documents->count()) {
             $document = $documents[0];
         }
 
@@ -51,22 +59,19 @@ class DocumentService implements IService
 
     public function getMany(array $identifiers = array(), $limit = 10000, $offset = 0)
     {
-        $query = NULL;
+        $query = null;
 
-        if (empty($identifiers))
-        {
-            $query = Elastica\Query::create(NULL);
-        }
-        else
-        {
+        if (empty($identifiers)) {
+            $query = Elastica\Query::create(null);
+        } else {
             $container = new Elastica\Filter\BoolAnd();
             $container->addFilter(new Elastica\Filter\Ids(
-                $this->module->getOption('prefix'), 
+                $this->module->getOption('prefix'),
                 array_unique($identifiers)
             ));
             $container->addFilter(new Elastica\Filter\BoolNot(
                 new Elastica\Filter\Term(
-                    array('meta.is_deleted' => TRUE)
+                    array('meta.is_deleted' => true)
                 )
             ));
             $query = Elastica\Query::create($container);
@@ -81,7 +86,7 @@ class DocumentService implements IService
     {
         $repository = $this->module->getRepository();
 
-        return $repository->find(NULL, $limit, $offset);
+        return $repository->find(null, $limit, $offset);
     }
 
     public function find(array $spec, $offset, $limit)
@@ -89,22 +94,19 @@ class DocumentService implements IService
         $queryBuilder = new ElasticSearch\DefaultQueryBuilder();
         $query = $queryBuilder->build($spec);
         $repository = $this->module->getRepository();
-        
+
         return $repository->find($query, $limit, $offset);
     }
 
-    public function delete(Document $document, $markOnly = TRUE)
+    public function delete(Document $document, $markOnly = true)
     {
-        if ($markOnly)
-        {
+        if ($markOnly) {
             $meta = $document->getMeta();
-            $meta['is_deleted'] = TRUE;
+            $meta['is_deleted'] = true;
             $document->setMeta($meta);
-            
+
             $this->save($document);
-        }
-        else
-        {
+        } else {
             // this actually is destructive, only use if you REALLY want to delete.
             $this->module->getRepository()->delete($document);
         }
@@ -120,7 +122,7 @@ class DocumentService implements IService
         $offset = $state->getOffset();
         $limit = $state->getLimit();
         $repository = $this->module->getRepository();
-        
+
         return $repository->find($query, $limit, $offset);
     }
 
@@ -138,5 +140,34 @@ class DocumentService implements IService
     public function getModule()
     {
         return $this->module;
+    }
+
+    public function updateReferencingDocuments(Document $document, array $changed_fields = array())
+    {
+        // update all dependent referencing index fields if required.
+        $dispatch_update_job = false;
+error_log(__CLASS__ . ' ' . print_r($changed_fields, true));
+error_log("---");
+        $referencing_modules = $this->module->getReferencingFieldIndices();
+        foreach ($referencing_modules as $reference_meta_data) {
+            $unaffected_fields = array_diff($changed_fields, $reference_meta_data['index_fields']);
+error_log(__CLASS__ . ' ' . print_r($reference_meta_data['index_fields'], true));
+error_log(__CLASS__ . ' ' . print_r($unaffected_fields, true));
+error_log("------------");
+            if (empty($changed_fields) || count($unaffected_fields) < count($changed_fields)) {
+                $dispatch_update_job = true;
+                break;
+            }
+        }
+
+        if ($dispatch_update_job) {
+            // @todo it could be faster to have a job per referencing module, instead of one for all.
+            $queue = new JobQueue('prio:1-default_queue');
+            $job_data = array(
+                'module_class' => get_class($this->module),
+                'document_identifier' => $document->getIdentifier()
+            );
+            $queue->push(new UpdateBackReferencesJob($job_data));
+        }
     }
 }

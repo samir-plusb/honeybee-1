@@ -5,11 +5,9 @@ namespace Honeybee\Core\Queue\Job;
 // @todo register shutdown listener to cleanup pid file
 class JobQueueSpinner extends Runnable
 {
-    const WAIT_AFTER_TRIGGER = 250000;
+    const IPC_SYNC_SLEEP_TIME = 250000;
 
     static protected $supported_signals = array(SIGHUP, SIGINT, SIGTERM, SIGQUIT, SIGUSR1, SIGUSR2);
-
-    protected $stats;
 
     protected $worker_pool_size;
 
@@ -19,20 +17,16 @@ class JobQueueSpinner extends Runnable
 
     public function __construct($queue_name, $msg_queue_id, $ipc_channel)
     {
-        parent::__construct($queue_name, $msg_queue_id, $ipc_channel);
-
         $this->busy_worker_pids = array();
         $this->available_worker_pids = array();
-        $this->stats = array();
+
+        parent::__construct($queue_name, $msg_queue_id, $ipc_channel);
     }
 
     protected function setUp(array $parameters)
     {
         $this->writePidFile();
-        $this->stats['started_at'] = new \DateTime();
-
         $this->spawnWorkers(isset($parameters['pool_size']) ? $parameters['pool_size'] : 3);
-        $this->log("Finshed spawning workers, available pids: " . implode(',', $this->available_worker_pids));
 
         parent::setUp($parameters);
     }
@@ -40,8 +34,7 @@ class JobQueueSpinner extends Runnable
     protected function spawnWorkers($num_workers)
     {
         $this->worker_pool_size = $num_workers;
-        for ($i = 0; $i < $this->worker_pool_size; $i++)
-        {
+        for ($i = 0; $i < $this->worker_pool_size; $i++) {
             $pid = pcntl_fork();
             if (-1 === $pid) {
                 $this->running = false;
@@ -53,30 +46,35 @@ class JobQueueSpinner extends Runnable
                 $this->available_worker_pids[] = $pid;
             }
         }
+
+        $this->log("Finshed spawning workers, available pids: " . implode(',', $this->available_worker_pids));
     }
 
     protected function tick(array $parameters)
     {
-        while (
-            $this->job_queue->hasJobs()
-            && count($this->busy_worker_pids) < $this->worker_pool_size
-        ) {
-            $this->log("There is work to do, lets notify a worker");
+        while ($this->job_queue->hasJobs() && count($this->busy_worker_pids) < $this->worker_pool_size) {
+            $this->log("There is work to do, lets notify a worker ...");
             $this->notifyFreeWorker();
         }
+
+        $this->printStats();
     }
 
     protected function notifyFreeWorker()
     {
         $avail_worker_pid = array_pop($this->available_worker_pids);
         $this->busy_worker_pids[] = $avail_worker_pid;
+        $this->log("... notified worker with pid: " . $avail_worker_pid);
+
         posix_kill($avail_worker_pid, SIGUSR1);
-        $this->log("Notified worker with pid: " . $avail_worker_pid);
+        // give the worker a sec. to pull the job off the queue in order to minimize worker races.
+        usleep(self::IPC_SYNC_SLEEP_TIME);
     }
 
     protected function tearDown(array $parameters)
     {
         $this->removePidFile();
+
         parent::tearDown($parameters);
     }
 
@@ -90,30 +88,19 @@ class JobQueueSpinner extends Runnable
         switch ($signo) {
             case SIGUSR1:
                 $this->log("... received SIGUSR1, checking job_queue for payload.");
-                // @todo: This signal is often triggered after a job was pushed to kestrel, in order to get the spinner running again.
-                // Jobs are pushed to kestrel over tcp/ip, which is somewhat slower than sending a system signal.
-                // When jobs are dispatched from a web process the kestrel push and spinner notify are very close in time,
-                // causing the system signal to win the race in most cases and leaving the spinner with a couple of idle runs.
-                // These can  be prevented by giving a kestrel push that is 'on air' atm the possibilty to catch up.
-                usleep(self::WAIT_AFTER_TRIGGER);
                 break;
             case SIGUSR2:
                 $this->log("... received SIGUSR2, checking ipc_messaging and job_queue for payload.");
+
                 if ($worker_message = $this->ipc_messaging->read()) {
                     $this->onWorkerFinished(json_decode($worker_message, true));
                 }
                 break;
-            case SIGQUIT:
-                $this->log("... received SIGQUIT, terminating!");
-                $now = new \DateTime();
-                $this->stats['uptime'] = $now->diff($this->stats['started_at']);
-                $this->printStats();
-                $this->running = false;
-                break;
             case SIGINT:
             case SIGHUP:
             case SIGTERM:
-                $this->log("... received SIGINT, SIGTERM or SIGHUP, terminating!");
+                $this->log("... received SIGINT, SIGTERM or SIGHUP, initiating graceful shutdown.");
+                // @todo $this->shutDown();
                 $this->running = false;
                 break;
             default:
@@ -121,29 +108,52 @@ class JobQueueSpinner extends Runnable
         }
     }
 
-    protected function onWorkerFinished(array $worker_response)
+    protected function onWorkerFinished(array $worker_msg)
     {
-        $worker_pid = $worker_response['worker_pid'];
-        if ($worker_response['status'] === 'success') {
+        $worker_pid = $worker_msg['worker_pid'];
+        if (isset($worker_msg['stats'])) {
+            $this->stats->setWorkerStats($worker_msg['worker_pid'], $worker_msg['stats']);
+        }
+
+        if ($worker_msg['status'] === 'success') {
             $this->log("Received success notification from worker: " . $worker_pid);
         } else {
             $this->log("Received error notification from worker: " . $worker_pid);
         }
-        $this->available_worker_pids[] = $worker_pid;
+
         $worker_index = array_search($worker_pid, $this->busy_worker_pids);
         array_splice($this->busy_worker_pids, $worker_index, 1);
+        array_unshift($this->available_worker_pids, $worker_pid);
     }
 
     protected function printStats()
     {
+        $stats_array = $this->stats->toArray();
+        $now = new \DateTime();
+        $uptime = $now->diff(new \DateTime($stats_array['start_time']));
+
         $lines = array();
-        $lines[] = PHP_EOL . "-- Honeybee jobqueue-spinner stats --";
-        $lines[] = "   Started at: " . $this->stats['started_at']->format(\DateTime::ISO8601);
-        $lines[] = "       Uptime: " . $this->stats['uptime']->format('%d days %H hours %I minutes');
-        $lines[] = "Executed Jobs: " . $this->stats['executed_jobs'];
-        $lines[] = "  Failed Jobs: " . $this->stats['failed_jobs'];
-        $lines[] = "   Fatal Jobs: " . $this->stats['fatal_jobs'];
-        echo PHP_EOL . implode(PHP_EOL, $lines) . PHP_EOL;
+        $lines[] = '# SPINNER STATS #';
+        $lines[] = "   Started at: " . $stats_array['start_time'];
+        $lines[] = "       Uptime: " . $uptime->format('%d days %H hours %I minutes') . PHP_EOL;
+        $lines[] = '# WORKER STATS #';
+        foreach ($stats_array['worker_stats'] as $worker_pid => $worker_stats) {
+            $worker_started = $worker_stats['start_time'];
+            if (isset($worker_stats['start_time']['date'])) {
+                $worker_started = $worker_stats['start_time']['date'];
+            }
+
+            $uptime = $now->diff(new \DateTime($worker_started));
+            $lines[] = PHP_EOL . '-- Worker [' . $worker_pid . ']';
+            $lines[] = "     Started at: " . $worker_started;
+            $lines[] = "         Uptime: " . $uptime->format('%d days %H hours %I minutes');
+            $lines[] = "   Started Jobs: " . $worker_stats['started_jobs'];
+            $lines[] = "Successful Jobs: " . $worker_stats['successful_jobs'];
+            $lines[] = "    Failed Jobs: " . $worker_stats['failed_jobs'];
+            $lines[] = "     Fatal Jobs: " . $worker_stats['fatal_jobs'];
+        }
+
+        file_put_contents('queue.stats', implode(PHP_EOL, $lines));
     }
 
     protected function writePidFile()
@@ -151,6 +161,7 @@ class JobQueueSpinner extends Runnable
         $pid = posix_getpid();
         $base_dir = dirname(\AgaviConfig::get('core.app_dir'));
         $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
+
         file_put_contents($pid_file, $pid);
     }
 
@@ -158,6 +169,12 @@ class JobQueueSpinner extends Runnable
     {
         $base_dir = dirname(\AgaviConfig::get('core.app_dir'));
         $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
+
         unlink($pid_file);
+    }
+
+    protected function createStatsInstance()
+    {
+        return new SpinnerStats();
     }
 }

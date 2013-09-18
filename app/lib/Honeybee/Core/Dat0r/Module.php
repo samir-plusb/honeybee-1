@@ -88,6 +88,32 @@ abstract class Module extends RootModule implements Acl\Resource\ResourceInterfa
         return $this->getField('identifier');
     }
 
+    public function getReferencingFieldIndices()
+    {
+        $index_fields = array();
+
+        $module_service = new ModuleService();
+        foreach ($module_service->getModules() as $module) {
+            $reference_fields = $module->getFields(
+                array(),
+                array('Dat0r\Core\Field\ReferenceField')
+            );
+            foreach ($reference_fields as $reference_field) {
+                foreach ($reference_field->getOption('references') as $reference_options) {
+                    if (isset($reference_options['index_fields']) && $reference_options['module'] === '\\' . get_class($this)) {
+                        $index_fields[$module->getName()] = array(
+                            'reference_field' => $reference_field,
+                            'reference_module' => $module,
+                            'index_fields' => $reference_options['index_fields']
+                        );
+                    }
+                }
+            }
+        }
+
+        return $index_fields;
+    }
+
     /**
      * Returns the default fields that are initially added to a module upon creation.
      *

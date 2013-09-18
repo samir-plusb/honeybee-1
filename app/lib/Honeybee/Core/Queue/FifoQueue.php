@@ -13,14 +13,15 @@ class FifoQueue implements IQueue
     public function __construct($name)
     {
         $this->name = $name;
-
         // @todo make the client exchangeable by introducing a client interface
         // and injecting instead of creating the client.
         $this->client = new Kestrel\Client();
         // @todo introduce client configuration
-        $this->client->connect(array(
-            array('host' => 'localhost', 'port' => '22133')
-        ));
+        $this->client->connect(
+            array(
+                array('host' => 'localhost', 'port' => '22133')
+            )
+        );
     }
 
     public function shift()

@@ -5,82 +5,37 @@ namespace Honeybee\Core\Queue\Job;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\ModuleService;
 
-class UpdateBackReferencesJob extends BaseJob
+class UpdateBackReferencesJob extends DocumentJob
 {
-    protected $module_class;
-
-    protected $document_identifier;
-
     protected function execute(array $parameters = array())
     {
         $document = $this->loadDocument();
-        $module_service = new ModuleService();
 
-        $referencing_modules = array();
-        foreach ($module_service->getModules() as $module)
-        {
-            $reference_fields = $module->getFields(
-                array(),
-                array('Dat0r\Core\Field\ReferenceField')
+        foreach ($document->getModule()->getReferencingFieldIndices() as $reference_meta_data) {
+            $referencing_module = $reference_meta_data['reference_module'];
+            $referencing_field = $reference_meta_data['reference_field'];
+            $index_fields = $reference_meta_data['index_fields'];
+
+            $reference_id_fieldname = $referencing_field->getName() . '.id';
+            $search_spec = array(
+                'filter' => array(
+                    $reference_id_fieldname => $document->getIdentifier()
+                )
             );
-            foreach ($reference_fields as $reference_field)
-            {
-                foreach ($reference_field->getOption('references') as $reference_options)
-                {
-                    if (isset($reference_options['index_fields']) && $reference_options['module'] === '\\' . get_class($document->getModule()))
-                    {
-                        $referencing_modules[] = $module;
-                    }
-                }
-            }
-        }
 
-        foreach ($referencing_modules as $referencing_module)
-        {
             $service = $referencing_module->getService();
-            $search_result = $service->find(array(
-                'filter' => array('categories.id' => $document->getIdentifier()),
-            ), 0, 100);
-            foreach ($search_result['documents'] as $referencing_document)
-            {
-                if ($document->getIdentifier() === $referencing_document->getIdentifier())
-                {
-                    // prevent recursion for self references
+            $search_result = $service->find($search_spec, 0, 1000);
+            foreach ($search_result['documents'] as $referencing_document) {
+                if ($document->getIdentifier() === $referencing_document->getIdentifier()) {
+                    // prevent recursion for self references,
+                    // I'm not sure if we should support the 'index_fields' feature in this case.
                     continue;
                 }
-                error_log(
-                    sprintf(
-                        "[%s] Updated %s",
-                        __CLASS__,
-                        $referencing_document->getIdentifier()
-                    )
-                );
+
                 $service->save($referencing_document);
+                error_log(sprintf("[%s] Updated %s", __CLASS__, $referencing_document->getIdentifier()));
             }
         }
-
         sleep(10);
-    }
-
-    protected function loadDocument()
-    {
-        $module = $this->loadModule();
-        $service = $module->getService();
-
-        return $service->get($this->document_identifier);
-    }
-
-    protected function loadModule()
-    {
-        if (! class_exists($this->module_class))
-        {
-            throw new Exception(
-                "Unable to load module: '" . $this->module_class . "', for PublishJob."
-            );
-        }
-
-        $implementor = $this->module_class;
-
-        return $implementor::getInstance();
     }
 }

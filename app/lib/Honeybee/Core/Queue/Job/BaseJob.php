@@ -10,7 +10,7 @@ abstract class BaseJob implements IJob, IQueueItem
 
     protected $errors = array();
 
-    protected $maxRetries = 3;
+    protected $max_retries = 3;
 
     abstract protected function execute();
 
@@ -21,21 +21,16 @@ abstract class BaseJob implements IJob, IQueueItem
 
     public function run(array $parameters = array())
     {
-        try
-        {
+        try {
             $this->execute($parameters);
             $this->setState(self::STATE_SUCCESS);
         }
-        catch(\Exception $e)
-        {
+        catch(\Exception $e) {
             $this->errors[] = $e->getMessage();
 
-            if ($this->getErrorCount() < $this->maxRetries)
-            {
+            if ($this->getErrorCount() < $this->max_retries) {
                 $this->setState(self::STATE_ERROR);
-            }
-            else
-            {
+            } else {
                 $this->setState(self::STATE_FATAL);
             }
         }
@@ -50,13 +45,14 @@ abstract class BaseJob implements IJob, IQueueItem
 
     public function setState($state)
     {
-        static $validStates = array(
-            self::STATE_FRESH, self::STATE_SUCCESS,
-            self::STATE_ERROR, self::STATE_FATAL
+        static $valid_states = array(
+            self::STATE_FRESH,
+            self::STATE_SUCCESS,
+            self::STATE_ERROR,
+            self::STATE_FATAL
         );
 
-        if (! in_array($state, $validStates))
-        {
+        if (!in_array($state, $valid_states)) {
             throw new Exception("Invalid state given.");
         }
 
@@ -76,13 +72,11 @@ abstract class BaseJob implements IJob, IQueueItem
     public function toArray()
     {
         $data = array();
-        $propBlacklist = $this->getPropertyBlacklist();
+        $property_blacklist = $this->getPropertyBlacklist();
 
-        foreach (get_class_vars(get_class($this)) as $propName => $default)
-        {
-            if (!in_array($propName, $propBlacklist))
-            {
-                $data[$propName] = (NULL === $this->$propName) ? $default : $this->$propName;
+        foreach (get_class_vars(get_class($this)) as $property_name => $default) {
+            if (!in_array($property_name, $property_blacklist)) {
+                $data[$property_name] = (NULL === $this->$property_name) ? $default : $this->$property_name;
             }
         }
 
@@ -91,11 +85,11 @@ abstract class BaseJob implements IJob, IQueueItem
 
     protected function hydrate(array $data)
     {
-        foreach (get_class_vars(get_class($this)) as $propName => $default)
+        foreach (get_class_vars(get_class($this)) as $property_name => $default)
         {
-            if (isset($data[$propName]))
+            if (isset($data[$property_name]))
             {
-                $this->$propName = $data[$propName];
+                $this->$property_name = $data[$property_name];
             }
         }
     }

@@ -49,11 +49,10 @@ class ModuleConsumer extends BaseConsumer
         if (!empty($updateField) && ($updateValue = Filter\RemapFilter::getArrayValue($data, $updateField)))
         {
             $parsedPath = Filter\RemapFilter::getPartsFromPath($updateField);
-            $updateFilterField = implode('.', $parsedPath['parts']) . '.filter';
+            $updateFilterField = implode('.', $parsedPath['parts']);
 
             $searchSpec = array('filter' => array($updateFilterField => $updateValue));
             $result = $this->module->getService()->find($searchSpec, 0, 10);
-
             if (1 < $result['totalCount'])
             {
                 // wtf, multiple update candidates found ...

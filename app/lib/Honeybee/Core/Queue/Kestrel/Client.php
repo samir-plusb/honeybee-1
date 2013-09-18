@@ -14,33 +14,29 @@ class Client
 
     const CMD_PEEK = '/peek';
 
-    protected $connected = FALSE;
+    protected $connected = false;
 
     protected $servers = array();
 
-    protected $kestrelApi = NULL;
+    protected $kestrel_api = null;
 
     public function __construct()
     {
-        $this->kestrelApi = new \memcached();
+        $this->kestrel_api = new \memcache();
     }
 
     public function addServer($host, $port)
     {
         $this->servers[] = array('host' => $host, 'port' => $port);
-        $this->kestrelApi->addServer($host, $port);
     }
 
     public function connect(array $servers)
     {
-        if (! $this->isConnected())
-        {
-            foreach ($servers as $server)
-            {
-                $this->addServer($server['host'], $server['port']);
-            }
-
-            $this->connected = TRUE;
+        if (!$this->isConnected()) {
+            $this->servers = $servers;
+            $server = $this->servers[0];
+            $this->kestrel_api->pconnect($server['host'], $server['port']);
+            $this->connected = true;
         }
     }
 
@@ -49,38 +45,37 @@ class Client
         return $this->connected;
     }
 
-    public function get($key, $reliable = FALSE)
+    public function get($key, $reliable = false)
     {
-        if (TRUE === $reliable)
-        {
+        if ($reliable === true) {
             $key .= self::CMD_READ;
         }
 
-        return $this->kestrelApi->get($key);
+        return $this->kestrel_api->get($key);
     }
 
     public function close($key)
     {
-        return $this->kestrelApi->get($key . self::CMD_CLOSE);
+        return $this->kestrel_api->get($key . self::CMD_CLOSE);
     }
 
     public function abort($key)
     {
-        return $this->kestrelApi->get($key . self::CMD_ABORT);
+        return $this->kestrel_api->get($key . self::CMD_ABORT);
     }
 
     public function getNext($key) //always a reliable read. does a close and a get
     {
-        return $this->kestrelApi->get($key . self::CMD_RELIABLE_READ);
+        return $this->kestrel_api->get($key . self::CMD_RELIABLE_READ);
     }
 
     public function peek($key)
     {
-        return $this->kestrelApi->get($key . self::CMD_PEEK);
+        return $this->kestrel_api->get($key . self::CMD_PEEK);
     }
 
     public function set($key, $value, $expire = 0)
     {
-        return $this->kestrelApi->set($key, $value, $expire);
+        return $this->kestrel_api->set($key, $value, $expire);
     }
 }

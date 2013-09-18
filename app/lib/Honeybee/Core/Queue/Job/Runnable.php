@@ -16,6 +16,8 @@ abstract class Runnable implements IRunnable
 
     protected $job_queue;
 
+    protected $stats;
+
     protected abstract function getSupportedSignals();
 
     protected abstract function onSignalReceived($signo);
@@ -26,6 +28,7 @@ abstract class Runnable implements IRunnable
         $this->queue_name = $queue_name;
         $this->msg_queue_id = $msg_queue_id;
         $this->ipc_channel = $ipc_channel;
+        $this->stats = $this->createStatsInstance();
     }
 
     public function run(array $parameters = array())
@@ -39,6 +42,7 @@ abstract class Runnable implements IRunnable
         $this->running = true;
         pcntl_sigprocmask(SIG_BLOCK, $this->getSupportedSignals());
 
+        $this->stats->onRunnableStarted();
         $this->setUp($parameters);
         $this->log("Started runnable with pid: " . posix_getpid());
 
@@ -50,6 +54,7 @@ abstract class Runnable implements IRunnable
 
         $this->running = false;
         $this->tearDown($parameters);
+        $this->stats->onRunnableStopped();
         $this->log("Stopped runnable with pid: " . posix_getpid());
     }
 
@@ -80,10 +85,15 @@ abstract class Runnable implements IRunnable
         $this->ipc_messaging = new IpcMessaging($queue_path, $this->msg_queue_id, $this->ipc_channel);
     }
 
-    protected function send(array $data, $receiver_pid)
+    protected function send(array $data, $receiver_pid, $msg_type = null)
     {
-        $this->ipc_messaging->send(json_encode($data));
+        $this->ipc_messaging->send(json_encode($data), $msg_type);
         posix_kill($receiver_pid, SIGUSR2);
+    }
+
+    protected function createStatsInstance()
+    {
+        return new RunnableStats();
     }
 
     protected function log($message)

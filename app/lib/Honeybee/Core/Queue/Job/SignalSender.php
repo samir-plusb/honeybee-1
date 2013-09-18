@@ -10,16 +10,11 @@ class SignalSender
 
     const TRIGGER_MSG_QUEUE = 12;
 
-    private static $supported_signals;
-
-    public function __construct()
-    {
-        self::$supported_signals = array(
-            self::TRIGGER_SHUTDOWN,
-            self::TRIGGER_JOB_QUEUE,
-            self::TRIGGER_MSG_QUEUE
-        );
-    }
+    private static $supported_signals = array(
+        self::TRIGGER_SHUTDOWN,
+        self::TRIGGER_JOB_QUEUE,
+        self::TRIGGER_MSG_QUEUE
+    );
 
     public function send(JobQueue $queue, $signo)
     {
