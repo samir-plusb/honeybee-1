@@ -4,21 +4,43 @@ namespace Honeybee\Core\Queue\Job;
 
 class PublishJob extends DocumentJob
 {
+    protected $exports;
+
+    protected $success_gate;
+
+    protected $error_gate;
+
+    protected $execution_delay;
+
     protected function execute(array $parameters = array())
     {
+        if ($this->execution_delay) {
+            sleep($this->execution_delay);
+        }
+
         $document = $this->loadDocument();
         $module = $document->getModule();
 
         $workflow_ticket = $document->getWorkflowTicket()->first();
         $workflow_step = $workflow_ticket->getWorkflowStep();
-        if ('publish' === $workflow_step) {
-            // @todo handle export errors and set corresponding workflow state.
-            $export_service = $module->getService('export');
-            $export_service->export('pulq-fe', $document);
 
-            // @todo promote should be configurable for each job, as you dont always want it.
-            $workflow_manager = $module->getWorkflowManager();
-            $workflow_manager->executeWorkflowFor($document, 'promote');
+        if ('publish' === $workflow_step) {
+            $export_service = $module->getService('export');
+            foreach ($this->exports as $export_name) {
+                try {
+                    $export_service->publish($export_name, $document);
+                } catch(\Exception $e) {
+                    if ($this->error_gate) {
+                        $workflow_manager = $module->getWorkflowManager();
+                        $workflow_manager->executeWorkflowFor($document, $this->error_gate);
+                    }
+                }
+            }
+
+            if ($this->success_gate) {
+                $workflow_manager = $module->getWorkflowManager();
+                $workflow_manager->executeWorkflowFor($document, $this->success_gate);
+            }
         } else {
             throw new Exception(
                 sprintf(

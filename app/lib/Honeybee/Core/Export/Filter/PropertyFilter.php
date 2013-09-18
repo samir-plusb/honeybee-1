@@ -26,6 +26,12 @@ class PropertyFilter extends BaseFilter
             }
 
             $export_key = $key;
+            $cast_to = false;
+            if (is_array($key))
+            {
+                $export_key = $key['export_key'];
+                $cast_to = isset($key['cast_to']) ? $key['cast_to'] : false;
+            }
             $field = $module->getField($fieldname);
             $prop_value = $document->getValue($fieldname);
 
@@ -33,12 +39,14 @@ class PropertyFilter extends BaseFilter
 
             if ($field instanceof ReferenceField)
             {
+                $flatten = false;
                 $display_fields = array();
                 if (is_array($key))
                 {
                     $export_key = $key['export_key'];
                     $display_fields = $key['display_fields'];
-                    if ($key['flatten'] && count($display_fields) > 0)
+                    $flatten = isset($key['flatten']) && true === $key['flatten'];
+                    if ($flatten && count($display_fields) > 0)
                     {
                         $display_fields = array($key['display_fields'][0]);
                     }
@@ -53,7 +61,7 @@ class PropertyFilter extends BaseFilter
                     }
                     else
                     {
-                        if ($key['flatten'])
+                        if ($flatten)
                         {
                              $value[] = $ref_document->getValue($display_fields[0]);
                         }
@@ -96,6 +104,25 @@ class PropertyFilter extends BaseFilter
             if (is_scalar($value))
             {
                 $value = trim($value);
+                if ($cast_to)
+                {
+                    switch ($cast_to)
+                    {
+                        case 'string':
+                            $value = (string)$value;
+                            break;
+                        case 'int':
+                            $value = (int)$value;
+                            break;
+                        case 'bool':
+                        case 'boolean':
+                            $value = (bool)$value;
+                            break;
+                        case 'float':
+                            $value = (float)$value;
+                            break;
+                    }
+                }
             }
             Filter\RemapFilter::setArrayValue($filter_output, $export_key, $value);
         }

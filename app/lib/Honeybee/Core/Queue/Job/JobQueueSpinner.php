@@ -116,9 +116,11 @@ class JobQueueSpinner extends Runnable
         }
 
         if ($worker_msg['status'] === 'success') {
-            $this->log("Received success notification from worker: " . $worker_pid);
+            $this->log("Received complete(success) notification from worker: " . $worker_pid);
         } else {
-            $this->log("Received error notification from worker: " . $worker_pid);
+            $this->log(
+                sprintf("Received complete(error) notification from worker: %s\nError: %s", $worker_pid, $worker_msg['error'])
+            );
         }
 
         $worker_index = array_search($worker_pid, $this->busy_worker_pids);

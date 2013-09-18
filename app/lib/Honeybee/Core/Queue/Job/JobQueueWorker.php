@@ -58,7 +58,7 @@ class JobQueueWorker extends Runnable
                 $this->onJobFailed($job);
             }
         } catch(Exception $e) {
-            $this->onJobFailed($job);
+            $this->onJobFailed($job, $e->getMessage());
         }
     }
 
@@ -80,28 +80,32 @@ class JobQueueWorker extends Runnable
         );
     }
 
-    protected function onJobFailed(IJob $job)
+    protected function onJobFailed(IJob $job, $error_message = '')
     {
         $this->job_queue->closeCurrent();
 
         $this->log("An error occured while executing job-type: " . get_class($job));
 
-        $notify_info = array(
-            'type' => 'job-complete',
-            'status' => 'error',
-            'worker_pid' => posix_getpid(),
-            'stats' => $this->stats->toArray()
-        );
+        $status = 'error';
         if (IJob::STATE_FATAL === $job->getState()) {
             $this->stats->onJobFatal($job);
-            $notify_info['status'] = 'fatal';
+            $status = 'fatal';
             $this->log("Dropping fatal job.");
             // @todo the job is now dropped from queue as fatal.
             // we might want to push it to an error queue
             // or to a journal for fatal jobs.
         } else {
+            $this->job_queue->push($job);
             $this->stats->onJobError($job);
         }
+
+        $notify_info = array(
+            'type' => 'job-complete',
+            'status' => $status,
+            'worker_pid' => posix_getpid(),
+            'error' => $error_message,
+            'stats' => $this->stats->toArray()
+        );
         $this->send($notify_info, posix_getppid());
     }
 

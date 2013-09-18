@@ -4,6 +4,7 @@ namespace Honeybee\Core\Queue\Job;
 
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\ModuleService;
+use Dat0r\Core\Document\DocumentSet;
 
 class UpdateBackReferencesJob extends DocumentJob
 {
@@ -18,9 +19,7 @@ class UpdateBackReferencesJob extends DocumentJob
 
             $reference_id_fieldname = $referencing_field->getName() . '.id';
             $search_spec = array(
-                'filter' => array(
-                    $reference_id_fieldname => $document->getIdentifier()
-                )
+                'filter' => array($reference_id_fieldname => $document->getIdentifier())
             );
 
             $service = $referencing_module->getService();
@@ -31,11 +30,19 @@ class UpdateBackReferencesJob extends DocumentJob
                     // I'm not sure if we should support the 'index_fields' feature in this case.
                     continue;
                 }
-
+                $document_set = new DocumentSet();
+                foreach ($referencing_document->getValue($referencing_field->getName()) as $ref_document) {
+                    if ($ref_document->getIdentifier() === $document->getIdentifier()) {
+                        // override any old referenced document with the current one ...
+                        $document_set->add($document);
+                    } else {
+                        // ... keep all others.
+                        $document_set->add($ref_document);
+                    }
+                }
+                $referencing_document->setValue($referencing_field->getName(), $document_set);
                 $service->save($referencing_document);
-                error_log(sprintf("[%s] Updated %s", __CLASS__, $referencing_document->getIdentifier()));
             }
         }
-        sleep(10);
     }
 }
