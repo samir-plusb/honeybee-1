@@ -1,9 +1,12 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job\Queue\Worker;
+
+use Honeybee\Core\Job\Queue\Runnable\Runnable as BaseRunnable;
+use Honeybee\Core\Job\IJob;
 
 // @todo register shutdown listener to notify parent process
-class JobQueueWorker extends Runnable
+class Runnable extends BaseRunnable
 {
     const IPC_STATS_CHANNEL = 42;
 
@@ -57,7 +60,7 @@ class JobQueueWorker extends Runnable
             } else {
                 $this->onJobFailed($job);
             }
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             $this->onJobFailed($job, $e->getMessage());
         }
     }
@@ -111,6 +114,6 @@ class JobQueueWorker extends Runnable
 
     protected function createStatsInstance()
     {
-        return new WorkerStats();
+        return new Stats();
     }
 }

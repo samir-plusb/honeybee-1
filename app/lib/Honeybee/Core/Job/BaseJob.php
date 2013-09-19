@@ -1,8 +1,8 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job;
 
-use Honeybee\Core\Queue\IQueueItem;
+use Honeybee\Core\Job\Queue\IQueueItem;
 
 abstract class BaseJob implements IJob, IQueueItem
 {

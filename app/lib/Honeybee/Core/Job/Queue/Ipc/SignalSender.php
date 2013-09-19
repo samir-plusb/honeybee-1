@@ -1,6 +1,9 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job\Queue\Ipc;
+
+use Honeybee\Core\Job\Queue\Exception;
+use Honeybee\Core\Job\Queue\JobQueue;
 
 class SignalSender
 {

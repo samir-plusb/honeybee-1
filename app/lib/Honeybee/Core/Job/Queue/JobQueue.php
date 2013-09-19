@@ -1,12 +1,12 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job\Queue;
 
-use Honeybee\Core\Queue;
+use Honeybee\Core\Job\IJob;
 
-class JobQueue extends Queue\FifoQueue
+class JobQueue extends FifoQueue
 {
-    public function push(Queue\IQueueItem $job)
+    public function push(IQueueItem $job)
     {
         if (!($job instanceof IJob)) {
             throw new Exception("The jobqeue only allows queueing of IJob implementations.");
@@ -20,8 +20,8 @@ class JobQueue extends Queue\FifoQueue
             )
         );
         // trigger the spinner to inform it, that there is work to be done
-        $signal_sender = new SignalSender();
-        $signal_sender->send($this, SignalSender::TRIGGER_JOB_QUEUE);
+        $signal_sender = new Ipc\SignalSender();
+        $signal_sender->send($this, Ipc\SignalSender::TRIGGER_JOB_QUEUE);
     }
 
     public function shift()

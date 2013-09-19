@@ -1,8 +1,8 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job\Queue\Runnable;
 
-class RunnableStats
+class Stats
 {
     protected $start_time;
 

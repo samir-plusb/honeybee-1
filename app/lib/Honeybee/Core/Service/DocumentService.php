@@ -5,8 +5,8 @@ namespace Honeybee\Core\Service;
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\Tree;
-use Honeybee\Core\Queue\Job\UpdateBackReferencesJob;
-use Honeybee\Core\Queue\Job\JobQueue;
+use Honeybee\Core\Job\Job\UpdateBackReferencesJob;
+use Honeybee\Core\Job\Job\JobQueue;
 use Honeybee\Core\Finder\ElasticSearch;
 use Elastica;
 

@@ -3,8 +3,8 @@
 namespace Honeybee\Core\Workflow\Plugin;
 
 use Honeybee\Core\Workflow\Plugin;
-use Honeybee\Core\Queue\Job\PublishJob;
-use Honeybee\Core\Queue\Job\JobQueue;
+use Honeybee\Core\Job\Job\PublishJob;
+use Honeybee\Core\Job\Job\JobQueue;
 
 class PublishPlugin extends BasePlugin
 {
@@ -44,7 +44,7 @@ class PublishPlugin extends BasePlugin
         $resource = $this->getResource();
         // @todo introduce jobqueue_name setting.
         $queue = new JobQueue('prio:1-default_queue');
-        $job_data = array(
+        $job_parameters = array(
             'module_class' => get_class($resource->getModule()),
             'document_identifier' => $resource->getIdentifier(),
             'exports' => $this->getParameter('exports'),
@@ -52,7 +52,7 @@ class PublishPlugin extends BasePlugin
             'error_gate' => $this->getParameter('error_gate', 'demote'),
             'execution_delay' => 1
         );
-        $queue->push(new PublishJob($job_data));
+        $queue->push(new PublishJob($job_parameters));
 
         $result = new Plugin\Result();
         $result->setState(Plugin\Result::STATE_EXPECT_INPUT);

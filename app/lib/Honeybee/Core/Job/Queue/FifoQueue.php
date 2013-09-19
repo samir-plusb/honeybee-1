@@ -1,10 +1,10 @@
 <?php
 
-namespace Honeybee\Core\Queue;
+namespace Honeybee\Core\Job\Queue;
 
-use Honeybee\Core\Queue\Kestrel;
+use Honeybee\Core\Job\Kestrel;
 
-class FifoQueue implements IQueue
+class FifoQueue implements IFiFoQueue
 {
     private $client;
 
@@ -18,9 +18,7 @@ class FifoQueue implements IQueue
         $this->client = new Kestrel\Client();
         // @todo introduce client configuration
         $this->client->connect(
-            array(
-                array('host' => 'localhost', 'port' => '22133')
-            )
+            array(array('host' => 'localhost', 'port' => '22133'))
         );
     }
 

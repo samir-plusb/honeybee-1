@@ -1,7 +1,8 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job\Bundle;
 
+use Honeybee\Core\Job\DocumentJob;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\ModuleService;
 use Dat0r\Core\Document\DocumentSet;

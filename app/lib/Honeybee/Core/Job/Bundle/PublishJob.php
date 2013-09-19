@@ -1,6 +1,8 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job\Bundle;
+
+use Honeybee\Core\Job\DocumentJob;
 
 class PublishJob extends DocumentJob
 {

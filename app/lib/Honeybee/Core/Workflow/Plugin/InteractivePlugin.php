@@ -3,8 +3,8 @@
 namespace Honeybee\Core\Workflow\Plugin;
 
 use Honeybee\Core\Workflow;
-use Honeybee\Core\Queue\Job\UpdateBackReferencesJob;
-use Honeybee\Core\Queue\Job\JobQueue;
+use Honeybee\Core\Job\Bundle\UpdateBackReferencesJob;
+use Honeybee\Core\Job\Queue\JobQueue;
 
 /**
  * The WorkflowInteractivePlugin serves as the base for interactive plugins.

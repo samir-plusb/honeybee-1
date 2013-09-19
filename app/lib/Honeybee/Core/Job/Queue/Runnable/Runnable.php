@@ -1,6 +1,9 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job\Queue\Runnable;
+
+use Honeybee\Core\Job\Queue\JobQueue;
+use Honeybee\Core\Job\Queue\Ipc\IpcMessaging;
 
 abstract class Runnable implements IRunnable
 {
@@ -93,7 +96,7 @@ abstract class Runnable implements IRunnable
 
     protected function createStatsInstance()
     {
-        return new RunnableStats();
+        return new Stats();
     }
 
     protected function log($message)

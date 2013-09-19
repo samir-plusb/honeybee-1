@@ -1,6 +1,6 @@
 <?php
 
-namespace Honeybee\Core\Queue;
+namespace Honeybee\Core\Job;
 
 class Exception extends \Exception
 {

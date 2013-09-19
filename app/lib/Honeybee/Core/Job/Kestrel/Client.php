@@ -1,6 +1,6 @@
 <?php
 
-namespace Honeybee\Core\Queue\Kestrel;
+namespace Honeybee\Core\Job\Kestrel;
 
 class Client
 {

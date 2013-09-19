@@ -5,3 +5,25 @@
         <xi:fallback />
     </xi:include>
 </environaut>
+
+    class Honeybee\BaseAction
+    {
+        
+    }
+
+if (!class_exists('\Project\BaseAction'))
+{
+    class AssetBaseAction extends Honeybee\BaseAction
+    {
+    
+    }
+
+} else {
+    class AssetBaseAction extends Project\BaseAction
+}
+
+
+class Asset_FooAction extends AssetBaseAction
+{
+    
+}

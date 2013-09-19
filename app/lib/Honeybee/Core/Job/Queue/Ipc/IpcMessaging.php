@@ -1,8 +1,8 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job\Queue\Ipc;
 
-use Honeybee\Core\Queue;
+use Honeybee\Core\Job;
 
 class IpcMessaging
 {

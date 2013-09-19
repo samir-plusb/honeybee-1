@@ -1,11 +1,14 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job\Queue\Spinner;
 
-// @todo register shutdown listener to cleanup pid file
-class JobQueueSpinner extends Runnable
+use Honeybee\Core\Job\Queue\Runnable\Runnable as BaseRunnable;
+use Honeybee\Core\Job\Queue\Worker\Runnable as Worker;
+
+// @todo register shutdown listener to notify parent process
+class Runnable extends BaseRunnable
 {
-    const IPC_SYNC_SLEEP_TIME = 250000;
+    const WORKER_RACE_DISTANCE = 250000;
 
     static protected $supported_signals = array(SIGHUP, SIGINT, SIGTERM, SIGQUIT, SIGUSR1, SIGUSR2);
 
@@ -39,7 +42,7 @@ class JobQueueSpinner extends Runnable
             if (-1 === $pid) {
                 $this->running = false;
             } elseif (0 === $pid) {
-                $worker = new JobQueueWorker($this->queue_name, $this->msg_queue_id, $this->ipc_channel);
+                $worker = new Worker($this->queue_name, $this->msg_queue_id, $this->ipc_channel);
                 $worker->run();
                 exit(0);
             } else {
@@ -68,7 +71,7 @@ class JobQueueSpinner extends Runnable
 
         posix_kill($avail_worker_pid, SIGUSR1);
         // give the worker a sec. to pull the job off the queue in order to minimize worker races.
-        usleep(self::IPC_SYNC_SLEEP_TIME);
+        usleep(self::WORKER_RACE_DISTANCE);
     }
 
     protected function tearDown(array $parameters)
@@ -161,15 +164,14 @@ class JobQueueSpinner extends Runnable
     protected function writePidFile()
     {
         $pid = posix_getpid();
-        $base_dir = dirname(\AgaviConfig::get('core.app_dir'));
+        $base_dir = \AgaviConfig::get('queue.run_dir', dirname(\AgaviConfig::get('core.app_dir')));
         $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
-
         file_put_contents($pid_file, $pid);
     }
 
     protected function removePidFile()
     {
-        $base_dir = dirname(\AgaviConfig::get('core.app_dir'));
+        $base_dir = \AgaviConfig::get('queue.run_dir', dirname(\AgaviConfig::get('core.app_dir')));
         $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
 
         unlink($pid_file);
@@ -177,6 +179,6 @@ class JobQueueSpinner extends Runnable
 
     protected function createStatsInstance()
     {
-        return new SpinnerStats();
+        return new Stats();
     }
 }

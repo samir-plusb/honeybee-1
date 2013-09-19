@@ -1,6 +1,6 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job;
 
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\ModuleService;

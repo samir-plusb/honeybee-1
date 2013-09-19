@@ -1,6 +1,6 @@
 <?php
 
-namespace Honeybee\Core\Queue\Job;
+namespace Honeybee\Core\Job\Queue\Runnable;
 
 interface IRunnable
 {
