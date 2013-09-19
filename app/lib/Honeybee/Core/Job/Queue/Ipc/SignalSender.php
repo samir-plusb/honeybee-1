@@ -3,7 +3,7 @@
 namespace Honeybee\Core\Job\Queue\Ipc;
 
 use Honeybee\Core\Job\Queue\Exception;
-use Honeybee\Core\Job\Queue\JobQueue;
+use Honeybee\Core\Job\Queue\IQueue;
 
 class SignalSender
 {
@@ -19,7 +19,7 @@ class SignalSender
         self::TRIGGER_MSG_QUEUE
     );
 
-    public function send(JobQueue $queue, $signo)
+    public function send(IQueue $queue, $signo)
     {
         $spinner_pid = $this->getSpinnerPid($queue);
         if ($spinner_pid && $spinner_pid !== posix_getpid()) {
@@ -32,7 +32,7 @@ class SignalSender
         return in_array($signo, self::$supported_signals);
     }
 
-    protected function getSpinnerPid(JobQueue $queue)
+    protected function getSpinnerPid(IQueue $queue)
     {
         $base_dir = dirname(\AgaviConfig::get('core.app_dir'));
         $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $queue->getName() . '.pid';

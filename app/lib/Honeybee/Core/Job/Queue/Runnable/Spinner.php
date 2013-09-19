@@ -1,12 +1,9 @@
 <?php
 
-namespace Honeybee\Core\Job\Queue\Spinner;
-
-use Honeybee\Core\Job\Queue\Runnable\Runnable as BaseRunnable;
-use Honeybee\Core\Job\Queue\Worker\Runnable as Worker;
+namespace Honeybee\Core\Job\Queue\Runnable;
 
 // @todo register shutdown listener to notify parent process
-class Runnable extends BaseRunnable
+class Spinner extends Runnable
 {
     const WORKER_RACE_DISTANCE = 250000;
 
@@ -55,7 +52,7 @@ class Runnable extends BaseRunnable
 
     protected function tick(array $parameters)
     {
-        while ($this->job_queue->hasJobs() && count($this->busy_worker_pids) < $this->worker_pool_size) {
+        while ($this->job_queue->hasItems() && count($this->busy_worker_pids) < $this->worker_pool_size) {
             $this->log("There is work to do, lets notify a worker ...");
             $this->notifyFreeWorker();
         }
@@ -179,6 +176,6 @@ class Runnable extends BaseRunnable
 
     protected function createStatsInstance()
     {
-        return new Stats();
+        return new SpinnerStats();
     }
 }

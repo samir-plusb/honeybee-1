@@ -1,10 +1,8 @@
 <?php
 
-namespace Honeybee\Core\Job\Queue\Spinner;
+namespace Honeybee\Core\Job\Queue\Runnable;
 
-use Honeybee\Core\Job\Queue\Runnable\Stats as BaseStats;
-
-class Stats extends BaseStats
+class SpinnerStats extends Stats
 {
     protected $worker_stats = array();
 

@@ -1,6 +1,6 @@
 <?php
 
-use Honeybee\Core\Job\Queue\Spinner\Runnable;
+use Honeybee\Core\Job\Queue\Runnable\Spinner;
 
 class Common_Queue_SpinnerAction extends CommonBaseAction
 {
@@ -15,7 +15,7 @@ class Common_Queue_SpinnerAction extends CommonBaseAction
         // random int that is used as an identifier to filter ipc messaging
         $ipc_channel = 23;
 
-        $spinner = new Runnable($queue_name, $msg_queue_id, $ipc_channel);
+        $spinner = new Spinner($queue_name, $msg_queue_id, $ipc_channel);
         $spinner->run(array('pool_size' => $pool_size));
 
         return AgaviView::NONE;

@@ -2,7 +2,7 @@
 
 namespace Honeybee\Core\Job\Queue;
 
-interface IFiFoQueue extends IQueue
+interface IFifoQueue extends IQueue
 {
     public function push(IQueueItem $item);
 

@@ -1,9 +1,13 @@
 <?php
 
-namespace Honeybee\Core\Job\Kestrel;
+namespace Honeybee\Agavi\Database\Kestrel;
 
 class Client
 {
+    const DEFAULT_HOST = 'localhost';
+
+    const DEFAULT_PORT = 22133;
+
     const CMD_ABORT = '/abort';
 
     const CMD_CLOSE = '/close';

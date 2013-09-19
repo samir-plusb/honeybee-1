@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
-    xmlns="http://agavi.org/agavi/config/parts/databases/1.0" 
+<ae:configurations
+    xmlns="http://agavi.org/agavi/config/parts/databases/1.0"
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <ae:configuration>
+        <databases default="Queue.Write">
+            <database name="Queue.Write" class="Honeybee\Agavi\Database\Kestrel\Database">
+                <ae:parameter name="servers">
+                    <ae:parameter>
+                        <ae:parameter name="host">localhost</ae:parameter>
+                        <ae:parameter name="port">22133</ae:parameter>
+                    </ae:parameter>
+                </ae:parameter>
+                <!--
+                <ae:parameter name="default_queue">prio:1-default_queue</ae:parameter>
+                -->
+            </database>
+        </databases>
+    </ae:configuration>
+
     <xi:include href="%core.app_dir%/config/includes/databases.xml"
         xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xpointer(/ae:configurations/*)">
     </xi:include>

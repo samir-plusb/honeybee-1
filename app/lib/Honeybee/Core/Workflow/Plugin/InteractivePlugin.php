@@ -4,7 +4,7 @@ namespace Honeybee\Core\Workflow\Plugin;
 
 use Honeybee\Core\Workflow;
 use Honeybee\Core\Job\Bundle\UpdateBackReferencesJob;
-use Honeybee\Core\Job\Queue\JobQueue;
+use Honeybee\Core\Job\Queue\KestrelQueue;
 
 /**
  * The WorkflowInteractivePlugin serves as the base for interactive plugins.
@@ -95,7 +95,7 @@ class InteractivePlugin extends BasePlugin
                 $this->publishResource($resource);
             }
 
-            $queue = new JobQueue('prio:1-default_queue');
+            $queue = new KestrelQueue('prio:1-default_queue');
             $job_data = array(
                 'module_class' => get_class($resource->getModule()),
                 'document_identifier' => $resource->getIdentifier()

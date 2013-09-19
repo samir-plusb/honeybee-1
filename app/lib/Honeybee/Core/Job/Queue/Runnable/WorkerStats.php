@@ -1,11 +1,10 @@
 <?php
 
-namespace Honeybee\Core\Job\Queue\Worker;
+namespace Honeybee\Core\Job\Queue\Runnable;
 
-use Honeybee\Core\Job\Queue\Runnable\Stats as BaseStats;
 use Honeybee\Core\Job\IJob;
 
-class Stats extends BaseStats
+class WorkerStats extends Stats
 {
     protected $started_jobs = 0;
 
