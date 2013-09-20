@@ -98,6 +98,20 @@ class DocumentService implements IService
         return $repository->find($query, $limit, $offset);
     }
 
+    public function walkDocuments(array $spec, $chunk_size, $callback)
+    {
+        $offset = 0;
+        $repository = $this->module->getRepository();
+        $result = $this->find($spec, $offset, $chunk_size);
+        while (count($result['documents']) > 0) {
+            foreach ($result['documents'] as $document) {
+                call_user_func($callback, $document);
+            }
+            $offset += $chunk_size;
+            $result = $this->find($spec, $offset, $chunk_size);
+        }
+    }
+
     public function delete(Document $document, $markOnly = true)
     {
         if ($markOnly) {

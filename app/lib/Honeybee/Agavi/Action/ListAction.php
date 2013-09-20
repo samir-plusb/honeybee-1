@@ -77,25 +77,23 @@ class ListAction extends BaseAction
             $listState->setOffset(0);
         }
 
-        $data = $service->fetchListData($listConfig, $listState);
-
-        $listState->setTotalCount($data['totalCount']);
-
-        $listState->setData(
-            $this->prepareListData($data['documents'])
-        );
-
         if ('xml_zipped' === $parameters->getParameter('export_format'))
         {
             $outputType = $this->getContext()->getController()->getOutputType('zip');
             $this->getContainer()->setOutputType($outputType);
-            $this->setAttribute('zip_file', $this->createXmlZipArchive($data['documents']));
+            $this->setAttribute('zip_file', $this->createXmlZipArchive());
         }
         else if ('csv' === $parameters->getParameter('export_format'))
         {
             $outputType = $this->getContext()->getController()->getOutputType('csv');
             $this->getContainer()->setOutputType($outputType);
-            $this->setAttribute('csv_file', $this->createCsvFile($data['documents']));
+            $this->setAttribute('csv_file', $this->createCsvFile());
+        }
+        else
+        {
+            $data = $service->fetchListData($listConfig, $listState);
+            $listState->setTotalCount($data['totalCount']);
+            $listState->setData($this->prepareListData($data['documents']));
         }
 
         return 'Success';
@@ -442,26 +440,45 @@ class ListAction extends BaseAction
         return $autoCompleteMappings;
     }
 
-    protected function createXmlZipArchive(DocumentCollection $documents)
+    protected function createXmlZipArchive()
     {
-        $export = $this->getModule()->getService('export')->getExport('list-xml-zip');
-        foreach ($documents as $document)
-        {
-            $export->publish($document);
+        $search_spec = array();
+        $list_state = $this->getAttribute('state');
+        if ($list_state->hasSearch()) {
+            $search_spec['search'] = $list_state->getSearch();
+        }
+        if ($list_state->hasFilter()) {
+            $search_spec['filter'] = $list_state->getFilter();
         }
 
+        $document_service = $this->getModule()->getService();
+        $export = $this->getModule()->getService('export')->getExport('list-xml-zip');
+        $document_service->walkDocuments($search_spec, 100, function($document) use ($export)
+        {
+            $export->publish($document);
+        });
         $export->getStorage()->getResource()->close();
 
         return $export->getStorage()->getResource();
     }
 
-    protected function createCsvFile(DocumentCollection $documents)
+    protected function createCsvFile()
     {
+        $search_spec = array();
+        $list_state = $this->getAttribute('state');
+        if ($list_state->hasSearch()) {
+            $search_spec['search'] = $list_state->getSearch();
+        }
+        if ($list_state->hasFilter()) {
+            $search_spec['filter'] = $list_state->getFilter();
+        }
+
+        $document_service = $this->getModule()->getService();
         $export = $this->getModule()->getService('export')->getExport('list-csv');
-        foreach ($documents as $document)
+        $document_service->walkDocuments($search_spec, 100, function($document) use ($export)
         {
             $export->publish($document);
-        }
+        });
 
         return $export->getStorage()->getResource();
     }

@@ -48,7 +48,7 @@ class PropertyFilter extends BaseFilter
                     $flatten = isset($key['flatten']) && true === $key['flatten'];
                     if ($flatten && count($display_fields) > 0)
                     {
-                        $display_fields = array($key['display_fields'][0]);
+                        $display_fields = array($display_fields[0]);
                     }
                 }
 
@@ -63,7 +63,7 @@ class PropertyFilter extends BaseFilter
                     {
                         if ($flatten)
                         {
-                             $value[] = $ref_document->getValue($display_fields[0]);
+                            $value[] = $ref_document->getValue($display_fields[0]);
                         }
                         else
                         {
@@ -75,6 +75,9 @@ class PropertyFilter extends BaseFilter
                             $value[] = $next_value;
                         }
                     }
+                }
+                if (isset($key['singular']) && $key['singular'] === true) {
+                    $value = implode(' ', $value);
                 }
             }
             else if ($prop_value instanceof Dat0r\DocumentCollection)

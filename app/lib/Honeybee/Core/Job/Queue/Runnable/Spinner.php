@@ -155,7 +155,8 @@ class Spinner extends Runnable
             $lines[] = "     Fatal Jobs: " . $worker_stats['fatal_jobs'];
         }
 
-        file_put_contents('queue.stats', implode(PHP_EOL, $lines));
+        $stats_filepath = \AgaviConfig::get('queue_spinner.stats_file', 'queue.stats');
+        file_put_contents($stats_filepath, implode(PHP_EOL, $lines));
     }
 
     protected function writePidFile()

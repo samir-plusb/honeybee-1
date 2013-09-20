@@ -6,35 +6,20 @@ class ExportAction extends BaseAction
 {
     public function executeWrite(\AgaviRequestDataHolder $parameters)
     {
+        $export_name = $parameters->getParameter('provider', 'pulq-fe');
+        $chunk_size = $parameters->getParameter('chunk_size', 100);
+
         $module = $this->getModule();
-        $exportName = $parameters->getParameter('provider', 'pulq-fe');
-        $exportService = $module->getService('export');
-        $docService = $module->getService();
+        $export_service = $module->getService('export');
+        $document_service = $module->getService();
 
-        $offset = 0;
-        $limit = 100;
-
-        $filter = array('workflowTicket.workflowStep' => 'published');
-        $searchSpec = array('filter' => $filter);
-
-        $data = $docService->find($searchSpec, $offset, $limit);
-        $totalDocs = $data['totalCount'];
-        $curDocCount = count($data['documents']);
-
-        while(0 < $curDocCount)
+        $search_spec = array('filter' => array('workflowTicket.workflowStep' => 'published'));
+        $publish_document = function($document) use ($export_service, $export_name)
         {
-            $docCollection = $data['documents'];
+            $export_service->publish($export_name, $document);
+        };
+        $document_service->walkDocuments($search_spec, $chunk_size, $publish_document);
 
-            foreach ($docCollection as $document)
-            {
-                $exportService->publish($exportName, $document);
-            }
-
-            $offset += $limit;
-            $data = $docService->find($searchSpec, $offset, $limit);
-            $curDocCount = count($data['documents']);
-        }
-        
         return 'Success';
     }
 
