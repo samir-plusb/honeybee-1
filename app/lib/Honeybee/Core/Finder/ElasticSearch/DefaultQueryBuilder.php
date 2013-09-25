@@ -60,6 +60,11 @@ class DefaultQueryBuilder implements IQueryBuilder
             );
         }
 
+        if (isset($specification['fields']))
+        {
+            $query->setFields($specification['fields']);
+        }
+
         return $query;
     }
 

@@ -9,6 +9,7 @@ bootstrap.js
 bootstrap-typeahead.js
 bootstrap-datepicker.js
 kinetic-v4.5.1.js
+flotr2.min.js
 underscore-min.js
 knockout-2.2.1.js
 knockout-custom.js

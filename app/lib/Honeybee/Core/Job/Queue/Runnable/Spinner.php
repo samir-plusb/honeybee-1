@@ -2,18 +2,27 @@
 
 namespace Honeybee\Core\Job\Queue\Runnable;
 
+use Honeybee\Core\Job\IJob;
+use Honeybee\Core\Config\ArrayConfig;
+
 // @todo register shutdown listener to notify parent process
 class Spinner extends Runnable
 {
-    const WORKER_RACE_DISTANCE = 250000;
+    const LOG_INTERVAL = 1;
 
-    static protected $supported_signals = array(SIGHUP, SIGINT, SIGTERM, SIGQUIT, SIGUSR1, SIGUSR2);
+    const THROTTLE_TIMEOUT = 100000;
+
+    static protected $supported_signals = array(SIGHUP, SIGINT, SIGTERM, SIGQUIT, SIGUSR1, SIGUSR2, SIGALRM);
 
     protected $worker_pool_size;
 
     protected $busy_worker_pids;
 
     protected $available_worker_pids;
+
+    protected $stats_writer;
+
+    protected $last_stats_write;
 
     public function __construct($queue_name, $msg_queue_id, $ipc_channel)
     {
@@ -27,6 +36,9 @@ class Spinner extends Runnable
     {
         $this->writePidFile();
         $this->spawnWorkers(isset($parameters['pool_size']) ? $parameters['pool_size'] : 3);
+
+        $this->stats_writer = new SpinnerStatsWriter($this->buildStatsWriterConfig());
+        pcntl_alarm(self::LOG_INTERVAL);
 
         parent::setUp($parameters);
     }
@@ -52,23 +64,21 @@ class Spinner extends Runnable
 
     protected function tick(array $parameters)
     {
-        while ($this->job_queue->hasItems() && count($this->busy_worker_pids) < $this->worker_pool_size) {
+        while (($next_job = $this->job_queue->peek()) && (count($this->busy_worker_pids) < $this->worker_pool_size)) {
             $this->log("There is work to do, lets notify a worker ...");
-            $this->notifyFreeWorker();
+            $this->pingNextFreeWorker($next_job);
         }
-
-        $this->printStats();
     }
 
-    protected function notifyFreeWorker()
+    protected function pingNextFreeWorker(IJob $next_job)
     {
         $avail_worker_pid = array_pop($this->available_worker_pids);
         $this->busy_worker_pids[] = $avail_worker_pid;
         $this->log("... notified worker with pid: " . $avail_worker_pid);
 
         posix_kill($avail_worker_pid, SIGUSR1);
-        // give the worker a sec. to pull the job off the queue in order to minimize worker races.
-        usleep(self::WORKER_RACE_DISTANCE);
+        $this->stats->onJobStarted();
+        usleep(self::THROTTLE_TIMEOUT);
     }
 
     protected function tearDown(array $parameters)
@@ -91,17 +101,26 @@ class Spinner extends Runnable
                 break;
             case SIGUSR2:
                 $this->log("... received SIGUSR2, checking ipc_messaging and job_queue for payload.");
-
-                if ($worker_message = $this->ipc_messaging->read()) {
+                // read any messages that are pending on the msg_queue
+                // @todo as soon as workers send more than complete messages,
+                // or when other components need to send stuff, we have to distinguish message types here.
+                while (($worker_message = $this->ipc_messaging->read())) {
                     $this->onWorkerFinished(json_decode($worker_message, true));
+                    $this->writeStats();
                 }
                 break;
             case SIGINT:
             case SIGHUP:
             case SIGTERM:
                 $this->log("... received SIGINT, SIGTERM or SIGHUP, initiating graceful shutdown.");
-                // @todo $this->shutDown();
+
+                $this->shutDown();
+                $this->writeStats();
                 $this->running = false;
+                break;
+            case SIGALRM:
+                pcntl_alarm(self::LOG_INTERVAL);
+                $this->writeStats();
                 break;
             default:
                 $this->log("Received unhandled system signal. Ignoring: " . print_r($info, true));
@@ -126,37 +145,8 @@ class Spinner extends Runnable
         $worker_index = array_search($worker_pid, $this->busy_worker_pids);
         array_splice($this->busy_worker_pids, $worker_index, 1);
         array_unshift($this->available_worker_pids, $worker_pid);
-    }
 
-    protected function printStats()
-    {
-        $stats_array = $this->stats->toArray();
-        $now = new \DateTime();
-        $uptime = $now->diff(new \DateTime($stats_array['start_time']));
-
-        $lines = array();
-        $lines[] = '# SPINNER STATS #';
-        $lines[] = "   Started at: " . $stats_array['start_time'];
-        $lines[] = "       Uptime: " . $uptime->format('%d days %H hours %I minutes') . PHP_EOL;
-        $lines[] = '# WORKER STATS #';
-        foreach ($stats_array['worker_stats'] as $worker_pid => $worker_stats) {
-            $worker_started = $worker_stats['start_time'];
-            if (isset($worker_stats['start_time']['date'])) {
-                $worker_started = $worker_stats['start_time']['date'];
-            }
-
-            $uptime = $now->diff(new \DateTime($worker_started));
-            $lines[] = PHP_EOL . '-- Worker [' . $worker_pid . ']';
-            $lines[] = "     Started at: " . $worker_started;
-            $lines[] = "         Uptime: " . $uptime->format('%d days %H hours %I minutes');
-            $lines[] = "   Started Jobs: " . $worker_stats['started_jobs'];
-            $lines[] = "Successful Jobs: " . $worker_stats['successful_jobs'];
-            $lines[] = "    Failed Jobs: " . $worker_stats['failed_jobs'];
-            $lines[] = "     Fatal Jobs: " . $worker_stats['fatal_jobs'];
-        }
-
-        $stats_filepath = \AgaviConfig::get('queue_spinner.stats_file', 'queue.stats');
-        file_put_contents($stats_filepath, implode(PHP_EOL, $lines));
+        $this->stats->onJobFinished();
     }
 
     protected function writePidFile()
@@ -178,5 +168,55 @@ class Spinner extends Runnable
     protected function createStatsInstance()
     {
         return new SpinnerStats();
+    }
+
+    protected function shutDown()
+    {
+        $worker_pids = array_merge($this->busy_worker_pids, $this->available_worker_pids);
+        for($i = 0; $i < count($worker_pids); $i++) {
+            posix_kill($worker_pids[$i], SIGINT);
+        }
+        // @todo prevent restarts being blocked by long running workers:
+        // - remove SIGALRM from the list of blocked signals `pcntl_sigprocmask(SIG_UNBLOCK, array(SIGALRM))`
+        // - setup a `pcntl_alarm` callback before starting to wait for our children to shutdown.
+        // - then force a shutdown with a `posix_kill($pid, SIGKILL)`,
+        //   if they haven't terminated when the alarm callback kicks in.
+        $status = null;
+        while(($pid = pcntl_wait($status)) > 0) {
+            $pid_pos = array_search($pid, $worker_pids);
+            array_splice($worker_pids, $pid_pos, 1);
+        }
+        if (count($worker_pids) > 0) {
+            $this->log(
+                sprintf(
+                    "The spinner is leaving %d worker-zombies behind. Zombie pids are: %s",
+                    count($worker_pids),
+                    implode(',', $worker_pids)
+                )
+            );
+        } else {
+            $this->log("Successfully stopped all worker processes.");
+        }
+    }
+
+    protected function buildStatsWriterConfig()
+    {
+        $display_file = \AgaviConfig::get('queue_spinner.stats_file', 'queue_stats');
+        $log_file = \AgaviConfig::get('queue_spinner.stats_file', 'queue_stats.log.json');
+
+        return new ArrayConfig(
+            array('stats_display_file' => $display_file, 'stats_log_file' => $log_file)
+        );
+    }
+
+    protected function writeStats()
+    {
+        $now = round(microtime(true) * 1000);
+        if (!$this->last_stats_write) {
+            $this->last_stats_write = $now;
+        } elseif ($now - $this->last_stats_write >= 1000) {
+            $this->last_stats_write = $now;
+            $this->stats_writer->write($this->stats);
+        }
     }
 }

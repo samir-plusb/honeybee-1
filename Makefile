@@ -115,7 +115,7 @@ install-dev: install-composer install-vendor-dev install-node-deps
 	@make deploy-resources
 
 
-update: update-composer update-vendor update-node-deps
+update: update-composer update-vendor 
 
 
 update-dev: update-composer update-vendor-dev update-node-deps

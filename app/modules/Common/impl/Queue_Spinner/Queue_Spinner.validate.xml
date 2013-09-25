@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+    parent="%core.config_dir%/validators.xml">
+    <ae:configuration>
+        <validators>
+
+            <validator class="number" name="invalid_size" required="false">
+                <arguments>
+                    <argument>size</argument>
+                </arguments>
+                <errors>
+                    <error>The provided pool 'size' must be an integer.</error>
+                    <error for="type">The provided pool size must be an integer.</error>
+                    <error for="min">You need at least one worker.</error>
+                    <error for="max">Max allowed number over workers is 100.</error>
+                </errors>
+            </validator>
+
+             <validator class="string" name="invalid_queue" required="false">
+                <arguments>
+                    <argument>queue</argument>
+                </arguments>
+                <errors>
+                    <error>The provided list state is missing or corrupt.</error>
+                    <error for="type">The provided list state must be either a valid array or IListState instance.</error>
+                </errors>
+            </validator>
+
+        </validators>
+    </ae:configuration>
+</ae:configurations>

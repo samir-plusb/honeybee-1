@@ -46,7 +46,7 @@ class DocumentFinder implements IFinder
         }
         $source = $this->getQuerySource();
         $resultSet = $source->search($query);
-        
+
         return $this->convertResultSetToArray($resultSet);
     }
 

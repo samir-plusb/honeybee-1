@@ -20,7 +20,7 @@ class Worker extends Runnable
     {
         switch ($signo) {
             case SIGINT:
-                $this->log("... received SIGINT, terminating ...");
+                $this->log("... received SIGINT, terminating.");
 
                 $this->running = false;
                 break;
@@ -86,7 +86,10 @@ class Worker extends Runnable
     {
         $this->job_queue->closeCurrent();
 
-        $this->log("An error occured while executing job-type: " . get_class($job));
+        if (empty($error_message)) {
+            $error_message = implode("\n", $job->getErrors());
+        }
+        $this->log("An error occured while executing job-type: " . get_class($job) . ', Error: ' . $error_message);
 
         $status = 'error';
         if (IJob::STATE_FATAL === $job->getState()) {
@@ -97,6 +100,7 @@ class Worker extends Runnable
             // we might want to push it to an error queue
             // or to a journal for fatal jobs.
         } else {
+            sleep(1); // wait a sec, then push the job back to the queue for a retry.
             $this->job_queue->push($job);
             $this->stats->onJobError($job);
         }

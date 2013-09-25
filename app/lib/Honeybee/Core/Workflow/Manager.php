@@ -110,8 +110,6 @@ class Manager
             'message' => $pluginResult->getMessage()
         ));
 
-        $this->getModule()->getService()->save($resource);
-
         return $pluginResult;
     }
 

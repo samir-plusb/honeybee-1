@@ -16,6 +16,11 @@ class KestrelQueue implements IFifoQueue
         $this->client = \AgaviContext::getInstance()->getDatabaseConnection('Queue.Write');
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function shift()
     {
         $job_state = unserialize($this->client->get($this->name));
@@ -26,15 +31,10 @@ class KestrelQueue implements IFifoQueue
         }
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
     public function push(IQueueItem $item)
     {
         if (!($item instanceof IJob)) {
-            throw new Exception("The jobqeue only allows queueing of IJob implementations.");
+            throw new Exception(get_class($this) . " only allows queueing of IJob implementations.");
         }
 
         $this->client->set(
@@ -46,14 +46,9 @@ class KestrelQueue implements IFifoQueue
         $signal_sender->send($this, Ipc\SignalSender::TRIGGER_JOB_QUEUE);
     }
 
-    public function openNext()
+    public function hasItems()
     {
-        $job_state = unserialize($this->client->get($this->name));
-        if ($job_state) {
-            return $this->createJob($job_state);
-        } else {
-            return null;
-        }
+        return $this->client->peek($this->getName()) !== false;
     }
 
     public function closeCurrent()
@@ -66,9 +61,14 @@ class KestrelQueue implements IFifoQueue
         return $this->client->abort($this->name);
     }
 
-    public function hasItems()
+    public function peek()
     {
-        return $this->client->peek($this->getName()) !== false;
+        $job_state = unserialize($this->client->peek($this->name));
+        if ($job_state) {
+            return $this->createJob($job_state);
+        } else {
+            return null;
+        }
     }
 
     protected function createJob(array $job_state)

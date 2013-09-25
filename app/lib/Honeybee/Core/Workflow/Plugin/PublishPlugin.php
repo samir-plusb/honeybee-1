@@ -3,8 +3,8 @@
 namespace Honeybee\Core\Workflow\Plugin;
 
 use Honeybee\Core\Workflow\Plugin;
-use Honeybee\Core\Job\Job\PublishJob;
-use Honeybee\Core\Job\Job\JobQueue;
+use Honeybee\Core\Job\Bundle\PublishJob;
+use Honeybee\Core\Job\Queue\KestrelQueue;
 
 class PublishPlugin extends BasePlugin
 {
@@ -15,7 +15,7 @@ class PublishPlugin extends BasePlugin
             if ($this->getParameter('async', false)) {
                 $result = $this->exportAsync();
             } else {
-                $result = $this->exportSync();
+                //$result = $this->exportSync();
             }
             $this->logInfo(
                 sprintf("Successfully published document: %s", $this->getResource()->getIdentifier())
@@ -42,8 +42,11 @@ class PublishPlugin extends BasePlugin
     protected function exportAsync()
     {
         $resource = $this->getResource();
+        // make sure the document's current state is persisted before triggering a job.
+        $resource->getModule()->getService()->save($resource);
+
         // @todo introduce jobqueue_name setting.
-        $queue = new JobQueue('prio:1-default_queue');
+        $queue = new KestrelQueue('prio:1-default_queue');
         $job_parameters = array(
             'module_class' => get_class($resource->getModule()),
             'document_identifier' => $resource->getIdentifier(),

@@ -115,10 +115,19 @@ class InteractivePlugin extends BasePlugin
     {
         $actionData = $this->prepareActionData();
         $container = $this->getWorkflow()->getContainer();
+        $rdhc = \AgaviContext::getInstance()->getRequest()->getParameter('request_data_holder_class');
+        $arguments = new $rdhc(
+            array(
+                \AgaviRequestDataHolder::SOURCE_PARAMETERS => array(
+                    $this->getResource()->getModule()->getOption('prefix') => $this->getResource()
+                )
+            )
+        );
+
         $pluginContainer = $container->createExecutionContainer(
             $actionData['module'],
             $actionData['action'],
-            $actionData['arguments'] ? $actionData['arguments'] : $container->getArguments(),
+            $arguments,
             $actionData['output'],
             empty($actionData['method']) ? $container->getRequestMethod() : $actionData['method']
         );

@@ -42,7 +42,14 @@ class UpdateBackReferencesJob extends DocumentJob
                     }
                 }
                 $referencing_document->setValue($referencing_field->getName(), $document_set);
-                $service->save($referencing_document);
+
+                try {
+                    $service->save($referencing_document);
+                } catch (Conflict $conflict) {
+                    $new_revision = $conflict->getHeadRevision();
+                    $referencing_document->setRevision($new_revision);
+                    $service->save($referencing_document);
+                }
             }
         }
     }

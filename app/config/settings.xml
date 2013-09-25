@@ -47,6 +47,7 @@
             <setting name="test_bootstrap_tpl">%core.app_dir%/../testing/TestCaseMethod.tpl</setting>
             <setting name="gravatar_url_tpl">http://www.gravatar.com/avatar/{EMAIL_HASH}?s=41</setting>
             <setting name="auth_provider">Honeybee\Core\Security\Auth\StandardAuthProvider</setting>
+            <setting name="apache_tika">%core.app_dir%/../bin/tika-app-1.4.jar</setting>
         </settings>
 
         <settings prefix="password_constraints.">

@@ -42,7 +42,8 @@ class WorkerStats extends Stats
                 'started_jobs' => $this->started_jobs,
                 'successful_jobs' => $this->successful_jobs,
                 'failed_jobs' => $this->failed_jobs,
-                'fatal_jobs' => $this->fatal_jobs
+                'fatal_jobs' => $this->fatal_jobs,
+                'memory' => memory_get_usage(true)
             )
         );
     }

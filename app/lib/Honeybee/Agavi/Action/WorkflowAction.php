@@ -6,68 +6,60 @@ use Honeybee\Core\Workflow\Plugin;
 
 class WorkflowAction extends BaseAction
 {
-    public function execute(\AgaviRequestDataHolder $parameters)
+    public function executeWrite(\AgaviRequestDataHolder $request_data)
     {
-        try
-        {
+        $view = $this->execute($request_data);
+        if ($request_data->hasParameter('gate')) {
+            //$this->getModule()->getService()->save($request_data->getParameter('document'));
+        }
+
+        return $view;
+    }
+
+    public function execute(\AgaviRequestDataHolder $request_data)
+    {
+        try {
             $module = $this->getModule();
             $service = $module->getService();
 
-            $resource = $parameters->getParameter('document');
-            $gate = $parameters->getParameter('gate', NULL);
+            $resource = $request_data->getParameter('document');
+            $gate = $request_data->getParameter('gate', null);
 
             $manager = $module->getWorkflowManager();
             $result = $manager->executeWorkflowFor($resource, $gate, $this->getContainer());
             $this->setAttribute('result', $result);
 
-            if ($result instanceof Plugin\InteractionResult)
-            {
+            if ($result instanceof Plugin\InteractionResult) {
                 $this->setAttribute('content', $result->getResponse()->getContent());
-            }
-            else
-            {
+            } else {
                 $this->setAttribute('content', $result->getMessage());
             }
 
-            $errorStates = array(
-                Plugin\Result::STATE_ERROR,
-                Plugin\Result::STATE_NOT_ALLOWED
-            );
-
-            if (in_array($result->getState(), $errorStates))
-            {
+            $error_states = array(Plugin\Result::STATE_ERROR, Plugin\Result::STATE_NOT_ALLOWED);
+            if (in_array($result->getState(), $error_states)) {
                 return 'Error';
             }
-        }
-        catch (\Exception $e)
-        {
-            throw $e;
+        } catch (\Exception $e) {
             $this->setAttribute(
                 'content',
                 'An unexpected workflow error occured while processing: ' . $e->getMessage()
             );
-            
             $this->setAttribute('reason', $e->getCode());
             $this->setAttribute('errors', array($e->getMessage()));
-
+throw $e;
             return 'Error';
         }
 
         return 'Success';
     }
 
-    public function handleError(\AgaviRequestDataHolder $parameters)
+    public function handleError(\AgaviRequestDataHolder $request_data)
     {
         $errors = array();
-
-        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $err)
-        {
-            if (!empty($err['message']))
-            {
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $err) {
+            if (!empty($err['message'])) {
                 $errors[] = $err['message'];
-            }
-            else
-            {
+            } else {
                 $errors[] = "An unexpected (validation) error occured.";
             }
         }
@@ -77,7 +69,6 @@ class WorkflowAction extends BaseAction
             'content',
             'The following errors occured while processing input: ' . implode(', ', $errors)
         );
-
         $this->setAttribute('errors', $errors);
 
         return 'Error';

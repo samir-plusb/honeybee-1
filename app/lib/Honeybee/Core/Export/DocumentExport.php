@@ -36,9 +36,16 @@ class DocumentExport extends GenericExport
         }
 
         $data = parent::buildExportData($document);
-        $data['identifier'] = $document->getShortIdentifier();
+
+        $export_identifier = $document->getShortIdentifier();
+        $data['identifier'] = $export_identifier;
         $data['type'] = $document->getModule()->getOption('prefix');
         $data[self::PUBLISHED_AT_FIELD] = $metaData[self::PUBLISHED_AT_FIELD];
+
+        if ($prev_data = $this->storage->read($export_identifier))
+        {
+            $data['revision'] = $prev_data['revision'];
+        }
 
         return $data;
     }

@@ -47,7 +47,7 @@ abstract class Runnable implements IRunnable
 
         $this->stats->onRunnableStarted();
         $this->setUp($parameters);
-        $this->log("Started runnable with pid: " . posix_getpid());
+        $this->log(sprintf("Started runnable with pid: %d (%s)", posix_getpid(), get_class($this)));
 
         while ($this->running) {
             $this->tick($parameters);
@@ -58,7 +58,7 @@ abstract class Runnable implements IRunnable
         $this->running = false;
         $this->tearDown($parameters);
         $this->stats->onRunnableStopped();
-        $this->log("Stopped runnable with pid: " . posix_getpid());
+        $this->log(sprintf("Stopped runnable with pid: %d (%s)", posix_getpid(), get_class($this)));
     }
 
     protected function setUp(array $parameters)

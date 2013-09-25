@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations
+    xmlns="http://agavi.org/agavi/config/parts/validators/1.0"
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+    parent="%core.config_dir%/validators.xml">
+    <ae:configuration>
+        <validators>
+
+            <validator class="number" name="invalid_offset" required="false">
+                <arguments>
+                    <argument>offset</argument>
+                </arguments>
+                <errors>
+                    <error>The provided pool 'offset' must be an integer greater than zero.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="min">0</ae:parameter>
+                </ae:parameters>
+            </validator>
+
+             <validator class="number" name="invalid_limit" required="false">
+                <arguments>
+                    <argument>limit</argument>
+                </arguments>
+                <errors>
+                    <error>The provided pool 'limit' must be an integer between 0 and 1000.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="min">0</ae:parameter>
+                    <ae:parameter name="max">1000</ae:parameter>
+                </ae:parameters>
+            </validator>
+
+        </validators>
+    </ae:configuration>
+</ae:configurations>

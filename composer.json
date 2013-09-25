@@ -52,7 +52,8 @@
         "fzaninotto/faker": "v1.1.0",
         "sami/sami": "1.0",
         "psr/log": "1.0.0",
-        "monolog/monolog": "1.5"
+        "monolog/monolog": "1.5",
+        "symfony/process": "~2.1"
     },
 
     "require-dev": {

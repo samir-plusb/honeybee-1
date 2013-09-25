@@ -57,6 +57,10 @@ class DocumentValidator extends \AgaviValidator
                 $this->throwError();
             }
         }
+        else if ($data instanceof Document\IDocument)
+        {
+            $document = $data;
+        }
         else if (! ($document = $service->get($data)))
         {
             $success = FALSE;
@@ -65,6 +69,7 @@ class DocumentValidator extends \AgaviValidator
 
         if ($success && $document)
         {
+            $this->export($document, $this->getArgument());
             $this->export($document, $this->getParameter('export', 'document'));
         }
 
