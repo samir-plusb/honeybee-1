@@ -60,10 +60,15 @@ class GenericStorage implements IStorage
 
         if(isset($result['error']) && 'conflict' === $result['error'])
         {
-            $conflict = new Conflict("Unable to store data because a couchdb conflict occured.");
-            $conflict->setGivenRevision($data[self::COUCH_REV]);
-            $conflict->setHeadRevision($couchDbClient->statDoc(NULL, $data[self::COUCH_ID]));
-            throw $conflict;
+            if (!isset($data[self::COUCH_REV])) {
+                $data[self::COUCH_REV] = $couchDbClient->statDoc(NULL, $data[self::COUCH_ID]);
+                $couchDbClient->storeDoc(NULL, $data)
+            } else {
+                $conflict = new Conflict("Unable to store data because a couchdb conflict occured.");
+                $conflict->setGivenRevision($data[self::COUCH_REV]);
+                $conflict->setHeadRevision($couchDbClient->statDoc(NULL, $data[self::COUCH_ID]));
+                throw $conflict;
+            }
         }
 
         if (isset($result['ok']) && isset($result['rev']))

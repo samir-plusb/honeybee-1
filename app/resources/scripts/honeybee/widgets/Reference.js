@@ -355,7 +355,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             {
                 exact_match_found = true;
             }
-
+            // var item_label = options.module_label + ': ' + entry[label_field];
+            var item_label = entry[label_field];
             select2_state.data.results.push({
                 id: entry[id_field],
                 text: entry[label_field],

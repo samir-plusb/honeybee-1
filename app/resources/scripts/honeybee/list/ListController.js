@@ -288,7 +288,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             if (has_errors)
             {
                 // do something to communicate the errors.
-                alert("Weird stuff is happening causing errors!");
+                alert("Es ist ein unerwarter Ausnahmefehler aufgetreten.");
             }
             // reload list after batch has finished
             window.location.href = window.location.href;
