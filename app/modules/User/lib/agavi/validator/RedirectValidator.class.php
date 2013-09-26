@@ -76,7 +76,13 @@ class RedirectValidator extends AgaviValidator
         if ($violations->count() === 0) {
             return true;
         } else {
-            $this->getContext()->getLoggerManager()->log(__METHOD__ . ' [Violations] ' . $violations->__toString());
+            $this->getContext()->getLoggerManager()->logTo(
+                'default',
+                \AgaviLogger::WARNING,
+                '[VALIDATION]',
+                __METHOD__ . ' - ' . $violations->__toString()
+            );
+
             return false;
         }
     }
