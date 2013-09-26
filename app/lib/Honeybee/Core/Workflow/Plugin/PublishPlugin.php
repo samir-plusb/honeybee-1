@@ -30,7 +30,7 @@ class PublishPlugin extends BasePlugin
             );
 
             $result = new Plugin\Result();
-            $result->setState(Plugin\Result::STATE_OK);
+            $result->setState(Plugin\Result::STATE_EXPECT_INPUT);
             $result->setMessage($e->getMessage());
             $result->setGate($this->getParameter('error_gate', 'demote'));
         }

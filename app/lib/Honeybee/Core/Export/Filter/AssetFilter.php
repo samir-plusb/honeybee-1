@@ -53,7 +53,11 @@ class AssetFilter extends BaseFilter
                 }
 
                 $assetData['sourceDoc'] = $documentShortId;
+                if ($prevAsset = $this->storage->read($assetData['identifier'])) {
+                    $assetData['revision'] = $prevAsset['revision'];
+                }
                 $this->storage->write($assetData);
+
                 $assetExportFields = $this->getConfig()->get('asset_fields', array('identifier' => 'id'));
 
                 $exportValue = array();
