@@ -10,7 +10,9 @@ class WorkflowAction extends BaseAction
     {
         $view = $this->execute($request_data);
         if ($request_data->hasParameter('gate')) {
-            //$this->getModule()->getService()->save($request_data->getParameter('document'));
+            $this->getModule()->getService()->save(
+                $request_data->getParameter('document')
+            );
         }
 
         return $view;

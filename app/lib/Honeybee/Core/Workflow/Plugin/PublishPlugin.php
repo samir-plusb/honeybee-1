@@ -15,7 +15,7 @@ class PublishPlugin extends BasePlugin
             if ($this->getParameter('async', false)) {
                 $result = $this->exportAsync();
             } else {
-                //$result = $this->exportSync();
+                $result = $this->exportSync();
             }
             $this->logInfo(
                 sprintf("Successfully published document: %s", $this->getResource()->getIdentifier())
