@@ -33,8 +33,9 @@ class TemplateService implements IService
         if ($mixed instanceof Module)
         {
             $this->module = $mixed;
-            $config = new Config\AgaviXmlConfig(\AgaviConfig::get('core.modules_dir') . '/' . $this->module->getName() . '/config/mail.xml');
-            $data = $config->toArray();
+            $data = array();
+            //$config = new Config\AgaviXmlConfig(\AgaviConfig::get('core.modules_dir') . '/' . $this->module->getName() . '/config/templates.xml');
+            //$data = $config->toArray();
             $data['module_name'] = $this->module->getName();
             $this->config = new Config\ArrayConfig($data);
         }

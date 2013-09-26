@@ -34,26 +34,6 @@ class EditErrorView extends BaseView
             }
         }
 
-        if (!$this->getResponse()->getParameter('append_eol', true))
-        {
-            $error_message .= PHP_EOL;
-        }
-
-        $this->getResponse()->setExitCode(1);
-
-        /*
-         * we just send stuff to STDERR as AgaviResponse::sendContent() uses fpassthru which
-         * does not allow us to give the handle to Agavi via $rp->setContent() or return $handle
-         * notice though, that the shell exit code will still be set correctly
-         */
-        if (php_sapi_name() === 'cli' && defined('STDERR'))
-        {
-            fwrite(STDERR, $error_message);
-            fclose(STDERR);
-        }
-        else
-        {
-            return $error_message;
-        }
+        return $this->cliError($error_message);
     }
 }

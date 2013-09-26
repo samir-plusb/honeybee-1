@@ -6,7 +6,9 @@ ini_set('display_startup_errors', 'On');
 $default_context = 'console';
 $environment_modifier = '';
 
-$rootDir = dirname(dirname(__FILE__));
-require  $rootDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+$root_dir = dirname(dirname(__FILE__));
+require  $root_dir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+unset($root_dir);
 
-AgaviContext::getInstance()->getController()->dispatch();
+$response = AgaviContext::getInstance()->getController()->dispatch();
+exit($response->getExitCode());

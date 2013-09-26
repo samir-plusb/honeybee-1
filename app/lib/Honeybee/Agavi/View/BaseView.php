@@ -179,6 +179,45 @@ class BaseView extends \AgaviView
     }
 
     /**
+     * Outputs given message on STDERR and sets the given shell exit code on the response
+     *
+     * @param string $error_message message to output
+     * @param int $exit_code shell exit code to use; defaults to 1 for general errors
+     *
+     * @return void|string usually nothing, but error message in case of non-cli SAPI or undefined STDERR constant
+     *
+     * @throws \Exception when current response ist not an instance of \AgaviConsoleResponse
+     */
+    public function cliError($error_message, $exit_code = 1)
+    {
+        if (!$this->getResponse() instanceof \AgaviConsoleResponse) {
+            throw new \Exception(
+                "The current response must be an instance of \AgaviConsoleResponse." .
+                "Please don't use this method for non-console contexts."
+            );
+        }
+
+        if (!$this->getResponse()->getParameter('append_eol', true)) {
+            $error_message .= PHP_EOL;
+        }
+
+        $this->getResponse()->setExitCode($exit_code);
+
+        /*
+         * we just send stuff to STDERR as AgaviResponse::sendContent() uses fpassthru which
+         * does not allow us to give the handle to Agavi via $rp->setContent() or return $handle
+         *
+         * notice though, that the shell exit code will still be set correctly
+         */
+        if (php_sapi_name() === 'cli' && defined('STDERR')) {
+            fwrite(STDERR, $error_message);
+            fclose(STDERR);
+        } else {
+            return $error_message;
+        }
+    }
+
+    /**
      * Handles non-existing methods. This includes mainly the not implemented
      * handling of certain output types.
      *
