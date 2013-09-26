@@ -6,13 +6,6 @@
  */
 class User_Login_LoginErrorView extends UserBaseView
 {
-    public function executeBinary(AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
-    {
-        // @easter-egg Return 'I am a teapot' for people,
-        //  that managed to provide data leading into this code path.
-        $this->getContext()->getController()->getGlobalResponse()->setHttpStatusCode(418);
-    }
-
     /**
      * Execute any html related presentation logic and sets up our template attributes.
      *
@@ -28,6 +21,9 @@ class User_Login_LoginErrorView extends UserBaseView
         $this->setAttribute('_title', $this->getContext()->getTranslationManager()->_('Login Error', 'user.messages'));
         $this->setAttribute('error_messages', $this->getContainer()->getValidationManager()->getErrorMessages());
 
+        $this->getResponse()->setHttpStatusCode(401);
+
+        // allow users to log in directly via html form
         $this->getLayer('content')->setTemplate('Login/LoginInput');
     }
 
@@ -41,12 +37,12 @@ class User_Login_LoginErrorView extends UserBaseView
      */
     public function executeJson(AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
-        $this->getContainer()->getResponse()->setContent(
-            json_encode(
-                array(
-                    'result' => 'failure',
-                    'errors' => $this->getContainer()->getValidationManager()->getErrorMessages()
-                )
+        $this->getResponse()->setHttpStatusCode(401);
+
+        return json_encode(
+            array(
+                'result' => 'failure',
+                'errors' => $this->getContainer()->getValidationManager()->getErrorMessages()
             )
         );
     }
@@ -61,11 +57,26 @@ class User_Login_LoginErrorView extends UserBaseView
      */
     public function executeConsole(AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
-        $this->getContainer()->getResponse()->setContent(
-            $this->getContext()->getTranslationManager()->_(
-                'Wrong user name or password!',
-                'user'
-            )
+        return $this->cliError(
+            $this->translation_manager->_('Wrong user name or password!', 'user') . PHP_EOL
         );
+    }
+
+    /**
+     * Handles non-existing methods. This includes mainly the not implemented
+     * handling of certain output types. This returns HTTP status code 401 by default.
+     *
+     * @param string $method_name
+     * @param array $arguments
+     */
+    public function __call($method_name, $arguments)
+    {
+        if (preg_match('~^(execute)([A-Za-z_]+)$~', $method_name)) {
+            if ($this->getResponse() instanceof AgaviWebResponse) {
+                $this->getResponse()->setHttpStatusCode(401);
+            } elseif ($this->getResponse() instanceof AgaviConsoleResponse) {
+                $this->getResponse()->setExitCode(70); // 70 ("internal software error") instead of 1 ("general error")
+            }
+        }
     }
 }

@@ -5,8 +5,14 @@
 
     <ae:configuration>
 
-        <validators method="write">
-            <validator class="string" translation_domain='user.messages'>
+        <validators translation_domain="user.messages">
+            <validator source="headers" class="RedirectValidator" name="valid_redirect_referer" severity="silent" required="false">
+                <argument>REFERER</argument>
+            </validator>
+        </validators>
+
+        <validators method="write" translation_domain="user.messages">
+            <validator class="string">
                 <argument>username</argument>
                 <ae:parameter name="min">3</ae:parameter>
                 <ae:parameter name="max">100</ae:parameter>
@@ -22,15 +28,15 @@
 
         </validators>
 
-        <validators method="read">
-            <validator class="string" translation_domain='user.messages' required="false">
+        <validators method="read" translation_domain="user.messages">
+            <validator class="string" required="false">
                 <argument>username</argument>
                 <ae:parameter name="min">3</ae:parameter>
                 <ae:parameter name="max">100</ae:parameter>
                 <error>The username is invalid.</error>
             </validator>
 
-            <validator class="string" translation_domain='user.messages' required="false">
+            <validator class="string" required="false">
                 <argument>password</argument>
                 <ae:parameter name="min">7</ae:parameter>
                 <ae:parameter name="max">200</ae:parameter>

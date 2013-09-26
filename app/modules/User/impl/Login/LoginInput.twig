@@ -7,7 +7,7 @@
         </div>
     </div>
     {% endif %}
-    <form class="well form-auth form-horizontal" action="{{ro.gen(NULL)}}" method="post" style="margin-top: 20%;">
+    <form class="well form-auth form-horizontal" action="{{ ro.gen('user.login') }}" method="post" style="margin-top: 20%;">
         <fieldset>
             <legend>{{tm._('Signin','user.ui')}}</legend>
             <div class="control-group">

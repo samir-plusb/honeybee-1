@@ -10,6 +10,7 @@
         <autoload name="UserDocumentValidator">%core.module_dir%/User/lib/agavi/validator/UserDocumentValidator.class.php</autoload>
         <autoload name="PasswordValidator">%core.module_dir%/User/lib/agavi/validator/PasswordValidator.class.php</autoload>
         <autoload name="UserTokenValidator">%core.module_dir%/User/lib/agavi/validator/UserTokenValidator.class.php</autoload>
+        <autoload name="RedirectValidator">%core.module_dir%/User/lib/agavi/validator/RedirectValidator.class.php</autoload>
         
         <!-- Service -->
         <autoload name="UserService">%core.module_dir%/User/lib/UserService.class.php</autoload>

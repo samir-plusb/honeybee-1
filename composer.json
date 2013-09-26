@@ -33,6 +33,7 @@
         "phing/phing": "2.4.12",
         "berlinonline/dat0r": "dev-master",
         "graste/environaut": "dev-non-nested-export",
+        "symfony/validator": "~2.3",
         "ruflin/Elastica": "v0.20.5.0.RC1",
         "zendframework/zend-permissions-acl": "2.2.0",
         "guzzle/guzzle": "~3.1",

@@ -136,6 +136,7 @@
                                 <p>Wir haben eine Email an die Adresse verschickt, die mit dem angegebenen Nutzerkonto verküpft ist.</p>
                                 <p>Darin finden sie die erforderlichen Schritte um ihr Passwort zurück zu setzen.</p>
                             ]]></ae:parameter>
+                            <ae:parameter name="session_regeneration_error">Interner Fehler beim Login. Bitte versuchen Sie es später noch einmal.</ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="en">
                             <ae:parameter name="reset_success_title">You have mail!</ae:parameter>
@@ -143,6 +144,7 @@
                                 <p>The password for the affected user account may be reset now.</p>
                                 <p>The necessary steps have been mailed to the email adress related to the latter user account.</p>
                             ]]></ae:parameter>
+                            <ae:parameter name="session_regeneration_error">Internal error while login. Please try again later.</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
                 </message_translator>
