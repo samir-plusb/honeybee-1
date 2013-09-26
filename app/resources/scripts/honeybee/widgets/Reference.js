@@ -661,7 +661,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
             var text = response.data[ref_module_settings.display_field];
             var reference_id = response.data[ref_module_settings.identity_field];
-            var displayed_text = ref_module_settings.module_label + ': ' + text;
+            // var displayed_text = ref_module_settings.module_label + ': ' + text;
+            var displayed_text = text;
 
             that.hideCreatePopover();
 

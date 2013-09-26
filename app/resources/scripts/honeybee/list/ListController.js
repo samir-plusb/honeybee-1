@@ -61,7 +61,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             if(0 === that.options.event_origin.indexOf(event.origin))
             {
                 var msg_data = JSON.parse(event.data);
-                if (msg_data.source_type === that.type_key)
+                if (msg_data.source_type === that.type_key || !msg_data.selected_doc_ids)
                 {
                     // ignore our own messages.
                     return;
@@ -135,39 +135,26 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         return this.viewmodel.selected_items();
     },
 
-    releaseTicket: function(data)
-    {
-        var release = this.workflow_handler.release(data.ticket);
-        var that = this;
-        release(function()
-        {
-            window.location.href = window.location.href;
-        }, function()
-        {
-            alert("Ticket konnte nicht freigegeben werden.");
-        });
-    },
-
-    run: function(is_batch, data)
+    run: function(is_batch, resource)
     {
         if (is_batch)
         {
             // no batch support for editing/plugin execution
             return;
         }
-
-        this.workflow_handler.run(data);
-        /* @todo integrate/consider ticket data
-        var checkout = this.workflow_handler.checkout(data);
-        var that = this;
-        checkout(function(ticket)
-        {
-            that.workflow_handler.run(ticket);
-        }, function()
-        {
-            alert("Datensatz konnte nicht geöffnet werden, da er bereits bearbeitet wird.");
-        });
-        */
+        if (true !== this.locking_enabled) {
+            var url = this.workflow_handler.urls.execute;
+            window.location.href = url + '?id=' + resource.data.identifier;
+        } else {
+            this.workflow_handler.run(resource, function(data)
+            {
+                alert("Das Dokument wird bereits von '"+data.owner+"' bearbeitet.");
+                $('tr#' + resource.data.identifier +' .document-owner').replaceWith(
+                    '<span class="document-owner">'+data.owner+'</span>'
+                );
+                resource.data.revision = data.revision;
+            });
+        }
     },
 
     proceed: function(is_batch, data, gate, confirm_text)
@@ -195,6 +182,19 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         {
             proceed();
         }
+    },
+
+    checkout: function(resource)
+    {
+        var checkout_request = this.workflow_handler.checkout(resource);
+        checkout_request(function(data){
+            $('tr#' + resource.data.identifier +' .release-ticket').replaceWith(
+                '<span class="document-owner">'+data.owner+'</span>'
+            );
+            resource.data.revision = data.revision;
+        }, function(err){
+            // display error message to user.
+        });
     },
 
     assignReference: function(is_batch, item, reference_field)
@@ -226,7 +226,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         {
             reference_dialog.find('.settings-reference-batch').css('visibility', 'hidden');
         }
-        
+
         assign_trigger.click(function()
         {
             reference_dialog.modal('hide');
@@ -527,7 +527,6 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 honeybee.list.ListController.create = function(element, namespace)
 {
     element = $(element);
-
     if (0 === element.length)
     {
         throw "[ListController] Unable to find element to create controller from. Looked for: " + element;
@@ -537,8 +536,8 @@ honeybee.list.ListController.create = function(element, namespace)
     {
         throw "[ListController] Unable to resolve controller implementor: " + controller_class;
     }
-    var options = element.attr('data-controller-options') || "{}";
-    var controller = new namespace[controller_class](JSON.parse(options));
+    var option_string = element.attr('data-controller-options') || "{}";
+    var controller = new namespace[controller_class](JSON.parse(option_string));
 
     return controller;
 };

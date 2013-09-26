@@ -94,13 +94,6 @@ class InteractivePlugin extends BasePlugin
             {
                 $this->publishResource($resource);
             }
-
-            $queue = new KestrelQueue('prio:1-default_queue');
-            $job_data = array(
-                'module_class' => get_class($resource->getModule()),
-                'document_identifier' => $resource->getIdentifier()
-            );
-            $queue->push(new UpdateBackReferencesJob($job_data));
         }
 
         return $result;

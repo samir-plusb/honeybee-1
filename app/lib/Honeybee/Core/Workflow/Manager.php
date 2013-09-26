@@ -40,7 +40,7 @@ class Manager
         $resource->setWorkflowTicket(array(
             array(
                 'workflowName' => $workflow->getName(),
-                'owner' => 'nobody',
+                'owner' => null,
                 'workflowStep' => $workflow->getFirstStep(),
                 'stepCounts' => NULL,
                 'lastResult' => array(

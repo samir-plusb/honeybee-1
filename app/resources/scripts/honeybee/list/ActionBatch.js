@@ -39,7 +39,8 @@ honeybee.list.ActionBatch = honeybee.core.BaseObject.extend({
             );
         }
         this.dequeue();
-        this.progress_dialog = $(this.progress_dialog_tpl).twodal('show');
+        this.progress_dialog = $(this.progress_dialog_tpl).twodal({backdrop: 'static'});
+        this.progress_dialog.twodal('show');
         return this;
     },
 

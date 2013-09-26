@@ -2,8 +2,8 @@
 
 namespace Honeybee\Agavi\User\Assertions;
 
-use Honeybee\Agavi\User\ZendAclSecurityUser; 
-use Honeybee\Core\Workflow\IResource; 
+use Honeybee\Agavi\User\ZendAclSecurityUser;
+use Honeybee\Core\Workflow\IResource;
 
 /**
  * The UserIsItemOwnerAssertion is responseable for asserting that a the current user owns
@@ -43,7 +43,7 @@ class UserIsItemOwnerAssertion implements \Zend_Acl_Assert_Interface
             return FALSE;
         }
 
-        return $resource->getWorkflowTicket()->getOwner() == $role->getAttribute('login');
+        return $resource->getWorkflowTicket()->first()->getOwner() == $role->getAttribute('login');
     }
 
 }

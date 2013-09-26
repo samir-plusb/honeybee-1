@@ -1292,3 +1292,8 @@ div.aggregate-module-item
   margin-right: 6.5%;
   margin-bottom: 5px;
 }
+
+.refbrowser-open:focus
+{
+  font-size: 14pt;
+}

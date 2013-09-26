@@ -41,15 +41,15 @@ class Common_ListAction extends CommonBaseAction
         $this->setAttribute('module_type_key', $listConfig->getTypeKey());
         $this->setAttribute('sidebar_tree_targets', $listConfig->getSidebarTreeTargets());
         $this->setAttribute('module', $this->getModule());
-        
+
         $clientSideOptions = $listConfig->getClientSideController();
         $clientSideOptions['options'] = isset($clientSideOptions['options']) ? $clientSideOptions['options'] : array();
         $clientSideOptions['options']['workflow_urls'] = array(
             'checkout' => urldecode(htmlspecialchars_decode(
-                $routing->gen(sprintf('%s.workflow.checkout', $listConfig->getTypeKey()))
+                $routing->gen(sprintf('%s.checkout', $listConfig->getTypeKey()))
             )),
-            'release' => urldecode(htmlspecialchars_decode(
-                $routing->gen(sprintf('%s.workflow.release', $listConfig->getTypeKey()))
+            'checkin' => urldecode(htmlspecialchars_decode(
+                $routing->gen(sprintf('%s.checkin', $listConfig->getTypeKey()))
             )),
             'execute' => urldecode(htmlspecialchars_decode(
                 $routing->gen(sprintf('%s.workflow.execute', $listConfig->getTypeKey()))

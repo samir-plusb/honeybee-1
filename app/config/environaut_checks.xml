@@ -227,40 +227,11 @@ If you set it to an empty string, PHP doesn't scan at all. The default is ".user
             </check>
             <check class="&executable;" name="php">
                 <parameter name="default">php</parameter>
-                <parameter name="version_mask" space="preserve" literalize="false">/^PHP (5.3.\d{1,2}).*/</parameter>
+                <parameter name="version_mask" space="preserve" literalize="false">/^PHP (5\.[3456]\.\d{1,2}).*/</parameter>
             </check>
             <check class="&executable;" name="curl">
                 <parameter name="default">curl</parameter>
                 <parameter name="version_mask" space="preserve" literalize="false">/curl (\d+\.\d+\.\d+) .*/</parameter>
-            </check>
-        </checks>
-
-        <checks name="configurator" description="some example checks for the Configurator that asks the user for settings">
-            <check name="cache_dir">
-                <parameter name="question">Please specify a writable cache directory to use for the application</parameter>
-                <parameter name="choices">
-                    <parameter>app/cache</parameter>
-                    <parameter>/tmp</parameter>
-                </parameter>
-                <parameter name="validator">Environaut\Checks\Validator::writableDirectory</parameter>
-            </check>
-            <check name="base_href">
-                <parameter name="question">What's the base HREF of the application?</parameter>
-                <parameter name="default">http://honeybee-showcase.dev/</parameter>
-                <parameter name="choices">
-                    <parameter>http://cms.my-project.example.com/</parameter>
-                </parameter>
-                <parameter name="validator">Environaut\Checks\Validator::validUrl</parameter>
-                <parameter name="max_attempts">5</parameter>
-            </check>
-            <check name="testing_enabled">
-                <parameter name="question">Enable testing?</parameter>
-                <parameter name="default">false</parameter>
-                <parameter name="confirm">true</parameter>
-            </check>
-            <check name="password">
-                <parameter name="question">Please type a super secret password</parameter>
-                <parameter name="hidden">true</parameter>
             </check>
         </checks>
     </sandbox>

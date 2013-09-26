@@ -13,6 +13,8 @@ class DefaultListValueRenderer implements IListValueRenderer
 
     public function renderValue($value, $field, array $data = array())
     {
+        $rendererDef = $field->getRenderer();
+        $options = isset($rendererDef['options']) ? $rendererDef['options'] : array();
         if (is_array($value))
         {
             $value = strip_tags(implode(', ', $value));
@@ -27,6 +29,18 @@ class DefaultListValueRenderer implements IListValueRenderer
             }
         }
 
+        if (empty($value))
+        {
+            $value = isset($options['default']) ? $options['default'] : $value;
+        }
+
+        if (isset($options['translate']) && true === $options['translate'])
+        {
+            $translation_domain = sprintf('%s.list', $this->module->getOption('prefix'));
+            $translation_domain = isset($options['domain']) ? $options['domain'] : $translation_domain;
+            $value = AgaviContext::getInstance()->getTranslationManager()->_($value, $translation_domain);
+        }
+
         return $value;
     }
 
@@ -36,7 +50,7 @@ class DefaultListValueRenderer implements IListValueRenderer
         $loader = new Twig_Loader_Filesystem($this->getTemplateDirectory());
         $twig = new Twig_Environment($loader);
 
-        $rendered = $twig->render($this->getTemplateFilename(), array('field' => $field));
+        $rendered = $twig->render($this->getTemplateFilename(), array('user' => $user, 'field' => $field));
         return $rendered;
     }
 
