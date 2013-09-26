@@ -79,8 +79,8 @@ class RedirectValidator extends AgaviValidator
             $this->getContext()->getLoggerManager()->logTo(
                 'default',
                 \AgaviLogger::WARNING,
-                '[VALIDATION]',
-                __METHOD__ . ' - ' . $violations->__toString()
+                __METHOD__,
+                $violations->__toString()
             );
 
             return false;
