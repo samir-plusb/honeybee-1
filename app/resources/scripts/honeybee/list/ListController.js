@@ -192,7 +192,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             this.confirm_dialog.show(function()
             {
                 that.confirm_dialog.hide();
-                var checkout_request = this.workflow_handler.checkout(resource);
+                var checkout_request = that.workflow_handler.checkout(resource);
                 checkout_request(function(data){
                     $('tr#' + resource.data.identifier +' .release-ticket').replaceWith(
                         '<span class="document-owner">'+data.owner+'</span>'
