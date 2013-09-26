@@ -21,7 +21,7 @@ class CheckOutSuccessView extends BaseView
             json_encode(array(
                 'state' => 'ok',
                 'revision' => $revision,
-                'owner' => !$owner ? 'Niemand' : $owner
+                'owner' => !$owner ? '' : $owner
             ))
         );
     }

@@ -13,6 +13,30 @@ class TicketOwnerListValueRenderer extends DefaultListValueRenderer
         return parent::renderValue($value, $field, $data);
     }
 
+    public function renderTemplate(ListField $field, $options = array())
+    {
+        $user = AgaviContext::getInstance()->getUser();
+        $loader = new Twig_Loader_Filesystem($this->getTemplateDirectory());
+        $twig = new Twig_Environment($loader);
+
+        $translation_domain = sprintf('%s.list', $this->module->getOption('prefix'));
+        $translation_domain = isset($options['domain']) ? $options['domain'] : $translation_domain;
+
+        $rendered = $twig->render(
+            $this->getTemplateFilename(),
+            array(
+                'user' => $user,
+                'field' => $field,
+                'steal_locking_prompt' => AgaviContext::getInstance()->getTranslationManager()->_(
+                    'steal_lock_prompt',
+                    $translation_domain,
+                    null
+                )
+            )
+        );
+        return $rendered;
+    }
+
     protected function getTemplateDirectory()
     {
         return dirname(__FILE__) . DIRECTORY_SEPARATOR;

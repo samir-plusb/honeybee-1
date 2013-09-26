@@ -258,9 +258,10 @@ class DocumentInputRenderer extends DocumentRenderer
     protected function getControllerOptions(Document $document)
     {
         $routing = AgaviContext::getInstance()->getRouting();
+        $module_prefix = $document->getModule()->getOption('prefix');
 
         return array(
-            'autobind' => TRUE, 
+            'autobind' => TRUE,
             'identifier' => $document->getIdentifier(),
             'shortId' => $document->getShortId(),
             'revision' => $document->getRevision(),
@@ -268,7 +269,8 @@ class DocumentInputRenderer extends DocumentRenderer
             'language' => $document->getValue('language'),
             'version' => $document->getValue('version'),
             'readonly' => $this->isReadonly($document),
-            'event_origin' => $routing->getBaseHref()
+            'event_origin' => $routing->getBaseHref(),
+            'unlock_url' => $routing->gen($module_prefix . '.checkout', array('id' => $document->getIdentifier()))
         );
     }
 }

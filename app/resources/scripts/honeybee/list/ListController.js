@@ -184,17 +184,35 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         }
     },
 
-    checkout: function(resource)
+    checkout: function(resource, scope, prompt_text)
     {
-        var checkout_request = this.workflow_handler.checkout(resource);
-        checkout_request(function(data){
-            $('tr#' + resource.data.identifier +' .release-ticket').replaceWith(
-                '<span class="document-owner">'+data.owner+'</span>'
-            );
-            resource.data.revision = data.revision;
-        }, function(err){
-            // display error message to user.
-        });
+        var that = this;
+        if (prompt_text) {
+            this.confirm_dialog.confirm_prompt.find('.prompt-text').html(prompt_text);
+            this.confirm_dialog.show(function()
+            {
+                that.confirm_dialog.hide();
+                var checkout_request = this.workflow_handler.checkout(resource);
+                checkout_request(function(data){
+                    $('tr#' + resource.data.identifier +' .release-ticket').replaceWith(
+                        '<span class="document-owner">'+data.owner+'</span>'
+                    );
+                    resource.data.revision = data.revision;
+                }, function(err){
+                    // display error message to user.
+                });
+            });
+        } else {
+            var checkout_request = this.workflow_handler.checkout(resource);
+            checkout_request(function(data){
+                $('tr#' + resource.data.identifier +' .release-ticket').replaceWith(
+                    '<span class="document-owner">'+data.owner+'</span>'
+                );
+                resource.data.revision = data.revision;
+            }, function(err){
+                // display error message to user.
+            });
+        }
     },
 
     assignReference: function(is_batch, item, reference_field)

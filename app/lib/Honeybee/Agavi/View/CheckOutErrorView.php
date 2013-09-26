@@ -21,7 +21,7 @@ class CheckOutErrorView extends BaseView
             json_encode(array(
                 'state' => 'error',
                 'revision' => $revision,
-                'owner' => !$owner ? 'Niemand' : $owner
+                'owner' => !$owner ? '' : $owner
             ))
         );
     }

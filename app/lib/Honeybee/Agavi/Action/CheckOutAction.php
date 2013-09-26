@@ -17,8 +17,8 @@ class CheckOutAction extends BaseAction
         $document = $request_data->getParameter('document');
         $workflow_ticket = $document->getWorkflowTicket()->first();
         $username = $user->getAttribute('login');
-
-        if ($username === $workflow_ticket->getOwner()) {
+        $role = $user->getAttribute('acl_role');
+        if ('honeybee-editor' === $role || $username === $workflow_ticket->getOwner()) {
             $workflow_ticket->setOwner(null);
             try {
                 $service->save($document);
