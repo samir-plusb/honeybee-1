@@ -360,7 +360,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             select2_state.data.results.push({
                 id: entry[id_field],
                 text: entry[label_field],
-                label: options.module_label + ': ' + entry[label_field],
+                label: item_label,
                 module_prefix: module_name
             });
         }

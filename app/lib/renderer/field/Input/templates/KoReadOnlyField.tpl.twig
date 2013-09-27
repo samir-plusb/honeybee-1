@@ -2,7 +2,7 @@
     <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td)|raw}}</label>
     <div class="controls">
         <input readonly="readonly" type="text" name="{{ inputName }}" data-bind="value: {{ fieldName }}"
-            id="{{ fieldId }}" placeholder="{{ placeholder }}" class="span11" />
+            id="{{ fieldId }}" placeholder="{{ placeholder }}" class="span11" tabindex="-1" />
         {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}
         <span class="hb-icon-info help-trigger field-help" 
             data-title="{{ tm._('field_level_help') }}" data-content="{{ tm._(fieldName ~ '_help', td) }}"

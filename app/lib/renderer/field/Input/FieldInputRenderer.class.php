@@ -137,6 +137,7 @@ class FieldInputRenderer extends FieldRenderer
 
         $widgetOptions['readonly'] = $this->isReadonly($document);
         $widgetOptions['autobind'] = TRUE;
+        $widgetOptions['field_id'] = $this->generateInputId($document);
 
         return $widgetOptions;
     }

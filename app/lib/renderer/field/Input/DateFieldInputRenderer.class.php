@@ -18,8 +18,7 @@ class DateFieldInputRenderer extends FieldInputRenderer
         return array_merge($parentOptions, array(
             'date' => empty($date) ? '' : $date,
             'format' => 'dd.mm.yyyy',
-            'field_name' => $this->generateInputName($document),
-            'field_id' => str_replace(array('[', ']'), '', $this->generateInputName($document))
+            'field_name' => $this->generateInputName($document)
         ));
     }
 }

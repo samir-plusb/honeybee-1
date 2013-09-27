@@ -14,7 +14,7 @@
         <div class="controls">
             <input type="text" {% if false == readonly %} name="{{ inputName }}" {% endif %} value="{{ fieldValue }}"
                 id="{{ fieldId }}" placeholder="{{ placeholder }}" class="span11"
-                {% if true == readonly %} readonly="readonly" {% endif %} />
+                {% if true == readonly %} readonly="readonly" tabindex="-1" {% endif %} />
             {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}
             <span class="hb-icon-info help-trigger field-help"
                 data-title="{{ tm._('field_level_help') }}" data-content="{{ tm._(fieldName ~ '_help', td) }}"

@@ -1205,6 +1205,11 @@ div.select2-container-multi .select2-choices .select2-search-field
   display: none;
 }
 
+.aggregates-list .aggregate .input-group-label
+{
+  cursor: pointer;
+}
+
 .aggregates-list .aggregate .field-group
 {
   margin-bottom: 0px;
