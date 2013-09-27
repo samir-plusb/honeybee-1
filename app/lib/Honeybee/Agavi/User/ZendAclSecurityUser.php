@@ -3,7 +3,6 @@
 namespace Honeybee\Agavi\User;
 
 use Zend\Permissions\Acl;
-use Honeybee\Core\Dat0r\Document;
 
 /**
  * The ZendAclSecurityUser is responseable for detecting required scripts and deploying them for your view.
@@ -33,7 +32,6 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
 
         $this->zendAcl = $this->createZendAcl();
 
-        $request = $this->getContext()->getRequest();
         if ($this->getContext()->getName() == 'console')
         {
             $this->raw_user_agent = 'console';
@@ -41,6 +39,7 @@ class ZendAclSecurityUser extends \AgaviSecurityUser implements Acl\Role\RoleInt
         }
         else
         {
+            $request = $this->getContext()->getRequest();
             $this->raw_user_agent = $request->getRequestData()->getHeader('User-Agent', '');
             $this->raw_referer = $request->getRequestData()->getHeader('Referer', '');
         }

@@ -15,11 +15,12 @@ class Default_Secure_SecureSuccessView extends DefaultBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeHtml(\AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeHtml(\AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
         $message = $this->translation_manager->_(self::DEFAULT_MESSAGE);
         $this->setAttribute('_title', $message);
-        $this->getResponse()->setHttpStatusCode('503');
+        $this->getResponse()->setHttpStatusCode('403');
+        // TODO introduce template and show nice hint and link to login or even the login input template directly
         return "<p>$message</p>";
     }
 
@@ -31,10 +32,10 @@ class Default_Secure_SecureSuccessView extends DefaultBaseView
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    public function executeJson(AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
         $this->getResponse()->setHttpStatusCode('403');
-        $this->getContainer()->getResponse()->setContent(json_encode(array('message' => $this->translation_manager->_(self::DEFAULT_MESSAGE))));
+        return json_encode(array('message' => $this->translation_manager->_(self::DEFAULT_MESSAGE)));
     }
     /**
      * Presentation logic for output type xml. Returns http status code 403.
@@ -121,29 +122,24 @@ class Default_Secure_SecureSuccessView extends DefaultBaseView
      */
     public function executeConsole(\AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
-        $message = $this->translation_manager->_(self::DEFAULT_MESSAGE);
+        return $this->cliError($this->translation_manager->_(self::DEFAULT_MESSAGE), 126);
+    }
 
-        if (!$this->getResponse()->getParameter('append_eol', true))
-        {
-            $message .= PHP_EOL;
-        }
-
-        $this->getResponse()->setExitCode(126);
-
-        /*
-         * we just send stuff to STDERR as AgaviResponse::sendContent() uses fpassthru which
-         * does not allow us to give the handle to Agavi via $rp->setContent() or return $handle
-         * notice though, that the shell exit code will still be set correctly
-         */
-        if (php_sapi_name() === 'cli' && defined('STDERR'))
-        {
-            fwrite(STDERR, $message);
-            fclose(STDERR);
-        }
-        else
-        {
-            return $message;
+    /**
+     * Handles non-existing methods. This includes mainly the not implemented
+     * handling of certain output types. This returns HTTP status code 403 by default.
+     *
+     * @param string $method_name
+     * @param array $arguments
+     */
+    public function __call($method_name, $arguments)
+    {
+        if (preg_match('~^(execute)([A-Za-z_]+)$~', $method_name)) {
+            if ($this->getResponse() instanceof AgaviWebResponse) {
+                $this->getResponse()->setHttpStatusCode(403);
+            } elseif ($this->getResponse() instanceof AgaviConsoleResponse) {
+                $this->getResponse()->setExitCode(126); // "permission problem or command is not an executable"
+            }
         }
     }
 }
-
