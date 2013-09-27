@@ -87,7 +87,6 @@ class ListAction extends BaseAction
         {
             $outputType = $this->getContext()->getController()->getOutputType('csv');
             $this->getContainer()->setOutputType($outputType);
-            $this->setAttribute('csv_file', $this->createCsvFile());
         }
         else
         {
@@ -458,27 +457,6 @@ class ListAction extends BaseAction
             $export->publish($document);
         });
         $export->getStorage()->getResource()->close();
-
-        return $export->getStorage()->getResource();
-    }
-
-    protected function createCsvFile()
-    {
-        $search_spec = array();
-        $list_state = $this->getAttribute('state');
-        if ($list_state->hasSearch()) {
-            $search_spec['search'] = $list_state->getSearch();
-        }
-        if ($list_state->hasFilter()) {
-            $search_spec['filter'] = $list_state->getFilter();
-        }
-
-        $document_service = $this->getModule()->getService();
-        $export = $this->getModule()->getService('export')->getExport('list-csv');
-        $document_service->walkDocuments($search_spec, 100, function($document) use ($export)
-        {
-            $export->publish($document);
-        });
 
         return $export->getStorage()->getResource();
     }

@@ -3,6 +3,7 @@
 namespace Honeybee\Agavi\View;
 
 use Dat0r\Core\Field\ReferenceField;
+use Honeybee\Core\Storage\Memory\CsvStorage;
 
 class ListSuccessView extends BaseView
 {
@@ -31,8 +32,8 @@ class ListSuccessView extends BaseView
             ), NULL, 'read')
         );
 
-        $enableFolders = 
-            ! $this->hasAttribute('referenceField') && 
+        $enableFolders =
+            ! $this->hasAttribute('referenceField') &&
             (TRUE === \AgaviConfig::get(sprintf('%s.sidebar.folders.enabled', $module->getOption('prefix')), FALSE));
 
         if (TRUE === $enableFolders)
@@ -83,13 +84,47 @@ class ListSuccessView extends BaseView
 
     public function executeCsv(\AgaviRequestDataHolder $parameters)
     {
-        $response = $this->getResponse();
-        $csvFileName = $this->getAttribute('module')->getName() . '-List.csv';
-        $response->setHttpHeader('Content-disposition', 'attachment; filename=' . $csvFileName);
+        $list_state = $this->getAttribute('state');
+        $module = $this->getAttribute('module');
 
-        $csvFileHandle = $this->getAttribute('csv_file');
-        rewind($csvFileHandle);
-        return $csvFileHandle;
+        $this->getResponse()->setHttpHeader(
+            'Content-disposition',
+            'attachment; filename='.$module->getName().'-List.csv'
+        );
+
+        $csv_export = $module->getService('export')->getExport('list-csv');
+        $stream_id = $csv_export->getStorage()->getConfig()->get('write_to');
+
+        $generate_csv = function() use ($list_state, $module, $csv_export) {
+            // no need to check safe mode, as we require php >= 5.3 anyway
+            set_time_limit(300);
+
+            $document_service = $module->getService();
+
+            $search_spec = array();
+            if ($list_state->hasSearch()) {
+                $search_spec['search'] = $list_state->getSearch();
+            }
+            if ($list_state->hasFilter()) {
+                $search_spec['filter'] = $list_state->getFilter();
+            }
+
+            $document_service->walkDocuments($search_spec, 100, function($document) use ($csv_export)
+            {
+                $csv_export->publish($document);
+            });
+
+            return $csv_export->getStorage()->getResource();
+        };
+
+        if ($stream_id === CsvStorage::OUTPUT_STREAM) {
+            return $generate_csv;
+        }
+
+        $csv_resource = $generate_csv();
+        rewind($csv_resource);
+
+        return $csv_resource;
     }
 
     protected function setBreadcrumb()
