@@ -4,6 +4,7 @@ namespace Honeybee\Agavi\View;
 
 use Dat0r\Core\Field\ReferenceField;
 use Honeybee\Core\Storage\Memory\CsvStorage;
+use Honeybee\Core\Storage\Memory\XmlStorage;
 
 class ListSuccessView extends BaseView
 {
@@ -71,15 +72,50 @@ class ListSuccessView extends BaseView
         ), NULL, 'read');
     }
 
-    public function executeZip(\AgaviRequestDataHolder $parameters)
+    public function executeXml(\AgaviRequestDataHolder $parameters)
     {
-        $response = $this->getResponse();
-        $archiveName = $this->getAttribute('module')->getName() . '-List.zip';
-        $response->setHttpHeader('Content-disposition', 'attachment; filename=' . $archiveName);
+        $list_state = $this->getAttribute('state');
+        $module = $this->getAttribute('module');
 
-        $zipArchive = $this->getAttribute('zip_file');
+        $this->getResponse()->setHttpHeader(
+            'Content-disposition',
+            'attachment; filename='.$module->getName().'-List.xml'
+        );
 
-        return fopen($zipArchive->getArchivePath(), 'r+');
+        $xml_export = $module->getService('export')->getExport('list-xml');
+        $stream_id = $xml_export->getStorage()->getConfig()->get('write_to');
+
+        $generate_xml = function() use ($list_state, $module, $xml_export) {
+            // no need to check safe mode, as we require php >= 5.3 anyway
+            set_time_limit(300);
+
+            $document_service = $module->getService();
+            $search_spec = array();
+            if ($list_state->hasSearch()) {
+                $search_spec['search'] = $list_state->getSearch();
+            }
+            if ($list_state->hasFilter()) {
+                $search_spec['filter'] = $list_state->getFilter();
+            }
+            $document_service->walkDocuments($search_spec, 100, function($document) use ($xml_export)
+            {
+                $xml_export->publish($document);
+            });
+
+            $xml_resource = $xml_export->getStorage()->getResource();
+            $xml_resource->endDocument();
+
+            return $xml_resource;
+        };
+
+        if ($stream_id === XmlStorage::OUTPUT_STREAM) {
+            return $generate_xml;
+        }
+
+        $xml_resource = $generate_xml();
+        rewind($xml_resource);
+
+        return $xml_resource;
     }
 
     public function executeCsv(\AgaviRequestDataHolder $parameters)
@@ -100,7 +136,6 @@ class ListSuccessView extends BaseView
             set_time_limit(300);
 
             $document_service = $module->getService();
-
             $search_spec = array();
             if ($list_state->hasSearch()) {
                 $search_spec['search'] = $list_state->getSearch();
@@ -108,7 +143,6 @@ class ListSuccessView extends BaseView
             if ($list_state->hasFilter()) {
                 $search_spec['filter'] = $list_state->getFilter();
             }
-
             $document_service->walkDocuments($search_spec, 100, function($document) use ($csv_export)
             {
                 $csv_export->publish($document);
@@ -125,6 +159,17 @@ class ListSuccessView extends BaseView
         rewind($csv_resource);
 
         return $csv_resource;
+    }
+
+    public function executeZip(\AgaviRequestDataHolder $parameters)
+    {
+        $response = $this->getResponse();
+        $archiveName = $this->getAttribute('module')->getName() . '-List.zip';
+        $response->setHttpHeader('Content-disposition', 'attachment; filename=' . $archiveName);
+
+        $zipArchive = $this->getAttribute('zip_file');
+
+        return fopen($zipArchive->getArchivePath(), 'r+');
     }
 
     protected function setBreadcrumb()

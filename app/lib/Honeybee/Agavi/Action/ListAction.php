@@ -88,6 +88,11 @@ class ListAction extends BaseAction
             $outputType = $this->getContext()->getController()->getOutputType('csv');
             $this->getContainer()->setOutputType($outputType);
         }
+        else if ('xml' === $parameters->getParameter('export_format'))
+        {
+            $outputType = $this->getContext()->getController()->getOutputType('xml');
+            $this->getContainer()->setOutputType($outputType);
+        }
         else
         {
             $data = $service->fetchListData($listConfig, $listState);
