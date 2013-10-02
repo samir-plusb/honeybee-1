@@ -8,31 +8,31 @@
     {% if hasWidget %}
         <section class="controls honeybee-widget {{widgetType}}"
             data-{{ widgetType|replace({'widget-': ''}) }}-options="{{widgetOptions|raw}}" ></section>
-        {% if tm._(fieldKey ~ '_help', td) != fieldKey ~ '_help' %}
+        {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}
         <span class="hb-icon-info help-trigger"
             {% if tm._(fieldKey ~ '_help_title', td) == fieldKey ~ '_help_title' %}
             data-title="{{ tm._('field_level_help') }}"
             {% else %}
             data-title="{{ tm._(fieldKey ~ '_help_title', td) }}"
             {% endif %}
-            data-content="{{ tm._(fieldKey ~ '_help', td) }}"
-            data-animation="false" data-placement="left" data-trigger="manual" data-html="true"  />
+            data-content="{{ tm._(fieldName ~ '_help', td) }}"
+            data-animation="false" data-placement="left" data-trigger="manual"  />
         {% endif %}
     {% else %}
         <div class="controls">
-            <input type="text" {% if false == readonly %} name="{{ inputName }}" {% endif %} value="{{ fieldValue }}"
+            <input type="email" {% if false == readonly %} name="{{ inputName }}" {% endif %} value="{{ fieldValue }}"
                 id="{{ fieldId }}" placeholder="{{ placeholder }}" class="span11"
                 {% if true == readonly %} readonly="readonly" tabindex="-1" {% endif %}
                 {% if mandatory == true %}aria-required="true"{% endif %} />
-            {% if tm._(fieldKey ~ '_help', td) != fieldKey ~ '_help' %}
+            {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}
             <span class="hb-icon-info help-trigger field-help"
                 {% if tm._(fieldKey ~ '_help_title', td) == fieldKey ~ '_help_title' %}
                 data-title="{{ tm._('field_level_help') }}"
                 {% else %}
                 data-title="{{ tm._(fieldKey ~ '_help_title', td) }}"
                 {% endif %}
-                data-content="{{ tm._(fieldKey ~ '_help', td) }}"
-                data-animation="false" data-placement="left" data-trigger="manual" data-html="true" />
+                data-content="{{ tm._(fieldName ~ '_help', td) }}"
+                data-animation="false" data-placement="left" data-trigger="manual"  />
             {% endif %}
         </div>
     {% endif %}

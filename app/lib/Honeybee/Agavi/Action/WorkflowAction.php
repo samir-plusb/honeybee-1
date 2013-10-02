@@ -3,12 +3,13 @@
 namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Workflow\Plugin;
+use \Exception;
 
 class WorkflowAction extends BaseAction
 {
     public function executeWrite(\AgaviRequestDataHolder $request_data)
     {
-        $view = $this->execute($request_data);
+        $view = $this->executeRead($request_data);
         if ($request_data->hasParameter('gate')) {
             $this->getModule()->getService()->save(
                 $request_data->getParameter('document')
@@ -18,7 +19,7 @@ class WorkflowAction extends BaseAction
         return $view;
     }
 
-    public function execute(\AgaviRequestDataHolder $request_data)
+    public function executeRead(\AgaviRequestDataHolder $request_data)
     {
         try {
             $module = $this->getModule();
@@ -41,14 +42,14 @@ class WorkflowAction extends BaseAction
             if (in_array($result->getState(), $error_states)) {
                 return 'Error';
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->setAttribute(
                 'content',
                 'An unexpected workflow error occured while processing: ' . $e->getMessage()
             );
             $this->setAttribute('reason', $e->getCode());
             $this->setAttribute('errors', array($e->getMessage()));
-throw $e;
+
             return 'Error';
         }
 
@@ -83,5 +84,10 @@ throw $e;
             $this->getModule()->getOption('prefix'),
             $this->getContainer()->getRequestMethod()
         );
+    }
+
+    protected function executeWorkflow()
+    {
+
     }
 }

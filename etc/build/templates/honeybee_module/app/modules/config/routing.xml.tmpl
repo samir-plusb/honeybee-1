@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+<ae:configurations
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
     <ae:configuration context="web">
         <routes>
@@ -8,12 +8,9 @@
             <route name=".suggest" pattern="/suggest" action="Suggest" method="read" />
             <route name=".edit" pattern="/edit" action="Edit" />
             <route name=".tree" pattern="/tree(/{referenceModule:(\w+)})?(/{referenceField:(\w+)})?" action="Tree" />
-
-            <route name=".workflow" pattern="/workflow">
-                <route name=".checkout" pattern="/checkout" action="Workflow_Checkout" />
-                <route name=".execute" pattern="/execute" action="Workflow_Execute" />
-                <route name=".release" pattern="/release" action="Workflow_Release" />
-            </route>
+            <route name=".checkin" pattern="/checkin" action="CheckIn" />
+            <route name=".checkout" pattern="/checkout" action="CheckOut" />
+            <route name=".workflow.execute" pattern="/workflow/execute" action="Workflow_Execute" >
         </routes>
     </ae:configuration>
 

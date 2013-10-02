@@ -1,11 +1,21 @@
 <div class="control-group field-wrapper-{{ fieldName }}">
-    <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td)|raw}}</label>
+    <label class="control-label" for="{{ fieldId }}">
+        {{ tm._(fieldKey, td)|raw}}
+        {% if mandatory == true %}
+        <span class="mandatory-marker">*</span>
+        {% endif %}
+    </label>
     <div class="controls">
         <input readonly="readonly" type="text" name="{{ inputName }}" data-bind="value: {{ fieldName }}"
             id="{{ fieldId }}" placeholder="{{ placeholder }}" class="span11" tabindex="-1" />
         {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}
-        <span class="hb-icon-info help-trigger field-help" 
-            data-title="{{ tm._('field_level_help') }}" data-content="{{ tm._(fieldName ~ '_help', td) }}"
+        <span class="hb-icon-info help-trigger field-help"
+            {% if tm._(fieldKey ~ '_help_title', td) == fieldKey ~ '_help_title' %}
+            data-title="{{ tm._('field_level_help') }}"
+            {% else %}
+            data-title="{{ tm._(fieldKey ~ '_help_title', td) }}"
+            {% endif %}
+            data-content="{{ tm._(fieldName ~ '_help', td) }}"
             data-animation="false" data-placement="left" data-trigger="manual"  />
         {% endif %}
     </div>

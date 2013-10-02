@@ -146,16 +146,33 @@ class DocumentInputRenderer extends DocumentRenderer
     protected function renderGroups(Document $document, array $groups)
     {
         $renderedGroups = array();
-
+        $prevGroup = null;
         foreach ($groups as $groupName => $fields)
         {
+            $renderBox = true;
+            $openColumn = true;
+            $closeColumn = true;
             $parts = explode(':', $groupName);
             $name = $parts[0];
+            if (strpos($name, '+') === 0) {
+                $openColumn = false;
+                if ($prevGroup) {
+                    $renderedGroups[$prevGroup]['closeColumn'] = false;
+                }
+                $name = substr($name, 1);
+            }
+            if (strpos($name, '-') === 0) {
+                $renderBox = false;
+                $name = substr($name, 1);
+            }
             $renderedGroups[$name] = array(
-                'boxed' => (strpos($name, '-') !== 0),
+                'boxed' => $renderBox,
+                'openColumn' => $openColumn,
+                'closeColumn' => $closeColumn,
                 'width' => (2 === count($parts)) ? $parts[1] : 6,
                 'fields' => $this->renderFields($document, $fields)
             );
+            $prevGroup = $name;
         }
 
         return $renderedGroups;

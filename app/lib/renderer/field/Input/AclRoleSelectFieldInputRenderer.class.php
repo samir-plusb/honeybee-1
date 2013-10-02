@@ -2,9 +2,9 @@
 
 use Dat0r\Core\Document\IDocument;
 
-class AclRoleSelectFieldInputRenderer extends FieldInputRenderer
+class AclRoleSelectFieldInputRenderer extends SelectFieldInputRenderer
 {
-    protected function getPayload(IDocument $document)
+    protected function getSelectionOptions(IDocument $document)
     {
         $context = AgaviContext::getInstance();
         $user = $context->getUser();
@@ -16,14 +16,6 @@ class AclRoleSelectFieldInputRenderer extends FieldInputRenderer
             $selectVals[$role] = $translationManager->_($role, 'user.roles');
         }
 
-        $payload = parent::getPayload($document);
-        $payload['selectValues'] = $selectVals;
-
-        return $payload;
-    }
-
-    protected function getTemplateName()
-    {
-        return "Select.tpl.twig";
+        return $selectVals;
     }
 }

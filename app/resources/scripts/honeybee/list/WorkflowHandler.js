@@ -4,16 +4,19 @@ honeybee.list.WorkflowHandler = honeybee.core.BaseObject.extend({
 
     urls: null,
 
-    init: function(urls)
+    module_prefix: null,
+
+    init: function(module_prefix, urls)
     {
         this.parent();
         this.urls = urls || {};
+        this.module_prefix = module_prefix;
     },
 
     proceed: function(resource, gate)
     {
         var that = this;
-        var post_url = this.urls.execute + '?id=' + resource.data.identifier;
+        var post_url = this.urls.execute + '?' + this.module_prefix + '=' + resource.data.identifier;
         var post_data = { gate: gate };
 
         return function(ok_callback, err_callback)
@@ -39,7 +42,7 @@ honeybee.list.WorkflowHandler = honeybee.core.BaseObject.extend({
         {
             if ('ok' === data.state)
             {
-                window.location.href = that.urls.execute + '?id=' + resource.data.identifier;
+                window.location.href = that.urls.execute + '?' + this.module_prefix + '=' + resource.data.identifier;
             }
             else
             {

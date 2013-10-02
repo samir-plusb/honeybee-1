@@ -47,8 +47,9 @@
                         {% if row.type == 'default' %}
                         <div class="row-fluid">
                             {% for groupName, groupDef in row.groups %}
+                            {% if groupDef.openColumn == true %}
                             <div class="span{{groupDef['width']}} group">
-
+                            {% endif %}
                                 {% if groupDef.boxed == true %}
                                 <div class="field-group field-group-{{groupName}}">
                                     <h3 class="input-group-label">
@@ -68,8 +69,9 @@
                                         {{field|raw}}
                                     {% endfor %}
                                 {% endif %}
-
+                            {% if groupDef.closeColumn == true %}
                             </div>
+                            {% endif %}
                             {% endfor %}
                         </div>
                         {% elseif row.type == 'custom' %}

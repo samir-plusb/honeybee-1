@@ -30,6 +30,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         this.element = $('.container-list-data');
 
         this.workflow_handler = new honeybee.list.WorkflowHandler(
+            this.options.module_prefix,
             this.options.workflow_urls || {}
         );
         this.viewmodel = new honeybee.list.ListViewModel(
@@ -144,7 +145,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         }
         if (true !== this.locking_enabled) {
             var url = this.workflow_handler.urls.execute;
-            window.location.href = url + '?id=' + resource.data.identifier;
+            window.location.href = url + '?' + this.options.module_prefix + '=' + resource.data.identifier;
         } else {
             this.workflow_handler.run(resource, function(data)
             {

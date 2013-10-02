@@ -5,8 +5,12 @@ namespace Honeybee\Agavi\Validator;
 use Honeybee\Core\Dat0r\RelationManager;
 use Honeybee\Core\Dat0r\Module;
 use Dat0r\Core\Document;
+use Dat0r\Core\Document\MandatoryValueMissingException;
+use Dat0r\Core\Document\InvalidValueException;
+use Dat0r\Core\Error\BadValueException;
 use Dat0r\Core\Error;
 use Dat0r\Core\Field\ReferenceField;
+use \Exception;
 
 class DocumentValidator extends \AgaviValidator
 {
@@ -31,7 +35,7 @@ class DocumentValidator extends \AgaviValidator
                 }
                 $document->checkMandatoryFields();
             }
-            catch(Document\InvalidValueException $error)
+            catch(InvalidValueException $error)
             {
                 $domain = sprintf('%s.list', $this->getModule()->getOption('prefix'));
                 $this->setParameter('fieldname', $tranlsationManager->_($error->getFieldname(), $domain));
@@ -41,7 +45,7 @@ class DocumentValidator extends \AgaviValidator
                 $document = NULL;
                 $success = FALSE;
             }
-            catch(Document\MandatoryValueMissingException $error)
+            catch(MandatoryValueMissingException $error)
             {
                 $domain = sprintf('%s.list', $this->getModule()->getOption('prefix'));
                 $this->setParameter('fieldname', $tranlsationManager->_($error->getFieldname(), $domain));
@@ -50,7 +54,7 @@ class DocumentValidator extends \AgaviValidator
                 $document = NULL;
                 $success = FALSE;
             }
-            catch(\Exception $error)
+            catch(Exception $error)
             {
                 $document = NULL;
                 $success = FALSE;
@@ -61,7 +65,7 @@ class DocumentValidator extends \AgaviValidator
         {
             $document = $data;
         }
-        else if (! ($document = $service->get($data)))
+        else if (!($document = $service->get($data)))
         {
             $success = FALSE;
             $this->throwError('non_existant');

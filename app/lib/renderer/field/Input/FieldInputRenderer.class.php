@@ -48,6 +48,7 @@ class FieldInputRenderer extends FieldRenderer
         return array(
             'fieldName' => $fieldName,
             'fieldKey' => $this->options['field_key'],
+            'mandatory' => $this->getField()->getOption('mandatory', false),
             'field' => $this->getField(),
             'inputName' => $this->generateInputName($document),
             'fieldId' => $this->generateInputId($document),

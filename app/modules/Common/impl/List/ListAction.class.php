@@ -44,6 +44,7 @@ class Common_ListAction extends CommonBaseAction
 
         $clientSideOptions = $listConfig->getClientSideController();
         $clientSideOptions['options'] = isset($clientSideOptions['options']) ? $clientSideOptions['options'] : array();
+        $clientSideOptions['options']['module_prefix'] = $this->getModule()->getOption('prefix');
         $clientSideOptions['options']['workflow_urls'] = array(
             'checkout' => urldecode(htmlspecialchars_decode(
                 $routing->gen(sprintf('%s.checkout', $listConfig->getTypeKey()))

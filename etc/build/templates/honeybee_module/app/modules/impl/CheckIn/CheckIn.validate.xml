@@ -5,17 +5,15 @@
     parent="%core.module_dir%/%%MODULE_NAME%%/config/validators.xml">
     <ae:configuration>
         <validators>
-            <validator class="%%MODULE_PREFIX%%">
-                <argument>%%MODULE_PREFIX%%</argument>
-            </validator>
-
-            <validator class="string" name="invalid_gate" required="false">
+            <validator class="%%MODULE_NAME%%DocumentValidator" name="invalid_%%MODULE_PREFIX%%" required="true">
                 <arguments>
-                    <argument>gate</argument>
+                    <argument>id</argument>
                 </arguments>
-                <errors>
-                    <error>An invalid gate was given.</error>
-                </errors>
+            </validator>
+            <validator class="string" name="invalid_revision" required="true">
+                <arguments>
+                    <argument>rev</argument>
+                </arguments>
             </validator>
         </validators>
     </ae:configuration>

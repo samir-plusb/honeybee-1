@@ -1,11 +1,28 @@
-<div class="control-group field-wrapper-{{ fieldName }}">
-    <label class="control-label" for="{{ fieldId }}">{{ tm._(fieldName, td)|raw}}</label>
+<div class="control-group field-wrapper-{{ fieldName }} {% if mandatory == true %}mandatory{% endif %}">
+    <label class="control-label" for="{{ fieldId }}">
+        {{ tm._(fieldKey, td)|raw}}
+        {% if mandatory == true %}
+        <span class="mandatory-marker">*</span>
+        {% endif %}
+    </label>
     <div class="controls">
-        <select name="{{ inputName }}" id="{{ fieldId }}" title="{{ placeholder }}" class="span11" 
-            {% if true == readonly %} readonly="readonly" {% endif %} >
-            {% for optVal, optLabel in selectValues %}
-            <option {% if optVal == fieldValue %} selected="selected" {% endif %} value="{{ optVal }}">{{ optLabel }}</option>
+        <select name="{{ inputName }}" id="{{ fieldId }}" title="{{ placeholder }}" class="span11"
+            {% if true == readonly %} readonly="readonly" {% endif %}
+            {% if mandatory == true %}aria-required="true"{% endif %} >
+            <option value=""></option>
+            {% for option, label in select_options %}
+            <option {% if option == fieldValue %} selected="selected" {% endif %} value="{{ option }}">{{ label }}</option>
             {% endfor %}
         </select>
+        {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}
+        <span class="hb-icon-info help-trigger"
+            {% if tm._(fieldKey ~ '_help_title', td) == fieldKey ~ '_help_title' %}
+            data-title="{{ tm._('field_level_help') }}"
+            {% else %}
+            data-title="{{ tm._(fieldKey ~ '_help_title', td) }}"
+            {% endif %}
+            data-content="{{ tm._(fieldName ~ '_help', td) }}"
+            data-animation="false" data-placement="left" data-trigger="manual" data-html="true"  />
+        {% endif %}
     </div>
 </div>

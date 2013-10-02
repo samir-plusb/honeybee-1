@@ -3,8 +3,11 @@
 namespace Honeybee\Agavi\Action;
 
 use Dat0r\Core\Document;
-use Dat0r\Core\Error;
+use Dat0r\Core\Document\MandatoryValueMissingException;
+use Dat0r\Core\Document\InvalidValueException;
+use Dat0r\Core\Error\BadValueException;
 use Honeybee\Core\Workflow\Plugin;
+use \Exception;
 
 class EditAction extends BaseAction
 {
@@ -38,12 +41,12 @@ class EditAction extends BaseAction
                 $requestData->getParameter('document')
             );
         }
-        catch(Document\InvalidValueException $error)
+        catch(InvalidValueException $error)
         {
             $this->setAttribute('errors', array($error->__toString()));
             $view = 'Error';
         }
-        catch(Document\MandatoryValueMissingException $error)
+        catch(MandatoryValueMissingException $error)
         {
             $translationManager = $this->getContext()->getTranslationManager();
             $fieldName = $translationManager->_(
@@ -60,12 +63,12 @@ class EditAction extends BaseAction
             $this->setAttribute('errors', array($errorMsg));
             $view = 'Error';
         }
-        catch(Error\BadValueException $error)
+        catch(BadValueException $error)
         {
             $this->setAttribute('errors', array($error->__toString()));
             $view = 'Error';
         }
-        catch(\Exception $error)
+        catch(Exception $error)
         {
             $this->setAttribute('errors', array($error->getMessage()));
             $view = 'Error';

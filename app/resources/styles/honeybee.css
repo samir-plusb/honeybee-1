@@ -225,6 +225,7 @@ fieldset .control-group .field-textarea
   max-height: 170px;
   overflow: auto;
   margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .pill-container li a
@@ -273,7 +274,7 @@ fieldset .control-group .field-textarea
   margin-top: 0px;
 }
 
-.pill-container .nav-pills > li:last-child > a
+.pill-container .nav-pills > li:last-child > a,
 {
   margin-bottom: 0px;
 }
@@ -731,6 +732,9 @@ input.typeahead
   display: none;
 }
 
+/*
+ * leftover hack for positioning select2 on top of reference widgets.
+ */
 div.select2-drop
 {
   margin-top: 5px;
@@ -741,7 +745,7 @@ div.select2-drop
   width: 100%;
 }
 
-/* 
+/*
  * Make select 2 look the way we think is right. Opinionated!
  */
 .select2-container
@@ -750,7 +754,8 @@ div.select2-drop
 }
 
 div.select2-container-multi.select2-container-active ul.select2-choices,
-div.select2-container-multi ul.select2-choices
+div.select2-container-multi ul.select2-choices,
+div.select2-container ul.select2-choice
 {
   background: none;
   background-color: rgb(255, 255, 255);
@@ -759,6 +764,36 @@ div.select2-container-multi ul.select2-choices
   border-radius: 4px 4px 4px 4px;
   height: auto;
   transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
+
+.select2-container .select2-choice,
+.select2-container-active .select2-choice
+{
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  box-shadow: none;
+  height: 29px;
+}
+
+.select2-container .select2-choice span
+{
+  margin-top: 2px;
+}
+
+.select2-drop
+{
+  margin-top: -5px;
+  border: 1px solid #cccccc;
+}
+
+div.select2-container ul.select2-choice:focus
+{
+  border-color: rgba(82, 168, 236, 0.8);
+  outline: 0;
+  outline: thin dotted \9;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
 }
 
 div.select2-container-multi.select2-container-active ul.select2-choices
@@ -774,7 +809,7 @@ div.select2-container-multi ul.select2-choices .select2-search-field input
   padding: 6px 5px 4px;
 }
 
-div.select2-drop .select2-results .select2-highlighted 
+div.select2-drop .select2-results .select2-highlighted
 {
   color: rgb(255, 255, 255);
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.2);
@@ -809,6 +844,49 @@ div.select2-container-multi .select2-choices .select2-search-field
   }
 }
 
+.select2-drop.regular-select
+{
+  margin-top: -31px;
+  border-top: none;
+  border-radius: 4px;
+}
+
+.select2-drop.regular-select .select2-search
+{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* select2 when it is displayed above the input */
+.select2-drop-above.regular-select
+{
+  margin-top: 0;
+  box-shadow: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.select2-drop-above.regular-select .select2-search
+{
+  margin-bottom: 4px;
+}
+
+.select2-drop.select2-drop-above .select2-search input
+{
+  margin-top: 0;
+}
+
+.select2-drop.regular-select .select2-input
+{
+  border-color: rgba(82, 168, 236, 0.8);
+  border-radius: 4px;
+  outline: 0;
+  outline: thin dotted \9;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
 /*
  * Reference-Inline-Create Styles
  */
@@ -835,14 +913,6 @@ div.select2-container-multi .select2-choices .select2-search-field
 .popover .create-reference-trigger:nth-child(n+1)
 {
   margin-bottom: 5px;
-}
-
-.popover ul
-{
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  position: relative;
 }
 
 /*
@@ -1301,4 +1371,9 @@ div.aggregate-module-item
 .refbrowser-open:focus
 {
   font-size: 14pt;
+}
+
+.mandatory-marker
+{
+  color: #006dcc;
 }

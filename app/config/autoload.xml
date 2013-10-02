@@ -13,8 +13,10 @@
             <autoload name="DocumentRenderer">%core.lib_dir%/renderer/document/DocumentRenderer.class.php</autoload>
             <autoload name="FieldRenderer">%core.lib_dir%/renderer/field/FieldRenderer.class.php</autoload>
             <autoload name="TextareaFieldInputRenderer">%core.lib_dir%/renderer/field/Input/TextareaFieldInputRenderer.class.php</autoload>
+            <autoload name="SelectFieldInputRenderer">%core.lib_dir%/renderer/field/Input/SelectFieldInputRenderer.class.php</autoload>
             <autoload name="FieldRendererFactory">%core.lib_dir%/renderer/field/FieldRendererFactory.class.php</autoload>
             <autoload name="FieldInputRenderer">%core.lib_dir%/renderer/field/Input/FieldInputRenderer.class.php</autoload>
+            <autoload name="EmailFieldInputRenderer">%core.lib_dir%/renderer/field/Input/EmailFieldInputRenderer.class.php</autoload>
             <autoload name="ReferenceFieldInputRenderer">%core.lib_dir%/renderer/field/Input/ReferenceFieldInputRenderer.class.php</autoload>
             <autoload name="DocumentInputRenderer">%core.lib_dir%/renderer/document/Input/DocumentInputRenderer.class.php</autoload>
             <autoload name="TextCollectionFieldInputRenderer">%core.lib_dir%/renderer/field/Input/TextCollectionFieldInputRenderer.class.php</autoload>

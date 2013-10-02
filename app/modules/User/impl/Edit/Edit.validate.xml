@@ -5,27 +5,13 @@
     parent="%core.module_dir%/User/config/validators.xml">
     <ae:configuration context="web">
         <validators method="read">
-            <validator class="UserDocumentValidator" name="invalid_user_" required="false">
-                <arguments>
-                    <argument>id</argument>
-                </arguments>
-                <errors>
-                    <error>An error occurred. Please check the given arguments.</error>
-                </errors>            
+            <validator class="user" required="false">
+                <argument>user</argument>
             </validator>
         </validators>
-
-        <validators method="write" translation_domain="user.errors">
-            <validator class="UserDocumentValidator" name="invalid_user" required="false">
-                <arguments>
-                    <argument>user</argument>
-                </arguments>
-                <errors>
-                    <error>An error occurred. Please check the given arguments.</error>
-                    <error for="non_existant">There is no such document.</error>
-                    <error for="invalid_values">The value '%value$s' given for field '%fieldname$s' does not comply.</error>
-                    <error for="missing_mandatory_values">Missing required value for field '%fieldname$s'</error>
-                </errors>                
+        <validators method="write">
+            <validator class="user">
+                <argument>user</argument>
             </validator>
         </validators>
     </ae:configuration>
