@@ -8,14 +8,13 @@ class AclRoleSelectFieldInputRenderer extends SelectFieldInputRenderer
     {
         $context = AgaviContext::getInstance();
         $user = $context->getUser();
-        $translationManager = $context->getTranslationManager();
+        $translation_manager = $context->getTranslationManager();
 
-        $selectVals = array();
-        foreach ($user->getAvailableRoles() as $role)
-        {
-            $selectVals[$role] = $translationManager->_($role, 'user.roles');
+        $select_values = array();
+        foreach ($user->getAvailableRoles() as $role) {
+            $select_values[$role] = $translation_manager->_($role, 'user.roles');
         }
-
-        return $selectVals;
+        ksort($select_values);
+        return $select_values;
     }
 }

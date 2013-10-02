@@ -21,6 +21,9 @@ class SelectFieldInputRenderer extends FieldInputRenderer
             $label = $translation_manager->_($option, $domain);
             $select_values[$option] = $label;
         }
+        if (!isset($this->options['sort_values']) || true == $this->options['sort_Values']) {
+            ksort($select_values);
+        }
 
         return $select_values;
     }
