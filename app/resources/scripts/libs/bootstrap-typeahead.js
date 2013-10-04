@@ -62,6 +62,7 @@
       this.$menu.css({
         top: pos.top + pos.height
       , left: pos.left
+      , width: this.$element[0].offsetWidth
       })
 
       this.$menu.show()
@@ -100,8 +101,7 @@
           this.strings = false
 
       this.query = this.$element.val()
-
-      if (!this.query) {
+      if (!this.query && this.options.minLength > 0) {
         return this.shown ? this.hide() : this
       }
 
@@ -112,7 +112,7 @@
       })
 
       items = this.sorter(items)
-      
+
       if (!items.length) {
         return this.shown ? this.hide() : this
       }
@@ -151,7 +151,6 @@
 
   , render: function (items) {
       var that = this
-
       items = $(items).map(function (i, item) {
         i = $(that.options.item).attr('data-value', JSON.stringify(item))
         if (!that.strings)
@@ -211,7 +210,6 @@
         case 38: // up arrow
           break
 
-        case 9: // tab
         case 13: // enter
           if (!this.shown) return
           this.select()
@@ -274,13 +272,13 @@
   /* TYPEAHEAD PLUGIN DEFINITION
 * =========================== */
 
-  $.fn.typeahead = function ( option ) {
+  $.fn.typeahead = function ( option, args ) {
     return this.each(function () {
       var $this = $(this)
         , data = $this.data('typeahead')
         , options = typeof option == 'object' && option
       if (!data) $this.data('typeahead', (data = new Typeahead(this, options)))
-      if (typeof option == 'string') data[option]()
+      if (typeof option == 'string') data[option].apply(data, args)
     })
   }
 

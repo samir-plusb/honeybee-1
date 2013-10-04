@@ -1,10 +1,10 @@
-<input type="text" placeholder="Hinzufügen" class="span11 tagslist-input"
+<input type="text" class="span11 tagslist-input"
        data-bind='value: current_tag,
                   valueUpdate: "afterkeydown",
                   hasfocus: has_focus,
                   event: { keypress: onInput },
                   disable: options.readonly,
-                  attr: { id: options.field_id }' />
+                  attr: { id: options.field_id, placeholder: placeholder }' />
 <input type="hidden" value=""
        data-bind="attr: { name: fieldname }" />
 <ul class="tagslist-value-list" style="display: none;"

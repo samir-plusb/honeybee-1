@@ -7,6 +7,8 @@ honeybee.widgets.TagsList = honeybee.widgets.Widget.extend({
 
     currently_valid: null,
 
+    placeholder: null,
+
     // <knockout_props>
     fieldname: null,
 
@@ -31,6 +33,11 @@ honeybee.widgets.TagsList = honeybee.widgets.Widget.extend({
     {
         this.parent(element, options, ready_callback);
         this.currently_valid = {};
+        if (this.options.autocomplete === true) {
+            this.placeholder = 'Auswählen';
+        } else {
+            this.placeholder = 'Hinzufügen (Freitext)';
+        }
     },
 
     // #################################
@@ -151,7 +158,6 @@ honeybee.widgets.TagsList = honeybee.widgets.Widget.extend({
             this.highlightTag(idx); // tag allready exists, highlight to point this out ^^
         }
         this.has_focus(true); // auto (re)gain focus for better usability
-        
     },
 
     removeTag: function(tag)
@@ -162,7 +168,6 @@ honeybee.widgets.TagsList = honeybee.widgets.Widget.extend({
         }
 
         this.tags.remove(tag);
-        this.has_focus(true);
         this.fire('tagschanged', [ this.fieldname(), this.tags()]);
     },
 
@@ -177,10 +182,18 @@ honeybee.widgets.TagsList = honeybee.widgets.Widget.extend({
         }
 
         var that = this;
-        this.element.find('.tagslist-input').typeahead({
+        var input = this.element.find('.tagslist-input');
+        input.typeahead({
             property: this.options.autocomplete_display_prop,
-            source: this.fetchTypeAheadData.bind(this),
+            source: this.fetchAutoCompleteData.bind(this),
             items: this.options.autocomplete_limit,
+            matcher: function () { return true; },
+            highlighter: function (item) {
+              return item.replace(new RegExp('^(' + this.query + ')', 'i'), function ($1, match) {
+                return '<u>' + match + '</u>'
+              })
+            },
+            minLength: 0,
             onselect: function(val)
             {
                 that.current_tag( // apply the selected autocomplete value
@@ -192,29 +205,61 @@ honeybee.widgets.TagsList = honeybee.widgets.Widget.extend({
                 }
             }
         });
+        input.focus(function(){ that.fetchAutoCompleteData(null, input.val()); });
     },
 
-    fetchTypeAheadData: function(typeahead, phrase)
+    fetchAutoCompleteData: function(typeahead, phrase)
     {
+        // synchron autocomplete based on local values from our options
+        if (this.options.autocomplete_values) {
+            if (!phrase || 0 === phrase.length) {
+                this.setAutoCompleteData(this.options.autocomplete_values);
+            } else {
+                // filter our local values based on the given phrase.
+                var autocomp_values = [];
+                var n, label, value, regexp;
+                for (n = 0; n < this.options.autocomplete_values.length; n++) {
+                    label = this.options.autocomplete_values[n].label;
+                    value = this.options.autocomplete_values[n].value;
+                    regexp = new RegExp('^'+phrase, 'i');
+                    if (label.match(regexp)) {
+                        autocomp_values.push({'value': value, 'label': label});
+                    }
+                }
+                this.setAutoCompleteData(autocomp_values);
+            }
+            return;
+        }
+        // asynchron autocomplete based on values returned from querying
+        // a server at the configured autocomplete url.
         var that = this;
         if (1 >= phrase.length)
         {
-            typeahead.process([]);
-            that.currently_valid = {};
+            that.setAutoCompleteData([]);
             return;
         }
-        var req = honeybee.core.Request.curry(that.options.autocomplete_uri.replace('{PHRASE}', phrase));
-        req(function(resp)
-        {
-            var data = resp.data;
-            that.currently_valid = {};
-            for (var i = 0; i < data.length; i++)
-            {
-                that.currently_valid[data[i][that.options.autocomplete_display_prop]] = data[i][that.options.autocomplete_value_prop];
-            }
+        honeybee.core.Request.curry(
+            that.options.autocomplete_uri.replace('{PHRASE}', phrase)
+        )(function(resp) { that.setAutoCompleteData(resp.data); });
+    },
 
-            typeahead.process(data);
-        });
+    setAutoCompleteData: function(data)
+    {
+        var i;
+        var selected_values = {};
+        var autocomplete_values = [];
+        for (i = 0; i < this.tags().length; i++) {
+            selected_values[this.tags()[i].value] = true;
+        }
+        for (i = 0; i < data.length; i++) {
+            var label = data[i].label;
+            var value = data[i].value;
+            if (selected_values[value] !== true) {
+                this.currently_valid[label] = value;
+                autocomplete_values.push(data[i]);
+            }
+        }
+        this.element.find('.tagslist-input').typeahead('process', [autocomplete_values]);
     },
 
     highlightTag: function(tag_idx)

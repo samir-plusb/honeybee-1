@@ -1,0 +1,13 @@
+<div class="control-group field-wrapper-{{ fieldName }} {% if mandatory == true %}mandatory{% endif %}">
+    <label class="control-label" for="{{ fieldId }}">
+        {{ tm._(fieldKey, td)|raw}}
+        {% if mandatory == true %}
+        <span class="mandatory-marker">*</span>
+        {% endif %}
+    </label>
+    <div class="controls">
+        <section class="honeybee-widget widget-tags-list field-wrapper-{{fieldName}}"
+            data-tags-list-options="{{ widgetOptions|raw }}" >
+        </section>
+    </div>
+</div>
