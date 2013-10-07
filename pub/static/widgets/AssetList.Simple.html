@@ -1,0 +1,103 @@
+<div class="simple-assets-tpl span11">
+    <input type="hidden" data-bind="attr: { name: fieldname }" value="" />
+    <div data-bind="visible: dropzone.show() && ! options.readonly" class="dropzone">
+        <p data-bind="text: dropzone.label()" />
+    </div>
+    <h5>Vorhandene Dateien</h4>
+    <ul class="asset-list" data-bind="foreach: assets">
+    <!-- ko if: $data.name -->
+        <li class="simple-asset-item" data-trigger="hover" data-html="true" data-animation="true" data-delay="700"
+            data-bind="attr: {
+                'data-title': $data.name,
+                'data-content': $data.popover_content,
+                'data-placement': $parent.popover_pos
+            }">
+            <h6>
+                <span class="hover-spacer">&nbsp;</span>
+                <span data-bind="text: $data.item_label"></span>
+            </h6>
+            <ul class="image-buttons" data-bind="visible: ! $parent.options.readonly">
+                <li>
+                    <a class="btn btn-info" data-bind="attr: { href: $parent.getDownloadUrl($data) }">
+                        <span class="hb-icon-download"/>
+                    </a>
+                </li>
+                <li>
+                    <button class="btn btn-success" data-bind="click: function() { $parent.onEditClicked($data); }">
+                        <span class="hb-icon-pencil"/>
+                    </button>
+                </li>
+                <li>
+                    <button class="btn btn-danger" data-bind="click: function() { $parent.onDeleteClicked($data); }">
+                        <span class="hb-icon-remove"/>
+                    </button>
+                </li>
+            </ul>
+            <div data-bind="if: $data.has_id">
+                <input type="hidden" data-bind="value: $data.id, attr: { name: $parent.fieldname }" />
+            </div>
+            <div data-bind="if: !$data.has_id()">
+                <div class="progress progress-striped active" style="width: 100%;">
+                    <div class="bar" data-bind="style: { width: $data.progress() + '%' }"></div>
+                </div>
+            </div>
+        </li>
+    <!-- /ko -->
+    </ul>
+</div>
+<div class="modal modal-edit-asset">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Datei - Metadaten</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <div class="span4">
+                <form class="form">
+                    <div class="input-field">
+                        <label>Titel</label>
+                        <input type="text" name="caption" class="input-caption" value="" style="width: 95%;" />
+                    </div>
+                    <div class="input-field">
+                        <label>Copyright</label>
+                        <input type="text" name="copyright" class="input-copyright" style="width: 95%;" value="" />
+                    </div>
+                    <div class="input-field">
+                        <label>Copyright Url</label>
+                        <input type="text" class="input-copyright-url" value="" style="width: 95%;" />
+                    </div>
+                    <button class="btn" type="button" data-toggle="button"
+                            data-bind="css: { 'active': start_active }, visible: cur_file_is_image, click: toggleAoiSelection">
+                        Auswahl für "area of interest"
+                    </button>
+                    <button class="btn" style="padding: 3px 7px; margin-left: 6px;"
+                            data-bind="visible: aoi_enabled() && ! aoi_scan_active() && face_detect_feat_on(), click: runFaceDetection">
+                        <img src="static/deploy/_global/binaries/icon_facedetection.png" style="width: 23px;" />
+                    </button>
+                    <img src="static/deploy/_global/binaries/loading-small.gif" title="Gesichtserkennung läuft, hier klicken um den Vorgang abzubrechen." 
+                         data-bind="visible: aoi_scan_active, click: abortFaceDetection" style="margin-left: 6px; cursor: pointer;" />
+                    <div data-bind="visible: aoi_enabled" class="image-editor row-fluid">
+                        <div class="span4">
+                            <label>X</label>
+                            <input type="text" readonly="readonly" style="width: 50px; margin-bottom: 5px;" data-bind="value: $data.area_of_interest()[0]" />
+                            <label>Y</label>
+                            <input type="text" readonly="readonly" style="width: 50px;" data-bind="value: $data.area_of_interest()[1]" />
+                        </div>
+                        <div class="span4">
+                            <label>Width</label>
+                            <input type="text" readonly="readonly" style="width: 50px; margin-bottom: 5px;" data-bind="value: $data.area_of_interest()[2]" />
+                            <label>Height</label>
+                            <input type="text" readonly="readonly" style="width: 50px;" data-bind="value: $data.area_of_interest()[3]" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="span8">
+                <div class="ichiejs-main-stage"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="margin-top: 1em; text-align: left;">
+        <input type="button" class="btn btn-primary" data-twodal-event="onstoredata" value="Metadaten speichern">
+    </div>
+</div>

@@ -21,7 +21,8 @@
     {% else %}
         <div class="controls">
             <input type="text" {% if false == readonly %} name="{{ inputName }}" {% endif %} value="{{ fieldValue }}"
-                id="{{ fieldId }}" placeholder="{{ placeholder }}" class="span11"
+                id="{{ fieldId }}" class="span11"
+                {% if placeholder %} placeholder="{{ placeholder }}" {% endif %}
                 {% if true == readonly %} readonly="readonly" tabindex="-1" {% endif %}
                 {% if mandatory == true %}aria-required="true"{% endif %} />
             {% if tm._(fieldKey ~ '_help', td) != fieldKey ~ '_help' %}

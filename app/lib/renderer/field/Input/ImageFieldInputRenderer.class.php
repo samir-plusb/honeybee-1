@@ -34,7 +34,8 @@ class ImageFieldInputRenderer extends FieldInputRenderer
                 'aoi' => empty($metaData['aoi']) ? NULL : $metaData['aoi'],
                 'width' => isset($size[0]) ? $size[0] : '',
                 'height' => isset($size[0]) ? $size[1] : '',
-                'mimeType' => $asset->getMimeType()
+                'mimeType' => $asset->getMimeType(),
+                'size' => $asset->getSize()
             );
         }
 

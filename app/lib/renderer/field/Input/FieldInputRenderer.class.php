@@ -45,6 +45,11 @@ class FieldInputRenderer extends FieldRenderer
         $fieldName = $this->getField()->getName();
         $widgetType = $this->getWidgetType($document);
 
+        $placeholder = $tm->_($fieldName . '_placeholder', $td);
+        if ($placeholder === $fieldName . '_placeholder') {
+            $placeholder = null;
+        }
+
         return array(
             'fieldName' => $fieldName,
             'fieldKey' => $this->options['field_key'],
@@ -52,12 +57,12 @@ class FieldInputRenderer extends FieldRenderer
             'field' => $this->getField(),
             'inputName' => $this->generateInputName($document),
             'fieldId' => $this->generateInputId($document),
-            'placeholder' => $this->getField()->getOption('placesholder', ''),
             'fieldValue' => $this->renderFieldValue($document),
             'widgetType' => $widgetType,
             'hasWidget' => ($widgetType !== NULL),
             'widgetOptions' => $this->renderWidgetOptions($document),
             'readonly' => $this->isReadonly($document),
+            'placeholder' => $placeholder,
             'tm' => $tm,
             'td' => $td
         );

@@ -625,6 +625,46 @@ input.typeahead
   width: 265px;
 }
 
+
+/* simple-asset widget styling */
+.widget-asset-list .simple-assets-tpl .dropzone
+{
+    float: none;
+    margin-left: 0px;
+}
+
+.widget-asset-list .simple-assets-tpl .asset-list,
+.widget-asset-list .simple-asset-item
+{
+    float: none;
+    list-style: circle;
+    position: relative;
+}
+
+.widget-asset-list .simple-asset-item
+{
+    margin-left: 20px;
+}
+
+.widget-asset-list .simple-asset-item .hover-spacer
+{
+    width: 200px;
+    margin-left: -200px;
+    display: inline-block;
+}
+
+.widget-asset-list .simple-asset-item:hover .image-buttons,
+.widget-asset-list .simple-assets-tpl .image-buttons:hover
+{
+    display: block;
+}
+
+.widget-asset-list .simple-assets-tpl .image-buttons
+{
+    top: -5px;
+    left: -180px;
+}
+
 /*
  * Templating - Input Form
  */
@@ -1327,9 +1367,14 @@ div.select2-container-multi .select2-choices .select2-search-field
   cursor: pointer;
 }
 
+.aggregate .input-group-label .position
+{
+  font-size: 16px;
+}
+
 .aggregate .input-group-label .displayed_text
 {
-  font-size: 12pt;
+  font-size: 16px;
   font-style: italic;
 }
 

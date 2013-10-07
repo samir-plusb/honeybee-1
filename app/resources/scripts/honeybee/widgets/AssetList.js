@@ -67,7 +67,7 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
             console.log('Yay, we\'ve a new sorting!');
         });*/
 
-        this.element.find('.asset-item').popover();
+        this.element.find('.asset-item, .simple-asset-item').popover();
     },
 
     initKnockoutProperties: function()
@@ -108,9 +108,9 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
 
         this.uploader.on('upload::start', function(asset)
         {
-            that.element.find('.asset-item').popover('destroy');
+            that.element.find('.asset-item, .simple-asset-item').popover('destroy');
             that.assets.splice(that.assets().length - 1, 0, asset);
-            that.element.find('.asset-item').popover();
+            that.element.find('.asset-item, .simple-asset-item').popover();
             if (that.options.max <= that.assets().length - 1)
             {
                 that.uploader.enabled = false;
@@ -222,9 +222,9 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
 
     onDeleteClicked: function(asset)
     {
-        this.element.find('.asset-item').popover('destroy');
+        this.element.find('.asset-item, .simple-asset-item').popover('destroy');
         this.assets.remove(asset);
-        this.element.find('.asset-item').popover();
+        this.element.find('.asset-item, .simple-asset-item').popover();
 
         if (this.options.max > this.assets().length - 1)
         {
@@ -328,6 +328,8 @@ honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
 
     caption: null,
 
+    size: null,
+
     caption_txt: null,
 
     copyright: null,
@@ -411,7 +413,17 @@ honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
         {
             return !! that.id();
         });
-
+        this.size = ko.observable(data.size || 0);
+        var bytesToSize = function(bytes) {
+            var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            if (bytes == 0) return 'n/a';
+            var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+            return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[[i]];
+        };
+        this.item_label = ko.computed(function()
+        {
+            return that.name() + ' (' + bytesToSize(that.size()) + ')';
+        });
         this.popover_content = ko.computed(function()
         {
             return '<p><b>Titel</b> ' + that.caption_txt() +
@@ -631,7 +643,8 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
                     name: file.name,
                     url: result,
                     width: img.width,
-                    height: img.height
+                    height: img.height,
+                    size: file.size
                 });
             }
             else
@@ -640,7 +653,8 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
                     name: file.name,
                     url: img.src,
                     width: img.width,
-                    height: img.height
+                    height: img.height,
+                    size: file.size
                 });
             }
 
