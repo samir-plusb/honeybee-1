@@ -35,7 +35,7 @@ class ImageFieldInputRenderer extends FieldInputRenderer
                 'width' => isset($size[0]) ? $size[0] : '',
                 'height' => isset($size[0]) ? $size[1] : '',
                 'mimeType' => $asset->getMimeType(),
-                'size' => $asset->getSize()
+                'size' => $asset->getSize(),
             );
         }
 
@@ -45,6 +45,7 @@ class ImageFieldInputRenderer extends FieldInputRenderer
             'put_url' => htmlspecialchars_decode(urldecode($routing->gen('asset.put'))),
             'download_url' =>  htmlspecialchars_decode(urldecode($routing->gen('asset.binary', array('aid' => '{AID}')))),
             'assets' => $assets,
+            'template' => isset($this->options['template']) ? $this->options['template'] : 'AssetList',
             'max' => isset($this->options['max_files']) ? (int)$this->options['max_files'] : 20,
             'allowed_types' => isset($this->options['allowed_types']) ? $this->options['allowed_types'] : array('image/png'),
             'aoi_url' => $routing->gen('common.service.detect_face'),

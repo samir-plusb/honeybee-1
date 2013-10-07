@@ -38,7 +38,7 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
 
     getTemplate: function()
     {
-        return 'static/widgets/AssetList.html';
+        return 'static/widgets/' + this.options.template + '.html';
     },
 
     initGui: function()
