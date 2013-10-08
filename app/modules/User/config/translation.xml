@@ -31,7 +31,7 @@
                             <ae:parameter name="actions">Aktionen</ae:parameter>
                             <ae:parameter name="promote">Publizieren</ae:parameter>
                             <ae:parameter name="demote">Depublizieren</ae:parameter>
-                            <ae:parameter name="state">Workflow Schritt</ae:parameter>
+                            <ae:parameter name="state">Status</ae:parameter>
                             <ae:parameter name="role">Rolle</ae:parameter>
 
                             <!-- reference batch dialogs -->

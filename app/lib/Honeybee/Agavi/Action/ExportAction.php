@@ -2,6 +2,8 @@
 
 namespace Honeybee\Agavi\Action;
 
+use Honeybee\Core\Config\ArrayConfig;
+
 class ExportAction extends BaseAction
 {
     public function executeWrite(\AgaviRequestDataHolder $parameters)
@@ -22,7 +24,9 @@ class ExportAction extends BaseAction
         $search_spec = array('filter' => array('workflowTicket.workflowStep' => 'published'));
         $publish_document = function($document) use ($export_name, $export_service)
         {
-            $export_service->publish($export_name, $document);
+            $client = new \CkanClient(new ArrayConfig(array()));
+            $client->publish($document);
+    //        $export_service->publish($export_name, $document);
         };
         $document_service->walkDocuments($search_spec, $chunk_size, $publish_document);
 
