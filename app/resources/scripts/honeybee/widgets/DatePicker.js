@@ -31,14 +31,19 @@ honeybee.widgets.DatePicker = honeybee.widgets.Widget.extend({
         datepicker.datepicker();
         var input = datepicker.find('input');
         var trigger = datepicker.find('.add-on');
-
-        input.focus(function()
-        {
-            datepicker.datepicker('show');
+        datepicker.on('show', function(){
+            var val = input.val();
+            if (val.length == 10) {
+                datepicker.datepicker('setValue', input.val());
+            }
         });
-        input.blur(function()
-        {
-            datepicker.datepicker('hide');
+        var cur_val = null;
+        input.keyup(function(){
+            var val = input.val();
+            if (cur_val !== val && val.length == 10) {
+                datepicker.datepicker('setValue', input.val());
+                cur_val = val;
+            }
         });
         trigger.click(function()
         {

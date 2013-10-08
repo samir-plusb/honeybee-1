@@ -74,7 +74,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             var text = first_input.val();
             if (text.length > 0)
             {
-                var short_text = text.substr(0, 25);
+                var short_text = text.substr(0, 40);
                 if (short_text.length < text.length)
                 {
                     short_text = short_text + ' ...';
@@ -91,7 +91,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         var text = first_input.val();
         if (text.length > 0)
         {
-            var short_text = text.substr(0, 15);
+            var short_text = text.substr(0, 40);
             if (short_text.length < text.length)
             {
                 short_text = short_text + ' ...';
