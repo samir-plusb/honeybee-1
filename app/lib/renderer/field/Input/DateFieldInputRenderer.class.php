@@ -13,12 +13,21 @@ class DateFieldInputRenderer extends FieldInputRenderer
     {
         $parentOptions = parent::getWidgetOptions($document);
 
-        $date = $document->getValue($this->getField()->getName());
+        $tm = $this->getTranslationManager();
+        $td = $this->getTranslationDomain($document);
+        $fieldName = $this->getField()->getName();
 
+        $placeholder = $tm->_($fieldName . '_placeholder', $td);
+        if ($placeholder === $fieldName . '_placeholder') {
+            $placeholder = null;
+        }
+
+        $date = $document->getValue($fieldName);
         return array_merge($parentOptions, array(
             'date' => empty($date) ? '' : $date,
             'format' => 'dd.mm.yyyy',
-            'field_name' => $this->generateInputName($document)
+            'field_name' => $this->generateInputName($document),
+            'placeholder' => $placeholder
         ));
     }
 }

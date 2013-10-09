@@ -627,42 +627,28 @@ input.typeahead
 
 
 /* simple-asset widget styling */
+.widget-asset-list .simple-assets-tpl
+{
+  margin-bottom: 20px;
+}
+
 .widget-asset-list .simple-assets-tpl .dropzone
 {
     float: none;
     margin-left: 0px;
 }
 
-.widget-asset-list .simple-assets-tpl .asset-list,
-.widget-asset-list .simple-asset-item
+.widget-asset-list .simple-assets-tpl .edit-trigger
 {
-    float: none;
-    list-style: circle;
-    position: relative;
+  position: absolute;
+  top: 12px;
+  right: 45px;
+  cursor: pointer;
 }
 
-.widget-asset-list .simple-asset-item
+.tagslist-list .simple-asset-item .asset-label
 {
-    margin-left: 20px;
-}
-
-.widget-asset-list .simple-asset-item .hover-spacer
-{
-    width: 200px;
-    margin-left: -200px;
-    display: inline-block;
-}
-
-.widget-asset-list .simple-asset-item:hover .image-buttons,
-.widget-asset-list .simple-assets-tpl .image-buttons:hover
-{
-    display: block;
-}
-
-.widget-asset-list .simple-assets-tpl .image-buttons
-{
-    top: -5px;
-    left: -180px;
+  padding-right: 55px;
 }
 
 /*

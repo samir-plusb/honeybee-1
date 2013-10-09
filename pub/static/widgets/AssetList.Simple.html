@@ -3,47 +3,30 @@
     <div data-bind="visible: dropzone.show() && ! options.readonly" class="dropzone">
         <p data-bind="text: dropzone.label()" />
     </div>
-    <h5>Vorhandene Dateien</h4>
-    <ul class="asset-list" data-bind="foreach: assets">
-    <!-- ko if: $data.name -->
-        <li class="simple-asset-item" data-trigger="hover" data-html="true" data-animation="true" data-delay="700"
-            data-bind="attr: {
-                'data-title': $data.name,
-                'data-content': $data.popover_content,
-                'data-placement': $parent.popover_pos
-            }">
-            <h6>
-                <span class="hover-spacer">&nbsp;</span>
-                <span data-bind="text: $data.item_label"></span>
-            </h6>
-            <ul class="image-buttons" data-bind="visible: ! $parent.options.readonly">
-                <li>
-                    <a class="btn btn-info" data-bind="attr: { href: $parent.getDownloadUrl($data) }">
-                        <span class="hb-icon-download"/>
-                    </a>
-                </li>
-                <li>
-                    <button class="btn btn-success" data-bind="click: function() { $parent.onEditClicked($data); }">
-                        <span class="hb-icon-pencil"/>
-                    </button>
-                </li>
-                <li>
-                    <button class="btn btn-danger" data-bind="click: function() { $parent.onDeleteClicked($data); }">
-                        <span class="hb-icon-remove"/>
-                    </button>
-                </li>
-            </ul>
-            <div data-bind="if: $data.has_id">
-                <input type="hidden" data-bind="value: $data.id, attr: { name: $parent.fieldname }" />
-            </div>
-            <div data-bind="if: !$data.has_id()">
-                <div class="progress progress-striped active" style="width: 100%;">
-                    <div class="bar" data-bind="style: { width: $data.progress() + '%' }"></div>
+    <h5>Verknüpfte Dateien</h5>
+    <div class="pill-container">
+        <ul data-bind="foreach: assets" class="tagslist-list nav nav-pills nav-stacked">
+        <!-- ko if: $data.name -->
+            <li class="simple-asset-item tagslist-tag">
+                <a href="#" onclick="return false;" tabindex="-1">
+                    <span class="asset-label" data-bind="text: $data.item_label" />
+                    <i data-bind="click: function() { $parent.onDeleteClicked($data); }, visible: ! $parent.options.readonly"
+                    class="hb-icon-cancel"></i>
+                    <i data-bind="click: function() { $parent.onEditClicked($data); }, visible: ! $parent.options.readonly"
+                    class="hb-icon-pencil edit-trigger"></i>
+                </a>
+                <div data-bind="if: $data.has_id">
+                    <input type="hidden" data-bind="value: $data.id, attr: { name: $parent.fieldname }" />
                 </div>
-            </div>
-        </li>
-    <!-- /ko -->
-    </ul>
+                <div data-bind="if: !$data.has_id()">
+                    <div class="progress progress-striped active" style="width: 100%;">
+                        <div class="bar" data-bind="style: { width: $data.progress() + '%' }"></div>
+                    </div>
+                </div>
+            </li>
+        <!-- /ko -->
+        </ul>
+    </div>
 </div>
 <div class="modal modal-edit-asset">
     <div class="modal-header">

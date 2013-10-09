@@ -18,6 +18,12 @@ honeybee.widgets.DatePicker = honeybee.widgets.Widget.extend({
     // #################################
     // #     widget implementation     #
     // #################################
+    init: function(element, options, ready_callback)
+    {
+        options.placeholder = options.placeholder || options.format;
+        this.parent(element, options, ready_callback);
+    },
+
     getTemplate: function()
     {
         return 'static/widgets/DatePicker.html';
@@ -68,5 +74,6 @@ honeybee.widgets.DatePicker.DEFAULT_OPTIONS = {
     date: '12.12.2013',
     format: 'dd.mm.yyyy',
     field_name: '',
-    field_id: ''
+    field_id: '',
+    placeholder: null
 };

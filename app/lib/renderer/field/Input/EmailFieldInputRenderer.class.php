@@ -14,7 +14,7 @@ class EmailFieldInputRenderer extends FieldInputRenderer
         $payload = parent::getPayload($document);
 
         if (!isset($payload['placeholder'])) {
-            $payload['placeholder'] = 'max.mustermann@example.com';
+            $payload['placeholder'] = 'user@example.com';
         }
 
         return $payload;
