@@ -2,7 +2,7 @@
 
 namespace Honeybee\Agavi\Filter;
 
-class DebugExecutionFilter extends \AgaviExecutionFilter
+class DebugExecutionFilter extends \PhpDebugToolbarAgaviExecutionFilter
 {
     protected function executeView(\AgaviExecutionContainer $container)
     {
