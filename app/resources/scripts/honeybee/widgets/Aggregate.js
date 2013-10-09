@@ -217,22 +217,30 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     moveItemUp: function(item)
     {
+        var restore_richtext = this.createCkeditorBackup(item);
+
         item.insertBefore(item.prev());
         this.renderAggregatePositions();
         this.fire('aggregate-moved-up', [{
             'field': this.options.fieldname,
             'element': item
         }]);
+
+        restore_richtext();
     },
 
     moveItemDown: function(item)
     {
+        var restore_richtext = this.createCkeditorBackup(item);
+
         item.insertAfter(item.next());
         this.renderAggregatePositions();
         this.fire('aggregate-moved-down', [{
             'field': this.options.fieldname,
             'element': item
         }]);
+
+        restore_richtext();
     },
 
     removeItem: function(item)
@@ -244,6 +252,27 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             'field': this.options.fieldname,
             'element': item[0]
         }]);
+    },
+
+    // workaround for ckeditor breaking when a surrounding dom-container is moved.
+    // sad but true ...
+    // @see http://ckeditor.com/forums/CKEditor-3.x/Moving-CKEditor-instances-around-DOM
+    createCkeditorBackup: function(item)
+    {
+        var textareas_to_recreate = [];
+        item.find('.cke').each(function(idx, ck_editor_el){
+            var cke_id = $(ck_editor_el).attr('id');
+            var input_id = $(ck_editor_el).attr('id').replace('cke_','');
+            CKEDITOR.instances[input_id].destroy();
+            textareas_to_recreate.push(input_id);
+        });
+
+        return function() {
+            var i = 0;
+            for (; i < textareas_to_recreate.length; i++) {
+                CKEDITOR.replace(textareas_to_recreate[i]);
+            }
+        };
     },
 
     renderAggregatePositions: function()
