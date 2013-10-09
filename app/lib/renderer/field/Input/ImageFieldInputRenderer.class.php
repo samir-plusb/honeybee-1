@@ -55,6 +55,9 @@ class ImageFieldInputRenderer extends FieldInputRenderer
 
     protected function getTemplateName()
     {
+        if (isset($this->options['widget_only']) && false === $this->options['widget_only']) {
+            return parent::getTemplateName();
+        }
         return 'PlainWidget.tpl.twig';
     }
 
