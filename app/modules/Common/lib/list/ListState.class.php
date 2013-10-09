@@ -18,6 +18,8 @@ class ListState implements IListState
 
     protected $filter = array();
 
+    protected $referenceFieldId = FALSE;
+
     protected $referenceField = FALSE;
 
     protected $referenceModule = FALSE;
@@ -137,6 +139,11 @@ class ListState implements IListState
     public function getSearchMode()
     {
         return $this->searchMode;
+    }
+
+    public function getReferenceFieldId()
+    {
+        return $this->referenceFieldId;
     }
 
     public function getReferenceField()

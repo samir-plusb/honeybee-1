@@ -31,6 +31,10 @@ class ListStateValidator extends AgaviValidator
             'class' => 'AgaviStringValidator',
             'required' => false
         ),
+        'referenceFieldId' => array(
+            'class' => 'AgaviStringValidator',
+            'required' => false
+        ),
         'referenceModule' => array(
             'class' => 'AgaviStringValidator',
             'required' => false

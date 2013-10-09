@@ -27,6 +27,7 @@ class Common_List_ListSuccessView extends CommonBaseView
 
         $referenceModule = $listState->getReferenceModule();
         $referenceField = $listState->getReferenceField();
+        $referenceFieldId = $listState->getReferenceFieldId();
         $defaultParams = array(
             'offset' => 0,
             'limit' => $listState->getLimit()
@@ -36,6 +37,7 @@ class Common_List_ListSuccessView extends CommonBaseView
         {
             $defaultParams['referenceModule'] = $referenceModule;
             $defaultParams['referenceField'] = $referenceField;
+            $defaultParams['referenceFieldId'] = $referenceFieldId;
         }
 
         $searchWidgetOpts = array(

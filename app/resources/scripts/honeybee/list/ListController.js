@@ -28,7 +28,6 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         this.bindSidebarEvents();
 
         this.element = $('.container-list-data');
-
         this.workflow_handler = new honeybee.list.WorkflowHandler(
             this.options.module_prefix,
             this.options.workflow_urls || {}
@@ -84,7 +83,8 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             JSON.stringify({
                 'event_type': 'list-loaded',
                 'source_type': this.type_key,
-                'reference_field': this.options.reference_field
+                'reference_field': this.options.reference_field,
+                'reference_field_id': this.options.reference_field_id
             }),
             this.options.event_origin
         );
@@ -125,7 +125,8 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             JSON.stringify({
                 'event_type': 'list-loaded',
                 'source_type': this.type_key,
-                'reference_field': this.options.reference_field
+                'reference_field': this.options.reference_field,
+                'reference_field_id': this.options.reference_field_id
             }),
             this.options.event_origin
         );
@@ -506,6 +507,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
                 event_type: 'item-added',
                 source_type: this.type_key,
                 reference_field: this.options.reference_field,
+                reference_field_id: this.options.reference_field_id,
                 reference_module: this.options.reference_module,
                 item: {
                     id: item.data[this.options.reference_settings.identity_field],
@@ -528,6 +530,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
                 event_type: 'item-removed',
                 source_type: this.type_key,
                 reference_field: this.options.reference_field,
+                reference_field_id: this.options.reference_field_id,
                 reference_module: this.options.reference_module,
                 item: {
                     id: item.data[this.options.reference_settings.identity_field],

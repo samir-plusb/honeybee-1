@@ -27,12 +27,12 @@ class ListAction extends BaseAction
     public function executeRead(\AgaviRequestDataHolder $parameters)
     {
         $module = $this->getModule();
+        $listState = $parameters->getParameter('state');
 
-        if ($parameters->hasParameter('referenceField') && $parameters->hasParameter('referenceModule'))
+        if (($fieldname = $listState->getReferenceField()) && ($referenceModuleName = $listState->getReferenceModule()))
         {
-            $fieldname = $parameters->getParameter('referenceField');
             $fieldparts = explode('.', $fieldname);
-            $moduleClass = sprintf('Honeybee\\Domain\\%1$s\\%1$sModule', $parameters->getParameter('referenceModule'));
+            $moduleClass = sprintf('Honeybee\\Domain\\%1$s\\%1$sModule', $referenceModuleName);
             $referenceModule = $moduleClass::getInstance();
             $curModule = $referenceModule;
             $curField = $curModule->getField(array_shift($fieldparts));
@@ -54,12 +54,12 @@ class ListAction extends BaseAction
             }
             $this->setAttribute('referenceModule', $curModule);
             $this->setAttribute('referenceField', $curField);
+            $this->setAttribute('referenceFieldId', $listState->getReferenceFieldId());
         }
 
         $service = $module->getService();
 
         $listConfig = ListConfig::create($this->buildListConfig($parameters));
-        $listState = $parameters->getParameter('state');
 
         $this->setAttribute('config', $listConfig);
         $this->setAttribute('state', $listState);
@@ -183,6 +183,7 @@ class ListAction extends BaseAction
                 {
                     $listSettings['clientSideController']['options']['reference_field'] = $referenceField->getName();
                     $listSettings['clientSideController']['options']['reference_module'] = $referenceModule->getName();
+                    $listSettings['clientSideController']['options']['reference_field_id'] = $this->getAttribute('referenceFieldId');
                     $listSettings['clientSideController']['options']['reference_settings'] = array(
                         'identity_field' => $reference[ReferenceField::OPT_IDENTITY_FIELD],
                         'display_field' => $reference[ReferenceField::OPT_DISPLAY_FIELD]

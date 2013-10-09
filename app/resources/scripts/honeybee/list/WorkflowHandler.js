@@ -10,6 +10,7 @@ honeybee.list.WorkflowHandler = honeybee.core.BaseObject.extend({
     {
         this.parent();
         this.urls = urls || {};
+        this.logInfo(module_prefix);
         this.module_prefix = module_prefix;
     },
 
@@ -42,7 +43,7 @@ honeybee.list.WorkflowHandler = honeybee.core.BaseObject.extend({
         {
             if ('ok' === data.state)
             {
-                window.location.href = that.urls.execute + '?' + this.module_prefix + '=' + resource.data.identifier;
+                window.location.href = that.urls.execute + '?' + that.module_prefix + '=' + resource.data.identifier;
             }
             else
             {

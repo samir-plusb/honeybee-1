@@ -453,7 +453,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
         refmodule.active(true);
         this.showDialog(loading_modal_el);
-        this.openReferenceListView(refmodule.list_url);
+        var ref_browser_url = refmodule.list_url + '&referenceFieldId=' + this.options.field_id;
+        this.openReferenceListView(ref_browser_url);
 
         return false;
     },
@@ -472,7 +473,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
         data.active(true);
 
-        this.openReferenceListView(data.list_url);
+        var ref_browser_url = data.list_url + '&referenceFieldId=' + this.options.field_id;
+        this.openReferenceListView(ref_browser_url);
 
         return false;
     },
@@ -703,7 +705,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         }
 
         var msg_data = JSON.parse(event.data);
-        if (msg_data.reference_field !== this.options.realname)
+        if (msg_data.reference_field_id !== this.options.field_id)
         {
             return;
         }

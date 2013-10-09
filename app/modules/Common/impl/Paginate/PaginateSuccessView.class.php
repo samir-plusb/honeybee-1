@@ -26,8 +26,10 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
         $listState = $parameters->getParameter('state');
         $referenceModule = $listState->getReferenceModule();
         $referenceField = $listState->getReferenceField();
+        $referenceFieldId = $listState->getReferenceFieldId();
 
         $this->setAttribute('reference_field', $referenceField);
+        $this->setAttribute('reference_field_id', $referenceFieldId);
         $this->setAttribute('reference_module', $referenceModule);
         $this->setAttribute('links', $this->generatePagingLinks($parameters));
         $this->setAttribute('list_filter', $this->getAttribute('filter'));
@@ -75,12 +77,14 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
 
         $referenceModule = $listState->getReferenceModule();
         $referenceField = $listState->getReferenceField();
+        $referenceFieldId = $listState->getReferenceFieldId();
 
         $defaultParams = array();
         if ($referenceModule && $referenceField)
         {
             $defaultParams['referenceModule'] = $referenceModule;
             $defaultParams['referenceField'] = $referenceField;
+            $defaultParams['referenceFieldId'] = $referenceFieldId;
         }
 
         $urls = array();
