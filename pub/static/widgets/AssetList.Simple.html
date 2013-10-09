@@ -1,9 +1,8 @@
-<div class="simple-assets-tpl span11">
+<div class="simple-assets-tpl">
     <input type="hidden" data-bind="attr: { name: fieldname }" value="" />
     <div data-bind="visible: dropzone.show() && ! options.readonly" class="dropzone">
         <p data-bind="text: dropzone.label()" />
     </div>
-    <h5>Verknüpfte Dateien</h5>
     <div class="pill-container">
         <ul data-bind="foreach: assets" class="tagslist-list nav nav-pills nav-stacked">
         <!-- ko if: $data.name -->
