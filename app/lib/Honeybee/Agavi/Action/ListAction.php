@@ -4,6 +4,7 @@ namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Dat0r\DocumentCollection;
 use Honeybee\Core\Dat0r\Document;
+use Honeybee\Core\Dat0r\RelationManager;
 use Dat0r\Core\Field\ReferenceField;
 use Dat0r\Core\Field\AggregateField;
 use Honeybee\Core\Import;
@@ -95,7 +96,9 @@ class ListAction extends BaseAction
         }
         else
         {
+            RelationManager::startPooling();
             $data = $service->fetchListData($listConfig, $listState);
+            RelationManager::stopPooling();
             $listState->setTotalCount($data['totalCount']);
             $listState->setData($this->prepareListData($data['documents']));
         }

@@ -8,26 +8,38 @@ use Dat0r\Core\Document\DocumentSet;
 
 class RelationManager
 {
+    private static $pool_references = false;
+
     private static $reference_pool;
 
     private static $recursion_depth = 0;
 
+    public static function startPooling()
+    {
+        self::$pool_references = true;
+    }
+
+    public static function stopPooling()
+    {
+        self::$pool_references = false;
+    }
+
     public static function loadReferences(BaseDocument $document, array $data)
     {
-        $referenced_documents = array();
-        if (self::$recursion_depth === 0) {
+        if (self::$recursion_depth === 0 && !self::$pool_references) {
             self::$reference_pool = array();
         }
-
         self::$recursion_depth++;
+
         if ($document instanceof Document) {
             self::$reference_pool[$document->getIdentifier()] = $document;
         }
+
+        $referenced_documents = array();
         $reference_fields = $document->getModule()->getFields(
             array(),
             array('Dat0r\Core\Field\ReferenceField')
         );
-
         foreach ($reference_fields as $reference_field) {
             $fieldname = $reference_field->getName();
             if (!isset($data[$fieldname])) {
@@ -44,6 +56,7 @@ class RelationManager
             }
             $referenced_documents[$fieldname] = self::getReferenceDocuments($reference_field, $field_data);
         }
+
         self::$recursion_depth--;
 
         return $referenced_documents;
