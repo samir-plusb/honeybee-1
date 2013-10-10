@@ -99,7 +99,8 @@ deploy-resources:
 #
 install: install-composer install-vendor install-node-deps cc
 
-	@make check-env
+	@bin/configure-env --init
+#	@make check-env
 	@make link-project-modules
 	@make link-project-app
 	@make config
@@ -108,7 +109,8 @@ install: install-composer install-vendor install-node-deps cc
 
 install-dev: install-composer install-vendor-dev install-node-deps
 
-	@make check-env
+	@bin/configure-env --init
+#	@make check-env
 	@make link-project-modules
 	@make link-project-app
 	@make config
