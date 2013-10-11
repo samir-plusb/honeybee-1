@@ -1,10 +1,12 @@
 <?php
 
 use Guzzle\Http\Client;
+use Guzzle\Common\Event;
+use Guzzle\Http\Message\Response;
 
 class Common_Service_LocalizeAction extends CommonBaseAction
 {
-    public function executeRead(AgaviRequestDataHolder $parameters) 
+    public function executeRead(AgaviRequestDataHolder $parameters)
     {
         $queryValues = array(
             'street' => $parameters->getParameter('street', FALSE),
