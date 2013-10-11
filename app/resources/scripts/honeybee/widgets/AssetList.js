@@ -543,6 +543,7 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
             evt.stopPropagation();
             evt.preventDefault();
             var files = evt.dataTransfer.files;
+
             if (0 < files.length)
             {
                 this.handleFiles(files);
@@ -690,7 +691,7 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
             {
                 if (evt.lengthComputable)
                 {
-                    that.fire('upload::progress', [ asset, (evt.loaded / evt.total) ]);                                                                                                
+                    that.fire('upload::progress', [ asset, (evt.loaded / evt.total) ]);
                 }
             }, false);
 
@@ -705,14 +706,11 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
         {
             img.src = result;
         }
-        else if (is_doc)
-        {
-            img.src = 'static/deploy/_global/binaries/pdficon_large.png';
-        }
         else if (is_audio)
         {
-            console.log("waaat?!");
             img.src = 'static/deploy/_global/binaries/audio.png';
+        } else {
+            img.src = 'static/deploy/_global/binaries/pdficon_large.png';
         }
     }
 });
