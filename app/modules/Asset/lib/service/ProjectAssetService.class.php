@@ -202,11 +202,14 @@ class ProjectAssetService implements IAssetService
      */
     public function delete($assetId)
     {
-        $assetFile = new AssetFile($assetId);
-        if ($this->assetDocStore->delete($assetId))
-        {
-            return $assetFile->delete();
+        if ($asset = $this->get($assetId)) {
+            $assetFile = new AssetFile($assetId);
+            if ($this->assetDocStore->delete($asset))
+            {
+                return $assetFile->delete();
+            }
         }
+        
         return FALSE;
     }
 
