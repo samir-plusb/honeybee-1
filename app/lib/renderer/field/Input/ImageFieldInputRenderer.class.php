@@ -48,6 +48,7 @@ class ImageFieldInputRenderer extends FieldInputRenderer
             'template' => isset($this->options['template']) ? $this->options['template'] : 'AssetList',
             'max' => isset($this->options['max_files']) ? (int)$this->options['max_files'] : 20,
             'allowed_types' => isset($this->options['allowed_types']) ? $this->options['allowed_types'] : array('image/png'),
+            'allowed_extensions' => isset($this->options['allowed_extensions']) ? $this->options['allowed_extensions'] : array('png', 'jpg', 'jpeg'),
             'aoi_url' => $routing->gen('common.service.detect_face'),
             'popover_pos' => isset($this->options['popover_pos']) ? $this->options['popover_pos'] : 'top'
         ));

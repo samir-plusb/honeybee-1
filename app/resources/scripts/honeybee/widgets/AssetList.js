@@ -103,7 +103,8 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
         this.uploader = new honeybee.widgets.AssetList.FileUploader({
             drop_target: this.element.find('.dropzone').first(),
             put_url: this.options.put_url,
-            allowed_types: this.options.allowed_types
+            allowed_types: this.options.allowed_types,
+            allowed_extensions: this.options.allowed_extensions
         });
 
         this.uploader.on('upload::start', function(asset)
@@ -481,6 +482,8 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
 
     allowed_types: null,
 
+    allowed_extensions: null,
+
     init: function(options)
     {
         this.parent();
@@ -489,6 +492,7 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
         this.enabled = true;
         this.put_url = options.put_url;
         this.allowed_types = options.allowed_types;
+        this.allowed_extensions = options.allowed_extensions;
         this.is_running = false;
         this.drop_target = $(options.drop_target);
         this.initDragEvents();
@@ -553,8 +557,26 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
         for (i = 0; i < files.length; i++)
         {
             var file = files[i];
-            var is_allowed = (-1 !== this.allowed_types.indexOf(file.type));
+            var is_allowed = false;
 
+            var name_parts = file.name.split('.');
+            var extension = null;
+            if(name_parts.length > 1)
+            {
+                extension = name_parts.pop().toLowerCase();
+                if (extension.length === 0)
+                {
+                    extension = null;
+                }
+                else
+                {
+                    is_allowed = (-1 !== this.allowed_extensions.indexOf(extension));
+                }
+            }
+            if (!is_allowed)
+            {
+                is_allowed = (-1 !== this.allowed_types.indexOf(file.type));
+            }
             if (is_allowed)
             {
                 this.queue.push(file);
@@ -622,12 +644,6 @@ honeybee.widgets.AssetList.FileUploader = honeybee.core.BaseObject.extend({
         var is_image = (-1 !== this.supported_image_types.indexOf(file.type));
         var is_doc = (-1 !== this.supported_doc_types.indexOf(file.type));
         var is_audio = (-1 !== this.supported_audio_types.indexOf(file.type));
-        if (-1 === this.allowed_types.indexOf(file.type))
-        {
-            alert("File type not supported and should not have landed in the queue in the first place.");
-            return;
-        }
-
         var img = new Image;
 
         img.onload = function()
