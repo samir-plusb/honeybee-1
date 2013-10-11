@@ -12,16 +12,15 @@ class GenericExport implements IExport
 
     private $description;
 
-    private $settings;
+    protected $settings;
 
     protected $storage;
 
     protected $filters;
 
-    public function __construct(Config\ArrayConfig $settings, IStorage $storage, $name, $description)
+    public function __construct(Config\ArrayConfig $settings, $name, $description)
     {
         $this->settings = $settings;
-        $this->storage = $storage;
         $this->name = $name;
         $this->description = $description;
     }
@@ -60,6 +59,11 @@ class GenericExport implements IExport
     public function getSettings()
     {
         return $this->settings;
+    }
+
+    public function setStorage(IStorage $storage)
+    {
+        $this->storage = $storage;
     }
 
     public function getStorage()

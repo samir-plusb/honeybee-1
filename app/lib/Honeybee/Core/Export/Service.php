@@ -74,30 +74,34 @@ class Service implements IService
         $implementor = $params['class'];
         $description = $params['description'];
         $settings = new Config\ArrayConfig($params['settings']);
-        $storage_def = $settings->get('storage');
-        $database = null;
-        if (isset($storage_def['connection']))
+        $export = new $implementor($settings, $name, $description);
+
+        if (($storage_def = $settings->get('storage', false)))
         {
-            $database = \AgaviContext::getInstance()->getDatabaseManager()->getDatabase($storage_def['connection']);
+            $database = null;
+            if (isset($storage_def['connection']))
+            {
+                $database = \AgaviContext::getInstance()->getDatabaseManager()->getDatabase($storage_def['connection']);
+            }
+
+            $storage = null;
+            $storage_class = $storage_def['implementor'];
+            if ($database)
+            {
+                $storage = new $storage_class($database);
+            }
+            else
+            {
+                $storage = new $storage_class(
+                    new Config\ArrayConfig(
+                        isset($storage_def['options']) ? $storage_def['options'] : array()
+                    )
+                );
+            }
+            $export->setStorage($storage);
         }
 
-        $storage = null;
-        if ($database)
-        {
-            $storage = new $storage_def['implementor']($database);
-        }
-        else
-        {
-            $storage = new $storage_def['implementor'](
-                new Config\ArrayConfig(
-                    isset($storage_def['options']) ? $storage_def['options'] : array()
-                )
-            );
-        }
-
-        $export = new $implementor($settings, $storage, $name, $description);
         $filters = new Filter\FilterList();
-
         foreach ($params['filters'] as $filterName => $filterParams)
         {
             $filters->add(
@@ -107,7 +111,6 @@ class Service implements IService
                 )
             );
         }
-
         $export->setFilters($filters);
 
         return $export;
