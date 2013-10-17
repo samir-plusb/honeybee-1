@@ -38,7 +38,7 @@
         "zendframework/zend-permissions-acl": "2.2.0",
         "guzzle/guzzle": "~3.1",
         "swiftmailer/swiftmailer": "v4.3.1",
-        "twig/twig": "1.*",
+        "twig/twig": "1.13.2",
         "craur/craur": "1.6.*",
         "imagine/Imagine": "0.3.*",
         "jquery/jquery": "1.8.2",
