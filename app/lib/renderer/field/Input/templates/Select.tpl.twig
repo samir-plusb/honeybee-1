@@ -12,7 +12,11 @@
             {% if multiple == true %}multiple="multiple"{% endif %}>
             <option value=""></option>
             {% for option, label in select_options %}
-            <option {% if option == fieldValue %} selected="selected" {% endif %} value="{{ option }}">{{ label }}</option>
+            <option
+                {% if option == fieldValue %} selected="selected" {% endif %}
+                {% if option in disabled_options %} disabled="disabled" {% endif %}
+                value="{{ option }}">{{ label }}
+            </option>
             {% endfor %}
         </select>
         {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}

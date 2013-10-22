@@ -8,6 +8,7 @@ class SelectFieldInputRenderer extends FieldInputRenderer
     {
         $payload = parent::getPayload($document);
         $payload['select_options'] = $this->getSelectionOptions($document);
+        $payload['disabled_options'] = array();
         $payload['multiple'] = $this->getField()->getOption('multiple', false);
 
         return $payload;
