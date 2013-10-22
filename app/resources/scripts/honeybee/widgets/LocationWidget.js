@@ -80,9 +80,8 @@ honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
         fields_section.find('input, textarea').each(function(idx, input)
         {
             input = $(input);
-            location[input.attr('id').replace(/input\-/, '')] = input.val();
+            location[input.attr('name').match(/\[([\w\d\-_]+)\](?!\[)/)[1]] = input.val();
         });
-
         var ready_callback = function()
         {
             that.registerDisplayedTextInputs(aggregate_element);

@@ -67,7 +67,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     registerDisplayedTextInputs: function(aggregate)
     {
-        var first_input = aggregate.find('input').first();
+        var first_input = aggregate.find('input:visible').first();
         var that = this;
         first_input.change(function()
         {
@@ -122,7 +122,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
         if (focus)
         {
-            var first_input = list_item.find('input').first();
+            var first_input = list_item.find('input:visible').first();
             $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350, function()
             {
                 first_input.focus();
@@ -201,7 +201,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             if (item.hasClass('collapsed'))
             {
                 item.removeClass('collapsed');
-                var first_input = item.find('input').first();
+                var first_input = item.find('input:visible').first();
                 first_input.focus();
                 $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350, function()
                 {

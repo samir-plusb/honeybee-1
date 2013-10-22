@@ -9,21 +9,21 @@
     <div class="map-canvas" style="height: 100%; position: absolute; left: 0; top: 0px; right: 0;"></div>
 </div>
 
-<div class="control-group">
+<div class="control-group field-wrapper-name">
     <label class="control-label">Name</label>
     <div class="controls">
         <input type="text" class="span11"
             data-bind="value: location.name, attr: { name: fieldname() + '[name]' }, disable: options.readonly" />
     </div>
 </div>
-<div class="control-group">
+<div class="control-group field-wrapper-detail">
     <label class="control-label">Zus&auml;tzliche Bezeichnung</label>
     <div class="controls">
         <input type="text" class="span11"
             data-bind="value: location.name_detail, attr: { name: fieldname() + '[name_detail]' }, disable: options.readonly" />
     </div>
 </div>
-<div class="control-group">
+<div class="control-group field-wrapper-street">
     <label class="control-label">Straße, Hnr.</label>
     <div class="controls">
         <input type="text" class="span8"
@@ -32,21 +32,21 @@
             data-bind="value: location.housenumber, attr: { name: fieldname() + '[housenumber]' }, disable: options.readonly" />
     </div>
 </div>
-<div class="control-group">
+<div class="control-group field-wrapper-zipcode">
     <label class="control-label">PLZ</label>
     <div class="controls">
         <input type="text" class="span11"
             data-bind="value: location.zipcode, attr: { name: fieldname() + '[zipcode]' }, disable: options.readonly" />
     </div>
 </div>
-<div class="control-group">
+<div class="control-group field-wrapper-city">
     <label class="control-label">Stadt</label>
     <div class="controls">
         <input type="text" class="span11"
             data-bind="value: location.city, attr: { name: fieldname() + '[city]' }, disable: options.readonly" />
     </div>
 </div>
-<div class="control-group">
+<div class="control-group field-wrapper-description">
     <label class="control-label">Beschreibung</label>
     <div class="controls">
         <textarea type="text" class="span11"

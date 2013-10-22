@@ -1311,6 +1311,7 @@ div.select2-container-multi .select2-choices .select2-search-field
 .aggregates-list .aggregate .input-group-label
 {
   cursor: pointer;
+  min-height: 43px;
 }
 
 .aggregates-list .aggregate .field-group
