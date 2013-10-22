@@ -387,7 +387,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         $.ajax({
             url: this.options.saveCompleteTreeUrl,
             type: 'POST',
-            data: { 
+            data: {
                 // :INFO: we are sending the tree as a string due to:
                 // http://php.net/manual/en/info.configuration.php#ini.max-input-vars
                 structure: JSON.stringify(this.tree)
@@ -403,6 +403,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
                     type: 'success',
                     message: 'Gespeichert'
                 });
+                that.tree.revision = response.data.revision;
             }
             else
             {
