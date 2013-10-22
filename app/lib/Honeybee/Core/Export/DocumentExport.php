@@ -42,7 +42,7 @@ class DocumentExport extends GenericExport
         $data['type'] = $document->getModule()->getOption('prefix');
         $data[self::PUBLISHED_AT_FIELD] = $metaData[self::PUBLISHED_AT_FIELD];
 
-        if ($prev_data = $this->storage->read($export_identifier))
+        if ($this->storage && $prev_data = $this->storage->read($export_identifier))
         {
             $data['revision'] = $prev_data['revision'];
         }
