@@ -10,7 +10,6 @@ honeybee.list.WorkflowHandler = honeybee.core.BaseObject.extend({
     {
         this.parent();
         this.urls = urls || {};
-        this.logInfo(module_prefix);
         this.module_prefix = module_prefix;
     },
 
