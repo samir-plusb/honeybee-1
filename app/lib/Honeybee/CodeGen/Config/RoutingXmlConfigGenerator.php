@@ -44,9 +44,9 @@ class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
         $moduleDefinition = str_replace('/', DIRECTORY_SEPARATOR,
              \AgaviConfig::get('core.modules_dir').'/'.$moduleName.'/config/dat0r/module.xml'
         );
-
+        $modulePrefix = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $moduleName));
         $moduleRoute = $document->createElement('route');
-        $moduleRoute->setAttribute('pattern', "^" . strtolower($moduleName) . ".");
+        $moduleRoute->setAttribute('pattern', "^" . $modulePrefix . ".");
         $moduleRoute->setAttribute('module', $moduleName);
 
         if (file_exists($moduleDefinition))
@@ -87,9 +87,10 @@ class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
              \AgaviConfig::get('core.modules_dir').'/'.$moduleName.'/config/dat0r/module.xml'
         );
 
+        $modulePrefix = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $moduleName));
         $moduleRoute = $document->createElement('route');
-        $moduleRoute->setAttribute('name', strtolower($moduleName));
-        $moduleRoute->setAttribute('pattern', '^/' . strtolower($moduleName));
+        $moduleRoute->setAttribute('name', $modulePrefix);
+        $moduleRoute->setAttribute('pattern', '^/' . $modulePrefix);
         $moduleRoute->setAttribute('module', $moduleName);
 
         if (file_exists($moduleDefinition))

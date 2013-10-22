@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="Honeybee" basedir="." default="cc">
-    <!-- 
+    <!--
         project property definitions
     -->
     <property name="project.directory" value="${application.startdir}" />
@@ -12,7 +12,7 @@
 
 	<taskdef name="run" classname="HoneybeeRunTask" classpath="${project.directory.etc}/build/tasks"/>
 
-    <!-- 
+    <!--
         Custom module wizward target that builds full stack honeybee modules along with 
         framework boilerplate and default implementations.
     -->
@@ -30,7 +30,8 @@
             </then>
         </if>
         <!-- @todo need a real impl for building module prefixes -->
-        <php expression="strtolower('${module.name}')" returnProperty="module.prefix"/>
+        <php expression="strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', '${module.name}'))" returnProperty="module.prefix"/>
+
         <property userProperty="true" name="module.directory" value="${project.codegen.target}/${module.name}" override="true" />
         <agavi.check-module property="module.available" path="${module.directory}" />
         <fail if="module.available" message="Module ${module.name} already exists at ${module.directory}" />
@@ -130,7 +131,7 @@
                 </replacetokens>
             </filterchain>
         </copy>
-        <copy toDir="${module.directory}/${module.directory.resources}/scripts/" 
+        <copy toDir="${module.directory}/${module.directory.resources}/scripts/"
               file="${template.path}/scripts/.index">
             <filterchain>
                 <replacetokens begintoken="%%" endtoken="%%">
