@@ -36,6 +36,7 @@ class ImageFieldInputRenderer extends FieldInputRenderer
                 'height' => isset($size[0]) ? $size[1] : '',
                 'mimeType' => $asset->getMimeType(),
                 'size' => $asset->getSize(),
+                'meta_data' => $metaData
             );
         }
 

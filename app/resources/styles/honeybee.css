@@ -478,12 +478,14 @@ input.typeahead
 * AssetList Widget
 */
 
-.widget-asset-list
+.widget-asset-list,
+.widget-file-widget
 {
   overflow: hidden;
 }
 
-.widget-asset-list .asset-list
+.widget-asset-list .asset-list,
+.widget-file-widget .asset-list
 {
   list-style: none;
   margin: 0;
@@ -492,7 +494,8 @@ input.typeahead
   float: left;
 }
 
-.widget-asset-list .asset-item
+.widget-asset-list .asset-item,
+.widget-file-widget .asset-item
 {
   float: left;
   width: 140px;
@@ -540,12 +543,13 @@ input.typeahead
   margin-left: 10px;
 }
 
-.widget-asset-list .image-buttons li:first-child
+.widget-asset-list .image-buttons li:first-child,
 {
   margin-left: 0px;
 }
 
-.widget-asset-list .asset-item h5
+.widget-asset-list .asset-item h5,
+.widget-file-widget .asset-item h5
 {
   height: 20px;
   overflow: hidden;
@@ -554,14 +558,17 @@ input.typeahead
   vertical-align: middle;
 }
 
-.widget-asset-list li.sortable-placeholder {
+.widget-asset-list li.sortable-placeholder,
+.widget-file-widget li.sortable-placeholder
+{
     background: none repeat scroll 0 0 transparent;
     border: 1px dashed #CCCCCC;
     height:120px;
     width:160px;
 }
 
-.widget-asset-list .dropzone
+.widget-asset-list .dropzone,
+.widget-file-widget .dropzone
 {
   border: 4px dashed #ababab;
   border-radius: 4px;
@@ -572,7 +579,8 @@ input.typeahead
   margin-bottom: 20px;
 }
 
-.widget-asset-list .dropzone p
+.widget-asset-list .dropzone p,
+.widget-file-widget .dropzone p
 {
   color: #ababab;
   font-weight: bold;
@@ -581,7 +589,8 @@ input.typeahead
   text-align: center;
 }
 
-.drag-enabled .widget-asset-list .dropzone
+.drag-enabled .widget-asset-list .dropzone,
+.drag-enabled .widget-file-widget .dropzone
 {
   border-color: rgba(82, 168, 236, 0.6);
 }
@@ -606,12 +615,13 @@ input.typeahead
 {
   display: none; 
   width: 70em; 
-  left: 29.5%;
+  left: 40em;
+  max-height: 400px;
 }
 
 .modal-edit-asset .modal-body
 {
-  max-height: 550px;
+  max-height: 300px;
 }
 
 .modal-edit-asset .input-field
@@ -626,18 +636,18 @@ input.typeahead
 
 
 /* simple-asset widget styling */
-.widget-asset-list .simple-assets-tpl
+.widget-file-widget .simple-assets-tpl
 {
   margin-bottom: 20px;
 }
 
-.widget-asset-list .simple-assets-tpl .dropzone
+.widget-file-widget .simple-assets-tpl .dropzone
 {
     float: none;
     margin-left: 0px;
 }
 
-.widget-asset-list .simple-assets-tpl .edit-trigger
+.widget-file-widget .simple-assets-tpl .edit-trigger
 {
   position: absolute;
   top: 12px;

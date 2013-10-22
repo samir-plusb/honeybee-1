@@ -327,6 +327,8 @@ honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
 
     name: null,
 
+    meta_data: null,
+
     caption: null,
 
     size: null,
@@ -457,6 +459,7 @@ honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
         this.y = ko.observable(
             Math.floor((cell_height - height) / 2)
         );
+        this.meta_data = data.meta_data || data.metaData || {};
     }
 });
 

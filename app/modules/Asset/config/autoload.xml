@@ -32,6 +32,8 @@
             <autoload name="IDataObject">%core.module_dir%/Asset/lib/data_object/IDataObject.iface.php</autoload>
             <autoload name="IDocument">%core.module_dir%/Asset/lib/data_object/IDocument.iface.php</autoload>
             <autoload name="IDocumentStore">%core.module_dir%/Asset/lib/data_object/IDocumentStore.iface.php</autoload>
+
+            <autoload name="FileMetaDataReader">%core.module_dir%/Asset/lib/service/FileMetaDataReader.class.php</autoload>
         </autoloads>
     </ae:configuration>
 </ae:configurations>

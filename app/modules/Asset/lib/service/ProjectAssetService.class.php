@@ -1,5 +1,6 @@
 <?php
 
+use Honeybee\Core\Config\ArrayConfig;
 
 /**
  * The ProjectAssetService is a concrete implementation of the IAssetService interface.
@@ -184,14 +185,28 @@ class ProjectAssetService implements IAssetService
     {
         $assetFile = new AssetFile($this->idSequence->nextId());
         $assetFile->move($assetUri, $moveOrigin);
+
+        // extract meta data
+        $reader = new FileMetaDataReader(
+            new ArrayConfig(
+                array('apache_tika_jarfile' => realpath(AgaviConfig::get('core.apache_tika')))
+            )
+        );
+        $extractedMetaData = $reader->read($assetFile->getPath());
+        $metaData = array_merge($metaData, array_filter($extractedMetaData));
+
+
         $assetData = $this->buildAssetInfoData($assetFile, $assetUri, $metaData);
         $assetDocument = ProjectAssetInfo::fromArray($assetData);
+
+error_log(print_r($extractedMetaData, true));
 
         if (! $this->assetDocStore->save($assetDocument))
         {
             $assetFile->delete();
             throw new Exception("Unable to store asset meta data for asset: " . $assetFile->getId());
         }
+
         return $assetDocument;
     }
 
