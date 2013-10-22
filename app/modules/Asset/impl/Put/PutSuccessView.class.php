@@ -32,6 +32,7 @@ class Asset_Put_PutSuccessView extends AssetBaseView
         $asset = $this->getAttribute('asset_info');
         $routing = $this->getContext()->getRouting();
         $data = $asset->toArray();
+        ksort($data['metaData']);
         $data['url'] = $routing->gen('asset.thumbnail', array('aid' => $asset->getIdentifier()));
         $this->getResponse()->setContent(json_encode(array(
             'state' => 'ok',
