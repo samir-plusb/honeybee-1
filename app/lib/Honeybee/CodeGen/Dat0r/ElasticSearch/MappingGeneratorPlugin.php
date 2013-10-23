@@ -21,6 +21,9 @@ class MappingGeneratorPlugin
         'reference' => 'object',
         'key-value' => 'object',
         'integer-collection' => 'integer',
+        'text-collection' => 'string',
+        'select' => 'string',
+        'email' => 'string',
         'boolean' => 'boolean'
     );
 
@@ -89,6 +92,26 @@ class MappingGeneratorPlugin
         file_put_contents($deployPath, $jsonString);
 
         $this->schema = null;
+    }
+
+    protected function mapEmail($fieldName, $field, $moduleDefinition)
+    {
+        return $this->mapText($fieldName, $field, $moduleDefinition);
+    }
+
+    protected function mapSelect($fieldName, $field, $moduleDefinition)
+    {
+        // @todo if multiple then, return $this->mapTextCollection ...
+        return $this->mapText($fieldName, $field, $moduleDefinition);
+    }
+
+    protected function mapTextCollection($fieldName, $field, $moduleDefinition)
+    {
+        $mapping = $this->mapText($fieldName, $field, $moduleDefinition);
+        unset($mapping['fields']['sort']);
+        unset($mapping['fields']['suggest']);
+
+        return $mapping;
     }
 
     protected function mapText($fieldName, $field, $moduleDefinition)
