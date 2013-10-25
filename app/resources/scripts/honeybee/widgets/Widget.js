@@ -16,6 +16,12 @@ honeybee.widgets.Widget = honeybee.core.BaseObject.extend({
         // basic member initialization
         this.element = element;
         this.options = $.extend(true, {}, options);
+
+        var parent_aggregate = this.element.parents('.aggregate');
+        if (parent_aggregate.length === 1 && options.field_id) {
+            this.options.field_id += Math.random().toString(36).substring(7);
+        }
+
         // render the widget
         var tpl = this.getTemplate();
         var that = this;
