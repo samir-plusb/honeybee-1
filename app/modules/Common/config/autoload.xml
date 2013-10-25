@@ -28,6 +28,7 @@
             <autoload name="DefaultListValueRenderer">%core.module_dir%/Common/lib/renderer/DefaultListValueRenderer.class.php</autoload>
             <autoload name="AggregateListRenderer">%core.module_dir%/Common/lib/renderer/AggregateListRenderer.class.php</autoload>
             <autoload name="ReferenceListValueRenderer">%core.module_dir%/Common/lib/renderer/ReferenceListValueRenderer.class.php</autoload>
+            <autoload name="BooleanListValueRenderer">%core.module_dir%/Common/lib/renderer/BooleanListValueRenderer.class.php</autoload>
         </autoloads>
     </ae:configuration>
 </ae:configurations>
