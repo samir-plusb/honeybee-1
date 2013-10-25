@@ -89,7 +89,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         });
 
         var text = first_input.val();
-        if (text.length > 0)
+        if (text && text.length > 0)
         {
             var short_text = text.substr(0, 40);
             if (short_text.length < text.length)
