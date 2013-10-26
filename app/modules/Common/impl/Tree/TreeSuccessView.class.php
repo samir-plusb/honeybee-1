@@ -26,14 +26,15 @@ class Common_Tree_TreeSuccessView extends CommonBaseView
         {
             $listParams = array(
                 'referenceField' => $parameters->getParameter('referenceField'),
-                'referenceModule' => $parameters->getParameter('referenceModule')
+                'referenceModule' => $parameters->getParameter('referenceModule'),
+                'referenceFieldId' => $parameters->getParameter('referenceFieldId')
             );
         }
 
         $routing = $this->getContext()->getRouting();
 
         $this->setAttribute('list_view_link', $routing->gen($treeConfig->getTypeKey() . '.list', $listParams));
-        $this->setAttribute('tree_view_link', $routing->gen($treeConfig->getTypeKey() . '.tree'));
+        $this->setAttribute('tree_view_link', $routing->gen($treeConfig->getTypeKey() . '.tree'), $listParams);
 
         $clientSideOptions = $treeConfig->getClientSideController();
         $clientSideOptions['options'] = isset($clientSideOptions['options']) ? $clientSideOptions['options'] : array();

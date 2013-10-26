@@ -74,9 +74,10 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
 
         window.top.postMessage(
             JSON.stringify({
-                'event_type': 'list-loaded', 
+                'event_type': 'list-loaded',
                 'source_type': this.type_key,
-                'reference_field': this.options.reference_field
+                'reference_field': this.options.reference_field,
+                'reference_field_id': this.options.reference_field_id
             }),
             that.options.event_origin
         );
@@ -117,7 +118,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
                 that.proceed(false, documentData, gate, confirm_text);
             });
             element.find('.honeybee-action-edit').bind('click', function(ev){
-                that.run(false, documentData); 
+                that.run(false, documentData);
             });
         });
     },

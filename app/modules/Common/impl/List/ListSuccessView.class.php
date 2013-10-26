@@ -70,8 +70,13 @@ class Common_List_ListSuccessView extends CommonBaseView
         $treeParams = array();
         if ($listState->isInSelectOnlyMode())
         {
-            $treeParams = array('referenceField' => $referenceField, 'referenceModule' => $referenceModule);
+            $treeParams = array(
+                'referenceField' => $referenceField,
+                'referenceModule' => $referenceModule,
+                'referenceFieldId' => $referenceFieldId
+            );
         }
+
         $this->setAttribute('tree_view_link', $routing->gen($modulePrefix . '.tree', $treeParams));
 
         $module = $this->getAttribute('module');

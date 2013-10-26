@@ -21,6 +21,7 @@ class TreeAction extends BaseAction
 
             $this->setAttribute('referenceModule', $referenceModule);
             $this->setAttribute('referenceField', $referenceField);
+            $this->setAttribute('referenceFieldId',  $requestData->getParameter('referenceFieldId'));
         }
 
         $tree = $module->getService('tree')->get('tree-default');
@@ -117,6 +118,7 @@ class TreeAction extends BaseAction
                 if ('\\' . get_class($this->getModule()) === $reference[ReferenceField::OPT_MODULE])
                 {
                     $treeSettings['clientSideController']['options']['reference_field'] = $referenceField->getName();
+                    $treeSettings['clientSideController']['options']['reference_field_id'] = $this->getAttribute('referenceFieldId');
                     $treeSettings['clientSideController']['options']['select_only_mode'] = TRUE;
                     $treeSettings['clientSideController']['options']['reference_module'] = $referenceModule->getName();
                     $treeSettings['clientSideController']['options']['reference_settings'] = array(

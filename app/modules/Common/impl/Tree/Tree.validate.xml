@@ -23,6 +23,12 @@
                     <argument>referenceField</argument>
                 </arguments>
             </validator>
+
+            <validator class="string" name="invalid_reference_field_id" required="false">
+                <arguments>
+                    <argument>referenceFieldId</argument>
+                </arguments>
+            </validator>
         </validators>
     </ae:configuration>
 </ae:configurations>
