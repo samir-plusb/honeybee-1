@@ -107,6 +107,7 @@ class TreeAction extends BaseAction
 
         $treeSettings['clientSideController']['options']['module'] = $this->getModule()->getOption('prefix');
         $treeSettings['clientSideController']['options']['event_origin'] = $routing->getBaseHref();
+        $treeSettings['clientSideController']['options']['module_prefix'] = $this->getModule()->getOption('prefix');
 
         if ($this->hasAttribute('referenceField'))
         {

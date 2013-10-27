@@ -30,6 +30,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         this.bindActions();
 
         this.workflow_handler = new honeybee.list.WorkflowHandler(
+            this.options.module_prefix,
             this.options.workflow_urls || {}
         );
 
