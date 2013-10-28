@@ -143,7 +143,6 @@ class TextExcerptFilter extends BaseFilter
         if ($maxCharacters) // cut to maximum number of characters
         {
             $excerpt = $this->extractCharacters($excerpt, $settings);
-
             if ($onlyFullSentences)
             {
                 $excerpt = $this->extractSentences($excerpt, $settings);
@@ -182,19 +181,28 @@ class TextExcerptFilter extends BaseFilter
         $maxSentences = isset($settings['sentences']) ? $settings['sentences'] : 0;
 
         // remove sentences that should be skipped
-        $regex = '!^((?:.*?[\.\!\?](?= )){' . $skip . '})!sm';
+        $regex = '!^((?:.*?[\.\!\?](?=\s+)){' . $skip . '})!sm';
         $text = preg_replace($regex, '', $text);
         // get number of sentences that we need
-        $regex = '!^((?:.*?[\.\!\?](?= )){' . $maxSentences . '})!sm';
+        $regex = '~^((?:.*?[\.\!\?](?= )){' . $maxSentences . '})~sm';
+
         if (preg_match_all($regex, $text, $matches))
         {
             $text = $matches[0][0];
         }
         else
         {
+            // First remove unwanted spaces - not needed really
+            $text = str_replace(" .",".",$text);
+            $text = str_replace(" ?","?",$text);
+            $text = str_replace(" !","!",$text);
+            // Find periods, exclamation- or questionmarks with a word before but not after.
+            // Perfect if you only need/want to return the first sentence of a paragraph.
+            preg_match('/^.*[^\s](\.|\?|\!)/', $text, $matches);
+            $text = $matches[0];
             // fallback, probably not necessary as there are no sentences left anyways...
-            $text = implode('. ', array_slice(explode('.', $text), $skip, $maxSentences)) . '.';
-            $text = preg_replace('#\s\s+#', ' ', $text);
+            //$text = implode('. ', array_slice(explode('.', $text), $skip, $maxSentences)) . '.';
+            //$text = preg_replace('#\s\s+#', ' ', $text);
         }
 
         return $text;
