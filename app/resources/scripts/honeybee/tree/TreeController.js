@@ -82,6 +82,16 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
             }),
             that.options.event_origin
         );
+
+        if (this.options.errors && this.options.errors.length > 0) {
+            for (var i = 0; i < this.options.errors.length; i++) {
+                console.log(this.options.errors[i]);
+                this.addAlert({
+                    type: 'error',
+                    message: this.options.errors[i]
+                });
+            }
+        }
     },
 
     initKnockoutProperties: function()

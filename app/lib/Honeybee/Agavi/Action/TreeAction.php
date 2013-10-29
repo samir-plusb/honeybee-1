@@ -131,6 +131,12 @@ class TreeAction extends BaseAction
             }
         }
 
+        $user = $this->getContext()->getUser();
+        if ($user->hasAttribute('last_errors', "honeybee.workflow.errors")) {
+            $treeSettings['clientSideController']['options']['errors'] = $user->getAttribute('last_errors', "honeybee.workflow.errors");
+            $user->removeAttribute('last_errors', "honeybee.workflow.errors");
+        }
+
         return $treeSettings;
     }
 

@@ -88,6 +88,16 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             }),
             this.options.event_origin
         );
+
+        if (this.options.errors && this.options.errors.length > 0) {
+            for (var i = 0; i < this.options.errors.length; i++) {
+                console.log(this.options.errors[i]);
+                this.viewmodel.addAlert({
+                    type: 'error',
+                    message: this.options.errors[i]
+                });
+            }
+        }
     },
 
     reloadList: function(parameters)
@@ -302,7 +312,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         }).on('error', function(err)
         {
             has_errors = true;
-            // console.log("noes batch item failed.", err);
+            console.log("noes batch item failed.", err);
         }).on('complete', function()
         {
             if (has_errors)

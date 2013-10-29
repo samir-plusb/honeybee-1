@@ -29,8 +29,11 @@ class PublishPlugin extends BasePlugin
                 )
             );
 
+            $user = \AgaviContext::getInstance()->getUser();
+            $user->setAttribute('last_errors', array($e->getMessage()), "honeybee.workflow.errors");
+
             $result = new Plugin\Result();
-            $result->setState(Plugin\Result::STATE_EXPECT_INPUT);
+            $result->setState(Plugin\Result::STATE_OK);
             $result->setMessage($e->getMessage());
             $result->setGate($this->getParameter('error_gate', 'demote'));
         }

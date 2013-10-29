@@ -26,6 +26,8 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
 
     actionCountMap: null,
 
+    alerts: null,
+
     init: function(controller, list_data)
     {
         this.parent();
@@ -36,6 +38,7 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
         this.dont_toggle = false; // helper to prevent toggle recursion.
         this.selected_items = ko.observableArray([]);
         this.list_items = ko.observableArray();
+        this.alerts = ko.observableArray([]);
         this.all_selected = ko.observable(false);
         this.all_selected.subscribe(this.toggleAllItemsSelection.bind(this));
         this.actionCountMap = {};
@@ -221,6 +224,55 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
         else
         {
             this.select_all_toggle.removeClass('hb-icon-checkmark').addClass('hb-icon-checkmark-2');
+        }
+    },
+
+    addAlert: function(alert)
+    {
+        console.log(alert);
+        var that = this;
+        this.alerts.push(alert);
+        setTimeout(function()
+        {
+            if (-1 !== that.alerts.indexOf(alert)) // if alert is still there.
+            {
+                that.removeAlert(alert);
+            }
+        }, 10000);
+    },
+
+    removeAlert: function(alert)
+    {
+        this.alerts.remove(alert);
+    },
+
+    showAlert: function(elem, idx, alert)
+    {
+        var that = this;
+        if (elem.nodeType === 1)
+        {
+            $(elem).animate({
+               opacity: 1
+            }, { duration: 600, queue: false });
+            $(elem).animate({
+               'margin-top': '0px'
+            }, { duration: 400, queue: false });
+        }
+    },
+
+    hideAlert: function(elem, idx, alert)
+    {
+        if (elem.nodeType === 1)
+        {
+            $(elem).animate({
+               opacity: 0
+            }, { duration: 300, queue: false });
+            $(elem).animate({
+               'margin-top': '-55px'
+            }, { duration: 600, queue: false, complete: function()
+            {
+                $(elem).remove();
+            } });
         }
     }
 });

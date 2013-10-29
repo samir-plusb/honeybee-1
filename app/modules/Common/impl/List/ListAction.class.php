@@ -61,6 +61,12 @@ class Common_ListAction extends CommonBaseAction
         );
         $clientSideOptions['options']['select_only_mode'] = $listState->isInSelectOnlyMode();
 
+        $user = $this->getContext()->getUser();
+        if ($user->hasAttribute('last_errors', "honeybee.workflow.errors")) {
+            $clientSideOptions['options']['errors'] = $user->getAttribute('last_errors', "honeybee.workflow.errors");
+            $user->removeAttribute('last_errors', "honeybee.workflow.errors");
+        }
+
         $this->setAttribute('client_side_controller', $clientSideOptions);
         $this->setAttribute('list_route', $listConfig->getRouteName());
         $this->setAttribute('translation_domain', $listConfig->getTranslationDomain());

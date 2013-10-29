@@ -3,6 +3,22 @@
     data-controller="{{client_side_controller.implementor}}"
     data-controller-options="{{client_side_controller.options|json_encode}}">
 
+{#
+    controller notifications (optional section for displaying alerts that are added to the controller) 
+#}
+    <section class="container-alerts"
+         data-bind="template: { foreach: alerts, afterAdd: showAlert, beforeRemove: hideAlert }">
+        <div class="alert"
+             data-bind="css: {
+                            'alert-success': 'success' === type,
+                            'alert-error': 'error' === type
+                        }">
+            <strong data-bind="text: message"></strong>
+            <i class="hb-icon-cancel close"
+               data-bind="click: function(alert) { $parent.removeAlert(alert); }"> </i>
+        </div>
+    </section>
+
 <!-- **************************************************
     List Controls/Widgets such as search and batch processing.
 ************************************************** -->
