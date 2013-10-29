@@ -64,11 +64,13 @@ class DocumentRepository extends BaseRepository
         if ($document instanceof Document)
         {
             $document->checkMandatoryFields();
+
             $document->onBeforeWrite();
             $data = $document->toArray();
             $data['type'] = get_class($document);
             $revision = $this->getStorage()->write($data);
             $document->setRevision($revision);
+            $document->onAfterWrite();
         }
         else
         {

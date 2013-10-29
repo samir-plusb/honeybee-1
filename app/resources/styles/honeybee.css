@@ -540,7 +540,7 @@ input.typeahead
 .widget-asset-list .image-buttons li
 {
   float: left;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .widget-asset-list .image-buttons li:first-child,

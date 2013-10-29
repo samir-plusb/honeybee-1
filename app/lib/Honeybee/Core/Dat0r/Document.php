@@ -95,6 +95,10 @@ abstract class Document extends BaseDocument implements IResource
         $this->setSlug($this->buildSlug());
     }
 
+    public function onAfterWrite()
+    {
+    }
+
     protected function hydrate(array $values = array(), $applyDefaults = FALSE)
     {
         parent::hydrate($values, $applyDefaults);
