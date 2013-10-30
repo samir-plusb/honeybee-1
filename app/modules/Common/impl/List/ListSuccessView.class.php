@@ -38,6 +38,12 @@ class Common_List_ListSuccessView extends CommonBaseView
             $defaultParams['referenceModule'] = $referenceModule;
             $defaultParams['referenceField'] = $referenceField;
             $defaultParams['referenceFieldId'] = $referenceFieldId;
+
+            $this->setAttribute('reference_params', array(
+                'referenceModule' => $referenceModule,
+                'referenceField' => $referenceField,
+                'referenceFieldId' => $referenceFieldId
+            ));
         }
 
         $searchWidgetOpts = array(

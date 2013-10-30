@@ -183,6 +183,14 @@
                             'filter': routing_data_filter
                         }%}
 
+                        {% if reference_params %}
+                            {% set routing_data = routing_data|merge({
+                                'referenceModule': reference_params.referenceModule,
+                                'referenceField': reference_params.referenceField,
+                                'referenceFieldId': reference_params.referenceFieldId
+                            }) %}
+                        {% endif %}
+
                         {% if field.hasSortField %}
                             <th class="data-header sortable {% if sorting_active %} sorted {{sortDirection}} {% endif %}">
                                 <a href="{{ro.gen(list_route, routing_data)|raw}}">
