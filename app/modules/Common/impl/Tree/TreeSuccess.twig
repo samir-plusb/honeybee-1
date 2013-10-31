@@ -96,12 +96,12 @@
         {% if false == select_only_mode %}
         <div class="container-actions clearfix">
             {% if create_link %}
-            <section>
+            <section class="edit-controls">
                 <a class="btn hb-icon-file-4" href="{{ro.gen(module_type_key ~ '.edit')}}"> Neuer Eintrag</a>
             </section>
             {% endif %}
             {% if false == readonly %}
-            <section>
+            <section class="batch-controls">
                 <div class="btn-group">
                     <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#">
                         Stapelverarbeitung
