@@ -2,37 +2,39 @@
 
 namespace Honeybee\Agavi\Action;
 
+use Honeybee\Core\Finder\ElasticSearch;
+use Elastica;
+
 class SuggestAction extends BaseAction
 {
-    public function executeRead(\AgaviRequestDataHolder $requestData)
+    public function executeRead(\AgaviRequestDataHolder $request_data)
     {
-        $displayField = $requestData->getParameter('display_field');
-        $identityField = $requestData->getParameter('identity_field');
-        $term = $requestData->getParameter('term');
+        $display_field = $request_data->getParameter('display_field');
+        $identity_field = $request_data->getParameter('identity_field');
+        $term = $request_data->getParameter('term');
 
         $module = $this->getModule();
-        $service = $module->getService();
-        $result = NULL;
+        $repository = $module->getRepository();
 
-        if ($term)
-        {
-            $result = $service->suggestDocuments($term, $displayField);
-        }
-        else
-        {
-            $result = $service->fetchAll(0, 20);
-        }
-
-        $suggestData = array();
-        foreach ($result['documents'] as $document)
-        {
-            $suggestData[] = array(
-                $displayField => $document->getValue($displayField),
-                $identityField => $document->getValue($identityField)
+        $data = array();
+        $query = null;
+        if ($term) {
+            $query_builder = new ElasticSearch\SuggestQueryBuilder();
+            $query = $query_builder->build(
+                array('term' => $term, 'field' => $display_field, 'sorting' => array())
             );
         }
 
-        $this->setAttribute('data', $suggestData);
+        $result = $repository->getFinder()->find($query, 10, 0);
+        $suggest_data = array();
+        foreach ($result['data'] as $document_data) {
+            $suggest_data[] = array(
+                $display_field => $document_data[$display_field],
+                $identity_field => $document_data[$identity_field]
+            );
+        }
+
+        $this->setAttribute('data', $suggest_data);
 
         return 'Success';
     }
@@ -47,8 +49,7 @@ class SuggestAction extends BaseAction
     public function handleReadError(\AgaviRequestDataHolder $parameters)
     {
         $errors = array();
-        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
-        {
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg) {
             $errors[]= $errMsg['message'];
         }
         $this->setAttribute('errors', $errors);
