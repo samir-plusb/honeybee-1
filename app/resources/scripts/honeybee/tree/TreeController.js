@@ -117,7 +117,7 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
         this.renderTarget.find('.child').each(function(index, element) {
             element = $(element);
             var documentData = JSON.parse(element.attr('data-document'));
-            element.find('.honeybee-action-proceed').bind('click', function(ev){
+            element.find('> .node-controls .honeybee-action-proceed').bind('click', function(ev){
                 var confirm_text;
                 var gate = $(this).attr('data-gate');
                 $.each(documentData.workflow.gates, function(i, value){
@@ -125,10 +125,10 @@ honeybee.tree.TreeController = honeybee.list.ListController.extend({
                         confirm_text = value.prompt;
                     }
                 });
-
                 that.proceed(false, documentData, gate, confirm_text);
+                return false;
             });
-            element.find('.honeybee-action-edit').bind('click', function(ev){
+            element.find('> .node-controls .honeybee-action-edit').bind('click', function(ev){
                 that.run(false, documentData);
             });
         });
