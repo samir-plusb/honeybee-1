@@ -370,7 +370,7 @@ class ListAction extends BaseAction
             $maxCount = (int)$referenceField->getOption(ReferenceField::OPT_MAX_REFERENCES, 0);
             $updateUrl = urldecode(htmlspecialchars_decode(
                 $routing->gen(
-                    sprintf('%s.workflow.execute', $this->getModule()->getOption('prefix')), 
+                    sprintf('%s.workflow.execute', $this->getModule()->getOption('prefix')),
                     array('id' => '{ID}')
                 )
             ));
@@ -382,6 +382,7 @@ class ListAction extends BaseAction
                 'autocomplete' => TRUE,
                 'autocomp_mappings' => $this->buildReferenceWidgetSuggestOptions($referenceField),
                 'fieldname' => $referenceField->getName(),
+                'field_id' => 'reference-batch-' . $referenceField->getName(),
                 'realname' => $referenceField->getName(),
                 'max' => $maxCount,
                 'disable_backdrop' => TRUE,

@@ -248,7 +248,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         assign_trigger.text(labels.assign_references);
         var close_trigger = reference_dialog.find('.modal-header .close-dialog');
 
-        var widget_container = reference_dialog.find('.widget-tags-list');
+        var widget_container = reference_dialog.find('.widget-reference');
         var widget_options = batch_options.widget_options;
         var reference_widget = new honeybee.widgets.Reference(widget_container, widget_options);
 

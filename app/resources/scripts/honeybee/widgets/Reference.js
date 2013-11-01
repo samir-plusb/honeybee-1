@@ -453,7 +453,10 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
 
         refmodule.active(true);
         this.showDialog(loading_modal_el);
-        var ref_browser_url = refmodule.list_url + '&referenceFieldId=' + this.options.field_id;
+        var query_string = $.url(refmodule.list_url).attr('query');
+        var ref_browser_url = refmodule.list_url + query_string;
+        ref_browser_url += query_string.length > 0 ? '&' : '?';
+        ref_browser_url += 'referenceFieldId=' + this.options.field_id;
         this.openReferenceListView(ref_browser_url);
 
         return false;
