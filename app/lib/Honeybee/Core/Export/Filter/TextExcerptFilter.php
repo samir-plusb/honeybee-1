@@ -129,12 +129,24 @@ class TextExcerptFilter extends BaseFilter
                 if (!($excerpt_sentences = $this->extractSentences($this->extractCharacters($excerpt, $settings), $settings))) {
                     // no full sentences within the given excerpt,
                     // try to find the first full sentence ...
-                    $first_sentence_end = min(
-                        mb_strpos($excerpt, '.'),
-                        mb_strpos($excerpt, '?'),
-                        mb_strpos($excerpt, '!')
-                    );
+                    $first_dot = (int)mb_strpos($excerpt, '.');
+                    $first_question_mark = (int)mb_strpos($excerpt, '?');
+                    $first_exlamation_mark = (int)mb_strpos($excerpt, '!');
+                    $first_sentence_end = $first_dot;
+                    if (
+                        0 === $first_sentence_end
+                        || (0 !== $first_question_mark && $first_sentence_end > $first_question_mark)
+                    ) {
+                        $first_sentence_end = $first_question_mark;
+                    }
+                    if (
+                        0 === $first_sentence_end
+                        || (0 !== $first_exlamation_mark && $first_sentence_end > $first_exlamation_mark)
+                    ) {
+                        $first_sentence_end = $first_exlamation_mark;
+                    }
                     $excerpt = mb_substr($excerpt, 0, $first_sentence_end + 1);
+                    error_log($excerpt);
                 } else {
                     $excerpt = $excerpt_sentences;
                 }
