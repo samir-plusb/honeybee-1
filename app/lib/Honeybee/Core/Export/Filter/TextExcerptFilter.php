@@ -130,23 +130,43 @@ class TextExcerptFilter extends BaseFilter
                     // no full sentences within the given excerpt,
                     // try to find the first full sentence ...
                     $first_dot = (int)mb_strpos($excerpt, '.');
-                    $first_question_mark = (int)mb_strpos($excerpt, '?');
-                    $first_exlamation_mark = (int)mb_strpos($excerpt, '!');
+                    if (0 !== $first_dot) { // ignore '.2'
+                        $prev_char = $excerpt{$first_dot - 1};
+                        $next_char = $excerpt{$first_dot + 1};
+                        while (
+                            (preg_match('/\d/', $prev_char) || preg_match('/\d/', $next_char))
+                            && $first_dot > 0
+                        ) {
+                            $first_dot = (int)mb_strpos($excerpt, '.', $first_dot + 1);
+                            if ($first_dot > 0) {
+                                $prev_char = $excerpt{$first_dot - 1};
+                                if (strlen($excerpt) >= $first_dot + 1) {
+                                    $next_char = $excerpt{$first_dot + 1};
+                                } else {
+                                    $next_char = '';
+                                }
+                            }
+                        }
+                    }
                     $first_sentence_end = $first_dot;
+
+                    $first_question_mark = (int)mb_strpos($excerpt, '?');
                     if (
                         0 === $first_sentence_end
                         || (0 !== $first_question_mark && $first_sentence_end > $first_question_mark)
                     ) {
                         $first_sentence_end = $first_question_mark;
                     }
+
+                    $first_exlamation_mark = (int)mb_strpos($excerpt, '!');
                     if (
                         0 === $first_sentence_end
                         || (0 !== $first_exlamation_mark && $first_sentence_end > $first_exlamation_mark)
                     ) {
                         $first_sentence_end = $first_exlamation_mark;
                     }
+
                     $excerpt = mb_substr($excerpt, 0, $first_sentence_end + 1);
-                    error_log($excerpt);
                 } else {
                     $excerpt = $excerpt_sentences;
                 }
@@ -184,18 +204,7 @@ class TextExcerptFilter extends BaseFilter
         if (preg_match_all($regex, $text, $matches)) {
             $text = $matches[0][0];
         } else {
-            // First remove unwanted spaces - not needed really
-            $text = str_replace(" .",".",$text);
-            $text = str_replace(" ?","?",$text);
-            $text = str_replace(" !","!",$text);
-            // Find periods, exclamation- or questionmarks with a word before but not after.
-            // Perfect if you only need/want to return the first sentence of a paragraph.
-            if (preg_match('/^.*[^\s](\.|\?|\!)/', $text, $matches)) {
-                $text = $matches[0];
-            } else {
-                return false;
-            }
-
+            return false;
             // fallback, probably not necessary as there are no sentences left anyways...
             //$text = implode('. ', array_slice(explode('.', $text), $skip, $max_sentences)) . '.';
             //$text = preg_replace('#\s\s+#', ' ', $text);
