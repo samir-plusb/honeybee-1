@@ -616,12 +616,12 @@ input.typeahead
   display: none; 
   width: 70em; 
   left: 40em;
-  max-height: 400px;
+  max-height: 485px;
 }
 
 .modal-edit-asset .modal-body
 {
-  max-height: 300px;
+  max-height: 385x;
 }
 
 .modal-edit-asset .input-field
