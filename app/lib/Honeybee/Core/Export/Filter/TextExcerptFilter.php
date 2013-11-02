@@ -3,6 +3,8 @@
 namespace Honeybee\Core\Export\Filter;
 
 use Honeybee\Core\Dat0r\BaseDocument;
+use Honeybee\Core\Config\IConfig;
+use Honeybee\Core\Config\ArrayConfig;
 
 /**
  * Creates excerpts from (rich) text properties. The following settings are
@@ -28,6 +30,8 @@ use Honeybee\Core\Dat0r\BaseDocument;
  */
 class TextExcerptFilter extends BaseFilter
 {
+    protected $sentence_chunker;
+
     public function execute(BaseDocument $document)
     {
         $property_map = $this->getConfig()->get('properties');
@@ -51,6 +55,7 @@ class TextExcerptFilter extends BaseFilter
         $settings['characters'] = $this->getConfig()->get('characters');
         $settings['words'] = $this->getConfig()->get('words');
         $settings['sentences'] = $this->getConfig()->get('sentences');
+        $settings['skip_sentences'] = $this->getConfig()->get('skip_sentences', 0);
         $settings['paragraphs'] = $this->getConfig()->get('paragraphs');
 
         $settings['skip'] = $cfg->get('skip');
@@ -125,50 +130,15 @@ class TextExcerptFilter extends BaseFilter
         }
 
         if ($max_characters) { // cut to maximum number of characters
-            if ($only_full_sentences) {
-                if (!($excerpt_sentences = $this->extractSentences($this->extractCharacters($excerpt, $settings), $settings))) {
-                    // no full sentences within the given excerpt,
-                    // try to find the first full sentence ...
-                    $first_dot = (int)mb_strpos($excerpt, '.');
-                    if (0 !== $first_dot) { // ignore '.2'
-                        $prev_char = $excerpt{$first_dot - 1};
-                        $next_char = $excerpt{$first_dot + 1};
-                        while (
-                            (preg_match('/\d/', $prev_char) || preg_match('/\d/', $next_char))
-                            && $first_dot > 0
-                        ) {
-                            $first_dot = (int)mb_strpos($excerpt, '.', $first_dot + 1);
-                            if ($first_dot > 0) {
-                                $prev_char = $excerpt{$first_dot - 1};
-                                if (strlen($excerpt) >= $first_dot + 1) {
-                                    $next_char = $excerpt{$first_dot + 1};
-                                } else {
-                                    $next_char = '';
-                                }
-                            }
-                        }
-                    }
-                    $first_sentence_end = $first_dot;
-
-                    $first_question_mark = (int)mb_strpos($excerpt, '?');
-                    if (
-                        0 === $first_sentence_end
-                        || (0 !== $first_question_mark && $first_sentence_end > $first_question_mark)
-                    ) {
-                        $first_sentence_end = $first_question_mark;
-                    }
-
-                    $first_exlamation_mark = (int)mb_strpos($excerpt, '!');
-                    if (
-                        0 === $first_sentence_end
-                        || (0 !== $first_exlamation_mark && $first_sentence_end > $first_exlamation_mark)
-                    ) {
-                        $first_sentence_end = $first_exlamation_mark;
-                    }
-
-                    $excerpt = mb_substr($excerpt, 0, $first_sentence_end + 1);
-                } else {
+            if ($only_full_sentences) {  // then cut to maximum number of sentences
+                if ($excerpt_sentences = $this->extractSentences(
+                    $this->extractCharacters($excerpt, $settings),
+                    $settings
+                )) {
                     $excerpt = $excerpt_sentences;
+                } else { // or take the first sentence, if there are no full sentences with the character range
+                    $settings['sentences'] = 1;
+                    $excerpt = $this->extractSentences($excerpt, $settings);
                 }
             }
         } else if ($max_words) { // cut to maximum number of words
@@ -192,25 +162,18 @@ class TextExcerptFilter extends BaseFilter
 
     protected function extractSentences($text, array $settings)
     {
-        $skip = isset($settings['skip']) ? $settings['skip'] : 0;
-        $max_sentences = isset($settings['sentences']) ? $settings['sentences'] : 0;
-
-        // remove sentences that should be skipped
-        $regex = '!^((?:.*?[\.\!\?](?=\s+)){' . $skip . '})!sm';
-        $text = preg_replace($regex, '', $text);
-        // get number of sentences that we need
-        $regex = '~^((?:.*?[\.\!\?](?= )){' . $max_sentences . '})~sm';
-
-        if (preg_match_all($regex, $text, $matches)) {
-            $text = $matches[0][0];
+        $sentence_chunker = $this->getSenctenceChunker();
+        $excerpt_sentences = $sentence_chunker->chunk($text);
+        if ($excerpt_sentences && count($excerpt_sentences) > 0) {
+            $excerpt_sentences = array_slice(
+                $excerpt_sentences,
+                $settings['skip_sentences'],
+                $settings['sentences']
+            );
+            return implode(' ', $excerpt_sentences);
         } else {
             return false;
-            // fallback, probably not necessary as there are no sentences left anyways...
-            //$text = implode('. ', array_slice(explode('.', $text), $skip, $max_sentences)) . '.';
-            //$text = preg_replace('#\s\s+#', ' ', $text);
         }
-
-        return $text;
     }
 
     protected function extractCharacters($text, array $settings)
@@ -240,5 +203,18 @@ class TextExcerptFilter extends BaseFilter
         $excerpt = preg_replace('#^(.*?)<p#', '<p', $excerpt); // strip content before first paragraph
 
         return preg_replace('#</p>(.*?)<p#', '</p><p', $excerpt); // strip content between paragraphs
+    }
+
+    protected function getSenctenceChunker()
+    {
+        if (!$this->sentence_chunker) {
+            $this->sentence_chunker = new SentenceChunker(
+                new ArrayConfig(
+                    array('dot_context_tokens' => $this->getConfig()->get('dot_context_tokens'))
+                )
+            );
+        }
+
+        return $this->sentence_chunker;
     }
 }
