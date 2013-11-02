@@ -112,7 +112,6 @@ class TextExcerptFilter extends BaseFilter
 
         $character_count = mb_strlen($excerpt);
         $word_count = count(explode(" ", $excerpt));
-        $sentence_count = count(explode(".", $excerpt));
         $paragraph_count = count(explode("</p>", $excerpt));
 
         if (!$max_characters && !$max_words && !$max_sentences && !$max_paragraphs) {
@@ -122,7 +121,6 @@ class TextExcerptFilter extends BaseFilter
         $create_excerpt = false;
         $create_excerpt = ($max_characters) ? ($max_characters < $character_count) ? true : false : $create_excerpt;
         $create_excerpt = ($max_words) ? ($max_words < $word_count) ? true : false : $create_excerpt;
-        $create_excerpt = ($max_sentences) ? ($max_sentences < $sentence_count) ? true : false : $create_excerpt;
         $create_excerpt = ($max_paragraphs) ? ($max_paragraphs < $paragraph_count) ? true : false : $create_excerpt;
 
         if (!$create_excerpt) {
