@@ -91,15 +91,11 @@ class SentenceChunker
         $is_valid_dot_position = false;
         $next_dot_position = (int)mb_strpos($text, '.');
         while (!$is_valid_dot_position && $next_dot_position > 0) {
-            if ($next_dot_position > 0) {
-                $potential_sentence = mb_substr($text, 0, $next_dot_position + 1);
-                if (preg_match($invalid_dot_regex, $potential_sentence)) {
-                    $next_dot_position = (int)mb_strpos($text, '.', $next_dot_position + 1);
-                } else {
-                    $is_valid_dot_position = true;
-                }
+            $potential_sentence = mb_substr($text, 0, $next_dot_position + 1);
+            if (preg_match($invalid_dot_regex, $potential_sentence)) {
+                $next_dot_position = (int)mb_strpos($text, '.', $next_dot_position + 1);
             } else {
-                $next_dot_position = 0;
+                $is_valid_dot_position = true;
             }
         }
 
