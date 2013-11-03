@@ -134,5 +134,6 @@ class SentenceChunker
                 $base .= $part . '\.\s*';
             }
         }
+        $this->dot_context_tokens[] = '\d+';
     }
 }
