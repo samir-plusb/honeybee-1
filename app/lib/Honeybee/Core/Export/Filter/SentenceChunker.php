@@ -13,6 +13,8 @@ class SentenceChunker
 
     protected $config;
 
+    protected $dot_context_tokens;
+
     public function __construct(IConfig $config)
     {
         $this->config = $config;
@@ -84,10 +86,9 @@ class SentenceChunker
     protected function findDelimitingDot($text)
     {
         $invalid_dot_regex = sprintf(
-            '~(%s)\.$~',
-            implode('|', $this->config->get('dot_context_tokens', array()))
+            '~(\(|\s)+\s*(%s)\.$~',
+            implode('|', $this->getDotContextTokens())
         );
-
         $is_valid_dot_position = false;
         $next_dot_position = (int)mb_strpos($text, '.');
         while (!$is_valid_dot_position && $next_dot_position > 0) {
@@ -100,5 +101,38 @@ class SentenceChunker
         }
 
         return $next_dot_position;
+    }
+
+    protected function getDotContextTokens()
+    {
+        if (!$this->dot_context_tokens) {
+            $this->loadDotContextTokens();
+        }
+
+        return $this->dot_context_tokens;
+    }
+
+    /**
+     * Load our list of non-sentence-delimiting dot-occurences and prepare
+     * them as pattern for matching against the end of our potential sentences.
+     */
+    protected function loadDotContextTokens()
+    {
+        $this->dot_context_tokens = array();
+        $dot_tokens_file = $this->config->get('dot_tokens_file');
+        if (!is_readable($dot_tokens_file)) {
+            throw new \Exception("Unable to load dot-tokens at location: " . $dot_tokens_file);
+        }
+
+        foreach (file($dot_tokens_file) as $dot_token) {
+            $parts = explode('.', str_replace(" ", "", trim($dot_token)));
+            array_pop($parts); // remove empty part
+
+            $base = '';
+            foreach ($parts as $part) {
+                $this->dot_context_tokens[] = $base . $part;
+                $base .= $part . '\.\s*';
+            }
+        }
     }
 }

@@ -208,7 +208,7 @@ class TextExcerptFilter extends BaseFilter
         if (!$this->sentence_chunker) {
             $this->sentence_chunker = new SentenceChunker(
                 new ArrayConfig(
-                    array('dot_context_tokens' => $this->getConfig()->get('dot_context_tokens'))
+                    array('dot_tokens_file' => realpath($this->getConfig()->get('dot_tokens_file')))
                 )
             );
         }
