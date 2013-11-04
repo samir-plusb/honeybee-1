@@ -30,189 +30,152 @@ use Honeybee\Core\Config\ArrayConfig;
  */
 class TextExcerptFilter extends BaseFilter
 {
-    protected $sentence_chunker;
+    protected $text_service;
 
     public function execute(BaseDocument $document)
     {
         $property_map = $this->getConfig()->get('properties');
-        $settings = $this->getExcerptSettings();
 
         $filter_output = array();
         foreach ($property_map as $fieldname => $target_key) {
-            $prop_value = $document->getValue($fieldname);
-            $filter_output[$target_key] = $this->createExcerptFor($prop_value, $settings);
+            $text = $document->getValue($fieldname);
+            $filter_output[$target_key] = $this->createExcerptFor($text);
         }
 
         return $filter_output;
     }
 
-    protected function getExcerptSettings()
+    protected function createExcerptFor($text)
     {
-        $settings = array();
+        $config = $this->getConfig();
 
-        $cfg = $this->getConfig();
-
-        $settings['characters'] = $this->getConfig()->get('characters');
-        $settings['words'] = $this->getConfig()->get('words');
-        $settings['sentences'] = $this->getConfig()->get('sentences');
-        $settings['skip_sentences'] = $this->getConfig()->get('skip_sentences', 0);
-        $settings['paragraphs'] = $this->getConfig()->get('paragraphs');
-
-        $settings['skip'] = $cfg->get('skip');
-
-        $settings['ellipsis'] = $cfg->get('ellipsis');
-        $settings['append_ellipsis'] = $cfg->get('append_ellipsis');
-
-        $settings['strip_tags'] = $cfg->get('strip_tags');
-        $settings['allowed_tags'] = $cfg->get('allowed_tags');
-
-        $settings['strip_newlines'] = $cfg->get('strip_newlines');
-        $settings['strip_tabs'] = $cfg->get('strip_tabs');
-        $settings['strip_excessive_whitespace'] = $cfg->get('strip_excessive_whitespace');
-        $settings['only_full_sentences'] = $cfg->get('only_full_sentences');
-
-        return $settings;
-    }
-
-    protected function createExcerptFor($text, $settings)
-    {
-        $append_ellipsis = isset($settings['append_ellipsis']) ? $settings['append_ellipsis'] : true;
-        $ellipsis = isset($settings['ellipsis']) ? $settings['ellipsis'] : ' […]';
-        $skip = isset($settings['skip']) ? $settings['skip'] : 0;
-        $allowed_tags = isset($settings['allowed_tags']) ? $settings['allowed_tags'] : '';
-        $strip_tags = isset($settings['strip_tags']) ? $settings['strip_tags'] : true;
-        $strip_newlines = isset($settings['strip_newlines']) ? $settings['strip_newlines'] : true;
-        $strip_tabs = isset($settings['strip_tabs']) ? $settings['strip_tabs'] : true;
-        $strip_excessive_whitespace = isset($settings['strip_excessive_whitespace']) ? $settings['strip_excessive_whitespace'] : true;
-        $only_full_sentences = isset($settings['only_full_sentences']) ? $settings['only_full_sentences'] : false;
-
-        $max_characters = isset($settings['characters']) ? $settings['characters'] : 0;
-        $max_words = isset($settings['words']) ? $settings['words'] : 0;
-        $max_sentences = isset($settings['sentences']) ? $settings['sentences'] : 0;
-        $max_paragraphs = isset($settings['paragraphs']) ? $settings['paragraphs'] : 0;
-
-        $excerpt = trim($text);
-        if ($strip_newlines) {
-            $excerpt =  preg_replace('#\n|\r|\r\n|\n\r#', '', $excerpt);
-        }
-        if ($strip_tabs) {
-            $excerpt =  preg_replace('#\t#', '', $excerpt);
-        }
-        if ($strip_excessive_whitespace) {
-            $excerpt =  preg_replace('#\s{2,}#', ' ', $excerpt);
-        }
-        if ($strip_tags) {
-            if ($max_paragraphs) {
-                $allowed_tags .= '<p>';
-            }
-            $excerpt = preg_replace('/(<\/[^>]+?>)(<[^>\/][^>]*?>)/', '$1 $2', $excerpt);
-            $excerpt = strip_tags($excerpt, $allowed_tags);
-            $excerpt =  preg_replace('#\s{2,}#', ' ', $excerpt);
-        }
-
-        $character_count = mb_strlen($excerpt);
-        $word_count = count(explode(" ", $excerpt));
-        $paragraph_count = count(explode("</p>", $excerpt));
-
+        $max_characters = $config->get('characters', 0);
+        $max_words = $config->get('words', 0);
+        $max_sentences = $config->get('sentences', 0);
+        $max_paragraphs = $config->get('paragraphs', 0);
         if (!$max_characters && !$max_words && !$max_sentences && !$max_paragraphs) {
             $max_characters = 250; // magic default in case of no settings at all
         }
 
+        $excerpt = $this->stripStuff($text);
+
+        $character_count = mb_strlen($excerpt);
+        $word_count = count(explode(" ", $excerpt));
+        $paragraph_count = count(explode("</p>", $excerpt));
+        // check if we must really create the excerpt or if we can skip it
         $create_excerpt = false;
         $create_excerpt = ($max_characters) ? ($max_characters < $character_count) ? true : false : $create_excerpt;
         $create_excerpt = ($max_words) ? ($max_words < $word_count) ? true : false : $create_excerpt;
         $create_excerpt = ($max_paragraphs) ? ($max_paragraphs < $paragraph_count) ? true : false : $create_excerpt;
-
-        if (!$create_excerpt) {
-            return $excerpt; // nothing to excerpt, return immediately
+        if (!$create_excerpt) { // nothing to excerpt, return immediately
+            return $excerpt;
         }
 
         if ($max_characters) { // cut to maximum number of characters
-            if ($only_full_sentences) {  // then cut to maximum number of sentences
+            if ($config->get('only_full_sentences', false)) { // then cut to maximum number of sentences
                 if ($excerpt_sentences = $this->extractSentences(
-                    $this->extractCharacters($excerpt, $settings),
-                    $settings
+                    $this->extractCharacters($excerpt)
                 )) {
                     $excerpt = $excerpt_sentences;
                 } else { // or take the first sentence, if there are no full sentences with the character range
-                    $settings['sentences'] = 1;
-                    $excerpt = $this->extractSentences($excerpt, $settings);
+                    $excerpt = $this->extractSentences($excerpt, 1);
                 }
             }
         } else if ($max_words) { // cut to maximum number of words
-            $excerpt = $this->extractWords($excerpt, $settings);
+            $excerpt = $this->extractWords($excerpt);
         } else if ($max_sentences) { // cut to maximum number of sentences
-            $excerpt = $this->extractSentences($excerpt, $settings);
+            $excerpt = $this->extractSentences($excerpt);
         } else if ($max_paragraphs) { // cut to maximum number of paragraphs
-            $excerpt = $this->extractParagraphs($excerpt, $settings);
+            $excerpt = $this->extractParagraphs($excerpt);
         }
 
-        if ($append_ellipsis) {
+        if ($config->get('append_ellipsis', true)) {
             $excerpt = preg_replace('#\W+$#', '', $excerpt);
             if ($max_paragraphs) {
                 $excerpt .= '>';
             }
-            $excerpt .= $ellipsis;
+            $excerpt .= $config->get('ellipsis', ' […]');
         }
 
         return $excerpt;
     }
 
-    protected function extractSentences($text, array $settings)
+    protected function stripStuff($text)
     {
-        $sentence_chunker = $this->getSenctenceChunker();
-        $excerpt_sentences = $sentence_chunker->chunk($text);
+        $text_service = $this->getTextService();
+
+        $text = trim($text);
+        if ($config->get('strip_newlines', true)) {
+            $text =  $text_service->stripNewlines($text);
+        }
+        if ($config->get('strip_tabs', true)) {
+            $text =  $text_service->stripTabs($text);
+        }
+        if ($config->get('strip_excessive_whitespace', true)) {
+            $text =  $text_service->stripMultipleSpaces($text);
+        }
+        if ($config->get('strip_tags', true)) {
+            $allowed_tags = $config->get('allowed_tags', '');
+            if ($config->get('paragraphs', false)) {
+                $allowed_tags .= '<p>';
+            }
+            $text = $text_service->stripTags($text, $allowed_tags);
+        }
+
+        return $text;
+    }
+
+    protected function extractSentences($text, $count = 0)
+    {
+        if ($count === 0) {
+            $count = $this->config->get('sentences', 0);
+        }
+        $offset = $this->config->get('skip_sentences', 0);
+
+        $excerpt_sentences = $this->getTextService()->getSentences($text, $count, $offset);
         if ($excerpt_sentences && count($excerpt_sentences) > 0) {
-            $excerpt_sentences = array_slice(
-                $excerpt_sentences,
-                $settings['skip_sentences'],
-                $settings['sentences']
-            );
             return implode(' ', $excerpt_sentences);
         } else {
             return false;
         }
     }
 
-    protected function extractCharacters($text, array $settings)
+    protected function extractCharacters($text, $count = 0)
     {
-        $skip = isset($settings['skip']) ? $settings['skip'] : 0;
-        $max_characters = isset($settings['characters']) ? $settings['characters'] : 0;
-
-        $text = mb_substr($text, $skip, $max_characters);
-
-        return mb_substr($text, 0, strrpos($text," "));
+        if ($count === 0) {
+            $count = $this->config->get('characters', 0);
+        }
+        $offset = $this->config->get('skip', 0);
+        return $this->getTextService()->getCharacters($text, $count, $offset);
     }
 
-    protected function extractWords($text, array $settings)
+    protected function extractWords($text, $count = 0)
     {
-        $skip = isset($settings['skip']) ? $settings['skip'] : 0;
-        $max_words = isset($settings['words']) ? $settings['words'] : 0;
-
-        return implode(' ', array_slice(explode(' ', $excerpt), $skip, $max_words));
+        if ($count === 0) {
+            $count = $this->config->get('words', 0);
+        }
+        $offset = $this->config->get('skip', 0);
+        return $this->getTextService()->getWords($text, $count, $offset);
     }
 
-    protected function extractParagraphs($text, array $settings)
+    protected function extractParagraphs($text, $count = 0)
     {
-        $skip = isset($settings['skip']) ? $settings['skip'] : 0;
-        $max_paragraphs = isset($settings['paragraphs']) ? $settings['paragraphs'] : 0;
-
-        $excerpt = implode('</p>', array_slice(explode('</p>', $excerpt), $skip, $max_paragraphs)) . '</p>';
-        $excerpt = preg_replace('#^(.*?)<p#', '<p', $excerpt); // strip content before first paragraph
-
-        return preg_replace('#</p>(.*?)<p#', '</p><p', $excerpt); // strip content between paragraphs
+        if ($count === 0) {
+            $count = $this->config->get('paragraphs', 0);
+        }
+        $offset = $this->config->get('skip', 0);
+        return $this->getTextService()->getWords($text, $count, $offset);
     }
 
-    protected function getSenctenceChunker()
+    protected function getTextService()
     {
-        if (!$this->sentence_chunker) {
-            $this->sentence_chunker = new SentenceChunker(
-                new ArrayConfig(
-                    array('dot_tokens_file' => realpath($this->getConfig()->get('dot_tokens_file')))
-                )
+        if (!$this->text_service) {
+            $dot_tokens_file = realpath($this->config->get('dot_tokens_file'));
+            $this->text_service = new TextService(
+                new ArrayConfig(array('dot_tokens_file' => $dot_tokens_file))
             );
         }
 
-        return $this->sentence_chunker;
+        return $this->text_service;
     }
 }

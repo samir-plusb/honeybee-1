@@ -13,6 +13,8 @@ use Honeybee\Core\Dat0r\BaseDocument;
  */
 abstract class BaseFilter implements IFilter
 {
+    protected $config;
+
     /**
      * Holds our name.
      *
