@@ -105,18 +105,18 @@ class TextExcerptFilter extends BaseFilter
         $text_service = $this->getTextService();
 
         $text = trim($text);
-        if ($config->get('strip_newlines', true)) {
+        if ($this->config->get('strip_newlines', true)) {
             $text =  $text_service->stripNewlines($text);
         }
-        if ($config->get('strip_tabs', true)) {
+        if ($this->config->get('strip_tabs', true)) {
             $text =  $text_service->stripTabs($text);
         }
-        if ($config->get('strip_excessive_whitespace', true)) {
+        if ($this->config->get('strip_excessive_whitespace', true)) {
             $text =  $text_service->stripMultipleSpaces($text);
         }
-        if ($config->get('strip_tags', true)) {
-            $allowed_tags = $config->get('allowed_tags', '');
-            if ($config->get('paragraphs', false)) {
+        if ($this->config->get('strip_tags', true)) {
+            $allowed_tags = $this->config->get('allowed_tags', '');
+            if ($this->config->get('paragraphs', false)) {
                 $allowed_tags .= '<p>';
             }
             $text = $text_service->stripTags($text, $allowed_tags);
