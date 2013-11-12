@@ -1,31 +1,19 @@
 <td>
-{% if user.getAttribute('acl_role') == 'honeybee-editor' %}
-        <!-- ko if: $data.display_data.{{field.getName()}}.length === 0 -->
-            <span class="document-owner" data-bind="text: $data.display_data.{{field.getName()}}"></span>
-        <!-- /ko -->
+  <!-- ko if: $data.display_data.{{field.getName()}}.length === 0 -->
+      <span class="document-owner" data-bind="text: $data.display_data.{{field.getName()}}"></span>
+  <!-- /ko -->
 
-        <!-- ko if: $data.display_data.{{field.getName()}}.length > 0 
-          && '{{user.getAttribute('login')}}' === $data.display_data.{{field.getName()}} -->
-            <span class="label label-info document-owner release-ticket"
-                  data-bind="text: $data.display_data.{{field.getName()}},
-                             click: function() { $parent.ctrl.checkout($data, this); }"></span>
-        <!-- /ko -->
+  <!-- ko if: $data.display_data.{{field.getName()}}.length > 0
+    && '{{user.getAttribute('login')}}' === $data.display_data.{{field.getName()}} -->
+      <span class="label label-info document-owner release-ticket"
+            data-bind="text: $data.display_data.{{field.getName()}},
+                       click: function() { $parent.ctrl.checkout($data, this); }"></span>
+  <!-- /ko -->
 
-        <!-- ko if: $data.display_data.{{field.getName()}}.length > 0 
-          && '{{user.getAttribute('login')}}' !== $data.display_data.{{field.getName()}}-->
-            <span class="label label-info document-owner release-ticket"
-                  data-bind="text: $data.display_data.{{field.getName()}},
-                             click: function() { $parent.ctrl.checkout($data, this, '{{ steal_locking_prompt }}'.replace('%s', $data.display_data.{{field.getName()}})); }"></span>
-        <!-- /ko -->
-{% else %}
-        <!-- ko if: '{{user.getAttribute('login')}}' !== $data.display_data.{{field.getName()}} -->
-            <span class="document-owner" data-bind="text: $data.display_data.{{field.getName()}}"></span>
-        <!-- /ko -->
-
-        <!-- ko if: '{{user.getAttribute('login')}}' === $data.display_data.{{field.getName()}} -->
-            <span class="label label-info document-owner release-ticket"
-                  data-bind="text: $data.display_data.{{field.getName()}},
-                             click: function() { $parent.ctrl.checkout($data, this); }"></span>
-        <!-- /ko -->
-{% endif %}
+  <!-- ko if: $data.display_data.{{field.getName()}}.length > 0
+    && '{{user.getAttribute('login')}}' !== $data.display_data.{{field.getName()}}-->
+      <span class="label label-info document-owner release-ticket"
+            data-bind="text: $data.display_data.{{field.getName()}},
+                       click: function() { $parent.ctrl.checkout($data, this, '{{ steal_locking_prompt }}'.replace('%s', $data.display_data.{{field.getName()}})); }"></span>
+  <!-- /ko -->
 </td>
