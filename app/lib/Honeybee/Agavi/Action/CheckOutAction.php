@@ -18,15 +18,11 @@ class CheckOutAction extends BaseAction
         $workflow_ticket = $document->getWorkflowTicket()->first();
         $username = $user->getAttribute('login');
         $role = $user->getAttribute('acl_role');
-        if ('honeybee-editor' === $role || $username === $workflow_ticket->getOwner()) {
-            $workflow_ticket->setOwner(null);
-            try {
-                $service->save($document);
-                return 'Success';
-            } catch (Conflict $conflict) {
-                return 'Error';
-            }
-        } else {
+        $workflow_ticket->setOwner(null);
+        try {
+            $service->save($document);
+            return 'Success';
+        } catch (Conflict $conflict) {
             return 'Error';
         }
     }
