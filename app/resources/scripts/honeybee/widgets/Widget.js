@@ -14,7 +14,8 @@ honeybee.widgets.Widget = honeybee.core.BaseObject.extend({
         this.parent();
         ready_callback = ready_callback || function() {};
         // basic member initialization
-        this.element = element;
+        this.element = $(element);
+        this.element[0].widget = this;
         this.options = $.extend(true, {}, options);
 
         var parent_aggregate = this.element.parents('.aggregate');

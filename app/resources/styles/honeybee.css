@@ -714,7 +714,7 @@ input.typeahead
 {
   cursor: pointer;
   font-size: 12pt;
-  right: 10px;
+  right: 5px;
   top: 17px;
   position: absolute;
   opacity: 0.2;
@@ -733,7 +733,7 @@ input.typeahead
 .field-group:hover .control-group .help-trigger.active
 {
   font-size: 14pt;
-  right: 9px;
+  right: 4px;
   opacity: 1.0;
 }
 

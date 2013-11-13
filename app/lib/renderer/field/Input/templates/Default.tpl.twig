@@ -6,7 +6,7 @@
         {% endif %}
     </label>
     {% if hasWidget %}
-        <section class="controls honeybee-widget {{widgetType}}"
+        <section class="controls honeybee-widget {{widgetType}} honeybee-widget-{{fieldName}}"
             data-{{ widgetType|replace({'widget-': ''}) }}-options="{{widgetOptions|raw}}" ></section>
         {% if tm._(fieldKey ~ '_help', td) != fieldKey ~ '_help' %}
         <span class="hb-icon-info help-trigger"

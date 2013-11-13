@@ -54,7 +54,7 @@ class FileMetaDataReader
     {
         // @todo support more options via $tika_options
         $command = sprintf(
-            'java -jar %s --%s %s',
+            'java -jar %s --encoding=UTF-8 --%s %s',
             $this->config->get('apache_tika_jarfile'),
             $output_type,
             $input_file
