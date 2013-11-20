@@ -32,6 +32,7 @@ honeybee.widgets.Widget = honeybee.core.BaseObject.extend({
             {
                 that.initGui();
                 ready_callback();
+                that.fire('ready');
             });
             return;
         }
@@ -41,6 +42,7 @@ honeybee.widgets.Widget = honeybee.core.BaseObject.extend({
         }
         that.initGui();
         ready_callback();
+        this.fire('ready');
     },
 
     initGui: function()

@@ -122,11 +122,15 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
         if (focus)
         {
-            var first_input = list_item.find('input:visible').first();
-            $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350, function()
-            {
-                first_input.focus();
-            });
+            var first_input = list_item.find('input:visible, textarea:visible, select:visible').first();
+            if (first_input.length > 0) {
+                $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350, function()
+                {
+                    first_input.focus();
+                });
+            } else {
+                $('html, body').animate({scrollTop: list_item.offset().top - 200}, 350);
+            }
         }
         this.fire('aggregate-added', [{
             'field': this.options.fieldname,
@@ -201,7 +205,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             if (item.hasClass('collapsed'))
             {
                 item.removeClass('collapsed');
-                var first_input = item.find('input:visible').first();
+                var first_input = item.find('input:visible, textarea:visible, select:visible').first();
                 first_input.focus();
                 $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350, function()
                 {

@@ -6,7 +6,7 @@ class LocationInputRenderer extends AggregateFieldInputRenderer
 {
     protected function getWidgetType(IDocument $document)
     {
-        return 'widget-location-aggregate';
+        return isset($this->options['widget_type']) ? $this->options['widget_type'] : 'widget-location-aggregate';
     }
 
     protected function getWidgetOptions(IDocument $document)

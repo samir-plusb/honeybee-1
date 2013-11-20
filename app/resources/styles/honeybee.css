@@ -1345,6 +1345,11 @@ div.select2-container-multi .select2-choices .select2-search-field
   margin-right: 7px;
 }
 
+.aggregate .placeholder
+{
+  font-size: 15px;
+}
+
 .aggregate .input-group-label .actions
 {
   list-style: none;
