@@ -10,6 +10,19 @@
     {% endif %}
     <textarea type="text" name="{{ inputName }}" id="{{ fieldId }}" placeholder="{{ placeholder }}" class="ckeditor"
         {% if true == readonly %} disabled="disabled" {% endif %}>{{fieldValue}}</textarea>
+{% elseif field.getOption('use_markdown') %}
+    <label class="control-label" for="{{ fieldId }}">
+        {{ tm._(fieldKey, td)|raw}}
+        {% if mandatory == true %}
+        <span class="mandatory-marker">*</span>
+        {% endif %}
+    </label>
+    <div class="controls markdown-box honeybee-widget widget-markdown-widget">
+        <textarea type="text" class="span11 field-textarea textarea-{{ fieldName }}" name="{{ inputName }}" id="{{ fieldId }}"
+            placeholder="{{ placeholder }}" class="input-xlarge"
+            {% if true == readonly %} readonly="readonly" {% endif %}>{{ fieldValue }}</textarea>
+        <div class="span11 epic-editor" />
+    </div>
 {% else %}
     <label class="control-label" for="{{ fieldId }}">
         {{ tm._(fieldKey, td)|raw}}
@@ -17,7 +30,7 @@
         <span class="mandatory-marker">*</span>
         {% endif %}
     </label>
-    <div class="controls">
+    <div class="controls mdedit-{{ fieldId }}">
         <textarea type="text" class="span11 field-textarea textarea-{{ fieldName }}" name="{{ inputName }}" id="{{ fieldId }}"
             placeholder="{{ placeholder }}" class="input-xlarge"
             {% if true == readonly %} readonly="readonly" {% endif %}>{{ fieldValue }}</textarea>

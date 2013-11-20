@@ -216,10 +216,10 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         this.alerts.remove(alert);
     },
 
-    showAlert: function(elem, idx, alert) 
-    { 
+    showAlert: function(elem, idx, alert)
+    {
         var that = this;
-        if (elem.nodeType === 1) 
+        if (elem.nodeType === 1)
         {
             $(elem).animate({
                opacity: 1
@@ -232,14 +232,14 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
 
     hideAlert: function(elem, idx, alert)
     {
-        if (elem.nodeType === 1) 
+        if (elem.nodeType === 1)
         {
             $(elem).animate({
                opacity: 0
             }, { duration: 300, queue: false });
             $(elem).animate({
                'margin-top': '-55px'
-            }, { duration: 600, queue: false, complete: function() 
+            }, { duration: 600, queue: false, complete: function()
             {
                 $(elem).remove();
             } });
@@ -300,20 +300,21 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         {
             var type_key;
 
-            $.each($(element).attr('class').split(' '), function(index, css_class)
-            {
-                css_class = css_class.trim();
-                if (css_class.match(/^widget-/))
+            var aggregate_tpl_parent = $(element).parents('.aggregate-tpl');
+            if (aggregate_tpl_parent.length === 0) {
+                $.each($(element).attr('class').split(' '), function(index, css_class)
                 {
-                    type_key = css_class.replace('widget-', '');
-                }
-            });
+                    css_class = css_class.trim();
+                    if (css_class.match(/^widget-/))
+                    {
+                        type_key = css_class.replace('widget-', '');
+                    }
+                });
 
-            if (type_key)
-            {
-                that.widgets.push(
-                    honeybee.widgets.Widget.factory(element, type_key)
-                );
+                if (type_key)
+                {
+                    that.widgets.push(honeybee.widgets.Widget.factory(element, type_key));
+                }
             }
         });
     }

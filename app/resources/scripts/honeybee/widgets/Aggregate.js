@@ -206,11 +206,15 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             {
                 item.removeClass('collapsed');
                 var first_input = item.find('input:visible, textarea:visible, select:visible').first();
-                first_input.focus();
-                $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350, function()
-                {
+                if (first_input.length > 0) {
                     first_input.focus();
-                });
+                    $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350, function()
+                    {
+                        first_input.focus();
+                    });
+                } else {
+                    $('html, body').animate({scrollTop: item.offset().top - 200}, 350);
+                }
             }
             else
             {
@@ -300,7 +304,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
             var i = 0;
             var cur_widget, fieldname;
-            for (; i < element.widgets.length; i++)
+            for (; element.widgets && i < element.widgets.length; i++)
             {
                 cur_widget = element.widgets[i];
                 if (!cur_widget.fieldname) {
