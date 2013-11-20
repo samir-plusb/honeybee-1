@@ -12,35 +12,29 @@ class User_ResetPasswordAction extends UserBaseAction
     {
         $translationManager = $this->getContext()->getTranslationManager();
 
-        try 
-        {
+        try {
             $result = $this->getModule()->getService()->find(
                 array('filter' => $this->buildUserFilter($parameters)), 0, 10
             );
 
-            if (1 === $result['totalCount'])
-            {
+            if (1 === $result['totalCount']) {
                 $this->getModule()->getService()->sendPasswordLostEmail(
                     $result['documents']->first()
                 );
-            }
-            else
-            {
+            } else {
                 $this->setAttribute(
-                    'errors', 
+                    'errors',
                     array('invalid_account' => $translationManager->_('invalid_account', 'user.messages'))
                 );
 
                 return 'Input';
             }
 
-            return 'Success';            
-        } 
-        catch (Exception $e) 
-        {
+            return 'Success';
+        } catch (Exception $e) {
             $this->setAttribute('errors', array('unexpected' => $e->getMessage()));
-            return 'Input';            
-        }        
+            return 'Input';
+        }
     }
 
     public function executeRead(AgaviRequestDataHolder $parameters)
@@ -62,7 +56,7 @@ class User_ResetPasswordAction extends UserBaseAction
 
     public function isSecure()
     {
-        return FALSE;
+        return false;
     }
 
     protected function buildUserFilter(AgaviRequestDataHolder $parameters)
