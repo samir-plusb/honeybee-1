@@ -150,33 +150,39 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         aggregate_element[0].widgets = [];
         aggregate_element.find('.honeybee-widget').each(function(idx, element)
         {
-            var type_key;
-
-            $.each($(element).attr('class').split(' '), function(index, css_class)
+            var widget = that.initWidget(element, function()
             {
-                css_class = css_class.trim();
-                if (css_class.match(/^widget-/))
+                loading_widgets_cnt--;
+                if (loading_widgets_cnt === 0)
                 {
-                    type_key = css_class.replace('widget-', '');
+                    that.renderAggregatePositions();
                 }
             });
-
-            if (type_key)
-            {
+            if (widget) {
                 loading_widgets_cnt++;
-                aggregate_element[0].widgets.push(
-                    honeybee.widgets.Widget.factory(element, type_key, honeybee.widgets, function()
-                    {
-                        loading_widgets_cnt--;
-                        if (loading_widgets_cnt === 0)
-                        {
-                            that.renderAggregatePositions();
-                        }
-                    })
-                );
+                aggregate_element[0].widgets.push(widget);
+            }
+        });
+    },
+
+    initWidget: function(element, ready_callback)
+    {
+        var type_key;
+
+        $.each($(element).attr('class').split(' '), function(index, css_class)
+        {
+            css_class = css_class.trim();
+            if (css_class.match(/^widget-/))
+            {
+                type_key = css_class.replace('widget-', '');
             }
         });
 
+        if (type_key)
+        {
+            return honeybee.widgets.Widget.factory(element, type_key, honeybee.widgets, ready_callback)
+        }
+        return false;
     },
 
     registerAggregateEvents: function(item)
@@ -225,7 +231,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     moveItemUp: function(item)
     {
-        var restore_richtext = this.createCkeditorBackup(item);
+        var restore_richtext = this.createTextareaBackups(item);
 
         item.insertBefore(item.prev());
         this.renderAggregatePositions();
@@ -239,7 +245,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     moveItemDown: function(item)
     {
-        var restore_richtext = this.createCkeditorBackup(item);
+        var restore_richtext = this.createTextareaBackups(item);
 
         item.insertAfter(item.next());
         this.renderAggregatePositions();
@@ -262,11 +268,21 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         }]);
     },
 
-    // workaround for ckeditor breaking when a surrounding dom-container is moved.
+    // workaround for ckeditor and epic-editor breaking when a surrounding dom-container is moved.
     // sad but true ...
     // @see http://ckeditor.com/forums/CKEditor-3.x/Moving-CKEditor-instances-around-DOM
-    createCkeditorBackup: function(item)
+    createTextareaBackups: function(item)
     {
+        // collect all markdown-widget instances to reset after moving.
+        var i = 0;
+        var markdown_widgets_to_reload = [];
+        var aggregate_widgets = item[0].widgets || [];
+        for (; i < aggregate_widgets.length; i++) {
+            if (aggregate_widgets[i] instanceof honeybee.widgets.MarkdownWidget) {
+                markdown_widgets_to_reload.push(aggregate_widgets[i]);
+            }
+        }
+        // collect all ckeditor instances to reset after moving.
         var textareas_to_recreate = [];
         item.find('.cke').each(function(idx, ck_editor_el){
             var cke_id = $(ck_editor_el).attr('id');
@@ -274,11 +290,16 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             CKEDITOR.instances[input_id].destroy();
             textareas_to_recreate.push(input_id);
         });
-
+        // return a closure that can be called to restore the textarea-editor states prior to movement.
         return function() {
-            var i = 0;
-            for (; i < textareas_to_recreate.length; i++) {
-                CKEDITOR.replace(textareas_to_recreate[i]);
+            var n;
+            // reload ckeditor instances
+            for (n = 0; n < textareas_to_recreate.length; n++) {
+                CKEDITOR.replace(textareas_to_recreate[n]);
+            }
+            // reload epic-editor instances inside markdown-widgets
+            for (n = 0; n < markdown_widgets_to_reload.length; n++) {
+                markdown_widgets_to_reload[n].loadEpicEditor();
             }
         };
     },

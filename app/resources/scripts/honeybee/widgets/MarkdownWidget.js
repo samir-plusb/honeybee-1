@@ -26,28 +26,35 @@ honeybee.widgets.MarkdownWidget = honeybee.widgets.Widget.extend({
     {
         this.parent();
 
-        var that = this;
-        var base_href = $('#base_href').prop('href');
         this.textarea = this.element.find('> textarea').first();
+        if (this.textarea.length === 0) {
+            throw "Unable to find corresponding textrea for markdown editor.";
+        }
+        var that = this;
         this.element.prev('label').click(function()
         {
             that.epic_editor.focus();
         });
-        if (this.textarea.length > 0) {
-            var base_theme = this.options.themes.base;
-            var preview_theme = this.options.themes.preview;
-            var editor_theme = this.options.themes.editor;
-            this.epic_editor = new EpicEditor({
-                container: this.element.find('.epic-editor').first()[0],
-                textarea: this.textarea[0],
-                theme: {
-                    base: base_href + 'static/deploy/_global/binaries/epic_themes/base/' + base_theme + '.css',
-                    preview: base_href + 'static/deploy/_global/binaries/epic_themes/preview/' + preview_theme + '.css',
-                    editor: base_href + 'static/deploy/_global/binaries/epic_themes/editor/' + editor_theme + '.css'
-                }
-            });
-            this.epic_editor.load(function() { that.textarea.hide(); });
-        }
+        this.loadEpicEditor();
+    },
+
+    loadEpicEditor: function()
+    {
+        var that = this;
+        var base_href = $('#base_href').prop('href');
+        var base_theme = this.options.themes.base;
+        var preview_theme = this.options.themes.preview;
+        var editor_theme = this.options.themes.editor;
+        this.epic_editor = new EpicEditor({
+            container: this.element.find('.epic-editor').first()[0],
+            textarea: this.textarea[0],
+            theme: {
+                base: base_href + 'static/deploy/_global/binaries/epic_themes/base/' + base_theme + '.css',
+                preview: base_href + 'static/deploy/_global/binaries/epic_themes/preview/' + preview_theme + '.css',
+                editor: base_href + 'static/deploy/_global/binaries/epic_themes/editor/' + editor_theme + '.css'
+            }
+        });
+        this.epic_editor.load(function() { that.textarea.hide(); });
     }
 });
 
