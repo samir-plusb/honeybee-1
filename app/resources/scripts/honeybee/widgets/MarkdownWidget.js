@@ -26,7 +26,7 @@ honeybee.widgets.MarkdownWidget = honeybee.widgets.Widget.extend({
     {
         this.parent();
 
-        this.textarea = this.element.find('> textarea').first();
+        this.textarea = this.element.find('> textarea');
         if (this.textarea.length === 0) {
             throw "Unable to find corresponding textrea for markdown editor.";
         }
@@ -46,8 +46,10 @@ honeybee.widgets.MarkdownWidget = honeybee.widgets.Widget.extend({
         var preview_theme = this.options.themes.preview;
         var editor_theme = this.options.themes.editor;
         this.epic_editor = new EpicEditor({
-            container: this.element.find('.epic-editor').first()[0],
+            container: this.element.find('> .epic-editor')[0],
             textarea: this.textarea[0],
+            clientSideStorage: false,
+            localStorageName: this.element.prop('id'),
             theme: {
                 base: base_href + 'static/deploy/_global/binaries/epic_themes/base/' + base_theme + '.css',
                 preview: base_href + 'static/deploy/_global/binaries/epic_themes/preview/' + preview_theme + '.css',
