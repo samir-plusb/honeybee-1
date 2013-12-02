@@ -68,7 +68,7 @@ honeybee.widgets.MarkdownWidget.DEFAULT_OPTIONS = {
     fieldname: null,
     themes: {
         base: 'epiceditor',
-        preview: 'preview-light',
+        preview: 'github',
         editor: 'epic-light'
     }
 };
