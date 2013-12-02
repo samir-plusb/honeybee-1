@@ -34,7 +34,7 @@ honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
         var that = this;
         var $parent_tab = that.aggregate_list.parents('.tab-pane');
         var tab_id = $parent_tab.attr('id');
-        $('.nav-tabs li a').each(function(idx, tab_item)
+        $('.nav-tabs li a, .nav-list li a').each(function(idx, tab_item)
         {
             tab_item = $(tab_item);
             if (tab_item.attr('href').match('#'+tab_id))
@@ -49,7 +49,6 @@ honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
                             if (aggregate.widgets.length > 0 && aggregate.widgets[0].map)
                             {
                                 widget = aggregate.widgets[0];
-                                google.maps.event.trigger(widget.map, "resize");
                                 widget.map.setCenter(new google.maps.LatLng(
                                     widget.location.lat(),
                                     widget.location.lon()
