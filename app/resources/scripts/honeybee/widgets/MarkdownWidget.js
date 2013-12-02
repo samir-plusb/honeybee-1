@@ -35,7 +35,22 @@ honeybee.widgets.MarkdownWidget = honeybee.widgets.Widget.extend({
         {
             that.epic_editor.focus();
         });
-        this.loadEpicEditor();
+
+        var $parent_aggregate = this.element.parents('.aggregate');
+
+        if ($parent_aggregate.length > 0)
+        {
+            var rendered = false;
+            $parent_aggregate.click(function()
+            {
+                if (!rendered) {
+                    that.loadEpicEditor();
+                    rendered = true;
+                }
+            });
+        } else {
+            this.loadEpicEditor();
+        }
     },
 
     loadEpicEditor: function()
