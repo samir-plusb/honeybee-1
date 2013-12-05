@@ -8,7 +8,7 @@
         {% endif %}
     </label>
     {% endif %}
-    <textarea type="text" name="{{ inputName }}" id="{{ fieldId }}" placeholder="{{ placeholder }}" class="ckeditor"
+    <textarea dir="auto" name="{{ inputName }}" id="{{ fieldId }}" placeholder="{{ placeholder }}" class="ckeditor"
         {% if true == readonly %} disabled="disabled" {% endif %}>{{fieldValue}}</textarea>
 {% elseif field.getOption('use_markdown') %}
     <label class="control-label" for="{{ fieldId }}">
@@ -31,7 +31,7 @@
         {% endif %}
     </label>
     <div class="controls mdedit-{{ fieldId }}">
-        <textarea type="text" class="span11 field-textarea textarea-{{ fieldName }}" name="{{ inputName }}" id="{{ fieldId }}"
+        <textarea dir="auto" type="text" class="span11 field-textarea textarea-{{ fieldName }}" name="{{ inputName }}" id="{{ fieldId }}"
             placeholder="{{ placeholder }}" class="input-xlarge"
             {% if true == readonly %} readonly="readonly" {% endif %}>{{ fieldValue }}</textarea>
     </div>
