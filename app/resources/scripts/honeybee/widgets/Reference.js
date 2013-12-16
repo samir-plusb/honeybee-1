@@ -63,13 +63,19 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             var input = this.element.find('.refwidget-container');
             var edge_distance_right = $(window).width() - (input.width() + input.offset().left);
             var edge_distance_left = input.offset().left;
-
+            var placement;
+            var avail_popup_space = Math.max(edge_distance_left, edge_distance_right);
+            if (avail_popup_space > 400) {
+                placement = (edge_distance_left > edge_distance_right) ? 'left' : 'right';
+            } else {
+                placement = 'top';
+            }
             input.popover({
                 trigger: 'manual',
                 animation: true,
                 html: true,
                 title: this.options.texts.inline_create_label,
-                placement: (edge_distance_left > edge_distance_right) ? 'left' : 'right',
+                placement: placement,
                 content: this.buildPopover()
             });
         }
@@ -586,9 +592,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         var input = this.element.find('.refwidget-container');
         var edge_distance_right = $(window).width() - (input.width() + input.offset().left);
         var edge_distance_left = input.offset().left;
-        var css_adjsutments = {
-            'top': (-(popover_el.height() / 2) + 10) + 'px'
-        };
+        var css_adjsutments = {};
 
         if (edge_distance_left > edge_distance_right)
         {
