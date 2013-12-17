@@ -67,7 +67,7 @@ class DocumentService implements IService
             $container = new Elastica\Filter\BoolAnd();
             $container->addFilter(new Elastica\Filter\Ids(
                 $this->module->getOption('prefix'),
-                array_unique($identifiers)
+                $identifiers
             ));
             $container->addFilter(new Elastica\Filter\BoolNot(
                 new Elastica\Filter\Term(

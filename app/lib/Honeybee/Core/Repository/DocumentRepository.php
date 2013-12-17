@@ -8,6 +8,7 @@ use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Dat0r\ModuleService;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\DocumentCollection;
+use Honeybee\Core\Dat0r\RelationManager;
 
 class DocumentRepository extends BaseRepository
 {
@@ -18,7 +19,9 @@ class DocumentRepository extends BaseRepository
         $result = (NULL === $query)
             ? $this->getFinder()->fetchAll($limit, $offset)
             : $this->getFinder()->find($query, $limit, $offset);
-
+        if (RelationManager::getRecursionDepth() == 0) {
+            RelationManager::prePopulateReferences($this->getModule(), $result['data']);
+        }
         foreach ($result['data'] as $documentData)
         {
             $documents->add(
