@@ -78,6 +78,10 @@ class RelationManager
                 );
             } elseif ($field instanceof AggregateField && isset($values[$fieldname])) {
                 foreach ($values[$fieldname] as $aggregate_data) {
+                    if (!isset($aggregate_data['type'])) {
+                        error_log(print_r($aggregate_data, true));
+                        continue;
+                    }
                     $document_type = '\\'.$aggregate_data['type'];
                     $module_type = substr_replace(
                         $document_type,

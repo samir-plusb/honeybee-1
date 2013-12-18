@@ -118,12 +118,7 @@ honeybee.widgets.KeyValuesList.KeyValuesPair = honeybee.core.BaseObject.extend({
 
     applyCurrentValues: function()
     {
-        var value_parts = $.trim(this.values_string()).split(',');
-        this.values([]);
-        for (var i = 0; i < value_parts.length; i++)
-        {
-            this.values.push($.trim(value_parts[i]));
-        }
+        this.values([$.trim(this.values_string())]);
     },
 
     handleFocus: function(event, action)

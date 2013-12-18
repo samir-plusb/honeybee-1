@@ -63,11 +63,12 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
                 $(item).addClass('collapsed');
             });
         });
+        this.updateAggregateLabels();
     },
 
     registerDisplayedTextInputs: function(aggregate)
     {
-        var first_input = aggregate.find('input:visible').first();
+        var first_input = aggregate.find('input[type="text"], textarea').first();
         var that = this;
         first_input.change(function()
         {
@@ -98,6 +99,25 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             }
             aggregate.find('.input-group-label .displayed_text').text(' ' + short_text);
         }
+    },
+
+    updateAggregateLabels: function()
+    {
+        this.aggregate_list.find('.aggregate').each(function(idx, aggregate)
+        {
+            aggregate = $(aggregate);
+            var first_input = aggregate.find('input:visible').first();
+            var text = first_input.val();
+            if (text && text.length > 0)
+            {
+                var short_text = text.substr(0, 40);
+                if (short_text.length < text.length)
+                {
+                    short_text = short_text + ' ...';
+                }
+                aggregate.find('.input-group-label .displayed_text').text(' ' + short_text);
+            }
+        });
     },
 
     addAggregate: function(doc_type, focus)
@@ -205,7 +225,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             that.moveItemDown(item);
             return false;
         });
-
+        var timer = null;
         item.find('.input-group-label').click(function(expand_event)
         {
             if (item.hasClass('collapsed'))
@@ -216,7 +236,11 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
                     first_input.focus();
                     $('html, body').animate({scrollTop: first_input.offset().top - 200}, 350, function()
                     {
-                        first_input.focus();
+                        if (timer) {
+                            clearTimeout(timer);
+                            timer = null;
+                        }
+                        timer = setTimeout(function() { first_input.focus(); }, 500);
                     });
                 } else {
                     $('html, body').animate({scrollTop: item.offset().top - 200}, 350);
@@ -224,6 +248,10 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             }
             else
             {
+                if (timer) {
+                    clearTimeout(timer);
+                    timer = null;
+                }
                 item.addClass('collapsed');
             }
         });

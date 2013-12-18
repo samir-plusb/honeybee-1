@@ -291,14 +291,22 @@ fieldset .control-group .field-textarea
   margin-left: 0;
 }
 
-.propertyExplorer .propertyValues ul li
+.propertyExplorer .propertyValues ul li.label
 {
-  float: left;
   margin-right: 10px;
   padding: 5px;
   margin-bottom: 7px;
   border-radius: 10px;
   cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+  white-space: normal;
+}
+
+.propertyExplorer .propertyValues
+{
+  text-overflow:ellipsis;
 }
 
 .section-screenings ul,
