@@ -54,7 +54,8 @@
         "sami/sami": "1.0",
         "psr/log": "1.0.0",
         "monolog/monolog": "1.5",
-        "symfony/process": "~2.1"
+        "symfony/process": "~2.1",
+        "michelf/php-markdown": "1.4.0"
     },
 
     "require-dev": {

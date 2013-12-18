@@ -1279,6 +1279,19 @@ div.select2-container-multi .select2-choices .select2-search-field
   float: left;
 }
 
+.aggregate-selector-bottom
+{
+  display: none;
+}
+
+.aggregate-selector-bottom,
+.add-aggregate-bottom
+{
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .aggregate-widget-root .collapse-actions li
 {
   float: left;

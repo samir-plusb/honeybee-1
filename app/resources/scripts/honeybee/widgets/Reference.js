@@ -84,7 +84,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             JSON.stringify({
                 'type': 'references-rendered',
                 'field': this.options.realname,
-                'references': this.tags()
+                'references': this.tags(),
+                'field_id': this.options.field_id
             }),
             this.options.event_origin
         );
@@ -156,7 +157,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             JSON.stringify({
                 'type': 'reference-removed',
                 'reference': tag,
-                'field': this.options.realname
+                'field': this.options.realname,
+                'field_id': this.options.field_id
             }),
             this.options.event_origin
         );
@@ -232,7 +234,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                     JSON.stringify({
                         'type': 'reference-added',
                         'reference': event.added,
-                        'field': that.options.realname
+                        'field': that.options.realname,
+                        'field_id': that.options.field_id
                     }),
                     that.options.event_origin
                 );
@@ -687,7 +690,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 JSON.stringify({
                     'type': 'reference-added',
                     'reference': event.added,
-                    'field': that.options.realname
+                    'field': that.options.realname,
+                    'field_id': that.options.field_id
                 }),
                 that.options.event_origin
             );
@@ -758,7 +762,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             id: msg_data.item.id,
             text: msg_data.item.text,
             module_prefix: msg_data.item.module,
-            label: msg_data.item.text
+            label: msg_data.item.text,
+            field_id: this.options.field_id
         };
 
         for (i = 0; i < this.tags().length && ! allready_added; i++)
@@ -778,7 +783,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                     JSON.stringify({
                         'type': 'reference-removed',
                         'reference': removed,
-                        'field': this.options.realname
+                        'field': this.options.realname,
+                        'field_id': that.options.field_id
                     }),
                     this.options.event_origin
                 );
@@ -790,11 +796,13 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             {
                 this.tags.push(item_data);
             }
+        console.log("wtf?!!");
             window.postMessage(
                 JSON.stringify({
                     'type': 'reference-added',
                     'reference': item_data,
-                    'field': this.options.realname
+                    'field': this.options.realname,
+                    'field_id': that.options.field_id
                 }),
                 this.options.event_origin
             );
@@ -820,7 +828,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                 JSON.stringify({
                     'type': 'reference-removed',
                     'reference': to_remove,
-                    'field': this.options.realname
+                    'field': this.options.realname,
+                    'field_id': that.options.field_id
                 }),
                 this.options.event_origin
             );

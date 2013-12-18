@@ -156,7 +156,11 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             'field': this.options.fieldname,
             'element': list_item
         }]);
-
+        if (this.aggregate_list.find('.aggregate').length > 1) {
+            this.element.find('.aggregate-selector-bottom').show();
+        } else {
+            this.element.find('.aggregate-selector-bottom').hide();
+        }
         return list_item;
     },
 
@@ -294,6 +298,11 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             'field': this.options.fieldname,
             'element': item[0]
         }]);
+        if (this.aggregate_list.find('.aggregate').length > 1) {
+            this.element.find('.aggregate-selector-bottom').show();
+        } else {
+            this.element.find('.aggregate-selector-bottom').hide();
+        }
     },
 
     // workaround for ckeditor and epic-editor breaking when a surrounding dom-container is moved.

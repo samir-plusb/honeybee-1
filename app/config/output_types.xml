@@ -73,6 +73,7 @@
                 </ae:parameter>
                 <ae:parameter name="extensions">
                     <ae:parameter>Honeybee\Agavi\Renderer\Twig\TranslationManagerExtension</ae:parameter>
+                    <ae:parameter>Honeybee\Agavi\Renderer\Twig\MarkdownExtension</ae:parameter>
                 </ae:parameter>
             </renderer>
             <renderer name="php" class="Honeybee\Agavi\Renderer\PhpRenderer">
