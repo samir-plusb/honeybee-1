@@ -44,8 +44,8 @@ honeybee.widgets.KeyValuesList = honeybee.widgets.Widget.extend({
         this.keyvalues_pairs.push(
             new honeybee.widgets.KeyValuesList.KeyValuesPair(
                 this.fieldname(),
-                'Eigentschaft/Name',
-                [ 'Eigentschaft/Wert 1', 'Eigenschaft/Wert 2' ]
+                'Name',
+                [ 'Wert' ]
             )
         );
     },
