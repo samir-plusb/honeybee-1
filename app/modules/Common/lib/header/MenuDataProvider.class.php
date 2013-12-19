@@ -10,8 +10,7 @@ class MenuDataProvider
         $modules = array();
         $service = new ModuleService();
 
-        foreach ($service->getModules() as $module)
-        {
+        foreach ($service->getModules() as $module) {
             $modules[$module->getName()] = array(
                 'label' => $this->getModuleLabel($module),
                 'links' => $this->getModuleLinks($module)
@@ -19,82 +18,78 @@ class MenuDataProvider
         }
 
         // sort modules by their translated labels
-        uasort($modules, function($left, $right)
-        {
-            return strcmp($left['label'], $right['label']);
-        });
+        uasort(
+            $modules,
+            function($left, $right)
+            {
+                return strcmp($left['label'], $right['label']);
+            }
+        );
 
         // apply custom sort order if specified in project/config/settings.xml
-        $customModuleSortOrder = AgaviConfig::get('project.modules.sort_order', array());
-        $sortedModules = array();
+        $custom_module_sort_order = AgaviConfig::get('project.modules.sort_order', array());
+        $sorted_modules = array();
 
-        foreach ($customModuleSortOrder as $moduleName)
-        {
-            if (isset($modules[$moduleName]))
-            {
-                $sortedModules[$moduleName] = $modules[$moduleName];
-            }   
-        }
-
-        // add all modules that were not specified in project/config/settings.xml
-        foreach ($modules as $moduleName => $values)
-        {
-            if (!isset($sortedModules[$moduleName]))
-            {
-                $sortedModules[$moduleName] = $modules[$moduleName];
+        foreach ($custom_module_sort_order as $module_name) {
+            if (isset($modules[$module_name])) {
+                $sorted_modules[$module_name] = $modules[$module_name];
             }
         }
 
-        return $sortedModules;
+        // add all modules that were not specified in project/config/settings.xml
+        foreach ($modules as $module_name => $values) {
+            if (!isset($sorted_modules[$module_name])) {
+                $sorted_modules[$module_name] = $modules[$module_name];
+            }
+        }
+
+        return $sorted_modules;
     }
 
     protected function getModuleLabel(Module $module)
     {
         $context = AgaviContext::getInstance();
-        $translationManager = $context->getTranslationManager();
+        $translation_manager = $context->getTranslationManager();
 
-        return $translationManager->_($module->getName(), 'modules.labels');
+        return $translation_manager->_($module->getName(), 'modules.labels');
     }
 
     protected function getModuleLinks(Module $module)
     {
         $context = AgaviContext::getInstance();
-        $translationManager = $context->getTranslationManager();
+        $translation_manager = $context->getTranslationManager();
         $routing = $context->getRouting();
         $user = $context->getUser();
 
-        $moduleLinks = array();
+        $module_links = array();
 
-        if ($user->isAllowed($module, $module->getOption('prefix') . '::create'))
-        {
-            $moduleLinks[] = array(
-                'name' => 'create_link', 
+        if ($user->isAllowed($module, $module->getOption('prefix') . '::create')) {
+            $module_links[] = array(
+                'name' => 'create_link',
                 'url' => $routing->gen($module->getOption('prefix') . '.edit'),
                 'icon_class' => 'hb-icon-file-4',
-                'label' => $translationManager->_('Neuer Eintrag')
+                'label' => $translation_manager->_('Neuer Eintrag')
             );
         }
 
-        if ($user->isAllowed($module, $module->getOption('prefix') . '::read'))
-        {
-            $moduleLinks[] = array(
-                'name' => 'list_link', 
+        if ($user->isAllowed($module, $module->getOption('prefix') . '::read')) {
+            $module_links[] = array(
+                'name' => 'list_link',
                 'url' => $routing->gen($module->getOption('prefix') . '.list'),
                 'icon_class' => 'hb-icon-list-3',
-                'label' => $translationManager->_('Übersicht')
+                'label' => $translation_manager->_('Übersicht')
             );
 
-            if ($module->isActingAsTree())
-            {
-                $moduleLinks[] = array(
-                    'name' => 'tree_link', 
+            if ($module->isActingAsTree()) {
+                $module_links[] = array(
+                    'name' => 'tree_link',
                     'url' => $routing->gen($module->getOption('prefix') . '.tree'),
                     'icon_class' => 'hb-icon-tree',
-                    'label' => $translationManager->_('Baumansicht')
+                    'label' => $translation_manager->_('Baumansicht')
                 );
             }
         }
 
-        return $moduleLinks;
+        return $module_links;
     }
 }
