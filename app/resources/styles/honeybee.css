@@ -1279,17 +1279,29 @@ div.select2-container-multi .select2-choices .select2-search-field
   float: left;
 }
 
-.aggregate-selector-bottom
+.widget-aggregate .aggregate-selector-bottom
 {
   display: none;
+  margin-left: 0;
 }
 
-.aggregate-selector-bottom,
-.add-aggregate-bottom
+.widget-aggregate .aggregate-selector-bottom button
+{
+  width: 100%;
+}
+
+.widget-aggregate .aggregate-selector-bottom,
+.widget-aggregate .add-aggregate-bottom
 {
   width: 100%;
   padding-left: 0;
   padding-right: 0;
+}
+
+.widget-aggregate .aggregate-selector-bottom .dropdown-menu
+{
+  width: 100%;
+  text-align: center;
 }
 
 .aggregate-widget-root .collapse-actions li
