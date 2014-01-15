@@ -83,6 +83,7 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
         return array_merge(
             parent::getPayload($document),
             array(
+                'max_count' => $this->getField()->getOption('max', 0),
                 'aggregates' => $aggregates,
                 'aggregate_modules' => $aggregate_modules
             )

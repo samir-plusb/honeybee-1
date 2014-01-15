@@ -143,7 +143,9 @@
     </div>
     {% else %}
     <div class="aggregate-module-item aggregate-selector-bottom">
-        <a href="#" class="btn btn-default add-aggregate-bottom"> {{ tm._('Add aggregate', td) }}</a>
+        {% if ((aggregates|length) < max_count) or (max_count == 0) %}
+            <a href="#" class="btn btn-default add-aggregate-bottom"> {{ tm._('Add aggregate', td) }}</a>
+        {% endif %}
         {% set aggregate_module = aggregate_modules[0] %}
         <div class="row-fluid aggregate-tpl aggregate">
             <div class="span{{group['width']}} group">
