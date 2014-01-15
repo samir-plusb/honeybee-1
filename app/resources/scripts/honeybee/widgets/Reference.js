@@ -784,7 +784,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                         'type': 'reference-removed',
                         'reference': removed,
                         'field': this.options.realname,
-                        'field_id': that.options.field_id
+                        'field_id': this.options.field_id
                     }),
                     this.options.event_origin
                 );
@@ -796,13 +796,13 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             {
                 this.tags.push(item_data);
             }
-        console.log("wtf?!!");
+
             window.postMessage(
                 JSON.stringify({
                     'type': 'reference-added',
                     'reference': item_data,
                     'field': this.options.realname,
-                    'field_id': that.options.field_id
+                    'field_id': this.options.field_id
                 }),
                 this.options.event_origin
             );
