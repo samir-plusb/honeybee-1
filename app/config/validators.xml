@@ -17,6 +17,17 @@
                 </ae:parameters>
             </validator_definition>
 
+            <validator_definition name="ModuleExportProvider" class="AgaviStringValidator">
+                <errors>
+                    <error>Please specify a %name$s defined in the module's exports.xml file.</error>
+                    <error for="min">A valid %name$s needs at least %min$s characters.</error>
+                </errors>
+                <ae:parameters>
+                    <ae:parameter name="min">4</ae:parameter>
+                    <ae:parameter name="description">Name of a provider from the module's exports.xml file.</ae:parameter>
+                </ae:parameters>
+            </validator_definition>
+
             <validator_definition class="AgaviInarrayValidator" name="valid_save_action">
                 <errors>
                     <error>Only specific types are allowed as submit button values.</error>
