@@ -12,7 +12,7 @@ class EditInputView extends BaseView
      */
     public function executeHtml(\AgaviRequestDataHolder $parameters)
     {
-        $this->setupHtml($parameters);
+        $this->setupHtml($parameters, $parameters->getParameter('layout', null));
 
         $module = $this->getAttribute('module');
         $tm = $this->getContext()->getTranslationManager();
