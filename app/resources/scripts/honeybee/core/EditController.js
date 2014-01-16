@@ -167,7 +167,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
                 {
                     window.location.href = resp_data.redirect_url;
                 }
-                that.fire('document-stored');
+                that.fire('document-stored', [resp_data]);
             }
             else if('error' === resp_data.state)
             {
@@ -175,6 +175,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
                     resp_data.errors || [ ],
                     'error'
                 );
+                that.fire('document-error', [resp_data]);
             }
         };
 
