@@ -20,6 +20,11 @@ abstract class Document extends BaseDocument implements IResource
         $this->setValue('identifier', $identifier);
     }
 
+    public function getUuid()
+    {
+        return $this->getValue('uuid');
+    }
+
     public function getIdentifier()
     {
         return $this->getValue('identifier');
