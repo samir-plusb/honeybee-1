@@ -6,8 +6,11 @@
         {% endif %}
     </label>
     <div class="controls">
+        {% if true == readonly %}
+        <input type="hidden" name="{{ inputName }}" value="{{ fieldValue }}" />
+        {% endif %}
         <select name="{{ inputName }}" id="{{ fieldId }}" title="{{ placeholder }}" class="span11"
-            {% if true == readonly %} readonly="readonly" {% endif %}
+            {% if true == readonly %} readonly="readonly" disabled="disabled" {% endif %}
             {% if mandatory == true %}aria-required="true"{% endif %}
             {% if multiple == true %}multiple="multiple"{% endif %}>
             <option value=""></option>
