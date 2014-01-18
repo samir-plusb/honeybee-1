@@ -829,7 +829,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                     'type': 'reference-removed',
                     'reference': to_remove,
                     'field': this.options.realname,
-                    'field_id': that.options.field_id
+                    'field_id': this.options.field_id
                 }),
                 this.options.event_origin
             );
