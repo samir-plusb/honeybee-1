@@ -55,6 +55,10 @@ class MappingGeneratorPlugin
                 'type' => 'string',
                 'index' => 'not_analyzed'
             ),
+            'uuid' => array(
+                'type' => 'string',
+                'index' => 'not_analyzed'
+            ),
             'language' => array(
                 'type' => 'string',
                 'index' => 'not_analyzed'
