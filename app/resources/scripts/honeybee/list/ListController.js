@@ -79,7 +79,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
         window.addEventListener('message', messageEventHandler,false);
         honeybee.core.events.on('clearFilter', function() { that.reloadList({}); });
-        window.top.postMessage(
+        window.parent.postMessage(
             JSON.stringify({
                 'event_type': 'list-loaded',
                 'source_type': this.type_key,
@@ -131,7 +131,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         this.viewmodel.initItems(data.listItems);
         this.viewmodel.initMetadata(data.metaData);
 
-        window.top.postMessage(
+        window.parent.postMessage(
             JSON.stringify({
                 'event_type': 'list-loaded',
                 'source_type': this.type_key,
@@ -526,7 +526,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
                 }
             };
 
-            window.top.postMessage(JSON.stringify(msg_payload), this.options.event_origin);
+            window.parent.postMessage(JSON.stringify(msg_payload), this.options.event_origin);
         }
 
         this.updateSidebarClickTriggers();
@@ -549,7 +549,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
                 }
             };
 
-            window.top.postMessage(JSON.stringify(msg_payload), this.options.event_origin);
+            window.parent.postMessage(JSON.stringify(msg_payload), this.options.event_origin);
         }
 
         this.updateSidebarClickTriggers();
