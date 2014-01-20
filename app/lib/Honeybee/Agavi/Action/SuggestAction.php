@@ -4,6 +4,7 @@ namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Finder\ElasticSearch;
 use Elastica;
+use AgaviConfig;
 
 class SuggestAction extends BaseAction
 {
@@ -11,19 +12,23 @@ class SuggestAction extends BaseAction
     {
         $display_field = $request_data->getParameter('display_field');
         $identity_field = $request_data->getParameter('identity_field');
-        $term = $request_data->getParameter('term');
+        $term = $request_data->getParameter('term', '');
 
         $module = $this->getModule();
         $repository = $module->getRepository();
 
         $data = array();
-        $query = null;
-        if ($term) {
-            $query_builder = new ElasticSearch\SuggestQueryBuilder();
-            $query = $query_builder->build(
-                array('term' => $term, 'field' => $display_field, 'sorting' => array())
-            );
-        }
+        $list_config = AgaviConfig::get(
+            sprintf('%s.list_config', $module->getOption('prefix')),
+            array()
+        );
+        $query_builder_implementor = isset($list_config['suggest_query_builder'])
+            ? $list_config['suggest_query_builder']
+            : '\Honeybee\Core\Finder\ElasticSearch\SuggestQueryBuilder';
+        $query_builder = new $query_builder_implementor();
+        $query = $query_builder->build(
+            array('term' => $term, 'field' => $display_field, 'sorting' => array())
+        );
 
         $result = $repository->getFinder()->find($query, 10, 0);
         $suggest_data = array();
