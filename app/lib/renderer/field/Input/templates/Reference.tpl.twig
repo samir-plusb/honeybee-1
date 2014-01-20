@@ -5,7 +5,8 @@
         <span class="mandatory-marker">*</span>
         {% endif %}
     </label>
-    <section class="controls honeybee-widget widget-reference" data-reference-options="{{ widgetOptions|raw }}">
+    <section class="controls honeybee-widget {{ widgetType }}"
+        data-{{ widgetType|replace({'widget-': ''}) }}-options="{{widgetOptions|raw}}">
     </section>
     {% if tm._(fieldName ~ '_help', td) != fieldName ~ '_help' %}
     <span class="hb-icon-info help-trigger field-help"

@@ -401,27 +401,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     initRefbrowser: function()
     {
         var that = this;
-        var resizeDialog = function()
-        {
-            $reference_dialog = that.element.find('.modal-reference-list');
-            $dialog_body = $reference_dialog.find('.modal-body');
-            var refbrowser_width = $(window).width() - 100;
-            var refbrowser_height = $(window).height() - 100;
-            var center_margin = (refbrowser_width / 2);
-            var middle_margin = (refbrowser_height / 2);
-            var body_height = refbrowser_height - 82;
-            $reference_dialog.css({
-                'width': refbrowser_width,
-                'height': refbrowser_height,
-                'margin-top': -middle_margin,
-                'margin-left': -center_margin
-            });
-            $dialog_body.css({
-                'height': body_height,
-                'padding': 0,
-                'max-height': body_height
-            });
-        };
+        var $reference_dialog = that.element.find('.modal-reference-list');
+        var resizeDialog = this.buildResizeFunction($reference_dialog);
 
         this.iframe = this.element.find('.reference-list-access')[0];
         this.iframe.onload = function()
@@ -441,6 +422,45 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         {
             that.hideDialog(that.element.find('.modal-reference-list'));
         });
+    },
+
+    buildResizeFunction: function($reference_dialog)
+    {
+        var that = this;
+        var $dialog_body = $reference_dialog.find('.modal-body');
+
+        return function()
+        {
+            var refbrowser_width = $(window).width() - 100;
+            var refbrowser_height = $(window).height() - 100;
+            var center_margin = (refbrowser_width / 2);
+            var middle_margin = (refbrowser_height / 2);
+            var body_height = refbrowser_height - 82;
+
+            var resize_options;
+            if (that.iframe.contentWindow.parent === window.top) {
+                resize_options = {
+                    'width': refbrowser_width,
+                    'height': refbrowser_height,
+                    'margin-top': -middle_margin,
+                    'margin-left': -center_margin
+                };
+            } else {
+                resize_options = {
+                    'width': refbrowser_width + 100,
+                    'height': refbrowser_height + 100,
+                    'margin-top': -(middle_margin + 50),
+                    'margin-left': -(center_margin + 50)
+                };
+            }
+
+            $reference_dialog.css(resize_options);
+            $dialog_body.css({
+                'height': body_height,
+                'padding': 0,
+                'max-height': body_height
+            });
+        };
     },
 
     launchReferenceBrowser: function()
@@ -511,6 +531,16 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         {
             element.modal('hide');
         }
+
+        window.top.postMessage(
+            JSON.stringify({
+                'event_type': 'reference-browser-hidden',
+                'fieldname': this.options.fieldname,
+                'field_id': this.options.field_id,
+                'element_classes': element.attr('class')
+            }),
+            this.options.event_origin
+        );
     },
 
     showDialog: function(element)
@@ -523,6 +553,16 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
         {
             element.modal({'show': true, 'backdrop': 'static'});
         }
+
+        window.top.postMessage(
+            JSON.stringify({
+                'event_type': 'reference-browser-shown',
+                'fieldname': this.options.fieldname,
+                'field_id': this.options.field_id,
+                'element_classes': element.attr('class')
+            }),
+            this.options.event_origin
+        );
     },
 
     // ------------------------------------
