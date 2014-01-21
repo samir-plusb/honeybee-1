@@ -88,15 +88,20 @@ class InteractivePlugin extends BasePlugin
         $result->freeze();
         $method = $this->getWorkflow()->getContainer()->getRequestMethod();
 
-        if ('write' === $method)
-        {
-            if ('published' === $ticket->getWorkflowStep())
-            {
-                $this->publishResource($resource);
-            }
+        if ($this->shallPublish()) {
+            $this->publishResource($resource);
         }
 
         return $result;
+    }
+
+    protected function shallPublish()
+    {
+        $resource = $this->getResource();
+        $ticket = $resource->getWorkflowTicket()->first();
+        $method = $this->getWorkflow()->getContainer()->getRequestMethod();
+
+        return ('write' === $method && 'published' === $ticket->getWorkflowStep());
     }
 
     /**
