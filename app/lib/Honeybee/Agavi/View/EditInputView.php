@@ -25,6 +25,12 @@ class EditInputView extends BaseView
         $renderer = new DocumentInputRenderer($module);
         $form = $renderer->render($document);
 
+        $list_setting_name = sprintf('%s_last_list_url', $module->getOption('prefix'));
+        $last_list_url = $this->getContext()->getUser()->getAttribute($list_setting_name, 'honeybee.list', false);
+        if ($last_list_url) {
+            $this->setAttribute('list_url', $last_list_url);
+        }
+
         $this->setAttribute('form', $form);
     }
 

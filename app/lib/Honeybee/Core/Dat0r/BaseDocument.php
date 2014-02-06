@@ -27,8 +27,10 @@ abstract class BaseDocument extends Document implements ResourceInterface
 
         parent::hydrate($values, $apply_defaults);
 
-        foreach (RelationManager::loadReferences($this, $reference_data) as $fieldname => $reference_documents) {
-            $this->setValue($fieldname, $reference_documents);
+        if (RelationManager::getRecursionDepth() === 0) {
+            foreach (RelationManager::loadReferences($this, $reference_data) as $fieldname => $reference_documents) {
+                $this->setValue($fieldname, $reference_documents);
+            }
         }
     }
 }

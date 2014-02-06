@@ -47,6 +47,9 @@ class DocumentInputRenderer extends DocumentRenderer
 
     protected function getPayload(Document $document)
     {
+        $list_setting_name = sprintf('%s_last_list_url', $document->getModule()->getOption('prefix'));
+        $last_list_url = AgaviContext::getInstance()->getUser()->getAttribute($list_setting_name, 'honeybee.list', false);
+
         return array(
             'tabs' => $this->renderTabs($document),
             'tm' => $this->getTranslationManager(),
@@ -55,7 +58,7 @@ class DocumentInputRenderer extends DocumentRenderer
             'modulePrefix' => $document->getModule()->getOption('prefix'),
             'controllerOptions' => htmlspecialchars(json_encode($this->getControllerOptions($document))),
             'editLink' => $this->getRouteLink('workflow.run'),
-            'listLink' => $this->getRouteLink('list'),
+            'listLink' => $last_list_url ? $last_list_url : $this->getRouteLink('list'),
             'readonly' => $this->isReadonly($document)
         );
     }

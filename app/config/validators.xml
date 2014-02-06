@@ -39,6 +39,7 @@
                     <ae:parameter name="values">
                         <ae:parameter>save_and_continue</ae:parameter>
                         <ae:parameter>save_and_new</ae:parameter>
+                        <ae:parameter>save_and_close</ae:parameter>
                     </ae:parameter>
                 </ae:parameters>
             </validator_definition>

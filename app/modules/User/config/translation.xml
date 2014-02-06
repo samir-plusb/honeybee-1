@@ -24,8 +24,8 @@
                         <ae:parameter name="de">
                             <!-- list header and standard action names -->
                             <ae:parameter name="created">Erstellt</ae:parameter>
-                            <ae:parameter name="owner">Besitzer</ae:parameter>
-                            <ae:parameter name="username">Nutzername</ae:parameter>
+                            <ae:parameter name="owner">Besitzer/in</ae:parameter>
+                            <ae:parameter name="username">Nutzer/inname</ae:parameter>
                             <ae:parameter name="firstname">Vorname</ae:parameter>
                             <ae:parameter name="lastname">Nachname</ae:parameter>
                             <ae:parameter name="actions">Aktionen</ae:parameter>
@@ -74,7 +74,7 @@
                         <ae:parameter name="de">
                             <ae:parameter name="identifier">Identifikation</ae:parameter>
                             <ae:parameter name="revision">Revision</ae:parameter>
-                            <ae:parameter name="username">Nutzername</ae:parameter>
+                            <ae:parameter name="username">Nutzer/inname</ae:parameter>
                             <ae:parameter name="firstname">Vorname</ae:parameter>
                             <ae:parameter name="lastname">Nachname</ae:parameter>
                             <ae:parameter name="email">Email</ae:parameter>
@@ -106,12 +106,12 @@
                         <ae:parameter name="de">
                             <ae:parameter name="Signin">Anmelden</ae:parameter>
                             <ae:parameter name="Set password">Kennwort setzen</ae:parameter>
-                            <ae:parameter name="Username">Nutzername</ae:parameter>
+                            <ae:parameter name="Username">Nutzer/inname</ae:parameter>
                             <ae:parameter name="Reset password">Kennwort zurücksetzen</ae:parameter>
                             <ae:parameter name="Password">Kennwort</ae:parameter>
                             <ae:parameter name="Repeat password">Kennwort wiederholen</ae:parameter>
-                            <ae:parameter name="Please sign in">Bitte Nutzernamen und Kennwort eingeben</ae:parameter>
-                            <ae:parameter name="Please enter your email or username."><![CDATA[Bitte Nutzernamen <b>oder</b> Emailadresse eingeben.]]></ae:parameter>
+                            <ae:parameter name="Please sign in">Bitte Nutzer/innamen und Kennwort eingeben</ae:parameter>
+                            <ae:parameter name="Please enter your email or username."><![CDATA[Bitte Nutzer/innamen <b>oder</b> Emailadresse eingeben.]]></ae:parameter>
                             <ae:parameter name="Min. %d characters long">Mind. %d Zeichen lang</ae:parameter>
                             <ae:parameter name="Min. %d lowercase letters">Mind. %d Kleinbuchstaben</ae:parameter>
                             <ae:parameter name="Min. %d uppercase characters">Mind. %d Grossbuchstaben</ae:parameter>
@@ -128,12 +128,12 @@
 
                     <ae:parameter name="messages">
                         <ae:parameter name="de">
-                            <ae:parameter name="invalid_login">Die Kombination aus Nutzername und Kennwort ist ungültig.</ae:parameter>
-                            <ae:parameter name="invalid_account">Ungültige Kontodaten; bitte die angegebene Email oder den Nutzernamen auf Richtigkeit überprüfen.</ae:parameter>
+                            <ae:parameter name="invalid_login">Die Kombination aus Nutzer/inname und Kennwort ist ungültig.</ae:parameter>
+                            <ae:parameter name="invalid_account">Ungültige Kontodaten; bitte die angegebene Email oder den Nutzer/innamen auf Richtigkeit überprüfen.</ae:parameter>
                             <ae:parameter name="Login Error">Fehler während der Anmeldung</ae:parameter>
                             <ae:parameter name="reset_success_title">Sie haben Post!</ae:parameter>
                             <ae:parameter name="reset_success_msg"><![CDATA[
-                                <p>Wir haben eine Email an die Adresse verschickt, die mit dem angegebenen Nutzerkonto verküpft ist.</p>
+                                <p>Wir haben eine Email an die Adresse verschickt, die mit dem angegebenen Nutzer/inkonto verküpft ist.</p>
                                 <p>Darin finden sie die erforderlichen Schritte um ihr Passwort zurück zu setzen.</p>
                             ]]></ae:parameter>
                             <ae:parameter name="session_regeneration_error">Interner Fehler beim Login. Bitte versuchen Sie es später noch einmal.</ae:parameter>

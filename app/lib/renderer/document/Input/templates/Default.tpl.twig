@@ -86,6 +86,7 @@
                 <a href="{{ listLink }}" class="btn" style="margin-right: 20px;"><strong>Schließen</strong></a>
                 {% if readonly == false %}
                 <button type="submit" name="save_type" value="save_and_continue" class="btn btn-primary action-save"><strong>Speichern</strong></button>
+                <button type="submit" name="save_type" value="save_and_close" class="btn btn-primary action-save-close" data-bind="click: onFormSubmit"><strong>Speichern und schließen</strong></button>
                 <button type="submit" name="save_type" value="save_and_new" class="btn btn-primary action-save-continue" data-bind="click: onFormSubmit"><strong>Speichern und neu</strong></button>
                 {% endif %}
             </div>

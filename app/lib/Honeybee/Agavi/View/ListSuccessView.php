@@ -235,6 +235,9 @@ class ListSuccessView extends BaseView
             );
         }
 
+        $list_setting_name = sprintf('%s_last_list_url', $module->getOption('prefix'));
+        $this->getContext()->getUser()->setAttribute($list_setting_name, $routing->gen(null), 'honeybee.list');
+
         $this->getContext()->getUser()->setAttribute('modulecrumb', $moduleCrumb, 'honeybee.breadcrumbs');
         $this->getContext()->getUser()->setAttribute('breadcrumbs', $breadcrumbs, 'honeybee.breadcrumbs');
     }

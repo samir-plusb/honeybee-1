@@ -115,9 +115,12 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         var form = this.element.find('form');
         var post_url = form.attr('action');
 
-        if (event)
-        {
-            form.append($('<input type="hidden" name="save_type" value="save_and_new" />'));
+        if (event) {
+            var save_type = $(event.currentTarget).val();
+            console.log("SAVE TYPE: " + save_type);
+            form.append(
+                $('<input type="hidden" name="save_type" value="' + save_type + '" />')
+            );
         }
 
         if (this.request_pending() || this.options.readonly)

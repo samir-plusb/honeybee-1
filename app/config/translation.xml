@@ -72,8 +72,8 @@
                 <message_translator class="AgaviSimpleTranslator">
                      <ae:parameter name="roles">
                         <ae:parameter name="de">
-                            <ae:parameter name="no-perms">Nutzer ohne Rechte</ae:parameter>
-                            <ae:parameter name="honeybee-editor">Nutzer mit allen Rechten (Administrator)</ae:parameter>
+                            <ae:parameter name="no-perms">Nutzer/in ohne Rechte</ae:parameter>
+                            <ae:parameter name="honeybee-editor">Nutzer/in mit allen Rechten (Administrator/in)</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
                 </message_translator>
