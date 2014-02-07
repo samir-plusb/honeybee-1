@@ -90,7 +90,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             this.options.event_origin
         );
 
-        this.element.find('.tagslist-list').sortable({
+        var reference_list = this.element.find('.tagslist-list');
+        reference_list.sortable({
             onDrop: function  (item, targetContainer, _super) {
                 var clonedItem = $('<li/>').css({height: 3});
                 item.before(clonedItem);
@@ -99,6 +100,8 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                     clonedItem.detach();
                     _super(item);
                 });
+
+                reference_list.find('li').index(item);
             },
             onDragStart: function ($item, container, _super) {
                 var offset = $item.offset();
@@ -108,6 +111,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
                     top: pointer.top - offset.top
                 }
                 _super($item, container);
+                reference_list.find('li').index($item);
             },
             onDrag: function ($item, position) {
                 $item.css({
