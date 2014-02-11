@@ -89,37 +89,6 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             }),
             this.options.event_origin
         );
-
-        var reference_list = this.element.find('.tagslist-list');
-        reference_list.sortable({
-            onDrop: function  (item, targetContainer, _super) {
-                var clonedItem = $('<li/>').css({height: 3});
-                item.before(clonedItem);
-                clonedItem.animate({'height': item.height()});
-                item.animate(clonedItem.position(), function () {
-                    clonedItem.detach();
-                    _super(item);
-                });
-
-                reference_list.find('li').index(item);
-            },
-            onDragStart: function ($item, container, _super) {
-                var offset = $item.offset();
-                var pointer = container.rootGroup.pointer;
-                adjustment = {
-                    left: pointer.left - offset.left,
-                    top: pointer.top - offset.top
-                }
-                _super($item, container);
-                reference_list.find('li').index($item);
-            },
-            onDrag: function ($item, position) {
-                $item.css({
-                    left: position.left - adjustment.left,
-                    top: position.top - adjustment.top
-                });
-            }
-        });
     },
 
     buildPopover: function()

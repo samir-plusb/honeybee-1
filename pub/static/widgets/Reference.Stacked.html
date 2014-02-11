@@ -17,7 +17,7 @@
   </li>
 </ul>
 <div class="pill-container">
-  <ul data-bind="foreach: tags" class="tagslist-list nav nav-pills nav-stacked">
+  <ul data-bind="sortable: tags, foreach: tags" class="tagslist-list nav nav-pills nav-stacked">
       <li class="tagslist-tag">
           <a href="#" onclick="return false;" tabindex="-1">
               <span data-bind="text: $data.label" /> <i data-bind="click: function(data) { $parent.removeTag(data); }, visible: ! $parent.options.readonly" class="hb-icon-cancel"></i>
