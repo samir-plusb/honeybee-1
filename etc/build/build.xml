@@ -163,7 +163,7 @@
         </copy>
 
         <run command="make link-project-modules" dir="${project.directory}" />
-        <run command="vendor/bin/dat0r.console generate ${module.ln_target}/config/dat0r/codegen.ini ${module.ln_target}/config/dat0r/module.xml gen+dep" dir="${project.directory}" />
+        <run command="vendor/bin/dat0r.console generate gen+dep -c ${module.ln_target}/config/dat0r/codegen.ini -s ${module.ln_target}/config/dat0r/module.xml" dir="${project.directory}" />
     </target>
 
     <!--
