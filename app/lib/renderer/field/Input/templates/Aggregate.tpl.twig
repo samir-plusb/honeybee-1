@@ -109,9 +109,11 @@
     </ul>
     {% if aggregate_modules|length > 1 %}
     <div class="btn-group span12 aggregate-selector-bottom dropup">
+        {% if (max_count > 1 or max_count == 0) %}
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
             {{ tm._('Add aggregate', td) }} <span class="caret"></span>
         </button>
+        {% endif %}
         <ul class="dropdown-menu">
         {% for aggregate_module in aggregate_modules %}
             <li class="aggregate-module-item">
@@ -143,7 +145,7 @@
     </div>
     {% else %}
     <div class="aggregate-module-item aggregate-selector-bottom">
-        {% if ((aggregates|length) < max_count) or (max_count == 0) %}
+        {% if (max_count > 1 or max_count == 0) %}
             <a href="#" class="btn btn-default add-aggregate-bottom"> {{ tm._('Add aggregate', td) }}</a>
         {% endif %}
         {% set aggregate_module = aggregate_modules[0] %}

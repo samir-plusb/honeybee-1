@@ -64,6 +64,12 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             });
         });
         this.updateAggregateLabels();
+
+        if (this.aggregate_list.find('.aggregate').length > 1) {
+            this.element.find('.aggregate-selector-bottom').show();
+        } else {
+            this.element.find('.aggregate-selector-bottom').hide();
+        }
     },
 
     registerDisplayedTextInputs: function(aggregate)

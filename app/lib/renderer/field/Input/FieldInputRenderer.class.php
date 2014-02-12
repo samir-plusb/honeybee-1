@@ -84,7 +84,6 @@ class FieldInputRenderer extends FieldRenderer
             $widgetDef = $widgetSettings[$fieldkey];
             $widget = $widgetDef['type'];
         }
-
         return $widget;
     }
 
@@ -139,11 +138,11 @@ class FieldInputRenderer extends FieldRenderer
         {
             $widgetDef = $widgetSettings[$fieldkey];
             $widgetOptions = $widgetDef['options'];
+            $widgetOptions['readonly'] = $this->isReadonly($document);
+            $widgetOptions['autobind'] = TRUE;
+            $widgetOptions['field_id'] = $this->generateInputId($document);
+            $widgetOptions['field_value'] = $document->getValue($this->getField()->getName());
         }
-
-        $widgetOptions['readonly'] = $this->isReadonly($document);
-        $widgetOptions['autobind'] = TRUE;
-        $widgetOptions['field_id'] = $this->generateInputId($document);
 
         return $widgetOptions;
     }
