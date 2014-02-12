@@ -23,7 +23,7 @@
         <textarea type="text" class="span11 field-textarea textarea-{{ fieldName }}" name="{{ inputName }}" id="{{ fieldId }}"
             placeholder="{{ placeholder }}" class="input-xlarge"
             {% if true == readonly %} readonly="readonly" {% endif %}>{{ fieldValue }}</textarea>
-        <div class="span11 epic-editor" id="markdown-{{ fieldId }}"/>
+        <div class="span11 epic-editor" id="markdown-{{ fieldId }}"></div>
     </div>
 {% else %}
     <label class="control-label" for="{{ fieldId }}">
