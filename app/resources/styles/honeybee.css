@@ -1290,6 +1290,13 @@ div.select2-container-multi .select2-choices .select2-search-field
 
 }
 
+.inline-create-targets
+{
+  list-style: none;
+  overflow: hidden;
+  margin: 0;
+}
+
 /**
  * Aggregate Widget
  */
@@ -1409,7 +1416,8 @@ div.select2-container-multi .select2-choices .select2-search-field
 
 .aggregate .placeholder
 {
-  font-size: 15px;
+  font-size: 23px;
+  font-style: normal;
 }
 
 .aggregate .input-group-label .actions
@@ -1496,5 +1504,10 @@ div.aggregate-module-item
 
 .epic-editor
 {
-  margin-left: 0px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    margin-left: 0px !important;
 }

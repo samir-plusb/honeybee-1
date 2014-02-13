@@ -95,7 +95,7 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
     {
         var refmodule_name, ref_module;
 
-        var inline_create_targets_list = $('<ul>');
+        var inline_create_targets_list = $('<ul class="inline-create-targets">');
         var inline_create_target_item, inline_create_link;
 
         for (refmodule_name in this.options.autocomp_mappings)
