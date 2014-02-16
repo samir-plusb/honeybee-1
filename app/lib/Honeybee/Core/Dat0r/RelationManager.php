@@ -14,6 +14,8 @@ class RelationManager
 
     private static $reference_pool;
 
+    private static $max_recursion_depth = -1;
+
     private static $recursion_depth = 0;
 
     public static function startPooling()
@@ -29,6 +31,16 @@ class RelationManager
     public static function getRecursionDepth()
     {
         return self::$recursion_depth;
+    }
+
+    public static function getMaxRecursionDepth()
+    {
+        return self::$max_recursion_depth;
+    }
+
+    public static function setMaxRecursionDepth($max_recursion_depth)
+    {
+        self::$max_recursion_depth = $max_recursion_depth;
     }
 
     public static function prePopulateReferences(IModule $module, array $documents_data)

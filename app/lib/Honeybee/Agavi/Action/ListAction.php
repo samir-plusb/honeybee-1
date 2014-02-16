@@ -96,6 +96,7 @@ class ListAction extends BaseAction
         }
         else
         {
+            RelationManager::setMaxRecursionDepth(0);
             RelationManager::startPooling();
             $data = $service->fetchListData($listConfig, $listState);
             RelationManager::stopPooling();
