@@ -97,6 +97,12 @@ abstract class Document extends BaseDocument implements IResource
             );
         }
 
+        $created = $this->getValue('created');
+        if (empty($created)) {
+            $this->setValue('created', date(DATE_ISO8601));
+        }
+        $this->setValue('modified', date(DATE_ISO8601));
+
         $this->setSlug($this->buildSlug());
     }
 

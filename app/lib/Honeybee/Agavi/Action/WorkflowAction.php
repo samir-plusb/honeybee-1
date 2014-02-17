@@ -3,11 +3,12 @@
 namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Workflow\Plugin;
-use \Exception;
+use AgaviRequestDataHolder;
+use Exception;
 
 class WorkflowAction extends BaseAction
 {
-    public function executeWrite(\AgaviRequestDataHolder $request_data)
+    public function executeWrite(AgaviRequestDataHolder $request_data)
     {
         $view = $this->executeRead($request_data);
         if ($request_data->hasParameter('gate')) {
@@ -19,7 +20,7 @@ class WorkflowAction extends BaseAction
         return $view;
     }
 
-    public function executeRead(\AgaviRequestDataHolder $request_data)
+    public function executeRead(AgaviRequestDataHolder $request_data)
     {
         try {
             $module = $this->getModule();
@@ -56,7 +57,7 @@ class WorkflowAction extends BaseAction
         return 'Success';
     }
 
-    public function handleError(\AgaviRequestDataHolder $request_data)
+    public function handleError(AgaviRequestDataHolder $request_data)
     {
         $errors = array();
         foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $err) {

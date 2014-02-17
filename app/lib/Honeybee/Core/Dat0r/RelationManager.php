@@ -14,7 +14,7 @@ class RelationManager
 
     private static $reference_pool;
 
-    private static $max_recursion_depth = -1;
+    private static $max_recursion_depth = 2;
 
     private static $recursion_depth = 0;
 

@@ -130,7 +130,9 @@ abstract class Module extends RootModule implements Acl\Resource\ResourceInterfa
                 'shortId' => IntegerField::create('shortId'),
                 'slug' => TextField::create('slug'),
                 'language' => TextField::create('language', array('default_value' => 'de_DE')),
-                'version' => IntegerField::create('version', array('default_value' => 1))
+                'version' => IntegerField::create('version', array('default_value' => 1)),
+                'created' => TextField::create('created'),
+                'modified' => TextField::create('modified')
             )
         );
     }

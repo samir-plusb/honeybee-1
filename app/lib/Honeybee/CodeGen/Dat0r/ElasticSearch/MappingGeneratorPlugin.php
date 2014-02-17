@@ -72,6 +72,12 @@ class MappingGeneratorPlugin
             'slug' => array(
                 'type' => 'string',
                 'index' => 'not_analyzed'
+            ),
+            'created' => array(
+                'type' => 'date'
+            ),
+            'modified' => array(
+                'type' => 'date'
             )
         );
 
