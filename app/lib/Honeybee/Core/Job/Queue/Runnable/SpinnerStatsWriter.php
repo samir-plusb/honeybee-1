@@ -63,12 +63,12 @@ class SpinnerStatsWriter
     {
         $now = new DateTime();
         $output_lines = array('# WORKER STATS #');
-
         foreach ($stats->getWorkerStats() as $worker_pid => $worker_stats) {
             $worker_started = $worker_stats['start_time'];
-            if (isset($worker_stats['start_time']['date'])) {
-                $worker_started = $worker_stats['start_time']['date'];
+            if (is_array($worker_started) && array_key_exists('date', $worker_started)) {
+                $worker_started = $worker_started['date'];
             }
+
             $uptime = $now->diff(new DateTime($worker_started));
             $output_lines[] = "Worker [" . $worker_pid . "]";
             $output_lines[] = "     Started at: " . $worker_started;
