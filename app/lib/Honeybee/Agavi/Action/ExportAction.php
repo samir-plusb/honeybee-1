@@ -3,10 +3,11 @@
 namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Config\ArrayConfig;
+use AgaviRequestDataHolder;
 
 class ExportAction extends BaseAction
 {
-    public function executeWrite(\AgaviRequestDataHolder $parameters)
+    public function executeWrite(AgaviRequestDataHolder $parameters)
     {
         $user = $this->getContext()->getUser();
         $user->setAuthenticated(true);
@@ -21,10 +22,11 @@ class ExportAction extends BaseAction
         $manager = $module->getWorkflowManager();
         $container = $this->getContainer();
 
-        $search_spec = array('filter' => array('workflowTicket.workflowStep' => 'published'));
-        $publish_document = function($document) use ($export_name, $export_service)
+        $search_spec = array('filter' => array('workflowTicket.workflowStep' => 'verify'));
+        $publish_document = function($document) use ($document_service, $export_service)
         {
-            $export_service->publish($export_name, $document);
+            $document->getWorkflowTicket()->first()->setWorkflowStep('edit');
+            $document_service->save($document);
         };
         $document_service->walkDocuments($search_spec, $chunk_size, $publish_document);
 

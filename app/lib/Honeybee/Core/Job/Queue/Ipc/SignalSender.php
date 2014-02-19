@@ -35,7 +35,8 @@ class SignalSender
     protected function getSpinnerPid(IQueue $queue)
     {
         $base_dir = dirname(\AgaviConfig::get('core.app_dir'));
-        $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $queue->getName() . '.pid';
+        $run_dir = realpath(\AgaviConfig::get('queue_spinner.run_dir'));
+        $pid_file = $run_dir . DIRECTORY_SEPARATOR . 'queue.' . $queue->getName() . '.pid';
         if (! is_readable($pid_file)) {
             throw new Exception("Unable to find pid file for jobqueue spinner.");
         }

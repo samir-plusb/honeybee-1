@@ -49,7 +49,7 @@ class PublishPlugin extends BasePlugin
         $resource->getModule()->getService()->save($resource);
 
         // @todo introduce jobqueue_name setting.
-        $queue = new KestrelQueue('prio:1-default_queue');
+        $queue = new KestrelQueue(\AgaviConfig::get('queue_spinner.default_queue'));
         $job_parameters = array(
             'module_class' => get_class($resource->getModule()),
             'document_identifier' => $resource->getIdentifier(),

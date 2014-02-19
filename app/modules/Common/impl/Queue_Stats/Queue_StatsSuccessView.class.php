@@ -14,7 +14,7 @@ class Common_Queue_Stats_Queue_StatsSuccessView extends CommonBaseView
         $limit = $request_data->getParameter('limit', 10);
         $offset = $request_data->getParameter('offset', 0);
 
-        $stats_file = realpath(AgaviConfig::get('core.app_dir') . '/../queue_stats.log.json');
+        $stats_file = realpath(AgaviConfig::get('queue_spinner.json_log_file', 'queue_stats.log.json'));
         $stats = array();
 
         if (is_readable($stats_file)) {

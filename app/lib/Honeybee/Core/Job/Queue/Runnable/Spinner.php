@@ -138,7 +138,7 @@ class Spinner extends Runnable
             $this->log("Received complete(success) notification from worker: " . $worker_pid);
         } else {
             $this->log(
-                sprintf("Received complete(error) notification from worker: %s\nError: %s", $worker_pid, $worker_msg['error'])
+                sprintf("Received complete(error) notification from worker: %s\nError: %s", $worker_pid, @$worker_msg['error'])
             );
         }
 
@@ -152,15 +152,15 @@ class Spinner extends Runnable
     protected function writePidFile()
     {
         $pid = posix_getpid();
-        $base_dir = \AgaviConfig::get('queue.run_dir', dirname(\AgaviConfig::get('core.app_dir')));
-        $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
+        $run_dir = realpath(\AgaviConfig::get('queue_spinner.run_dir'));
+        $pid_file = $run_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
         file_put_contents($pid_file, $pid);
     }
 
     protected function removePidFile()
     {
-        $base_dir = \AgaviConfig::get('queue.run_dir', dirname(\AgaviConfig::get('core.app_dir')));
-        $pid_file = $base_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
+        $run_dir = realpath(\AgaviConfig::get('queue_spinner.run_dir'));
+        $pid_file = $run_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
 
         unlink($pid_file);
     }
@@ -201,8 +201,8 @@ class Spinner extends Runnable
 
     protected function buildStatsWriterConfig()
     {
-        $display_file = \AgaviConfig::get('queue_spinner.stats_file', 'queue_stats');
-        $log_file = \AgaviConfig::get('queue_spinner.stats_file', 'queue_stats.log.json');
+        $display_file = \AgaviConfig::get('queue_spinner.text_stats_file', 'queue_stats');
+        $log_file = \AgaviConfig::get('queue_spinner.json_log_file', 'queue_stats.log.json');
 
         return new ArrayConfig(
             array('stats_display_file' => $display_file, 'stats_log_file' => $log_file)

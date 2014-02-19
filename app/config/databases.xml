@@ -13,9 +13,6 @@
                         <ae:parameter name="port">22133</ae:parameter>
                     </ae:parameter>
                 </ae:parameter>
-                <!--
-                <ae:parameter name="default_queue">prio:1-default_queue</ae:parameter>
-                -->
             </database>
         </databases>
     </ae:configuration>

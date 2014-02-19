@@ -4,12 +4,15 @@ namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Dat0r\Tree;
 use Dat0r\Core\Field\ReferenceField;
+use Honeybee\Core\Dat0r\RelationManager;
 use TreeConfig;
 
 class TreeAction extends BaseAction
 {
     public function executeRead(\AgaviRequestDataHolder $requestData)
     {
+        RelationManager::setMaxRecursionDepth(0);
+
         $module = $this->getModule();
 
         if ($requestData->hasParameter('referenceField') && $requestData->hasParameter('referenceModule'))

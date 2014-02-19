@@ -27,7 +27,7 @@ abstract class BaseJob implements IJob, IQueueItem
         }
         catch(\Exception $e) {
             $this->errors[] = $e->getMessage();
-
+error_log(__METHOD__ . ' - ' . $e);
             if ($this->getErrorCount() < $this->max_retries) {
                 $this->setState(self::STATE_ERROR);
             } else {

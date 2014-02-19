@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
+<ae:configurations
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     xmlns="http://agavi.org/agavi/config/parts/settings/1.0">
     <ae:configuration>
+        <settings prefix="queue_spinner.">
+            <setting name="text_stats_file">%core.app_dir%/log/queue_stats</setting>
+            <setting name="json_log_file">%core.app_dir%/log/queue_stats_log.json</setting>
+            <setting name="run_dir">%core.app_dir%/log</setting>
+            <setting name="default_queue">prio:1-default_queue</setting>
+        </settings>
         <settings prefix="common.">
             <setting name="geo_service.url">https://api.berlinonline.net/boapi/geo/ask.json</setting>
             <setting name="geo_service.auth">

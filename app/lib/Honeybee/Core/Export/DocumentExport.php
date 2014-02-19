@@ -3,6 +3,7 @@
 namespace Honeybee\Core\Export;
 
 use Honeybee\Core\Dat0r\Document;
+use DateTime;
 
 class DocumentExport extends GenericExport
 {
@@ -10,29 +11,31 @@ class DocumentExport extends GenericExport
 
     public function revoke(Document $document)
     {
-        $identifier = $document->getShortIdentifier();
+        $identifier = $this->getStorageIdentifier($document);
 
-        if ($data = $this->storage->read($identifier))
-        {
+        if ($data = $this->storage->read($identifier)) {
             $identifier = $data['identifier'];
             $revision = $data['revision'];
             $this->storage->delete($identifier, $revision);
 
-            foreach ($this->filters as $filter)
-            {
+            foreach ($this->filters as $filter) {
                 $filter->onDocumentRevoked($document);
             }
         }
     }
 
+    protected function getStorageIdentifier(Document $document)
+    {
+        return $document->getShortIdentifier();
+    }
+
     protected function buildExportData(Document $document)
     {
-        $metaData = $document->getMeta();
-        if (! isset($metaData[self::PUBLISHED_AT_FIELD]))
-        {
-            $publishDate = new \DateTime();
-            $metaData[self::PUBLISHED_AT_FIELD] = $publishDate->format(DATE_ISO8601);
-            $document->setMeta($metaData);
+        $meta_data = $document->getMeta();
+        if (!isset($meta_data[self::PUBLISHED_AT_FIELD])) {
+            $publish_date = new DateTime();
+            $meta_data[self::PUBLISHED_AT_FIELD] = $publish_date->format(DATE_ISO8601);
+            $document->setMeta($meta_data);
         }
 
         $data = parent::buildExportData($document);
@@ -40,10 +43,9 @@ class DocumentExport extends GenericExport
         $export_identifier = $document->getShortIdentifier();
         $data['identifier'] = $export_identifier;
         $data['type'] = $document->getModule()->getOption('prefix');
-        $data[self::PUBLISHED_AT_FIELD] = $metaData[self::PUBLISHED_AT_FIELD];
+        $data[self::PUBLISHED_AT_FIELD] = $meta_data[self::PUBLISHED_AT_FIELD];
 
-        if ($this->storage && $prev_data = $this->storage->read($export_identifier))
-        {
+        if ($this->storage && $prev_data = $this->storage->read($export_identifier)) {
             $data['revision'] = $prev_data['revision'];
         }
 

@@ -199,8 +199,6 @@ class ProjectAssetService implements IAssetService
         $assetData = $this->buildAssetInfoData($assetFile, $assetUri, $metaData);
         $assetDocument = ProjectAssetInfo::fromArray($assetData);
 
-error_log(print_r($extractedMetaData, true));
-
         if (! $this->assetDocStore->save($assetDocument))
         {
             $assetFile->delete();

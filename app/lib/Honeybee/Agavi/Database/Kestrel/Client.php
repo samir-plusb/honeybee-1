@@ -55,31 +55,31 @@ class Client
             $key .= self::CMD_READ;
         }
 
-        return $this->kestrel_api->get($key);
+        return @$this->kestrel_api->get($key);
     }
 
     public function close($key)
     {
-        return $this->kestrel_api->get($key . self::CMD_CLOSE);
+        return @$this->kestrel_api->get($key . self::CMD_CLOSE);
     }
 
     public function abort($key)
     {
-        return $this->kestrel_api->get($key . self::CMD_ABORT);
+        return @$this->kestrel_api->get($key . self::CMD_ABORT);
     }
 
     public function getNext($key) //always a reliable read. does a close and a get
     {
-        return $this->kestrel_api->get($key . self::CMD_RELIABLE_READ);
+        return @$this->kestrel_api->get($key . self::CMD_RELIABLE_READ);
     }
 
     public function peek($key)
     {
-        return $this->kestrel_api->get($key . self::CMD_PEEK);
+        return @$this->kestrel_api->get($key . self::CMD_PEEK);
     }
 
     public function set($key, $value, $expire = 0)
     {
-        return $this->kestrel_api->set($key, $value, $expire);
+        return @$this->kestrel_api->set($key, $value, $expire);
     }
 }

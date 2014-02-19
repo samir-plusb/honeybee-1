@@ -176,7 +176,7 @@ error_log("------------");
 
         if ($dispatch_update_job) {
             // @todo it could be faster to have a job per referencing module, instead of one for all.
-            $queue = new JobQueue('prio:1-default_queue');
+            $queue = new JobQueue(\AgaviConfig::get('queue_spinner.default_queue'));
             $job_data = array(
                 'module_class' => get_class($this->module),
                 'document_identifier' => $document->getIdentifier()

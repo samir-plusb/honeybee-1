@@ -174,6 +174,7 @@ class InteractivePlugin extends BasePlugin
         // @todo read these workflow-step names from the plugin config.
         if (('published' === $ticket->getWorkflowStep() && $gateName !== 'correction')
             || ('correction' === $ticket->getWorkflowStep() && $gateName === 'demote')
+            || (true === $this->getParameter('live_node') && $gateName === 'demote')
         ) {
             $this->revokeResource($resource);
         }
