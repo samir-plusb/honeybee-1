@@ -49,8 +49,8 @@ honeybee.widgets.EmbedCodeWidget = honeybee.widgets.Widget.extend({
 
     getEmbedForUrl: function(url)
     {
-        var youtube_long = /(http\:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([\-\w]+)/;
-        var youtube_short = /(http\:\/\/)?(?:www\.)?youtube\.de\/([\-\w]+)/;
+        var youtube_long = /(http\:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([\-\w\d]+)/;
+        var youtube_short = /(http\:\/\/)?(?:www\.)?youtube\.de\/([\-\w\d]+)/;
         var vimeo = /(http\:\/\/)?vimeo\.com\/(\d+)/;
         var matches = url.match(youtube_long);
         matches = matches || url.match(youtube_short);
