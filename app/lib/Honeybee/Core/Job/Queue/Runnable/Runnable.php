@@ -4,6 +4,8 @@ namespace Honeybee\Core\Job\Queue\Runnable;
 
 use Honeybee\Core\Job\Queue\KestrelQueue;
 use Honeybee\Core\Job\Queue\Ipc\IpcMessaging;
+use DateTime;
+use AgaviConfig;
 
 abstract class Runnable implements IRunnable
 {
@@ -79,7 +81,7 @@ abstract class Runnable implements IRunnable
     protected function initIpcMessaging()
     {
         $queue_path_parts = array(
-            dirname(\AgaviConfig::get('core.app_dir')),
+            dirname(AgaviConfig::get('core.app_dir')),
             'etc',
             'local',
             $this->queue_name . '.msg_q'
@@ -101,7 +103,7 @@ abstract class Runnable implements IRunnable
 
     protected function log($message)
     {
-        $now = new \DateTime();
+        $now = new DateTime();
         error_log(
             sprintf('[%s][%s][%s] %s', get_class($this), posix_getpid(), $now->format('h:i:s.u'), $message)
         );

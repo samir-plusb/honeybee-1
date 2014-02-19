@@ -2,8 +2,9 @@
 
 namespace Honeybee\Core\Job\Queue\Runnable;
 
-use Honeybee\Core\Config\IConfig;
 use Honeybee\Core\Config\ArrayConfig;
+use Honeybee\Core\Config\IConfig;
+use DateTime;
 
 class SpinnerStatsWriter
 {
@@ -43,9 +44,9 @@ class SpinnerStatsWriter
 
     protected function prepareSpinnerStatus(SpinnerStats $stats)
     {
-        $now = new \DateTime();
+        $now = new DateTime();
         $stats_array = $stats->toArray();
-        $uptime = $now->diff(new \DateTime($stats_array['start_time']));
+        $uptime = $now->diff(new DateTime($stats_array['start_time']));
 
         $output_lines = array();
         $output_lines[] = '# SPINNER STATS #';
@@ -60,7 +61,7 @@ class SpinnerStatsWriter
 
     protected function prepareWorkerStatus(SpinnerStats $stats)
     {
-        $now = new \DateTime();
+        $now = new DateTime();
         $output_lines = array('# WORKER STATS #');
 
         foreach ($stats->getWorkerStats() as $worker_pid => $worker_stats) {
@@ -68,7 +69,7 @@ class SpinnerStatsWriter
             if (isset($worker_stats['start_time']['date'])) {
                 $worker_started = $worker_stats['start_time']['date'];
             }
-            $uptime = $now->diff(new \DateTime($worker_started));
+            $uptime = $now->diff(new DateTime($worker_started));
             $output_lines[] = "Worker [" . $worker_pid . "]";
             $output_lines[] = "     Started at: " . $worker_started;
             $output_lines[] = "         Uptime: " . $uptime->format('%d days %H hours %I minutes %s seconds');
