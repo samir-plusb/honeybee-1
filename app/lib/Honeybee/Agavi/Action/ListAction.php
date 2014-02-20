@@ -27,6 +27,9 @@ class ListAction extends BaseAction
      */
     public function executeRead(\AgaviRequestDataHolder $parameters)
     {
+        RelationManager::setMaxRecursionDepth(0);
+        RelationManager::startPooling();
+
         $module = $this->getModule();
         $listState = $parameters->getParameter('state');
 
@@ -96,13 +99,12 @@ class ListAction extends BaseAction
         }
         else
         {
-            RelationManager::setMaxRecursionDepth(0);
-            RelationManager::startPooling();
             $data = $service->fetchListData($listConfig, $listState);
-            RelationManager::stopPooling();
             $listState->setTotalCount($data['totalCount']);
             $listState->setData($this->prepareListData($data['documents']));
         }
+
+        RelationManager::stopPooling();
 
         return 'Success';
     }

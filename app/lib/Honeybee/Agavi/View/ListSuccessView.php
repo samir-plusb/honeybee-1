@@ -143,7 +143,7 @@ class ListSuccessView extends BaseView
             if ($list_state->hasFilter()) {
                 $search_spec['filter'] = $list_state->getFilter();
             }
-            $document_service->walkDocuments($search_spec, 100, function($document) use ($csv_export)
+            $document_service->walkDocuments($search_spec, 50, function($document) use ($csv_export)
             {
                 $csv_export->publish($document);
             });

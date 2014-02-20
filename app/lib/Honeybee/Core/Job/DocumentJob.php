@@ -4,6 +4,7 @@ namespace Honeybee\Core\Job;
 
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\ModuleService;
+use Honeybee\Core\Dat0r\RelationManager;
 
 abstract class DocumentJob extends BaseJob
 {
@@ -13,6 +14,8 @@ abstract class DocumentJob extends BaseJob
 
     protected function loadDocument()
     {
+        RelationManager::setMaxRecursionDepth(1);
+
         $module = $this->loadModule();
         $service = $module->getService();
 

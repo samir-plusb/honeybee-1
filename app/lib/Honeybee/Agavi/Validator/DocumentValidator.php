@@ -16,6 +16,8 @@ class DocumentValidator extends \AgaviValidator
 {
     protected function validate()
     {
+        RelationManager::setMaxRecursionDepth(0);
+
         $tranlsationManager = $this->getContext()->getTranslationManager();
 
         $data = $this->getData($this->getArgument());
