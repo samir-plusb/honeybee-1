@@ -86,7 +86,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
                 {
                     short_text = short_text + ' ...';
                 }
-                aggregate.find('.input-group-label .displayed_text').text(' ' + short_text);
+                aggregate.find('.input-group-label .displayed_text').text(' ' + short_text.replace(/(<([^>]+)>)/ig,""));
 
                 that.fire('aggregate-label-changed', [{
                     'field': that.options.fieldname,
@@ -103,7 +103,7 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             {
                 short_text = short_text + ' ...';
             }
-            aggregate.find('.input-group-label .displayed_text').text(' ' + short_text);
+            aggregate.find('.input-group-label .displayed_text').text(' ' + short_text.replace(/(<([^>]+)>)/ig,""));
         }
     },
 
