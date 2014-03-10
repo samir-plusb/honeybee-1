@@ -38,6 +38,11 @@
                     {% endif %}
                 </div>
             </li>
+            <li class="control node-state">
+                <span class="label label-info {{ document.css_classes|join(' ') }}">
+                    {{ document.display_data.state }}
+                </span>
+            </li>
             <li class="control">
                 <a class="move">
                     <span class="control-label">Verschieben</span>
