@@ -34,6 +34,16 @@ class EditInputView extends BaseView
         $this->setAttribute('form', $form);
     }
 
+    public function executeJson(\AgaviRequestDataHolder $parameters)
+    {
+        $response_data = array(
+            'state' => 'ok',
+            'data' => $this->getAttribute('document')->toArray()
+        );
+
+        $this->getResponse()->setContent(json_encode($response_data));
+    }
+
     protected function setBreadcrumb()
     {
         $routing = $this->getContext()->getRouting();

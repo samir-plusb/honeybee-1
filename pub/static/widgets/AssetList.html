@@ -2,22 +2,22 @@
 <ul class="thumbnails asset-list" data-bind="foreach: assets">
 <!-- ko if: $data.name -->
     <li class="asset-item" data-trigger="hover" data-html="true" data-animation="true" data-delay="700"
-        data-bind="attr: { 
-            'data-title': $data.name, 
+        data-bind="attr: {
+            'data-title': $data.name,
             'data-content': $data.popover_content,
-            'data-placement': $parent.popover_pos 
+            'data-placement': $parent.popover_pos
         }">
         <div class="asset-thumbnail">
-            <img data-bind="attr: { 
+            <img data-bind="attr: {
                 src: $data.url
-            }, style: { 
-                width: $data.width() + 'px', 
+            }, style: {
+                width: $data.width() + 'px',
                 height: $data.height() + 'px',
-                top: $data.y() + 'px', 
-                left: $data.x() + 'px' 
+                top: $data.y() + 'px',
+                left: $data.x() + 'px'
             }" class="sortable-dragging" />
         </div>
-        <ul class="image-buttons" data-bind="visible: ! $parent.options.readonly">
+        <ul class="image-buttons" data-bind="visible: ! $parent.readonly()">
             <li>
                 <a class="btn btn-info" data-bind="attr: { href: $parent.getDownloadUrl($data) }">
                     <span class="hb-icon-download"/>
@@ -45,7 +45,7 @@
     </li>
 <!-- /ko -->
 <!-- ko if: true === $data.dropzone -->
-    <li data-bind="visible: $data.show() && ! $parent.options.readonly" class="dropzone">
+    <li data-bind="visible: $data.show() && ! $parent.readonly()" class="dropzone">
         <p data-bind="text: $data.label()" />
     </li>
 <!-- /ko -->

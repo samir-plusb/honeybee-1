@@ -31,6 +31,8 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
 
     face_detect_feat_on: null,
 
+    readonly: null,
+
     init: function(element, options, ready_callback)
     {
         this.parent(element, options, ready_callback);
@@ -73,6 +75,7 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
     initKnockoutProperties: function()
     {
         this.fieldname = ko.observable(this.options.fieldname);
+        this.readonly = ko.observable(this.options.readonly || false);
         this.aoi_enabled = ko.observable(false);
         this.start_active = ko.observable(false);
         this.cur_file_is_image = ko.observable(false);
@@ -112,26 +115,28 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
             that.element.find('.asset-item, .simple-asset-item').popover('destroy');
             that.assets.splice(that.assets().length - 1, 0, asset);
             that.element.find('.asset-item, .simple-asset-item').popover();
-            if (that.options.max <= that.assets().length - 1)
-            {
-                that.uploader.enabled = false;
-                that.dropzone.show(false);
-            }
+            that.handleDropzoneVisiblity();
         }).on('upload::progress', function(asset, progress)
         {
             asset.progress(progress * 100);
         }).on('upload::complete', function(asset, data)
         {
-            that.element.find('.asset-list').sortable();
             asset.id(data.identifier);
             asset.url(data.url);
             asset.mime_type = data.mimeType;
         });
 
-        if (that.options.max <= that.assets().length - 1)
-        {
-            that.uploader.enabled = false;
-            that.dropzone.show(false);
+        that.handleDropzoneVisiblity();
+    },
+
+    handleDropzoneVisiblity: function()
+    {
+        if (this.options.max <= this.assets().length - 1) {
+            this.uploader.enabled = false;
+            this.dropzone.show(false);
+        } else {
+            this.uploader.enabled = true;
+            this.dropzone.show(true);
         }
     },
 

@@ -34,8 +34,8 @@ honeybee.widgets.DatePicker = honeybee.widgets.Widget.extend({
         this.parent();
 
         var datepicker = this.element.find('.input-append.date');
-        datepicker.datepicker();
         var input = datepicker.find('input');
+        datepicker.datetimepicker();
         var trigger = datepicker.find('.add-on');
         datepicker.on('show', function(){
             var val = input.val();
@@ -72,7 +72,7 @@ honeybee.widgets.DatePicker = honeybee.widgets.Widget.extend({
 honeybee.widgets.DatePicker.DEFAULT_OPTIONS = {
     autobind: true,
     date: '12.12.2013',
-    format: 'dd.mm.yyyy',
+    format: 'dd.MM.yyyy HH:mm:ss',
     field_name: '',
     field_id: '',
     placeholder: null

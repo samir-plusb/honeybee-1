@@ -135,16 +135,22 @@ class FieldInputRenderer extends FieldRenderer
         }
         $widgetSettings = AgaviConfig::get(sprintf('%s.input_widgets', $prefix));
         $fieldkey = $this->options['field_key'];
-        $widgetOptions = array();
+        $routing = AgaviContext::getInstance()->getRouting();
+
+        $widgetOptions = array(
+            'event_origin' => $routing->getBaseHref(),
+            'readonly' => $this->isReadonly($document),
+            'autobind' => true,
+            'field_id' => $this->generateInputId($document),
+            'fieldname' => $this->generateInputName($document),
+            'realname' => $this->getField()->getName(),
+            'field_value' => $document->getValue($this->getField()->getName())
+        );
+
         if (isset($widgetSettings[$fieldkey]))
         {
             $widgetDef = $widgetSettings[$fieldkey];
-            $widgetOptions = $widgetDef['options'];
-            $widgetOptions['readonly'] = $this->isReadonly($document);
-            $widgetOptions['autobind'] = TRUE;
-            $widgetOptions['field_id'] = $this->generateInputId($document);
-            $widgetOptions['fieldname'] = $this->generateInputName($document);
-            $widgetOptions['field_value'] = $document->getValue($this->getField()->getName());
+            $widgetOptions = array_merge($widgetDef['options'], $widgetOptions);
         }
 
         return $widgetOptions;

@@ -7,7 +7,7 @@ jquery.fracs-0.12.0.js
 jquery.outline-0.12.0.js
 bootstrap.js
 bootstrap-typeahead.js
-bootstrap-datepicker.js
+bootstrap-datetimepicker.min.js
 kinetic-v4.5.1.js
 flotr2.min.js
 underscore-min.js

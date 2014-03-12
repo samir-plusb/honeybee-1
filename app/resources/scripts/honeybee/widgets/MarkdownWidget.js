@@ -9,9 +9,12 @@ honeybee.widgets.MarkdownWidget = honeybee.widgets.Widget.extend({
 
     textarea: null,
 
+    loaded: null,
+
     init: function(element, options, ready_callback)
     {
         this.parent(element, options, ready_callback);
+        this.loaded = false;
     },
 
     // #################################
@@ -36,32 +39,32 @@ honeybee.widgets.MarkdownWidget = honeybee.widgets.Widget.extend({
             that.epic_editor.focus();
         });
 
-        var $parent_aggregate = this.element.parents('.aggregate');
-
-        if ($parent_aggregate.length > 0)
-        {
-            var rendered = false;
-            $parent_aggregate.click(function()
-            {
-                if (!rendered) {
-                    that.loadEpicEditor();
-                    rendered = true;
-                }
-            });
-        } else {
+        // lazy initialize the epic editor instance on 'tab shown', if we are rendered within a hidden tab.
+        var $parent_tab = this.element.parents('.tab-pane');
+        $('a[data-toggle="tab"]').on('shown', function (e) {
+            var $tab_pane = $($(e.target).attr('href'));
+            if ($tab_pane.length > 0 && $tab_pane[0] === $parent_tab[0]) {
+                that.loadEpicEditor();
+            }
+        });
+        if ($parent_tab.length === 0 || $parent_tab.hasClass('active')) {
             this.loadEpicEditor();
         }
     },
 
     loadEpicEditor: function()
     {
+        if (this.loaded) {
+            return;
+        }
         var that = this;
+        var container = this.element.find('> .epic-editor');
         var base_href = $('#base_href').prop('href');
         var base_theme = this.options.themes.base;
         var preview_theme = this.options.themes.preview;
         var editor_theme = this.options.themes.editor;
         this.epic_editor = new EpicEditor({
-            container: this.element.find('> .epic-editor')[0],
+            container: container[0],
             textarea: this.textarea[0],
             clientSideStorage: false,
             localStorageName: this.element.prop('id'),
@@ -71,7 +74,28 @@ honeybee.widgets.MarkdownWidget = honeybee.widgets.Widget.extend({
                 editor: base_href + 'static/deploy/_global/binaries/epic_themes/editor/' + editor_theme + '.css'
             }
         });
-        this.epic_editor.load(function() { that.textarea.hide(); });
+        this.epic_editor.load(function()
+        {
+            that.textarea.hide();
+            that.loaded = true;
+        });
+    },
+
+    disable: function()
+    {
+        if (!this.disabled_overlay) {
+            this.disabled_overlay = $('<div class="epic-overlay" />');
+            $(this.epic_editor.getElement('container')).append(this.disabled_overlay);
+        }
+        this.disabled_overlay.show();
+    },
+
+    enable: function()
+    {
+        if (!this.disabled_overlay) {
+            return;
+        }
+        this.disabled_overlay.hide();
     }
 });
 

@@ -1,6 +1,8 @@
-<div class="input-append date" style="padding-right: 15px";
-    data-bind="attr: { 'data-date': date(), 'data-date-format': 'dd.mm.yyyy' }">
+<div id="datetimepicker1" class="input-append date">
     <input class="span12 date-picker" type="text"
-        data-bind="attr: { name: field_name(), id: field_id(), placeholder: options.placeholder }, value: date()" />
-    <span class="add-on"><i class="hb-icon-calendar-2"></i></span>
+        data-bind="attr: { name: field_name(), id: field_id(), placeholder: options.placeholder, 'data-format': options.format }, value: date()" />
+    <span class="add-on">
+        <i data-time-icon="hb-icon-clock" data-date-icon="hb-icon-calendar-2">
+        </i>
+    </span>
 </div>

@@ -19,7 +19,7 @@
         {% endif %}
     </label>
     {% endif %}
-    <div class="controls markdown-box honeybee-widget widget-markdown-widget">
+    <div class="controls markdown-box honeybee-widget widget-markdown-widget" data-markdown-widget-options="{{ widgetOptions|raw }}">
         <textarea type="text" class="span11 field-textarea textarea-{{ fieldName }}" name="{{ inputName }}" id="{{ fieldId }}"
             placeholder="{{ placeholder }}" class="input-xlarge"
             {% if true == readonly %} readonly="readonly" {% endif %}>{{ fieldValue }}</textarea>

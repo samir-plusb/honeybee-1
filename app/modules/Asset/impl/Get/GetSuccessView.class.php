@@ -44,6 +44,28 @@ class Asset_Get_GetSuccessView extends AssetBaseView
         $this->getResponse()->setContent($msg);
     }
 
+    public function executeJson(AgaviRequestDataHolder $parameters) // @codingStandardsIgnoreEnd
+    {
+        $asset = $this->getAttribute('asset_info');
+        $routing = $this->getContext()->getRouting();
+        $metaData = $asset->getMetaData();
+        $size = getimagesize($asset->getFullPath());
+
+        return json_encode(array(
+            'id' => $asset->getIdentifier(),
+            'url' => $routing->gen('asset.thumbnail', array('aid' => $asset->getIdentifier())),
+            'name' => $asset->getFullName(),
+            'caption' => isset($metaData['caption']) ? $metaData['caption'] : '',
+            'copyright' => isset($metaData['copyright']) ? $metaData['copyright'] : '',
+            'copyright_url' => isset($metaData['copyright_url']) ? $metaData['copyright_url'] : '',
+            'aoi' => empty($metaData['aoi']) ? NULL : $metaData['aoi'],
+            'width' => isset($size[0]) ? $size[0] : '',
+            'height' => isset($size[0]) ? $size[1] : '',
+            'mimeType' => $asset->getMimeType(),
+            'size' => $asset->getSize(),
+            'meta_data' => $metaData
+        ));
+    }
 }
 
 ?>
