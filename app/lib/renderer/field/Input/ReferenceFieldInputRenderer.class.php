@@ -4,9 +4,17 @@ use Dat0r\Core\Field\ReferenceField;
 use Dat0r\Core\Field\AggregateField;
 use Dat0r\Core\Document\IDocument;
 
-
 class ReferenceFieldInputRenderer extends FieldInputRenderer
 {
+    protected function getPayload(IDocument $document)
+    {
+        $payload = parent::getPayload($document);
+
+        $payload['isSingle'] = (int)$this->getField()->getOption('max') === 1;
+
+        return $payload;
+    }
+
     protected function getWidgetType(IDocument $document)
     {
         return 'widget-reference';

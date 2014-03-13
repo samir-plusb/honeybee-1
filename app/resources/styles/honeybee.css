@@ -995,6 +995,16 @@ div.select2-container-multi .select2-choices .select2-search-field
   margin-bottom: 5px;
 }
 
+.single-reference .pill-container .tagslist-list
+{
+  min-height: 40px;
+}
+
+.nav-pills.nav-stacked > li:last-child > a
+{
+  margin-bottom: 0;
+}
+
 /*
  * ReferenceBrowser styles
  */
