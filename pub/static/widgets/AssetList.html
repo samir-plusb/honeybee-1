@@ -45,9 +45,10 @@
     </li>
 <!-- /ko -->
 <!-- ko if: true === $data.dropzone -->
-    <li data-bind="visible: $data.show() && ! $parent.readonly()" class="dropzone">
+    <li data-bind="visible: $data.show() && !$parent.readonly()" class="dropzone">
         <p data-bind="text: $data.label()" />
     </li>
+    <li data-bind="visible: $data.show() && $parent.readonly()" class="dropzone" />
 <!-- /ko -->
 </ul>
 <div class="modal modal-edit-asset">
