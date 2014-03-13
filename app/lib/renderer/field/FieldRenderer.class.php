@@ -75,6 +75,10 @@ abstract class FieldRenderer implements IRenderer
         $user = AgaviContext::getInstance()->getUser();
         $module = $document->getModule();
 
+        if (isset($this->options['readonly']) && $this->options['readonly'] === TRUE) {
+            return true;
+        }
+
         if ($module instanceof AggregateModule)
         {
             return false;
@@ -95,7 +99,6 @@ abstract class FieldRenderer implements IRenderer
         $shortId = $document->getShortId();
         $requiredCredential = empty($shortId) ? $createAction : $writeAction;
 
-        return ! $user->isAllowed($document, $requiredCredential)
-            || isset($this->options['readonly']) && $this->options['readonly'] === TRUE;
+        return !$user->isAllowed($document, $requiredCredential);
     }
 }
