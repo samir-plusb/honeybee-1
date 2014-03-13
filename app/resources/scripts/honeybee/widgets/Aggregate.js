@@ -112,11 +112,11 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         this.aggregate_list.find('.aggregate').each(function(idx, aggregate)
         {
             aggregate = $(aggregate);
-            var first_input = aggregate.find('input:visible').first();
+            var first_input = aggregate.find('input[type="text"]:visible, textarea:visible').first();
             var text = first_input.val();
             if (text && text.length > 0)
             {
-                var short_text = text.substr(0, 40);
+                var short_text = text.substr(0, 40).replace(/(<([^>]+)>)/ig,"");
                 if (short_text.length < text.length)
                 {
                     short_text = short_text + ' ...';
