@@ -7,7 +7,7 @@
             <setting name="text_stats_file">%core.app_dir%/log/queue_stats</setting>
             <setting name="json_log_file">%core.app_dir%/log/queue_stats_log.json</setting>
             <setting name="run_dir">%core.app_dir%/log</setting>
-            <setting name="default_queue">prio:1-default_queue</setting>
+            <setting name="default_queue">%core.clean_environment%_%core.project_prefix%_default_queue</setting>
         </settings>
         <settings prefix="common.">
             <setting name="geo_service.url">https://api.berlinonline.net/boapi/geo/ask.json</setting>
