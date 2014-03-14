@@ -11,6 +11,7 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
         $aggregateDocuments = $document->getValue($this->getField()->getName());
         $aggregates = array();
 
+        $hasDefaultAggregate = false;
         if (count($aggregateDocuments) === 0 && isset($this->options['default_aggregate']))
         {
             $defaultAggregate = $this->options['default_aggregate'];
@@ -21,6 +22,7 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
                 if ($documentType === $defaultAggregate)
                 {
                     $aggregateDocuments->add($aggregateModule->createDocument());
+                    $hasDefaultAggregate = true;
                 }
             }
         }
@@ -84,6 +86,7 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
             parent::getPayload($document),
             array(
                 'max_count' => $this->getField()->getOption('max', 0),
+                'has_default_aggregate' => $hasDefaultAggregate,
                 'aggregates' => $aggregates,
                 'aggregate_modules' => $aggregate_modules
             )
