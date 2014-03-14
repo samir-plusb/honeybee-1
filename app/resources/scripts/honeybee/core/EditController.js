@@ -304,7 +304,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         {
             var type_key;
 
-            var aggregate_tpl_parent = $(element).parents('.aggregate-tpl');
+            var aggregate_tpl_parent = $(element).parents('.aggregate-tpl, .aggregate');
             if (aggregate_tpl_parent.length === 0) {
                 $.each($(element).attr('class').split(' '), function(index, css_class)
                 {
