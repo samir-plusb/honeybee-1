@@ -74,54 +74,69 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     registerDisplayedTextInputs: function(aggregate)
     {
-        var first_input = aggregate.find('input[type="text"], textarea').first();
+        if (this.options.max_count === 1) {
+            return;
+        }
+
+        var first_input = aggregate.find(this.options.label_update_selector).first();
         var that = this;
         first_input.change(function()
         {
             var text = first_input.val();
-            if (text.length > 0)
-            {
+            if (text.length > 0) {
                 var short_text = text.substr(0, 40);
-                if (short_text.length < text.length)
-                {
+                if (short_text.length < text.length) {
                     short_text = short_text + ' ...';
                 }
-                aggregate.find('.input-group-label .displayed_text').text(' ' + short_text.replace(/(<([^>]+)>)/ig,""));
-
+                aggregate.find('.input-group-label .dynamic_text').text(' ' + short_text.replace(/(<([^>]+)>)/ig,"")).show();
+                aggregate.find('.input-group-label .placeholder').hide();
                 that.fire('aggregate-label-changed', [{
                     'field': that.options.fieldname,
                     'element': aggregate
                 }]);
+            } else {
+                aggregate.find('.input-group-label .dynamic_text').hide();
+                aggregate.find('.input-group-label .placeholder').show();
             }
         });
 
         var text = first_input.val();
-        if (text && text.length > 0)
-        {
+        var label = aggregate.find('.input-group-label');
+        if (text && text.length > 0) {
             var short_text = text.substr(0, 40);
-            if (short_text.length < text.length)
-            {
+            if (short_text.length < text.length) {
                 short_text = short_text + ' ...';
             }
-            aggregate.find('.input-group-label .displayed_text').text(' ' + short_text.replace(/(<([^>]+)>)/ig,""));
+            label.find('.placeholder').hide();
+            label.find('.dynamic_text').text(' ' + short_text.replace(/(<([^>]+)>)/ig,"")).show();
+        } else {
+            label.find('.dynamic_text').hide();
+            label.find('.placeholder').show();
         }
     },
 
     updateAggregateLabels: function()
     {
+        if (this.options.max_count === 1) {
+            return;
+        }
+        var that = this;
         this.aggregate_list.find('.aggregate').each(function(idx, aggregate)
         {
             aggregate = $(aggregate);
-            var first_input = aggregate.find('input[type="text"]:visible, textarea:visible').first();
+            var first_input = aggregate.find(that.options.label_update_selector).first();
             var text = first_input.val();
-            if (text && text.length > 0)
-            {
+            var label = aggregate.find('.input-group-label');
+            if (text && text.length > 0) {
                 var short_text = text.substr(0, 40).replace(/(<([^>]+)>)/ig,"");
-                if (short_text.length < text.length)
-                {
+                if (short_text.length < text.length) {
                     short_text = short_text + ' ...';
                 }
-                aggregate.find('.input-group-label .displayed_text').text(' ' + short_text);
+                label.find('.placeholder').hide();
+                label.find('.dynamic_text').text(' ' + short_text).show();
+            } else {
+                label.find('.dynamic_text').hide();
+                label.find('.placeholder').show();
             }
         });
     },

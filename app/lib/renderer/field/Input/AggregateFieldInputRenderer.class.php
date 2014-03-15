@@ -123,9 +123,17 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
 
     protected function getWidgetOptions(IDocument $document)
     {
+        $label_update_selector = null;
+        if (isset($this->options['label_update_selectors'])) {
+            $label_update_selector = implode(', ', $this->options['label_update_selectors']);
+        } else {
+            $label_update_selector = 'input[type="text"]:visible, textarea:visible';
+        }
         $widgetOptions = array(
             'inputname' => $this->generateInputName($document),
-            'fieldname' => $this->getField()->getName()
+            'fieldname' => $this->getField()->getName(),
+            'max_count' => $this->getField()->getOption('max', 0),
+            'label_update_selector' => $label_update_selector
         );
 
         return array_merge(parent::getWidgetOptions($document), $widgetOptions);
