@@ -15,6 +15,8 @@ honeybee.widgets.DatePicker = honeybee.widgets.Widget.extend({
     field_id: null,
     // </knockout_props>
 
+    datepicker: null,
+
     // #################################
     // #     widget implementation     #
     // #################################
@@ -33,21 +35,26 @@ honeybee.widgets.DatePicker = honeybee.widgets.Widget.extend({
     {
         this.parent();
 
-        var datepicker = this.element.find('.input-append.date');
-        var input = datepicker.find('input');
-        datepicker.datetimepicker();
-        var trigger = datepicker.find('.add-on');
-        datepicker.on('show', function(){
+        this.datepicker = this.element.find('.input-append.date');
+        var input = this.datepicker.find('input');
+        this.datepicker.datetimepicker();
+        var trigger = this.datepicker.find('.add-on');
+        this.datepicker.on('show', function(){
             var val = input.val();
             if (val.length == 10) {
-                datepicker.datepicker('setValue', input.val());
+                that.datepicker.datepicker('setValue', input.val());
             }
         });
+        var that = this;
+        this.datepicker.on('changeDate', function(e) {
+            that.fire('changeDate');
+        });
+
         var cur_val = null;
         input.keyup(function(){
             var val = input.val();
             if (cur_val !== val && val.length == 10) {
-                datepicker.datepicker('setValue', input.val());
+                that.datepicker.datepicker('setValue', input.val());
                 cur_val = val;
             }
         });
