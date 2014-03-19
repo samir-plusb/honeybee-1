@@ -12,6 +12,7 @@ class ExportAction extends BaseAction
         $user = $this->getContext()->getUser();
         $user->setAuthenticated(true);
         $user->setAttribute('acl_role', 'honeybee-editor');
+
         $export_name = $parameters->getParameter('provider', 'pulq-fe');
         $chunk_size = $parameters->getParameter('chunk_size', 1000);
 
@@ -19,14 +20,10 @@ class ExportAction extends BaseAction
         $export_service = $module->getService('export');
         $document_service = $module->getService();
 
-        $manager = $module->getWorkflowManager();
-        $container = $this->getContainer();
-
-        $search_spec = array('filter' => array('workflowTicket.workflowStep' => 'verify'));
-        $publish_document = function($document) use ($document_service, $export_service)
+        $search_spec = array('filter' => array('workflowTicket.workflowStep' => 'published'));
+        $publish_document = function($document) use ($export_name, $export_service)
         {
-            $document->getWorkflowTicket()->first()->setWorkflowStep('edit');
-            $document_service->save($document);
+            $export_service->publish($export_name, $document);
         };
         $document_service->walkDocuments($search_spec, $chunk_size, $publish_document);
 
