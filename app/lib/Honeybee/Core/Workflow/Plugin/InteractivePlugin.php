@@ -101,7 +101,22 @@ class InteractivePlugin extends BasePlugin
         $ticket = $resource->getWorkflowTicket()->first();
         $method = $this->getWorkflow()->getContainer()->getRequestMethod();
 
-        return ('write' === $method && 'published' === $ticket->getWorkflowStep());
+        $name = $resource->getModule()->getOption('prefix');
+        $publish_steps = \AgaviConfig::get(
+            'workflow.' . $name . '.publish_steps',
+            \AgaviConfig::get(
+                'workflow.publish_steps',
+                array(
+                    'published'
+                )
+            )
+        );
+
+        if (!is_array($publish_steps)) {
+            $publish_steps = array('published');
+        }
+
+        return ('write' === $method && in_array($ticket->getWorkflowStep(), $publish_steps));
     }
 
     /**
