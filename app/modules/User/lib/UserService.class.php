@@ -15,52 +15,75 @@ class UserService extends DocumentService
 {
     public function sendPasswordLostEmail(UserDocument $user)
     {
+        $tm = \AgaviContext::getInstance()->getTranslationManager();
+        $lm = \AgaviContext::getInstance()->getLoggerManager();
+
         $user->setAuthToken(TokenGenerator::generateToken());
         $expireDate = new DateTime();
         $expireDate->add(new DateInterval('PT20M'));
         $user->setTokenExpireDate($expireDate->format(DATE_ISO8601));
         $this->save($user);
 
-        $current_language = \AgaviContext::getInstance()->getTranslationManager()->getCurrentLocaleIdentifier();
+        $current_language = $tm->getCurrentLocaleIdentifier();
         $user_language = $user->getLanguage();
-        if (empty($user_language))
-        {
+        if (empty($user_language)) {
             $user_language = $current_language;
         }
 
         // TODO use locale of user instead of language of the user document?
-        \AgaviContext::getInstance()->getTranslationManager()->setLocale($user_language);
+        $tm->setLocale($user_language);
 
         $user_password_link = \AgaviContext::getInstance()->getRouting()->gen('user.password', array('token' => $user->getAuthToken()));
 
         $mail_service = $user->getModule()->getService('mail');
-        $project_contact = AgaviConfig::get('core.project_contact');
+        $project_contact = \AgaviConfig::get('core.project_contact');
 
-        $message = $mail_service->createMessageFromTemplate('ResetPassword/ResetPassword', array(
-            'user_password_link' => $user_password_link,
-            'user' => $user,
-            'project_contact' => $project_contact
-        ));
+        $message = $mail_service->createMessageFromTemplate(
+            'ResetPassword/ResetPassword',
+            array(
+                'user_password_link' => $user_password_link,
+                'user' => $user,
+                'project_contact' => $project_contact
+            )
+        );
 
         $message->setSender(array('no-reply@honeybee-cms.de' => \AgaviConfig::get('core.app_name') . ' CMS'));
         $message->setFrom(array($project_contact['email'] => \AgaviConfig::get('core.app_name') . ' CMS'));
         $message->setTo(array($user->getEmail() => $user->getFirstname() . ' ' . $user->getLastname()));
         $message->setReplyTo(array($project_contact['email'] => $project_contact['name']));
 
-        $info = $mail_service->send($message);
+        try {
+            $info = $mail_service->send($message);
+        } catch (\Exception $e) {
+            $lm->logTo(
+                'mail',
+                Logging\Logger::ERROR,
+                __METHOD__,
+                array("Unable to send ResetPassword email for", $user, "- exception was:", $e, $message)
+            );
 
-        if (count($info[MailService::FAILED_RECIPIENTS]) !== 0)
-        {
-            \AgaviContext::getInstance()->getLoggerManager()->logTo(
-                null,
+            $tm->setLocale($current_language);
+
+            throw new \Exception(
+                $tm->_("Unable to send email. Please try again later or contact the responsible staff.", "user.errors")
+            );
+        }
+
+        if (count($info[MailService::FAILED_RECIPIENTS]) !== 0) {
+            $lm->logTo(
+                'mail',
                 Logging\Logger::ERROR,
                 __METHOD__,
                 array("Failed to send ResetPassword email for", $user, "- return value was:", $info)
             );
 
-            throw new \Exception("Unable to deliver mail correctly. Please try again later or contact the responsible staff.");
+            $tm->setLocale($current_language);
+
+            throw new \Exception(
+                $tm->_("Unable to deliver email correctly. Please try again later or contact the responsible staff.", "user.errors")
+            );
         }
 
-        \AgaviContext::getInstance()->getTranslationManager()->setLocale($current_language);
+        $tm->setLocale($current_language);
     }
 }

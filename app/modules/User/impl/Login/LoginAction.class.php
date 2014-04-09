@@ -65,7 +65,7 @@ class User_LoginAction extends UserBaseAction
             $errors[$field] = $error['messages'][0];
         }
 
-        $errors['auth'] = $this->getContext()->getTranslationManager()->_('invalid_login', 'user.messages');
+        $errors['auth'] = $this->getContext()->getTranslationManager()->_('invalid_login', 'user.errors');
 
         $this->setAttribute('errors', $errors);
         $this->setAttribute('reset_support_enabled', \AgaviConfig::get('user.module_active', FALSE));
@@ -104,7 +104,7 @@ class User_LoginAction extends UserBaseAction
             } else {
                 $view_name = 'Error';
 
-                $error_message = $translation_manager->_('session_regeneration_error', 'user.messages');
+                $error_message = $translation_manager->_('session_regeneration_error', 'user.errors');
                 $this->setAttribute('errors', array('auth' => $error_message));
 
                 $this->logError(
@@ -115,7 +115,7 @@ class User_LoginAction extends UserBaseAction
             $view_name = 'Error';
 
             $user->setAuthenticated(false);
-            $this->setAttribute('errors', array('auth' => $translation_manager->_('invalid_login', 'user.messages')));
+            $this->setAttribute('errors', array('auth' => $translation_manager->_('invalid_login', 'user.errors')));
 
             $this->logError(
                 sprintf(
@@ -162,7 +162,7 @@ class User_LoginAction extends UserBaseAction
         }
 
         if (!class_exists($auth_provider_class, true)) {
-            throw new \InvalidArgumentException('The configured auth_provider can not be loaded.');
+            throw new \InvalidArgumentException('The configured auth_provider cannot be loaded.');
         }
 
         return new $auth_provider_class(

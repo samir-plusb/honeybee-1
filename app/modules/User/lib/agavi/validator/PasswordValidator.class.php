@@ -77,7 +77,7 @@ class PasswordValidator extends UserTokenValidator
 
     const ERR_LOWERCASE_TOKENS = 'not_enough_lowercase_tokens';
 
-    const ERR_NUMERIC_TOKENS = 'not_enough_lowercase_tokens';
+    const ERR_NUMERIC_TOKENS = 'not_enough_numeric_tokens';
 
     const ERR_SPECIAL_CHARS = 'not_enough_special_chars';
 

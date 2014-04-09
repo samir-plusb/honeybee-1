@@ -24,7 +24,7 @@ class User_ResetPasswordAction extends UserBaseAction
             } else {
                 $this->setAttribute(
                     'errors',
-                    array('invalid_account' => $translationManager->_('invalid_account', 'user.messages'))
+                    array('invalid_account' => $translationManager->_('invalid_account', 'user.errors'))
                 );
 
                 return 'Input';
@@ -48,7 +48,7 @@ class User_ResetPasswordAction extends UserBaseAction
 
         $translationManager = $this->getContext()->getTranslationManager();
         $this->setAttribute('errors', array(
-            $translationManager->_('invalid_account', 'user.messages')
+            $translationManager->_('invalid_account', 'user.errors')
         ));
 
         return 'Input';

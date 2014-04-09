@@ -5,13 +5,13 @@
 
     <ae:configuration>
 
-        <validators translation_domain="user.messages">
+        <validators translation_domain="user.errors">
             <validator source="headers" class="RedirectValidator" name="valid_redirect_referer" severity="silent" required="false">
                 <argument>REFERER</argument>
             </validator>
         </validators>
 
-        <validators method="write" translation_domain="user.messages">
+        <validators method="write" translation_domain="user.errors">
             <validator class="string">
                 <argument>username</argument>
                 <ae:parameter name="min">3</ae:parameter>
@@ -19,7 +19,7 @@
                 <error>The username is either missing or invalid.</error>
             </validator>
 
-            <validator class="string" translation_domain='user.messages'>
+            <validator class="string">
                 <argument>password</argument>
                 <ae:parameter name="min">7</ae:parameter>
                 <ae:parameter name="max">200</ae:parameter>
@@ -28,7 +28,7 @@
 
         </validators>
 
-        <validators method="read" translation_domain="user.messages">
+        <validators method="read" translation_domain="user.errors">
             <validator class="string" required="false">
                 <argument>username</argument>
                 <ae:parameter name="min">3</ae:parameter>

@@ -25,7 +25,7 @@
                             <!-- list header and standard action names -->
                             <ae:parameter name="created">Erstellt</ae:parameter>
                             <ae:parameter name="owner">Besitzer/in</ae:parameter>
-                            <ae:parameter name="username">Nutzer/inname</ae:parameter>
+                            <ae:parameter name="username">Nutzer/in</ae:parameter>
                             <ae:parameter name="firstname">Vorname</ae:parameter>
                             <ae:parameter name="lastname">Nachname</ae:parameter>
                             <ae:parameter name="actions">Aktionen</ae:parameter>
@@ -36,12 +36,12 @@
 
                             <!-- reference batch dialogs -->
                             <ae:parameter name="batch_actions">Stapelverarbeitung</ae:parameter>
-                            <ae:parameter name="override_references">bestehendende Verknüpfungen überschreiben</ae:parameter>
-                            <ae:parameter name="append_reference">zu bestehenden Verknüpfungen hinzufügen</ae:parameter>
-                            <ae:parameter name="searching">Suche läuft ...</ae:parameter>
-                            <ae:parameter name="max_references_reached">maximal erlaubte Anzahl an Verknüpfungen erreicht</ae:parameter>
-                            <ae:parameter name="reference_suggest_to_short">Bitte mindestens ein Zeichen eingeben</ae:parameter>
-                            <ae:parameter name="no_references_found">Keine passenden Ergebnisse gefunden</ae:parameter>
+                            <ae:parameter name="override_references">Bestehendende Verknüpfungen überschreiben.</ae:parameter>
+                            <ae:parameter name="append_reference">Zu bestehenden Verknüpfungen hinzufügen.</ae:parameter>
+                            <ae:parameter name="searching">Suche läuft...</ae:parameter>
+                            <ae:parameter name="max_references_reached">Maximal erlaubte Anzahl an Verknüpfungen erreicht.</ae:parameter>
+                            <ae:parameter name="reference_suggest_to_short">Bitte mindestens ein Zeichen eingeben.</ae:parameter>
+                            <ae:parameter name="no_references_found">Keine passenden Ergebnisse gefunden.</ae:parameter>
                             <ae:parameter name="assign_references">Verknüpfen</ae:parameter>
 
                             <ae:parameter name="edit">Bearbeiten</ae:parameter>
@@ -62,7 +62,7 @@
                             <ae:parameter name="edit.promote.prompt">Sind sie sicher, dass sie diesen Datensatz publizieren (abnehmen) möchten?</ae:parameter>
                             <ae:parameter name="published.demote.prompt">Sind sie sicher, dass sie diesen Datensatz depublizieren möchten?</ae:parameter>
                             <ae:parameter name="edit.delete.prompt">Sind sie sicher, dass sie diesen Datensatz löschen möchten?</ae:parameter>
-                            <ae:parameter name="published.delete.prompt">Sind sie sicher, dass sie diesen (publizierten)Datensatz löschen möchten?</ae:parameter>
+                            <ae:parameter name="published.delete.prompt">Sind sie sicher, dass sie diesen (publizierten) Datensatz löschen möchten?</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
 
@@ -74,7 +74,7 @@
                         <ae:parameter name="de">
                             <ae:parameter name="identifier">Identifikation</ae:parameter>
                             <ae:parameter name="revision">Revision</ae:parameter>
-                            <ae:parameter name="username">Nutzer/inname</ae:parameter>
+                            <ae:parameter name="username">Nutzer/in</ae:parameter>
                             <ae:parameter name="firstname">Vorname</ae:parameter>
                             <ae:parameter name="lastname">Nachname</ae:parameter>
                             <ae:parameter name="email">Email</ae:parameter>
@@ -84,7 +84,7 @@
                     <!-- Group- and Tabnames -->
                     <ae:parameter name="rendering.input.document">
                         <ae:parameter name="de">
-                            <ae:parameter name="edit-form-title">User erstellen/bearbeiten</ae:parameter>
+                            <ae:parameter name="edit-form-title">Nutzer/in erstellen/bearbeiten</ae:parameter>
                             <ae:parameter name="meta">Metadaten</ae:parameter>
                             <ae:parameter name="content">Inhalte</ae:parameter>
                             <ae:parameter name="main">Stammdaten</ae:parameter>
@@ -97,8 +97,56 @@
                     -->
                     <ae:parameter name="errors">
                         <ae:parameter name="de">
-                            <ae:parameter name="storage_error">Das speichern der (User) Daten schlug fehl.</ae:parameter>
+                            <ae:parameter name="invalid_login">Die Kombination aus Nutzer/in und Kennwort ist ungültig.</ae:parameter>
+                            <ae:parameter name="invalid_account">Ungültige Kontodaten. Bitte die angegebene Email bzw. den Namen auf Richtigkeit überprüfen.</ae:parameter>
+                            <ae:parameter name="Login Error">Fehler während der Anmeldung.</ae:parameter>
+                            <ae:parameter name="reset_success_title">Sie haben Post!</ae:parameter>
+                            <ae:parameter name="reset_success_msg"><![CDATA[
+                                <p>Wir haben eine Email an die Adresse verschickt, die mit dem angegebenen Nutzer/in-Konto verküpft ist.</p>
+                                <p>Darin finden sie die erforderlichen Schritte um ihr Passwort zurückzusetzen.</p>
+                            ]]></ae:parameter>
+                            <ae:parameter name="session_regeneration_error">Interner Fehler bei der Anmeldung. Bitte versuchen sie es später noch einmal.</ae:parameter>
+                            <ae:parameter name="Unable to send email. Please try again later or contact the responsible staff.">Emailversand fehlgeschlagen. Versuchen sie es später noch einmal oder wenden sich an die Systemverantwortlichen.</ae:parameter>
+                            <ae:parameter name="Unable to deliver email correctly. Please try again later or contact the responsible staff.">Emailversand nicht erfolgreich. Bitte versuchen sie es später erneut oder wenden sich an die Systemverantwortlichen.</ae:parameter>
+                            <ae:parameter name="storage_error">Das Speichern der Daten schlug fehl.</ae:parameter>
                             <ae:parameter name="export_error">Während der Datenverarbeitung trat ein unerwarteter Fehler auf.</ae:parameter>
+                            <ae:parameter name="An error occurred. Please check the given arguments.">Ein Fehler ist aufgetreten. Bitte kontrollieren sie die übergebenen Argumente.</ae:parameter>
+                            <ae:parameter name="There is no such document.">Das Dokument existiert nicht.</ae:parameter>
+                            <ae:parameter name="The value '%value$s' given for field '%fieldname$s' does not comply.">Der für das Feld '%fieldname$s' angegebene Wert '%value$s' ist nicht erlaubt.</ae:parameter>
+                            <ae:parameter name="Missing required value for field '%fieldname$s'.">Bitte geben sie einen Wert für das Pflichtfeld '%fieldname$s' an.</ae:parameter>
+                            <ae:parameter name="The username is either missing or invalid.">Der Nutzer/innen-Name ist ungültig oder fehlt.</ae:parameter>
+                            <ae:parameter name="The password is either missing or invalid.">Kennwort fehlt oder ist ungültig.</ae:parameter>
+                            <ae:parameter name="The username is invalid.">Der angegebene Name für Nutzer/in ist ungültig.</ae:parameter>
+                            <ae:parameter name="The password is invalid.">Das Kennwort ist ungültig.</ae:parameter>
+                            <ae:parameter name="Invalid or missing account info.">Ungültige oder fehlende Kontoinformation.</ae:parameter>
+                            <ae:parameter name="The given user token is invalid.">Angegebenes Token ist ungültig.</ae:parameter>
+                            <ae:parameter name="The password does not meet the minimum complexity rules.">Das Kennwort erfüllt nicht die Minimum-Anforderungen zur Kennwortkomplexität. Es muss mindestens %min_string_length$s Zeichen lang sein und wenigstens %min_uppercase_chars$s Großbuchstaben, %min_lowercase_chars$s Kleinbuchstaben und %min_decimal_numbers$s Ziffern enthalten.</ae:parameter>
+                            <ae:parameter name="Password is too short.">Kennwort ist zu kurz. Bitte verwenden sie mindestens %min_string_length$s Zeichen.</ae:parameter>
+                            <ae:parameter name="Password is too long.">Kennwort ist zu lang. Bitte verwenden sie maximal %max_string_length$s Zeichen.</ae:parameter>
+                            <ae:parameter name="The repeated password does not match.">Kennwort-Wiederholung passt nicht zum eingegebenen Kennwort.</ae:parameter>
+                            <ae:parameter name="Password is too similar to one of the following attributes: username, firstname, lastname and email.">Kennwort ist zu ähnlich zu Nutzer/in-Name, Vorname, Nachname oder Email. Bitte wählen sie ein schwerer zu erratenes Kennwort.</ae:parameter>
+                            <ae:parameter name="Password must contain at least %min_decimal_numbers$s decimal characters.">Kennwort erhält nicht genügend Ziffern. Mindestens %min_decimal_numbers$s Ziffern sind erforderlich.</ae:parameter>
+                            <ae:parameter name="Password must contain at least %min_uppercase_chars$s uppercase characters.">Kennwort erhält nicht genügend Großbuchstaben. Mindestens %min_uppercase_chars$s Großbuchstaben sind erforderlich.</ae:parameter>
+                            <ae:parameter name="Password must contain at least %min_lowercase_chars$s lowercase characters.">Kennwort enthält nicht genügend Kleinbuchstaben. Mindestens %min_lowercase_chars$s Kleinbuchstaben sind erforderlich.</ae:parameter>
+                            <ae:parameter name="Password is too common and therefore easy to guess.">Das Kennwort ist zu leicht zu erraten. Bitte wählen sie ein weniger verbreitetes Kennwort.</ae:parameter>
+                            <ae:parameter name="An invalid gate was given.">Ein ungültiger Workflow-Übergang wurde angefordert.</ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="en">
+                            <ae:parameter name="invalid_login">Invalid login.</ae:parameter>
+                            <ae:parameter name="invalid_account">Invalid account data. Please provide correct username or email.</ae:parameter>
+                            <ae:parameter name="Login Error">Login error.</ae:parameter>
+                            <ae:parameter name="reset_success_title">You have mail!</ae:parameter>
+                            <ae:parameter name="reset_success_msg"><![CDATA[
+                                <p>The password for the affected user account may be reset now.</p>
+                                <p>The necessary steps have been mailed to the email adress related to the given user account.</p>
+                            ]]></ae:parameter>
+                            <ae:parameter name="session_regeneration_error">Internal error while login. Please try again later.</ae:parameter>
+                            <ae:parameter name="storage_error">Storing the data failed.</ae:parameter>
+                            <ae:parameter name="export_error">An error occurred while exporting the data.</ae:parameter>
+                            <ae:parameter name="The password does not meet the minimum complexity rules.">The password does not meet the minimum complexity rules. It must contain at least %min_string_length$s characters with at least %min_uppercase_chars$s uppercase character, %min_lowercase_chars$s lowercase characters and %min_decimal_numbers$s decimal numbers.</ae:parameter>
+                            <ae:parameter name="Password is too short.">Password is too short. It should contain at least %min_string_length$s characters.</ae:parameter>
+                            <ae:parameter name="Password is too long.">Password is too long. It should contain a maximum of %max_string_length$s characters.</ae:parameter>
+                            <ae:parameter name="An invalid gate was given.">An invalid workflow step transition was given.</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
 
@@ -106,12 +154,12 @@
                         <ae:parameter name="de">
                             <ae:parameter name="Signin">Anmelden</ae:parameter>
                             <ae:parameter name="Set password">Kennwort setzen</ae:parameter>
-                            <ae:parameter name="Username">Nutzer/inname</ae:parameter>
+                            <ae:parameter name="Username">Nutzer/in</ae:parameter>
                             <ae:parameter name="Reset password">Kennwort zurücksetzen</ae:parameter>
                             <ae:parameter name="Password">Kennwort</ae:parameter>
                             <ae:parameter name="Repeat password">Kennwort wiederholen</ae:parameter>
-                            <ae:parameter name="Please sign in">Bitte Nutzer/innamen und Kennwort eingeben</ae:parameter>
-                            <ae:parameter name="Please enter your email or username."><![CDATA[Bitte Nutzer/innamen <b>oder</b> Emailadresse eingeben.]]></ae:parameter>
+                            <ae:parameter name="Please sign in">Bitte Nutzer/in und Kennwort eingeben</ae:parameter>
+                            <ae:parameter name="Please enter your email or username."><![CDATA[Bitte Nutzer/in <b>oder</b> Emailadresse eingeben.]]></ae:parameter>
                             <ae:parameter name="Min. %d characters long">Mind. %d Zeichen lang</ae:parameter>
                             <ae:parameter name="Min. %d lowercase letters">Mind. %d Kleinbuchstaben</ae:parameter>
                             <ae:parameter name="Min. %d uppercase characters">Mind. %d Grossbuchstaben</ae:parameter>
@@ -128,21 +176,12 @@
 
                     <ae:parameter name="messages">
                         <ae:parameter name="de">
-                            <ae:parameter name="invalid_login">Die Kombination aus Nutzer/inname und Kennwort ist ungültig.</ae:parameter>
-                            <ae:parameter name="invalid_account">Ungültige Kontodaten; bitte die angegebene Email oder den Nutzer/innamen auf Richtigkeit überprüfen.</ae:parameter>
-                            <ae:parameter name="Login Error">Fehler während der Anmeldung</ae:parameter>
-                            <ae:parameter name="reset_success_title">Sie haben Post!</ae:parameter>
-                            <ae:parameter name="reset_success_msg"><![CDATA[
-                                <p>Wir haben eine Email an die Adresse verschickt, die mit dem angegebenen Nutzer/inkonto verküpft ist.</p>
-                                <p>Darin finden sie die erforderlichen Schritte um ihr Passwort zurück zu setzen.</p>
-                            ]]></ae:parameter>
-                            <ae:parameter name="session_regeneration_error">Interner Fehler beim Login. Bitte versuchen Sie es später noch einmal.</ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="en">
                             <ae:parameter name="reset_success_title">You have mail!</ae:parameter>
                             <ae:parameter name="reset_success_msg"><![CDATA[
                                 <p>The password for the affected user account may be reset now.</p>
-                                <p>The necessary steps have been mailed to the email adress related to the latter user account.</p>
+                                <p>The necessary steps have been mailed to the email adress related to the given user account.</p>
                             ]]></ae:parameter>
                             <ae:parameter name="session_regeneration_error">Internal error while login. Please try again later.</ae:parameter>
                         </ae:parameter>

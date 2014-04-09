@@ -4,20 +4,20 @@
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     parent="%core.module_dir%/User/config/validators.xml">
     <ae:configuration context="web">
-        <validators method="read">
+        <validators method="read" translation_domain="user.errors">
             <validator class="user" required="false">
                 <argument>user</argument>
             </validator>
         </validators>
-        <validators method="write">
+        <validators method="write" translation_domain="user.errors">
             <validator class="user">
                 <argument>user</argument>
             </validator>
         </validators>
     </ae:configuration>
 
-    <ae:configuration context="console" translation_domain="user.errors">
-        <validators method="write">
+    <ae:configuration context="console">
+        <validators method="write" translation_domain="user.errors">
             <validator class="UserDocumentValidator" name="invalid_user" required="true">
                 <arguments>
                     <argument>username</argument>
@@ -27,7 +27,7 @@
                     <error>An error occurred. Please check the given arguments.</error>
                     <error for="non_existant">There is no such document.</error>
                     <error for="invalid_values">The value '%value$s' given for field '%fieldname$s' does not comply.</error>
-                    <error for="missing_mandatory_values">Missing required value for field '%fieldname$s'</error>
+                    <error for="missing_mandatory_values">Missing required value for field '%fieldname$s'.</error>
                 </errors>
             </validator>
         </validators>
