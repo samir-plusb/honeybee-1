@@ -56,7 +56,8 @@ class User_Login_LoginInputView extends UserBaseView
             array(
                 'result'  => 'success',
                 'message' => $this->translation_manager->_(
-                    'You may post a username and a password to this uri in order to login to the application.'
+                    'You may post a username and a password to this uri in order to login to the application.',
+                    'user.messages'
                 )
             )
         );

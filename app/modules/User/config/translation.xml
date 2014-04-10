@@ -143,11 +143,6 @@
                             <ae:parameter name="invalid_login">Die Kombination aus Nutzer/in und Kennwort ist ungültig.</ae:parameter>
                             <ae:parameter name="invalid_account">Ungültige Kontodaten. Bitte die angegebene Email bzw. den Namen auf Richtigkeit überprüfen.</ae:parameter>
                             <ae:parameter name="Login Error">Fehler während der Anmeldung.</ae:parameter>
-                            <ae:parameter name="reset_success_title">Sie haben Post!</ae:parameter>
-                            <ae:parameter name="reset_success_msg"><![CDATA[
-                                <p>Wir haben eine Email an die Adresse verschickt, die mit dem angegebenen Nutzer/in-Konto verküpft ist.</p>
-                                <p>Darin finden sie die erforderlichen Schritte um ihr Passwort zurückzusetzen.</p>
-                            ]]></ae:parameter>
                             <ae:parameter name="session_regeneration_error">Interner Fehler bei der Anmeldung. Bitte versuchen sie es später noch einmal.</ae:parameter>
                             <ae:parameter name="Unable to send email. Please try again later or contact the responsible staff.">Emailversand fehlgeschlagen. Versuchen sie es später noch einmal oder wenden sich an die Systemverantwortlichen.</ae:parameter>
                             <ae:parameter name="Unable to deliver email correctly. Please try again later or contact the responsible staff.">Emailversand nicht erfolgreich. Bitte versuchen sie es später erneut oder wenden sich an die Systemverantwortlichen.</ae:parameter>
@@ -179,11 +174,6 @@
                             <ae:parameter name="invalid_login">Invalid login.</ae:parameter>
                             <ae:parameter name="invalid_account">Invalid account data. Please provide correct username or email.</ae:parameter>
                             <ae:parameter name="Login Error">Login error.</ae:parameter>
-                            <ae:parameter name="reset_success_title">You have mail!</ae:parameter>
-                            <ae:parameter name="reset_success_msg"><![CDATA[
-                                <p>The password for the affected user account may be reset now.</p>
-                                <p>The necessary steps have been mailed to the email adress related to the given user account.</p>
-                            ]]></ae:parameter>
                             <ae:parameter name="session_regeneration_error">Internal error while login. Please try again later.</ae:parameter>
                             <ae:parameter name="storage_error">Storing the data failed.</ae:parameter>
                             <ae:parameter name="export_error">An error occurred while exporting the data.</ae:parameter>
@@ -218,6 +208,22 @@
                         </ae:parameter>
                     </ae:parameter>
 
+                    <ae:parameter name="messages">
+                        <ae:parameter name="de">
+                            <ae:parameter name="reset_success_title">Sie haben Post!</ae:parameter>
+                            <ae:parameter name="reset_success_msg"><![CDATA[
+                                <p>Wir haben eine Email an die Adresse verschickt, die mit dem angegebenen Nutzer/inkonto verküpft ist.</p>
+                                <p>Darin finden sie die erforderlichen Schritte um ihr Passwort zurück zu setzen.</p>
+                            ]]></ae:parameter>
+                        </ae:parameter>
+                        <ae:parameter name="en">
+                            <ae:parameter name="reset_success_title">You have mail!</ae:parameter>
+                            <ae:parameter name="reset_success_msg"><![CDATA[
+                                <p>The password for the affected user account may be reset now.</p>
+                                <p>The necessary steps have been mailed to the email adress related to the latter user account.</p>
+                            ]]></ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
                 </message_translator>
             </translator>
         </translators>

@@ -18,7 +18,7 @@ class User_Login_LoginErrorView extends UserBaseView
     {
         parent::setupHtml($request_data);
 
-        $this->setAttribute('_title', $this->getContext()->getTranslationManager()->_('Login Error', 'user.messages'));
+        $this->setAttribute('_title', $this->getContext()->getTranslationManager()->_('Login Error', 'user.errors'));
         $this->setAttribute('error_messages', $this->getContainer()->getValidationManager()->getErrorMessages());
 
         $this->getResponse()->setHttpStatusCode(401);
@@ -58,7 +58,7 @@ class User_Login_LoginErrorView extends UserBaseView
     public function executeConsole(AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
         return $this->cliError(
-            $this->translation_manager->_('Wrong user name or password!', 'user') . PHP_EOL
+            $this->translation_manager->_('Wrong user name or password!', 'user.errors') . PHP_EOL
         );
     }
 
