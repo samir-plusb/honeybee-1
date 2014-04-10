@@ -101,19 +101,17 @@ class InteractivePlugin extends BasePlugin
         $ticket = $resource->getWorkflowTicket()->first();
         $method = $this->getWorkflow()->getContainer()->getRequestMethod();
 
-        $name = $resource->getModule()->getOption('prefix');
+        $module_prefix = $resource->getModule()->getOption('prefix');
         $publish_steps = \AgaviConfig::get(
-            'workflow.' . $name . '.publish_steps',
+            $module_prefix . '.workflow.publish_steps',
             \AgaviConfig::get(
                 'workflow.publish_steps',
-                array(
-                    'published'
-                )
+                array('published')
             )
         );
 
         if (!is_array($publish_steps)) {
-            $publish_steps = array('published');
+            throw new \InvalidArgumentException("Invalid publish steps configuration given.");
         }
 
         return ('write' === $method && in_array($ticket->getWorkflowStep(), $publish_steps));
@@ -186,12 +184,23 @@ class InteractivePlugin extends BasePlugin
     {
         $resource = $this->getResource();
         $ticket = $resource->getWorkflowTicket()->first();
-        // @todo read these workflow-step names from the plugin config.
-        if (('published' === $ticket->getWorkflowStep() && $gateName !== 'correction')
-            || ('correction' === $ticket->getWorkflowStep() && $gateName === 'demote')
-            || (true === $this->getParameter('live_node') && $gateName === 'demote')
-        ) {
-            $this->revokeResource($resource);
+        $module_prefix = $resource->getModule()->getOption('prefix');
+
+        $default_revoke_transitions = \AgaviConfig::get('workflow.default_revoke_transitions');
+        $revoke_transitions = \AgaviConfig::get(
+            $module_prefix . '.workflow.revoke_transitions',
+            $default_revoke_transitions
+        );
+
+        if (!is_array($revoke_transitions)) {
+            throw new \InvalidArgumentException("Invalid default transitions configuration given.");
+        }
+
+        foreach ($revoke_transitions as $revoke_transition) {
+            list($step, $gate) = explode('~', $revoke_transition);
+            if ($step === $ticket->getWorkflowStep() && $gateName === $gate) {
+                $this->revokeResource($resource);
+            }
         }
     }
 
