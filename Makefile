@@ -1,6 +1,6 @@
 PROJECT_ROOT=`pwd`
 BUILD_DIR=${PROJECT_ROOT}/etc/integration/build/
-PHP_ERROR_LOG=`php -i | grep error_log | cut -f '3' -d " "`
+PHP_ERROR_LOG=`php -i | grep -P '^error_log' | cut -f '3' -d " "`
 
 help:
 
