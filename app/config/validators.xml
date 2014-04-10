@@ -34,6 +34,7 @@
                     <error for="type">Only strings are allowed as submit button values.</error>
                 </errors>
                 <ae:parameters>
+                    <ae:parameter name="translation_domain">modules.errors</ae:parameter>
                     <ae:parameter name="type">string</ae:parameter>
                     <ae:parameter name="case">true</ae:parameter>
                     <ae:parameter name="values">

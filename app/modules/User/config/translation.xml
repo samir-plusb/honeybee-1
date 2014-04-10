@@ -64,6 +64,49 @@
                             <ae:parameter name="edit.delete.prompt">Sind sie sicher, dass sie diesen Datensatz löschen möchten?</ae:parameter>
                             <ae:parameter name="published.delete.prompt">Sind sie sicher, dass sie diesen (publizierten) Datensatz löschen möchten?</ae:parameter>
                         </ae:parameter>
+                        <ae:parameter name="en">
+                            <!-- list header and standard action names -->
+                            <ae:parameter name="created">Created</ae:parameter>
+                            <ae:parameter name="owner">Owner</ae:parameter>
+                            <ae:parameter name="username">Username</ae:parameter>
+                            <ae:parameter name="firstname">Firstname</ae:parameter>
+                            <ae:parameter name="lastname">Lastname</ae:parameter>
+                            <ae:parameter name="actions">Actions</ae:parameter>
+                            <ae:parameter name="promote">Publicise</ae:parameter>
+                            <ae:parameter name="demote">Depublicise</ae:parameter>
+                            <ae:parameter name="state">State</ae:parameter>
+                            <ae:parameter name="role">Role</ae:parameter>
+
+                            <!-- reference batch dialogs -->
+                            <ae:parameter name="batch_actions">Batch Actions</ae:parameter>
+                            <ae:parameter name="override_references">Override existing references.</ae:parameter>
+                            <ae:parameter name="append_reference">Append to existing references.</ae:parameter>
+                            <ae:parameter name="searching">Searching...</ae:parameter>
+                            <ae:parameter name="max_references_reached">Maximum number of references reached.</ae:parameter>
+                            <ae:parameter name="reference_suggest_to_short">Please enter at least one character.</ae:parameter>
+                            <ae:parameter name="no_references_found">No matching references found.</ae:parameter>
+                            <ae:parameter name="assign_references">Assign reference.</ae:parameter>
+
+                            <ae:parameter name="edit">Edit</ae:parameter>
+                            <ae:parameter name="view">View</ae:parameter>
+                            <ae:parameter name="disabled">Disabled</ae:parameter>
+                            <ae:parameter name="delete">Delete</ae:parameter>
+
+                            <!-- workflow transitions (context sensitive action names for promote and demote) -->
+                            <ae:parameter name="edit.promote">Activate</ae:parameter>
+                            <ae:parameter name="edit.delete">Delete</ae:parameter>
+                            <ae:parameter name="published.promote">Archive</ae:parameter>
+                            <ae:parameter name="published.demote">Deactivate</ae:parameter>
+                            <ae:parameter name="published.delete">Delete</ae:parameter>
+                            <ae:parameter name="archived.demote">Reimport</ae:parameter>
+                            <ae:parameter name="archived.delete">Delete</ae:parameter>
+
+                            <!-- workflow transition prompts -->
+                            <ae:parameter name="edit.promote.prompt">Are you sure you want to approve and publicise the dataset?</ae:parameter>
+                            <ae:parameter name="published.demote.prompt">Are you sure you want to depublicise the dataset?</ae:parameter>
+                            <ae:parameter name="edit.delete.prompt">Are you sure you want to delete the dataset?</ae:parameter>
+                            <ae:parameter name="published.delete.prompt">Are you sure to delete this publicised dataset?</ae:parameter>
+                        </ae:parameter>
                     </ae:parameter>
 
                     <!--
@@ -114,6 +157,7 @@
                             <ae:parameter name="There is no such document.">Das Dokument existiert nicht.</ae:parameter>
                             <ae:parameter name="The value '%value$s' given for field '%fieldname$s' does not comply.">Der für das Feld '%fieldname$s' angegebene Wert '%value$s' ist nicht erlaubt.</ae:parameter>
                             <ae:parameter name="Missing required value for field '%fieldname$s'.">Bitte geben sie einen Wert für das Pflichtfeld '%fieldname$s' an.</ae:parameter>
+                            <ae:parameter name="Missing value for field '%s'.">Wert für Feld '%s' fehlt.</ae:parameter>
                             <ae:parameter name="The username is either missing or invalid.">Der Nutzer/innen-Name ist ungültig oder fehlt.</ae:parameter>
                             <ae:parameter name="The password is either missing or invalid.">Kennwort fehlt oder ist ungültig.</ae:parameter>
                             <ae:parameter name="The username is invalid.">Der angegebene Name für Nutzer/in ist ungültig.</ae:parameter>
@@ -174,18 +218,6 @@
                         </ae:parameter>
                     </ae:parameter>
 
-                    <ae:parameter name="messages">
-                        <ae:parameter name="de">
-                        </ae:parameter>
-                        <ae:parameter name="en">
-                            <ae:parameter name="reset_success_title">You have mail!</ae:parameter>
-                            <ae:parameter name="reset_success_msg"><![CDATA[
-                                <p>The password for the affected user account may be reset now.</p>
-                                <p>The necessary steps have been mailed to the email adress related to the given user account.</p>
-                            ]]></ae:parameter>
-                            <ae:parameter name="session_regeneration_error">Internal error while login. Please try again later.</ae:parameter>
-                        </ae:parameter>
-                    </ae:parameter>
                 </message_translator>
             </translator>
         </translators>

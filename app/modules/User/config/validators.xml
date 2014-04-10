@@ -6,6 +6,7 @@
                 <error for="invalid_values">The value '%value$s' given for field '%fieldname$s' does not comply.</error>
                 <error for="missing_mandatory_values">Missing required value for field '%fieldname$s'.</error>
                 <ae:parameter name="required">true</ae:parameter>
+                <ae:parameter name="translation_domain">user.errors</ae:parameter>
             </validator_definition>
         </validator_definitions>
 	</ae:configuration>

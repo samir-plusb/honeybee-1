@@ -4,7 +4,7 @@
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     parent="%core.module_dir%/%%MODULE_NAME%%/config/validators.xml">
     <ae:configuration>
-        <validators>
+        <validators translation_domain="%%MODULE_PREFIX%%.errors">
             <validator class="string" name="invalid_phrase" required="false">
                 <arguments>
                     <argument>term</argument>

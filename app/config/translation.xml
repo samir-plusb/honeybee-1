@@ -3,11 +3,11 @@
     <ae:configuration>
 
         <available_locales default_locale="de_DE">
-			<!-- German, Germany -->
+            <!-- German, Germany -->
             <available_locale identifier="de_DE">
                 <ae:parameter name="description">Deutsch</ae:parameter>
             </available_locale>
-			<!-- English, United States -->
+            <!-- English, United States -->
             <available_locale identifier="en_EN">
                 <ae:parameter name="description">English</ae:parameter>
             </available_locale>
@@ -64,6 +64,12 @@
                         <ae:parameter name="de">
                             <ae:parameter name="Previous">Zurück</ae:parameter>
                             <ae:parameter name="Next">Vor</ae:parameter>
+                        </ae:parameter>
+                    </ae:parameter>
+                    <ae:parameter name="errors">
+                        <ae:parameter name="de">
+                            <ae:parameter name="Only specific types are allowed as submit button values.">Nur bestimmte Aktionen sind erlaubt beim Speichern.</ae:parameter>
+                            <ae:parameter name="Only strings are allowed as submit button values.">Nur Zeichenketten sind erlaubt als Werte für Speichern.</ae:parameter>
                         </ae:parameter>
                     </ae:parameter>
                 </message_translator>

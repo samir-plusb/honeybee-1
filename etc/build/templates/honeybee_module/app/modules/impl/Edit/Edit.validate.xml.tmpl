@@ -4,13 +4,16 @@
     xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
     parent="%core.module_dir%/%%MODULE_NAME%%/config/validators.xml">
     <ae:configuration>
-        <validators method="read">
+        <validators method="read" translation_domain="%%MODULE_PREFIX%%.errors">
             <validator class="%%MODULE_PREFIX%%" required="false">
                 <argument>%%MODULE_PREFIX%%</argument>
             </validator>
         </validators>
 
-        <validators method="write">
+        <validators method="write" translation_domain="%%MODULE_PREFIX%%.errors">
+            <validator class="valid_save_action" required="false">
+                <argument>save_type</argument>
+            </validator>
             <validator class="%%MODULE_PREFIX%%">
                 <argument>%%MODULE_PREFIX%%</argument>
             </validator>
