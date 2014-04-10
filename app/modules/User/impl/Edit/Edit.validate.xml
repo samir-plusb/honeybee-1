@@ -10,6 +10,9 @@
             </validator>
         </validators>
         <validators method="write" translation_domain="user.errors">
+            <validator class="valid_save_action" required="false">
+                <argument>save_type</argument>
+            </validator>
             <validator class="user">
                 <argument>user</argument>
             </validator>
