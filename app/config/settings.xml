@@ -71,6 +71,9 @@
         </settings>
 
         <settings prefix="workflow.">
+            <setting name="publish_steps">
+                <ae:parameter>published</ae:parameter>
+            </setting>
             <setting name="default_revoke_transitions">
                 <ae:parameter>published~promote</ae:parameter>
                 <ae:parameter>published~demote</ae:parameter>
