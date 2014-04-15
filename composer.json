@@ -61,8 +61,8 @@
     },
 
     "require-dev": {
-        "shrink/phpmd": "1.4.3",
-        "shrink/phploc": "1.7.6",
+        "shrink0r/phpmd": "1.4.3",
+        "shrink0r/phploc": "1.7.6",
         "pdepend/pdepend": "1.1.0",
         "zerkalica/php-code-browser": "dev-master",
         "phpunit/phpunit": "3.7.*",
