@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ae:configurations 
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
-    xmlns="http://agavi.org/agavi/config/parts/filters/1.0">
+<!DOCTYPE namespaces [
+    <!ENTITY aegf "xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(l=http://agavi.org/agavi/config/parts/filters/1.0)">
+]>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/filters/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+
     <ae:configuration context="web">
         <filters>
             <filter name="ResourceFilter" class="Honeybee\Agavi\Filter\ResourceFilter">
@@ -59,4 +61,9 @@
             </filter>
         </filters>
     </ae:configuration>
+
+    <xi:include href="%project.config_dir%/global_filters.xml" xpointer="&aegf; xpointer(/ae:configurations/*)">
+        <xi:fallback />
+    </xi:include>
+
 </ae:configurations> 
