@@ -24,11 +24,6 @@ class DocumentExport extends GenericExport
         }
     }
 
-    protected function getStorageIdentifier(Document $document)
-    {
-        return $document->getShortIdentifier();
-    }
-
     protected function buildExportData(Document $document)
     {
         $meta_data = $document->getMeta();
@@ -40,7 +35,7 @@ class DocumentExport extends GenericExport
 
         $data = parent::buildExportData($document);
 
-        $export_identifier = $document->getShortIdentifier();
+        $export_identifier = $this->getStorageIdentifier($document);
         $data['identifier'] = $export_identifier;
         $data['type'] = $document->getModule()->getOption('prefix');
         $data[self::PUBLISHED_AT_FIELD] = $meta_data[self::PUBLISHED_AT_FIELD];
@@ -50,5 +45,10 @@ class DocumentExport extends GenericExport
         }
 
         return $data;
+    }
+
+    protected function getStorageIdentifier(Document $document)
+    {
+        return $document->getShortIdentifier();
     }
 }
