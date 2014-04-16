@@ -12,7 +12,6 @@
         <title>{{ _title }}</title>
         <base href="{{ ro.getBaseHref() }}" id="base_href"/>
         <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
-        <!-- GoogleMaps code - @todo get this sucker oughta here! -->
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;libraries=drawing"></script>
         <script type="text/javascript" src="static/ckeditor/ckeditor.js"></script>
         <!-- %%STYLESHEETS%% -->
@@ -20,10 +19,9 @@
     <body>
         {{ slots.header|raw }}
         {{ inner|raw }}
-        <!-- @todo Move to a dedicated footer action. -->
         <footer class="footer container-fluid">
             <p>
-                Honeybee - Copyright &#169;2013 <a href="http://www.berlinonline.de">BerlinOnline</a>
+                Honeybee - Copyright &#169; {{ "now"|date("Y") }} <a href="http://www.berlinonline.net">BerlinOnline</a>
             </p>
         </footer>
         <!-- %%JAVASCRIPTS%% -->
