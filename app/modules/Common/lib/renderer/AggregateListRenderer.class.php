@@ -6,7 +6,7 @@ use Dat0r\Core\Module\AggregateModule;
 
 class AggregateListRenderer extends DefaultListValueRenderer
 {
-    public function renderValue($value, $field, array $data = array())
+    public function renderValue($value, $field, array &$data = array())
     {
         if ($value instanceof DocumentCollection)
         {

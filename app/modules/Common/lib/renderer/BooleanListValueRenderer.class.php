@@ -11,7 +11,7 @@ class BooleanListValueRenderer extends DefaultListValueRenderer
         $this->module = $module;
     }
 
-    public function renderValue($value, $field, array $data = array())
+    public function renderValue($value, $field, array &$data = array())
     {
         $translation_domain = sprintf('%s.list', $this->module->getOption('prefix'));
         $translation_domain = isset($options['domain']) ? $options['domain'] : $translation_domain;

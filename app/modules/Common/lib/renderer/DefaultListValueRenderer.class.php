@@ -11,7 +11,7 @@ class DefaultListValueRenderer implements IListValueRenderer
         $this->module = $module;
     }
 
-    public function renderValue($value, $field, array $data = array())
+    public function renderValue($value, $field, array &$data = array())
     {
         $rendererDef = $field->getRenderer();
         $options = isset($rendererDef['options']) ? $rendererDef['options'] : array();

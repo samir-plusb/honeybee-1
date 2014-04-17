@@ -4,7 +4,7 @@ use Dat0r\Core\Document\DocumentCollection;
 
 class TicketOwnerListValueRenderer extends DefaultListValueRenderer
 {
-    public function renderValue($value, $field, array $data = array())
+    public function renderValue($value, $field, array &$data = array())
     {
         if ($value instanceof DocumentCollection) {
             $value = $value->first()->getOwner();

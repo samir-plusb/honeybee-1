@@ -4,7 +4,7 @@ use Dat0r\Core\Document\DocumentCollection;
 
 class ReferenceListValueRenderer extends DefaultListValueRenderer
 {
-    public function renderValue($value, $field, array $data = array())
+    public function renderValue($value, $field, array &$data = array())
     {
         $rendererDef = $field->getRenderer();
         $options = $rendererDef['options'];
