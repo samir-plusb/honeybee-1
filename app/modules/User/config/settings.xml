@@ -45,6 +45,14 @@
                     <ae:parameter name="role">
                         <ae:parameter name="valuefield">role</ae:parameter>
                         <ae:parameter name="sortfield">role.sort</ae:parameter>
+                        <ae:parameter name="renderer">
+                            <ae:parameter name="implementor">DefaultListValueRenderer</ae:parameter>
+                            <ae:parameter name="options">
+                                <ae:parameter name="displayField">role</ae:parameter>
+                                <ae:parameter name="translate">true</ae:parameter>
+                                <ae:parameter name="domain">user.roles</ae:parameter>
+                            </ae:parameter>
+                        </ae:parameter>
                     </ae:parameter>
                     <ae:parameter name="state">
                         <ae:parameter name="valuefield">workflowTicket</ae:parameter>
