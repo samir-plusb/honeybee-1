@@ -95,14 +95,18 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
                 }
             });
         });
+
         window.addEventListener('message', this.onDomMessagePostReceived.bind(this), false);
-        $(window).on('beforeunload', function(){
-            var url = $.url().param('directory');
-            jQuery.ajax({
-                url: that.options.unlock_url,
-                async: false
+
+        if (this.options.locking_enabled) {
+            $(window).on('beforeunload', function(){
+                var url = $.url().param('directory');
+                jQuery.ajax({
+                    url: that.options.unlock_url,
+                    async: false
+                });
             });
-        });
+        }
     },
 
     // ##################################
