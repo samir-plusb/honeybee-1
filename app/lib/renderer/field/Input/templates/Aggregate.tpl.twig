@@ -90,7 +90,7 @@
 -->
     <ul class="aggregates-list">
         {% for pos, aggregate in aggregates %}
-        <li class="row-fluid aggregate {% if max_count > 1 %}collapsed{% endif %}">
+        <li class="row-fluid aggregate {% if start_collapsed %}collapsed{% endif %}">
             <div class="span{{group['width']}} group">
                 <div class="field-group field-group-{{name}}">
                     <h3 class="input-group-label">

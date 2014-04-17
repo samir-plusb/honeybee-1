@@ -82,10 +82,16 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
             );
         }
 
+        $start_collapsed = ($this->getField()->getOption('max', 0) > 1) ? true : false;
+        if (array_key_exists('start_collapsed', $this->options) && $this->options['start_collapsed'] === true) {
+            $start_collapsed = true;
+        }
+
         return array_merge(
             parent::getPayload($document),
             array(
                 'max_count' => $this->getField()->getOption('max', 0),
+                'start_collapsed' => $start_collapsed,
                 'has_default_aggregate' => $hasDefaultAggregate,
                 'aggregates' => $aggregates,
                 'aggregate_modules' => $aggregate_modules
