@@ -106,7 +106,12 @@ class Default_Error404_Error404SuccessView extends DefaultBaseView
         {
             $all_pattern[$key] = $route_info['pattern'];
         }
-        array_multisort($all_pattern, SORT_NATURAL | SORT_FLAG_CASE, $all_routes);
+
+        $sort_flag = SORT_REGULAR;
+        if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+            $sort_flag = SORT_NATURAL | SORT_FLAG_CASE;
+        }
+        array_multisort($all_pattern, $sort_flag, $all_routes);
 
         // create help with parameters/validation and description for each known route
         foreach ($all_routes as $route)
