@@ -24,7 +24,30 @@ class UserDocumentValidator extends DocumentValidator
                     'email' => $this->getData('email'),
                     'role' => 'honeybee-editor',
                     'authToken' => TokenGenerator::generateToken(),
-                    'tokenExpireDate' => $expireDate->format(DATE_ISO8601)
+                    'tokenExpireDate' => $expireDate->format(DATE_ISO8601),
+                    'workflowTicket' => array(
+                        array(
+                            'workflowName' => 'user.default',
+                            'owner' => null,
+                            'workflowStep' => 'published',
+                            'stepCounts' => null,
+                            'lastResult' => array(
+                                array(
+                                    'state' => null,
+                                    'gate' => null,
+                                    'message' =>  null,
+                                    'type' => sprintf(
+                                        'Honeybee\\Domain\\%s\\PluginResultDocument',
+                                        $this->getModule()->getName()
+                                    )
+                                )
+                            ),
+                            'type' => sprintf(
+                                'Honeybee\\Domain\\%s\\WorkflowTicketDocument',
+                                $this->getModule()->getName()
+                            )
+                        )
+                    )
                 ));
 
                 $this->export($document, $this->getParameter('export', 'document'));

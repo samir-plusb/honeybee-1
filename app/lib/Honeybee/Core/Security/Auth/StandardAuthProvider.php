@@ -13,6 +13,8 @@ use Honeybee\Core\Config\IConfig;
  */
 class StandardAuthProvider implements IAuthProvider
 {
+    const ACTIVE_STATE = 'published';
+
     const TYPE_KEY = 'standard-auth';
 
     protected $config;
@@ -52,7 +54,13 @@ class StandardAuthProvider implements IAuthProvider
             );
         }
         $passwordHandler = new CryptedPasswordHandler();
-        
+
+        if ($user->getWorkflowTicket()->first()->getWorkflowStep() !== self::ACTIVE_STATE) {
+            return new AuthResponse(
+                AuthResponse::STATE_UNAUTHORIZED,
+                "user deactivated"
+            );
+        }
         if ($passwordHandler->verify($password, $user->getPasswordHash()))
         {
             return new AuthResponse(
