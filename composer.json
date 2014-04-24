@@ -57,7 +57,8 @@
         "symfony/process": "~2.3",
         "symfony/dom-crawler": "~2.3",
         "symfony/css-selector": "~2.3",
-        "michelf/php-markdown": "1.4.0"
+        "michelf/php-markdown": "1.4.0",
+        "ezyang/htmlpurifier": "4.6.0"
     },
 
     "require-dev": {
