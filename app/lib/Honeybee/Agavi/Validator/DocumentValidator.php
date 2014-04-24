@@ -16,7 +16,9 @@ class DocumentValidator extends \AgaviValidator
 {
     protected function validate()
     {
-        RelationManager::setMaxRecursionDepth(0);
+        RelationManager::setMaxRecursionDepth(
+            $this->getMaxRecursionDepth()
+        );
 
         $tranlsationManager = $this->getContext()->getTranslationManager();
 
@@ -122,5 +124,10 @@ class DocumentValidator extends \AgaviValidator
         }
 
         return $module;
+    }
+
+    protected function getMaxRecursionDepth()
+    {
+        return 0;
     }
 }
