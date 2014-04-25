@@ -33,9 +33,22 @@ class SuggestAction extends BaseAction
         $result = $repository->getFinder()->find($query, 10, 0);
         $suggest_data = array();
         foreach ($result['data'] as $document_data) {
+            $workflow_ticket = false;
+            $workflow_step = false;
+            if (isset($document_data['workflowTicket'])) {
+                $workflow_ticket = $document_data['workflowTicket'];
+            }
+
+            if ($workflow_ticket) {
+                if (count($workflow_ticket) === 1) {
+                    $workflow_step = $workflow_ticket[0]['workflowStep'];
+                }
+            }
+
             $suggest_data[] = array(
                 $display_field => $document_data[$display_field],
-                $identity_field => $document_data[$identity_field]
+                $identity_field => $document_data[$identity_field],
+                '_state' => $workflow_step
             );
         }
 

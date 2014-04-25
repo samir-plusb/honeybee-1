@@ -55,7 +55,8 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
                     'id' => $refDocument->getValue($settings['id_field']),
                     'module_prefix' => $refDocument->getModule()->getOption('prefix'),
                     // $tm->_($refDocument->getModule()->getName()) . ': ' . $text
-                    'label' => $text
+                    'label' => $text,
+                    '_state' => $refDocument->getWorkflowTicket()->first()->getWorkflowStep()
                 );
             }
         }

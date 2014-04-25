@@ -367,10 +367,11 @@ honeybee.widgets.Reference = honeybee.widgets.Widget.extend({
             // var item_label = options.module_label + ': ' + entry[label_field];
             var item_label = entry[label_field];
             select2_state.data.results.push({
-                id: entry[id_field],
-                text: entry[label_field],
-                label: item_label,
-                module_prefix: module_name
+                'id': entry[id_field],
+                'text': entry[label_field],
+                'label': item_label,
+                'module_prefix': module_name,
+                '_state': entry['_state']
             });
         }
 
