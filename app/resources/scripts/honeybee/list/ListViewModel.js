@@ -74,6 +74,7 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
             }
         };
 
+        var has_batch_actions = 0 < that.ctrl.element.find('.batch_actions .dropdown-menu li').length;
         this.has_selection = ko.computed(function()
         {
             that.actionCountMap = {};
@@ -128,7 +129,9 @@ honeybee.list.ListViewModel = honeybee.core.BaseObject.extend({
                 }
             }
 
-            return 0 < that.selected_items().length;
+
+
+            return has_batch_actions && 0 < that.selected_items().length;
         });
 
         this.has_filter = ko.observable(false);
