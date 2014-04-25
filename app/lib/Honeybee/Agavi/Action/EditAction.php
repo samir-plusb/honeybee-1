@@ -30,6 +30,7 @@ class EditAction extends BaseAction
 
     public function executeWrite(\AgaviRequestDataHolder $requestData)
     {
+        $translationManager = $this->getContext()->getTranslationManager();
         $view = 'Success';
 
         $module = $this->getModule();
@@ -43,12 +44,15 @@ class EditAction extends BaseAction
         }
         catch(InvalidValueException $error)
         {
-            $this->setAttribute('errors', array($error->__toString()));
+            $errorMsg = $translationManager->_(
+                $error->__toString(),
+                $this->getModule()->getOption('prefix') . '.errors'
+            );
+            $this->setAttribute('errors', array($errorMsg));
             $view = 'Error';
         }
         catch(MandatoryValueMissingException $error)
         {
-            $translationManager = $this->getContext()->getTranslationManager();
             $fieldName = $translationManager->_(
                 $error->getFieldName(),
                 $this->getModule()->getOption('prefix') . '.list'
@@ -65,12 +69,20 @@ class EditAction extends BaseAction
         }
         catch(BadValueException $error)
         {
-            $this->setAttribute('errors', array($error->__toString()));
+            $errorMsg = $translationManager->_(
+                $error->__toString(),
+                $this->getModule()->getOption('prefix') . '.errors'
+            );
+            $this->setAttribute('errors', array($errorMsg));
             $view = 'Error';
         }
         catch(Exception $error)
         {
-            $this->setAttribute('errors', array($error->getMessage()));
+            $errorMsg = $translationManager->_(
+                $error->getMessage(),
+                $this->getModule()->getOption('prefix') . '.errors'
+            );
+            $this->setAttribute('errors', array($errorMsg));
             $view = 'Error';
         }
 

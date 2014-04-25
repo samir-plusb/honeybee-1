@@ -169,6 +169,7 @@
                             <ae:parameter name="Password must contain at least %min_lowercase_chars$s lowercase characters.">Kennwort enthält nicht genügend Kleinbuchstaben. Mindestens %min_lowercase_chars$s Kleinbuchstaben sind erforderlich.</ae:parameter>
                             <ae:parameter name="Password is too common and therefore easy to guess.">Das Kennwort ist zu leicht zu erraten. Bitte wählen sie ein weniger verbreitetes Kennwort.</ae:parameter>
                             <ae:parameter name="An invalid gate was given.">Ein ungültiger Workflow-Übergang wurde angefordert.</ae:parameter>
+                            <ae:parameter name="Unable to store data because a couchdb conflict occured.">Speichern fehlgeschlagen, da der Datensatz im Hintergrund verändert wurde. Bitte laden Sie die Seite neu und wiederholen die Änderungen.</ae:parameter>
                         </ae:parameter>
                         <ae:parameter name="en">
                             <ae:parameter name="invalid_login">Invalid login.</ae:parameter>
