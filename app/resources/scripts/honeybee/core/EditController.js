@@ -119,17 +119,23 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         var form = this.element.find('form');
         var post_url = form.attr('action');
         var storing_loader_overlay = $('.overlay-simplegenie');
+        var start_time = +(new Date());
+        var end_time = null;
+        var request_duration = null;
+        var handle_response = null;
+        var min_display_time = 1; // n seconds
+        var time_left_to_display_overlay = 0;
+        var save_type = '';
 
         if (event) {
-            var save_type = $(event.currentTarget).val();
+            save_type = $(event.currentTarget).val();
 
             form.append(
                 $('<input type="hidden" name="save_type" value="' + save_type + '" />')
             );
         }
 
-        if (this.request_pending() || this.options.readonly)
-        {
+        if (this.request_pending() || this.options.readonly) {
             return false;
         }
 
@@ -142,49 +148,59 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
             );
         });
 
-        if (this.identifier() && ! $.url().param('id'))
-        {
+        if (this.identifier() && ! $.url().param('id')) {
             post_url += '?id=' + this.identifier();
         }
 
-        handleResponse = function(resp_data)
+        handle_response = function(resp_data)
         {
-            that.request_pending(false);
-
-            if (! resp_data || ! resp_data.state)
-            {
-                throw "Unexpected response data structure received from honeybee backend (places save).";
-            }
-
-            if ('ok' === resp_data.state)
-            {
-                that.addAlerts(
-                    resp_data.messages || [ ],
-                    'success'
-                );
-                that.addAlerts(
-                    resp_data.errors || [ ],
-                    'error'
-                );
-
-                that.identifier(resp_data.data.identifier);
-                that.revision(resp_data.data.revision);
-                that.shortId(resp_data.data.shortId);
-
-                if (resp_data.redirect_url) {
-                    window.location.href = resp_data.redirect_url;
-                } else {
-                    storing_loader_overlay.removeClass('open');
+            var process_result = function() {
+                if (! resp_data || ! resp_data.state)
+                {
+                    throw "Unexpected response data structure received from honeybee backend (places save).";
                 }
-                that.fire('document-stored', [resp_data]);
-            }
-            else if('error' === resp_data.state)
-            {
-                that.addAlerts(
-                    resp_data.errors || [ ],
-                    'error'
-                );
-                that.fire('document-error', [resp_data]);
+
+                if ('ok' === resp_data.state)
+                {
+                    that.addAlerts(
+                        resp_data.messages || [ ],
+                        'success'
+                    );
+                    that.addAlerts(
+                        resp_data.errors || [ ],
+                        'error'
+                    );
+
+                    that.identifier(resp_data.data.identifier);
+                    that.revision(resp_data.data.revision);
+                    that.shortId(resp_data.data.shortId);
+
+                    if (resp_data.redirect_url) {
+                        window.location.href = resp_data.redirect_url;
+                    } else {
+                        storing_loader_overlay.removeClass('open');
+                    }
+                    that.fire('document-stored', [resp_data]);
+                }
+                else if('error' === resp_data.state)
+                {
+                    that.addAlerts(
+                        resp_data.errors || [ ],
+                        'error'
+                    );
+                    that.fire('document-error', [resp_data]);
+                }
+            };
+
+            that.request_pending(false);
+            end_time = +(new Date());
+            request_duration = (end_time - start_time) / 1000;
+            time_left_to_display_overlay = min_display_time - request_duration;
+
+            if (time_left_to_display_overlay > 0) {
+                setTimeout(process_result, time_left_to_display_overlay * 1000)
+            } else {
+                process_result();
             }
         };
 
@@ -195,7 +211,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
             post_url,
             form.serialize(),
             'post'
-        )(handleResponse, handleResponse);
+        )(handle_response, handle_response);
     },
 
     addAlerts: function(alerts, type)
