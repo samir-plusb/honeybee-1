@@ -118,10 +118,11 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         var that = this;
         var form = this.element.find('form');
         var post_url = form.attr('action');
+        var storing_loader_overlay = $('.overlay-simplegenie');
 
         if (event) {
             var save_type = $(event.currentTarget).val();
-            console.log("SAVE TYPE: " + save_type);
+
             form.append(
                 $('<input type="hidden" name="save_type" value="' + save_type + '" />')
             );
@@ -170,9 +171,10 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
                 that.revision(resp_data.data.revision);
                 that.shortId(resp_data.data.shortId);
 
-                if (resp_data.redirect_url)
-                {
+                if (resp_data.redirect_url) {
                     window.location.href = resp_data.redirect_url;
+                } else {
+                    storing_loader_overlay.removeClass('open');
                 }
                 that.fire('document-stored', [resp_data]);
             }
@@ -187,6 +189,8 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         };
 
         this.request_pending(true);
+        storing_loader_overlay.addClass('open');
+
         honeybee.core.Request.curry(
             post_url,
             form.serialize(),
