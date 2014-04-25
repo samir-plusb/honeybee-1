@@ -155,11 +155,6 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         handle_response = function(resp_data)
         {
             var process_result = function() {
-                if (! resp_data || ! resp_data.state)
-                {
-                    throw "Unexpected response data structure received from honeybee backend (places save).";
-                }
-
                 if ('ok' === resp_data.state)
                 {
                     that.addAlerts(
@@ -188,7 +183,22 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
                         resp_data.errors || [ ],
                         'error'
                     );
+
+                    storing_loader_overlay.removeClass('open');
+
                     that.fire('document-error', [resp_data]);
+                } else {
+                    storing_loader_overlay.removeClass('open');
+
+                    that.addAlerts(
+                        [ 'Unexpected response data structure received from honeybee backend on save.' ],
+                        'error'
+                    );
+
+                    that.fire('document-error', {
+                        'err': 'Unexpected response data structure received from honeybee backend on save.',
+                        'data': resp_data
+                    });
                 }
             };
 
