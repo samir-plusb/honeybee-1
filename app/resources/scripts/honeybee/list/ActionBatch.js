@@ -1,7 +1,7 @@
 honeybee.list.ActionBatch = honeybee.core.BaseObject.extend({
 
     log_prefix: "ActionBatch",
-    
+
     actions: null,
 
     queue: null,
@@ -46,19 +46,9 @@ honeybee.list.ActionBatch = honeybee.core.BaseObject.extend({
 
     dequeue: function()
     {
-        if (0 === this.queue.length)
-        {
-            var that = this;
-            setTimeout(function()
-            {
-                that.fire('complete');
-                that.progress_dialog.twodal('hide');
-                that.progress_dialog.remove();
-                that.progress_dialog = null;
-            }, 1500);
-            return;
+        if (this.queue.length > 0) {
+            this.queue.shift()();
         }
-        this.queue.shift()();
     },
 
     onActionStarted: function()
@@ -68,11 +58,22 @@ honeybee.list.ActionBatch = honeybee.core.BaseObject.extend({
 
     onActionSuccess: function()
     {
+        var that = this;
+        var ontransitionend = function() {
+            that.progress_dialog.unbind('transitionend', ontransitionend);
+            that.fire('complete');
+        };
         // @todo make the progress bar selector configurable or so.
         var progress = (100 / this.actions.length) * (this.actions.length - this.queue.length);
         this.progress_dialog.find('.progress .bar').css('width', Math.round(progress)+'%');
         this.fire('progress');
-        this.dequeue();
+
+        if (0 === this.queue.length) {
+            this.progress_dialog.bind('transitionend', ontransitionend);
+            this.progress_dialog.find('.progress .bar').css('width', '100%');
+        } else {
+            this.dequeue();
+        }
     },
 
     onActionFailure: function(error)

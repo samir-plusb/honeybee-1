@@ -91,7 +91,6 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
         if (this.options.errors && this.options.errors.length > 0) {
             for (var i = 0; i < this.options.errors.length; i++) {
-                console.log(this.options.errors[i]);
                 this.viewmodel.addAlert({
                     type: 'error',
                     message: this.options.errors[i]
@@ -173,11 +172,21 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
     {
         var that = this;
         confirm_text = (undefined === confirm_text) ? false : confirm_text;
+        var success_callback = function() {};
+        var error_callback = function(error) {
+            that.logDebug("proceed", error);
+        };
+        var finished_callback = function() {
+            window.location.href = window.location.href;
+        };
         var proceed = function()
         {
             that.createProceedBatch(
                 (true === is_batch) ? that.getSelectedItems() : [ data ],
-                gate
+                gate,
+                success_callback,
+                error_callback,
+                finished_callback
             ).run();
         };
 
@@ -293,10 +302,16 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         });
     },
 
-    createProceedBatch: function(items, gate)
+    createProceedBatch: function(items, gate, success_callback, error_callback, finished_callback)
     {
+        var noop = function() {};
+        success_callback = success_callback || noop;
+        error_callback = error_callback || noop;
+        finished_callback = finished_callback || noop;
+
         var batch = new honeybee.list.ActionBatch();
         var has_errors = false;
+        var errors = [];
         for (var i = 0; i < items.length; i++)
         {
             var item = items[i];
@@ -306,22 +321,21 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             ));
         }
 
-        batch.on('success', function()
+        batch.on('success', function(data)
         {
-            // console.log("yay batch item succeeded.");
+            success_callback(data);
         }).on('error', function(err)
         {
             has_errors = true;
-            console.log("noes batch item failed.", err);
-        }).on('complete', function()
+            error_callback(err);
+            errors.push(err);
+        }).on('complete', function(data)
         {
-            if (has_errors)
-            {
-                // do something to communicate the errors.
-                console.log("Es ist ein unerwarter Ausnahmefehler aufgetreten.");
+            if (has_errors) {
+                error_callback(errors);
             }
-            // reload list after batch has finished
-            window.location.href = window.location.href;
+
+            finished_callback();
         });
 
         return batch;
