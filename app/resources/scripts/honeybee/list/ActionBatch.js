@@ -66,7 +66,7 @@ honeybee.list.ActionBatch = honeybee.core.BaseObject.extend({
         // @todo make the progress bar selector configurable or so.
         var progress = (100 / this.actions.length) * (this.actions.length - this.queue.length);
         this.progress_dialog.find('.progress .bar').css('width', Math.round(progress)+'%');
-        this.fire('progress');
+        this.fire('progress', arguments);
 
         if (0 === this.queue.length) {
             this.progress_dialog.bind('transitionend', ontransitionend);

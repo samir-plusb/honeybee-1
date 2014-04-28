@@ -29,7 +29,7 @@ class WorkflowSuccessView extends BaseView
             $this->getResponse()->setContent(json_encode(array(
                 'state' => 'ok',
                 'messages' => array($result->getMessage()),
-                'data' => array()
+                'data' => array('identifier' => $parameters->getParameter('document')->getIdentifier())
             )));
         }
     }

@@ -321,7 +321,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             ));
         }
 
-        batch.on('success', function(data)
+        batch.on('progress', function(data)
         {
             success_callback(data);
         }).on('error', function(err)
