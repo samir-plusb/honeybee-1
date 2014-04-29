@@ -170,10 +170,52 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
                 }
             }
         });
+
+        window.onresize = this.buildResizeFunction(this.dialog);
+    },
+
+    buildResizeFunction: function($dialog_modal)
+    {
+        var that = this;
+        var $dialog_body = $dialog_modal.find('.modal-body');
+        var original_size = {
+            width: $dialog_modal.width(),
+            height: $dialog_modal.height()
+        };
+
+        return function()
+        {
+            var viewport_width = $(window).width();
+            var viewport_height = $(window).height();
+            var center_margin = (viewport_width - $dialog_modal.width()) / 2;
+            var middle_margin = (viewport_height - $dialog_modal.height()) / 2;
+            var resize_options = {
+                'left': center_margin,
+                'top': middle_margin,
+                'width': original_size.width,
+                'height': original_size.height
+            };
+
+            if (viewport_width < original_size.width) {
+                resize_options.width = '100%';
+                resize_options['max-width'] = '100%';
+                resize_options.left = 0;
+            }
+
+            if (viewport_height < original_size.height) {
+                resize_options.height = '100%';
+                resize_options['max-height'] = '100%';
+                resize_options.top = 0;
+            }
+
+            $dialog_modal.css(resize_options);
+        };
     },
 
     onEditClicked: function(asset)
     {
+        $(window).resize();
+
         this.dialog.data('cur_asset', asset);
         this.dialog.twodal('promptVal', '.input-caption', asset.caption());
         this.dialog.twodal('promptVal', '.input-copyright', asset.copyright());

@@ -654,7 +654,7 @@ input.typeahead
   min-width: 100px;
 }
 
-.thumbnail > canvas 
+.thumbnail > canvas
 {
   display: block;
   max-width: 100%;
@@ -666,14 +666,16 @@ input.typeahead
 
 .modal-edit-asset
 {
-  display: none; 
-  width: 70em; 
-  left: 40em;
+  display: none;
+  width: 950px;
+  height: 485px;
   max-height: 485px;
+  margin: 0;
 }
 
 .modal-edit-asset .modal-body
 {
+  height: 385x;
   max-height: 385x;
 }
 
