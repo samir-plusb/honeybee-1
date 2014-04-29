@@ -2,12 +2,21 @@
 
 namespace Honeybee\Agavi\View;
 
+use AgaviView;
+use AgaviConfig;
+use AgaviRequestDataHolder;
+use AgaviExecutionContainer;
+use AgaviViewException;
+use AgaviLogger;
+use AgaviConsoleResponse;
+use RuntimeException;
+
 /**
  * Base view for all the application's views.
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class BaseView extends \AgaviView
+class BaseView extends AgaviView
 {
     /**
      * Name of the default layout to use for slots.
@@ -16,38 +25,38 @@ class BaseView extends \AgaviView
 
     /**
      * Holds a reference to the current routing object. May be a more concrete
-     * instance like an \AgaviConsoleRouting or \AgaviWebRouting.
+     * instance like an AgaviConsoleRouting or AgaviWebRouting.
      *
-     * @var \AgaviRouting
+     * @var AgaviRouting
      */
     protected $routing;
 
     /**
      * Holds a reference to the current request object. May be a more concrete
-     * instance like an \AgaviConsoleRequest or \AgaviWebRequest.
+     * instance like an AgaviConsoleRequest or AgaviWebRequest.
      *
-     * @var \AgaviRequest
+     * @var AgaviRequest
      */
     protected $request;
 
     /**
      * Holds a reference to the translation manager.
      *
-     * @var \AgaviTranslationManager
+     * @var AgaviTranslationManager
      */
     protected $translation_manager;
 
     /**
      * Holds a reference to the user for the current session.
      *
-     * @var \AgaviUser
+     * @var AgaviUser
      */
     protected $user;
 
     /**
      * Holds a reference to the current agavi controller.
      *
-     * @var \AgaviController
+     * @var AgaviController
      */
     protected $controller;
 
@@ -55,9 +64,9 @@ class BaseView extends \AgaviView
      * Initialize the view and set default member variables available in all
      * views.
      *
-     * @param \AgaviExecutionContainer $container
+     * @param AgaviExecutionContainer $container
      */
-    public function initialize(\AgaviExecutionContainer $container)
+    public function initialize(AgaviExecutionContainer $container)
     {
         parent::initialize($container);
 
@@ -75,8 +84,7 @@ class BaseView extends \AgaviView
      */
     public function escape($string)
     {
-        if (!defined('ENT_SUBSTITUTE'))
-        {
+        if (!defined('ENT_SUBSTITUTE')) {
             define('ENT_SUBSTITUTE', 8);
         }
 
@@ -138,13 +146,11 @@ class BaseView extends \AgaviView
     {
         $errors = array();
 
-        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg)
-        {
-            $errors[] = $errMsg['message'];
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $error_message) {
+            $errors[] = $error_message['message'];
         }
 
-        foreach ($this->getAttribute('errors', array()) as $error)
-        {
+        foreach ($this->getAttribute('errors', array()) as $error) {
             $errors[] = $error;
         }
 
@@ -155,23 +161,22 @@ class BaseView extends \AgaviView
      * Convenience method to configure the layout and some defaults like a page
      * title when using the html output type.
      *
-     * @param \AgaviRequestDataHolder $request_data
+     * @param AgaviRequestDataHolder $request_data
      * @param string $layout_name layout name from output_types.xml file
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public function setupHtml(\AgaviRequestDataHolder $request_data, $layout_name = null) // @codingStandardsIgnoreEnd
+    public function setupHtml(AgaviRequestDataHolder $request_data, $layout_name = null) // @codingStandardsIgnoreEnd
     {
-        if ($layout_name === null && $this->getContainer()->getParameter('is_slot', false))
-        {
+        if ($layout_name === null && $this->getContainer()->getParameter('is_slot', false)) {
             $layout_name = self::DEFAULT_SLOT_LAYOUT_NAME;
-        }
-        else
-        {
-            if (!$this->hasAttribute('_title'))
-            {
-                $this->setAttribute('_title', 'Honeybee');
+        } else {
+            if (!$this->hasAttribute('_title')) {
+                $this->setAttribute(
+                    '_title',
+                    $this->translation_manager->_('brand-name', 'modules.labels')
+                );
             }
         }
 
@@ -186,12 +191,12 @@ class BaseView extends \AgaviView
      *
      * @return void|string usually nothing, but error message in case of non-cli SAPI or undefined STDERR constant
      *
-     * @throws \Exception when current response ist not an instance of \AgaviConsoleResponse
+     * @throws RuntimeException when current response ist not an instance of AgaviConsoleResponse
      */
     public function cliError($error_message, $exit_code = 1)
     {
-        if (!$this->getResponse() instanceof \AgaviConsoleResponse) {
-            throw new \Exception(
+        if (!$this->getResponse() instanceof AgaviConsoleResponse) {
+            throw new RuntimeException(
                 "The current response must be an instance of \AgaviConsoleResponse." .
                 "Please don't use this method for non-console contexts."
             );
@@ -224,16 +229,15 @@ class BaseView extends \AgaviView
      * @param string $method_name
      * @param array $arguments
      *
-     * @throws \AgaviViewException with different messages
+     * @throws AgaviViewException with different messages
      */
     public function __call($method_name, $arguments)
     {
-        if (preg_match('~^(execute|setup)([A-Za-z_]+)$~', $method_name, $matches))
-        {
+        if (preg_match('~^(execute|setup)([A-Za-z_]+)$~', $method_name, $matches)) {
             $this->throwOutputTypeNotImplementedException();
         }
 
-        throw new \AgaviViewException(
+        throw new AgaviViewException(
             sprintf(
                 'The view "%1$s" does not implement an "%2$s()" method. Please ' .
                 'implement "%1$s::%2$s()" or handle this situation in one of the base views (e.g. "%3$s").',
@@ -249,11 +253,11 @@ class BaseView extends \AgaviView
      * about the not implemented output type handling method for this view.
      * This method is called via __call() overrider in this class.
      *
-     * @throws \AgaviViewException
+     * @throws AgaviViewException
      */
     protected function throwOutputTypeNotImplementedException()
     {
-        throw new \AgaviViewException(
+        throw new AgaviViewException(
             sprintf(
                 'The view "%1$s" does not implement an "execute%3$s()" method to serve the ' .
                 'output type "%2$s". Please implement "%1$s::execute%3$s()" or handle this ' .
@@ -273,14 +277,14 @@ class BaseView extends \AgaviView
      * an output type specific handler they will get a fatal error. If they call
      * this method directly we try to help them with an exception.
      *
-     * @param \AgaviRequestDataHolder $request_data
+     * @param AgaviRequestDataHolder $request_data
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codingStandardsIgnoreStart
      */
-    public final function execute(\AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
+    public final function execute(AgaviRequestDataHolder $request_data) // @codingStandardsIgnoreEnd
     {
-        throw new \AgaviViewException(
+        throw new AgaviViewException(
             sprintf(
                 'There should be no "execute()" method in "%1$s". Views deal ' .
                 'with output types and should therefore implement specific ' .
@@ -304,47 +308,47 @@ class BaseView extends \AgaviView
 
     public function logTrace()
     {
-        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::TRACE, get_class($this), func_get_args());
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), AgaviLogger::TRACE, get_class($this), func_get_args());
     }
 
     public function logDebug()
     {
-        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::DEBUG, get_class($this), func_get_args());
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), AgaviLogger::DEBUG, get_class($this), func_get_args());
     }
 
     public function logInfo()
     {
-        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::INFO, get_class($this), func_get_args());
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), AgaviLogger::INFO, get_class($this), func_get_args());
     }
 
     public function logNotice()
     {
-        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::NOTICE, get_class($this), func_get_args());
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), AgaviLogger::NOTICE, get_class($this), func_get_args());
     }
 
     public function logWarning()
     {
-        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::WARNING, get_class($this), func_get_args());
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), AgaviLogger::WARNING, get_class($this), func_get_args());
     }
 
     public function logError()
     {
-        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::ERROR, get_class($this), func_get_args());
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), AgaviLogger::ERROR, get_class($this), func_get_args());
     }
 
     public function logCritical()
     {
-        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::CRITICAL, get_class($this), func_get_args());
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), AgaviLogger::CRITICAL, get_class($this), func_get_args());
     }
 
     public function logAlert()
     {
-        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::ALERT, get_class($this), func_get_args());
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), AgaviLogger::ALERT, get_class($this), func_get_args());
     }
 
     public function logEmergency()
     {
-        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), \AgaviLogger::EMERGENCY, get_class($this), func_get_args());
+        $this->getContext()->getLoggerManager()->logTo($this->getLoggerName(), AgaviLogger::EMERGENCY, get_class($this), func_get_args());
     }
     // @codeCoverageIgnoreEnd
 }
