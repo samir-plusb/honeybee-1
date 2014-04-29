@@ -11,9 +11,9 @@
                     <ae:parameter>html</ae:parameter>
                 </ae:parameter>
                 <ae:parameter name="base_dir">%core.app_dir%/../pub/static/</ae:parameter>
-                <!-- 
-                    defines whether the deploy or the cache directory is used. 
-                    use true for development and false for production. 
+                <!--
+                    defines whether the deploy or the cache directory is used.
+                    use true for development and false for production.
                     make sure to deploy and commit your latest scripts: `make deploy-resources`
                 -->
                 <ae:parameter name="use_caching">on</ae:parameter>
@@ -48,7 +48,7 @@
         </filters>
     </ae:configuration>
 
-    <ae:configuration context="web" environment="(preview|stage).*">
+    <ae:configuration context="web" environment="(preview|stage|production).*">
         <filters>
             <filter name="ResourceFilter" class="Honeybee\Agavi\Filter\ResourceFilter">
                 <ae:parameter name="output_types">
@@ -66,4 +66,4 @@
         <xi:fallback />
     </xi:include>
 
-</ae:configurations> 
+</ae:configurations>
