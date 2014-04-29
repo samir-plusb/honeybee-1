@@ -148,11 +148,11 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
     run: function(is_batch, resource)
     {
-        if (is_batch)
-        {
+        if (is_batch) {
             // no batch support for editing/plugin execution
             return;
         }
+
         if (true !== this.locking_enabled) {
             var url = this.workflow_handler.urls.execute;
             window.location.href = url + '?' + this.options.module_prefix + '=' + resource.data.identifier;
@@ -170,38 +170,28 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
     proceed: function(is_batch, data, gate, confirm_text)
     {
-        var that = this;
         confirm_text = (undefined === confirm_text) ? false : confirm_text;
-        var success_callback = function() {};
-        var error_callback = function(error) {
-            that.logDebug("proceed", error);
-        };
-        var finished_callback = function() {
-            window.location.href = window.location.href;
-        };
-        var proceed = function()
-        {
-            that.createProceedBatch(
-                (true === is_batch) ? that.getSelectedItems() : [ data ],
-                gate,
-                success_callback,
-                error_callback,
-                finished_callback
-            ).run();
-        };
 
-        if (confirm_text)
-        {
+        var that = this;
+        var success_callback = function() {};
+        var error_callback = function(error) { that.logDebug("proceed", error); };
+        var finished_callback = function() { window.location.href = window.location.href; };
+        var proceed_batch = this.createProceedBatch(
+            (true === is_batch) ? this.getSelectedItems() : [ data ],
+            gate,
+            success_callback,
+            error_callback,
+            finished_callback
+        );
+
+        if (confirm_text) {
             this.confirm_dialog.confirm_prompt.find('.prompt-text').html(confirm_text);
-            this.confirm_dialog.show(function()
-            {
+            this.confirm_dialog.show(function() {
                 that.confirm_dialog.hide();
-                proceed();
+                proceed_batch.run();
             });
-        }
-        else
-        {
-            proceed();
+        } else {
+            proceed_batch.run();
         }
     },
 
@@ -241,6 +231,9 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         var that = this;
         var batch_options = this.options.reference_batches[reference_field];
         var labels = batch_options.widget_options.texts;
+        var success_callback = function() {};
+        var error_callback = function(error) { that.logDebug("proceed", error); };
+        var finished_callback = function() { window.location.href = window.location.href; };
 
         var reference_dialog = this.reference_dialog.clone();
         reference_dialog.find('.modal-header .header').text(labels.field_label);
@@ -261,19 +254,16 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         var widget_options = batch_options.widget_options;
         var reference_widget = new honeybee.widgets.Reference(widget_container, widget_options);
 
-        if (widget_options.max === 1)
-        {
+        if (widget_options.max === 1) {
             reference_dialog.find('.settings-reference-batch').css('visibility', 'hidden');
         }
 
-        assign_trigger.click(function()
-        {
+        assign_trigger.click(function() {
             reference_dialog.modal('hide');
 
             var items = (true === is_batch) ? that.getSelectedItems() : [ item ];
 
-            if (0 < reference_widget.tags().length)
-            {
+            if (0 < reference_widget.tags().length) {
                 var references = reference_widget.tags();
                 var append_references = reference_dialog.find(
                     '.setting-append-to-existing .setting-value'
@@ -281,23 +271,24 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
                 append_references = append_references && (1 !== reference_widget.options.max);
 
-                that.createAssignReferenceBatch(items, {
-                    reference_field: reference_field,
-                    references: references
-                }, append_references).on('complete', function()
-                {
-                    that.reloadList();
-                }).run();
+                that.createAssignReferenceBatch(
+                    items,
+                    { reference_field: reference_field, references: references },
+                    append_references,
+                    success_callback,
+                    error_callback,
+                    finished_callback
+                ).on('complete', function() { that.reloadList(); }).run();
             }
         });
 
         reference_dialog.modal({'show': true, 'backdrop': 'static'});
-        close_trigger.click(function()
-        {
+
+        close_trigger.click(function() {
             reference_dialog.modal('hide');
         });
-        reference_dialog.on('hidden', function()
-        {
+
+        reference_dialog.on('hidden', function() {
             reference_dialog.remove();
         });
     },
@@ -341,22 +332,30 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         return batch;
     },
 
-    createAssignReferenceBatch: function(items, ref_data, append_references)
+    createAssignReferenceBatch: function(items, ref_data, append_references, success_callback, error_callback, finished_callback)
     {
-        var batch_options = this.options.reference_batches[ref_data.reference_field];
+        var noop = function() {};
+        success_callback = success_callback || noop;
+        error_callback = error_callback || noop;
+        finished_callback = finished_callback || noop;
 
-        if (! batch_options)
-        {
+        var batch_options = this.options.reference_batches[ref_data.reference_field];
+        if (!batch_options) {
             return;
         }
 
         var batch = new honeybee.list.ActionBatch();
-        var that = this, i, n, reference, document_data, update_url;
+        var has_errors = false;
+        var errors = [];
+        var that = this;
+        var i, n;
+        var reference;
+        var document_data;
+        var update_url;
+        var field_references;
 
-        for (i = 0; i < items.length; i++)
-        {
-            if (! items[i].workflow.interactive)
-            {
+        for (i = 0; i < items.length; i++) {
+            if (!items[i].workflow.interactive) {
                 // items that are non-interactive may not be batch assigned references
                 // and therefore should not land here in the first place. let them be and continue on.
                 continue;
@@ -365,10 +364,9 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
             document_data = {};
             document_data[this.options.module] = { identifier: items[i].data.identifier };
 
-            var field_references = (true === append_references) ? items[i].data[ref_data.reference_field] : [];
+            field_references = (true === append_references) ? items[i].data[ref_data.reference_field] : [];
 
-            for (n = 0; n < ref_data.references.length; n++)
-            {
+            for (n = 0; n < ref_data.references.length; n++) {
                 reference = ref_data.references[n];
                 field_references.push({ 'id': reference.id, 'module': reference.module_prefix });
             }
@@ -381,6 +379,23 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
                 honeybee.core.Request.curry(update_url, document_data, 'post')
             ));
         }
+
+        batch.on('progress', function(data)
+        {
+            success_callback(data);
+        }).on('error', function(err)
+        {
+            has_errors = true;
+            error_callback(err);
+            errors.push(err);
+        }).on('complete', function(data)
+        {
+            if (has_errors) {
+                error_callback(errors);
+            }
+
+            finished_callback();
+        });
 
         return batch;
     },
