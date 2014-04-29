@@ -429,11 +429,11 @@ dd {
   margin-left: 60px;
 }
 
-.footer, 
-.push 
+.footer,
+.push
 {
     padding: 7px 20px;
-    height: 23px;
+    height: 24px;
 }
 
 .footer
@@ -444,9 +444,26 @@ dd {
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25), 0px -1px 0px rgba(0, 0, 0, 0.1) inset;
 }
 
+.footer .footer-logo
+{
+  margin-top: -5px;
+}
+
+.footer .footer-logo span
+{
+  margin-left: 3px;
+}
+
+.footer .company-link,
+.footer .footer-logo
+{
+  color: #005580;
+}
+
 .footer p
 {
     color: #cdcdcd;
+    margin-bottom: 0;
 }
 
 .editing .page-header,
