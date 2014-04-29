@@ -171,7 +171,7 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
             }
         });
 
-        window.onresize = this.buildResizeFunction(this.dialog);
+        $(window).resize(this.buildResizeFunction(this.dialog));
     },
 
     buildResizeFunction: function($dialog_modal)
@@ -187,8 +187,8 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
         {
             var viewport_width = $(window).width();
             var viewport_height = $(window).height();
-            var center_margin = (viewport_width - $dialog_modal.width()) / 2;
-            var middle_margin = (viewport_height - $dialog_modal.height()) / 2;
+            var center_margin = (viewport_width - original_size.width) / 2;
+            var middle_margin = (viewport_height - original_size.height) / 2;
             var resize_options = {
                 'left': center_margin,
                 'top': middle_margin,
