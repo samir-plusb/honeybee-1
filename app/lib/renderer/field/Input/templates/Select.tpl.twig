@@ -33,4 +33,14 @@
             data-animation="false" data-placement="left" data-trigger="manual" data-html="true"  />
         {% endif %}
     </div>
+    {% if tm._(fieldKey ~ '_help', td) != fieldKey ~ '_help' %}
+    <span class="hb-icon-info help-trigger"
+        {% if tm._(fieldKey ~ '_help_title', td) == fieldKey ~ '_help_title' %}
+        data-title="{{ tm._('field_level_help') }}"
+        {% else %}
+        data-title="{{ tm._(fieldKey ~ '_help_title', td) }}"
+        {% endif %}
+        data-content="{{ tm._(fieldKey ~ '_help', td) }}"
+        data-animation="false" data-placement="left" data-trigger="manual" data-html="true"  />
+    {% endif %}
 </div>
