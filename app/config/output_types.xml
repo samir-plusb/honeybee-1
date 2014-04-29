@@ -2,12 +2,12 @@
 <!DOCTYPE namespaces [
     <!ENTITY aeot "xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(ot=http://agavi.org/agavi/config/parts/output_types/1.0)">
 ]>
-<ae:configurations 
-    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" 
-    xmlns="http://agavi.org/agavi/config/parts/output_types/1.0" 
+<ae:configurations
+    xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+    xmlns="http://agavi.org/agavi/config/parts/output_types/1.0"
     xmlns:xi="http://www.w3.org/2001/XInclude">
 
-    <!-- 
+    <!--
         the sandbox. we can put anything in here. very useful for sharing stuff inside the document using XIncludes
     -->
     <ae:sandbox>
@@ -74,6 +74,7 @@
                 <ae:parameter name="extensions">
                     <ae:parameter>Honeybee\Agavi\Renderer\Twig\TranslationManagerExtension</ae:parameter>
                     <ae:parameter>Honeybee\Agavi\Renderer\Twig\MarkdownExtension</ae:parameter>
+                    <ae:parameter>Honeybee\Agavi\Renderer\Twig\AgaviConfigExtension</ae:parameter>
                 </ae:parameter>
             </renderer>
             <renderer name="php" class="Honeybee\Agavi\Renderer\PhpRenderer">
