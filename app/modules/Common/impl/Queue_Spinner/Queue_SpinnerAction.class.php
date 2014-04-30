@@ -63,6 +63,13 @@ class Common_Queue_SpinnerAction extends CommonBaseAction
 
     protected function startSpinner($queue, $worker_poolsize)
     {
+        $spinner_pid = $this->signal_sender->getSpinnerPid($queue);
+
+        if ($spinner_pid) {
+            printf(PHP_EOL . "Spinner for queue '%s' already running." . PHP_EOL, $queue->getName());
+            return;
+        }
+
         $daemonize = AgaviConfig::get('queue_spinner.daemonize', false);
         $queue_name = $queue->getName();
 
