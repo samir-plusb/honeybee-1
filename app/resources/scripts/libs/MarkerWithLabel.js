@@ -1,3 +1,6 @@
+if (google && google.maps) {
+
+
 /**
  * @name MarkerWithLabel for V3
  * @version 1.0.1 [September 17, 2010]
@@ -411,3 +414,5 @@ MarkerWithLabel.prototype.setMap = function (theMap) {
   // ... then deal with the label:
   this.label.setMap(theMap);
 };
+
+}
