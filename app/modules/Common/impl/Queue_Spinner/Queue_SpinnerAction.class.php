@@ -115,17 +115,22 @@ class Common_Queue_SpinnerAction extends CommonBaseAction
 
     protected function stopSpinner($queue)
     {
-        $this->signal_sender->send($queue, SignalSender::TRIGGER_SHUTDOWN);
         $spinner_pid = $this->signal_sender->getSpinnerPid($queue);
-        echo PHP_EOL . "Waiting for spinner to stop ";
 
-        while ($spinner_pid !== false) {
-            $spinner_pid = $this->signal_sender->getSpinnerPid($queue);
-            echo ".";
-            sleep(1);
+        if (!$spinner_pid) {
+            printf(PHP_EOL . "Spinner for queue '%s' not running." . PHP_EOL, $queue->getName());
+        } else {
+            $this->signal_sender->send($queue, SignalSender::TRIGGER_SHUTDOWN);
+            echo PHP_EOL . "Waiting for spinner to stop ";
+
+            while ($spinner_pid !== false) {
+                $spinner_pid = $this->signal_sender->getSpinnerPid($queue);
+                echo ".";
+                sleep(1);
+            }
+
+            echo PHP_EOL . "Successfully stopped spinner" . PHP_EOL;
         }
-
-        echo PHP_EOL . "Successfully stopped spinner" . PHP_EOL;
     }
 
     protected function restartSpinner($queue, $poolsize)
