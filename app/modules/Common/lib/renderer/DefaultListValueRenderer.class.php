@@ -14,7 +14,12 @@ class DefaultListValueRenderer implements IListValueRenderer
     public function renderValue($value, $field, array &$data = array())
     {
         $rendererDef = $field->getRenderer();
-        $options = isset($rendererDef['options']) ? $rendererDef['options'] : array();
+        $options = array();
+
+        if (is_array($rendererDef) && array_key_exists('options', $rendererDef)) {
+            $options = $rendererDef['options'];
+        }
+
         if (is_array($value))
         {
             $value = strip_tags(implode(', ', $value));
