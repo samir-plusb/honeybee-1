@@ -15,8 +15,12 @@
         <link rel="shortcut icon" type="image/png" href="{{ ac('core.favicon_path') }}" />
         {% endif %}
         <!-- %%STYLESHEETS%% -->
+        {% if ac('core.include_google_maps', true) != false %}
         <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=false&amp;libraries=drawing"></script>
+        {% endif %}
+        {% if ac('core.include_ckeditor', true) != false %}
         <script type="text/javascript" src="static/ckeditor/ckeditor.js"></script>
+        {% endif %}
     </head>
     <body>
         {{ slots.header|raw }}
