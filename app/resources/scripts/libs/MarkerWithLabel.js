@@ -1,4 +1,4 @@
-if (google && google.maps) {
+if (window.google && window.google.maps) {
 
 
 /**
