@@ -154,7 +154,10 @@ class Spinner extends Runnable
         $pid = posix_getpid();
         $run_dir = realpath(\AgaviConfig::get('queue_spinner.run_dir'));
         $pid_file = $run_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
-        file_put_contents($pid_file, $pid);
+
+        if (false === file_put_contents($pid_file, $pid)) {
+            throw new \RuntmeException("Unable to create spinner pid-file at location: " . $pid_file);
+        }
     }
 
     protected function removePidFile()
