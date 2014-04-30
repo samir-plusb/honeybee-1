@@ -11,7 +11,15 @@ class DocumentInputRenderer extends DocumentRenderer
             'rows' => array(
                 array(
                     'groups' => array(
-                        'identity' => array('identifier', 'uuid', 'language', 'version', 'shortId', 'revision')
+                        'identity' => array(
+                            'identifier',
+                            'uuid',
+                            'language',
+                            'version',
+                            'shortId',
+                            'revision',
+                            'slug'
+                        )
                     )
                 )
             )
