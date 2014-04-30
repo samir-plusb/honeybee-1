@@ -4,6 +4,7 @@ namespace Honeybee\Core\Job\Queue\Runnable;
 
 use Honeybee\Core\Job\IJob;
 use Honeybee\Core\Config\ArrayConfig;
+use RuntimeException;
 
 // @todo register shutdown listener to notify parent process
 class Spinner extends Runnable
@@ -156,7 +157,7 @@ class Spinner extends Runnable
         $pid_file = $run_dir . DIRECTORY_SEPARATOR . 'queue.' . $this->queue_name . '.pid';
 
         if (false === file_put_contents($pid_file, $pid)) {
-            throw new \RuntmeException("Unable to create spinner pid-file at location: " . $pid_file);
+            throw new RuntimeException("Unable to create spinner pid-file at location: " . $pid_file);
         }
     }
 
