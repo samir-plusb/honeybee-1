@@ -103,7 +103,10 @@ abstract class Document extends BaseDocument implements IResource
         }
         $this->setValue('modified', date(DATE_ISO8601));
 
-        $this->setSlug($this->buildSlug());
+        $slug = $this->getSlug();
+        if (empty($slug)) {
+            $this->setSlug($this->buildSlug());
+        }
     }
 
     public function onAfterWrite()
