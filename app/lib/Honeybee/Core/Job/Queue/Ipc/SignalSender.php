@@ -27,21 +27,25 @@ class SignalSender
         }
     }
 
-    protected function isValidSignal($signo)
-    {
-        return in_array($signo, self::$supported_signals);
-    }
-
-    protected function getSpinnerPid(IQueue $queue)
+    public function getSpinnerPid(IQueue $queue)
     {
         $base_dir = dirname(\AgaviConfig::get('core.app_dir'));
         $run_dir = realpath(\AgaviConfig::get('queue_spinner.run_dir'));
         $pid_file = $run_dir . DIRECTORY_SEPARATOR . 'queue.' . $queue->getName() . '.pid';
-        if (! is_readable($pid_file)) {
-            throw new Exception("Unable to find pid file for jobqueue spinner.");
-        }
-        $pid = (int)file_get_contents($pid_file);
+        $pid = false;
 
-        return $pid > 0 ? $pid : false;
+        if (is_readable($pid_file)) {
+            $pid = (int)file_get_contents($pid_file);
+            if (!file_exists( "/proc/" . $pid)) {
+                $pid = false;
+            }
+        }
+
+        return $pid;
+    }
+
+    protected function isValidSignal($signo)
+    {
+        return in_array($signo, self::$supported_signals);
     }
 }

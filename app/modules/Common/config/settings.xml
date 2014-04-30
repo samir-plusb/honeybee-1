@@ -7,6 +7,9 @@
             <setting name="text_stats_file">%core.app_dir%/log/queue_stats</setting>
             <setting name="json_log_file">%core.app_dir%/log/queue_stats_log.json</setting>
             <setting name="run_dir">%core.app_dir%/log</setting>
+            <setting name="default_max_workers">3</setting>
+            <setting name="ipc_channel">23</setting>
+            <setting name="daemonize">false</setting>
             <setting name="default_queue">%core.clean_environment%_%core.project_prefix%_default_queue</setting>
         </settings>
         <settings prefix="common.">
@@ -15,6 +18,12 @@
                 <ae:parameter name="user">geo.midas</ae:parameter>
                 <ae:parameter name="pwd">WnrwDf7qFAFk3xTrbaQ</ae:parameter>
             </setting>
+        </settings>
+    </ae:configuration>
+
+    <ae:configuration environment="(preview|stage|production).*">
+        <settings prefix="queue_spinner.">
+            <setting name="daemonize">true</setting>
         </settings>
     </ae:configuration>
 </ae:configurations>

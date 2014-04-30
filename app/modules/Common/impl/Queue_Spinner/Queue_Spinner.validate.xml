@@ -18,13 +18,29 @@
                 </errors>
             </validator>
 
-             <validator class="string" name="invalid_queue" required="false">
+            <validator class="string" name="invalid_queue" required="false">
                 <arguments>
                     <argument>queue</argument>
                 </arguments>
                 <errors>
-                    <error>The provided list state is missing or corrupt.</error>
-                    <error for="type">The provided list state must be either a valid array or IListState instance.</error>
+                    <error>Invalid or missing 'queue' parameter.</error>
+                </errors>
+            </validator>
+
+            <validator class="inarray" name="invalid_action" required="false">
+                <arguments>
+                    <argument>action</argument>
+                </arguments>
+                <ae:parameters>
+                    <ae:parameter name="values">
+                        <ae:parameter>restart</ae:parameter>
+                        <ae:parameter>start</ae:parameter>
+                        <ae:parameter>status</ae:parameter>
+                        <ae:parameter>stop</ae:parameter>
+                    </ae:parameter>
+                </ae:parameters>
+                <errors>
+                    <error>Invalid or missing 'action' parameter.</error>
                 </errors>
             </validator>
 
