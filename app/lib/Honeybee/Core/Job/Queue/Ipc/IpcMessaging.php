@@ -3,6 +3,7 @@
 namespace Honeybee\Core\Job\Queue\Ipc;
 
 use Honeybee\Core\Job;
+use RuntimeException;
 
 class IpcMessaging
 {
@@ -14,7 +15,9 @@ class IpcMessaging
 
     public function __construct($queue_path, $identifier, $msg_type)
     {
-        touch($queue_path);
+        if (!touch($queue_path)) {
+            throw new RuntimeException("Unable to find init ipc for queue at path: " . $queue_path);
+        }
         $queue_key = ftok($queue_path, $identifier);
         $this->msg_queue = msg_get_queue($queue_key);
         $this->msg_type = $msg_type;

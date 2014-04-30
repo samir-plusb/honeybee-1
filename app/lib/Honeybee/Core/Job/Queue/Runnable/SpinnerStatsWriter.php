@@ -4,6 +4,7 @@ namespace Honeybee\Core\Job\Queue\Runnable;
 
 use Honeybee\Core\Config\ArrayConfig;
 use Honeybee\Core\Config\IConfig;
+use RuntimeException;
 use DateTime;
 
 class SpinnerStatsWriter
@@ -26,8 +27,10 @@ class SpinnerStatsWriter
         $data_filepath = $this->config->get('stats_log_file');
         $data = $stats->toArray();
         $data['timestamp'] = round(microtime(true) * 1000);
-
-        file_put_contents($data_filepath, json_encode($data) . PHP_EOL, FILE_APPEND);
+        $bytes_written = file_put_contents($data_filepath, json_encode($data) . PHP_EOL, FILE_APPEND);
+        if (false === $bytes_written) {
+            throw new RuntimeException("Unable to write spinner stats at location: " . $data_filepath);
+        }
     }
 
     protected function updateStatsDisplay(SpinnerStats $stats)
@@ -39,7 +42,10 @@ class SpinnerStatsWriter
         );
 
         $status_filepath = $this->config->get('stats_display_file');
-        file_put_contents($status_filepath, implode(PHP_EOL, $output_lines));
+        $bytes_written = file_put_contents($status_filepath, implode(PHP_EOL, $output_lines));
+        if (false === $bytes_written) {
+            throw new RuntimeException("Unable to write spinner stats at location: " . $data_filepath);
+        }
     }
 
     protected function prepareSpinnerStatus(SpinnerStats $stats)
