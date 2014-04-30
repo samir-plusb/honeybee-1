@@ -213,7 +213,7 @@
                         <ae:parameter name="de">
                             <ae:parameter name="reset_success_title">Sie haben Post!</ae:parameter>
                             <ae:parameter name="reset_success_msg"><![CDATA[
-                                <p>Wir haben eine Email an die Adresse verschickt, die mit dem angegebenen Nutzer/inkonto verküpft ist.</p>
+                                <p>Wir haben eine Email an die Adresse verschickt, die mit dem angegebenen Konto verküpft ist.</p>
                                 <p>Darin finden sie die erforderlichen Schritte um ihr Passwort zurück zu setzen.</p>
                             ]]></ae:parameter>
                         </ae:parameter>
