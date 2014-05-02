@@ -155,8 +155,7 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
         handle_response = function(resp_data)
         {
             var process_result = function() {
-                if ('ok' === resp_data.state)
-                {
+                if ('ok' === resp_data.state) {
                     that.addAlerts(
                         resp_data.messages || [ ],
                         'success'
@@ -176,16 +175,13 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
                         storing_loader_overlay.removeClass('open');
                     }
                     that.fire('document-stored', [resp_data]);
-                }
-                else if('error' === resp_data.state)
-                {
+                } else if('error' === resp_data.state) {
                     that.addAlerts(
                         resp_data.errors || [ ],
                         'error'
                     );
 
                     storing_loader_overlay.removeClass('open');
-
                     that.fire('document-error', [resp_data]);
                 } else {
                     storing_loader_overlay.removeClass('open');
@@ -194,10 +190,14 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
                         [ 'Unexpected response data structure received from honeybee backend on save.' ],
                         'error'
                     );
-
                     that.fire('document-error', {
                         'err': 'Unexpected response data structure received from honeybee backend on save.',
                         'data': resp_data
+                    });
+
+                    $.ajax({
+                        url: 'js_error_api/logs?' + JSON.stringify(resp_data),
+                        type: 'GET'
                     });
                 }
             };
