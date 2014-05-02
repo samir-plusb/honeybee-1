@@ -5,6 +5,7 @@ jquery-sortable.js
 jquery-twodal-0.1.js
 jquery.fracs-0.12.0.js
 jquery.outline-0.12.0.js
+jquery.scrollTo.min.js
 bootstrap.js
 bootstrap-typeahead.js
 bootstrap-datetimepicker.min.js
