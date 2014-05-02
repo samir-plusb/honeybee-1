@@ -83,6 +83,11 @@ tail-logs:
 	@tail -f "${PHP_ERROR_LOG}" app/log/*.log
 
 
+spinner-stats:
+
+	@bin/cli common.queue.spinner
+
+
 #
 # Compiling bootstrap and managing resource deployment.
 #

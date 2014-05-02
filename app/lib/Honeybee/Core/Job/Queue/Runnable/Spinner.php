@@ -208,6 +208,14 @@ class Spinner extends Runnable
         $display_file = \AgaviConfig::get('queue_spinner.text_stats_file', 'queue_stats');
         $log_file = \AgaviConfig::get('queue_spinner.json_log_file', 'queue_stats.log.json');
 
+        if (file_exists($log_file)) {
+            unlink($log_file);
+        }
+
+        if (file_exists($display_file)) {
+            unlink($display_file);
+        }
+
         return new ArrayConfig(
             array('stats_display_file' => $display_file, 'stats_log_file' => $log_file)
         );

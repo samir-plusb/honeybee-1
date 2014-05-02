@@ -127,7 +127,7 @@
                 render_queue_stats(new_data);
             });
         }, 1000);
-    }
+    };
 
     var renderJobCountChart = function(container, options)
     {
@@ -167,7 +167,7 @@
         };
         // render chart with flotr2
         Flotr.draw(container, chart_data, chart_options);
-    }
+    };
 
     var renderMemoryChart = function(container, options)
     {
@@ -213,13 +213,10 @@
     {
         var url = $.url();
         $.getJSON(url.attr('path') + '?offset=' + offset + '&limit=' + limit, callback);
-    }
+    };
 
-    var chart_container = $('.memory-graph');
-    if (chart_container.length > 0) {
-        load_data(poll_offset, poll_limit, function(data)
-        {
-            render_queue_stats(data);
-        });
-    }
+    load_data(poll_offset, poll_limit, function(data)
+    {
+        render_queue_stats(data);
+    });
 })($('.memory-graph')[0], $('.job-count-graph')[0]);
