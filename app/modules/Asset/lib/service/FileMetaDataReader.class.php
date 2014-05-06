@@ -34,7 +34,19 @@ class FileMetaDataReader
                 $meta_data_output = $this->exec($input_file, $output_type);
                 break;
             case self::AS_ARRAY:
-                $meta_data_output = json_decode($this->exec($input_file, self::AS_JSON), true);
+                $output = $this->exec($input_file, self::AS_JSON);
+                $meta_data_output = json_decode($output, true);
+                if (!is_array($meta_data_output)) {
+                    $meta_data_output = array();
+                    $error = $this->getLastJsonErrorAsString();
+                    error_log(
+                        __METHOD__ .
+                        ' Output of apache tika could not be interpreted as valid JSON. ' .
+                        ' Error was: ' . $error .
+                        ' - Input file was: ' . $input_file
+                        // DEBUG: . ' - Output from tika was: ' . $output
+                    );
+                }
                 break;
             default:
                 throw new \Exception(
@@ -68,5 +80,37 @@ class FileMetaDataReader
         }
 
         return $process->getOutput();
+    }
+
+    protected function getLastJsonErrorAsString()
+    {
+        $msg = 'Unknown error';
+
+        // TODO implement PHP v5.5 check to support JSON_ERROR_INF_OR_NAN and JSON_ERROR_UNSUPPORTED_TYPE as well
+        switch (json_last_error()) {
+            case JSON_ERROR_NONE:
+                $msg = 'No errors (JSON_ERROR_NONE)';
+                break;
+            case JSON_ERROR_DEPTH:
+                $msg = 'Maximum stack depth exceeded (JSON_ERROR_DEPTH)';
+                break;
+            case JSON_ERROR_STATE_MISMATCH:
+                $msg = 'Underflow or the modes mismatch (JSON_ERROR_STATE_MISMATCH';
+                break;
+            case JSON_ERROR_CTRL_CHAR:
+                $msg = 'Unexpected control character found (JSON_ERROR_CTRL_CHAR)';
+                break;
+            case JSON_ERROR_SYNTAX:
+                $msg = 'Syntax error due to malformed JSON (JSON_ERROR_SYNTAX)';
+                break;
+            case JSON_ERROR_UTF8:
+                $msg = 'Malformed UTF-8 characters, possibly incorrectly encoded (JSON_ERROR_UTF8)';
+                break;
+            default:
+                $msg = 'Unknown error (constant unknown)';
+                break;
+        }
+
+        return $msg;
     }
 }
