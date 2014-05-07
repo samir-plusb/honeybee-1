@@ -59,15 +59,23 @@ class Asset_Thumbnail_ThumbnailSuccessView extends AssetBaseView
             $filePath = AgaviConfig::get('core.app_dir') . '/../pub/static/deploy/_global/binaries/audio.png';
         }
 
-        if (is_readable($filePath))
-        {
-            $response->setHttpHeader('Content-Type', 'image/png');
-            $response->setHttpHeader('Content-Length', filesize($filePath));
-            $response->setHttpHeader('Content-Disposition', 'inline; filename='.$assetInfo->getFullName());
-            $response->setContent(fopen($filePath, 'rb'));
+        $sanitized_filename = preg_replace('/(\w*[\x80-\xFF]+\w*)/', '', $assetInfo->getName());
+
+        $extension = $assetInfo->getExtension();
+        if (!empty($extension)) {
+            $sanitized_filename .= '.' . $extension;
         }
-        else
-        {
+
+        if (mb_strlen($sanitized_filename) > 74) {
+            $sanitized_filename = mb_substr($sanitized_filename, -74);
+        }
+
+        if (is_readable($filePath)) {
+            $response->setHttpHeader('Content-Type', $assetInfo->getMimeType());
+            $response->setHttpHeader('Content-Length', filesize($filePath));
+            $response->setHttpHeader('Content-Disposition', 'inline; filename="' . $sanitized_filename . '"');
+            $response->setContent(fopen($filePath, 'rb'));
+        } else {
             $response->setHttpStatusCode(401);
         }
     }
