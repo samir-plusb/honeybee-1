@@ -23,6 +23,7 @@ class LocationInputRenderer extends AggregateFieldInputRenderer
             'fieldname' => $this->generateInputName($document),
             'location_type' => $this->options['location_type'],
             'single_entry' => $renderSingleEntry,
+            'reverse_geocode' => $this->getField()->getOption('reverse_geocode', false),
             'localize_url' => urldecode(htmlspecialchars(
                 $routing->gen('common.service.localize')
             ))

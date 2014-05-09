@@ -102,6 +102,7 @@ honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
                 fields_section, {
                     autobind: true,
                     localize_url: this.options.localize_url,
+                    reverse_geocode: (this.options.reverse_geocode || false),
                     fieldname: this.options.fieldname + '[' + position + ']',
                     location: location
                 },
@@ -129,7 +130,7 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
     // #########################
     log_prefix: "LocationWidget",
 
-    select_dialog:null,
+    select_dialog: null,
 
     map_canvas: null,
 
@@ -297,7 +298,7 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
 
     renderLocationOnMap: function()
     {
-        var marker = new google.maps.Marker({
+        this.marker = new google.maps.Marker({
             position: new google.maps.LatLng(
                 this.location.lat(),
                 this.location.lon()
@@ -306,13 +307,13 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
         });
         this.map = new google.maps.Map(this.map_canvas[0], {
             zoom: 16,
-            center: marker.getPosition(),
+            center: this.marker.getPosition(),
             sensor:false,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
-        marker.setMap(this.map);
+        this.marker.setMap(this.map);
 
-        if (! this.options.readonly)
+        if (!this.options.readonly)
         {
             this.registerGeoCoder();
         }
@@ -320,44 +321,54 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
 
     registerGeoCoder: function()
     {
-        var geocoder = new google.maps.Geocoder();
+        if (this.options.reverse_geocode === true) {
+            var geocoder = new google.maps.Geocoder();
+        }
 
         var that = this;
-        google.maps.event.addListener(this.map, 'click', function(event) {
-            marker.setPosition(event.latLng);
-            that.is_processing(true);
-            geocoder.geocode({'latLng': event.latLng}, function(results, status)
-            {
-                if (status == google.maps.GeocoderStatus.OK)
-                {
-                    if (results[0])
-                    {
-                        var components = results[0]['address_components'];
-                        var data = {};
-                        for (var i = 0; i < components.length; i++)
-                        {
-                            var type = components[i].types[0];
-                            data[type] = components[i].long_name;
-                        }
+        google.maps.event.addListener(this.map, 'click', function(event)
+        {
+            that.marker.setPosition(event.latLng);
+            that.location.setLat(event.latLng.lat());
+            that.location.setLon(event.latLng.lng());
 
-                        that.onLocationSelected(
-                            honeybee.widgets.LocationWidget.Location.createFromServiceResp({
-                                street: data.route,
-                                housenumber: data.street_name,
-                                uzip: data.postal_code,
-                                city: data.locality,
-                                lat: event.latLng.lat(),
-                                lon: event.latLng.lng()
-                            })
-                        );
-                        that.is_processing(false);
-                    }
-                }
-                else
+            // only do reverse geocoding if appropriate
+            if (that.options.reverse_geocode === true)
+            {
+                that.is_processing(true);
+                geocoder.geocode({'latLng': event.latLng}, function(results, status)
                 {
-                    alert("Geocoder failed due to: " + status);
-                }
-            });
+                    if (status == google.maps.GeocoderStatus.OK)
+                    {
+                        if (results[0])
+                        {
+                            var components = results[0]['address_components'];
+                            var data = {};
+                            for (var i = 0; i < components.length; i++)
+                            {
+                                var type = components[i].types[0];
+                                data[type] = components[i].long_name;
+                            }
+
+                            that.onLocationSelected(
+                                honeybee.widgets.LocationWidget.Location.createFromServiceResp({
+                                    street: data.route,
+                                    housenumber: data.street_name,
+                                    uzip: data.postal_code,
+                                    city: data.locality,
+                                    lat: event.latLng.lat(),
+                                    lon: event.latLng.lng()
+                                })
+                            );
+                            that.is_processing(false);
+                        }
+                    }
+                    else
+                    {
+                        alert("Geocoder failed due to: " + status);
+                    }
+                });
+            }
         });
     }
 });
@@ -368,6 +379,7 @@ honeybee.widgets.LocationWidget = honeybee.widgets.Widget.extend({
 honeybee.widgets.LocationWidget.DEFAULT_OPTIONS = {
     autobind: true,
     localize_url: '',
+    reverse_geocode: false,
     location: null
 };
 
@@ -434,6 +446,25 @@ honeybee.widgets.LocationWidget.Location = honeybee.core.BaseObject.extend({
             }
         }
         return values;
+    },
+
+    /**
+     * @param google.maps.LatLng
+     */
+    setCoordinates: function(coord)
+    {
+        this.lon(coord.lng || '');
+        this.lat(coord.lat || '');
+    },
+
+    setLat: function(lat)
+    {
+        this.lat(lat || '');
+    },
+
+    setLon: function(lon)
+    {
+        this.lon(lon || '');
     }
 });
 
