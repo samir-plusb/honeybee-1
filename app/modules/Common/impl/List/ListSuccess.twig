@@ -289,10 +289,11 @@
                 </tr>
             </tbody>
         </table>
+
 {# **************************************************
     ListData Pagination Bottom
 ************************************************** #}
-    {% if list_data|length >= 10 %}
+    {% if list_data.metaData.item_count >= limit %}
     <section class="well toolbar secondary">
         {{slots.pagination|raw}}
     </section>
