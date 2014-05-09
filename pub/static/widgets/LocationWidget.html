@@ -53,8 +53,19 @@
             data-bind="text: location.description, attr: { name: fieldname() + '[description]' }, disable: options.readonly" />
     </div>
 </div>
-<input type="hidden" data-bind="value: location.lon, attr: { name: fieldname() + '[lon]' }, disable: options.readonly" />
-<input type="hidden" data-bind="value: location.lat, attr: { name: fieldname() + '[lat]' }, disable: options.readonly" />
+<div class="control-group field-wrapper-coordinates" data-bind="visible: options.visible_coordinates">
+    <label class="control-label">Koordinaten</label>
+    <div class="controls">
+        <label class="field-wrapper-latitude control-group">
+            <span class="control-label">Breitengrad: &#160;</span>
+            <input type="text" class="" data-bind="value: location.lat, attr: { name: fieldname() + '[lat]' }, disable: options.readonly, event: { change: renderLocationOnMap }" />
+        </label>
+        <label class="field-wrapper-longitude control-group">
+            <span class="control-label">Längengrad: &#160;</span>
+            <input type="text" class="" data-bind="value: location.lon, attr: { name: fieldname() + '[lon]' }, disable: options.readonly, event: { change: renderLocationOnMap }" />
+        </label>
+    </div>
+</div>
 
 <div class="modal dialog-select-location" style="display:none">
     <div class="modal-header">

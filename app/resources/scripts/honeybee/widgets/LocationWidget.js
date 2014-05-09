@@ -103,6 +103,7 @@ honeybee.widgets.LocationAggregate = honeybee.widgets.Aggregate.extend({
                     autobind: true,
                     localize_url: this.options.localize_url,
                     reverse_geocode: (this.options.reverse_geocode || false),
+                    visible_coordinates: (this.options.visible_coordinates || false),
                     fieldname: this.options.fieldname + '[' + position + ']',
                     location: location
                 },
@@ -453,18 +454,20 @@ honeybee.widgets.LocationWidget.Location = honeybee.core.BaseObject.extend({
      */
     setCoordinates: function(coord)
     {
-        this.lon(coord.lng || '');
-        this.lat(coord.lat || '');
+        this.setLat(coord.lat);
+        this.setLon(coord.lng);
     },
 
     setLat: function(lat)
     {
-        this.lat(lat || '');
+        var latitude = lat || '';
+        this.lat(+latitude.toFixed(6));
     },
 
     setLon: function(lon)
     {
-        this.lon(lon || '');
+        var longitude = lon || '';
+        this.lon(+longitude.toFixed(6));
     }
 });
 
