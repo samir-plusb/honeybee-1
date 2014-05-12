@@ -8,6 +8,7 @@ use Honeybee\Core\Dat0r\Tree;
 use Honeybee\Core\Job\Job\UpdateBackReferencesJob;
 use Honeybee\Core\Job\Job\JobQueue;
 use Honeybee\Core\Finder\ElasticSearch;
+use AgaviConfig;
 use Elastica;
 
 use ListConfig;
@@ -151,6 +152,34 @@ class DocumentService implements IService
         return $repository->find($query, 50, 0);
     }
 
+    public function suggestData($term, $field, $sorting = array())
+    {
+        $finder = $this->getModule()->getRepository()->getFinder();
+
+        $result = $finder->find($this->buildSuggestQuery($term, $field), 10, 0);
+        $suggest_data = array();
+
+        foreach ($result['data'] as $document_data) {
+            $workflow_ticket = false;
+            $workflow_step = false;
+
+            if (isset($document_data['workflowTicket'])) {
+                $workflow_ticket = $document_data['workflowTicket'];
+                if (count($workflow_ticket) === 1) {
+                    $workflow_step = $workflow_ticket[0]['workflowStep'];
+                }
+            }
+
+            $suggest_data[] = array(
+                $field => $document_data[$field],
+                'identifier' => $document_data['identifier'],
+                '_state' => $workflow_step
+            );
+        }
+
+        return $suggest_data;
+    }
+
     public function getModule()
     {
         return $this->module;
@@ -183,5 +212,22 @@ error_log("------------");
             );
             $queue->push(new UpdateBackReferencesJob($job_data));
         }
+    }
+
+    protected function buildSuggestQuery($term, $display_field)
+    {
+        $module = $this->getModule();
+
+        $list_config = AgaviConfig::get(sprintf('%s.list_config', $module->getOption('prefix')), array());
+        $query_builder_implementor = '\Honeybee\Core\Finder\ElasticSearch\SuggestQueryBuilder';
+
+        if (array_key_exists('suggest_query_builder', $list_config)) {
+            $query_builder_implementor = $list_config['suggest_query_builder'];
+        }
+
+        $query_builder = new $query_builder_implementor();
+        $query_spec = array('term' => $term, 'field' => $display_field, 'sorting' => array());
+
+        return $query_builder->build($query_spec);
     }
 }

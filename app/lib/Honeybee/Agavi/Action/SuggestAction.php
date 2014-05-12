@@ -10,49 +10,16 @@ class SuggestAction extends BaseAction
 {
     public function executeRead(\AgaviRequestDataHolder $request_data)
     {
+        $term = $request_data->getParameter('term');
         $display_field = $request_data->getParameter('display_field');
-        $identity_field = $request_data->getParameter('identity_field');
-        $term = $request_data->getParameter('term', '');
 
-        $module = $this->getModule();
-        $repository = $module->getRepository();
-
-        $data = array();
-        $list_config = AgaviConfig::get(
-            sprintf('%s.list_config', $module->getOption('prefix')),
-            array()
+        $this->setAttribute(
+            'data',
+            $this->getModule()->getService()->suggestData(
+                $term,
+                $display_field
+            )
         );
-        $query_builder_implementor = isset($list_config['suggest_query_builder'])
-            ? $list_config['suggest_query_builder']
-            : '\Honeybee\Core\Finder\ElasticSearch\SuggestQueryBuilder';
-        $query_builder = new $query_builder_implementor();
-        $query = $query_builder->build(
-            array('term' => $term, 'field' => $display_field, 'sorting' => array())
-        );
-
-        $result = $repository->getFinder()->find($query, 10, 0);
-        $suggest_data = array();
-        foreach ($result['data'] as $document_data) {
-            $workflow_ticket = false;
-            $workflow_step = false;
-            if (isset($document_data['workflowTicket'])) {
-                $workflow_ticket = $document_data['workflowTicket'];
-            }
-
-            if ($workflow_ticket) {
-                if (count($workflow_ticket) === 1) {
-                    $workflow_step = $workflow_ticket[0]['workflowStep'];
-                }
-            }
-
-            $suggest_data[] = array(
-                $display_field => $document_data[$display_field],
-                $identity_field => $document_data[$identity_field],
-                '_state' => $workflow_step
-            );
-        }
-
-        $this->setAttribute('data', $suggest_data);
 
         return 'Success';
     }
@@ -67,9 +34,11 @@ class SuggestAction extends BaseAction
     public function handleReadError(\AgaviRequestDataHolder $parameters)
     {
         $errors = array();
-        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $errMsg) {
-            $errors[]= $errMsg['message'];
+
+        foreach ($this->getContainer()->getValidationManager()->getErrorMessages() as $error_msg) {
+            $errors[]= $error_msg['message'];
         }
+
         $this->setAttribute('errors', $errors);
 
         return 'Error';
