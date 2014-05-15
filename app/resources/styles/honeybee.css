@@ -1627,3 +1627,8 @@ div.epic-overlay
     min-height: 34px;
   }
 }
+
+.toolbar-bottom
+{
+  margin-top: 20px;
+}
