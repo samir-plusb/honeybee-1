@@ -143,14 +143,14 @@ class FieldInputRenderer extends FieldRenderer
             'autobind' => true,
             'field_id' => $this->generateInputId($document),
             'fieldname' => $this->generateInputName($document),
-            'realname' => $this->getField()->getName(),
-            'field_value' => $document->getValue($this->getField()->getName())
+            'realname' => $this->getField()->getName()
         );
 
         if (isset($widgetSettings[$fieldkey]))
         {
             $widgetDef = $widgetSettings[$fieldkey];
             $widgetOptions = array_merge($widgetDef['options'], $widgetOptions);
+            $widgetOptions['field_value'] = $document->getValue($this->getField()->getName());
         }
 
         return $widgetOptions;
