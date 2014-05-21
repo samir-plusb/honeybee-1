@@ -4,6 +4,7 @@ namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Config\ArrayConfig;
 use AgaviRequestDataHolder;
+use AgaviConfig;
 
 class ExportAction extends BaseAction
 {
@@ -20,12 +21,22 @@ class ExportAction extends BaseAction
         $export_service = $module->getService('export');
         $document_service = $module->getService();
 
-        $search_spec = array('filter' => array('workflowTicket.workflowStep' => 'published'));
-        $publish_document = function($document) use ($export_name, $export_service)
+        $module_prefix = $this->getModule()->getOption('prefix');
+        $publish_steps = AgaviConfig::get(
+            $module_prefix . '.workflow.publish_steps',
+            AgaviConfig::get('workflow.publish_steps', array('published'))
+        );
+
+        $exported_doc_count = 0;
+        $search_spec = array('filter' => array('workflowTicket.workflowStep' => $publish_steps));
+        $publish_document = function($document) use ($export_name, $export_service, &$exported_doc_count)
         {
             $export_service->publish($export_name, $document);
+            $exported_doc_count++;
         };
         $document_service->walkDocuments($search_spec, $chunk_size, $publish_document);
+
+        $this->setAttribute('exported_doc_count', $exported_doc_count);
 
         return 'Success';
     }

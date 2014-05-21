@@ -99,9 +99,15 @@ class DefaultQueryBuilder implements IQueryBuilder
             {
                 if (! empty($fieldvalue))
                 {
-                    $filter->addFilter(
-                        new Elastica\Filter\Term(array($fieldname => $fieldvalue)
-                    ));
+                    if (is_array($fieldvalue)) {
+                        $filter->addFilter(
+                            new Elastica\Filter\Terms(array($fieldname => $fieldvalue)
+                        ));
+                    } else {
+                        $filter->addFilter(
+                            new Elastica\Filter\Term(array($fieldname => $fieldvalue)
+                        ));
+                    }
                 }
             }
         }
