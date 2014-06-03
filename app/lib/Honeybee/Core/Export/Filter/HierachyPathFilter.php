@@ -9,13 +9,15 @@ use Dat0r\Core\Field\ReferenceField;
 
 class HierachyPathFilter extends BaseFilter
 {
+    protected $tree_cache = array();
+
     public function execute(BaseDocument $document)
     {
         $filterOutput = array();
 
-        $tree = $document->getModule()->getService('tree')->get();
+        $tree = $this->getTree($document);
         $documentNode = $this->getNodeById(
-            $document->getIdentifier(), 
+            $document->getIdentifier(),
             $tree->getRootNode()
         );
 
@@ -59,5 +61,18 @@ class HierachyPathFilter extends BaseFilter
         }
 
         return NULL;
+    }
+
+    protected function getTree(BaseDocument $document)
+    {
+        $module = $document->getModule();
+        $cache_key = $module->getOption('prefix');
+
+        if (!array_key_exists($cache_key, $this->tree_cache))
+        {
+            $this->tree_cache[$cache_key] = $document->getModule()->getService('tree')->get();
+        }
+
+        return $this->tree_cache[$cache_key];
     }
 }
