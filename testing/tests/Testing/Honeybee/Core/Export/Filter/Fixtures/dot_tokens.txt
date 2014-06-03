@@ -1,0 +1,98 @@
+Abk.
+Abs.
+acc.
+Adj.
+ags.
+ahd.
+altfries.
+altfrz.
+alts.
+a. m.
+bes.
+Bez.
+BGBl.
+bsp.
+bzw.
+ca.
+Co.
+dän.
+Datenverarb.
+d. h.
+d. i.
+dial.
+Dict.
+Dr.
+dr.
+dt.
+eigtl.
+engl.
+et\sal.
+etc.
+f.
+ff.
+franz.
+frz.
+gen.
+germ.
+gleichbed.
+got.
+goth.
+grch.
+idg.
+indekl.
+it.
+jahrh.
+jh.
+lat.
+leseb.
+m.
+masc.
+malai.
+mfrz.
+mhd.
+mittelalterl.
+Mwst.
+n.
+n. Chr.
+neuwestfries.
+nhd.
+nl.
+nom.
+nordfries.
+nordgerm.
+norw.
+Nr.
+o. ä.
+od.
+österr.
+Part.
+prof.
+Plur.
+p. m.
+s.
+S.
+sal.
+schwed.
+Sept.
+Sing.
+sog.
+Soldatenspr.
+südd.
+sw. V.
+u.
+u. a.
+u. ä.
+u. ähnl.
+u. a. m.
+u. dgl.
+übertr.
+usw.
+u. s. w.
+vgl.
+v. Chr.
+v. u. Z.
+w.
+Wds.
+wg.
+z. B.
+\d+.

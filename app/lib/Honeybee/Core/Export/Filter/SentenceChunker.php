@@ -3,6 +3,7 @@
 namespace Honeybee\Core\Export\Filter;
 
 use Honeybee\Core\Config\IConfig;
+use RuntimeException;
 
 /**
  * The SentenceChunker splits text into an array of sentences.
@@ -31,11 +32,12 @@ class SentenceChunker
     {
         $sentences = array();
 
-        $sentence_end_offset = $this->findEndOfSentence($text);
+        $sentence_end_offset = $this->findEndOfFirstSentence($text);
         while ($sentence_end_offset !== false) {
-            $sentences[] = trim(mb_strcut($text, 0, $sentence_end_offset));
-            $text = trim(mb_strcut($text, $sentence_end_offset + 1));
-            $sentence_end_offset = $this->findEndOfSentence($text);
+            $sentence_end_offset += 1;
+            $sentences[] = trim(mb_substr($text, 0, $sentence_end_offset));
+            $text = trim(mb_substr($text, $sentence_end_offset));
+            $sentence_end_offset = $this->findEndOfFirstSentence($text);
         }
 
         return (count($sentences) > 0) ? $sentences : false;
@@ -49,58 +51,60 @@ class SentenceChunker
      *
      * @return int | false
      */
-    protected function findEndOfSentence($text)
+    public function findEndOfFirstSentence($text)
     {
         if (strlen($text) <= self::MIN_SENTENCE_LENGTH) {
             return false;
         }
-        $sentence_end = $this->findDelimitingDot($text);
+        $sentence_end = $this->findFirstSentenceDelimiterOffset($text);
 
-        $next_question_mark = (int)mb_strpos($text, '?');
-        if (
-            (0 !== $next_question_mark && $sentence_end > $next_question_mark)
-            || 0 === $sentence_end
-        ) { // check if there is a question mark before the first dot.
-            $sentence_end = $next_question_mark;
-        }
-
-        $next_exlamation_mark = (int)mb_strpos($text, '!');
-        if (
-            (0 !== $next_exlamation_mark && $sentence_end > $next_exlamation_mark)
-            || 0 === $sentence_end
-        ) { // check if there is a exlamtion mark before the first dot or question mark.
-            $sentence_end = $next_exlamation_mark;
-        }
-
-        return $sentence_end > 0 ? $sentence_end + 1 : false;
+        return $sentence_end > 0 ? $sentence_end : false;
     }
 
-    /**
-     * Search for the offset of the first dot that terminates a sentence within the given text.
-     * Returns false if no valid dot token is found.
-     *
-     * @param string $text
-     *
-     * @return int | false
-     */
-    protected function findDelimitingDot($text)
+    public function findFirstSentenceDelimiterOffset($text)
     {
-        $invalid_dot_regex = sprintf(
-            '~(\(|\s)+\s*(%s)\.$~',
+        $period_offset = (int)$this->findFirstDelimitingPeriod($text);
+        $exlamation_mark_offset = (int)$this->findFirstDelimitingExclamationMark($text);
+        $question_mark_offset = (int)$this->findFirstDelimitingQuestionMark($text);
+
+        $values = array_filter(
+            array($period_offset, $exlamation_mark_offset, $question_mark_offset)
+        );
+        sort($values);
+
+        return empty($values) ? false : min($values);
+    }
+
+    public function findFirstDelimitingPeriod($text)
+    {
+        $invalid_period_regex = sprintf(
+            '~(?<!\w)(%s)$~is',
             implode('|', $this->getDotContextTokens())
         );
-        $is_valid_dot_position = false;
-        $next_dot_position = (int)mb_strpos($text, '.');
-        while (!$is_valid_dot_position && $next_dot_position > 0) {
-            $potential_sentence = mb_substr($text, 0, $next_dot_position + 1);
-            if (preg_match($invalid_dot_regex, $potential_sentence)) {
-                $next_dot_position = (int)mb_strpos($text, '.', $next_dot_position + 1);
+
+        $next_period_offset = (int)mb_strpos($text, '.');
+        $is_valid_period_offset = preg_match($invalid_period_regex, $text);
+
+        while (!$is_valid_period_offset && $next_period_offset > 0) {
+            $potential_sentence = substr($text, 0, $next_period_offset + 1);
+            if (preg_match($invalid_period_regex, $potential_sentence)) {
+                $next_period_offset = (int)mb_strpos($text, '.', $next_period_offset + 1);
             } else {
-                $is_valid_dot_position = true;
+                $is_valid_period_offset = true;
             }
         }
 
-        return $next_dot_position;
+        return $next_period_offset;
+    }
+
+    public function findFirstDelimitingExclamationMark($text)
+    {
+        return (int)mb_strpos($text, '!');
+    }
+
+    public function findFirstDelimitingQuestionMark($text)
+    {
+        return (int)mb_strpos($text, '?');
     }
 
     protected function getDotContextTokens()
@@ -119,21 +123,16 @@ class SentenceChunker
     protected function loadDotContextTokens()
     {
         $this->dot_context_tokens = array();
-        $dot_tokens_file = $this->config->get('dot_tokens_file');
-        if (!is_readable($dot_tokens_file)) {
-            throw new \Exception("Unable to load dot-tokens at location: " . $dot_tokens_file);
-        }
+        $dot_tokens_file = $this->config->get('dot_tokens_file', false);
 
-        foreach (file($dot_tokens_file) as $dot_token) {
-            $parts = explode('.', str_replace(" ", "", trim($dot_token)));
-            array_pop($parts); // remove empty part
-
-            $base = '';
-            foreach ($parts as $part) {
-                $this->dot_context_tokens[] = $base . $part;
-                $base .= $part . '\.\s*';
+        if ($dot_tokens_file) {
+            if (is_readable($dot_tokens_file)) {
+                foreach (file($dot_tokens_file) as $token) {
+                    $this->dot_context_tokens[] = trim(str_replace('.', '\.', $token));
+                }
+            } else {
+                throw new RuntimeException("Unable to load dot-tokens at location: " . $dot_tokens_file);
             }
         }
-        $this->dot_context_tokens[] = '\d+';
     }
 }
