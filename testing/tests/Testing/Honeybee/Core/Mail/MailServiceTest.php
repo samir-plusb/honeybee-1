@@ -82,7 +82,7 @@ class MailServiceTest extends BaseTest
             $content_types[] = $part->getContentType();
             $content[] = $part->getBody();
         }
-        $this->assertContains('plain/text', $content_types, 'There should be a plain/text content type body part');
+        $this->assertContains('text/plain', $content_types, 'There should be a plain/text content type body part');
         $this->assertContains('text/html', $content_types, 'There should be a text/html content type body part');
         $this->assertContains('plain text', $content, 'There should be a plain text body part');
         $this->assertContains('<h1>HTML</h1>', $content, 'There should be a html body part');
@@ -141,7 +141,7 @@ class MailServiceTest extends BaseTest
         }
         $content = implode('', $content);
 
-        $this->assertContains('plain/text', $content_types, 'There should be a plain/text content type body part');
+        $this->assertContains('text/plain', $content_types, 'There should be a plain/text content type body part');
         $this->assertContains('text/html', $content_types, 'There should be a text/html content type body part');
         $this->assertContains('plain text', $content, 'Could not find plain text in the body content');
         $this->assertContains('HTML', $content, 'Could not find HTML in the body content');
