@@ -1,6 +1,6 @@
 <?php
 
-use Symfony\Component\Validator\ExecutionContext;
+use Symfony\Component\Validator\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validation;
@@ -91,7 +91,7 @@ class RedirectValidator extends AgaviValidator
      * @param string $url referrer url to check against base href of this application
      * @param \Symfony\Component\Validator\ExecutionContext $context
      */
-    public function hasCorrectBaseHref($url, ExecutionContext $context)
+    public function hasCorrectBaseHref($url, ExecutionContextInterface $context)
     {
         if (!is_string($url)) {
             $context->addViolation('URL is not a string.');
