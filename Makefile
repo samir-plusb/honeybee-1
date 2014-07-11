@@ -244,6 +244,7 @@ php-metrics:
 link-project-app:
 
 	@bin/link-project-app
+	@bin/link-project-pub
 	@make config
 
 

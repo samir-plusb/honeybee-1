@@ -1,0 +1,13 @@
+#!/bin/bash
+
+BASEDIR=`readlink -f "$( dirname $0 )/.."`
+PWD=`pwd`
+
+cd $BASEDIR
+
+LINK_TARGET='../../project/pub/*'
+LINK_LOCATION='pub'
+cd $LINK_LOCATION
+ln -s $LINK_TARGET .
+
+cd $PWD
