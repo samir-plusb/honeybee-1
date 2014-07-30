@@ -361,11 +361,11 @@ honeybee.core.EditController = honeybee.core.BaseObject.extend({
 // ##########################
 // #     static methods     #
 // ##########################
-honeybee.core.EditController.factory = function(element)
+honeybee.core.EditController.factory = function(element, options)
 {
     element = $(element);
-    var options = $.extend(
-        {},
+    options = $.extend(
+        options || {},
         honeybee.core.EditController.DEFAULT_OPTIONS,
         JSON.parse(element.attr('data-edit-controller-options') || "{}")
     );
