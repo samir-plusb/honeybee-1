@@ -4,6 +4,7 @@ namespace Honeybee\Agavi\Action;
 
 use Honeybee\Core\Workflow\Plugin;
 use AgaviRequestDataHolder;
+use AgaviConfig;
 use Exception;
 
 class WorkflowAction extends BaseAction
@@ -15,6 +16,25 @@ class WorkflowAction extends BaseAction
             $this->getModule()->getService()->save(
                 $request_data->getParameter('document')
             );
+        }
+        
+        // The following setting allows to specify a delay (in seconds) for loading the page after 
+        // a write operation.
+        // 
+        // This is to provide a better feeling to the user regarding the eventual consistency of
+        // the application.
+        // This delay should be set according to the speed of the River in syncing the Storage with the Finder.
+        //
+        // Use it carefully.
+        // 
+        // The attribute 'skip_after_write_delay' allows to skip the delay in situation where it is not needed
+        // (like processing the workflow for many documents)
+        //
+        $reload_delay = AgaviConfig::get('core.after_write_delay', null);
+        $skip_delay = $this->getAttribute('skip_after_write_delay', false);
+
+        if(!$skip_delay && !is_null($reload_delay) && is_numeric($reload_delay)) {
+            sleep($reload_delay);
         }
 
         return $view;
