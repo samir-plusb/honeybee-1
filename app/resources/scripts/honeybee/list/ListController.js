@@ -174,7 +174,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
         var that = this;
         var success_callback = function() {};
-        var error_callback = function(error) { that.logDebug("proceed", error); };
+        var error_callback = function(error) { that.genericErrorCallback(error, "proceed", proceed_batch); };
         var finished_callback = function() { window.location.href = window.location.href; };
         var proceed_batch = this.createProceedBatch(
             (true === is_batch) ? this.getSelectedItems() : [ data ],
@@ -193,6 +193,37 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         } else {
             proceed_batch.run();
         }
+    },
+
+    genericErrorCallback: function(error, method, batch)
+    {
+        if(error.hasOwnProperty('type')) {
+            message = error.message.msg;
+            state = error.type;
+        } else if(error.hasOwnProperty('state')) {
+            message = error.msg;
+            state = error.state;
+        } else {
+            message = error;
+            state = 'error';
+        }
+        method = method || 'general';
+        this.logDebug(method, message);
+
+        if(batch && batch.hasOwnProperty('progress_dialog')) {
+            batch.progress_dialog.unbind('transitionend');
+            this.fire('complete');
+            batch.progress_dialog.twodal('hide');
+        }
+        this.addAlert(message, state);
+    },
+
+    addAlert: function(msg, messageType)
+    {
+        this.viewmodel.addAlert({
+            type: messageType || 'error',
+            message: msg
+        });
     },
 
     checkout: function(resource, scope, prompt_text)
@@ -232,7 +263,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
         var batch_options = this.options.reference_batches[reference_field];
         var labels = batch_options.widget_options.texts;
         var success_callback = function() {};
-        var error_callback = function(error) { that.logDebug("proceed", error); };
+        var error_callback = function(error) { that.genericErrorCallback(error, "assignReference", assign_reference_batch); };
         var finished_callback = function() { window.location.href = window.location.href; };
 
         var reference_dialog = this.reference_dialog.clone();
@@ -271,7 +302,7 @@ honeybee.list.ListController = honeybee.core.BaseObject.extend({
 
                 append_references = append_references && (1 !== reference_widget.options.max);
 
-                that.createAssignReferenceBatch(
+                assign_reference_batch = that.createAssignReferenceBatch(
                     items,
                     { reference_field: reference_field, references: references },
                     append_references,
