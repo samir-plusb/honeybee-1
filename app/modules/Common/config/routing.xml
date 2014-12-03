@@ -4,9 +4,9 @@
     xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
     <ae:configuration context="web">
         <routes>
-            <route name=".service.localize" pattern="/service/localize" action="Service_Localize" method="read" />
-            <route name=".service.detect_face" pattern="/service/detect_face" action="Service_DetectFace" method="read" />
-            <route name=".queue.stats" pattern="/queue/stats" action="Queue_Stats" method="read" />
+            <route name=".service.localize" pattern="service/localize" action="Service_Localize" method="read" />
+            <route name=".service.detect_face" pattern="service/detect_face" action="Service_DetectFace" method="read" />
+            <route name=".queue.stats" pattern="queue/stats" action="Queue_Stats" method="read" />
         </routes>
     </ae:configuration>
 

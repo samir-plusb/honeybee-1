@@ -2,17 +2,17 @@
 <ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/routing/1.0">
     <ae:configuration context="web">
         <routes>
-            <route name=".login" pattern="^/login$" action="Login" />
-            <route name=".logout" pattern="^/logout$" action="Logout" />
-            <route name=".reset" pattern="^/reset$" action="ResetPassword"/>
-            <route name=".password" pattern="^/password" action="SetPassword"/>
+            <route name=".login" pattern="^login$" action="Login" />
+            <route name=".logout" pattern="^logout$" action="Logout" />
+            <route name=".reset" pattern="^reset$" action="ResetPassword"/>
+            <route name=".password" pattern="^password" action="SetPassword"/>
 
-            <route name=".list" pattern="/list(/{referenceModule:(\w+)})?(/{referenceField:([\w\.\-_]+)})?" action="List" method="read" />
-            <route name=".suggest" pattern="/suggest" action="Suggest" method="read" />
-            <route name=".edit" pattern="/edit" action="Edit" />
-            <route name=".tree" pattern="/tree" action="Tree" />
+            <route name=".list" pattern="list(/{referenceModule:(\w+)})?(/{referenceField:([\w\.\-_]+)})?" action="List" method="read" />
+            <route name=".suggest" pattern="suggest" action="Suggest" method="read" />
+            <route name=".edit" pattern="edit" action="Edit" />
+            <route name=".tree" pattern="tree" action="Tree" />
 
-            <route name=".workflow" pattern="/workflow">
+            <route name=".workflow" pattern="workflow">
                 <route name=".checkout" pattern="/checkout" action="Workflow_Checkout" />
                 <route name=".execute" pattern="/execute" action="Workflow_Execute" />
                 <route name=".release" pattern="/release" action="Workflow_Release" />
