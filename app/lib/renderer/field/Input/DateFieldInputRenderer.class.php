@@ -25,8 +25,9 @@ class DateFieldInputRenderer extends FieldInputRenderer
         $date = $document->getValue($fieldName);
         return array_merge($parentOptions, array(
             'date' => empty($date) ? '' : $date,
-            'format' => 'dd.MM.yyyy hh:mm:ss',
+            'format' => isset($this->options['format']) ? $this->options['format'] : 'dd.MM.yyyy hh:mm:ss',
             'field_name' => $this->generateInputName($document),
+            'time_only' => isset($this->options['time_only']) ? (bool)$this->options['time_only'] : false,
             'placeholder' => $placeholder
         ));
     }

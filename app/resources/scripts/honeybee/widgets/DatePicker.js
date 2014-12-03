@@ -37,7 +37,9 @@ honeybee.widgets.DatePicker = honeybee.widgets.Widget.extend({
 
         this.datepicker = this.element.find('.input-append.date');
         var input = this.datepicker.find('input');
-        this.datepicker.datetimepicker();
+        this.datepicker.datetimepicker({
+            pickDate: !this.options.time_only
+        });
         var trigger = this.datepicker.find('.add-on');
         this.datepicker.on('show', function(){
             var val = input.val();
@@ -82,5 +84,6 @@ honeybee.widgets.DatePicker.DEFAULT_OPTIONS = {
     format: 'dd.MM.yyyy HH:mm:ss',
     field_name: '',
     field_id: '',
-    placeholder: null
+    placeholder: null,
+    time_only: true
 };
