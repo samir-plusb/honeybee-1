@@ -7,7 +7,7 @@ use Elastica;
 
 class DatabaseSetup implements IDatabaseSetup
 {
-    const DEFAULT_COUCH_HOST = 'localhost'; 
+    const DEFAULT_COUCH_HOST = 'localhost';
 
     const DEFAULT_COUCH_PORT = 5984;
 
@@ -57,7 +57,7 @@ class DatabaseSetup implements IDatabaseSetup
                       "type" => "custom",
                       "tokenizer" => "whitespace",
                       "filter" => array("lowercase", "edge")
-                    ), 
+                    ),
                     'IcuAnalyzer_DE' => array(
                         'type' => 'custom',
                         'tokenizer' => 'keyword',
@@ -83,7 +83,7 @@ class DatabaseSetup implements IDatabaseSetup
                         //'strength' => "quaternary", // "tertiary" is the usual default
                         //'decomposition' => "canonical", // "no" is faster, as no normalization takes place and many languages don't require text normalization
                         'alternate' => "shifted", // or "non-ignorable", sets alternate handling for "quaternary" strength; ignoring punctuation and whitespace
-                        'caseLevel' => true, // ignore accent differences in "primary" strength?; defaults to "false" 
+                        'caseLevel' => true, // ignore accent differences in "primary" strength?; defaults to "false"
                         'caseFirst' => "upper", // or "upper", which case is sorted first in "tertiary" strength?
                         'numeric' => true, // defaults to false; should "egg-9" be before "egg-21"?
                         'hiraganaQuaternaryMode' => false // distinguish between Katakana and Hiragana characters in "quaternary" strength
@@ -163,6 +163,7 @@ class DatabaseSetup implements IDatabaseSetup
                 'host' => $this->database->getParameter('river[couch_host]', self::DEFAULT_COUCH_HOST),
                 'port' => $this->database->getParameter('river[couch_port]', self::DEFAULT_COUCH_PORT),
                 'filter' => '', // @todo implement when needed
+                'script_type' => 'javascript',
                 'script' => $this->reformatJavascript(
                     file_get_contents($riverScriptFile)
                 )
@@ -198,12 +199,12 @@ class DatabaseSetup implements IDatabaseSetup
         {
             throw new \AgaviDatabaseException("Only one river definition per module allowed.");
         }
-        
+
         $riverScriptFile = $riverFiles[0];
         $typeName = str_replace('.river.js', '', basename($riverScriptFile));
 
         $this->database->getConnection()->request(
-            sprintf("_river/%s", $typeName), 
+            sprintf("_river/%s", $typeName),
             Elastica\Request::DELETE
         );
     }

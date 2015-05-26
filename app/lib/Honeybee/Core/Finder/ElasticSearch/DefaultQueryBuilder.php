@@ -34,7 +34,7 @@ class DefaultQueryBuilder implements IQueryBuilder
 
         if (! $sort)
         {
-            $sort = array(array('shortId' => 'desc'));
+            $sort = array('shortId' => 'desc');
         }
 
         $query->addSort($sort);
@@ -49,11 +49,11 @@ class DefaultQueryBuilder implements IQueryBuilder
                     array('meta.is_deleted' => TRUE)
                 ))
             );
-            $query->setFilter($container);
+            $query->setPostFilter($container);
         }
         else
         {
-            $query->setFilter(
+            $query->setPostFilter(
                 new Elastica\Filter\BoolNot(new Elastica\Filter\Term(
                     array('meta.is_deleted' => TRUE)
                 ))

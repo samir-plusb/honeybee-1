@@ -136,12 +136,12 @@ class ProjectAssetService implements IAssetService
             return $assets;
         }
         $query = Elastica\Query::create(NULL);
-        $query->setFilter(
+        $query->setPostFilter(
             new Elastica\Filter\Ids('asset', $assetIds)
         );
         $query->setSort(array(
-            array('created.date' => IListState::SORT_ASC),
-            array('_uid' => IListState::SORT_ASC)
+            'created.date' => IListState::SORT_ASC,
+            '_uid' => IListState::SORT_ASC
         ));
         $query->setLimit(100);
         $result = $this->assetDocIndex->search($query);
@@ -222,7 +222,7 @@ class ProjectAssetService implements IAssetService
                 return $assetFile->delete();
             }
         }
-        
+
         return FALSE;
     }
 

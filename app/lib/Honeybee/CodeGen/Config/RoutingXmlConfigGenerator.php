@@ -90,7 +90,7 @@ class RoutingXmlConfigGenerator extends DefaultXmlConfigGenerator
         $modulePrefix = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $moduleName));
         $moduleRoute = $document->createElement('route');
         $moduleRoute->setAttribute('name', $modulePrefix);
-        $moduleRoute->setAttribute('pattern', '^/' . $modulePrefix . '/');
+        $moduleRoute->setAttribute('pattern', '^/' . $modulePrefix);
         $moduleRoute->setAttribute('module', $moduleName);
 
         if (file_exists($moduleDefinition))

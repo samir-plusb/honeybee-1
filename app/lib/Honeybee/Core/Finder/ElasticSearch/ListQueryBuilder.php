@@ -15,7 +15,7 @@ class ListQueryBuilder extends DefaultQueryBuilder
         $state = $specification['state'];
         $config = $specification['config'];
 
-        $innerQuery = $state->hasSearch() 
+        $innerQuery = $state->hasSearch()
             ? $this->buildSearchQuery($state->getSearch())
             : new Elastica\Query\MatchAll();
 
@@ -36,7 +36,7 @@ class ListQueryBuilder extends DefaultQueryBuilder
             $filter = $container;
         }
 
-        return $query->setFilter($filter);
+        return $query->setPostFilter($filter);
     }
 
     protected function prepareSortingParams(IListConfig $config, IListState $state)
@@ -46,9 +46,7 @@ class ListQueryBuilder extends DefaultQueryBuilder
 
         if (! $sortField)
         {
-            return array(
-                array('shortId' => IListState::SORT_DESC)
-            );
+            return array('shortId' => IListState::SORT_DESC);
         }
 
         if (! $config->hasField($sortField))
@@ -68,8 +66,8 @@ class ListQueryBuilder extends DefaultQueryBuilder
         $esSortFieldName = $listField->getSortfield();
 
         return array(
-            array($esSortFieldName => $sortDirection),
-            array('shortId' => IListState::SORT_DESC)
+            $esSortFieldName => $sortDirection,
+            'shortId' => IListState::SORT_DESC
         );
     }
 }

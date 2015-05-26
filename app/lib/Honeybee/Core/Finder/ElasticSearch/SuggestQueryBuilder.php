@@ -18,12 +18,13 @@ class SuggestQueryBuilder implements IQueryBuilder
 
         $query = null;
         if (!empty($term)) {
-            $suggestQuery = new Elastica\Query\Text();
+            $suggestQuery = new Elastica\Query\Match();
             $suggestQuery->setFieldQuery($field . '.suggest', $term);
             $suggestQuery->setFieldType($field . '.suggest', 'phrase_prefix');
             $suggestQuery->setFieldMaxExpansions($field . '.suggest', 15);
 
             $query = Elastica\Query::create($suggestQuery);
+
         } else {
             $query = Elastica\Query::create(null);
         }
@@ -33,7 +34,8 @@ class SuggestQueryBuilder implements IQueryBuilder
         {
             $sortDefs[] = $sortSpec;
         }
-        $sortDefs[] = array(sprintf('%s.sort', $field) => 'asc');
+        $sortKey = sprintf('%s.sort', $field);
+        $sortDefs[$sortKey] = 'asc';
 
         return $query->addSort($sortDefs);
     }

@@ -40,7 +40,7 @@ class DocumentFinder implements IFinder
 
         if (! isset($queryArr['filter']))
         {
-            $query->setFilter(new Elastica\Filter\BoolNot(new Elastica\Filter\Term(
+            $query->setPostFilter(new Elastica\Filter\BoolNot(new Elastica\Filter\Term(
                 array('meta.is_deleted' => TRUE)
             )));
         }
@@ -59,9 +59,7 @@ class DocumentFinder implements IFinder
         );
 
         $query->setLimit($limit)->setFrom($offset);
-        $query->addSort(
-            array(array('shortId' => 'desc'))
-        );
+        $query->addSort(array('shortId' => 'desc'));
 
         $source = $this->getQuerySource();
         $resultSet = $source->search($query);
