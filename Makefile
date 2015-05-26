@@ -122,7 +122,7 @@ install-dev: install-composer install-vendor-dev install-node-deps
 	@make deploy-resources
 
 
-update: update-composer update-vendor 
+update: update-composer update-vendor
 
 
 update-dev: update-composer update-vendor-dev update-node-deps
@@ -141,28 +141,28 @@ update-composer:
 
 install-vendor:
 
-	@if [ -d vendor/agavi/agavi/ ]; then svn revert -R vendor/agavi/agavi/; fi
+	@if [ -d vendor/agavi/agavi/ ]; then (cd vendor/agavi/agavi && git checkout .); fi
 	@php -d allow_url_fopen=1 bin/composer.phar install --no-dev
 	-@bin/apply-patches
 
 
 install-vendor-dev:
 
-	@if [ -d vendor/agavi/agavi/ ]; then svn revert -R vendor/agavi/agavi/; fi
+	@if [ -d vendor/agavi/agavi/ ]; then (cd vendor/agavi/agavi && git checkout .); fi
 	@php -d allow_url_fopen=1 bin/composer.phar install --dev
 	-@bin/apply-patches
 
 
 update-vendor:
 
-	@svn revert -R vendor/agavi/agavi/ || true
+	@if [ -d vendor/agavi/agavi/ ]; then (cd vendor/agavi/agavi && git checkout .); fi
 	@php -d allow_url_fopen=1 bin/composer.phar update --no-dev
 	-@bin/apply-patches
 
 
 update-vendor-dev:
 
-	@svn revert -R vendor/agavi/agavi/ || true
+	@if [ -d vendor/agavi/agavi/ ]; then (cd vendor/agavi/agavi && git checkout .); fi
 	@php -d allow_url_fopen=1 bin/composer.phar update --dev
 	-@bin/apply-patches
 
