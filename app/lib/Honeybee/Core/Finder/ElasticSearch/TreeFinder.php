@@ -35,12 +35,12 @@ class TreeFinder implements IFinder
         $response = $type->request($treeName, 'GET');
         $data = $response->getData();
 
-        return $data['exists'] ? $this->mapElasticSearchDataToDomain($data['_source']) : NULL;
+        return $data['found'] ? $this->mapElasticSearchDataToDomain($data['_source']) : NULL;
     }
 
     public function fetchAll($limit = 0, $offset = 0)
     {
-        // not sure if we really need this. 
+        // not sure if we really need this.
         // to implement fire a match all query on the tree-type.
         return array();
     }
