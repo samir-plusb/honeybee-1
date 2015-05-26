@@ -29,7 +29,7 @@
 
     "require": {
         "php": ">=5.3.3",
-        "agavi/agavi": "1.0.*",
+        "agavi/agavi": "dev-master#a8f513c8fbd34371c6c9ee3629a09e66de60f534 as 1.0.8",
         "phing/phing": "2.4.12",
         "berlinonline/dat0r": "dev-master",
         "graste/environaut": "v0.5.1",
@@ -72,18 +72,6 @@
     },
 
     "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "agavi/agavi",
-                "version": "1.0.7",
-                "source": {
-                    "url": "http://svn.agavi.org/",
-                    "type": "svn",
-                    "reference": "tags/1.0.7/"
-                }
-            }
-        },
         {
             "type": "package",
             "package": {
