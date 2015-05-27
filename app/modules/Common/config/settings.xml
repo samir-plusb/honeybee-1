@@ -10,7 +10,7 @@
             <setting name="default_max_workers">3</setting>
             <setting name="ipc_channel">23</setting>
             <setting name="daemonize">false</setting>
-            <setting name="default_queue">%core.clean_environment%_%core.project_prefix%_default_queue</setting>
+            <setting name="default_queue">%core.clean_environment%_default_queue</setting>
         </settings>
         <settings prefix="common.">
             <setting name="geo_service.url">https://api.berlinonline.net/boapi/geo/ask.json</setting>
