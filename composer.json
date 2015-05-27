@@ -29,12 +29,12 @@
 
     "require": {
         "php": ">=5.3.3",
-        "agavi/agavi": "dev-master#a8f513c8fbd34371c6c9ee3629a09e66de60f534 as 1.0.8",
+        "agavi/agavi": "1.0.7",
         "phing/phing": "2.4.12",
         "berlinonline/dat0r": "dev-master",
         "graste/environaut": "v0.5.1",
         "symfony/validator": "2.3.12",
-        "ruflin/Elastica": "1.4.*",
+        "ruflin/Elastica": "v0.90.2.0",
         "zendframework/zend-permissions-acl": "2.2.0",
         "guzzle/guzzle": "~3.1",
         "swiftmailer/swiftmailer": "v4.3.1",
@@ -72,6 +72,17 @@
     },
 
     "repositories": [
+        {
+            "package": {
+                "name": "agavi/agavi",		
+                "version": "1.0.7",		
+                "source": {		
+                    "url": "http://svn.agavi.org/",		
+                    "type": "svn",		
+                    "reference": "tags/1.0.7/"		
+                }		
+            }		
+        },
         {
             "type": "package",
             "package": {
