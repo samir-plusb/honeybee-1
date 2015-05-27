@@ -74,6 +74,7 @@
     "repositories": [
         {
             "package": {
+                "type": "package",
                 "name": "agavi/agavi",		
                 "version": "1.0.7",		
                 "source": {		
