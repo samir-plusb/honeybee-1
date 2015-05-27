@@ -27,6 +27,15 @@
                 </errors>
             </validator>
 
+            <validator class="boolean" name="invalid_daemonize_flag" required="false">
+                <arguments>
+                    <argument>daemonize</argument>
+                </arguments>
+                <errors>
+                    <error>Invalid 'daemonize' parameter given, expecting bool.</error>
+                </errors>
+            </validator>
+
             <validator class="inarray" name="invalid_action" required="false">
                 <arguments>
                     <argument>action</argument>

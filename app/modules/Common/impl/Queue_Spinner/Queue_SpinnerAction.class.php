@@ -43,7 +43,8 @@ class Common_Queue_SpinnerAction extends CommonBaseAction
                 $this->spinnerStatus($queue);
                 break;
             case self::ACTION_START:
-                $this->startSpinner($queue, $poolsize);
+                $default_daemonize = AgaviConfig::get('queue_spinner.daemonize', false);
+                $this->startSpinner($queue, $poolsize, $request_data->getParameter('daemonize', $default_daemonize));
                 break;
             case self::ACTION_STOP:
                 $this->stopSpinner($queue);
@@ -61,7 +62,7 @@ class Common_Queue_SpinnerAction extends CommonBaseAction
         return false;
     }
 
-    protected function startSpinner($queue, $worker_poolsize)
+    protected function startSpinner($queue, $worker_poolsize, $daemonize = false)
     {
         $spinner_pid = $this->signal_sender->getSpinnerPid($queue);
 
@@ -70,9 +71,7 @@ class Common_Queue_SpinnerAction extends CommonBaseAction
             return;
         }
 
-        $daemonize = AgaviConfig::get('queue_spinner.daemonize', false);
         $queue_name = $queue->getName();
-
         if ($daemonize) {
             $pid = pcntl_fork();
         }
