@@ -16,49 +16,31 @@ class DefaultQueryBuilder implements IQueryBuilder
         $filterFields = isset($specification['filter']) ? $specification['filter'] : NULL;
         $sort = isset($specification['sort']) ? $specification['sort'] : NULL;
 
+        $filter = new Elastica\Filter\BoolAnd();
+        $filter->addFilter(
+            new Elastica\Filter\BoolNot(new Elastica\Filter\Term(
+                array('meta.is_deleted' => TRUE)
+            ))
+        );
+
+        if($filterFields){
+            $fieldsFilter = $this->buildFilter($filterFields);
+            $filter->addFilter($fieldsFilter);
+        }
+
         $innerQuery = $search
             ? $this->buildSearchQuery($search)
             : new Elastica\Query\MatchAll();
 
-        $query = NULL;
-        if ($search)
-        {
-            $query = Elastica\Query::create(
-                $this->buildSearchQuery($search)
-            );
-        }
-        else
-        {
-            $query = Elastica\Query::create(NULL);
-        }
+        $filteredQuery = new Elastica\Query\Filtered($innerQuery, $filter);
+        $query = Elastica\Query::create($filteredQuery);
 
-        if (! $sort)
+        if (!$sort)
         {
             $sort = array('shortId' => 'desc');
         }
 
         $query->addSort($sort);
-
-        if($filterFields)
-        {
-            $filter = $this->buildFilter($filterFields);
-            $container = new Elastica\Filter\BoolAnd();
-            $container->addFilter($filter);
-            $container->addFilter(
-                new Elastica\Filter\BoolNot(new Elastica\Filter\Term(
-                    array('meta.is_deleted' => TRUE)
-                ))
-            );
-            $query->setPostFilter($container);
-        }
-        else
-        {
-            $query->setPostFilter(
-                new Elastica\Filter\BoolNot(new Elastica\Filter\Term(
-                    array('meta.is_deleted' => TRUE)
-                ))
-            );
-        }
 
         if (isset($specification['fields']))
         {
@@ -77,7 +59,7 @@ class DefaultQueryBuilder implements IQueryBuilder
         $query = new Elastica\Query\Match();
         $query->setFieldQuery('_all', $search);
         $query->setFieldType('_all', 'phrase_prefix');
-
+        
         return $query;
     }
 
