@@ -286,7 +286,7 @@ module-code:
     	dator_dir=app/modules/$$module/config/dat0r; \
 		vendor/bin/dat0r.console generate_code gen+dep -c $$dator_dir/codegen.ini -s $$dator_dir/module.xml
 	@make config
-	@curl -XDELETE localhost:9200/
+	@curl -XDELETE localhost:9200/_all
 	@echo "\n"
 
 
