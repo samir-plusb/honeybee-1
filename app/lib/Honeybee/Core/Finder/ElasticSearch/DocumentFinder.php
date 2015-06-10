@@ -28,17 +28,19 @@ class DocumentFinder implements IFinder
         $this->type = $type;
     }
 
+
     public function find($query, $limit = 0, $offset = 0)
     {
+
         if (! $query instanceof Elastica\Query)
         {
             $query = Elastica\Query::create($query);
         }
 
         $queryArr = $query->toArray();
-        $query->setLimit($limit)->setFrom($offset);
+        $query->setSize($limit)->setFrom($offset);
 
-        if (! isset($queryArr['filter']))
+        if (! strpos(json_encode( $queryArr ),'meta.is_deleted') && ! strpos(json_encode( $queryArr ),'filter'))
         {
             $query->setPostFilter(new Elastica\Filter\BoolNot(new Elastica\Filter\Term(
                 array('meta.is_deleted' => TRUE)
@@ -58,7 +60,7 @@ class DocumentFinder implements IFinder
             ))
         );
 
-        $query->setLimit($limit)->setFrom($offset);
+        $query->setSize($limit)->setFrom($offset);
         $query->addSort(array('shortId' => 'desc'));
 
         $source = $this->getQuerySource();

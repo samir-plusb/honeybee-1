@@ -135,15 +135,16 @@ class ProjectAssetService implements IAssetService
         {
             return $assets;
         }
-        $query = Elastica\Query::create(NULL);
-        $query->setPostFilter(
-            new Elastica\Filter\Ids('asset', $assetIds)
+
+        $query = Elastica\Query::create(
+            new \Elastica\Filter\Ids('asset', $assetIds)
         );
+
         $query->setSort(array(
             'created.date' => IListState::SORT_ASC,
             '_uid' => IListState::SORT_ASC
         ));
-        $query->setLimit(100);
+        $query->setSize(100);
         $result = $this->assetDocIndex->search($query);
         foreach ($result->getResults() as $result)
         {
@@ -161,7 +162,7 @@ class ProjectAssetService implements IAssetService
     public function findByOrigin($origin)
     {
         $originFilter = new Elastica\Filter\Term();
-        $originFilter->setTerm(array('origin.raw' => $origin));
+        $originFilter->setTerm('origin.raw', $origin);
         $query = Elastica\Query::create($originFilter);
         $resultSet = $this->assetDocIndex->getType('asset')->search($query);
         if (0 === $resultSet->count())

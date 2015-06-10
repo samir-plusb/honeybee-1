@@ -19,9 +19,6 @@ class ListQueryBuilder extends DefaultQueryBuilder
             ? $this->buildSearchQuery($state->getSearch())
             : new Elastica\Query\MatchAll();
 
-        $query = Elastica\Query::create($innerQuery)->addSort(
-            $this->prepareSortingParams($config, $state)
-        );
         $filter = new Elastica\Filter\BoolNot(
             new Elastica\Filter\Term(array('meta.is_deleted' => TRUE))
         );
@@ -36,7 +33,12 @@ class ListQueryBuilder extends DefaultQueryBuilder
             $filter = $container;
         }
 
-        return $query->setPostFilter($filter);
+        $filteredQuery = new Elastica\Query\Filtered($innerQuery, $filter);
+        $query = Elastica\Query::create($filteredQuery)->addSort(
+            $this->prepareSortingParams($config, $state)
+        );
+
+        return $query;
     }
 
     protected function prepareSortingParams(IListConfig $config, IListState $state)
