@@ -37,6 +37,7 @@ class SuggestQueryBuilder implements IQueryBuilder
         $sortKey = sprintf('%s.sort', $field);
         $sortDefs[$sortKey] = 'asc';
 
-        return $query->addSort($sortDefs);
+//        return $query->addSort($sortDefs);
+        return $query;
     }
 }
