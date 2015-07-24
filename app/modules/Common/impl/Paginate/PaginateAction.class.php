@@ -26,6 +26,9 @@ class Common_PaginateAction extends CommonBaseAction
         $listConfig = $parameters->getParameter('config');
         $listState = $parameters->getParameter('state');
 
+	//pass AssigneeFilterQueryBuilder to ListAction
+	$assignedFilter =  ($listConfig->getQueryBuilder()  ===  'AssigneeFilterQueryBuilder') ? 'true' : 'false';
+	
         $limit = $listState->getLimit();
         $routeName = $listConfig->getRouteName();
         $currentOffset = $listState->getOffset();
@@ -54,6 +57,7 @@ class Common_PaginateAction extends CommonBaseAction
             'paging_range' => $pagingRange,
             'limit' => $limit,
             'offset' => $currentOffset,
+	    'only_assigned_docs' => $assignedFilter,
             'total_count' => $totalCount,
             'total_pages' => $totalPages,
             'route_name' => $routeName,

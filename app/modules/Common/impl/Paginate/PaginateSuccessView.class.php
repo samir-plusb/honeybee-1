@@ -51,27 +51,33 @@ class Common_Paginate_PaginateSuccessView extends CommonBaseView
         $pageLinksData = array(
             'first_page' => array(
                 'limit' => $limit,
-                'offset' => 0
+                'offset' => 0,
+		'only_assigned_docs' => $this->getAttribute('only_assigned_docs')
             ),
             'last_page' => array(
                 'limit' => $limit,
-                'offset' => $lastPage * $limit
+                'offset' => $lastPage * $limit,
+		'only_assigned_docs' => $this->getAttribute('only_assigned_docs')
             ),
             'second_page' => array(
                 'limit' => $limit,
-                'offset' => $limit
+                'offset' => $limit,
+		'only_assigned_docs' => $this->getAttribute('only_assigned_docs')
             ),
             'second_last_page' => array(
                 'limit' => $limit,
-                'offset' => ($lastPage - 1) * $limit
+                'offset' => ($lastPage - 1) * $limit,
+		'only_assigned_docs' => $this->getAttribute('only_assigned_docs')
             ),
             'previous_page' => array(
                 'limit' => $limit,
-                'offset' => ($currentPage - 1) * $limit
+                'offset' => ($currentPage - 1) * $limit,
+		'only_assigned_docs' => $this->getAttribute('only_assigned_docs')
             ),
             'next_page' => array(
                 'limit' => $limit,
-                'offset' => ($currentPage + 1) * $limit
+                'offset' => ($currentPage + 1) * $limit,
+		'only_assigned_docs' => $this->getAttribute('only_assigned_docs')
             )
         );
 
