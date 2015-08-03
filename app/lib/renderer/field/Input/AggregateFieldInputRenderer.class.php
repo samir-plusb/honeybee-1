@@ -52,9 +52,11 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
                 )
             );
         }
-
         $translation = AgaviContext::getInstance()->getTranslationManager();
         $aggregate_modules = array();
+
+        //set correct index
+        $position = count($aggregates);
 
         foreach ($this->getField()->getAggregateModules() as $pos => $aggregateModule)
         {
@@ -68,7 +70,7 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
                     array(
                         $document->getModule()->getOption('prefix'),
                         $this->getField()->getName(),
-                        $pos
+                        $position
                     )
                 ),
                 'type_field' => sprintf(
@@ -76,7 +78,7 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
                     $document->getModule()->getOption('prefix'),
                     implode('][', array(
                         $this->getField()->getName(),
-                        $pos
+                        $position
                     ))
                 )
             );

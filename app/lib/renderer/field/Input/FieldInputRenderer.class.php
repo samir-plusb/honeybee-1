@@ -122,7 +122,7 @@ class FieldInputRenderer extends FieldRenderer
     protected function generateInputId(IDocument $document)
     {
         return sprintf(
-            'input-%s',
+            'f-input-%s',
             md5($this->generateInputName($document))
         );
     }
