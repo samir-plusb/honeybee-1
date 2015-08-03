@@ -10,11 +10,14 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
 
     widgets: null,
 
+    aggregates: 0,
+
     init: function(element, options, ready_callback)
     {
         this.templates = {};
         this.widgets = [];
         this.parent(element, options, ready_callback);
+        this.aggregates = $('.aggregate').length;
     },
 
     initGui: function()
@@ -148,6 +151,36 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
             focus = true;
         }
         var module_item_markup = this.templates[doc_type];
+
+        //here we need to hack the #!@$* out of our markup
+        var re = new RegExp( '\\[' + this.aggregates + '\\]' , 'g' );
+        var subst = '[' + $('.aggregate').length + ']';
+        module_item_markup = module_item_markup.replace(re, subst);
+        //still not hacking deep enough.. must.. hack... more... code..... !
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", container = module_item_markup.split('control-group');
+        container.forEach(function(el, idx){
+            var fakeHash = "f-input-";
+            //generate 32 random characters
+            for( var i=0; i < 32; i++ ){
+                fakeHash += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            //replace original hash with fakehash
+            container[idx] = container[idx].replace(/(f-input-\S{32})/gm, fakeHash);
+            //the image-widget is in a seperate section and needs to be handled separately
+            if(container[idx].indexOf('field-wrapper-image') > -1){
+                fakeHash = "f-input-";
+                for( var i=0; i < 32; i++ ){
+                    fakeHash += possible.charAt(Math.floor(Math.random() * possible.length));
+                }
+                var imageBlock = container[idx].split('field-wrapper-image');
+                imageBlock[1] = imageBlock[1].replace(/(f-input-\S{32})/gm, fakeHash);
+                container[idx] = imageBlock.join('field-wrapper-image');
+
+            }
+        });
+        module_item_markup = container.join('control-group');
+        //code successfully hacked. now go and do your stuff.
+
         var list_item = $('<li class="row-fluid aggregate"></li>');
         list_item.html(module_item_markup);
         this.aggregate_list.append(list_item);
