@@ -2,13 +2,16 @@
 
 namespace Honeybee\Core\Repository;
 
+use Honeybee\Agavi\Database\CouchDb\Database;
 use Honeybee\Core\Finder\IFinder;
+use Honeybee\Core\Storage\CouchDb\DocumentStorage;
 use Honeybee\Core\Storage\IStorage;
 use Honeybee\Core\Dat0r\Module;
 use Honeybee\Core\Dat0r\ModuleService;
 use Honeybee\Core\Dat0r\Document;
 use Honeybee\Core\Dat0r\DocumentCollection;
 use Honeybee\Core\Dat0r\RelationManager;
+use Honeybee\Domain\Topic\TopicModule;
 
 class DocumentRepository extends BaseRepository
 {
@@ -38,6 +41,9 @@ class DocumentRepository extends BaseRepository
     // @todo add a get method to the finder and use it instead of the storage here.
     public function read($identifier)
     {
+        //update category/topic relation
+        $this->updateCategoryReferences($identifier);
+
         $documents = new DocumentCollection();
 
         if (is_array($identifier)) {
@@ -64,6 +70,7 @@ class DocumentRepository extends BaseRepository
 
             $document->onBeforeWrite();
             $data = $document->toArray();
+            // backreference
             $data['type'] = get_class($document);
             $revision = $this->getStorage()->write($data);
             $document->setRevision($revision);
@@ -84,5 +91,61 @@ class DocumentRepository extends BaseRepository
         }
 
         return $errors;
+    }
+
+
+    public function updateCategoryReferences($identifier){
+        if(is_int(strpos($identifier, 'category'))){
+            $con = $this->getStorage()->getDatabase()->getConnection();
+            $alltopics = $con->getAllDocs("famport_production_topic", array('include_docs' => true));
+            foreach ($alltopics['rows'] as $topic) {
+                if(!empty($topic['doc']['categories'])){
+                    $topicId = $topic['doc']['_id'];
+                    $categories = $topic['doc']['categories'];
+                    foreach ($categories as $category) {
+                        if($category['id'] === $identifier){
+                            $this->makeBackReference($identifier, $topicId, 'topics');
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /** Check references and make back-reference if it doesn't exist.
+     *
+     * @param string $identifier the elements id
+     * @param string $referenceId the id of the referencing element
+     * @param string $field the type of the referencing element
+     */
+    public function makeBackReference($identifier, $referenceId, $field){
+        $data = $this->getStorage()->read($identifier);
+        $allreadyLinked = false;
+        foreach ($data[$field] as $existingReference) {
+            if($existingReference['id'] === $referenceId){
+                $allreadyLinked = true;
+            }
+        }
+        if(!$allreadyLinked){
+            $newReference = array("id" => $referenceId, "module" => $this->convertPlural($field));
+            $data[$field][] = $newReference;
+            $document = $this->getModule()->createDocument($data);
+            $this->write($document);
+        }
+    }
+
+    /** Convert field name to module name
+     *
+     * @param $fieldName
+     * @return string
+     */
+    public function convertPlural($fieldName){
+        $singular = "topic";
+        switch($fieldName){
+            case "topics":
+                $singular = "topic";
+                break;
+        }
+        return $singular;
     }
 }
