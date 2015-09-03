@@ -41,8 +41,8 @@ class DocumentRepository extends BaseRepository
     // @todo add a get method to the finder and use it instead of the storage here.
     public function read($identifier)
     {
-        //update category/topic relation
-        $this->updateCategoryReferences($identifier);
+        //update relation display in backend
+        $this->updateExtReferences($identifier);
 
         $documents = new DocumentCollection();
 
@@ -70,7 +70,7 @@ class DocumentRepository extends BaseRepository
 
             $document->onBeforeWrite();
             $data = $document->toArray();
-            // backreference
+            // backreference (delete values in referencing modules )
             $data['type'] = get_class($document);
             $revision = $this->getStorage()->write($data);
             $document->setRevision($revision);
@@ -94,23 +94,59 @@ class DocumentRepository extends BaseRepository
     }
 
 
-    public function updateCategoryReferences($identifier){
-        if(is_int(strpos($identifier, 'category'))){
-            $con = $this->getStorage()->getDatabase()->getConnection();
-            $alltopics = $con->getAllDocs("famport_production_topic", array('include_docs' => true));
-            foreach ($alltopics['rows'] as $topic) {
-                if(!empty($topic['doc']['categories'])){
-                    $topicId = $topic['doc']['_id'];
-                    $categories = $topic['doc']['categories'];
-                    foreach ($categories as $category) {
-                        if($category['id'] === $identifier){
-                            $this->makeBackReference($identifier, $topicId, 'topics');
-                        }
+    public function updateExtReferences($identifier){
+        $referencesToUpdate = array();
+        $index = "";
+        if(is_int(strpos($identifier, 'category'))){ //categories display referencing topics
+            array_push($referencesToUpdate, 'topics');
+            array_push($referencesToUpdate, 'news');
+            $index = 'categories';
+        } elseif(is_int(strpos($identifier, 'external_link'))) { //categories display referencing topics, guides, news
+            array_push($referencesToUpdate, 'topics');
+            array_push($referencesToUpdate, 'guides');
+            array_push($referencesToUpdate, 'news');
+            $index = 'externalPages';
+        }
+        if(count($referencesToUpdate) > 0){
+            foreach ($referencesToUpdate as $ref) {
+                $this->connectReferences($identifier, $ref, $index);
+            }
+        }
+    }
+
+    /** get external db -> read and update references to current module
+     * @param $identifier
+     * @param $module
+     * @param $field
+     */
+    public function connectReferences($identifier, $module, $field){
+        // since there is no easy way to get the couchdbnames...
+        switch($module){
+            case 'topics':
+                $db = "famport_production_topic";
+                break;
+            case 'news':
+                $db = "famport_production_news";
+                break;
+            case 'guides':
+                $db = "production_famport_guide";
+                break;
+        }
+        $con = $this->getStorage()->getDatabase()->getConnection();
+        $allDocs = $con->getAllDocs($db, array('include_docs' => true));
+        foreach ($allDocs['rows'] as $document) {
+            if(!empty($document['doc'][$field])){
+                $documentId = $document['doc']['_id'];
+                $references = $document['doc'][$field];
+                foreach ($references as $reference) {
+                    if($reference['id'] === $identifier){
+                        $this->makeBackReference($identifier, $documentId, $module);
                     }
                 }
             }
         }
     }
+
 
     /** Check references and make back-reference if it doesn't exist.
      *
@@ -145,6 +181,13 @@ class DocumentRepository extends BaseRepository
             case "topics":
                 $singular = "topic";
                 break;
+            case "guides":
+                $singular = "guide";
+                break;
+            case "news":
+                $singular = "news";
+                break;
+
         }
         return $singular;
     }
