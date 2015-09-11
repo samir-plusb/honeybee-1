@@ -400,6 +400,12 @@ honeybee.widgets.LocationWidget.Location = honeybee.core.BaseObject.extend({
 
     city: null,
 
+    homepage: null,
+
+    mail: null,
+
+    openinghours: null,
+
     administrative_district: null,
 
     district: null,
@@ -417,6 +423,9 @@ honeybee.widgets.LocationWidget.Location = honeybee.core.BaseObject.extend({
         this.housenumber = ko.observable(l.housenumber || '');
         this.name_detail = ko.observable(l.name_detail || '');
         this.description = ko.observable(l.description || '');
+        this.mail = ko.observable(l.mail || '');
+        this.homepage = ko.observable(l.homepage || '');
+        this.openinghours = ko.observable(l.openinghours || '');
         this.city = ko.observable(l.city || '');
         this.zipcode = ko.observable(l.postalCode || l.zipcode || '');
         this.administrative_district = ko.observable(l.administrativeDistrict || '');
