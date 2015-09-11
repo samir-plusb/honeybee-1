@@ -293,7 +293,7 @@ class Process
 
         if (NULL === $gateDef)
         {
-            throw new Exception("The given workflow gate '$gate' does not exist.");
+            throw new Exception("The given workflow gate '$gateName' does not exist.");
         }
 
         try
