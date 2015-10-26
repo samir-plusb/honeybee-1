@@ -30,7 +30,7 @@ class ArchivePlugin extends BasePlugin
         {
             $this->logError(sprintf(
                 "An error occured while depublishing/archiving document: %s\nError: %s",
-                $workflowItem->getIdentifier(),
+                $resource->getIdentifier(),
                 $e->getMessage()
             ));
 

@@ -20,3 +20,5 @@ select2.min.js
 MarkerWithLabel.js
 moment.min.js
 epiceditor.min.js
+pikaday.js
+pikaday.jquery.js
