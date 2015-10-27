@@ -34,7 +34,6 @@ class PropertyFilter extends BaseFilter
             }
             $field = $module->getField($fieldname);
             $prop_value = $document->getValue($fieldname);
-
             $value = NULL;
 
             if ($field instanceof ReferenceField)
@@ -86,6 +85,12 @@ class PropertyFilter extends BaseFilter
             }
             else
             {
+
+                if($fieldname == 'customDate' && $prop_value == ''){
+                    $publishDate = $document_data['meta']['publishedAt'];
+                    $publishDate = explode('T', $publishDate)[0];
+                    $prop_value = $publishDate;
+                }
                 $value = $prop_value;
             }
 
