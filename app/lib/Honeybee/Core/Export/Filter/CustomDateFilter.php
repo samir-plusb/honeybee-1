@@ -39,7 +39,7 @@ class CustomDateFilter extends BaseFilter
                 $publishDate = $document_data['meta']['publishedAt'];
                 $publishDate = explode('T', $publishDate)[0];
                 $prop_value = $publishDate;
-                error_log('normalizing shortId ' . $module->getField('shortId') . ' with value: ' . $prop_value);
+                error_log('normalizing shortId ' . $document_data["shortId"] . ' with value: ' . $prop_value);
             }
             $value = $prop_value;
 
