@@ -12,7 +12,7 @@ class CustomDateFilter extends BaseFilter
     {
         $filter_output = array();
 
-        $property_map = array("customDate" => "customDate");
+        $property_map = $this->getConfig()->get('properties');
         $module = $document->getModule();
         $document_data = $document->toArray();
 
@@ -35,11 +35,12 @@ class CustomDateFilter extends BaseFilter
             $prop_value = $document->getValue($fieldname);
             $value = NULL;
 
-            if($fieldname == 'customDate' && $prop_value == ''){
+            error_log($fieldname . ' -> ' . $prop_value);
+            if($fieldname == 'newDate' && $prop_value == ''){
                 $publishDate = $document_data['meta']['publishedAt'];
                 $publishDate = explode('T', $publishDate)[0];
                 $prop_value = $publishDate;
-                error_log('normalizing shortId ' . $document_data["shortId"] . ' with value: ' . $prop_value);
+                error_log($fieldname . ' set to: ' . $prop_value);
             }
             $value = $prop_value;
 
