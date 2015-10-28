@@ -37,8 +37,16 @@ class CustomDateFilter extends BaseFilter
 
             error_log($fieldname . ' -> ' . $prop_value);
             if($fieldname == 'newDate' && $prop_value == ''){
-                $publishDate = $document_data['meta']['publishedAt'];
-                $publishDate = explode('T', $publishDate)[0];
+
+                if($document_data['customDate'] != ''){
+                    $publishDate = $document_data['customDate'];
+                    $parts = explode('.', $publishDate);
+                    $publishDate = implode('-', array_reverse($parts));
+                    error_log('reversed: ' . $publishDate);
+                } else {
+                    $publishDate = $document_data['meta']['publishedAt'];
+                    $publishDate = explode('T', $publishDate)[0];
+                }
                 $prop_value = $publishDate;
                 error_log($fieldname . ' set to: ' . $prop_value);
             }
