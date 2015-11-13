@@ -157,9 +157,11 @@ class DocumentRepository extends BaseRepository
     public function makeBackReference($identifier, $referenceId, $field){
         $data = $this->getStorage()->read($identifier);
         $allreadyLinked = false;
-        foreach ($data[$field] as $existingReference) {
-            if($existingReference['id'] === $referenceId){
-                $allreadyLinked = true;
+        if(array_key_exists($field, $data)){
+            foreach ($data[$field] as $existingReference) {
+                if($existingReference['id'] === $referenceId){
+                    $allreadyLinked = true;
+                }
             }
         }
         if(!$allreadyLinked){
