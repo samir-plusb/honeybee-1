@@ -124,7 +124,7 @@ class Spinner extends Runnable
                 $this->writeStats();
                 break;
             default:
-                $this->log("Received unhandled system signal. Ignoring: " . print_r($info, true));
+                $this->log("Received unhandled system signal. Ignoring: " . print_r($signo, true));
         }
     }
 

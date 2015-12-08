@@ -44,7 +44,7 @@ class SpinnerStatsWriter
         $status_filepath = $this->config->get('stats_display_file');
         $bytes_written = file_put_contents($status_filepath, implode(PHP_EOL, $output_lines));
         if (false === $bytes_written) {
-            throw new RuntimeException("Unable to write spinner stats at location: " . $data_filepath);
+            throw new RuntimeException("Unable to write spinner stats at location: " . $status_filepath);
         }
     }
 

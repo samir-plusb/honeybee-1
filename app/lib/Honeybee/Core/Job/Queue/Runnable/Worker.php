@@ -44,7 +44,7 @@ class Worker extends Runnable
                 $this->sendStats();
                 break;
             default:
-                $this->log("... received unhandled system signal. Ignoring: " . print_r($info, true));
+                $this->log("... received unhandled system signal. Ignoring: " . print_r($signo, true));
         }
     }
 
