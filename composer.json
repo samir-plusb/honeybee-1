@@ -176,7 +176,7 @@
                 "name": "kineticjs/kineticjs",
                 "version": "4.5.1",
                 "dist": {
-                    "url": "http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.1.js",
+                    "url": "https://raw.githubusercontent.com/ericdrowell/KineticJS/master/kinetic.js",
                     "type": "file"
                 }
             }
