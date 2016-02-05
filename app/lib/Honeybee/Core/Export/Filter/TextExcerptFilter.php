@@ -59,6 +59,10 @@ class TextExcerptFilter extends BaseFilter
 
         $excerpt = $this->stripStuff($text);
 
+        if($config->get('cut_off', false)){
+            return ($this->extractCharacters($excerpt, $max_characters) . '...');
+        }
+
         $character_count = mb_strlen($excerpt);
         $word_count = count(explode(" ", $excerpt));
         $paragraph_count = count(explode("</p>", $excerpt));
