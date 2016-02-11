@@ -135,6 +135,12 @@ class PropertyFilter extends BaseFilter
             Filter\RemapFilter::setArrayValue($filter_output, $export_key, $value);
         }
 
+        # custom properties #
+        if($module->getName() == 'Download'){
+            $step = $document_data['workflowTicket'][0]['workflowStep'] == 'archived' ? 1 : '';
+            Filter\RemapFilter::setArrayValue($filter_output, 'depublished', $step);
+        }
+
         return $filter_output;
     }
 
