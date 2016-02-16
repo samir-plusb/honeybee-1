@@ -164,6 +164,7 @@ class AssetFilter extends BaseFilter
                 'modified' => date(DATE_ISO8601, filemtime($filePath)),
                 'copyright' => isset($metaData['copyright']) ? $metaData['copyright'] : '',
                 'copyrightUrl' => isset($metaData['copyright_url']) ? $metaData['copyright_url'] : '',
+                'alt_text' => isset($metaData['alt_text']) ? $metaData['alt_text'] : '',
                 'caption' => isset($metaData['caption']) ? $metaData['caption'] : '',
                 'type' => 'asset'
             );

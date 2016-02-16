@@ -163,6 +163,7 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
                             'caption': that.dialog.twodal('promptVal', '.input-caption'),
                             'copyright': that.dialog.twodal('promptVal', '.input-copyright'),
                             'copyright_url': that.dialog.twodal('promptVal', '.input-copyright-url'),
+                            'alt_text': that.dialog.twodal('promptVal', '.alt-text'),
                             'aoi': that.aoi_enabled() ? that.area_of_interest() : null
                         }
                     );
@@ -220,6 +221,7 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
         this.dialog.twodal('promptVal', '.input-caption', asset.caption());
         this.dialog.twodal('promptVal', '.input-copyright', asset.copyright());
         this.dialog.twodal('promptVal', '.input-copyright-url', asset.copyright_url());
+        this.dialog.twodal('promptVal', '.alt-text', asset.alt_text());
         this.area_of_interest(asset.aoi || [0, 0, 20, 20]);
 
         var that = this;
@@ -329,6 +331,7 @@ honeybee.widgets.AssetList = honeybee.widgets.Widget.extend({
             asset.caption(newData.caption || '');
             asset.copyright_url(newData.copyright_url || '');
             asset.copyright(newData.copyright || '');
+            asset.alt_text(newData.alt_text || '');
             asset.setAoi(newData.aoi);
             asset.is_loading(false);
         },
@@ -389,6 +392,10 @@ honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
     copyright_url: null,
 
     copyright_url_txt: null,
+
+    alt_text: null,
+
+    alt_text_txt: null,
 
     popover_content: null,
 
@@ -458,6 +465,11 @@ honeybee.widgets.AssetList.Asset = honeybee.core.BaseObject.extend({
         this.copyright_url_txt = ko.computed(function()
         {
             return 0 === that.copyright_url().length ? ' - ' : that.copyright_url();
+        });
+        this.alt_text = ko.observable(data.alt_text || '');
+        this.alt_text_txt = ko.computed(function()
+        {
+            return 0 === that.alt_text().length ? ' - ' : that.alt_text();
         });
         this.has_id = ko.computed(function()
         {

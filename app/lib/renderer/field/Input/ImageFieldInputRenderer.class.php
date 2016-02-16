@@ -31,6 +31,7 @@ class ImageFieldInputRenderer extends FieldInputRenderer
                 'caption' => isset($metaData['caption']) ? $metaData['caption'] : '',
                 'copyright' => isset($metaData['copyright']) ? $metaData['copyright'] : '',
                 'copyright_url' => isset($metaData['copyright_url']) ? $metaData['copyright_url'] : '',
+                'alt_text' => isset($metaData['alt_text']) ? $metaData['alt_text'] : '',
                 'aoi' => empty($metaData['aoi']) ? NULL : $metaData['aoi'],
                 'width' => isset($size[0]) ? $size[0] : '',
                 'height' => isset($size[0]) ? $size[1] : '',
