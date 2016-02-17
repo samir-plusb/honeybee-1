@@ -97,10 +97,10 @@ class DocumentRepository extends BaseRepository
     public function updateExtReferences($identifier){
         $referencesToUpdate = array();
         $index = "";
-        if(is_int(strpos($identifier, 'category'))){ //categories display referencing topics
+        if(is_int(strpos($identifier, 'category')) || is_int(strpos($identifier, 'download'))){ //categories display referencing topics
             array_push($referencesToUpdate, 'topics');
             array_push($referencesToUpdate, 'news');
-            $index = 'categories';
+            $index = is_int(strpos($identifier, 'category')) ? 'category' : 'downloads';
         } elseif(is_int(strpos($identifier, 'external_link'))) { //categories display referencing topics, guides, news
             array_push($referencesToUpdate, 'topics');
             array_push($referencesToUpdate, 'guides');
