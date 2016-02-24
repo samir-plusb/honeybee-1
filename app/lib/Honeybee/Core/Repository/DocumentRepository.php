@@ -97,15 +97,24 @@ class DocumentRepository extends BaseRepository
     public function updateExtReferences($identifier){
         $referencesToUpdate = array();
         $index = "";
-        if(is_int(strpos($identifier, 'category')) || is_int(strpos($identifier, 'download'))){ //categories display referencing topics
+        if(is_int(strpos($identifier, 'category'))){ //categories display referencing topics
             array_push($referencesToUpdate, 'topics');
             array_push($referencesToUpdate, 'news');
-            $index = is_int(strpos($identifier, 'category')) ? 'category' : 'downloads';
+            array_push($referencesToUpdate, 'survey');
+            $index = 'category';
         } elseif(is_int(strpos($identifier, 'external_link'))) { //categories display referencing topics, guides, news
             array_push($referencesToUpdate, 'topics');
             array_push($referencesToUpdate, 'guides');
             array_push($referencesToUpdate, 'news');
             $index = 'externalPages';
+        } elseif(is_int(strpos($identifier, 'download'))){
+            array_push($referencesToUpdate, 'topics');
+            array_push($referencesToUpdate, 'news');
+            $index = 'downloads';
+        } elseif(is_int(strpos($identifier, 'survey'))){
+            array_push($referencesToUpdate, 'survey');
+            array_push($referencesToUpdate, 'category');
+            $index = 'surveys';
         }
         if(count($referencesToUpdate) > 0){
             foreach ($referencesToUpdate as $ref) {
@@ -130,6 +139,12 @@ class DocumentRepository extends BaseRepository
                 break;
             case 'guides':
                 $db = "production_famport_guide";
+                break;
+            case 'survey':
+                $db = "production_famport_survey";
+                break;
+            case 'category':
+                $db = "famport_production_category";
                 break;
         }
         $con = $this->getStorage()->getDatabase()->getConnection();
@@ -189,7 +204,9 @@ class DocumentRepository extends BaseRepository
             case "news":
                 $singular = "news";
                 break;
-
+            case "surveys":
+                $singular = "survey";
+                break;
         }
         return $singular;
     }

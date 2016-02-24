@@ -1,4 +1,5 @@
 <input type="hidden" data-bind="attr: { name: fieldname }" value="" />
+<script>$(document).ready(function(){ if($('.controller-edit').hasClass('edit-survey') ) $('.thumbnails.asset-list').prepend('<label class="control-label insert-from-asset-list">Bild</label>'); });</script>
 <ul class="thumbnails asset-list" data-bind="foreach: assets">
 <!-- ko if: $data.name -->
     <li class="asset-item" data-trigger="hover" data-html="true" data-animation="true" data-delay="700"
