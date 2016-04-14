@@ -53,6 +53,10 @@ help:
 	@echo "update-vendor - update dependencies in vendor folder."
 	@echo "update-vendor-dev - update development dependencies in vendor folder."
 	@echo ""
+	@echo "Custom functions"
+	@echo "----------------"
+	@echo "  verify-links - Verify external_link documents that are stuck in 'verify' state"
+	@echo ""
 	@exit 0
 
 
@@ -97,6 +101,15 @@ deploy-resources:
 	@if [ ! -d pub/static/deploy ]; then mkdir pub/static/deploy; fi
 	@rm -rf pub/static/deploy/*
 	@php bin/deploy-resources.php
+
+#
+# Verify external_link documents that are stuck in verify state
+#
+
+verify-links:
+
+	@php bin/verify-links.php
+	@bin/cli external_link.export
 
 
 #
