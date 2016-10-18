@@ -115,6 +115,8 @@ class DocumentRepository extends BaseRepository
             array_push($referencesToUpdate, 'survey');
             array_push($referencesToUpdate, 'category');
             $index = 'surveys';
+        } elseif(is_int(strpos($identifier, 'event'))){
+            $index = 'events';
         }
         if(count($referencesToUpdate) > 0){
             foreach ($referencesToUpdate as $ref) {
@@ -145,6 +147,9 @@ class DocumentRepository extends BaseRepository
                 break;
             case 'category':
                 $db = "famport_production_category";
+                break;
+            case 'events':
+                $db = "production_famport_event";
                 break;
         }
         $con = $this->getStorage()->getDatabase()->getConnection();
@@ -206,6 +211,9 @@ class DocumentRepository extends BaseRepository
                 break;
             case "surveys":
                 $singular = "survey";
+                break;
+            case "events":
+                $singular = "event";
                 break;
         }
         return $singular;
