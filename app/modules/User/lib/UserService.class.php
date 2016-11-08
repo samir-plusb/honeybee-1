@@ -47,7 +47,7 @@ class UserService extends DocumentService
             )
         );
 
-        $message->setSender(array('no-reply@honeybee-cms.de' => $tm->_('brand-name', 'modules.labels')));
+        $message->setSender(array('familienportal@plus-b.net' => $tm->_('brand-name', 'modules.labels')));
         $message->setFrom(array($project_contact['email'] => $tm->_('brand-name', 'modules.labels')));
         $message->setTo(array($user->getEmail() => $user->getFirstname() . ' ' . $user->getLastname()));
         $message->setReplyTo(array($project_contact['email'] => $project_contact['name']));

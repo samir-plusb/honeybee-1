@@ -43,9 +43,13 @@ The following settings are supported for mailer settings:
         <mailers default="default">
             <mailer name="default">
                 <settings>
+                    <setting name="swift_transport_class">\Swift_SmtpTransport</setting>
                     <setting name="charset">utf-8</setting>
                     <setting name="logging_enabled">true</setting>
                     <setting name="log_messages">false</setting>
+                    <setting name="host">82.210.31.81</setting>
+                    <setting name="username">familienportal@plus-b.net</setting>
+                    <setting name="password">eB89oNoZEzEn</setting>
                 </settings>
             </mailer>
         </mailers>

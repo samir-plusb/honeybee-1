@@ -84,10 +84,21 @@ class MailService implements IService, IMailer
     protected function initSwiftMailer($mailer_config_name = null)
     {
         $settings = $this->getMailerSettings($mailer_config_name);
-
         $class = $settings->get('swift_transport_class', '\\Swift_SendmailTransport');
 
-        $this->connection = $class::newInstance();
+        if ($class == '\\Swift_SmtpTransport') {
+
+            $host = $settings->get('host', 'localhost');
+            $username = $settings->get('username', null);
+            $password = $settings->get('password', null);
+
+            $this->connection = $class::newInstance($host)
+                ->setUsername($username)
+                ->setPassword($password);
+        } else {
+            $this->connection = $class::newInstance();
+        }
+
         $this->mailer = \Swift_Mailer::newInstance($this->connection);
 
         \Swift_Preferences::getInstance()->setCharset($settings->get('charset', 'utf-8'));
