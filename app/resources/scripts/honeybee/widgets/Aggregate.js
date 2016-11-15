@@ -28,22 +28,42 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         this.element.find('.aggregate-module-item').each(function(pos, aggregate_module_item)
         {
             aggregate_module_item = $(aggregate_module_item);
+
             var tpl_element = aggregate_module_item.find('.aggregate-tpl');
-            var doc_type = aggregate_module_item
-                .find('.honeybee-js-type')
-                .val()
-                .split('\\')
-                .pop()
-                .toLowerCase();
 
-            that.templates[doc_type] = tpl_element.html();
-            aggregate_module_item.click(function(add_event)
-            {
-                add_event.preventDefault();
-                that.addAggregate(doc_type);
-            });
+            var hb_js_type = aggregate_module_item.find('.honeybee-js-type');
 
-            tpl_element.remove();
+            if(hb_js_type.length > 0){
+
+                var doc_type = aggregate_module_item
+                    .find('.honeybee-js-type')
+                    .val()
+                    .split('\\')
+                    .pop()
+                    .toLowerCase();
+                var wrapper_class = aggregate_module_item.closest('section').attr('class').substr(aggregate_module_item.closest('section').attr('class').indexOf('field-wrapper-'));
+                if (wrapper_class == 'field-wrapper-eventLocation') {
+                    doc_type = 'eventlocationdocument';
+                }
+                if(doc_type == 'accessibilityoptiondocument') {
+                    var regex_inputs = /name="event\[/g;
+                    var regex_type = /name="\[/g;
+                    var subst = "name=\"event[eventLocation][0][";
+                    var replaced_input_names = tpl_element.html().replace(regex_inputs,subst);
+                    replaced_input_names = replaced_input_names.replace(regex_type,subst);
+                    tpl_element.html(replaced_input_names);
+                }
+                that.templates[doc_type] = tpl_element.html();
+                aggregate_module_item.click(function(add_event)
+                {
+                    add_event.preventDefault();
+                    that.addAggregate(doc_type);
+                });
+
+                tpl_element.remove();
+
+            }
+
         });
 
         this.element.find('.aggregates-list .aggregate').each(function(idx, item)
@@ -184,7 +204,6 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
         var list_item = $('<li class="row-fluid aggregate"></li>');
         list_item.html(module_item_markup);
         this.aggregate_list.append(list_item);
-
         this.initAggregateListItem(list_item);
         this.renderAggregatePositions();
 
@@ -407,11 +426,15 @@ honeybee.widgets.Aggregate = honeybee.widgets.Widget.extend({
                 var name = input.attr('name');
                 if (name)
                 {
-                    input.attr(
-                        'name',
-                        name.replace(/\[\d+\]/, '[' + idx + ']')
-                    );
-                }
+                    // hacky hack because there seems no way to define a renderAggregatePositions function for accessibilityoption aggregates
+                    // @todo: find a way to define AccessibilityOption aggregate
+                    if(name.indexOf('barrierefreiheit') < 0){
+                        input.attr(
+                            'name',
+                            name.replace(/\[\d+\]/, '[' + idx + ']')
+                        );
+                    }
+                 }
             });
 
             var i = 0;

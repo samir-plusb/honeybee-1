@@ -52,6 +52,7 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
                 )
             );
         }
+
         $translation = AgaviContext::getInstance()->getTranslationManager();
         $aggregate_modules = array();
 
@@ -115,6 +116,12 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
 
         foreach ($document->getModule()->getFields() as $field)
         {
+            $nulls = array('barrierefreiheit' => 'event');
+            if(!empty($parentGroup) && $parentGroup[0] == null) {
+                $fieldname = $this->getField()->getName();
+                $parentGroup[0] = array_key_exists($fieldname, $nulls) ? $nulls[$fieldname] : null;
+            }
+
             $options = array(
                 'fieldpath' => $field->getName(),
                 'field_key' => $this->getField()->getName().'.'.strtolower($document->getModule()->getName()).'.'.$field->getName(),
@@ -122,10 +129,10 @@ class AggregateFieldInputRenderer extends FieldInputRenderer
                 'group' => $parentGroup,
                 'parent_document' => $parentDocument
             );
+
             $renderer = $factory->createRenderer($field, FieldRendererFactory::CTX_INPUT, $options);
             $renderedFields[$field->getName()] = $renderer->render($document);
         }
-
         return $renderedFields;
     }
 
