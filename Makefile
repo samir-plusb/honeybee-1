@@ -56,6 +56,7 @@ help:
 	@echo "Custom functions"
 	@echo "----------------"
 	@echo "  verify-links - Verify external_link documents that are stuck in 'verify' state"
+	@echo "  import-events - Import events from external source(s) into database and publish new events for frontend"
 	@echo ""
 	@exit 0
 
@@ -110,6 +111,15 @@ verify-links:
 
 	@php bin/verify-links.php
 	@bin/cli external_link.export
+
+#
+# Import events from external source(s) into database and publish new events for frontend
+#
+
+import-events:
+
+	@bin/cli event.fetch
+	@bin/cli event.export
 
 
 #
