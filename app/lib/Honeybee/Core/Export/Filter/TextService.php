@@ -71,7 +71,7 @@ class TextService
 
     public function stripNewlines($text)
     {
-        return preg_replace('#\n|\r|\r\n|\n\r#', '', $text);
+        return preg_replace('#\n|\r|\r\n|\n\r#', ' ', $text);
     }
 
     public function stripMultipleSpaces($text)
