@@ -91,6 +91,14 @@ class TextService
         return  preg_replace('#\s{2,}#', ' ', $text);
     }
 
+    public function stripEmptyTags($text, $allowed_tags = '')
+    {
+        $text = preg_replace('/(<\/[^>]+?>)(<[^>\/][^>]*?>)/', '$1 $2', $text);
+        $text = strip_tags($text, $allowed_tags);
+        while (!ctype_alnum(substr($text,0,1))) $text = substr($text,1);
+        return  preg_replace('#\s{2,}#', ' ', $text);
+    }
+
     protected function getSenctenceChunker()
     {
         if (!$this->sentence_chunker) {

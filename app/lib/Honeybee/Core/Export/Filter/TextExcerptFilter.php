@@ -118,6 +118,9 @@ class TextExcerptFilter extends BaseFilter
         if ($this->config->get('strip_excessive_whitespace', true)) {
             $text =  $text_service->stripMultipleSpaces($text);
         }
+        if ($this->config->get('strip_empty_tags', true)) {
+            $text =  $text_service->stripEmptyTags($text);
+        }
         if ($this->config->get('strip_tags', true)) {
             $allowed_tags = $this->config->get('allowed_tags', '');
             if ($this->config->get('paragraphs', false)) {
