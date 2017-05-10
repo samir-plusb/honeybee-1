@@ -8,6 +8,8 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
     initialWidth: null,
     availableWidth: null,
     hiddenWidths: [],
+    removedWidthAdded: -500,
+    mobile_more_added: false,
 
     init: function(options)
     {
@@ -54,11 +56,14 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
     {
         var lastElement, addedWidth, removedWidth;
         var counter = 0;
+        var toggled = false;
+        this.removedWidthAdded = -500;
 
         this.availableWidth = this.getAvailableWidth();
         this.currentWidth = this.domElement.outerWidth();
 
-        if (this.currentWidth >= this.availableWidth)
+        // 'Sie sind angemeldet als..'
+        if (this.currentWidth >= this.availableWidth || this.availableWidth < 1024)
         {
             this.loginText.hide();
         }
@@ -68,16 +73,55 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
 
         if (this.currentWidth > this.availableWidth)
         {
+            // elemente einklappen und in die Liste "Mehr..." einfügen
             while (this.currentWidth > this.availableWidth)
             {
                 counter++;
-                removedWidth = this.hideNavElement();
-                this.currentWidth = this.domElement.outerWidth();
+                if(this.availableWidth < 1024)
+                {
+                    // make these entries accessible for mobile users
+                    removedWidth = this.dontHideNavElement();
+                    this.removedWidthAdded += removedWidth;
+                    this.currentWidth = this.domElement.outerWidth() - this.removedWidthAdded;
+                }
+                else
+                {
+                    removedWidth = this.hideNavElement();
+                    this.currentWidth = this.domElement.outerWidth();
+                }
                 if (removedWidth === 0 || counter > 50) // magic constant for maximum number of modules :-D
                 {
                     break;
                 }
                 this.hiddenWidths.push(removedWidth);
+            }
+
+            //add mobile more button and listener
+            if(this.removedWidthAdded > -500 && !this.mobile_more_added)
+            {
+                var mobile_more = this.domElement.find('li.dropdown.more').clone();
+                mobile_more.prop('id','mobile_more').show().find('ul, a').remove();
+                var innerDiv = '<div class="menu-trigger" id="drop-more_div">▾</div>'
+                mobile_more.append(innerDiv);
+                mobile_more.on('click',function () {
+
+                    toggled = !toggled;
+
+                    var toggleText = toggled ? '▴' : '▾' ;
+
+                    $('#drop-more_div').text(toggleText);
+
+                    // instead of .slideToggle().toggleClass('triggered'); which doesn't work on iPad..
+                    if(toggled){
+                        $('li.dropdown.mobile__second-row--nagivation').slideDown().addClass('triggered');
+                    } else {
+                        $('li.dropdown.mobile__second-row--nagivation').slideUp().removeClass('triggered');
+                    }
+
+                });
+                this.domElement.children('li.dropdown.mobile__second-row--nagivation').hide().first().before(mobile_more);
+                this.domElement.css('width', this.domElement.outerWidth() + 5);
+                this.mobile_more_added = true;
             }
         }
         else
@@ -137,6 +181,28 @@ honeybee.navigation.MainNavigationController = honeybee.core.BaseObject.extend({
         element.removeClass('dropdown').addClass('dropdown-submenu pull-left');
         element.find('a > b.caret').hide();
         element.prependTo(this.overflowListElement);
+
+        if (this.overflowListElement.children().length > 0)
+        {
+            this.overflowElement.show();
+        }
+
+        return width;
+    },
+
+    dontHideNavElement: function()
+    {
+        element = this.domElement.children('li.dropdown').not('.more, .mobile__second-row--nagivation').last();
+        var width = element.outerWidth() || 0;
+        if (width === 0)
+        {
+            return 0;
+        }
+
+        // element.removeClass('dropdown').addClass('dropdown-submenu pull-left');
+        // element.find('a > b.caret').hide();
+        element.addClass('mobile__second-row--nagivation');
+        // element.prependTo(this.overflowListElement);
 
         if (this.overflowListElement.children().length > 0)
         {
