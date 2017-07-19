@@ -101,22 +101,39 @@ class DocumentRepository extends BaseRepository
             array_push($referencesToUpdate, 'topics');
             array_push($referencesToUpdate, 'news');
             array_push($referencesToUpdate, 'survey');
+            array_push($referencesToUpdate, 'event');
+            array_push($referencesToUpdate, 'locality');
+            //guides?
             $index = 'category';
         } elseif(is_int(strpos($identifier, 'external_link'))) { //categories display referencing topics, guides, news
             array_push($referencesToUpdate, 'topics');
             array_push($referencesToUpdate, 'guides');
             array_push($referencesToUpdate, 'news');
+            //surveys?
             $index = 'externalPages';
         } elseif(is_int(strpos($identifier, 'download'))){
             array_push($referencesToUpdate, 'topics');
             array_push($referencesToUpdate, 'news');
+            //guides?
             $index = 'downloads';
         } elseif(is_int(strpos($identifier, 'survey'))){
             array_push($referencesToUpdate, 'survey');
             array_push($referencesToUpdate, 'category');
             $index = 'surveys';
         } elseif(is_int(strpos($identifier, 'event'))){
+            array_push($referencesToUpdate, 'category');
+            array_push($referencesToUpdate, 'locality');
             $index = 'events';
+        } elseif(is_int(strpos($identifier, 'locality'))){
+            array_push($referencesToUpdate, 'category');
+            array_push($referencesToUpdate, 'event');
+            //guides?
+            //topics?
+            //news?
+            //events?
+            $index = 'localities';
+
+            //what about topics???
         }
         if(count($referencesToUpdate) > 0){
             foreach ($referencesToUpdate as $ref) {
@@ -150,6 +167,9 @@ class DocumentRepository extends BaseRepository
                 break;
             case 'events':
                 $db = "production_famport_event";
+                break;
+            case 'localities':
+                $db = "production_famport_locality";
                 break;
         }
         $con = $this->getStorage()->getDatabase()->getConnection();
@@ -214,6 +234,9 @@ class DocumentRepository extends BaseRepository
                 break;
             case "events":
                 $singular = "event";
+                break;
+            case "localities":
+                $singular = "locality";
                 break;
         }
         return $singular;
