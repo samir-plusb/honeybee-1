@@ -97,15 +97,15 @@ class DocumentRepository extends BaseRepository
     public function updateExtReferences($identifier){
         $referencesToUpdate = array();
         $index = "";
-        if(is_int(strpos($identifier, 'category'))){ //categories display referencing topics
-            array_push($referencesToUpdate, 'topics');
-            array_push($referencesToUpdate, 'news');
-            array_push($referencesToUpdate, 'survey');
-            array_push($referencesToUpdate, 'event');
-            array_push($referencesToUpdate, 'locality');
-            //guides?
-            $index = 'category';
-        } elseif(is_int(strpos($identifier, 'external_link'))) { //categories display referencing topics, guides, news
+        if(is_int(strpos($identifier, 'category'))){ # the actual identifier like category-967faafd-61b1-4062-ba2e-5ba41d66cafe-de_DE-1
+            array_push($referencesToUpdate, 'topics'); # look in topics
+            array_push($referencesToUpdate, 'news'); # look in news
+            array_push($referencesToUpdate, 'guides'); # look in guides field (of this category)
+            array_push($referencesToUpdate, 'surveys'); # ...
+            array_push($referencesToUpdate, 'events');
+            array_push($referencesToUpdate, 'localities');
+            $index = 'categories'; # look for categories field in specified modules
+        } elseif(is_int(strpos($identifier, 'external_link'))) {
             array_push($referencesToUpdate, 'topics');
             array_push($referencesToUpdate, 'guides');
             array_push($referencesToUpdate, 'news');
@@ -114,26 +114,28 @@ class DocumentRepository extends BaseRepository
         } elseif(is_int(strpos($identifier, 'download'))){
             array_push($referencesToUpdate, 'topics');
             array_push($referencesToUpdate, 'news');
+            array_push($referencesToUpdate, 'guides');
             //guides?
             $index = 'downloads';
         } elseif(is_int(strpos($identifier, 'survey'))){
-            array_push($referencesToUpdate, 'survey');
-            array_push($referencesToUpdate, 'category');
+            array_push($referencesToUpdate, 'surveys');
+            array_push($referencesToUpdate, 'categories');
             $index = 'surveys';
         } elseif(is_int(strpos($identifier, 'event'))){
-            array_push($referencesToUpdate, 'category');
-            array_push($referencesToUpdate, 'locality');
+            array_push($referencesToUpdate, 'categories');
+            array_push($referencesToUpdate, 'localities');
             $index = 'events';
         } elseif(is_int(strpos($identifier, 'locality'))){
-            array_push($referencesToUpdate, 'category');
-            array_push($referencesToUpdate, 'event');
-            //guides?
-            //topics?
-            //news?
-            //events?
+            array_push($referencesToUpdate, 'categories');
+            array_push($referencesToUpdate, 'events');
+            array_push($referencesToUpdate, 'topics');
+            array_push($referencesToUpdate, 'news');
             $index = 'localities';
-
-            //what about topics???
+        } elseif(is_int(strpos($identifier, 'topic'))){
+            array_push($referencesToUpdate, 'categories');
+            array_push($referencesToUpdate, 'localities');
+            array_push($referencesToUpdate, 'topics');
+            $index = 'topics';
         }
         if(count($referencesToUpdate) > 0){
             foreach ($referencesToUpdate as $ref) {
@@ -159,10 +161,10 @@ class DocumentRepository extends BaseRepository
             case 'guides':
                 $db = "production_famport_guide";
                 break;
-            case 'survey':
+            case 'surveys':
                 $db = "production_famport_survey";
                 break;
-            case 'category':
+            case 'categories':
                 $db = "famport_production_category";
                 break;
             case 'events':
@@ -196,15 +198,15 @@ class DocumentRepository extends BaseRepository
      */
     public function makeBackReference($identifier, $referenceId, $field){
         $data = $this->getStorage()->read($identifier);
-        $allreadyLinked = false;
+        $alreadyLinked = false;
         if(array_key_exists($field, $data)){
             foreach ($data[$field] as $existingReference) {
                 if($existingReference['id'] === $referenceId){
-                    $allreadyLinked = true;
+                    $alreadyLinked = true;
                 }
             }
         }
-        if(!$allreadyLinked){
+        if(!$alreadyLinked){
             $newReference = array("id" => $referenceId, "module" => $this->convertPlural($field));
             $data[$field][] = $newReference;
             $document = $this->getModule()->createDocument($data);
@@ -218,7 +220,7 @@ class DocumentRepository extends BaseRepository
      * @return string
      */
     public function convertPlural($fieldName){
-        $singular = "topic";
+        $singular = "category";
         switch($fieldName){
             case "topics":
                 $singular = "topic";
