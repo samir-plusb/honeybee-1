@@ -119,7 +119,7 @@ if(in_array('ExternalLink', $modules)){
     echo PHP_EOL . "Module 'ExternalLink' not found" . PHP_EOL;
 }
 
-exit(0);
+return;
 
 //helper functions//
 
