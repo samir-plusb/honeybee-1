@@ -14,7 +14,7 @@ class RelationManager
 
     private static $reference_pool;
 
-    private static $max_recursion_depth = 2;
+    private static $max_recursion_depth = 0;
 
     private static $recursion_depth = 0;
 
@@ -39,6 +39,11 @@ class RelationManager
     }
 
     public static function setMaxRecursionDepth($max_recursion_depth)
+    {
+        self::$max_recursion_depth = $max_recursion_depth;
+    }
+
+    public static function setRecursionDepth($max_recursion_depth)
     {
         self::$max_recursion_depth = $max_recursion_depth;
     }
@@ -110,7 +115,7 @@ class RelationManager
         return $mapped_reference_data;
     }
 
-    public static function loadReferences(BaseDocument $document, array $data, $max_depth = 1)
+    public static function loadReferences(BaseDocument $document, array $data)
     {
         if (self::$recursion_depth === 0 && !self::$pool_references) {
             self::$reference_pool = array();

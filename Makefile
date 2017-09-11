@@ -55,8 +55,10 @@ help:
 	@echo ""
 	@echo "Custom functions"
 	@echo "----------------"
-	@echo "  verify-links - Verify external_link documents that are stuck in 'verify' state"
-	@echo "  import-events - Import events from external source(s) into database and publish new events for frontend"
+	@echo "verify-links - Verify external_link documents that are stuck in 'verify' state"
+	@echo "import-events - Import events from external source(s) into database and publish new events for frontend"
+	@echo "import-localities - Import localities from external sources into database and publish for frontend"
+	@echo "module-backlinks - Make backlinks between all modules (may take days!!)"
 	@echo ""
 	@exit 0
 
@@ -118,9 +120,48 @@ verify-links:
 
 import-events:
 
+	@echo "-> Starting event import: $$(date)"
 	@bin/cli event.fetch
 	@bin/cli event.export
+	@echo "-> Event import ended: $$(date)"
 
+#
+# Make backlinks between modules (may take days to finish!!)
+#
+
+module-backlinks:
+
+	@echo "-> Starting module connect: $$(date)"
+	@bin/cli category.connect
+	@bin/cli category.export
+	@bin/cli download.export
+	@bin/cli event.export
+	@bin/cli external_link.export
+	@bin/cli guide.export
+	@bin/cli locality.export
+	@bin/cli news.export
+	@bin/cli survey.export
+	@bin/cli topic.export
+	@echo "-> Mocule connect ended: $$(date)"
+
+#
+# Import localities from external sources into database and publish new localities for frontend
+#
+
+import-localities:
+
+	@echo "-> Starting locality import: $$(date)"
+	@bin/cli locality.fetch
+	@bin/cli locality.export
+	@echo "-> Locality import ended: $$(date)"
+
+
+locality-connect:
+
+	@echo "-> Starting locality connect: $$(date)"
+	@bin/cli locality.connect
+	@bin/cli locality.export
+	@echo "-> Locality connect ended: $$(date)"
 
 #
 # Composer and vendor handling

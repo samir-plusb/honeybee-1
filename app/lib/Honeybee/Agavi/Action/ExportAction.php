@@ -34,7 +34,7 @@ class ExportAction extends BaseAction
             $export_service->publish($export_name, $document);
             $exported_doc_count++;
         };
-        $document_service->walkDocuments($search_spec, $chunk_size, $publish_document);
+        $document_service->walkDocuments($search_spec, $chunk_size, $publish_document, true);
 
         $this->setAttribute('exported_doc_count', $exported_doc_count);
 

@@ -27,6 +27,8 @@ class ListAction extends BaseAction
      */
     public function executeRead(\AgaviRequestDataHolder $parameters)
     {
+
+        RelationManager::setRecursionDepth(1);
         RelationManager::setMaxRecursionDepth(0);
         RelationManager::startPooling();
 

@@ -14,7 +14,7 @@ abstract class DocumentJob extends BaseJob
 
     protected function loadDocument()
     {
-        RelationManager::setMaxRecursionDepth(1);
+        RelationManager::setMaxRecursionDepth(0);
 
         $module = $this->loadModule();
         $service = $module->getService();

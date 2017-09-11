@@ -11,6 +11,7 @@ class TreeAction extends BaseAction
 {
     public function executeRead(\AgaviRequestDataHolder $requestData)
     {
+        RelationManager::setRecursionDepth(1);
         RelationManager::setMaxRecursionDepth(0);
 
         $module = $this->getModule();

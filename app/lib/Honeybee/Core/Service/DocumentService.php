@@ -90,26 +90,26 @@ class DocumentService implements IService
         return $repository->find(null, $limit, $offset);
     }
 
-    public function find(array $spec, $offset, $limit)
+    public function find(array $spec, $offset, $limit, $fly = false)
     {
         $queryBuilder = new ElasticSearch\DefaultQueryBuilder();
         $query = $queryBuilder->build($spec);
         $repository = $this->module->getRepository();
 
-        return $repository->find($query, $limit, $offset);
+        return $fly ? $repository->find($query, $limit, $offset, true) : $repository->find($query, $limit, $offset);
     }
 
-    public function walkDocuments(array $spec, $chunk_size, $callback)
+    public function walkDocuments(array $spec, $chunk_size, $callback, $fly = false)
     {
         $offset = 0;
         $repository = $this->module->getRepository();
-        $result = $this->find($spec, $offset, $chunk_size);
+        $result = $this->find($spec, $offset, $chunk_size, $fly);
         while (count($result['documents']) > 0) {
             foreach ($result['documents'] as $document) {
                 call_user_func($callback, $document);
             }
             $offset += $chunk_size;
-            $result = $this->find($spec, $offset, $chunk_size);
+            $result = $this->find($spec, $offset, $chunk_size, $fly);
         }
     }
 
