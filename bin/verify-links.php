@@ -78,7 +78,7 @@ if(in_array('ExternalLink', $modules)){
 
         $workflowTicket = $linkObj->workflowTicket[0];
 
-        if ($workflowTicket->workflowStep == 'verify') {
+        if ($workflowTicket->workflowStep == 'verify' || $workflowTicket->workflowStep == 'edit' ) {
 
             $putUrl = $host . '/' . $dbName . '/' . $linkObj->_id;
 
