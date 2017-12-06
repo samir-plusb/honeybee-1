@@ -100,6 +100,24 @@ if(in_array('ExternalLink', $modules)){
 
         }
 
+        if ($workflowTicket->workflowStep == 'deleted') {
+
+            $putUrl = $host . '/' . $dbName . '/' . $linkObj->_id;
+
+            // add "delete me" description
+            $linkObj->description = 'delete';
+
+            // send data to db
+            $result = putByCurlRequest($putUrl, json_encode($linkObj));
+
+            if(strpos($result, '"ok"') > 0){
+                echo PHP_EOL . 'successfully reset ' . $linkObj->_id . PHP_EOL;
+                $export_count++;
+            }
+            else echo PHP_EOL . 'update failed - ' . $result . PHP_EOL;
+
+        }
+
     }
 
     echo PHP_EOL . 'Finished update. Updated ' . $export_count . ' documents' . PHP_EOL;
