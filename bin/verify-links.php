@@ -100,26 +100,51 @@ if(in_array('ExternalLink', $modules)){
 
         }
 
-        if ($workflowTicket->workflowStep == 'delete') {
-
-            $putUrl = $host . '/' . $dbName . '/' . $linkObj->_id;
-
-            // show in list -> only necessary once
-            $linkObj->meta = null;
-
-            // add "delete me" description
-            $linkObj->description = 'deleted';
-
-            // send data to db
-            $result = putByCurlRequest($putUrl, json_encode($linkObj));
-
-            if(strpos($result, '"ok"') > 0){
-                echo PHP_EOL . 'successfully reset ' . $linkObj->_id . PHP_EOL;
-                $export_count++;
-            }
-            else echo PHP_EOL . 'update failed - ' . $result . PHP_EOL;
-
-        }
+//        if ($linkObj->description == 'deleted') {
+//
+//            $putUrl = $host . '/' . $dbName . '/' . $linkObj->_id;
+//
+//            // hide in list
+//            $linkObj->meta = array("is_deleted" => true);
+//
+//            // send data to db
+//            $result = putByCurlRequest($putUrl, json_encode($linkObj));
+//
+//            if(strpos($result, '"ok"') > 0){
+//                echo PHP_EOL . 'successfully hidden ' . $linkObj->_id . PHP_EOL;
+//                $export_count++;
+//            }
+//            else echo PHP_EOL . 'update failed - ' . $result . PHP_EOL;
+//
+//        }
+//
+//        if ($workflowTicket->workflowStep == 'delete') {
+//
+//            $putUrl = $host . '/' . $dbName . '/' . $linkObj->_id;
+//
+//            // update workflowstep and blocked status
+//            $workflowTicket->workflowStep = 'verified';
+//            $workflowTicket->blocked = false;
+//
+//            // assign workflowticket to external_link
+//            $linkObj->workflowTicket[0] = $workflowTicket;
+//
+//            // show in list
+//            $linkObj->meta = null;
+//
+//            // add "delete me" description
+//            $linkObj->description = 'deleted';
+//
+//            // send data to db
+//            $result = putByCurlRequest($putUrl, json_encode($linkObj));
+//
+//            if(strpos($result, '"ok"') > 0){
+//                echo PHP_EOL . 'successfully reset ' . $linkObj->_id . PHP_EOL;
+//                $export_count++;
+//            }
+//            else echo PHP_EOL . 'update failed - ' . $result . PHP_EOL;
+//
+//        }
 
     }
 
