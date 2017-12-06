@@ -100,12 +100,15 @@ if(in_array('ExternalLink', $modules)){
 
         }
 
-        if ($workflowTicket->workflowStep == 'deleted') {
+        if ($workflowTicket->workflowStep == 'delete') {
 
             $putUrl = $host . '/' . $dbName . '/' . $linkObj->_id;
 
+            // show in list -> only necessary once
+            $linkObj->meta = null;
+
             // add "delete me" description
-            $linkObj->description = 'delete';
+            $linkObj->description = 'deleted';
 
             // send data to db
             $result = putByCurlRequest($putUrl, json_encode($linkObj));
