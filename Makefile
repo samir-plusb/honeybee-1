@@ -56,6 +56,7 @@ help:
 	@echo "Custom functions"
 	@echo "----------------"
 	@echo "verify-links - Verify external_link documents that are stuck in 'verify' state"
+	@echo "event-dateCorrect - Rewrite nextDates property for Event documents"
 	@echo "import-events - Import events from external source(s) into database and publish new events for frontend"
 	@echo "import-localities - Import localities from external sources into database and publish for frontend"
 	@echo "module-backlinks - Make backlinks between all modules (may take days!!)"
@@ -113,6 +114,17 @@ verify-links:
 
 	@php bin/verify-links.php
 	@bin/cli external_link.export
+
+#
+# Rewrite nextDates property for Event documents
+#
+
+event-dateCorrect:
+
+	@echo "-> Starting event dateCorrect: $$(date)"
+    @bin/cli event.dateCorrect
+    @bin/cli event.export
+    @echo "-> Event dateCorrect ended: $$(date)"
 
 #
 # Import events from external source(s) into database and publish new events for frontend
