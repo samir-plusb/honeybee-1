@@ -12,5 +12,6 @@ AssetList.js
 ClipboardWidget.js
 EmbedCodeWidget.js
 DatePicker.js
+BackReference.js
 Reference.js
 MarkdownWidget.js

@@ -17,7 +17,7 @@ class ReferenceFieldInputRenderer extends FieldInputRenderer
 
     protected function getWidgetType(IDocument $document)
     {
-        return 'widget-reference';
+        return parent::getWidgetType($document) ?: 'widget-reference';
     }
 
     protected function getTemplateName()

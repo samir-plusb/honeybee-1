@@ -47,9 +47,6 @@ class DocumentRepository extends BaseRepository
     // @todo add a get method to the finder and use it instead of the storage here.
     public function read($identifier)
     {
-        // update relation display in backend
-        $this->updateExtReferences($identifier);
-
         $documents = new DocumentCollection();
 
         if (is_array($identifier)) {

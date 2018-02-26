@@ -18,6 +18,7 @@
             <autoload name="FieldInputRenderer">%core.lib_dir%/renderer/field/Input/FieldInputRenderer.class.php</autoload>
             <autoload name="EmailFieldInputRenderer">%core.lib_dir%/renderer/field/Input/EmailFieldInputRenderer.class.php</autoload>
             <autoload name="ReferenceFieldInputRenderer">%core.lib_dir%/renderer/field/Input/ReferenceFieldInputRenderer.class.php</autoload>
+            <autoload name="BackReferenceFieldInputRenderer">%core.lib_dir%/renderer/field/Input/BackReferenceFieldInputRenderer.class.php</autoload>
             <autoload name="DocumentInputRenderer">%core.lib_dir%/renderer/document/Input/DocumentInputRenderer.class.php</autoload>
             <autoload name="TextCollectionFieldInputRenderer">%core.lib_dir%/renderer/field/Input/TextCollectionFieldInputRenderer.class.php</autoload>
             <autoload name="ImageFieldInputRenderer">%core.lib_dir%/renderer/field/Input/ImageFieldInputRenderer.class.php</autoload>
