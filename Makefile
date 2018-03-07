@@ -122,9 +122,9 @@ verify-links:
 event-dateCorrect:
 
 	@echo "-> Starting event dateCorrect: $$(date)"
-    @bin/cli event.dateCorrect
-    @bin/cli event.export
-    @echo "-> Event dateCorrect ended: $$(date)"
+	@bin/cli event.dateCorrect
+	@bin/cli event.export
+	@echo "-> Event dateCorrect ended: $$(date)"
 
 #
 # Import events from external source(s) into database and publish new events for frontend
