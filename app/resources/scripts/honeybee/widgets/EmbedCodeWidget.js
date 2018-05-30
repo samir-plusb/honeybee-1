@@ -49,7 +49,8 @@ honeybee.widgets.EmbedCodeWidget = honeybee.widgets.Widget.extend({
 
     getEmbedForUrl: function(url)
     {
-        var youtube_long = /(http\:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([\-\w\d]+)/;
+        var youtube_long = /(http\:\/\/)?(?:www\.)?youtube\-nocookie\.com\/watch\?v=([\-\w\d]+)/;
+        // var youtube_long = /(http\:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([\-\w\d]+)/; # deactivated
         var youtube_short = /(http\:\/\/)?(?:www\.)?youtube\.de\/([\-\w\d]+)/;
         var vimeo = /(http\:\/\/)?vimeo\.com\/(\d+)/;
         var matches = url.match(youtube_long);
@@ -82,7 +83,7 @@ honeybee.widgets.EmbedCodeWidget.DEFAULT_OPTIONS = {
     fieldname: null,
     embed_url: null,
     embed_templates: {
-        'youtube': '<iframe class="span11" height="315" src="//www.youtube.com/embed/{embed_payload}" frameborder="0" allowfullscreen></iframe>',
+        'youtube': '<iframe class="span11" height="315" src="//www.youtube-nocookie.com/embed/{embed_payload}" frameborder="0" allowfullscreen></iframe>',
         'vimeo': '<iframe src="//player.vimeo.com/video/{embed_payload}" class="span11" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
     }
 };
