@@ -164,6 +164,7 @@ import-localities:
 
 	@echo "-> Starting locality import: $$(date)"
 	@bin/cli locality.fetch
+	@bin/cli locality.clear
 	@bin/cli locality.export
 	@echo "-> Locality import ended: $$(date)"
 
