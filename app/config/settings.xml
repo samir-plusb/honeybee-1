@@ -77,6 +77,8 @@
             <setting name="default_revoke_transitions">
                 <ae:parameter>published~promote</ae:parameter>
                 <ae:parameter>published~demote</ae:parameter>
+                <ae:parameter>verified~demote</ae:parameter>
+                <ae:parameter>verify~demote</ae:parameter>
                 <ae:parameter>published~delete</ae:parameter>
             </setting>
         </settings>
