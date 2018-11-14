@@ -37,8 +37,9 @@ class StringToolkit
         if (!is_string($value)) {
             return $value;
         }
-
-        return ctype_lower($value) ? $value : mb_strtolower(preg_replace('/(.)([A-Z])/', '$1_$2', $value));
+        
+        // ATTENTION: This fix is only needed for the Welcome App because of the 'IDM' package prefix
+        return preg_replace("/^i_dm/", "idm", ctype_lower($value) ? $value : mb_strtolower(preg_replace('/(.)([A-Z])/', '$1_$2', $value)));
     }
 
     public static function endsWith($haystack, $needle)
