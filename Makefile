@@ -163,10 +163,16 @@ module-backlinks:
 import-localities:
 
 	@echo "-> Starting locality import: $$(date)"
-	@bin/cli locality.fetch
 	@bin/cli locality.clear
+	@bin/cli locality.fetch
 	@bin/cli locality.export
 	@echo "-> Locality import ended: $$(date)"
+
+fetch-localities:
+
+	@echo "-> Starting locality fetch: $$(date)"
+	@bin/cli locality.fetch
+	@echo "-> Locality fetch ended: $$(date)"
 
 
 locality-connect:

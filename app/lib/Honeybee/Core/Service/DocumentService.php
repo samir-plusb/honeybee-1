@@ -20,6 +20,8 @@ class DocumentService implements IService
 
     public function __construct(Module $module)
     {
+        mb_internal_encoding("UTF-8");
+
         $this->module = $module;
     }
 
@@ -137,7 +139,6 @@ class DocumentService implements IService
         $offset = $state->getOffset();
         $limit = $state->getLimit();
         $repository = $this->module->getRepository();
-
         return $repository->find($query, $limit, $offset);
     }
 
