@@ -110,10 +110,11 @@ deploy-resources:
 # Verify external_link documents that are stuck in verify state
 #
 
-verify-links:
+validate-links:
 
-	@php bin/verify-links.php
-	@bin/cli external_link.export
+	@echo "-> Starting link validation: $$(date)"
+	@bin/cli external_link.validate
+	@echo "-> Link validation ended: $$(date)"
 
 #
 # Rewrite nextDates property for Event documents
