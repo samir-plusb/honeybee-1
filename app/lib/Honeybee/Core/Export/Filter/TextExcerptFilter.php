@@ -47,6 +47,8 @@ class TextExcerptFilter extends BaseFilter
 
     protected function createExcerptFor($text)
     {
+        if (empty($text)) return $text;
+
         $config = $this->getConfig();
 
         $max_characters = $config->get('characters', 0);
