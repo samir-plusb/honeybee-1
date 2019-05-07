@@ -103,7 +103,6 @@ class DocumentRepository extends BaseRepository
         if(is_int(strpos($identifier, 'category'))){ # the actual identifier like category-967faafd-61b1-4062-ba2e-5ba41d66cafe-de_DE-1
             array_push($referencesToUpdate, 'topics'); # look in topics
             array_push($referencesToUpdate, 'news'); # look in news
-            array_push($referencesToUpdate, 'surveys'); # ...
 //            array_push($referencesToUpdate, 'guides'); # look in guides field (of this category)
             array_push($referencesToUpdate, 'localities'); # honeybee architecture is not capable of handling so many backreferences
 //            array_push($referencesToUpdate, 'downloads');
@@ -140,10 +139,6 @@ class DocumentRepository extends BaseRepository
 //            array_push($referencesToUpdate, 'topics');
 //            array_push($referencesToUpdate, 'downloads');
             $index = 'news';
-        } elseif(is_int(strpos($identifier, 'survey'))){
-            array_push($referencesToUpdate, 'surveys');
-            array_push($referencesToUpdate, 'categories');
-            $index = 'surveys';
         } elseif(is_int(strpos($identifier, 'topic'))){
 //            array_push($referencesToUpdate, 'localities');
 //            array_push($referencesToUpdate, 'categories');
@@ -187,10 +182,7 @@ class DocumentRepository extends BaseRepository
             case 'news':
                 $db = "famport_production_news";
                 break;
-            case 'surveys':
-                $db = "production_famport_survey";
-                break;
-            case 'topics':
+           case 'topics':
                 $db = "famport_production_topic";
                 break;
         }
@@ -264,9 +256,6 @@ class DocumentRepository extends BaseRepository
                 break;
             case "news":
                 $singular = "news";
-                break;
-            case "surveys":
-                $singular = "survey";
                 break;
             case "topics":
                 $singular = "topic";

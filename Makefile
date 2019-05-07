@@ -153,7 +153,6 @@ module-backlinks:
 	@bin/cli guide.export
 	@bin/cli locality.export
 	@bin/cli news.export
-	@bin/cli survey.export
 	@bin/cli topic.export
 	@echo "-> Mocule connect ended: $$(date)"
 
