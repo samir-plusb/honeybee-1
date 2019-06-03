@@ -116,6 +116,12 @@ validate-links:
 	@bin/cli external_link.validate
 	@echo "-> Link validation ended: $$(date)"
 
+validate-downloads:
+
+	@echo "-> Starting download validation: $$(date)"
+	@bin/cli download.validate
+	@echo "-> Download validation ended: $$(date)"
+
 #
 # Rewrite nextDates property for Event documents
 #
