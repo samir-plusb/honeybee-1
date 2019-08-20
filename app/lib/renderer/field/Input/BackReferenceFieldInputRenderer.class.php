@@ -20,6 +20,8 @@ class BackReferenceFieldInputRenderer extends FieldInputRenderer
     {
         $parentOptions = parent::getWidgetOptions($document);
 
+
+        if ($this->options['referenced_module'] === "externalPage") $this->options['referenced_module'] = "external_link";
         return array_merge($parentOptions, array(
             'fieldname' => $this->generateInputName($document),
             'field_id' => $this->generateInputId($document),
