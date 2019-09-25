@@ -97,7 +97,8 @@ class TextService
         $text = strip_tags($text, $allowed_tags);
         while (!ctype_alnum(substr($text,0,1)))
         {
-            if (ord(substr($text,0,1)) === 226) break; # do not crop „ symbol
+            $ord = ord(substr($text,0,1));
+            if ($ord === 226 || $ord === 34) break; # do not crop „ or " symbol
             $text = substr($text,1);
         }
         return  preg_replace('#\s{2,}#', ' ', $text);
