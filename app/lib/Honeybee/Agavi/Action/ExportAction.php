@@ -27,6 +27,12 @@ class ExportAction extends BaseAction
             AgaviConfig::get('workflow.publish_steps', array('published'))
         );
 
+        // modules with different publish steps can define custom publish step via parameter
+        if ($parameters->getParameter('publish_step'))
+        {
+            $publish_steps[0] = $parameters->getParameter('publish_step');
+        }
+
         $exported_doc_count = 0;
         $search_spec = array('filter' => array('workflowTicket.workflowStep' => $publish_steps));
         $publish_document = function($document) use ($export_name, $export_service, &$exported_doc_count)
