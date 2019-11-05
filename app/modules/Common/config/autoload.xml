@@ -30,6 +30,7 @@
             <autoload name="ReferenceListValueRenderer">%core.module_dir%/Common/lib/renderer/ReferenceListValueRenderer.class.php</autoload>
             <autoload name="BooleanListValueRenderer">%core.module_dir%/Common/lib/renderer/BooleanListValueRenderer.class.php</autoload>
             <autoload name="YmdValueRenderer">%core.module_dir%/Common/lib/renderer/YmdValueRenderer.class.php</autoload>
+            <autoload name="ModDateRenderer">%core.module_dir%/Common/lib/renderer/ModDateRenderer.class.php</autoload>
         </autoloads>
     </ae:configuration>
 </ae:configurations>
