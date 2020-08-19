@@ -89,10 +89,12 @@ class MailService implements IService, IMailer
         if ($class == '\\Swift_SmtpTransport') {
 
             $host = $settings->get('host', 'localhost');
+            $port = $settings->get('port', 25);
+            $security = $settings->get('security', null);
             $username = $settings->get('username', null);
             $password = $settings->get('password', null);
 
-            $this->connection = $class::newInstance($host)
+            $this->connection = $class::newInstance($host, $port, $security)
                 ->setUsername($username)
                 ->setPassword($password);
         } else {
@@ -112,9 +114,9 @@ class MailService implements IService, IMailer
 
     /**
      * Returns the settings of the given mailer.
-     * 
+     *
      * @param string $mailer_name name of mailer to get settings for (if omitted, the settings of the default mailer are returned)
-     * 
+     *
      * @return Config\ArrayConfig with settings for the given mailer name (or the default mailer)
      */
     public function getMailerSettings($mailer_name = null)
@@ -151,7 +153,7 @@ class MailService implements IService, IMailer
      * @param string $mailer_config_name name of the mailer config to get settings from
      *
      * @return array with the following keys: 'sent_mails' (number of mails sent) and 'failed_recipients' (email addresses that were not accepted by the internal transport)
-     * 
+     *
      * @throws MessageConfigurationException in case of invalid message configurations
      * @throws \InvalidArgumentException in case of unknown mailer name from config
      */
@@ -210,7 +212,7 @@ class MailService implements IService, IMailer
 
     /**
      * Create Swift_Message instance from the given IMail instance.
-     * 
+     *
      * @param IMail $message
      * @param string $mailer_config_name name of the mailer config to get settings from
      *
