@@ -205,5 +205,9 @@
                 }
             }
         }
-    ]
+    ],
+
+    "config": {
+        "secure-http": false
+    }
 }
